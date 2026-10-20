@@ -1,0 +1,146 @@
+/*
+ * Numaya design tokens.
+ * Every color, size, radius, shadow and timing used by the UI lives here.
+ */
+:root {
+  /* Brand -------------------------------------------------------------
+   * One hue (~207°) at three depths.
+   * --accent       #63AFE9, the brand blue: marks, progress, rings, tints.
+   *                Too light for any foreground on it, so nothing sits on it.
+   * --accent-strong  filled surfaces that carry content. Foreground on it is
+   *                always --on-accent (white), 5.3:1.
+   * --accent-ink   blue text and icons on white or light surfaces.
+   * Dark text is only used on white, neutral or tinted backgrounds.
+   */
+  --accent: #63afe9;
+  --accent-strong: #1f6fb0;
+  --on-accent: #ffffff;
+  --accent-ink: #1f6fb0;
+  --accent-deep: #17507f;
+  --accent-tint: #e6f2fc;
+  --accent-wash: #eff6fd;
+  --accent-ring: rgb(99 175 233 / 0.32);
+
+  /* Neutrals, slightly cool to sit with the blue ------------------------ */
+  --ink: #14171f;
+  --ink-2: #3a404c;
+  --ink-3: #646b78;
+  --ink-4: #9aa1ac;
+  --line: #e7e9ed;
+  --line-strong: #d7dbe1;
+  --surface: #ffffff;
+  --surface-soft: #f3f5f8;
+  --surface-sunk: #eceff3;
+  --canvas: #eceef1;
+
+  --danger: #c8364f;
+  --danger-tint: #fdf0f2;
+
+  /* Typography --------------------------------------------------------
+   * Display: Fraunces, a soft, low-contrast serif at regular weight, for
+   * headlines, the wordmark and prompt answers. Hierarchy comes from size,
+   * not boldness.
+   * Text: Inter, a neutral grotesk, for body, labels, inputs and buttons.
+   */
+  --font-display: "Fraunces Variable", ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --display-axes: "SOFT" 50, "WONK" 0;
+
+  --fs-display: 31px;
+  --lh-display: 35px;
+  --fw-display: 440;
+  --ls-display: -0.02em;
+
+  --fs-hero: 34px;
+  --lh-hero: 38px;
+
+  --fs-headline: 26px;
+  --lh-headline: 30px;
+
+  --fs-title: 20px;
+  --lh-title: 25px;
+  --fw-title: 450;
+
+  --fs-body: 15.5px;
+  --lh-body: 23px;
+  --ls-body: -0.006em;
+
+  --fs-button: 16px;
+  --ls-button: -0.01em;
+
+  --fs-label: 13.5px;
+  --lh-label: 18px;
+
+  --fs-caption: 13px;
+  --lh-caption: 18px;
+
+  --fs-eyebrow: 11px;
+  --lh-eyebrow: 14px;
+  --ls-eyebrow: 0.12em;
+
+  --fs-micro: 11px;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 680;
+
+  /* Space (4pt grid) -------------------------------------------------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --gutter: 24px;
+
+  /* Radius ------------------------------------------------------------ */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;
+
+  /* Controls ---------------------------------------------------------- */
+  --control-h: 56px;
+  --button-h: 54px;
+  --fab: 56px;
+  --nav-button: 40px;
+  --keypad-h: 291px;
+
+  /* Elevation --------------------------------------------------------- */
+  --shadow-float: 0 1px 2px rgb(20 23 31 / 0.05), 0 6px 18px rgb(20 23 31 / 0.07);
+  --shadow-card: 0 1px 2px rgb(20 23 31 / 0.04), 0 14px 34px -10px rgb(20 23 31 / 0.16);
+  --shadow-button: inset 0 1px 0 rgb(255 255 255 / 0.14), inset 0 -1px 0 rgb(0 0 0 / 0.3),
+    0 1px 2px rgb(20 23 31 / 0.18), 0 8px 18px -6px rgb(20 23 31 / 0.38);
+  --shadow-sheet: 0 -1px 0 rgb(20 23 31 / 0.04), 0 -18px 48px -12px rgb(20 23 31 / 0.18);
+  --scrim: rgb(20 23 31 / 0.34);
+
+  /* Motion ------------------------------------------------------------ */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-ios: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+  --dur-slow: 380ms;
+  --dur-push: 460ms;
+
+  /* Device chrome, overridden in device mode --------------------------- */
+  --safe-top: 54px;
+  --safe-bottom: 34px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 1ms;
+    --dur-base: 1ms;
+    --dur-slow: 120ms;
+    --dur-push: 160ms;
+  }
+}
