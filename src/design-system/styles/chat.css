@@ -1,0 +1,249 @@
+/* ------------------------------------------------------------------ */
+/* Messages                                                            */
+/* ------------------------------------------------------------------ */
+.message {
+  display: grid;
+  gap: 4px;
+  max-width: 78%;
+  margin-top: var(--space-3);
+}
+
+.message.is-grouped {
+  margin-top: 3px;
+}
+
+.message--me {
+  justify-self: end;
+  justify-items: end;
+}
+
+.message--them {
+  justify-self: start;
+}
+
+.message__bubble {
+  padding: 10px 14px;
+  border-radius: 20px;
+  font-size: var(--type-body-size);
+  line-height: 22px;
+  overflow-wrap: anywhere;
+  animation: rise-in var(--motion-duration-base) var(--motion-ease-out);
+}
+
+/* Mine: brand tint with dark text (light surface rule). */
+.message--me .message__bubble {
+  border-bottom-right-radius: 6px;
+  background: var(--color-brand-tint);
+  color: var(--color-text-primary);
+}
+
+.message--them .message__bubble {
+  border-bottom-left-radius: 6px;
+  background: var(--color-surface-soft);
+}
+
+.message.is-sending .message__bubble {
+  opacity: var(--opacity-pending);
+}
+
+.message.is-failed .message__bubble {
+  box-shadow: inset 0 0 0 var(--border-selected) var(--color-danger);
+}
+
+.message__meta {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.message__failed {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-danger);
+  font-size: 12.5px;
+  font-weight: var(--font-weight-medium);
+}
+
+.message__failed button {
+  color: inherit;
+  font-weight: var(--font-weight-bold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.system-message {
+  margin: var(--space-4) 0 var(--space-1);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ------------------------------------------------------------------ */
+/* Composer                                                            */
+/* ------------------------------------------------------------------ */
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+.composer__icon {
+  display: grid;
+  place-items: center;
+  width: var(--size-touch-min);
+  height: var(--size-touch-min);
+  flex: none;
+  color: var(--color-text-secondary);
+}
+
+.composer__field {
+  flex: 1;
+  display: flex;
+  min-height: var(--size-touch-min);
+  padding: 0 var(--space-4);
+  border-radius: 22px;
+  background: var(--color-surface-soft);
+  transition: background-color var(--motion-duration-base), box-shadow var(--motion-duration-base);
+}
+
+.composer__field:focus-within {
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-selected) var(--color-focus-ring), 0 0 0 4px var(--color-focus-halo);
+}
+
+.composer__field textarea {
+  flex: 1;
+  min-height: var(--size-touch-min);
+  max-height: 120px;
+  padding: 11px 0;
+  border: 0;
+  outline: none;
+  resize: none;
+  background: transparent;
+  font: inherit;
+  font-size: var(--type-body-size);
+  line-height: 22px;
+  field-sizing: content;
+}
+
+.composer__field textarea::placeholder {
+  color: var(--color-text-subtle);
+}
+
+/* Send: exact brand fill with a white glyph; disabled falls back to neutral. */
+.composer__send {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--size-touch-min);
+  height: var(--size-touch-min);
+  border-radius: 50%;
+  background: var(--color-brand);
+  color: var(--color-on-brand);
+  transition: background-color var(--motion-duration-base), transform var(--motion-duration-fast) var(--motion-ease-out);
+}
+
+.composer__send:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.composer__send:disabled {
+  background: var(--color-surface-sunken);
+  color: var(--color-text-subtle);
+}
+
+/* ------------------------------------------------------------------ */
+/* Inbox                                                               */
+/* ------------------------------------------------------------------ */
+.conversation__hit {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3) 0;
+  text-align: left;
+}
+
+.conversation__text {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.conversation__top,
+.conversation__bottom {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.conversation__name {
+  flex: 1;
+  font-weight: var(--font-weight-semibold);
+}
+
+.conversation__time {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.conversation__preview {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: var(--type-body-sm-size);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation__preview.is-unread {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.conversation__unread {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-brand);
+  color: var(--color-on-brand);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+}
+
+.match-queue {
+  display: flex;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: none;
+}
+
+.match-queue__item {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  width: 72px;
+}
+
+.match-queue__name {
+  overflow: hidden;
+  max-width: 100%;
+  font-size: 12.5px;
+  font-weight: var(--font-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .message__bubble {
+    animation: none;
+  }
+}

@@ -1,0 +1,11 @@
+/* Numaya design system styles. Import once at the app entry. */
+@import "@fontsource-variable/fraunces/full.css";
+@import "@fontsource-variable/inter";
+@import "./tokens.css";
+@import "./styles/base.css";
+@import "./styles/components.css";
+@import "./styles/selection.css";
+@import "./styles/content.css";
+@import "./styles/feedback.css";
+@import "./styles/chat.css";
+@import "./styles/commerce.css";

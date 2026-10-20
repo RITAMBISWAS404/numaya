@@ -1,0 +1,205 @@
+.presentation {
+  display: grid;
+  grid-template-columns: minmax(300px, 420px) minmax(0, 1fr);
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.brief {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-10);
+  height: 100dvh;
+  padding: var(--space-10) var(--space-6) var(--space-10) 56px;
+  overflow-y: auto;
+}
+
+.brief__top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.brief__tag {
+  padding: 3px 10px 4px;
+  border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.brief__main {
+  max-width: 330px;
+}
+
+.brief__eyebrow {
+  color: var(--color-text-brand);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.brief__title {
+  margin-top: var(--space-3);
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: 33px;
+  line-height: 37px;
+  font-weight: var(--type-display-weight);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.brief__body {
+  margin-top: 14px;
+  color: var(--color-text-muted);
+  font-size: 15px;
+  line-height: 22px;
+  text-wrap: pretty;
+}
+
+.brief__steps {
+  display: grid;
+  gap: 4px;
+  margin: var(--space-8) 0 0 -14px;
+  padding: 0;
+  list-style: none;
+}
+
+.brief-step {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  text-align: left;
+  transition: background-color var(--motion-duration-base), box-shadow var(--motion-duration-base);
+}
+
+.brief-step:hover {
+  background: var(--color-overlay-hover-light);
+}
+
+.brief-step.is-current,
+.brief-step[aria-current="step"] {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-xs), inset 0 0 0 1px var(--color-border-subtle);
+}
+
+.brief-step__index {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  color: var(--color-text-muted);
+  font-size: 11.5px;
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  transition: background-color var(--motion-duration-base), color var(--motion-duration-base);
+}
+
+.brief-step.is-current .brief-step__index {
+  background: var(--color-surface-inverse);
+  color: var(--color-text-on-inverse);
+  box-shadow: none;
+}
+
+.brief-step.is-done .brief-step__index {
+  background: var(--color-brand-strong);
+  color: var(--color-on-brand);
+  box-shadow: none;
+}
+
+.brief-step__text {
+  display: grid;
+  gap: 1px;
+  padding-top: 3px;
+}
+
+.brief-step__title {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.brief-step.is-upcoming .brief-step__title {
+  color: var(--color-text-secondary);
+}
+
+.brief-step__summary {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-text-muted);
+}
+
+.brief__restart {
+  margin-top: var(--space-5);
+  padding: 8px 16px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: var(--font-weight-semibold);
+  transition: box-shadow var(--motion-duration-base), color var(--motion-duration-base);
+}
+
+.brief__restart:hover {
+  color: var(--color-text-primary);
+  box-shadow: inset 0 0 0 1px var(--color-text-subtle);
+}
+
+.brief__footer {
+  display: grid;
+  gap: 14px;
+  max-width: 330px;
+}
+
+.brief__hint {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 19px;
+}
+
+.brief__refs {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.brief__refs a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+}
+
+.brief__refs a:hover {
+  color: var(--color-text-brand);
+}
+
+@media (max-width: 1000px) {
+  .presentation {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .brief {
+    display: none;
+  }
+}
