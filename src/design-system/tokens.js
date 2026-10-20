@@ -811,6 +811,15 @@ export const tokens = [
     "description": "Text on brand.tint surfaces."
   },
   {
+    "id": "semantic.color.text.brand-display",
+    "name": "--color-text-brand-display",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.blue.500}",
+    "resolved": "#63afe9",
+    "description": "Exact brand #63AFE9 for brand-highlighted display words (≥ 26px headline emphasis, e.g. welcome \"Better\"). 2.38:1 on white: documented exception, one word per headline, never body text."
+  },
+  {
     "id": "semantic.color.text.on-inverse",
     "name": "--color-text-on-inverse",
     "layer": "semantic",

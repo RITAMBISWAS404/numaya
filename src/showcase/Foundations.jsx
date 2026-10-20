@@ -65,9 +65,14 @@ export function Foundations() {
               </span>
             </span>
           </Specimen>
-          <Specimen title="Brand text on light surfaces" note={`--color-text-brand ${ratio(tokenByName["--color-text-brand"].resolved, WHITE)}`}>
-            <p className="sc-type-sample" style={{ fontFamily: "var(--font-display)", fontSize: 28, color: "var(--color-text-brand)" }}>
+          <Specimen title="Brand emphasis in a headline" note={`--color-text-brand-display · exact #63AFE9 · ${ratio(tokenByName["--color-text-brand-display"].resolved, WHITE)} (display size only)`}>
+            <p className="sc-type-sample" style={{ fontFamily: "var(--font-display)", fontSize: 34, color: "var(--color-text-brand-display)" }}>
               Better
+            </p>
+          </Specimen>
+          <Specimen title="Brand text at body size" note={`--color-text-brand ${ratio(tokenByName["--color-text-brand"].resolved, WHITE)} · links, labels`}>
+            <p className="sc-type-sample" style={{ color: "var(--color-text-brand)", fontWeight: 600 }}>
+              Change number
             </p>
           </Specimen>
           <Specimen title="Readable blue fill" note={`--color-brand-strong · white ${ratio(tokenByName["--color-brand-strong"].resolved, WHITE)}`}>

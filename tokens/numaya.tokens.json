@@ -118,6 +118,7 @@
         "subtle":     { "$type": "color", "$value": "{primitive.color.neutral.400}", "$description": "Placeholders and disabled labels only (2.6:1, documented exception)." },
         "brand":      { "$type": "color", "$value": "{primitive.color.blue.700}", "$description": "Brand-coloured text: links, emphasis, labels on light surfaces. 5.3:1." },
         "brand-deep": { "$type": "color", "$value": "{primitive.color.blue.800}", "$description": "Text on brand.tint surfaces." },
+        "brand-display": { "$type": "color", "$value": "{primitive.color.blue.500}", "$description": "Exact brand #63AFE9 for brand-highlighted display words (≥ 26px headline emphasis, e.g. welcome \"Better\"). 2.38:1 on white: documented exception, one word per headline, never body text." },
         "on-inverse": { "$type": "color", "$value": "{primitive.color.neutral.0}" }
       },
       "surface": {

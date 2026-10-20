@@ -50,7 +50,7 @@ Evidence tags as in [README](README.md#evidence-legend). Unless tagged otherwise
   footnote with a privacy-policy link.
 - **Numaya:** generic `PermissionPrimer` pattern (see design-system patterns). Numaya does not plan
   ad tracking. Whether this screen exists at all is an open product decision
-  ([unknowns](unknowns.md#product-decisions)).
+  ([unknowns](unknowns.md#product-decisions-still-open)).
 
 ### B-03 Sign-in methods (returning)
 - **Regions:** back · logo · "You last signed in with a cell phone number" · stacked full-width

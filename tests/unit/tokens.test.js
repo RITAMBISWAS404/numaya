@@ -30,6 +30,7 @@ describe("token pipeline", () => {
     expect(value("--color-brand").toLowerCase()).toBe("#63afe9");
     expect(value("--color-focus-ring").toLowerCase()).toBe("#63afe9");
     expect(value("--color-border-brand").toLowerCase()).toBe("#63afe9");
+    expect(value("--color-text-brand-display").toLowerCase()).toBe("#63afe9");
   });
 
   it("keeps foreground on brand fills white", () => {

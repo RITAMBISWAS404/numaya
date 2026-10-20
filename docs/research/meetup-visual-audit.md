@@ -60,7 +60,7 @@ are [O] at preview resolution; pixel values are estimates.
 | Segmented progress pills | `ProgressSegments` in brand `#63AFE9` |
 | Hairline-border cards with large radius | `Card` surface (`radius.lg`, `border.subtle`) |
 | Tip card | `TipCard` |
-| Colour emphasis on one headline word | Welcome headline emphasis via `color.text.brand` |
+| Colour emphasis on one headline word | Welcome headline emphasis via `color.text.brand-display` (exact `#63AFE9`) |
 | Spinner replacing the CTA label | `Button loading` |
 | Floating capsule tab bar | `TabBar` spec (floating variant), future work |
 

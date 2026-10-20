@@ -185,7 +185,7 @@
 }
 
 .welcome__emphasis {
-  color: var(--color-text-brand);
+  color: var(--color-text-brand-display);
 }
 
 .welcome__lede {

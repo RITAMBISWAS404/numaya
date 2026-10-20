@@ -94,6 +94,7 @@
   --color-text-subtle: var(--p-color-neutral-400);
   --color-text-brand: var(--p-color-blue-700);
   --color-text-brand-deep: var(--p-color-blue-800);
+  --color-text-brand-display: var(--p-color-blue-500);
   --color-text-on-inverse: var(--p-color-neutral-0);
   --color-surface: var(--p-color-neutral-0);
   --color-surface-soft: var(--p-color-neutral-50);

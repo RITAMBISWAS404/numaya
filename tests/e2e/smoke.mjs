@@ -55,7 +55,7 @@ try {
       );
       return { color: el && getComputedStyle(el).color, after };
     });
-    check("headline emphasis uses brand text colour", emphasis.color === "rgb(31, 111, 176)", emphasis.color);
+    check("headline emphasis is exactly #63AFE9", emphasis.color === "rgb(99, 175, 233)", emphasis.color);
     check("headline has no decorative underline", !emphasis.after);
 
     const mark = await p.evaluate(() => getComputedStyle(document.querySelector(".welcome__lockup .wordmark rect[mask]")).fill);
