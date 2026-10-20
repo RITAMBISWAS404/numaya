@@ -10,6 +10,7 @@ export default defineConfig({
       input: {
         prototype: resolve(import.meta.dirname, "index.html"),
         showcase: resolve(import.meta.dirname, "showcase.html"),
+        flows: resolve(import.meta.dirname, "flows.html"),
       },
     },
   },

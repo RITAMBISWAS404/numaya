@@ -164,6 +164,42 @@ try {
     await p.screenshot({ path: `${OUT}/showcase-${name}.png`, fullPage: name === "mobile" ? false : true });
     check(`showcase ${name}: no console errors`, p.errors.length === 0, p.errors.join(" | "));
   }
+
+  /* ---------------------------------------------------------------- */
+  /* Product flow previews                                             */
+  /* ---------------------------------------------------------------- */
+  for (const [name, vp] of [
+    ["desktop", { width: 1440, height: 900 }],
+    ["375", { width: 375, height: 667 }],
+  ]) {
+    const p = await page(vp);
+    await p.goto(`${base}flows.html`);
+    await wait(1200);
+    check(`flows ${name}: 10 preview screens render`, (await p.locator(".fl-frame").count()) === 10);
+    const overflow = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    check(`flows ${name}: no horizontal overflow`, overflow <= 0, `${overflow}px`);
+    if (name === "desktop") {
+      await p.addStyleTag({ content: ".fl-top{position:static}" });
+      const disc = p.locator("#discovery");
+      await disc.getByRole("button", { name: "Like", exact: true }).click();
+      await wait(1000);
+      check("flows: like on discovery leads to the match screen", await p.evaluate(() => document.querySelector("#match").classList.contains("is-active")));
+      const chat = p.locator("#chat");
+      await chat.getByRole("button", { name: "Conversation options" }).click();
+      await wait(500);
+      await chat.getByRole("button", { name: "Report or block" }).click();
+      await wait(600);
+      await chat.getByRole("button", { name: "Fake profile" }).click();
+      await wait(600);
+      check("flows: report ends in a block confirmation", (await chat.getByText("You’ve blocked and reported Maya").count()) === 1);
+      for (const id of ["discovery", "match", "chats", "chat", "settings"]) {
+        await p.locator(`#${id} .fl-frame__screen`).screenshot({ path: `${OUT}/flows-${id}.png` });
+      }
+    } else {
+      await p.screenshot({ path: `${OUT}/flows-375.png` });
+    }
+    check(`flows ${name}: no console errors`, p.errors.length === 0, p.errors.join(" | "));
+  }
 } catch (err) {
   check("smoke run completed without an exception", false, err.message.split("\n")[0]);
 } finally {
