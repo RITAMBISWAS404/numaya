@@ -179,21 +179,49 @@ try {
     const overflow = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     check(`flows ${name}: no horizontal overflow`, overflow <= 0, `${overflow}px`);
     if (name === "desktop") {
-      await p.addStyleTag({ content: ".fl-top{position:static}" });
-      const disc = p.locator("#discovery");
-      await disc.getByRole("button", { name: "Like", exact: true }).click();
-      await wait(1000);
-      check("flows: like on discovery leads to the match screen", await p.evaluate(() => document.querySelector("#match").classList.contains("is-active")));
-      const chat = p.locator("#chat");
-      await chat.getByRole("button", { name: "Conversation options" }).click();
+      const f = (id) => p.locator(`#${id}`);
+      const textOf = async (id) => (await f(id).innerText()).replace(/\s+/g, " ");
+      const header = await p.evaluate(() => getComputedStyle(document.querySelector(".fl-top")).position);
+      check("flows: navigation strip is not sticky", header !== "sticky" && header !== "fixed", header);
+
+      await f("basics").getByLabel("First name").fill("Jordan");
+      check("flows: profile edits carry to the profile screen", (await textOf("profile")).includes("Jordan"));
+
+      await f("discovery").getByRole("button", { name: "Like", exact: true }).click();
+      await wait(600);
+      check("flows: liking Maya opens the match screen", (await textOf("match")).includes("You and Maya liked each other"));
+
+      await f("match").getByRole("textbox", { name: "Message" }).fill("Which record shop?");
+      await p.keyboard.press("Enter");
+      await wait(900);
+      check("flows: the match opens Maya’s conversation with the message", (await textOf("chat")).includes("Which record shop?") && (await textOf("chat")).includes("Maya"));
+
+      await f("chat").getByRole("textbox", { name: "Message" }).fill("Saturday works.");
+      await p.keyboard.press("Enter");
+      await wait(900);
+      await f("chats").getByRole("button", { name: /Priya/ }).click();
+      await wait(400);
+      await f("chats").getByRole("button", { name: /Maya/ }).click();
+      await wait(400);
+      check("flows: sent messages persist after switching chats", (await textOf("chat")).includes("Saturday works."));
+      check("flows: inbox preview shows the latest message", (await textOf("chats")).includes("You: Saturday works."));
+
+      await f("chat").getByRole("button", { name: "Conversation options" }).click();
       await wait(500);
-      await chat.getByRole("button", { name: "Report or block" }).click();
+      await p.getByRole("button", { name: "Report or block" }).click();
       await wait(600);
-      await chat.getByRole("button", { name: "Fake profile" }).click();
+      await p.getByRole("button", { name: "Fake profile" }).click();
       await wait(600);
-      check("flows: report ends in a block confirmation", (await chat.getByText("You’ve blocked and reported Maya").count()) === 1);
-      for (const id of ["discovery", "match", "chats", "chat", "settings"]) {
-        await p.locator(`#${id} .fl-frame__screen`).screenshot({ path: `${OUT}/flows-${id}.png` });
+      check("flows: report ends in a block confirmation", (await textOf("chat")).includes("You’ve blocked and reported Maya"));
+      check("flows: blocked person leaves the inbox", !(await textOf("chats")).includes("Maya"));
+      check("flows: settings counts the blocked person", /Blocked people 1/.test(await textOf("settings")));
+
+      const clipped = await p.evaluate(() =>
+        [...document.querySelectorAll(".fl-screen__body")].filter((b) => b.scrollWidth > b.clientWidth + 1).map((b) => b.closest(".fl-frame").id),
+      );
+      check("flows: no screen content overflows sideways", clipped.length === 0, clipped.join(", "));
+      for (const id of ["basics", "discovery", "match", "chats", "chat", "profile", "settings"]) {
+        await f(id).locator(".fl-frame__screen").screenshot({ path: `${OUT}/flows-${id}.png` });
       }
     } else {
       await p.screenshot({ path: `${OUT}/flows-375.png` });

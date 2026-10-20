@@ -1,38 +1,41 @@
 // Mock data for the flow previews. No backend.
-export const ME = { name: "Alex", age: 30 };
-
-export const MAYA = {
-  name: "Maya",
-  age: 29,
-  verified: true,
-  isNew: true,
-  tone: 0,
-  photoCount: 4,
-  details: [
-    { icon: "user", text: "Product designer" },
-    { icon: "location", text: "2 km away" },
-  ],
-  shared: ["Jazz", "Natural wine"],
-  prompt: { q: "A perfect first date", a: "Natural wine, a record shop, and nowhere to be after." },
-  facts: [
-    { icon: "heart", label: "Looking for", value: "Long-term" },
-    { icon: "location", label: "Lives in", value: "Hackney" },
-    { icon: "message", label: "Languages", value: "English, Spanish" },
-  ],
+export const PEOPLE = {
+  maya: {
+    name: "Maya", age: 29, verified: true, isNew: true, tone: 0, photoCount: 4, likesYou: true,
+    details: [{ icon: "user", text: "Product designer" }, { icon: "location", text: "2 km away" }],
+    shared: ["Jazz", "Natural wine"],
+    prompt: { q: "A perfect first date", a: "Natural wine, a record shop, and nowhere to be after." },
+    facts: [
+      { icon: "heart", label: "Looking for", value: "Long-term" },
+      { icon: "location", label: "Lives in", value: "Hackney" },
+      { icon: "message", label: "Languages", value: "English, Spanish" },
+    ],
+    opener: "Ask about the record shop…",
+  },
+  sam: {
+    name: "Sam", age: 31, verified: false, tone: 2, photoCount: 3, likesYou: false,
+    details: [{ icon: "user", text: "Architect" }, { icon: "location", text: "4 km away" }],
+    shared: ["Cooking"],
+    prompt: { q: "I’m weirdly good at", a: "Finding the one good table in a crowded café." },
+    facts: [
+      { icon: "heart", label: "Looking for", value: "Open to seeing" },
+      { icon: "location", label: "Lives in", value: "Peckham" },
+    ],
+  },
+  noor: {
+    name: "Noor", age: 28, verified: true, tone: 3, photoCount: 5, likesYou: true,
+    details: [{ icon: "user", text: "Pastry chef" }, { icon: "location", text: "6 km away" }],
+    shared: ["Cooking", "Museums"],
+    prompt: { q: "Let’s debate this", a: "Croissants are a dinner food." },
+    facts: [
+      { icon: "heart", label: "Looking for", value: "Long-term" },
+      { icon: "location", label: "Lives in", value: "Islington" },
+    ],
+    opener: "Defend the croissant theory…",
+  },
+  priya: { name: "Priya", age: 30, verified: true, tone: 1, lastTime: "Tue" },
+  jo: { name: "Jo", age: 32, verified: false, tone: 2 },
 };
-
-export const MATCHES = [
-  { id: 1, name: "Maya", remaining: 0.85 },
-  { id: 2, name: "Sam", remaining: 0.4 },
-  { id: 3, name: "Ari", remaining: 0.12 },
-  { id: 4, name: "Noor" },
-];
-
-export const CONVERSATIONS = [
-  { name: "Maya", preview: "Obviously. Saturday afternoon?", time: "21:04", unread: 1, verified: true },
-  { name: "Jo", preview: "You matched 2 hours ago", yourMove: true },
-  { name: "Priya", preview: "That bakery was unreal. Thank you!", time: "Tue" },
-];
 
 export const INTERESTS = [
   "Natural wine", "Jazz", "Cooking", "Climbing", "Film photography", "Museums", "Running", "Board games", "Travel", "Poetry",

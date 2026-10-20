@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActionBar,
   ActionSheet,
@@ -10,8 +10,8 @@ import {
   ConsequenceList,
   ConversationRow,
   Dialog,
+  EmptyState,
   Fab,
-  IconButton,
   ListGroup,
   ListRow,
   MatchCelebration,
@@ -33,18 +33,20 @@ import {
   TextField,
   Toast,
   TopBar,
+  IconButton,
   VerifiedBadge,
   Wordmark,
 } from "../design-system/index.js";
-import { ME, MAYA, MATCHES, CONVERSATIONS, INTERESTS, REPORT_REASONS } from "./data.js";
+import { INTERESTS, PEOPLE, REPORT_REASONS } from "./data.js";
+import { conversations, discoveryQueue, newMatches, useStore } from "./store.js";
 
 const TABS = [
   { id: "discover", label: "Discover", icon: "sparkle" },
-  { id: "likes", label: "Likes", icon: "heart", badge: 4 },
-  { id: "chats", label: "Chats", icon: "message", badge: 2 },
+  { id: "chats", label: "Chats", icon: "message" },
   { id: "profile", label: "Profile", icon: "user" },
 ];
-const TAB_TARGET = { discover: "discovery", likes: "discovery", chats: "chats", profile: "profile" };
+const TAB_TARGET = { discover: "discovery", chats: "chats", profile: "profile" };
+const ageOf = (year) => (year.length === 4 ? new Date().getFullYear() - Number(year) : null);
 
 /** Shared screen scaffold inside a preview frame. */
 function Frame({ top, footer, tab, go, children, tone }) {
@@ -56,6 +58,17 @@ function Frame({ top, footer, tab, go, children, tone }) {
       {tab && <TabBar items={TABS} current={tab} onChange={(id) => go(TAB_TARGET[id])} />}
     </div>
   );
+}
+
+/** Short-lived toast message. */
+function useFlash() {
+  const [msg, setMsg] = useState(null);
+  useEffect(() => {
+    if (!msg) return;
+    const id = setTimeout(() => setMsg(null), 1400);
+    return () => clearTimeout(id);
+  }, [msg]);
+  return [msg, setMsg];
 }
 
 /* 1 · Onboarding → profile setup -------------------------------------------- */
@@ -90,11 +103,12 @@ export function SetupIntro({ go }) {
 
 /* 2 · Profile creation ------------------------------------------------------ */
 export function Basics({ go }) {
-  const [name, setName] = useState("Alex");
-  const [year, setYear] = useState("1995");
-  const [gender, setGender] = useState("man");
-  const [looking, setLooking] = useState(["long-term"]);
-  const valid = name.trim() && year.length === 4;
+  const [state, dispatch] = useStore();
+  const { name, year, gender, looking } = state.profile;
+  const set = (patch) => dispatch({ type: "profile", patch });
+  const age = ageOf(year);
+  const yearError = age !== null && age < 18 ? "You need to be 18 or older to use Numaya." : null;
+  const valid = name.trim() && age !== null && age >= 18 && age <= 100;
   return (
     <Frame
       top={<TopBar onBack={() => go("intro")} step={3} steps={6} />}
@@ -107,12 +121,20 @@ export function Basics({ go }) {
     >
       <ScreenHeader title="Let’s start with the basics" />
       <div className="fl-stack fl-gap-lg">
-        <TextField label="First name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="given-name" />
-        <TextField label="Year you were born" inputMode="numeric" maxLength={4} value={year} onChange={(e) => setYear(e.target.value.replace(/\D/g, ""))} hint="We show your age, never your birthday." />
+        <TextField label="First name" value={name} onChange={(e) => set({ name: e.target.value })} autoComplete="given-name" />
+        <TextField
+          label="Year you were born"
+          inputMode="numeric"
+          maxLength={4}
+          value={year}
+          onChange={(e) => set({ year: e.target.value.replace(/\D/g, "") })}
+          error={yearError}
+          hint="We show your age, never your birthday."
+        />
         <OptionCards
           legend="I’m a"
           value={gender}
-          onChange={setGender}
+          onChange={(v) => set({ gender: v })}
           options={[
             { value: "woman", label: "Woman" },
             { value: "man", label: "Man" },
@@ -124,7 +146,7 @@ export function Basics({ go }) {
           mode="multi"
           max={2}
           value={looking}
-          onChange={setLooking}
+          onChange={(v) => set({ looking: v })}
           options={[
             { value: "long-term", label: "A long-term relationship" },
             { value: "open", label: "Open to seeing where it goes" },
@@ -137,27 +159,23 @@ export function Basics({ go }) {
 }
 
 export function InterestsPrompts({ go }) {
-  const [interests, setInterests] = useState(["Natural wine", "Jazz", "Cooking"]);
+  const [state, dispatch] = useStore();
+  const { interests } = state.profile;
   return (
     <Frame
       top={<TopBar onBack={() => go("basics")} step={4} steps={6} />}
       footer={
         <>
-          <span className="fl-caption">{interests.length}/5 interests</span>
+          <span className="fl-caption">{interests.length < 3 ? `Pick ${3 - interests.length} more` : `${interests.length}/5 interests`}</span>
           <Fab disabled={interests.length < 3} onClick={() => go("photos")} />
         </>
       }
     >
       <ScreenHeader title="What are you into?" lede="Pick 3 to 5. They start conversations and help us find people like you." />
       <div className="fl-stack fl-gap-lg">
-        <ChipGroup label="Interests" options={INTERESTS} value={interests} onChange={setInterests} max={5} />
-        <Section title="Your prompts" description="Answer at least one. Matches reply to these.">
-          <div className="fl-stack">
-            <PromptCard prompt="A perfect first date" answer="A record shop, a long walk, and nowhere to be after." onEdit={() => {}} onRemove={() => {}} />
-            <button type="button" className="fl-add-prompt">
-              + Add a prompt
-            </button>
-          </div>
+        <ChipGroup label="Interests" options={INTERESTS} value={interests} onChange={(v) => dispatch({ type: "profile", patch: { interests: v } })} max={5} />
+        <Section title="Your prompt" description="Matches reply to this. More prompts arrive in a later step.">
+          <PromptCard prompt="A perfect first date" answer="A record shop, a long walk, and nowhere to be after." />
         </Section>
       </div>
     </Frame>
@@ -165,15 +183,12 @@ export function InterestsPrompts({ go }) {
 }
 
 export function Photos({ go }) {
-  const [photos, setPhotos] = useState([
-    { id: 1, tone: 0 },
-    { id: 2, tone: 1 },
-    { id: 3, tone: 2 },
-  ]);
+  const [state, dispatch] = useStore();
+  const { photos } = state.profile;
+  const setPhotos = (fn) => dispatch({ type: "profile", patch: { photos: fn(photos) } });
   const add = () => {
-    const id = Date.now();
-    setPhotos((p) => (p.length >= 6 ? p : [...p, { id, tone: p.length % 4, uploading: true }]));
-    setTimeout(() => setPhotos((p) => p.map((x) => (x.id === id ? { ...x, uploading: false } : x))), 1100);
+    if (photos.length >= 6) return;
+    setPhotos((p) => [...p, { id: Date.now(), tone: p.length % 4 }]);
   };
   return (
     <Frame
@@ -187,7 +202,7 @@ export function Photos({ go }) {
     >
       <ScreenHeader title="Add your photos" lede="At least 2, ideally 4. Clear, recent, and just you in the first one." />
       <div className="fl-gap-lg">
-        <PhotoGrid photos={photos} onAdd={add} onRemove={(id) => setPhotos((p) => p.filter((x) => x.id !== id))} />
+        <PhotoGrid photos={photos} onAdd={add} onRemove={(id) => setPhotos((p) => p.filter((x) => x.id !== id))} hint="Tap + to add a sample photo. The first photo is your main one." />
       </div>
     </Frame>
   );
@@ -195,31 +210,38 @@ export function Photos({ go }) {
 
 /* 3 · Discovery ------------------------------------------------------------- */
 export function Discovery({ go }) {
-  const [index, setIndex] = useState(0);
-  const [toast, setToast] = useState(null);
-  const person = index % 2 === 0 ? MAYA : { ...MAYA, name: "Jo", age: 31, tone: 2, details: [{ icon: "location", text: "4 km away" }], shared: [] };
-  const act = (liked) => {
-    setToast(liked ? `You liked ${person.name}` : null);
-    setTimeout(() => setToast(null), 1200);
-    if (liked && index === 0) return setTimeout(() => go("match"), 700);
-    setIndex((i) => i + 1);
+  const [state, dispatch] = useStore();
+  const [toast, flash] = useFlash();
+  const queue = discoveryQueue(state);
+  const id = queue[0];
+  const person = id && PEOPLE[id];
+
+  const decide = (liked) => {
+    dispatch({ type: "decide", id, liked });
+    if (liked && person.likesYou) go("match");
+    else flash(liked ? `You liked ${person.name}` : null);
   };
+
   return (
-    <Frame
-      top={<TopBar largeTitle="Discover" actions={<IconButton icon="filter" label="Filters" variant="plain" />} />}
-      tab="discover"
-      go={go}
-    >
-      <div className="fl-stack">
-        <ProfileCard key={index} {...person} />
-        <ActionBar onPass={() => act(false)} onSuper={() => act(true)} onLike={() => act(true)} />
-        <PromptCard prompt={person.prompt.q} answer={person.prompt.a} />
-        <ListGroup>
-          {person.facts.map((f) => (
-            <ListRow key={f.label} icon={f.icon} label={f.label} kind="value" value={f.value} />
-          ))}
-        </ListGroup>
-      </div>
+    <Frame top={<TopBar largeTitle="Discover" />} tab="discover" go={go}>
+      {person ? (
+        <div className="fl-stack">
+          <ProfileCard key={id} {...person} />
+          <ActionBar onPass={() => decide(false)} onSuper={() => decide(true)} onLike={() => decide(true)} />
+          <PromptCard prompt={person.prompt.q} answer={person.prompt.a} />
+          <ListGroup>
+            {person.facts.map((f) => (
+              <ListRow key={f.label} icon={f.icon} label={f.label} kind="info" value={f.value} />
+            ))}
+          </ListGroup>
+        </div>
+      ) : (
+        <div className="fl-center fl-fill">
+          <EmptyState title="You’ve seen everyone for now" action="Show them again" onAction={() => dispatch({ type: "resetDiscovery" })}>
+            New people join every day. People you passed on can come back around.
+          </EmptyState>
+        </div>
+      )}
       <Toast open={Boolean(toast)} placement="bottom" icon="heart">
         {toast}
       </Toast>
@@ -229,13 +251,35 @@ export function Discovery({ go }) {
 
 /* 4 · Matching -------------------------------------------------------------- */
 export function Match({ go }) {
+  const [state, dispatch] = useStore();
   const [text, setText] = useState("");
+  const id = state.lastMatch;
+  const person = id && PEOPLE[id];
+
+  if (!person || state.ended[id]) {
+    return (
+      <Frame top={<TopBar onBack={() => go("discovery")} />}>
+        <div className="fl-center fl-fill">
+          <EmptyState icon="heart" title="No new match yet" action="Go to Discover" onAction={() => go("discovery")}>
+            Like someone who has already liked you and you’ll see it here.
+          </EmptyState>
+        </div>
+      </Frame>
+    );
+  }
+
+  const send = (value) => {
+    dispatch({ type: "send", id, text: value, msgId: Date.now() });
+    setText("");
+    go("chat");
+  };
+
   return (
     <Frame
       top={<TopBar onBack={() => go("discovery")} />}
       footer={
         <div className="fl-stack fl-stack--full">
-          <Composer value={text} onChange={setText} placeholder="Ask about the record shop…" onSend={() => go("chat")} />
+          <Composer value={text} onChange={setText} placeholder={person.opener ?? "Say hello…"} onSend={send} />
           <Button variant="quiet" onClick={() => go("discovery")}>
             Keep browsing
           </Button>
@@ -243,8 +287,8 @@ export function Match({ go }) {
       }
     >
       <div className="fl-center fl-fill">
-        <MatchCelebration names={[ME.name, MAYA.name]} title="It’s a match">
-          You and Maya liked each other. She answered “A perfect first date”. Start there.
+        <MatchCelebration names={[state.profile.name || "You", person.name]} title="It’s a match">
+          You and {person.name} liked each other. They answered “{person.prompt.q}”. Start there.
         </MatchCelebration>
       </div>
     </Frame>
@@ -253,20 +297,33 @@ export function Match({ go }) {
 
 /* 5 · Messaging ------------------------------------------------------------- */
 export function Chats({ go }) {
+  const [state, dispatch] = useStore();
+  const open = (id) => {
+    dispatch({ type: "openChat", id });
+    go("chat");
+  };
+  const fresh = newMatches(state).map((id) => ({ id, name: PEOPLE[id].name }));
+  const rows = conversations(state);
   return (
-    <Frame top={<TopBar largeTitle="Chats" actions={<IconButton icon="search" label="Search chats" variant="plain" />} />} tab="chats" go={go}>
+    <Frame top={<TopBar largeTitle="Chats" />} tab="chats" go={go}>
       <div className="fl-stack fl-gap-lg">
-        <section>
-          <p className="fl-label">New matches</p>
-          <MatchQueue matches={MATCHES} onSelect={() => go("chat")} />
-        </section>
+        {fresh.length > 0 && (
+          <section>
+            <p className="fl-label">New matches</p>
+            <MatchQueue matches={fresh} onSelect={open} />
+          </section>
+        )}
         <section>
           <p className="fl-label">Conversations</p>
-          <ul className="fl-list">
-            {CONVERSATIONS.map((c) => (
-              <ConversationRow key={c.name} {...c} onPress={() => go("chat")} />
-            ))}
-          </ul>
+          {rows.length ? (
+            <ul className="fl-list">
+              {rows.map((c) => (
+                <ConversationRow key={c.id} {...c} onPress={() => open(c.id)} />
+              ))}
+            </ul>
+          ) : (
+            <p className="fl-caption">No conversations yet.</p>
+          )}
         </section>
       </div>
     </Frame>
@@ -274,30 +331,37 @@ export function Chats({ go }) {
 }
 
 export function Chat({ go }) {
-  const [messages, setMessages] = useState([
-    { id: 1, from: "them", text: "Okay, which record shop? I need to know your taste first." },
-    { id: 2, from: "me", text: "Phonica in Soho. Jazz section, obviously." },
-    { id: 3, from: "them", text: "Obviously. Saturday afternoon?" },
-  ]);
+  const [state, dispatch] = useStore();
+  const id = state.activeChat;
+  const person = PEOPLE[id];
+  const messages = state.threads[id] ?? [];
+  const ended = state.ended[id];
   const [text, setText] = useState("");
   const [menu, setMenu] = useState(false);
   const [report, setReport] = useState(false);
-  const [blocked, setBlocked] = useState(null);
   const [confirm, setConfirm] = useState(false);
+  const [reason, setReason] = useState(null);
 
   const send = (value) => {
-    const id = Date.now();
-    setMessages((m) => [...m, { id, from: "me", text: value, status: "sending" }]);
+    const msgId = Date.now();
+    dispatch({ type: "send", id, text: value, msgId });
     setText("");
-    setTimeout(() => setMessages((m) => m.map((x) => (x.id === id ? { ...x, status: "delivered", time: "now" } : x))), 700);
+    setTimeout(() => dispatch({ type: "delivered", id, msgId }), 700);
   };
 
-  if (blocked) {
+  if (ended) {
     return (
       <Frame top={<TopBar onBack={() => go("chats")} />}>
         <div className="fl-center fl-fill">
-          <ResultPanel title={`You’ve blocked and reported ${MAYA.name}`} footer={<Button onClick={() => { setBlocked(null); go("chats"); }}>Done</Button>}>
-            <p>Reason: {blocked}. She won’t be told, and you won’t see each other again. We’ll update you in Help.</p>
+          <ResultPanel
+            title={ended === "blocked" ? `You’ve blocked and reported ${person.name}` : `You’ve unmatched ${person.name}`}
+            footer={<Button onClick={() => go("chats")}>Back to chats</Button>}
+          >
+            <p>
+              {ended === "blocked"
+                ? `${reason ? `Reason: ${reason}. ` : ""}${person.name} won’t be told. You won’t see each other again, and we’ll follow up in Help.`
+                : `The conversation is closed for both of you and ${person.name} won’t appear in Discover.`}
+            </p>
           </ResultPanel>
         </div>
       </Frame>
@@ -309,19 +373,25 @@ export function Chat({ go }) {
       top={
         <header className="fl-chat-head">
           <IconButton icon="chevronLeft" label="Back to chats" variant="plain" onClick={() => go("chats")} />
-          <Avatar name={MAYA.name} size="sm" verified decorative />
+          <Avatar name={person.name} size="sm" verified={person.verified} decorative />
           <span className="fl-chat-head__name">
-            {MAYA.name} <VerifiedBadge compact />
+            {person.name}
+            {person.verified && <VerifiedBadge compact />}
           </span>
           <IconButton icon="more" label="Conversation options" variant="plain" onClick={() => setMenu(true)} />
         </header>
       }
-      footer={<Composer value={text} onChange={setText} onSend={send} onAttach={() => {}} />}
+      footer={<Composer value={text} onChange={setText} onSend={send} placeholder={`Message ${person.name}`} />}
     >
       <div className="fl-messages">
-        <SystemMessage>You matched with Maya · Today</SystemMessage>
+        <SystemMessage>You matched with {person.name}</SystemMessage>
         {messages.map((m, i) => (
-          <MessageBubble key={m.id} from={m.from} status={m.status} time={m.time} grouped={i > 0 && messages[i - 1].from === m.from}>
+          <MessageBubble
+            key={m.id}
+            from={m.from}
+            status={m.from === "me" && i === messages.length - 1 ? m.status : undefined}
+            grouped={i > 0 && messages[i - 1].from === m.from}
+          >
             {m.text}
           </MessageBubble>
         ))}
@@ -331,7 +401,6 @@ export function Chat({ go }) {
         open={menu}
         onClose={() => setMenu(false)}
         actions={[
-          { label: "View profile", onSelect: () => { setMenu(false); go("discovery"); } },
           { label: "Unmatch", onSelect: () => { setMenu(false); setConfirm(true); } },
           { label: "Report or block", tone: "destructive", onSelect: () => { setMenu(false); setReport(true); } },
         ]}
@@ -346,15 +415,34 @@ export function Chat({ go }) {
         <p className="fl-caption fl-mb">Your report is anonymous. Reporting also blocks them.</p>
         <ListGroup>
           {REPORT_REASONS.map(([icon, label]) => (
-            <ListRow key={label} icon={icon} label={label} onPress={() => { setReport(false); setBlocked(label); }} />
+            <ListRow
+              key={label}
+              icon={icon}
+              label={label}
+              onPress={() => {
+                setReport(false);
+                setReason(label);
+                dispatch({ type: "end", id, reason: "blocked" });
+              }}
+            />
           ))}
         </ListGroup>
       </Sheet>
-      <Dialog open={confirm} onClose={() => setConfirm(false)} title={`Unmatch ${MAYA.name}?`} tone="destructive" confirmLabel="Unmatch" onConfirm={() => { setConfirm(false); go("chats"); }}>
+      <Dialog
+        open={confirm}
+        onClose={() => setConfirm(false)}
+        title={`Unmatch ${person.name}?`}
+        tone="destructive"
+        confirmLabel="Unmatch"
+        onConfirm={() => {
+          setConfirm(false);
+          dispatch({ type: "end", id, reason: "unmatched" });
+        }}
+      >
         <ConsequenceList
           items={[
             { icon: "eyeOff", text: "You won’t see each other again" },
-            { icon: "message", text: "This conversation will be deleted" },
+            { icon: "message", text: "This conversation will be closed" },
           ]}
         />
       </Dialog>
@@ -364,16 +452,21 @@ export function Chat({ go }) {
 
 /* 6 · Profile and settings -------------------------------------------------- */
 export function MyProfile({ go }) {
+  const [state] = useStore();
+  const { name, year, interests, photos } = state.profile;
+  const age = ageOf(year);
+  const completion = Math.min(1, 0.4 + Math.min(photos.length, 4) * 0.1 + Math.min(interests.length, 5) * 0.04);
   return (
     <Frame top={<TopBar largeTitle="Profile" actions={<IconButton icon="settings" label="Settings" variant="plain" onClick={() => go("settings")} />} />} tab="profile" go={go}>
       <div className="fl-stack fl-gap-lg">
         <div className="fl-me">
-          <Avatar name={ME.name} size="xl" ring={{ value: 0.8 }} />
+          <Avatar name={name || "You"} size="xl" ring={{ value: completion }} />
           <div>
             <p className="fl-me__name">
-              {ME.name}, {ME.age}
+              {name || "You"}
+              {age ? `, ${age}` : ""}
             </p>
-            <Badge tone="brand">Profile 80% complete</Badge>
+            <Badge tone="brand">Profile {Math.round(completion * 100)}% complete</Badge>
           </div>
         </div>
         <Button variant="secondary" icon="user" onClick={() => go("basics")}>
@@ -381,9 +474,9 @@ export function MyProfile({ go }) {
         </Button>
         <PromptCard prompt="A perfect first date" answer="A record shop, a long walk, and nowhere to be after." />
         <ListGroup title="Your profile">
-          <ListRow icon="image" label="Photos" kind="value" value="4 of 6" onPress={() => go("photos")} />
-          <ListRow icon="sparkle" label="Interests" kind="value" value="Jazz, Cooking +3" onPress={() => go("interests")} />
-          <ListRow icon="shield" label="Verification" kind="value" value="Phone verified" onPress={() => {}} />
+          <ListRow icon="image" label="Photos" kind="value" value={`${photos.length} of 6`} onPress={() => go("photos")} />
+          <ListRow icon="sparkle" label="Interests" kind="value" value={interests.slice(0, 2).join(", ") + (interests.length > 2 ? ` +${interests.length - 2}` : "")} onPress={() => go("interests")} />
+          <ListRow icon="shield" label="Verification" kind="info" value="Phone verified" />
         </ListGroup>
       </div>
     </Frame>
@@ -391,11 +484,13 @@ export function MyProfile({ go }) {
 }
 
 export function Settings({ go }) {
+  const [state, dispatch] = useStore();
   const [age, setAge] = useState([27, 38]);
   const [distance, setDistance] = useState(15);
   const [prefs, setPrefs] = useState({ snooze: false, messages: true, likes: true });
   const [pending, setPending] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const blocked = Object.values(state.ended).filter((r) => r === "blocked").length;
   const toggle = (key, value) => {
     setPending(key);
     setTimeout(() => {
@@ -403,10 +498,10 @@ export function Settings({ go }) {
       setPending(null);
     }, 700);
   };
-  const SwitchRow = ({ k, label, description }) => (
-    <li className="list-row">
+  const switchRow = (k, label) => (
+    <li className="list-row" key={k}>
       <div className="list-row__hit">
-        <Switch label={label} description={description} checked={prefs[k]} pending={pending === k} onChange={(v) => toggle(k, v)} />
+        <Switch label={label} checked={prefs[k]} pending={pending === k} onChange={(v) => toggle(k, v)} />
       </div>
     </li>
   );
@@ -426,25 +521,34 @@ export function Settings({ go }) {
           </li>
         </ListGroup>
         <ListGroup title="Visibility" footnote="Snooze hides your profile. Matches and chats stay.">
-          <SwitchRow k="snooze" label="Snooze" />
+          {switchRow("snooze", "Snooze")}
         </ListGroup>
         <ListGroup title="Notifications">
-          <SwitchRow k="messages" label="New messages" />
-          <SwitchRow k="likes" label="New likes" />
+          {switchRow("messages", "New messages")}
+          {switchRow("likes", "New likes")}
         </ListGroup>
-        <ListGroup title="Privacy and safety">
-          <ListRow icon="shield" label="Blocked people" kind="value" value="1" onPress={() => {}} />
-          <ListRow icon="lock" label="Data and privacy" onPress={() => {}} />
+        <ListGroup title="Privacy and safety" footnote="Blocking and reporting happen from a conversation’s options menu.">
+          <ListRow icon="shield" label="Blocked people" kind="info" value={String(blocked)} />
         </ListGroup>
         <ListGroup>
           <ListRow label="Log out" kind="action" onPress={() => go("intro")} />
           <ListRow label="Delete account" kind="destructive" onPress={() => setDeleting(true)} />
         </ListGroup>
       </div>
-      <Dialog open={deleting} onClose={() => setDeleting(false)} title="Delete your account?" tone="destructive" confirmLabel="Delete account" onConfirm={() => setDeleting(false)}>
-        Your profile, matches and messages will be removed. You can restore it within 28 days.
+      <Dialog
+        open={deleting}
+        onClose={() => setDeleting(false)}
+        title="Delete your account?"
+        tone="destructive"
+        confirmLabel="Delete account"
+        onConfirm={() => {
+          setDeleting(false);
+          dispatch({ type: "reset" });
+          go("intro");
+        }}
+      >
+        Your profile, matches and messages will be removed. In this preview, everything resets to the start.
       </Dialog>
     </Frame>
   );
 }
-

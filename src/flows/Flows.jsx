@@ -2,6 +2,7 @@ import { useState } from "react";
 import { OverlayRootProvider, Wordmark } from "../design-system/index.js";
 import { cx } from "../lib/cx.js";
 import * as S from "./screens.jsx";
+import { StoreProvider } from "./store.js";
 
 export const SCREENS = [
   { id: "intro", flow: "Onboarding", title: "Verified → profile setup", Component: S.SetupIntro },
@@ -43,6 +44,7 @@ export function Flows() {
     setTimeout(() => setActive(null), 1400);
   };
   return (
+    <StoreProvider>
     <div className="fl">
       <header className="fl-top">
         <div className="fl-top__brand">
@@ -65,5 +67,6 @@ export function Flows() {
         ))}
       </main>
     </div>
+    </StoreProvider>
   );
 }
