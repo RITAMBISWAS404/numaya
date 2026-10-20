@@ -239,7 +239,7 @@ export function VerifyCode({
           <Sheet open={done} labelledBy="done-title">
             <div className="done">
               <span className="done__badge" aria-hidden="true">
-                <Icon name="check" size={30} stroke={2.4} />
+                <Icon name="check" size={30} stroke={2.75} />
               </span>
               <h2 id="done-title" className="done__title">
                 {intent === "signin" ? "You’re signed in" : "You’re verified"}

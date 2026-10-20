@@ -44,7 +44,7 @@ export function Welcome({ active, onCreate, onSignIn }) {
         <h1 id="welcome-title" className="welcome__title">
           Fewer swipes.
           <br />
-          <span className="welcome__underline">Better</span> first dates.
+          <span className="welcome__emphasis">Better</span> first dates.
         </h1>
         <p className="welcome__lede">
           Profiles built around conversation, so the right person knows what to say.
