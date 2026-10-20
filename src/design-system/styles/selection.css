@@ -277,8 +277,10 @@ button.chip:active {
 /* ------------------------------------------------------------------ */
 .switch-row {
   display: flex;
+  flex: 1;
   align-items: center;
   gap: var(--space-4);
+  width: 100%;
   min-height: var(--size-touch-min);
 }
 

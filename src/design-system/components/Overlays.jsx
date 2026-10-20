@@ -7,16 +7,19 @@ import { Portal } from "./Portal.jsx";
 
 const FOCUSABLE = 'button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex="-1"])';
 
-/** Focus the first [data-autofocus] (or focusable) element, trap Tab, restore focus on close. */
-function useModalFocus(open, panelRef) {
+/**
+ * Focus the first [data-autofocus] (or focusable) element, trap Tab, restore focus on close.
+ * `active` must be true only once the panel is mounted (open && mounted).
+ */
+function useModalFocus(active, panelRef) {
   useEffect(() => {
-    if (!open) return;
+    if (!active) return;
     const previous = document.activeElement;
     const panel = panelRef.current;
     const first = panel?.querySelector("[data-autofocus]") ?? panel?.querySelector(FOCUSABLE);
     first?.focus({ preventScroll: true });
     return () => previous?.focus?.({ preventScroll: true });
-  }, [open, panelRef]);
+  }, [active, panelRef]);
 
   return (e, onClose) => {
     if (e.key === "Escape") {
@@ -43,7 +46,7 @@ function useModalFocus(open, panelRef) {
 export function Sheet({ open, onClose, labelledBy, label, className, children }) {
   const mounted = usePresence(open, 320);
   const panelRef = useRef(null);
-  const onKeyDown = useModalFocus(open, panelRef);
+  const onKeyDown = useModalFocus(open && mounted, panelRef);
   if (!mounted) return null;
 
   return (
@@ -109,7 +112,7 @@ export function ActionSheet({ open, onClose, title, actions }) {
 export function Dialog({ open, onClose, title, children, confirmLabel = "Confirm", cancelLabel = "Cancel", tone = "default", onConfirm, loading = false }) {
   const mounted = usePresence(open, 220);
   const panelRef = useRef(null);
-  const onKeyDown = useModalFocus(open, panelRef);
+  const onKeyDown = useModalFocus(open && mounted, panelRef);
   const titleId = useId();
   const bodyId = useId();
   if (!mounted) return null;

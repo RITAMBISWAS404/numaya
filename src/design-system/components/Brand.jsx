@@ -1,7 +1,7 @@
 import { useId } from "react";
 
 /** A soft square with a bite taken out of the corner. */
-export function BrandMark({ size = 28, color = "var(--accent)" }) {
+export function BrandMark({ size = 28, color = "var(--color-brand)" }) {
   const maskId = useId();
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">

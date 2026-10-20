@@ -1,0 +1,43 @@
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { describe, expect, it } from "vitest";
+
+const walk = (dir) =>
+  readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(join(dir, e.name)) : [join(dir, e.name)]));
+
+const tokensCss = readFileSync("src/design-system/tokens.css", "utf8");
+const defined = new Set([...tokensCss.matchAll(/(--[a-z0-9-]+):/g)].map((m) => m[1]));
+// Runtime and component-local custom properties set in CSS or inline styles.
+const RUNTIME = new Set([
+  "--safe-top", "--safe-bottom", "--keyboard-inset", "--keypad-h",
+  "--x", "--r", "--s", "--i", "--from", "--to", "--code-length", "--code-group", "--sc-min", "--avatar-size",
+]);
+const files = walk("src").filter((f) => /\.(css|jsx?)$/.test(f) && !f.endsWith("tokens.css") && !f.endsWith("tokens.js"));
+
+describe("CSS custom property usage", () => {
+  it("every var() reference resolves to a token or a documented runtime variable", () => {
+    const unknown = [];
+    for (const f of files) {
+      for (const m of readFileSync(f, "utf8").matchAll(/var\((--[a-z0-9-]+)[,)]/g)) {
+        if (!defined.has(m[1]) && !RUNTIME.has(m[1])) unknown.push(`${f}: ${m[1]}`);
+      }
+    }
+    expect(unknown).toEqual([]);
+  });
+
+  it("product CSS contains no raw colours (simulator chrome excluded)", () => {
+    const product = files.filter((f) => f.endsWith(".css") && !f.endsWith("device.css"));
+    const raw = [];
+    for (const f of product) {
+      const text = readFileSync(f, "utf8").replace(/\/\*[\s\S]*?\*\//g, "").replace(/url\("data:[^"]*"\)/g, "");
+      for (const m of text.matchAll(/#[0-9a-fA-F]{3,8}\b|rgba?\(/g)) raw.push(`${f}: ${m[0]}`);
+    }
+    // Shadow tokens may contain rgb(); everything else must go through tokens.
+    expect(raw).toEqual([]);
+  });
+
+  it("component CSS never references primitive tokens directly", () => {
+    const offenders = files.filter((f) => /var\(--p-/.test(readFileSync(f, "utf8")));
+    expect(offenders).toEqual([]);
+  });
+});

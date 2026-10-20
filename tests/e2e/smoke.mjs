@@ -1,0 +1,176 @@
+#!/usr/bin/env node
+/**
+ * Browser smoke test for the prototype and the design-system showcase.
+ *
+ *   npm run test:e2e
+ *
+ * Starts a Vite dev server, drives the real UI in Chromium, asserts behaviour,
+ * and writes screenshots to tests/e2e/artifacts/ for visual review.
+ * Requires a Playwright Chromium (`npx playwright install chromium` on a fresh machine).
+ */
+import { mkdirSync } from "node:fs";
+import { resolve } from "node:path";
+import { chromium } from "playwright";
+import { createServer } from "vite";
+
+const ROOT = resolve(import.meta.dirname, "../..");
+const OUT = resolve(import.meta.dirname, "artifacts");
+mkdirSync(OUT, { recursive: true });
+
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const results = [];
+function check(name, ok, detail = "") {
+  results.push({ name, ok, detail });
+  console.log(`${ok ? "✓" : "✗"} ${name}${detail ? ` (${detail})` : ""}`);
+}
+
+const server = await createServer({ root: ROOT, server: { port: 0, host: "127.0.0.1" }, logLevel: "error" });
+await server.listen();
+const base = server.resolvedUrls.local[0];
+const browser = await chromium.launch();
+
+async function page(viewport, opts = {}) {
+  const ctx = await browser.newContext({ viewport, deviceScaleFactor: 2, ...opts });
+  const p = await ctx.newPage();
+  p.errors = [];
+  p.on("pageerror", (e) => p.errors.push(e.message));
+  p.on("console", (m) => m.type() === "error" && p.errors.push(m.text()));
+  return p;
+}
+
+try {
+  /* ---------------------------------------------------------------- */
+  /* Prototype, desktop simulator                                      */
+  /* ---------------------------------------------------------------- */
+  {
+    const p = await page({ width: 1440, height: 900 });
+    await p.goto(base);
+    await wait(1500);
+    await p.screenshot({ path: `${OUT}/prototype-welcome.png` });
+
+    const emphasis = await p.evaluate(() => {
+      const el = document.querySelector(".welcome__emphasis");
+      const after = [...document.querySelectorAll(".welcome__title *")].some(
+        (e) => !["none", "normal"].includes(getComputedStyle(e, "::after").content),
+      );
+      return { color: el && getComputedStyle(el).color, after };
+    });
+    check("headline emphasis uses brand text colour", emphasis.color === "rgb(31, 111, 176)", emphasis.color);
+    check("headline has no decorative underline", !emphasis.after);
+
+    const mark = await p.evaluate(() => getComputedStyle(document.querySelector(".welcome__lockup .wordmark rect[mask]")).fill);
+    check("wordmark mark is the brand blue", mark === "rgb(99, 175, 233)", mark);
+
+    await p.getByRole("button", { name: "Create an account" }).click();
+    await wait(900);
+    await p.getByRole("button", { name: /^Country:/ }).click();
+    await wait(700);
+    const geo = await p.evaluate(() => {
+      const edges = (el) => {
+        const r = el.getBoundingClientRect();
+        return [Math.round(r.left), Math.round(r.right)];
+      };
+      const s = edges(document.querySelector(".search"));
+      const rows = [...document.querySelectorAll(".country-row")].map(edges);
+      const sel = document.querySelector(".country-row.is-selected");
+      const c = sel.querySelector(".country-row__check svg").getBoundingClientRect();
+      const r = sel.getBoundingClientRect();
+      return { aligned: rows.every((x) => x[0] === s[0] && x[1] === s[1]), inside: c.right <= r.right - 8 };
+    });
+    check("country rows align with the search field", geo.aligned);
+    check("selected check stays inside its row", geo.inside);
+    await p.screenshot({ path: `${OUT}/prototype-country.png` });
+    await p.keyboard.press("Escape");
+    await wait(500);
+    const restored = await p.evaluate(() => document.activeElement?.id);
+    check("closing the sheet returns focus to the country button", restored === "phone-country", restored);
+
+    await p.locator("#phone-number").click();
+    await p.keyboard.type("4155550132");
+    check("Send code enabled for a complete number", await p.getByRole("button", { name: "Send code" }).isEnabled());
+    await p.keyboard.press("Enter");
+    await wait(3300);
+    check("verification screen reached", (await p.locator("#verify-title").count()) === 1);
+    await p.locator(".keypad__suggestion").click({ timeout: 5000 });
+    await wait(3200);
+    const badge = await p.evaluate(() => {
+      const el = document.querySelector(".result__badge");
+      return el && { bg: getComputedStyle(el).backgroundColor, fg: getComputedStyle(el).color };
+    });
+    check("verified badge fill is exactly #63AFE9", badge?.bg === "rgb(99, 175, 233)", badge?.bg);
+    check("verified badge check is white", badge?.fg === "rgb(255, 255, 255)", badge?.fg);
+    await p.screenshot({ path: `${OUT}/prototype-verified.png` });
+
+    await p.getByRole("button", { name: "Start over" }).first().click();
+    await wait(900);
+    await p.getByRole("button", { name: "I have an account" }).click();
+    await wait(900);
+    await p.getByRole("button", { name: "Back" }).click();
+    await wait(900);
+    check("back navigation returns to welcome", (await p.locator("#welcome-title").count()) === 1);
+    check("prototype has no console errors", p.errors.length === 0, p.errors.join(" | "));
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Prototype on phones, plus reduced motion                          */
+  /* ---------------------------------------------------------------- */
+  for (const [name, vp] of [
+    ["iphone-15", { width: 393, height: 852 }],
+    ["iphone-se", { width: 375, height: 667 }],
+  ]) {
+    const p = await page(vp, { isMobile: true, hasTouch: true, reducedMotion: name === "iphone-se" ? "reduce" : "no-preference" });
+    await p.goto(base);
+    await wait(1200);
+    await p.screenshot({ path: `${OUT}/prototype-${name}-welcome.png` });
+    await p.getByRole("button", { name: "Create an account" }).click();
+    await wait(900);
+    await p.locator("#phone-number").fill("4155550132");
+    await p.getByRole("button", { name: "Send code" }).click();
+    await wait(3000);
+    const overflow = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    check(`${name}: flow reaches verification`, (await p.locator("#verify-title").count()) === 1);
+    check(`${name}: no horizontal overflow`, overflow <= 0, `${overflow}px`);
+    await p.screenshot({ path: `${OUT}/prototype-${name}-verify.png` });
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Showcase                                                          */
+  /* ---------------------------------------------------------------- */
+  for (const [name, vp] of [
+    ["desktop", { width: 1440, height: 900 }],
+    ["mobile", { width: 390, height: 844 }],
+  ]) {
+    const p = await page(vp);
+    await p.goto(`${base}showcase.html`);
+    await wait(1200);
+    const overflow = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    check(`showcase ${name}: no horizontal overflow`, overflow <= 0, `${overflow}px`);
+    const unlabelled = await p.evaluate(
+      () =>
+        [...document.querySelectorAll("button")].filter(
+          (b) => !b.closest("[aria-hidden='true']") && !(b.getAttribute("aria-label") || b.textContent.trim()),
+        ).length,
+    );
+    check(`showcase ${name}: every button has an accessible name`, unlabelled === 0, `${unlabelled} unlabelled`);
+    if (name === "desktop") {
+      const frame = p.locator(".sc-phone", { hasText: "Settings and system states" });
+      await frame.getByRole("button", { name: "Delete account" }).click();
+      await wait(400);
+      const focused = await p.evaluate(() => document.activeElement?.textContent);
+      check("destructive dialog focuses Cancel first", focused === "Cancel", focused);
+      await p.keyboard.press("Escape");
+      await wait(300);
+    }
+    await p.screenshot({ path: `${OUT}/showcase-${name}.png`, fullPage: name === "mobile" ? false : true });
+    check(`showcase ${name}: no console errors`, p.errors.length === 0, p.errors.join(" | "));
+  }
+} catch (err) {
+  check("smoke run completed without an exception", false, err.message.split("\n")[0]);
+} finally {
+  await browser.close();
+  await server.close();
+}
+
+const failed = results.filter((r) => !r.ok);
+console.log(`\n${results.length - failed.length}/${results.length} checks passed. Screenshots: tests/e2e/artifacts/`);
+process.exit(failed.length ? 1 : 0);
