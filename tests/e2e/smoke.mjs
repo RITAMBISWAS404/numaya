@@ -220,6 +220,42 @@ try {
         [...document.querySelectorAll(".fl-screen__body")].filter((b) => b.scrollWidth > b.clientWidth + 1).map((b) => b.closest(".fl-frame").id),
       );
       check("flows: no screen content overflows sideways", clipped.length === 0, clipped.join(", "));
+      // Swipe: drag Sam's card (next after Maya) left past the threshold to pass.
+      const before = await textOf("discovery");
+      const card = f("discovery").locator(".fl-swipe");
+      await card.scrollIntoViewIfNeeded();
+      const box = await card.boundingBox();
+      const y = box.y + box.height / 3;
+      await p.mouse.move(box.x + box.width / 2, y);
+      await p.mouse.down();
+      await p.mouse.move(box.x + box.width / 2 - 160, y, { steps: 8 });
+      await p.mouse.up();
+      await wait(500);
+      const after = await textOf("discovery");
+      check("flows: swiping left passes to the next profile", before.includes("Sam, 31") && after.includes("Noor, 28"));
+
+      // Filters: narrowing distance empties Discover; the empty state widens it again.
+      const dist = f("settings").getByLabel("Distance");
+      await dist.fill("1");
+      await wait(200);
+      check("flows: distance filter empties Discover", (await textOf("discovery")).includes("No one fits your filters"));
+      await f("discovery").getByRole("button", { name: "Widen age and distance" }).click();
+      await wait(300);
+      check("flows: widening filters brings people back", (await textOf("discovery")).includes("Ages 18–70"));
+
+      // Persistence: reload keeps the session; delete account clears it.
+      await p.reload();
+      await wait(1200);
+      check("flows: reload restores the session", (await textOf("profile")).includes("Jordan") && (await textOf("settings")).includes("Blocked people 1"));
+      await f("settings").getByRole("button", { name: "Delete account" }).click();
+      await wait(400);
+      await p.getByRole("button", { name: "Delete account" }).last().click();
+      await wait(400);
+      await p.reload();
+      await wait(1200);
+      const saved = await p.evaluate(() => localStorage.getItem("numaya.preview.v1"));
+      check("flows: delete account clears saved data", saved === null && (await textOf("profile")).includes("Alex"));
+
       for (const id of ["basics", "discovery", "match", "chats", "chat", "profile", "settings"]) {
         await f(id).locator(".fl-frame__screen").screenshot({ path: `${OUT}/flows-${id}.png` });
       }

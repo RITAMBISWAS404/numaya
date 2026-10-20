@@ -10,7 +10,7 @@ const defined = new Set([...tokensCss.matchAll(/(--[a-z0-9-]+):/g)].map((m) => m
 // Runtime and component-local custom properties set in CSS or inline styles.
 const RUNTIME = new Set([
   "--safe-top", "--safe-bottom", "--keyboard-inset", "--keypad-h",
-  "--x", "--r", "--s", "--i", "--from", "--to", "--code-length", "--code-group", "--sc-min", "--avatar-size",
+  "--x", "--r", "--s", "--i", "--from", "--to", "--code-length", "--code-group", "--sc-min", "--avatar-size", "--dx", "--rot",
 ]);
 const files = walk("src").filter((f) => /\.(css|jsx?)$/.test(f) && !f.endsWith("tokens.css") && !f.endsWith("tokens.js"));
 

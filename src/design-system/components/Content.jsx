@@ -282,7 +282,11 @@ export function PhotoGrid({ photos, slots = 6, onAdd, onRemove, hint = "Hold and
 export function ProfileCard({ name, age, verified, details = [], shared = [], photoCount = 3, photoIndex = 0, tone = 0, isNew = false }) {
   return (
     <article className="profile-card" aria-label={`${name}, ${age}`}>
-      <ImagePlaceholder tone={tone} ratio="3 / 4" className="profile-card__photo" label={`Photo of ${name}`} />
+      <ImagePlaceholder tone={tone} ratio="3 / 4" className="profile-card__photo" label={`Photo of ${name}`}>
+        <span className="profile-card__initial" aria-hidden="true">
+          {name?.[0]}
+        </span>
+      </ImagePlaceholder>
       <div className="profile-card__progress" aria-hidden="true">
         {Array.from({ length: photoCount }, (_, i) => (
           <span key={i} className={cx(i === photoIndex && "is-current")} />

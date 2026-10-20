@@ -260,6 +260,7 @@ body {
 
 .fl-me__name {
   margin-bottom: var(--space-2);
+  overflow-wrap: anywhere;
   font-family: var(--font-display);
   font-variation-settings: var(--font-display-axes);
   font-size: var(--type-headline-size);
@@ -280,6 +281,10 @@ body {
 
 .fl-chat-head__name {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -310,4 +315,61 @@ body {
 
 .fl-screen__footer > .composer {
   flex: 1;
+}
+
+/* Discover: filter summary and swipe -------------------------------------- */
+.fl-filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: calc(-1 * var(--space-2)) 0 var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--type-caption-size);
+}
+
+.fl-swipe {
+  position: relative;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+  transform: translateX(var(--dx, 0)) rotate(var(--rot, 0));
+  transition: transform var(--motion-duration-slow) var(--motion-ease-out);
+}
+
+.fl-swipe.is-dragging {
+  cursor: grabbing;
+  transition: none;
+}
+
+.fl-swipe__stamp {
+  position: absolute;
+  top: var(--space-6);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: var(--type-label-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--type-eyebrow-tracking);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.fl-swipe__stamp--like {
+  left: var(--space-5);
+  /* Text on a blue fill uses the readable variant (5.3:1), never #63AFE9. */
+  background: var(--color-brand-strong);
+  color: var(--color-on-brand);
+}
+
+.fl-swipe__stamp--pass {
+  right: var(--space-5);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fl-swipe {
+    transform: none;
+    transition: none;
+  }
 }

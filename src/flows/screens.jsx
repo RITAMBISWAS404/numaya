@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ActionBar,
   ActionSheet,
@@ -38,7 +38,7 @@ import {
   Wordmark,
 } from "../design-system/index.js";
 import { INTERESTS, PEOPLE, REPORT_REASONS } from "./data.js";
-import { conversations, discoveryQueue, newMatches, useStore } from "./store.js";
+import { conversations, discoveryQueue, hiddenByFilters, newMatches, useStore } from "./store.js";
 
 const TABS = [
   { id: "discover", label: "Discover", icon: "sparkle" },
@@ -209,27 +209,76 @@ export function Photos({ go }) {
 }
 
 /* 3 · Discovery ------------------------------------------------------------- */
+const SWIPE_THRESHOLD = 96;
+
+/** Horizontal drag on the card: past the threshold, right likes and left passes. Buttons remain the accessible path. */
+function useSwipe(onDecide) {
+  const start = useRef(null);
+  const [dx, setDx] = useState(0);
+  const handlers = {
+    onPointerDown: (e) => {
+      if (e.button !== 0) return;
+      start.current = e.clientX;
+      e.currentTarget.setPointerCapture?.(e.pointerId);
+    },
+    onPointerMove: (e) => {
+      if (start.current !== null) setDx(e.clientX - start.current);
+    },
+    onPointerUp: () => {
+      if (start.current === null) return;
+      start.current = null;
+      if (Math.abs(dx) >= SWIPE_THRESHOLD) onDecide(dx > 0);
+      setDx(0);
+    },
+    onPointerCancel: () => {
+      start.current = null;
+      setDx(0);
+    },
+  };
+  return { dx, handlers };
+}
+
 export function Discovery({ go }) {
   const [state, dispatch] = useStore();
   const [toast, flash] = useFlash();
   const queue = discoveryQueue(state);
+  const hidden = hiddenByFilters(state);
   const id = queue[0];
   const person = id && PEOPLE[id];
+  const { age, distance } = state.prefs;
 
   const decide = (liked) => {
+    if (!person) return;
     dispatch({ type: "decide", id, liked });
     if (liked && person.likesYou) go("match");
     else flash(liked ? `You liked ${person.name}` : null);
   };
+  const { dx, handlers } = useSwipe(decide);
+  const intent = dx >= SWIPE_THRESHOLD / 2 ? "like" : dx <= -SWIPE_THRESHOLD / 2 ? "pass" : null;
 
   return (
     <Frame top={<TopBar largeTitle="Discover" />} tab="discover" go={go}>
+      <p className="fl-filters">
+        Ages {age[0]}–{age[1]} · within {distance} km
+        <button type="button" className="text-button" onClick={() => go("settings")}>
+          Change
+        </button>
+      </p>
       {person ? (
         <div className="fl-stack">
-          <ProfileCard key={id} {...person} />
+          <div
+            className={`fl-swipe${dx ? " is-dragging" : ""}`}
+            style={{ "--dx": `${dx}px`, "--rot": `${dx / 24}deg` }}
+            {...handlers}
+            aria-label={`${person.name}. Swipe right to like, left to pass, or use the buttons below.`}
+            role="group"
+          >
+            <ProfileCard key={id} {...person} details={[...person.details, { icon: "location", text: `${person.distanceKm} km away` }]} />
+            {intent && <span className={`fl-swipe__stamp fl-swipe__stamp--${intent}`}>{intent === "like" ? "Like" : "Pass"}</span>}
+          </div>
           <ActionBar onPass={() => decide(false)} onSuper={() => decide(true)} onLike={() => decide(true)} />
           <PromptCard prompt={person.prompt.q} answer={person.prompt.a} />
-          <ListGroup>
+          <ListGroup footnote="Sample profiles. Distances are illustrative, not real locations.">
             {person.facts.map((f) => (
               <ListRow key={f.label} icon={f.icon} label={f.label} kind="info" value={f.value} />
             ))}
@@ -237,9 +286,15 @@ export function Discovery({ go }) {
         </div>
       ) : (
         <div className="fl-center fl-fill">
-          <EmptyState title="You’ve seen everyone for now" action="Show them again" onAction={() => dispatch({ type: "resetDiscovery" })}>
-            New people join every day. People you passed on can come back around.
-          </EmptyState>
+          {hidden > 0 ? (
+            <EmptyState icon="filter" title="No one fits your filters" action="Widen age and distance" onAction={() => dispatch({ type: "broaden" })}>
+              {hidden} {hidden === 1 ? "person is" : "people are"} just outside ages {age[0]}–{age[1]} or {distance} km.
+            </EmptyState>
+          ) : (
+            <EmptyState title="You’ve seen everyone for now" action="Show them again" onAction={() => dispatch({ type: "resetDiscovery" })}>
+              New people join every day. People you passed on can come back around.
+            </EmptyState>
+          )}
         </div>
       )}
       <Toast open={Boolean(toast)} placement="bottom" icon="heart">
@@ -373,7 +428,7 @@ export function Chat({ go }) {
       top={
         <header className="fl-chat-head">
           <IconButton icon="chevronLeft" label="Back to chats" variant="plain" onClick={() => go("chats")} />
-          <Avatar name={person.name} size="sm" verified={person.verified} decorative />
+          <Avatar name={person.name} size="sm" decorative />
           <span className="fl-chat-head__name">
             {person.name}
             {person.verified && <VerifiedBadge compact />}
@@ -485,16 +540,15 @@ export function MyProfile({ go }) {
 
 export function Settings({ go }) {
   const [state, dispatch] = useStore();
-  const [age, setAge] = useState([27, 38]);
-  const [distance, setDistance] = useState(15);
-  const [prefs, setPrefs] = useState({ snooze: false, messages: true, likes: true });
+  const { prefs } = state;
+  const setPrefs = (patch) => dispatch({ type: "prefs", patch });
   const [pending, setPending] = useState(null);
   const [deleting, setDeleting] = useState(false);
   const blocked = Object.values(state.ended).filter((r) => r === "blocked").length;
   const toggle = (key, value) => {
     setPending(key);
     setTimeout(() => {
-      setPrefs((p) => ({ ...p, [key]: value }));
+      setPrefs({ [key]: value });
       setPending(null);
     }, 700);
   };
@@ -511,12 +565,12 @@ export function Settings({ go }) {
         <ListGroup title="Who you see">
           <li className="list-row">
             <div className="list-row__hit fl-slider-row">
-              <RangeSlider label="Age" min={18} max={70} value={age} onChange={setAge} />
+              <RangeSlider label="Age" min={18} max={70} value={prefs.age} onChange={(v) => setPrefs({ age: v })} />
             </div>
           </li>
           <li className="list-row">
             <div className="list-row__hit fl-slider-row">
-              <Slider label="Distance" min={1} max={100} value={distance} onChange={setDistance} format={(v) => `${v} km`} />
+              <Slider label="Distance" min={1} max={100} value={prefs.distance} onChange={(v) => setPrefs({ distance: v })} format={(v) => `${v} km`} />
             </div>
           </li>
         </ListGroup>
@@ -547,7 +601,7 @@ export function Settings({ go }) {
           go("intro");
         }}
       >
-        Your profile, matches and messages will be removed. In this preview, everything resets to the start.
+        Your profile, matches and messages will be removed. In this preview, saved data is cleared and the demo restarts.
       </Dialog>
     </Frame>
   );

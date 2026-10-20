@@ -511,6 +511,18 @@ button.list-row__hit:hover {
 
 .profile-card__photo {
   border-radius: 0;
+  align-items: start;
+}
+
+/* Without a photo, a large display initial keeps the card composed. */
+.profile-card__initial {
+  margin-top: 18%;
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: 128px;
+  line-height: 1;
+  font-weight: 400;
+  opacity: 0.55;
 }
 
 .profile-card__progress {
@@ -547,6 +559,8 @@ button.list-row__hit:hover {
 
 .profile-card__name {
   display: flex;
+  flex-wrap: wrap;
+  overflow-wrap: anywhere;
   align-items: center;
   gap: 8px;
   font-family: var(--font-display);
@@ -763,8 +777,8 @@ button.list-row__hit:hover {
 
 .match__photos {
   position: relative;
-  width: 220px;
-  height: 160px;
+  width: 264px;
+  height: 200px;
 }
 
 .match__photo {
@@ -772,11 +786,11 @@ button.list-row__hit:hover {
   top: 0;
   display: grid;
   place-items: center;
-  width: 112px;
-  height: 148px;
+  width: 136px;
+  height: 184px;
   border-radius: var(--radius-lg);
   font-family: var(--font-display);
-  font-size: 44px;
+  font-size: 56px;
   box-shadow: var(--shadow-card);
 }
 

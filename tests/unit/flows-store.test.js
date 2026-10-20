@@ -32,3 +32,52 @@ describe("flow preview store", () => {
     expect(reducer(s, { type: "reset" })).toBe(initialState);
   });
 });
+
+import { BROAD, STORAGE_KEY, hiddenByFilters, loadState, saveState } from "../../src/flows/store.js";
+
+const memory = () => {
+  const m = new Map();
+  return { getItem: (k) => m.get(k) ?? null, setItem: (k, v) => m.set(k, v), removeItem: (k) => m.delete(k), map: m };
+};
+
+describe("discovery filters", () => {
+  it("default age and distance hide people outside them", () => {
+    expect(discoveryQueue(initialState)).toEqual(["maya", "sam", "noor"]);
+    expect(hiddenByFilters(initialState)).toBe(3);
+  });
+
+  it("narrow filters can empty the queue; broaden restores everyone", () => {
+    const narrow = run({ type: "prefs", patch: { distance: 1 } });
+    expect(discoveryQueue(narrow)).toEqual([]);
+    const broad = reducer(narrow, { type: "broaden" });
+    expect(broad.prefs).toMatchObject(BROAD);
+    expect(discoveryQueue(broad)).toHaveLength(6);
+  });
+});
+
+describe("persistence", () => {
+  it("round-trips state and finishes interrupted sends", () => {
+    const store = memory();
+    const s = run({ type: "profile", patch: { name: "Jordan" } }, { type: "send", id: "priya", text: "Hi", msgId: 5 });
+    saveState(s, store);
+    const restored = loadState(store);
+    expect(restored.profile.name).toBe("Jordan");
+    expect(restored.threads.priya.at(-1)).toMatchObject({ text: "Hi", status: "delivered" });
+  });
+
+  it("falls back safely on bad data or unavailable storage", () => {
+    const store = memory();
+    store.setItem(STORAGE_KEY, "{not json");
+    expect(loadState(store)).toBe(initialState);
+    const throwing = { getItem: () => { throw new Error("blocked"); }, setItem: () => { throw new Error("blocked"); }, removeItem: () => {} };
+    expect(loadState(throwing)).toBe(initialState);
+    expect(() => saveState(run({ type: "profile", patch: { name: "X" } }), throwing)).not.toThrow();
+  });
+
+  it("reset clears saved data", () => {
+    const store = memory();
+    saveState(run({ type: "profile", patch: { name: "Jordan" } }), store);
+    saveState(reducer(initialState, { type: "reset" }), store);
+    expect(store.map.has(STORAGE_KEY)).toBe(false);
+  });
+});
