@@ -373,3 +373,9 @@ body {
     transition: none;
   }
 }
+
+.fl-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}

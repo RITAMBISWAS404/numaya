@@ -195,6 +195,7 @@ try {
       await p.keyboard.press("Enter");
       await wait(900);
       check("flows: the match opens Maya’s conversation with the message", (await textOf("chat")).includes("Which record shop?") && (await textOf("chat")).includes("Maya"));
+      check("flows: a message sent from the match is delivered", !(await textOf("chat")).includes("Sending"));
 
       await f("chat").getByRole("textbox", { name: "Message" }).fill("Saturday works.");
       await p.keyboard.press("Enter");
@@ -243,6 +244,29 @@ try {
       await wait(300);
       check("flows: widening filters brings people back", (await textOf("discovery")).includes("Ages 18–70"));
 
+      // Snooze pauses Discover, survives reload, and Resume restores it.
+      await f("settings").getByRole("switch", { name: /Snooze/ }).check();
+      await wait(1000);
+      check("flows: snooze gives feedback", (await textOf("settings")).includes("Snoozed. Discover is paused."));
+      check("flows: snooze pauses Discover", (await textOf("discovery")).includes("Discover is paused") && (await textOf("profile")).includes("Snoozed"));
+      await p.reload();
+      await wait(1200);
+      check("flows: snooze persists across reload", (await textOf("discovery")).includes("Discover is paused"));
+      await f("discovery").getByRole("button", { name: "Resume" }).click();
+      await wait(300);
+      check("flows: Resume restores Discover", (await textOf("discovery")).includes("Ages 18–70") && !(await textOf("profile")).includes("Snoozed"));
+
+      // Message alerts: off shows feedback and a Chats banner; the banner turns them back on.
+      await f("settings").getByRole("switch", { name: /New messages/ }).uncheck();
+      await wait(1000);
+      check("flows: alerts off gives feedback", (await textOf("settings")).includes("New message alerts off"));
+      check("flows: Chats shows alerts-off banner", (await textOf("chats")).includes("New message alerts are off"));
+      await f("chats").getByRole("button", { name: "Turn on" }).click();
+      await wait(300);
+      check("flows: banner turns alerts back on", !(await textOf("chats")).includes("alerts are off") && (await f("settings").getByRole("switch", { name: /New messages/ }).isChecked()));
+      await f("settings").getByRole("switch", { name: /New messages/ }).uncheck();
+      await wait(1000);
+
       // Persistence: reload keeps the session; delete account clears it.
       await p.reload();
       await wait(1200);
@@ -255,6 +279,10 @@ try {
       await wait(1200);
       const saved = await p.evaluate(() => localStorage.getItem("numaya.preview.v1"));
       check("flows: delete account clears saved data", saved === null && (await textOf("profile")).includes("Alex"));
+      check(
+        "flows: delete account restores default settings",
+        !(await textOf("chats")).includes("alerts are off") && (await f("settings").getByRole("switch", { name: /Snooze/ }).isChecked()) === false,
+      );
 
       for (const id of ["basics", "discovery", "match", "chats", "chat", "profile", "settings"]) {
         await f(id).locator(".fl-frame__screen").screenshot({ path: `${OUT}/flows-${id}.png` });

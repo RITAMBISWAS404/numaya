@@ -4,6 +4,7 @@ import {
   ActionSheet,
   Avatar,
   Badge,
+  Banner,
   Button,
   ChipGroup,
   Composer,
@@ -254,10 +255,19 @@ export function Discovery({ go }) {
     else flash(liked ? `You liked ${person.name}` : null);
   };
   const { dx, handlers } = useSwipe(decide);
+  const snoozed = state.prefs.snooze;
   const intent = dx >= SWIPE_THRESHOLD / 2 ? "like" : dx <= -SWIPE_THRESHOLD / 2 ? "pass" : null;
 
   return (
     <Frame top={<TopBar largeTitle="Discover" />} tab="discover" go={go}>
+      {snoozed ? (
+        <div className="fl-center fl-fill">
+          <EmptyState icon="eyeOff" title="Discover is paused" action="Resume" onAction={() => dispatch({ type: "prefs", patch: { snooze: false } })}>
+            You’re snoozed, so you won’t see new people and they won’t see you. Your matches and chats are still here.
+          </EmptyState>
+        </div>
+      ) : (
+      <>
       <p className="fl-filters">
         Ages {age[0]}–{age[1]} · within {distance} km
         <button type="button" className="text-button" onClick={() => go("settings")}>
@@ -297,6 +307,8 @@ export function Discovery({ go }) {
           )}
         </div>
       )}
+      </>
+      )}
       <Toast open={Boolean(toast)} placement="bottom" icon="heart">
         {toast}
       </Toast>
@@ -324,7 +336,9 @@ export function Match({ go }) {
   }
 
   const send = (value) => {
-    dispatch({ type: "send", id, text: value, msgId: Date.now() });
+    const msgId = Date.now();
+    dispatch({ type: "send", id, text: value, msgId });
+    setTimeout(() => dispatch({ type: "delivered", id, msgId }), 700);
     setText("");
     go("chat");
   };
@@ -362,6 +376,11 @@ export function Chats({ go }) {
   return (
     <Frame top={<TopBar largeTitle="Chats" />} tab="chats" go={go}>
       <div className="fl-stack fl-gap-lg">
+        {!state.prefs.messages && (
+          <Banner tone="info" title="New message alerts are off" action="Turn on" onAction={() => dispatch({ type: "prefs", patch: { messages: true } })}>
+            You’ll still see new messages here.
+          </Banner>
+        )}
         {fresh.length > 0 && (
           <section>
             <p className="fl-label">New matches</p>
@@ -521,7 +540,14 @@ export function MyProfile({ go }) {
               {name || "You"}
               {age ? `, ${age}` : ""}
             </p>
-            <Badge tone="brand">Profile {Math.round(completion * 100)}% complete</Badge>
+            <span className="fl-badges">
+              <Badge tone="brand">Profile {Math.round(completion * 100)}% complete</Badge>
+              {state.prefs.snooze && (
+                <Badge tone="warning" icon="eyeOff">
+                  Snoozed
+                </Badge>
+              )}
+            </span>
           </div>
         </div>
         <Button variant="secondary" icon="user" onClick={() => go("basics")}>
@@ -538,24 +564,37 @@ export function MyProfile({ go }) {
   );
 }
 
+const FEEDBACK = {
+  snooze: ["Snoozed. Discover is paused.", "Welcome back. Discover is on."],
+  messages: ["New message alerts on", "New message alerts off"],
+  likes: ["New like alerts on", "New like alerts off"],
+};
+const DESCRIBE = {
+  snooze: (on) => (on ? "You’re hidden. Resume any time." : "Take a break without losing matches"),
+  messages: (on) => (on ? "On" : "Off: you’ll still see them in Chats"),
+  likes: (on) => (on ? "On" : "Off"),
+};
+
 export function Settings({ go }) {
   const [state, dispatch] = useStore();
   const { prefs } = state;
   const setPrefs = (patch) => dispatch({ type: "prefs", patch });
   const [pending, setPending] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [toast, flash] = useFlash();
   const blocked = Object.values(state.ended).filter((r) => r === "blocked").length;
   const toggle = (key, value) => {
     setPending(key);
     setTimeout(() => {
       setPrefs({ [key]: value });
       setPending(null);
+      flash(FEEDBACK[key][value ? 0 : 1]);
     }, 700);
   };
   const switchRow = (k, label) => (
     <li className="list-row" key={k}>
       <div className="list-row__hit">
-        <Switch label={label} checked={prefs[k]} pending={pending === k} onChange={(v) => toggle(k, v)} />
+        <Switch label={label} description={DESCRIBE[k](prefs[k])} checked={prefs[k]} pending={pending === k} onChange={(v) => toggle(k, v)} />
       </div>
     </li>
   );
@@ -574,10 +613,10 @@ export function Settings({ go }) {
             </div>
           </li>
         </ListGroup>
-        <ListGroup title="Visibility" footnote="Snooze hides your profile. Matches and chats stay.">
+        <ListGroup title="Visibility" footnote="Snooze hides your profile and pauses Discover. Matches and chats stay.">
           {switchRow("snooze", "Snooze")}
         </ListGroup>
-        <ListGroup title="Notifications">
+        <ListGroup title="Notifications" footnote="In this preview, alerts are simulated. Your browser is never asked for permission.">
           {switchRow("messages", "New messages")}
           {switchRow("likes", "New likes")}
         </ListGroup>
@@ -589,6 +628,9 @@ export function Settings({ go }) {
           <ListRow label="Delete account" kind="destructive" onPress={() => setDeleting(true)} />
         </ListGroup>
       </div>
+      <Toast open={Boolean(toast)} placement="bottom" icon="check">
+        {toast}
+      </Toast>
       <Dialog
         open={deleting}
         onClose={() => setDeleting(false)}

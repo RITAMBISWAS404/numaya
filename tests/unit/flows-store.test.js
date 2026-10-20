@@ -81,3 +81,22 @@ describe("persistence", () => {
     expect(store.map.has(STORAGE_KEY)).toBe(false);
   });
 });
+
+describe("snooze and notification settings", () => {
+  it("persist through storage and clear on reset", () => {
+    const store = memory();
+    const s = run({ type: "prefs", patch: { snooze: true, messages: false } });
+    saveState(s, store);
+    const restored = loadState(store);
+    expect(restored.prefs).toMatchObject({ snooze: true, messages: false, likes: true, age: [27, 38] });
+    const reset = reducer(restored, { type: "reset" });
+    expect(reset.prefs).toMatchObject({ snooze: false, messages: true });
+    saveState(reset, store);
+    expect(loadState(store).prefs.snooze).toBe(false);
+  });
+
+  it("changing one setting keeps the others", () => {
+    const s = run({ type: "prefs", patch: { distance: 40 } }, { type: "prefs", patch: { snooze: true } });
+    expect(s.prefs).toMatchObject({ distance: 40, snooze: true, age: [27, 38] });
+  });
+});
