@@ -28,6 +28,15 @@ export const tokens = [
     "description": "30% mix: brand-tinted borders and image placeholders."
   },
   {
+    "id": "primitive.color.pink.300",
+    "name": "--p-color-pink-300",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#fbbff2",
+    "resolved": "#fbbff2",
+    "description": "45% mix of #F770E3 with white: the heading marker behind ink text. Lighter than the brand, never a darker pink."
+  },
+  {
     "id": "primitive.color.pink.500",
     "name": "--p-color-pink-500",
     "layer": "primitive",
@@ -694,6 +703,15 @@ export const tokens = [
     "description": "Brand-tinted borders and image placeholders."
   },
   {
+    "id": "semantic.color.brand.marker",
+    "name": "--color-brand-marker",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.pink.300}",
+    "resolved": "#fbbff2",
+    "description": "Marker stroke behind one emphasised word in a hero headline (Marker). Text on it stays ink."
+  },
+  {
     "id": "semantic.color.on-brand",
     "name": "--color-on-brand",
     "layer": "semantic",
@@ -755,15 +773,6 @@ export const tokens = [
     "value": "{primitive.color.neutral.900}",
     "resolved": "#14171f",
     "description": "Text on brand.tint surfaces (16:1)."
-  },
-  {
-    "id": "semantic.color.text.brand-display",
-    "name": "--color-text-brand-display",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.pink.500}",
-    "resolved": "#f770e3",
-    "description": "Exact brand pink for one emphasised word in a display headline (>= 26px), e.g. welcome \"Better\". 2.51:1 on white is below the 3:1 large-text minimum: a documented, display-only exception. Never for body text, links or labels."
   },
   {
     "id": "semantic.color.text.on-inverse",

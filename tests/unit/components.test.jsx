@@ -5,6 +5,8 @@ import { describe, expect, it, vi } from "vitest";
 import {
   Button,
   ChipGroup,
+  Marker,
+  Ribbon,
   CodeInput,
   Composer,
   Dialog,
@@ -290,6 +292,23 @@ describe("illustration slots", () => {
     const { container } = render(<EmptyState art="chats-empty" title="Connections start here" />);
     expect(container.querySelector("[data-illustration='chats-empty']")).not.toBeNull();
     expect(container.querySelector(".empty-state__icon")).toBeNull();
+  });
+});
+
+describe("expressive details", () => {
+  it("Marker keeps its words as readable text; Ribbon is hidden from assistive tech", () => {
+    const { container } = render(
+      <h1>
+        Fewer swipes. <Marker>Better</Marker> first dates.
+        <Ribbon variant="welcome" />
+        <Ribbon variant="unknown" />
+      </h1>,
+    );
+    expect(screen.getByRole("heading")).toHaveTextContent("Fewer swipes. Better first dates.");
+    const ribbons = container.querySelectorAll("svg.ribbon");
+    expect(ribbons).toHaveLength(1);
+    expect(ribbons[0]).toHaveAttribute("aria-hidden", "true");
+    expect(ribbons[0]).toHaveAttribute("focusable", "false");
   });
 });
 

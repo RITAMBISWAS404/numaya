@@ -13,8 +13,13 @@ import {
   ConversationRow,
   EmptyState,
   Fab,
+  Icon,
+  IconButton,
+  IllustrationPlaceholder,
+  ImagePlaceholder,
   ListGroup,
   ListRow,
+  Marker,
   MatchCelebration,
   MatchQueue,
   MessageBubble,
@@ -24,6 +29,7 @@ import {
   PromptCard,
   RangeSlider,
   ResultPanel,
+  Ribbon,
   ScreenHeader,
   Section,
   Sheet,
@@ -34,10 +40,6 @@ import {
   TextField,
   Toast,
   TopBar,
-  Icon,
-  IconButton,
-  IllustrationPlaceholder,
-  ImagePlaceholder,
   VerifiedBadge,
   Wordmark,
 } from "../design-system/index.js";
@@ -92,9 +94,12 @@ export function SetupIntro({ go }) {
     >
       <div className="fl-center fl-intro">
         <Wordmark />
-        <ResultPanel title="You’re verified">
-          <p>+1 (415) 555-0132 is confirmed. Now let’s make a profile people actually want to reply to.</p>
-        </ResultPanel>
+        <div className="fl-intro__result">
+          <Ribbon variant="verified" />
+          <ResultPanel title={<>You’re <Marker>verified</Marker></>}>
+            <p>+1 (415) 555-0132 is confirmed. Now let’s make a profile people actually want to reply to.</p>
+          </ResultPanel>
+        </div>
         <ol className="fl-steps">
           {["The basics", "What you’re into", "Photos"].map((s, i) => (
             <li key={s}>
@@ -469,7 +474,7 @@ export function Match({ go }) {
       }
     >
       <div className="fl-center fl-fill">
-        <MatchCelebration names={[state.profile.name || "You", person.name]} title="It’s a match">
+        <MatchCelebration names={[state.profile.name || "You", person.name]}>
           You and {person.name} liked each other. They answered “{person.prompt.q}”. Start there.
         </MatchCelebration>
       </div>

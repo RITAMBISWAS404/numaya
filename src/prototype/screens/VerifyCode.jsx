@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  IllustrationPlaceholder,
   Button,
   CodeInput,
   Fab,
   Field,
+  IllustrationPlaceholder,
+  Marker,
   ResultPanel,
   Screen,
   ScreenBody,
@@ -221,7 +222,7 @@ export function VerifyCode({
           <Sheet open={done} labelledBy="done-title">
             <IllustrationPlaceholder id="verified-success" ratio="5 / 3" width="200px" className="verify-art" />
             <ResultPanel
-              title={<span id="done-title">{intent === "signin" ? "You’re signed in" : "You’re verified"}</span>}
+              title={<span id="done-title">{intent === "signin" ? "You’re signed in" : <>You’re <Marker>verified</Marker></>}</span>}
               footer={
                 <>
                   <p className="result__caption">This prototype ends here.</p>

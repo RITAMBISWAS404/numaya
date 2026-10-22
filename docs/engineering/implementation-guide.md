@@ -25,11 +25,14 @@ npm run tokens                    # regenerate src/design-system/tokens.{css,js}
 
 ## Brand and typography rules
 
-- `#F770E3` (`--color-brand`, `--color-text-brand-display`) is used exactly. Never substitute
+- `#F770E3` (`--color-brand`) is used exactly. Never substitute
   another pink for a brand-bearing element, add a darker second pink, or change the token globally.
 - Foreground on solid brand fills is dark ink (`--color-on-brand`), never white. Brand-context text
   (`--color-text-brand`) is ink because pink text fails contrast. See the
   [contrast table](../design-system/foundations.md#contrast).
+- Headline emphasis uses `Marker` (ink text over `--color-brand-marker`), never pink text, and only
+  on hero messages (Welcome, You're verified, It's a match). Decorative `Ribbon`s are limited to
+  those three screens; do not add more without a rendered comparison.
 - Fraunces for display, Inter for everything operational. No other fonts.
 
 ## Changing tokens

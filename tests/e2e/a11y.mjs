@@ -25,7 +25,6 @@ const browser = await chromium.launch();
 /* Deliberate exceptions, each documented where it is shown. */
 const EXCLUDE = [
   ".sc-pill-demo--never", // the showcase's "Never: white on #F770E3" anti-example
-  ".sc-specimen:nth-child(3) .sc-type-sample", // --color-text-brand-display specimen (documented 2.5:1 display exception)
 ];
 
 /** Each target loads a page at 393 × 852, optionally opens a state, then audits `scope`. */

@@ -5,6 +5,7 @@
   --p-color-pink-50: #fff6fd;
   --p-color-pink-100: #feeefc;
   --p-color-pink-200: #fdd4f7;
+  --p-color-pink-300: #fbbff2;
   --p-color-pink-500: #f770e3;
   --p-color-neutral-0: #ffffff;
   --p-color-neutral-50: #f3f5f8;
@@ -81,6 +82,7 @@
   --color-brand: var(--p-color-pink-500);
   --color-brand-tint: var(--p-color-pink-100);
   --color-brand-subtle: var(--p-color-pink-200);
+  --color-brand-marker: var(--p-color-pink-300);
   --color-on-brand: var(--p-color-neutral-900);
   --color-text-primary: var(--p-color-neutral-900);
   --color-text-secondary: var(--p-color-neutral-700);
@@ -88,7 +90,6 @@
   --color-text-subtle: var(--p-color-neutral-400);
   --color-text-brand: var(--p-color-neutral-900);
   --color-text-brand-deep: var(--p-color-neutral-900);
-  --color-text-brand-display: var(--p-color-pink-500);
   --color-text-on-inverse: var(--p-color-neutral-0);
   --color-surface: var(--p-color-neutral-0);
   --color-surface-soft: var(--p-color-neutral-50);

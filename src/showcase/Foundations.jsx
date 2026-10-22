@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ICON_NAMES, Icon } from "../design-system/index.js";
+import { ICON_NAMES, Icon, Marker } from "../design-system/index.js";
 import { tokens, tokenByName } from "../design-system/tokens.js";
 import { contrast } from "../lib/contrast.js";
 import { Grid, Section, Specimen } from "./ui.jsx";
@@ -70,9 +70,9 @@ export function Foundations() {
               Say hello
             </span>
           </Specimen>
-          <Specimen title="Brand emphasis in a headline" note={`--color-text-brand-display · exact #F770E3 · ${ratio(tokenByName["--color-text-brand-display"].resolved, WHITE)} on white (display only; documented exception)`}>
-            <p className="sc-type-sample" style={{ fontFamily: "var(--font-display)", fontSize: 34, color: "var(--color-text-brand-display)" }}>
-              Better
+          <Specimen title="Brand emphasis in a headline" note={`Marker · ink on --color-brand-marker · ${ratio(tokenByName["--color-text-primary"].resolved, tokenByName["--color-brand-marker"].resolved)} · hero headlines only, one word`}>
+            <p className="sc-type-sample" style={{ fontFamily: "var(--font-display)", fontSize: 34 }}>
+              <Marker>Better</Marker> first dates
             </p>
           </Specimen>
           <Specimen title="Brand text at body size" note={`--color-text-brand is ink · ${ratio(tokenByName["--color-text-brand"].resolved, WHITE)} · pink text fails on white`}>

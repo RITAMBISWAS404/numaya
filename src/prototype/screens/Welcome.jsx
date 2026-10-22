@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Avatar, Button, Icon, Screen, Toast, Wordmark } from "../../design-system/index.js";
+import { Avatar, Button, Icon, Marker, Ribbon, Screen, Toast, Wordmark } from "../../design-system/index.js";
 import { cx } from "../../lib/cx.js";
 
 const PROMPTS = [
@@ -30,6 +30,7 @@ export function Welcome({ active, onCreate, onSignIn }) {
   return (
     <Screen tone="brand" className="welcome" aria-labelledby="welcome-title">
       <div className="welcome__hero">
+        <Ribbon variant="welcome" />
         <div className="welcome__lockup">
           <Wordmark />
         </div>
@@ -40,7 +41,7 @@ export function Welcome({ active, onCreate, onSignIn }) {
         <h1 id="welcome-title" className="welcome__title">
           Fewer swipes.
           <br />
-          <span className="welcome__emphasis">Better</span> first dates.
+          <Marker className="welcome__emphasis">Better</Marker> first dates.
         </h1>
         <p className="welcome__lede">
           Profiles built around conversation, so the right person knows what to say.

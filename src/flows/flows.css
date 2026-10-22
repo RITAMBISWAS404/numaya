@@ -223,6 +223,17 @@ body {
   padding-top: var(--space-10);
 }
 
+.fl-intro__result {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+}
+
+.fl-intro__result > .ribbon {
+  z-index: -1;
+  height: 112px; /* the band runs behind the badge only, clear of the title and body */
+}
+
 .fl-steps {
   display: grid;
   gap: var(--space-3);

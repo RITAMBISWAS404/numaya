@@ -67,7 +67,7 @@ export function Flows() {
         ))}
       </main>
       <footer className="fl-credits">
-        Icons: <a href="https://www.figma.com/community/file/1166831539721848736" target="_blank" rel="noreferrer">Solar</a> by 480 Design, 
+        Icons: <a href="https://www.figma.com/community/file/1166831539721848736" target="_blank" rel="noreferrer">Solar</a> by 480 Design,{" "}
         <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>. Fonts: Fraunces and Inter, SIL OFL.
       </footer>
     </div>

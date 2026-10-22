@@ -6,6 +6,8 @@
 }
 
 .welcome__hero {
+  position: relative;
+  isolation: isolate;
   flex: 1;
   min-height: 0;
   display: flex;
@@ -13,6 +15,10 @@
   align-items: center;
   padding: var(--space-3) var(--layout-gutter) var(--space-6);
   container-type: size;
+}
+
+.welcome__hero > .ribbon {
+  z-index: -1;
 }
 
 .welcome__lockup {
@@ -181,10 +187,6 @@
   line-height: var(--type-hero-line);
   font-weight: var(--type-display-weight);
   letter-spacing: -0.022em;
-}
-
-.welcome__emphasis {
-  color: var(--color-text-brand-display);
 }
 
 .welcome__lede {

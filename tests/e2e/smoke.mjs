@@ -53,9 +53,9 @@ try {
       const after = [...document.querySelectorAll(".welcome__title *")].some(
         (e) => !["none", "normal"].includes(getComputedStyle(e, "::after").content),
       );
-      return { color: el && getComputedStyle(el).color, after };
+      return { color: el && getComputedStyle(el).color, marker: el && getComputedStyle(el).backgroundImage, after };
     });
-    check("headline emphasis is exactly #F770E3", emphasis.color === "rgb(247, 112, 227)", emphasis.color);
+    check("headline emphasis is ink on a light brand-pink marker, never pink text", emphasis.color === "rgb(20, 23, 31)" && emphasis.marker.includes("rgb(251, 191, 242)"), `${emphasis.color} / ${emphasis.marker}`);
     check("headline has no decorative underline", !emphasis.after);
 
     const mark = await p.evaluate(() => getComputedStyle(document.querySelector(".welcome__lockup .wordmark rect[mask]")).fill);
@@ -198,6 +198,21 @@ try {
     await p.keyboard.press("Enter");
     await wait(800);
     check("keyboard: Like has a visible focus ring and Enter opens the match", focusVisible && (await p.locator("#match").innerText()).includes("You and Maya liked each other"));
+    await wait(600);
+    const deco = await p.evaluate(() => {
+      const ribbons = [...document.querySelectorAll(".ribbon")];
+      const marker = document.querySelector("#match .marker");
+      return {
+        where: ribbons.map((r) => r.closest(".fl-frame")?.id).sort().join(),
+        hidden: ribbons.every((r) => r.getAttribute("aria-hidden") === "true" && getComputedStyle(r).pointerEvents === "none"),
+        anim: ribbons.flatMap((r) => [...r.querySelectorAll("path")].map((x) => getComputedStyle(x).animationName)),
+        marker: marker && { text: marker.textContent, color: getComputedStyle(marker).color, anim: getComputedStyle(marker).animationName },
+      };
+    });
+    check("expressive: ribbons appear only on the verified intro and the match moment in the flows", deco.where === "intro,match", deco.where);
+    check("expressive: ribbons are aria-hidden and never take pointer input", deco.hidden);
+    check("expressive: reduced motion keeps ribbons and the marker static", deco.anim.every((a) => a === "none") && deco.marker?.anim === "none", `${deco.anim.join()} / ${deco.marker?.anim}`);
+    check("expressive: the match title marks one word in ink", deco.marker?.text === "match" && deco.marker.color === "rgb(20, 23, 31)", JSON.stringify(deco.marker));
     check("motion: no console errors with reduced motion", p.errors.length === 0, p.errors.join(" | "));
     await p.evaluate(() => localStorage.clear());
   }
