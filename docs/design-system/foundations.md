@@ -60,8 +60,9 @@ or brand colour. Numerals in inputs, codes and prices use `tabular-nums`.
   badges. Never for ordinary buttons, chips, tabs or badges.
 - **Borders:** hairline 1px, selected 1.5px, focus 2px.
 - **Gutters:** 16px screen padding; the Discover card runs to 8px from the edges so the photo leads.
-- **Reference baseline:** chips are pills, Pass and Like are ink circles, sliders are ink, the Discover
-  photo card and section cards use 16px corners. SuperSwipe is the single brand-pink action on Discover.
+- **Reference baseline (Bumble layout, Meetup styling):** white pages; cards are white with a hairline
+  and a faint shadow (20px), grouped rows 16px, photos 24px (`radius.photo`); buttons and chips are
+  pills (primary ink, secondary light grey); Pass and Like are ink circles; sliders are ink. SuperSwipe is the single brand-pink action on Discover.
 - **Pink footprint:** SuperSwipe, selected states, verification, progress, toggles and the match
   mark. Avatars, placeholders, empty states, info banners and completion badges are neutral.
 - **Surfaces:** app screens (Discover, Chats, a conversation, Match, Profile, Settings) sit on
@@ -92,10 +93,10 @@ accessible label; the icons themselves are `aria-hidden`.
 
 ## Navigation
 
-Reference baseline ([Bumble reference map](../bumble-reference-map.md)): a flat white tab bar across the
-bottom with a hairline top edge, icon over label, in the reference order (Profile, Discover, Chats).
-The active tab is a filled ink icon with a bold ink label; inactive tabs are muted regular icons. The
-bar sits in the layout flow under the scrolling content, so it never covers content or composers.
+Bumble destinations and order (Profile, Discover, Chats) with Meetup styling
+([UI map](../numaya-meetup-ui-map.md)): a frosted capsule floating above the bottom edge, icon over
+label. The active item sits on a light-grey pill with a filled pink icon and a bold ink label. The bar
+stays in the layout flow under the scrolling content, so it never covers content or composers.
 
 ## Interaction states
 

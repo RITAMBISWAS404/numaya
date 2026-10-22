@@ -326,12 +326,6 @@ body {
   background: var(--color-surface-page);
 }
 
-/* On the page surface, secondary buttons and the composer are raised white, not outlined or grey. */
-.fl-screen--page .btn--secondary,
-.fl-screen--page .btn--secondary:hover:not(:disabled) {
-  box-shadow: var(--shadow-sm);
-}
-
 .fl-screen--page .composer__field:not(:focus-within) {
   background: var(--color-surface);
   box-shadow: var(--shadow-xs);
@@ -376,12 +370,15 @@ body {
   color: var(--color-text-subtle);
 }
 
-/* Header: side slots, centred wordmark, short scroll-progress track. */
+/* Header: side slots, centred wordmark, short scroll-progress track; faint brand wash at the top
+   (Meetup Home places its accent wash the same way). */
 .fl-disc-head {
   flex: none;
   display: grid;
   gap: 2px;
-  padding-bottom: var(--space-2);
+  margin-top: calc(-1 * var(--safe-top));
+  padding: var(--safe-top) 0 var(--space-2);
+  background: linear-gradient(180deg, var(--color-surface-brand) 0%, var(--color-surface) 100%);
 }
 
 .fl-disc-head__bar {
@@ -433,19 +430,34 @@ body {
 
 .fl-pf {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
 .fl-pf__section {
   display: grid;
   gap: var(--space-3);
-  padding: var(--space-4);
+  padding: var(--space-5);
 }
 
+/* Tinted highlight card (Meetup "About our members"): brand tint with white pill chips inside. */
+.fl-pf__section--tint {
+  background: var(--color-surface-brand);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-brand-subtle);
+}
+
+.fl-pf__section--tint .chip {
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-brand-subtle);
+}
+
+/* Section titles in Fraunces (Numaya type), sized like Meetup section headings. */
 .fl-pf__title {
-  font-size: var(--type-body-size);
-  line-height: 22px;
-  font-weight: var(--font-weight-bold);
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: var(--type-title-size);
+  line-height: var(--type-title-line);
+  font-weight: var(--type-title-weight);
+  letter-spacing: var(--type-title-tracking);
 }
 
 .fl-pf__body {
@@ -461,12 +473,7 @@ body {
 }
 
 .fl-pf__photo {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  border-radius: var(--radius-md);
-  user-select: none;
+  border-radius: var(--radius-photo);
 }
 
 .fl-pf .action-bar {

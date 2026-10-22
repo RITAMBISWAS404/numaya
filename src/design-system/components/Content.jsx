@@ -290,7 +290,7 @@ export function ProfileCard({ name, age, verified, details = [], isNew = false, 
           <img className="profile-card__img" src={src} alt={photoAlt ?? `Photo of ${name}`} draggable="false" />
         ) : (
           <div className="profile-card__stand-in" role="img" aria-label={`${name} has not added a photo yet`}>
-            <Icon name="user" size={136} weight="fill" />
+            <Icon name="image" size={40} />
           </div>
         )}
         <div className="profile-card__overlay">

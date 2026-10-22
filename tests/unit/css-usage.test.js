@@ -50,8 +50,8 @@ describe("geometry rules", () => {
     return m ? m[2] : "";
   };
 
-  it("ordinary controls are not pills (chips are pills, as in the reference)", () => {
-    for (const sel of [".btn", ".badge", ".tag", ".segmented", ".segmented__item", ".pill"]) {
+  it("ordinary controls are not pills (chips and buttons are pills, as in the references)", () => {
+    for (const sel of [".badge", ".tag", ".segmented", ".segmented__item", ".pill"]) {
       expect(block(sel), sel).toContain("border-radius");
       expect(block(sel), sel).not.toMatch(/radius-pill|999px/);
     }
@@ -59,6 +59,7 @@ describe("geometry rules", () => {
 
   it("chips are pills, as in the reference", () => {
     expect(block(".chip")).toMatch(/radius-pill/);
+    expect(block(".btn")).toMatch(/radius-pill/);
   });
 
   it("applies squircle corners only as a @supports enhancement", () => {

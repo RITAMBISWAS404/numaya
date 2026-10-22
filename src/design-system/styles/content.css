@@ -154,11 +154,11 @@
 /* ------------------------------------------------------------------ */
 /* Surfaces, sections, lists                                           */
 /* ------------------------------------------------------------------ */
-/* Section cards (reference: Bumble profile sections): ≈ 16px corners, soft shadow, no border. */
+/* Cards (Meetup reference): white, a light hairline and a barely-there shadow, ≈ 20px corners. */
 .card {
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
-  box-shadow: var(--shadow-sm);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle), var(--shadow-xs);
 }
 
 .card--padded {
@@ -225,9 +225,10 @@
   padding: 0;
   overflow: hidden;
   list-style: none;
-  border-radius: var(--radius-lg);
+  /* Grouped rows (Meetup settings): hairline-bordered white group, 16px corners, no heavy shadow. */
+  border-radius: var(--radius-md);
   background: var(--color-surface);
-  box-shadow: var(--shadow-sm);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle);
 }
 
 .list-group__footnote {
@@ -510,7 +511,7 @@ button.list-row__hit:hover {
   opacity: var(--opacity-pending);
 }
 
-/* Hero card (reference: Bumble profile card): the photo is the card, ≈ 16px corners. */
+/* Hero card: Bumble composition, Meetup photo treatment (≈ 24px corners, soft legibility gradient). */
 .profile-card {
   position: relative;
   display: grid;
@@ -523,7 +524,7 @@ button.list-row__hit:hover {
   min-height: var(--profile-card-photo-min, 420px);
   height: var(--profile-card-photo-height, auto);
   aspect-ratio: var(--profile-card-ratio, 3 / 4);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-photo);
   background: var(--color-surface-photo);
 }
 
@@ -536,14 +537,14 @@ button.list-row__hit:hover {
   user-select: none;
 }
 
-/* No photo yet: a neutral slate field with a soft silhouette, deliberately not photographic. */
+/* No photo yet: a neutral grey placeholder with a small image glyph; keeps the photo's size and corners. */
 .profile-card__stand-in {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
   padding-bottom: 30%;
-  color: color-mix(in srgb, var(--color-text-on-inverse) 9%, transparent);
+  color: var(--color-text-secondary);
 }
 
 /* Functional legibility overlay so white text always sits on a dark region. */
@@ -553,7 +554,7 @@ button.list-row__hit:hover {
   display: grid;
   justify-items: start;
   gap: 2px;
-  padding: 96px 88px var(--space-4) var(--space-4);
+  padding: 112px 88px var(--space-5) var(--space-5);
   background: linear-gradient(180deg, transparent 0%, var(--color-overlay-photo) 100%);
   color: var(--color-text-on-inverse);
 }
@@ -572,18 +573,23 @@ button.list-row__hit:hover {
   height: 24px;
   padding: 0 10px;
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--color-surface-inverse) 55%, transparent);
+  background: color-mix(in srgb, var(--color-surface-inverse) 45%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   color: var(--color-text-on-inverse);
   font-size: 12.5px;
   font-weight: var(--font-weight-semibold);
 }
 
+/* Prominent name in Fraunces (Numaya type). */
 .profile-card__name {
   overflow-wrap: anywhere;
-  font-size: 26px;
-  line-height: 31px;
-  font-weight: var(--font-weight-bold);
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: var(--type-display-size);
+  line-height: var(--type-display-line);
+  font-weight: var(--type-display-weight);
+  letter-spacing: var(--type-display-tracking);
 }
 
 .profile-card__detail {
@@ -596,8 +602,8 @@ button.list-row__hit:hover {
 
 .profile-card__actions {
   position: absolute;
-  right: var(--space-4);
-  bottom: var(--space-4);
+  right: var(--space-5);
+  bottom: var(--space-5);
 }
 
 /* Actions (reference: end of profile): ink Pass and Like at the edges, accent SuperSwipe centred. */
@@ -613,10 +619,11 @@ button.list-row__hit:hover {
   place-items: center;
   width: 60px;
   height: 60px;
+  /* Meetup primary treatment: ink with a soft sheen. */
   border-radius: 50%;
-  background: var(--color-surface-inverse);
+  background: linear-gradient(180deg, var(--button-primary-bg-top) 0%, var(--button-primary-bg-bottom) 100%);
   color: var(--color-text-on-inverse);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-button);
   transition: transform var(--motion-duration-fast) var(--motion-ease-out);
 }
 
@@ -628,6 +635,7 @@ button.list-row__hit:hover {
 .action-bar__btn--super {
   background: var(--color-brand);
   color: var(--color-on-brand);
+  box-shadow: var(--shadow-sm);
 }
 
 .action-bar__btn:disabled {

@@ -1,7 +1,6 @@
 // Mock data for the flow previews. No backend.
 export const PEOPLE = {
   maya: {
-    photos: ["cafe", "jazz-bar", "museum", "city-dusk"],
     name: "Maya", age: 29, verified: true, isNew: true, tone: 0, photoCount: 4, likesYou: true,
     distanceKm: 2,
     details: [{ icon: "user", text: "Product designer" }],
@@ -15,7 +14,6 @@ export const PEOPLE = {
     opener: "Ask about the record shop…",
   },
   sam: {
-    photos: ["city-dusk", "mountains", "cafe"],
     name: "Sam", age: 31, verified: false, tone: 2, photoCount: 3, likesYou: false,
     distanceKm: 4,
     details: [{ icon: "user", text: "Architect" }],
@@ -27,7 +25,6 @@ export const PEOPLE = {
     ],
   },
   noor: {
-    photos: ["market", "cafe", "museum", "park", "beach"],
     name: "Noor", age: 28, verified: true, tone: 3, photoCount: 5, likesYou: true,
     distanceKm: 6,
     details: [{ icon: "user", text: "Pastry chef" }],
@@ -40,7 +37,6 @@ export const PEOPLE = {
     opener: "Defend the croissant theory…",
   },
   ines: {
-    photos: ["beach", "mountains", "park"],
     name: "Inés", age: 24, verified: true, tone: 1, photoCount: 3, likesYou: true, distanceKm: 9,
     details: [{ icon: "user", text: "Marine biologist" }],
     shared: ["Climbing"],
@@ -49,7 +45,6 @@ export const PEOPLE = {
     opener: "Ask about the sea swim…",
   },
   lea: {
-    photos: ["museum", "park", "city-dusk", "jazz-bar"],
     name: "Léa", age: 35, verified: false, tone: 0, photoCount: 4, likesYou: false, distanceKm: 22,
     details: [{ icon: "user", text: "Documentary editor" }],
     shared: ["Film photography", "Museums"],
@@ -57,7 +52,6 @@ export const PEOPLE = {
     facts: [{ icon: "heart", label: "Looking for", value: "Open to seeing" }, { icon: "location", label: "Lives in", value: "Richmond" }],
   },
   tomas: {
-    photos: ["jazz-bar", "city-dusk"],
     name: "Tomás", age: 41, verified: true, tone: 3, photoCount: 2, likesYou: true, distanceKm: 38,
     details: [{ icon: "user", text: "Cellist" }],
     shared: ["Jazz"],

@@ -42,7 +42,6 @@ import {
   Wordmark,
 } from "../design-system/index.js";
 import { INTERESTS, PEOPLE, REPORT_REASONS } from "./data.js";
-import { photosOf } from "./scenes.js";
 import { conversations, discoveryQueue, hiddenByFilters, newMatches, useStore } from "./store.js";
 
 // Order follows the reference tab bar: Profile first, then browsing, then chats.
@@ -259,7 +258,7 @@ function DiscoverHeader({ age, distance, progress, onFilters, showFilters }) {
         </h1>
         <span className="fl-disc-head__side fl-disc-head__side--end">
           {showFilters && (
-            <IconButton icon="filter" variant="plain" label={`Filters: Ages ${age[0]}–${age[1]}, within ${distance} km. Change`} onClick={onFilters} />
+            <IconButton icon="filter" variant="floating" size="sm" label={`Filters: Ages ${age[0]}–${age[1]}, within ${distance} km. Change`} onClick={onFilters} />
           )}
         </span>
       </div>
@@ -279,7 +278,8 @@ export function Discovery({ go }) {
   const id = queue[0];
   const person = id && PEOPLE[id];
   const { age, distance } = state.prefs;
-  const photos = person ? photosOf(person) : [];
+  // No licensed photography is bundled yet: every photo slot is a neutral grey placeholder.
+  const photoCount = person?.photoCount ?? 0;
 
   const decide = (liked) => {
     if (!person) return;
@@ -296,9 +296,7 @@ export function Discovery({ go }) {
     setProgress(max > 0 ? el.scrollTop / max : 0);
   };
   const photo = (i) =>
-    photos[i] && (
-      <img key={`p${i}`} className="fl-pf__photo" src={photos[i]} alt={`${person.name}, photo ${i + 1} (illustration)`} draggable="false" />
-    );
+    i < photoCount && <ImagePlaceholder key={`p${i}`} tone={0} ratio="4 / 5" className="fl-pf__photo" label={`${person.name}, photo ${i + 1} (placeholder)`} />;
   const [lookingFor, livesIn, ...otherFacts] = person?.facts ?? [];
 
   return (
@@ -327,8 +325,6 @@ export function Discovery({ go }) {
           >
             <ProfileCard
               {...person}
-              src={photos[0]}
-              photoAlt={`${person.name}, photo 1 (illustration)`}
               actions={
                 <button type="button" className="action-bar__btn action-bar__btn--super" aria-label="SuperSwipe" onClick={() => decide(true)}>
                   <Icon name="star" size={26} weight="fill" />
@@ -359,7 +355,7 @@ export function Discovery({ go }) {
           {photo(1)}
 
           {person.shared?.length > 0 && (
-            <section className="card fl-pf__section">
+            <section className="card fl-pf__section fl-pf__section--tint">
               <h2 className="fl-pf__title">You both like</h2>
               <div className="fl-chip-row">
                 {person.shared.map((s) => (
@@ -387,10 +383,10 @@ export function Discovery({ go }) {
             )}
           </section>
 
-          {photos.slice(3).map((_, i) => photo(i + 3))}
+          {Array.from({ length: Math.max(0, photoCount - 3) }, (_, i) => photo(i + 3))}
 
           <ActionBar onPass={() => decide(false)} onSuper={() => decide(true)} onLike={() => decide(true)} />
-          <p className="fl-caption fl-center">Sample profiles with illustrated photos. Distances are illustrative.</p>
+          <p className="fl-caption fl-center">Sample profiles. Photos are placeholders; distances are illustrative.</p>
         </div>
       ) : (
         <div className="fl-center fl-fill">

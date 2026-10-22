@@ -61,7 +61,7 @@ dialog and ended chat (8), delete dialog (10). These use the closest generation-
 
 ## Imagery
 
-Bumble profile photos are not reused. Network policy blocks external image hosts in this environment
-and no image-generation credits are available, so Discover uses locally drawn scenic demo photos
-(`src/flows/assets/scenes/`): people seen from behind in places, no identifiable faces, labelled as
-illustrations for assistive tech.
+Bumble profile photos are not reused. External image hosts are blocked by this environment's network
+policy (one attempt per pass), so every photo area is a neutral grey placeholder that keeps the photo's
+size, aspect ratio and corners until licensed photography is supplied. The Pass 1 scenic illustrations
+were removed in Pass 2. Visual styling now follows [the Meetup UI map](numaya-meetup-ui-map.md).

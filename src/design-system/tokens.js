@@ -46,15 +46,6 @@ export const tokens = [
     "description": null
   },
   {
-    "id": "primitive.color.neutral.25",
-    "name": "--p-color-neutral-25",
-    "layer": "primitive",
-    "type": "color",
-    "value": "#f6f6f7",
-    "resolved": "#f6f6f7",
-    "description": "Near-white grey page (reference baseline): white section cards read as raised."
-  },
-  {
     "id": "primitive.color.neutral.50",
     "name": "--p-color-neutral-50",
     "layer": "primitive",
@@ -815,18 +806,18 @@ export const tokens = [
     "name": "--color-surface-photo",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.neutral.750}",
-    "resolved": "#353b48",
-    "description": "Stand-in for a missing profile photo. Neutral slate so white identity text reads on it; never pink."
+    "value": "{primitive.color.neutral.300}",
+    "resolved": "#d7dbe1",
+    "description": "Neutral grey placeholder for a profile photo until licensed photography is supplied. Text over it sits on the photo legibility gradient."
   },
   {
     "id": "semantic.color.surface.page",
     "name": "--color-surface-page",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.neutral.25}",
-    "resolved": "#f6f6f7",
-    "description": "App page background (Discover, Chats, Profile, Settings). White cards sit on it with a soft shadow instead of a border."
+    "value": "{primitive.color.neutral.0}",
+    "resolved": "#ffffff",
+    "description": "App page background (Meetup reference: white pages; cards separate with a hairline and a faint shadow)."
   },
   {
     "id": "semantic.color.surface.canvas",
@@ -1828,6 +1819,15 @@ export const tokens = [
     "description": null
   },
   {
+    "id": "semantic.radius.photo",
+    "name": "--radius-photo",
+    "layer": "semantic",
+    "type": "dimension",
+    "value": "{primitive.dimension.24}",
+    "resolved": "24px",
+    "description": "Large photography (Meetup reference: ≈ 24px on event and profile photos)."
+  },
+  {
     "id": "semantic.radius.pill",
     "name": "--radius-pill",
     "layer": "semantic",
@@ -2196,8 +2196,8 @@ export const tokens = [
     "name": "--tab-bar-height",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.56}",
-    "resolved": "56px",
+    "value": "{primitive.dimension.64}",
+    "resolved": "64px",
     "description": null
   }
 ];

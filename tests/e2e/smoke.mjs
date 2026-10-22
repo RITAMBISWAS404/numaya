@@ -190,7 +190,7 @@ try {
       const states = await p.evaluate(() => {
         const cs = (sel, pseudo) => getComputedStyle(document.querySelector(sel), pseudo);
         return {
-          likeBg: cs("#discovery .action-bar__btn--like").backgroundColor,
+          likeBg: cs("#discovery .action-bar__btn--like").backgroundImage,
           likeFg: cs("#discovery .action-bar__btn--like").color,
           superBg: cs("#discovery .profile-card .action-bar__btn--super").backgroundColor,
           superFg: cs("#discovery .profile-card .action-bar__btn--super").color,
@@ -198,15 +198,16 @@ try {
           switchOn: cs("#settings .switch:checked").backgroundColor,
           tabActive: cs("#discovery .tab-bar__item.is-current").backgroundColor,
           tabActiveFg: cs("#discovery .tab-bar__item.is-current").color,
+          tabActiveIcon: cs("#discovery .tab-bar__item.is-current .tab-bar__icon > svg").color,
           progress: cs("#basics .progress__segment.is-done .progress__fill").backgroundColor,
           verified: cs("#chats .avatar__badge, #discovery .verified__mark").backgroundColor,
         };
       });
-      check("flows: like is an ink circle with a white glyph (reference)", states.likeBg === INK && states.likeFg === "rgb(255, 255, 255)", `${states.likeBg} / ${states.likeFg}`);
+      check("flows: like is an ink circle (Meetup primary sheen) with a white glyph", states.likeBg.includes(INK) && states.likeFg === "rgb(255, 255, 255)", `${states.likeBg.slice(0, 60)} / ${states.likeFg}`);
       check("flows: SuperSwipe is the single brand-pink action, with an ink glyph", states.superBg === PINK && states.superFg === INK, `${states.superBg} / ${states.superFg}`);
       check("flows: selected chip uses the brand pink border", states.chipShadow.includes(PINK), states.chipShadow.slice(0, 60));
       check("flows: switch on uses brand pink", states.switchOn === PINK, states.switchOn);
-      check("flows: active tab is ink on the flat bar, with no tinted surface (reference)", states.tabActive === "rgba(0, 0, 0, 0)" && states.tabActiveFg === INK, `${states.tabActive} / ${states.tabActiveFg}`);
+      check("flows: active tab sits on a grey pill with a pink icon and an ink label (Meetup)", states.tabActive === "rgb(236, 239, 243)" && states.tabActiveFg === INK && states.tabActiveIcon === PINK, `${states.tabActive} / ${states.tabActiveFg} / ${states.tabActiveIcon}`);
       check("flows: progress fill uses brand pink", states.progress === PINK, states.progress);
       // Geometry, elevation, icons and bottom navigation.
       const geo = await p.evaluate(() => {
@@ -236,21 +237,23 @@ try {
           legacyStrokeIcons: document.querySelectorAll("#discovery svg[stroke-linecap='round'][viewBox='0 0 24 24']").length,
         };
       });
-      check("geometry: buttons are softly rounded, not capsules", geo.btnRadius >= 12 && geo.btnRadius <= 18, `${geo.btnRadius}px`);
+      check("geometry: buttons are pills (Meetup)", geo.btnRadius >= 999, `${geo.btnRadius}px`);
       check("geometry: squircle corners apply where supported", !geo.squircleSupported || geo.btnCorner.includes("squircle"), `${geo.squircleSupported} / ${geo.btnCorner}`);
       check("elevation: card shadow is very light", geo.promptShadowAlpha > 0 && geo.promptShadowAlpha <= 0.08, `alpha ${geo.promptShadowAlpha}`);
       const tabAlpha = Math.max(0, ...[...geo.tabShadow.matchAll(/rgba\(\d+, \d+, \d+, ([0-9.]+)\)/g)].map((m) => parseFloat(m[1])));
-      check("navigation: flat full-width bar with only a hairline edge (reference)", geo.tabInset === 0 && geo.tabRadius === 0 && !/\d+px \d+px [1-9]/.test(geo.tabShadow.replace(/rgba?\([^)]*\)/g, "")), `inset ${geo.tabInset} / radius ${geo.tabRadius} / ${geo.tabShadow.slice(0, 60)}`);
+      check("navigation: floating capsule inset from the edges with a soft shadow (Meetup)", geo.tabInset >= 8 && geo.tabRadius >= 999 && tabAlpha > 0 && tabAlpha <= 0.14, `inset ${geo.tabInset} / radius ${geo.tabRadius} / alpha ${tabAlpha}`);
       check("navigation: bar sits below the scrolling content, never over it", geo.tabBelowBody);
       check("discover: SuperSwipe sits on the photo, above the tab bar, without scrolling", geo.superTop);
       check("discover: Pass and Like follow the profile, after its sections (reference)", geo.actionsAfterSections);
       check("discover: the photo dominates the screen (≥ 90% width, ≥ 55% height)", geo.photoShare.w >= 0.9 && geo.photoShare.h >= 0.55, `${geo.photoShare.w.toFixed(2)} × ${geo.photoShare.h.toFixed(2)}`);
-      check("surfaces: Discover page is a light grey and the hero card has no border", geo.pageBg !== "rgb(255, 255, 255)" && geo.cardBorder === "0px", `${geo.pageBg} / ${geo.cardBorder}`);
+      const cardEdge = await p.evaluate(() => getComputedStyle(document.querySelector("#discovery .fl-pf__section")).boxShadow);
+      check("surfaces: white page; section cards separate with a hairline, not a heavy shadow (Meetup)", geo.pageBg === "rgb(255, 255, 255)" && geo.cardBorder === "0px" && /inset/.test(cardEdge), `${geo.pageBg} / ${cardEdge.slice(0, 60)}`);
       const imagery = await p.evaluate(() => {
-        const img = document.querySelector("#discovery .profile-card__img");
-        return { local: Boolean(img) && !/^https?:\/\/(?!localhost)/.test(img.getAttribute("src")), loaded: Boolean(img?.naturalWidth), standIn: Boolean(document.querySelector("#discovery .profile-card__stand-in")) };
+        const media = document.querySelector("#discovery .profile-card__media");
+        const s = getComputedStyle(media);
+        return { radius: parseFloat(s.borderTopLeftRadius), bg: s.backgroundColor, ext: [...document.querySelectorAll("#discovery img")].filter((i) => /^https?:\/\/(?!localhost)/.test(i.src)).length, placeholders: document.querySelectorAll("#discovery .fl-pf__photo").length };
       });
-      check("discover: the card shows a locally bundled photo, not a placeholder panel", imagery.local && imagery.loaded && !imagery.standIn, JSON.stringify(imagery));
+      check("discover: photo areas are neutral grey placeholders with 24px corners and no hotlinked images", imagery.radius === 24 && imagery.bg === "rgb(215, 219, 225)" && imagery.ext === 0 && imagery.placeholders >= 1, JSON.stringify(imagery));
       const roll = await p.evaluate(() => {
         const cs = (sel) => getComputedStyle(document.querySelector(sel));
         const body = document.querySelector("#chat .fl-screen__body").getBoundingClientRect();

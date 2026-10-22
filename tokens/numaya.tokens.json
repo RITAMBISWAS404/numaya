@@ -12,7 +12,6 @@
       },
       "neutral": {
         "0":   { "$type": "color", "$value": "#ffffff" },
-        "25":  { "$type": "color", "$value": "#f6f6f7", "$description": "Near-white grey page (reference baseline): white section cards read as raised." },
         "50":  { "$type": "color", "$value": "#f3f5f8" },
         "100": { "$type": "color", "$value": "#eceff3" },
         "200": { "$type": "color", "$value": "#e7e9ed" },
@@ -120,8 +119,8 @@
         "default": { "$type": "color", "$value": "{primitive.color.neutral.0}" },
         "soft":    { "$type": "color", "$value": "{primitive.color.neutral.50}", "$description": "Fields and quiet fills." },
         "sunken":  { "$type": "color", "$value": "{primitive.color.neutral.100}", "$description": "Tracks, disabled fills, hover on soft." },
-        "photo":   { "$type": "color", "$value": "{primitive.color.neutral.750}", "$description": "Stand-in for a missing profile photo. Neutral slate so white identity text reads on it; never pink." },
-        "page":    { "$type": "color", "$value": "{primitive.color.neutral.25}", "$description": "App page background (Discover, Chats, Profile, Settings). White cards sit on it with a soft shadow instead of a border." },
+        "photo":   { "$type": "color", "$value": "{primitive.color.neutral.300}", "$description": "Neutral grey placeholder for a profile photo until licensed photography is supplied. Text over it sits on the photo legibility gradient." },
+        "page":    { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "App page background (Meetup reference: white pages; cards separate with a hairline and a faint shadow)." },
         "canvas":  { "$type": "color", "$value": "{primitive.color.neutral.100}", "$description": "Background behind app frames and showcase pages." },
         "brand":   { "$type": "color", "$value": "{primitive.color.pink.50}", "$description": "Brand-washed screen backgrounds (welcome)." },
         "inverse": { "$type": "color", "$value": "{primitive.color.neutral.900}", "$description": "Ink fills: primary actions, toasts." }
@@ -220,6 +219,7 @@
       "lg":   { "$type": "dimension", "$value": "{primitive.dimension.20}" },
       "xl":   { "$type": "dimension", "$value": "{primitive.dimension.28}" },
       "2xl":  { "$type": "dimension", "$value": "{primitive.dimension.32}" },
+      "photo":{ "$type": "dimension", "$value": "{primitive.dimension.24}", "$description": "Large photography (Meetup reference: ≈ 24px on event and profile photos)." },
       "pill": { "$type": "dimension", "$value": "999px" }
     },
     "border": {
@@ -280,6 +280,6 @@
     "progress":    { "segment-width": { "$type": "dimension", "$value": "{primitive.dimension.18}" }, "segment-height": { "$type": "dimension", "$value": "{primitive.dimension.8}" } },
     "code-cell":   { "height": { "$type": "dimension", "$value": "{primitive.dimension.60}" }, "radius": { "$type": "dimension", "$value": "{primitive.dimension.10}" } },
     "switch":      { "width": { "$type": "dimension", "$value": "51px" }, "height": { "$type": "dimension", "$value": "31px" } },
-    "tab-bar":     { "height": { "$type": "dimension", "$value": "{primitive.dimension.56}" } }
+    "tab-bar":     { "height": { "$type": "dimension", "$value": "{primitive.dimension.64}" } }
   }
 }
