@@ -80,7 +80,7 @@ function Actions() {
             <Button variant="quiet">Quiet</Button>
           </div>
         </Specimen>
-        <Specimen title="Button · brand · destructive" note="Brand fill uses brand.strong for white text">
+        <Specimen title="Button · brand · destructive" note="Brand pink fill with an ink label">
           <div className="sc-stack">
             <Button variant="brand">Get verified</Button>
             <Button variant="destructive">Report</Button>
@@ -222,7 +222,7 @@ function SelectionControls() {
   const [age, setAge] = useState([27, 36]);
 
   return (
-    <Section id="selection" title="Selection" intro="Selected states use the brand blue plus a shape cue (check, knob, dot): never colour alone.">
+    <Section id="selection" title="Selection" intro="Selected states use the brand pink plus a shape cue (check, knob, dot): never colour alone.">
       <Grid>
         <Specimen title="ChipGroup · max 3" note="At the quota, others become unavailable" wide>
           <ChipGroup label="Interests" options={INTERESTS} value={chips} onChange={setChips} max={3} />
@@ -325,7 +325,7 @@ function Identity() {
             <Avatar name="Ari" size="lg" verified />
           </Row>
         </Specimen>
-        <Specimen title="VerifiedBadge" note="Exact brand fill, white check, text label">
+        <Specimen title="VerifiedBadge" note="Exact brand fill, ink check, text label">
           <Row>
             <VerifiedBadge />
             <VerifiedBadge label="Photo verified" />
@@ -561,7 +561,7 @@ function Feedback() {
             </EmptyState>
           </div>
         </Specimen>
-        <Specimen title="ResultPanel" note="Badge: exact brand fill, white check">
+        <Specimen title="ResultPanel" note="Badge: exact brand fill, ink check">
           <ResultPanel title="You’ve blocked and reported Jo" footer={<Button>Done</Button>}>
             <p>Thanks for helping keep Numaya safe. We’ll update you in Help.</p>
           </ResultPanel>

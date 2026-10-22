@@ -9,7 +9,7 @@ research. **No production framework is chosen yet** ([architecture](docs/enginee
 - UX research and screen specs: [docs/research/](docs/research/README.md)
 
 ## Non-negotiables
-- Brand blue is exactly `#63AFE9`. Never substitute or darken it; foreground on blue fills is white.
+- Brand pink is exactly `#F770E3` (the only brand colour; no second dark pink). Text and glyphs on solid pink fills are dark ink, never white (white is 2.51:1). Pink text on white fails contrast, so brand-context text uses ink.
 - Import UI only from `src/design-system/index.js`; style with semantic tokens only.
 - Edit tokens in `tokens/numaya.tokens.json`, then `npm run tokens`. Never edit generated files.
 - Do not build screens the spec does not describe. Cover every state the spec lists.

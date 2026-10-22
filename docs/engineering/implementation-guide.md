@@ -25,10 +25,11 @@ npm run tokens                    # regenerate src/design-system/tokens.{css,js}
 
 ## Brand and typography rules
 
-- `#63AFE9` (`--color-brand`, `--color-text-brand-display`) is used exactly. Never substitute
-  another blue for a brand-bearing element, and never change the token globally.
-- Foreground on solid brand fills is white; never dark. Body-size blue text uses the named
-  `--color-text-brand`. See the [contrast table](../design-system/foundations.md#contrast).
+- `#F770E3` (`--color-brand`, `--color-text-brand-display`) is used exactly. Never substitute
+  another pink for a brand-bearing element, add a darker second pink, or change the token globally.
+- Foreground on solid brand fills is dark ink (`--color-on-brand`), never white. Brand-context text
+  (`--color-text-brand`) is ink because pink text fails contrast. See the
+  [contrast table](../design-system/foundations.md#contrast).
 - Fraunces for display, Inter for everything operational. No other fonts.
 
 ## Changing tokens

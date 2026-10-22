@@ -2,14 +2,10 @@
 
 :root {
   /* Primitive: raw values. Not for direct use in component CSS. */
-  --p-color-blue-50: #eff6fd;
-  --p-color-blue-100: #e6f2fc;
-  --p-color-blue-200: #c6e1f7;
-  --p-color-blue-300: #9ccbf0;
-  --p-color-blue-500: #63afe9;
-  --p-color-blue-600: #3f92d4;
-  --p-color-blue-700: #1f6fb0;
-  --p-color-blue-800: #17507f;
+  --p-color-pink-50: #fff6fd;
+  --p-color-pink-100: #feeefc;
+  --p-color-pink-200: #fdd4f7;
+  --p-color-pink-500: #f770e3;
   --p-color-neutral-0: #ffffff;
   --p-color-neutral-50: #f3f5f8;
   --p-color-neutral-100: #eceff3;
@@ -31,7 +27,8 @@
   --p-color-amber-700: #9a5b00;
   --p-color-alpha-ink-34: rgb(20 23 31 / 0.34);
   --p-color-alpha-ink-62: rgb(20 23 31 / 0.62);
-  --p-color-alpha-blue-32: rgb(99 175 233 / 0.32);
+  --p-color-alpha-pink-32: rgb(247 112 227 / 0.32);
+  --p-color-alpha-pink-40: rgb(247 112 227 / 0.4);
   --p-color-alpha-white-55: rgb(255 255 255 / 0.55);
   --p-font-family-fraunces: "Fraunces Variable", ui-serif, Georgia, "Times New Roman", serif;
   --p-font-family-inter: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -82,32 +79,30 @@
   --p-easing-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   /* Semantic: the public API. */
-  --color-brand: var(--p-color-blue-500);
-  --color-brand-pressed: var(--p-color-blue-600);
-  --color-brand-strong: var(--p-color-blue-700);
-  --color-brand-tint: var(--p-color-blue-100);
-  --color-brand-subtle: var(--p-color-blue-200);
-  --color-on-brand: var(--p-color-neutral-0);
+  --color-brand: var(--p-color-pink-500);
+  --color-brand-tint: var(--p-color-pink-100);
+  --color-brand-subtle: var(--p-color-pink-200);
+  --color-on-brand: var(--p-color-neutral-900);
   --color-text-primary: var(--p-color-neutral-900);
   --color-text-secondary: var(--p-color-neutral-700);
   --color-text-muted: var(--p-color-neutral-500);
   --color-text-subtle: var(--p-color-neutral-400);
-  --color-text-brand: var(--p-color-blue-700);
-  --color-text-brand-deep: var(--p-color-blue-800);
-  --color-text-brand-display: var(--p-color-blue-500);
+  --color-text-brand: var(--p-color-neutral-900);
+  --color-text-brand-deep: var(--p-color-neutral-900);
+  --color-text-brand-display: var(--p-color-pink-500);
   --color-text-on-inverse: var(--p-color-neutral-0);
   --color-surface: var(--p-color-neutral-0);
   --color-surface-soft: var(--p-color-neutral-50);
   --color-surface-sunken: var(--p-color-neutral-100);
   --color-surface-canvas: var(--p-color-neutral-100);
-  --color-surface-brand: var(--p-color-blue-50);
+  --color-surface-brand: var(--p-color-pink-50);
   --color-surface-inverse: var(--p-color-neutral-900);
   --color-border-subtle: var(--p-color-neutral-200);
   --color-border-strong: var(--p-color-neutral-300);
-  --color-border-brand: var(--p-color-blue-500);
+  --color-border-brand: var(--p-color-pink-500);
   --color-border-control: var(--p-color-neutral-450);
-  --color-focus-ring: var(--p-color-blue-500);
-  --color-focus-halo: var(--p-color-alpha-blue-32);
+  --color-focus-ring: var(--p-color-neutral-900);
+  --color-focus-halo: var(--p-color-alpha-pink-32);
   --color-overlay-scrim: var(--p-color-alpha-ink-34);
   --color-overlay-hover-light: var(--p-color-alpha-white-55);
   --color-overlay-photo: var(--p-color-alpha-ink-62);
@@ -220,7 +215,7 @@
   --shadow-button: inset 0 1px 0 rgb(255 255 255 / 0.14), inset 0 -1px 0 rgb(0 0 0 / 0.3), 0 1px 2px rgb(20 23 31 / 0.18), 0 8px 18px -6px rgb(20 23 31 / 0.38);
   --shadow-sheet: 0 -1px 0 rgb(20 23 31 / 0.04), 0 -18px 48px -12px rgb(20 23 31 / 0.18);
   --shadow-toast: 0 12px 30px -10px rgb(20 23 31 / 0.5);
-  --shadow-brand: 0 8px 20px -6px rgb(31 111 176 / 0.45);
+  --shadow-brand: 0 8px 20px -6px var(--p-color-alpha-pink-40);
   --shadow-knob: 0 2px 4px rgb(20 23 31 / 0.18);
   --shadow-thumb: 0 1px 2px rgb(20 23 31 / 0.04), 0 2px 6px rgb(20 23 31 / 0.16);
   --shadow-segment: 0 1px 2px rgb(20 23 31 / 0.04), 0 2px 6px rgb(20 23 31 / 0.06);

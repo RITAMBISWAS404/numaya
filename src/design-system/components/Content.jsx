@@ -39,7 +39,7 @@ export function Avatar({ name, src, size = "md", ring, verified = false, decorat
   );
 }
 
-/** Verified mark: white check on the exact brand blue, always paired with a text label. */
+/** Verified mark: ink check on the exact brand pink, always paired with a text label. */
 export function VerifiedBadge({ label = "Verified", compact = false }) {
   return (
     <span className={cx("verified", compact && "verified--compact")}>

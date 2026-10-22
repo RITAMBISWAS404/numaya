@@ -7,14 +7,14 @@ the **rules**. Live swatches and specimens: `showcase.html` (Foundations section
 
 | Role | Tokens | Rule |
 | --- | --- | --- |
-| Brand | `--color-brand` (exact `#63AFE9`), `-pressed`, `-tint`, `-subtle` | Marks, progress, focus ring, selected borders, verified mark, like/send fills, display-size emphasis. Never darkened globally |
-| On brand | `--color-on-brand` (white) | The only foreground allowed on a solid brand fill |
-| Brand text | `--color-text-brand-display` (exact `#63AFE9`) | One emphasised word in a display headline (≥ 26px) |
-| Readable brand variants | `--color-text-brand`, `--color-brand-strong` (`#1F6FB0`, same hue) | Named variants for **body-size** brand text (links, labels) and blue fills that must carry white body text. Never used where the canonical brand is meant |
+| Brand | `--color-brand` (exact `#F770E3`), `-tint`, `-subtle` (lightened mixes of the brand; no darker second pink) | Marks, progress, selected borders and fills, verified mark, like/send fills, switches. Never darkened |
+| On brand | `--color-on-brand` (dark ink) | The only foreground allowed on a solid brand fill: 7.15:1. White on `#F770E3` is 2.51:1 and is not allowed |
+| Brand text | `--color-text-brand-display` (exact `#F770E3`) | One emphasised word in a display headline (>= 26px) only |
+| Brand-context text | `--color-text-brand`, `-brand-deep` (resolve to ink) | Links, eyebrows, labels. Pink text on white fails, so these use the neutral ink; links stay underlined |
 | Text | `--color-text-primary`, `-secondary`, `-muted`, `-subtle`, `-on-inverse`, `-brand-deep` | Dark text only on white, neutral or tinted surfaces |
 | Surface | `--color-surface`, `-soft`, `-sunken`, `-canvas`, `-brand`, `-inverse` | Ink (`inverse`) for primary buttons and toasts |
 | Border / focus | `--color-border-subtle`, `-strong`, `-brand`, `-control`; `--color-focus-ring`, `-halo` | Unchecked controls use `border-control` (≥ 3:1) |
-| Feedback | `--color-danger`, `--color-success`, `--color-warning` (+ `-tint`) | Distinct from the brand palette; never use brand blue for status |
+| Feedback | `--color-danger`, `--color-success`, `--color-warning` (+ `-tint`) | Distinct from the brand palette; never use the brand pink for status |
 | Overlay | `--color-overlay-scrim`, `-photo`, `-hover-light` | `photo` is a functional legibility overlay on images |
 
 ### Contrast
@@ -24,11 +24,10 @@ All pairs below are enforced by `tests/unit/tokens.test.js`.
 | Pair | Ratio | Status |
 | --- | --- | --- |
 | Primary / secondary / muted text on white | 17.9 / 10.4 / 5.4 | AA |
-| `text-brand` on white, white on `brand-strong` | 5.3 | AA |
-| Feedback text on white and on its tint | ≥ 4.5 | AA |
-| `border-control` on white | 3.2 | Non-text AA |
-| **White on `#63AFE9`** | **2.38** | **Exception.** Allowed only for glyphs (check, heart, arrow) ≥ 16px with stroke ≥ 2, where meaning is repeated by a text label or a shape cue (knob position, check mark). Never for text |
-| **`#63AFE9` text on white** (`text-brand-display`) | **2.38** | **Exception.** Display size only, one word per headline, decorative emphasis of text that is also fully readable in context. Never for body, links or labels |
+| Ink (`on-brand`, `text-brand`) on `#F770E3` / on brand tint | 7.15 / 16 | AA |
+| Focus ring (ink) on white | 17.9 | Non-text AA. The pink halo is decorative |
+| **White on `#F770E3`** | **2.51** | **Not allowed.** This is why `on-brand` is ink |
+| **`#F770E3` text on white** (`text-brand-display`) | **2.51** | **Exception.** Display size only, one word per headline, decorative emphasis of text that is also fully readable in context. Below the 3:1 large-text minimum, so set `--color-text-brand-display` to `text-primary` for strict compliance. Never for body, links or labels |
 | `text-subtle` on white | 2.6 | Exception: placeholders and disabled labels only |
 
 ## Typography

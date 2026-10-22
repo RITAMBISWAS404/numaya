@@ -55,11 +55,11 @@ try {
       );
       return { color: el && getComputedStyle(el).color, after };
     });
-    check("headline emphasis is exactly #63AFE9", emphasis.color === "rgb(99, 175, 233)", emphasis.color);
+    check("headline emphasis is exactly #F770E3", emphasis.color === "rgb(247, 112, 227)", emphasis.color);
     check("headline has no decorative underline", !emphasis.after);
 
     const mark = await p.evaluate(() => getComputedStyle(document.querySelector(".welcome__lockup .wordmark rect[mask]")).fill);
-    check("wordmark mark is the brand blue", mark === "rgb(99, 175, 233)", mark);
+    check("wordmark mark is the brand pink", mark === "rgb(247, 112, 227)", mark);
 
     await p.getByRole("button", { name: "Create an account" }).click();
     await wait(900);
@@ -97,8 +97,8 @@ try {
       const el = document.querySelector(".result__badge");
       return el && { bg: getComputedStyle(el).backgroundColor, fg: getComputedStyle(el).color };
     });
-    check("verified badge fill is exactly #63AFE9", badge?.bg === "rgb(99, 175, 233)", badge?.bg);
-    check("verified badge check is white", badge?.fg === "rgb(255, 255, 255)", badge?.fg);
+    check("verified badge fill is exactly #F770E3", badge?.bg === "rgb(247, 112, 227)", badge?.bg);
+    check("verified badge check is dark ink, not white", badge?.fg === "rgb(20, 23, 31)", badge?.fg);
     await p.screenshot({ path: `${OUT}/prototype-verified.png` });
 
     await p.getByRole("button", { name: "Start over" }).first().click();
@@ -183,6 +183,46 @@ try {
       const textOf = async (id) => (await f(id).innerText()).replace(/\s+/g, " ");
       const header = await p.evaluate(() => getComputedStyle(document.querySelector(".fl-top")).position);
       check("flows: navigation strip is not sticky", header !== "sticky" && header !== "fixed", header);
+
+      // Brand pink in real interactive states (computed styles), and no legacy blue anywhere on the page.
+      const PINK = "rgb(247, 112, 227)";
+      const INK = "rgb(20, 23, 31)";
+      const states = await p.evaluate(() => {
+        const cs = (sel, pseudo) => getComputedStyle(document.querySelector(sel), pseudo);
+        return {
+          likeBg: cs("#discovery .action-bar__btn--like").backgroundColor,
+          likeFg: cs("#discovery .action-bar__btn--like").color,
+          chipShadow: cs("#interests .chip.is-selected").boxShadow,
+          switchOn: cs("#settings .switch:checked").backgroundColor,
+          tabDot: cs("#discovery .tab-bar__item.is-current .tab-bar__icon", "::after").backgroundColor,
+          progress: cs("#basics .progress__segment.is-done .progress__fill").backgroundColor,
+          verified: cs("#chats .avatar__badge, #discovery .verified__mark").backgroundColor,
+        };
+      });
+      check("flows: like button is brand pink with an ink glyph", states.likeBg === PINK && states.likeFg === INK, `${states.likeBg} / ${states.likeFg}`);
+      check("flows: selected chip uses the brand pink border", states.chipShadow.includes(PINK), states.chipShadow.slice(0, 60));
+      check("flows: switch on uses brand pink", states.switchOn === PINK, states.switchOn);
+      check("flows: active tab indicator uses brand pink", states.tabDot === PINK, states.tabDot);
+      check("flows: progress fill uses brand pink", states.progress === PINK, states.progress);
+      await f("basics").getByLabel("First name").focus();
+      await wait(500); // let the focus-ring transition finish before reading computed styles
+      const focus = await p.evaluate(() => getComputedStyle(document.querySelector("#basics .input:focus")).boxShadow);
+      check("flows: field focus is an ink ring with a pink halo", focus.includes(INK) && focus.includes("rgba(247, 112, 227"), focus.slice(0, 80));
+      for (const [name, path] of [["prototype", ""], ["flows", "flows.html"], ["showcase", "showcase.html"]]) {
+        const q = await page({ width: 1440, height: 900 });
+        await q.goto(base + path);
+        await wait(1200);
+        const legacy = await q.evaluate(() => {
+          const re = /99, 175, 233|31, 111, 176|23, 80, 127|63, 146, 212/;
+          let n = 0;
+          for (const el of document.querySelectorAll("*")) {
+            const s = getComputedStyle(el);
+            if ([s.color, s.backgroundColor, s.borderColor, s.boxShadow, s.outlineColor, s.fill, s.stroke].some((v) => re.test(v))) n++;
+          }
+          return n;
+        });
+        check(`${name}: no legacy blue is rendered`, legacy === 0, `${legacy} elements`);
+      }
 
       await f("basics").getByLabel("First name").fill("Jordan");
       check("flows: profile edits carry to the profile screen", (await textOf("profile")).includes("Jordan"));

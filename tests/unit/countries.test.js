@@ -28,6 +28,6 @@ describe("contrast()", () => {
   it("matches WCAG reference values", () => {
     expect(contrast("#000000", "#ffffff")).toBeCloseTo(21, 0);
     expect(contrast("#ffffff", "#ffffff")).toBeCloseTo(1, 5);
-    expect(contrast("#1f6fb0", "#ffffff")).toBeCloseTo(5.3, 1);
+    expect(contrast("#767676", "#ffffff")).toBeCloseTo(4.54, 1);
   });
 });

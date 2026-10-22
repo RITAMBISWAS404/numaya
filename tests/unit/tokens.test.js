@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { build, cssVarName } from "../../scripts/tokens.mjs";
-import { contrast } from "../../src/lib/contrast.js";
+import { contrast, hexToRgb, luminance } from "../../src/lib/contrast.js";
 
 const { tokens, css, js } = build();
 const value = (name) => {
@@ -26,25 +26,29 @@ describe("token pipeline", () => {
     }
   });
 
-  it("keeps the brand accent at exactly #63AFE9", () => {
-    expect(value("--color-brand").toLowerCase()).toBe("#63afe9");
-    expect(value("--color-focus-ring").toLowerCase()).toBe("#63afe9");
-    expect(value("--color-border-brand").toLowerCase()).toBe("#63afe9");
-    expect(value("--color-text-brand-display").toLowerCase()).toBe("#63afe9");
+  it("keeps the single brand colour at exactly #F770E3", () => {
+    expect(value("--color-brand").toLowerCase()).toBe("#f770e3");
+    expect(value("--color-border-brand").toLowerCase()).toBe("#f770e3");
+    expect(value("--color-text-brand-display").toLowerCase()).toBe("#f770e3");
+    expect(value("--p-color-pink-500").toLowerCase()).toBe("#f770e3");
   });
 
-  it("keeps foreground on brand fills white", () => {
-    expect(value("--color-on-brand").toLowerCase()).toBe(WHITE);
+  it("has no legacy blue brand tokens or literals", () => {
+    expect(css).not.toMatch(/--p-color-blue|63afe9|1f6fb0|17507f|3f92d4/i);
+    expect(css).not.toMatch(/--color-brand-(strong|pressed)/);
   });
 
-  it("uses the same hue for the strong brand variant", () => {
-    const hue = (hex) => {
-      const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
-      const max = Math.max(r, g, b);
-      const min = Math.min(r, g, b);
-      return 60 * (4 + (r - g) / (max - min)); // blue is the max channel for both
-    };
-    expect(Math.abs(hue(value("--color-brand")) - hue(value("--color-brand-strong")))).toBeLessThan(2);
+  it("derives tints by lightening the brand pink, with no darker second pink", () => {
+    const l = (hex) => luminance(hexToRgb(hex));
+    const brand = l(value("--color-brand"));
+    for (const t of ["--color-brand-tint", "--color-brand-subtle", "--color-surface-brand"]) expect(l(value(t))).toBeGreaterThan(brand);
+    const pinks = tokens.keys().toArray().filter((id) => id.startsWith("primitive.color.pink."));
+    expect(pinks.map((id) => id.split(".").pop())).toEqual(["50", "100", "200", "500"]);
+  });
+
+  it("puts dark ink, not white, on solid brand fills", () => {
+    expect(value("--color-on-brand").toLowerCase()).toBe(value("--p-color-neutral-900").toLowerCase());
+    expect(contrast(value("--color-on-brand"), value("--color-brand"))).toBeGreaterThanOrEqual(4.5);
   });
 });
 
@@ -56,7 +60,9 @@ describe("contrast requirements", () => {
     ["--color-text-muted", "--color-surface-soft"],
     ["--color-text-brand", "--color-surface"],
     ["--color-text-brand-deep", "--color-brand-tint"],
-    ["--color-on-brand", "--color-brand-strong"],
+    ["--color-on-brand", "--color-brand"],
+    ["--color-text-brand", "--color-surface"],
+    ["--color-text-brand", "--color-brand-tint"],
     ["--color-text-on-inverse", "--color-surface-inverse"],
     ["--color-danger", "--color-surface"],
     ["--color-danger", "--color-danger-tint"],
@@ -69,13 +75,18 @@ describe("contrast requirements", () => {
     expect(contrast(value(fg), value(bg))).toBeGreaterThanOrEqual(4.5);
   });
 
-  it("control outlines meet 3:1 non-text contrast", () => {
+  it("control outlines and the focus indicator meet 3:1 non-text contrast", () => {
     expect(contrast(value("--color-border-control"), value("--color-surface"))).toBeGreaterThanOrEqual(3);
+    expect(contrast(value("--color-focus-ring"), value("--color-surface"))).toBeGreaterThanOrEqual(3);
   });
 
   it("documents the only accepted exceptions", () => {
-    // Glyph-only white marks on the exact brand fill, always paired with a text label or a shape cue.
-    expect(contrast(value("--color-on-brand"), value("--color-brand"))).toBeCloseTo(2.38, 1);
+    // Pink as display-size headline emphasis: below the 3:1 large-text minimum, documented, one word only.
+    const display = contrast(value("--color-text-brand-display"), value("--color-surface"));
+    expect(display).toBeGreaterThan(2.4);
+    expect(display).toBeLessThan(3);
+    // White on the brand fill fails, which is why on-brand is ink.
+    expect(contrast(WHITE, value("--color-brand"))).toBeLessThan(3);
     // Placeholder and disabled text.
     expect(contrast(value("--color-text-subtle"), value("--color-surface"))).toBeLessThan(3);
   });

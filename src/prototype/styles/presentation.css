@@ -114,7 +114,7 @@
 }
 
 .brief-step.is-done .brief-step__index {
-  background: var(--color-brand-strong);
+  background: var(--color-brand);
   color: var(--color-on-brand);
   box-shadow: none;
 }

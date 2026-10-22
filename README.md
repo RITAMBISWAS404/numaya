@@ -19,4 +19,4 @@ npm run test:e2e                  # browser smoke test with screenshots
   with mock data. Buttons jump between connected screens.
 - **Docs:** see [CLAUDE.md](CLAUDE.md) and [docs/](docs/).
 
-Fonts: Fraunces and Inter (SIL OFL), self-hosted. Brand blue: `#63AFE9`.
+Fonts: Fraunces and Inter (SIL OFL), self-hosted. Brand pink: `#F770E3`.

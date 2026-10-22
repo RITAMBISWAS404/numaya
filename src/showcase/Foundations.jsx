@@ -55,34 +55,34 @@ export function Foundations() {
       <Section
         id="brand"
         title="Brand"
-        intro="The Numaya blue #63AFE9 is the identity. It appears at its exact value on marks, progress, focus, selection, verification and brand-filled glyphs. Anything placed on a solid blue fill is white."
+        intro="The Numaya pink #F770E3 is the identity. It appears at its exact value on marks, progress, selection, verification and like/send fills. Anything placed on a solid pink fill is dark ink: white on it is only 2.51:1."
       >
         <Grid min={240}>
-          <Specimen title="Brand fill + white glyph" note={`#63AFE9 · white ${ratio(brandHex, WHITE)} (glyph-only, redundant label)`}>
+          <Specimen title="Brand fill + ink glyph" note={`#F770E3 · ink ${ratio(tokenByName["--color-on-brand"].resolved, brandHex)}`}>
             <span className="sc-brand-demo">
               <span className="sc-brand-demo__mark">
                 <Icon name="check" size={28} stroke={2.75} />
               </span>
             </span>
           </Specimen>
-          <Specimen title="Brand emphasis in a headline" note={`--color-text-brand-display · exact #63AFE9 · ${ratio(tokenByName["--color-text-brand-display"].resolved, WHITE)} (display size only)`}>
+          <Specimen title="Brand fill + ink label" note={`--color-on-brand on --color-brand · ${ratio(tokenByName["--color-on-brand"].resolved, brandHex)}`}>
+            <span className="sc-pill-demo" style={{ background: "var(--color-brand)", color: "var(--color-on-brand)" }}>
+              Say hello
+            </span>
+          </Specimen>
+          <Specimen title="Brand emphasis in a headline" note={`--color-text-brand-display · exact #F770E3 · ${ratio(tokenByName["--color-text-brand-display"].resolved, WHITE)} on white (display only; documented exception)`}>
             <p className="sc-type-sample" style={{ fontFamily: "var(--font-display)", fontSize: 34, color: "var(--color-text-brand-display)" }}>
               Better
             </p>
           </Specimen>
-          <Specimen title="Brand text at body size" note={`--color-text-brand ${ratio(tokenByName["--color-text-brand"].resolved, WHITE)} · links, labels`}>
+          <Specimen title="Brand text at body size" note={`--color-text-brand is ink · ${ratio(tokenByName["--color-text-brand"].resolved, WHITE)} · pink text fails on white`}>
             <p className="sc-type-sample" style={{ color: "var(--color-text-brand)", fontWeight: 600 }}>
               Change number
             </p>
           </Specimen>
-          <Specimen title="Readable blue fill" note={`--color-brand-strong · white ${ratio(tokenByName["--color-brand-strong"].resolved, WHITE)}`}>
-            <span className="sc-pill-demo" style={{ background: "var(--color-brand-strong)", color: "var(--color-on-brand)" }}>
-              Use for white body text
-            </span>
-          </Specimen>
-          <Specimen title="Never" note="Dark content on a solid brand fill" tone="soft">
-            <span className="sc-pill-demo sc-pill-demo--never">
-              <Icon name="close" size={16} stroke={2.4} /> Dark on #63AFE9
+          <Specimen title="Never" note="White content on a solid brand fill" tone="soft">
+            <span className="sc-pill-demo sc-pill-demo--never" style={{ background: "var(--color-brand)", color: "var(--color-text-on-inverse)", boxShadow: "none" }}>
+              <Icon name="close" size={16} stroke={2.4} /> White on #F770E3
             </span>
           </Specimen>
         </Grid>

@@ -356,8 +356,8 @@ body {
 
 .fl-swipe__stamp--like {
   left: var(--space-5);
-  /* Text on a blue fill uses the readable variant (5.3:1), never #63AFE9. */
-  background: var(--color-brand-strong);
+  /* Brand pink fill with ink text (7.15:1). */
+  background: var(--color-brand);
   color: var(--color-on-brand);
 }
 

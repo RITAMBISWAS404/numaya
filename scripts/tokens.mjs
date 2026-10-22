@@ -9,7 +9,7 @@
  * Outputs: src/design-system/tokens.css  CSS custom properties
  *          src/design-system/tokens.js   resolved manifest for the showcase and tests
  *
- * Naming: primitive.color.blue.500   → --p-color-blue-500
+ * Naming: primitive.color.pink.500   → --p-color-pink-500
  *         semantic.color.brand.default → --color-brand   ("default" segments are dropped)
  *         component.button.height     → --button-height
  */

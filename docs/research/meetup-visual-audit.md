@@ -57,10 +57,10 @@ are [O] at preview resolution; pixel values are estimates.
 | Floating white circular nav buttons | `IconButton` variant `floating` (white, `shadow.float`) |
 | Glossy ink primary pill | `Button` primary uses `button.primary.*` component tokens (ink gradient) |
 | Soft-filled borderless fields | `TextField`, `PhoneField`, `SearchField` share `field.*` tokens |
-| Segmented progress pills | `ProgressSegments` in brand `#63AFE9` |
+| Segmented progress pills | `ProgressSegments` in brand `#F770E3` |
 | Hairline-border cards with large radius | `Card` surface (`radius.lg`, `border.subtle`) |
 | Tip card | `TipCard` |
-| Colour emphasis on one headline word | Welcome headline emphasis via `color.text.brand-display` (exact `#63AFE9`) |
+| Colour emphasis on one headline word | Welcome headline emphasis via `color.text.brand-display` (exact `#F770E3`) |
 | Spinner replacing the CTA label | `Button loading` |
 | Floating capsule tab bar | `TabBar` spec (floating variant), future work |
 

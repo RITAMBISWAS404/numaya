@@ -44,7 +44,7 @@ CDNs. No other families are permitted without a token change
 ## Rules carried into the design system
 1. Serif for **expression** (headlines, names, prompt answers); sans for **operation**.
 2. Display weight stays at **400–460**. Never bold the serif for emphasis; use size or brand colour.
-3. Emphasis inside a headline is **colour only** (`color.text.brand-display`, exact `#63AFE9`), applied to one meaningful
+3. Emphasis inside a headline is **colour only** (`color.text.brand-display`, exact `#F770E3`), applied to one meaningful
    word or short phrase.
 4. Uppercase is limited to eyebrows and tags, always tracked at `tracking.eyebrow`.
 5. Numbers in inputs and prices use Inter with `tabular-nums`.

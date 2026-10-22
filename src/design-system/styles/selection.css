@@ -122,7 +122,7 @@
 
 .code__cell.is-active {
   background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-selected) var(--color-brand), 0 0 0 4px var(--color-focus-halo);
+  box-shadow: inset 0 0 0 var(--border-selected) var(--color-focus-ring), 0 0 0 4px var(--color-focus-halo);
 }
 
 .code__caret {
@@ -340,7 +340,7 @@ button.chip:active {
   transition: transform var(--motion-duration-base) var(--motion-ease-out);
 }
 
-/* On: exact brand blue; state is also carried by the knob position. */
+/* On: exact brand pink; state is also carried by the knob position. */
 .switch:checked {
   background: var(--color-brand);
   box-shadow: none;
@@ -429,10 +429,10 @@ button.chip:active {
   border-radius: 50%;
 }
 
-/* Checked: exact brand fill with a white glyph (state also shown by the glyph). */
+/* Checked: exact brand fill with an ink glyph (state also shown by the glyph). */
 .choice__input--checkbox:checked {
   background: var(--color-brand)
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4L18 8.5'/%3E%3C/svg%3E")
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314171f' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4L18 8.5'/%3E%3C/svg%3E")
     center / 18px no-repeat;
   box-shadow: none;
 }
@@ -577,5 +577,5 @@ button.chip:active {
 }
 
 .slider__track input:focus-visible::-webkit-slider-thumb {
-  box-shadow: inset 0 0 0 var(--border-focus) var(--color-brand), 0 0 0 4px var(--color-focus-halo);
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-focus-ring), 0 0 0 4px var(--color-focus-halo);
 }

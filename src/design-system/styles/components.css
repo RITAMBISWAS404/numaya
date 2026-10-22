@@ -623,10 +623,10 @@
   background: var(--color-danger);
 }
 
-/* Readable blue fill: white text needs brand.strong (5.3:1), never #63AFE9. */
+/* Brand pink fill: label in ink (7.15:1); white on #F770E3 is only 2.51:1. */
 .btn--brand {
   color: var(--color-on-brand);
-  background: var(--color-brand-strong);
+  background: var(--color-brand);
   box-shadow: var(--shadow-xs);
 }
 

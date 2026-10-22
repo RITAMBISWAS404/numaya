@@ -6,7 +6,7 @@ JSDoc. Live variants and states: `showcase.html`. Tier: **P** primitive, **C** c
 
 | Component | Tier | Purpose | Key variants / states | A11y notes |
 | --- | --- | --- | --- | --- |
-| `Button` | P | Text action | primary, secondary, quiet, destructive, destructive-solid, brand (white on `brand-strong`); sm; inline; icon; loading; disabled | `aria-busy` when loading; one primary per screen |
+| `Button` | P | Text action | primary, secondary, quiet, destructive, destructive-solid, brand (ink label on the brand-pink fill); sm; inline; icon; loading; disabled | `aria-busy` when loading; one primary per screen |
 | `Fab` | P | Forward step on data-entry screens | enabled, disabled, loading | `label` required |
 | `IconButton`, `BackButton` | P | Icon-only action | floating, flat, plain; sm; pressed | `label` required; `aria-pressed` for toggles |
 | `TextButton`, `Link` | P | Inline action / navigation | brand, muted, danger; disabled | Real `<a>` for navigation |

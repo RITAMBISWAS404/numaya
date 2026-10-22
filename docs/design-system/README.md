@@ -32,7 +32,7 @@ src/design-system/index.js       public API: import from here only
 
 | Layer | CSS name | Holds | Who may reference it |
 | --- | --- | --- | --- |
-| Primitive | `--p-color-blue-500`, `--p-dimension-16` | Raw values (palette, scales) | Semantic and component tokens only |
+| Primitive | `--p-color-pink-500`, `--p-dimension-16` | Raw values (palette, scales) | Semantic and component tokens only |
 | Semantic | `--color-text-muted`, `--space-4`, `--type-body-size` | Meaning | All component and screen CSS |
 | Component | `--button-height`, `--code-cell-radius` | Explicit reusable needs a semantic token cannot express | That component's CSS |
 
@@ -58,7 +58,7 @@ or the real page):
 ## Principles
 
 1. **Semantic first.** Screens use semantic tokens and library components, never raw values.
-2. **Brand with restraint.** `#63AFE9` marks meaning (selected, verified, progress, focus, brand
+2. **Brand with restraint.** `#F770E3` marks meaning (selected, verified, progress, brand
    moments). It is never diluted and never carries dark foreground content.
 3. **Expression vs operation.** Fraunces expresses (headlines, names, prompt answers); Inter
    operates (everything you read to act).

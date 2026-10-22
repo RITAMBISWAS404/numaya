@@ -60,7 +60,7 @@ export function TopBar({ onBack, step, steps, title, largeTitle, actions }) {
   );
 }
 
-/** Onboarding progress: short segments in the brand blue. */
+/** Onboarding progress: short segments in the brand pink. */
 export function ProgressSegments({ step, steps, label = "Sign-up progress" }) {
   return (
     <div
