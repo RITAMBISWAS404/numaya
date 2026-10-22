@@ -58,6 +58,8 @@ describe("contrast requirements", () => {
     ["--color-text-secondary", "--color-surface"],
     ["--color-text-muted", "--color-surface"],
     ["--color-text-muted", "--color-surface-soft"],
+    ["--color-text-muted", "--color-surface-page"],
+    ["--color-text-primary", "--color-surface-page"],
     ["--color-text-brand", "--color-surface"],
     ["--color-text-brand-deep", "--color-brand-tint"],
     ["--color-on-brand", "--color-brand"],
@@ -105,9 +107,9 @@ describe("geometry and elevation", () => {
   });
 
   it("shadows are neutral and low opacity, strongest only on layered overlays", () => {
-    for (const t of ["xs", "sm", "md", "button"]) expect(maxAlpha(`--shadow-${t}`)).toBeLessThanOrEqual(0.14);
+    for (const t of ["xs", "sm", "md", "float", "button"]) expect(maxAlpha(`--shadow-${t}`)).toBeLessThanOrEqual(0.14);
     expect(maxAlpha("--shadow-lg")).toBeLessThanOrEqual(0.2);
-    for (const t of ["xs", "sm", "md", "lg", "button"]) {
+    for (const t of ["xs", "sm", "md", "float", "lg", "button"]) {
       const v = value(`--shadow-${t}`);
       expect(v).not.toMatch(/247 112 227/); // no pink glow
       expect(v.match(/rgb\(/g).length).toBeLessThanOrEqual(3);

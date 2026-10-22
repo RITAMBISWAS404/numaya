@@ -25,6 +25,7 @@
         "850": { "$type": "color", "$value": "#1a1d26" },
         "900": { "$type": "color", "$value": "#14171f" }
       },
+      "warm":  { "50": { "$type": "color", "$value": "#f8f5f6", "$description": "Blush-warm neutral (white with a trace of the brand pink, desaturated). Page surface so white cards read as raised." } },
       "red":   { "50": { "$type": "color", "$value": "#fdf0f2" }, "600": { "$type": "color", "$value": "#c8364f" } },
       "green": { "50": { "$type": "color", "$value": "#eaf7f0" }, "700": { "$type": "color", "$value": "#1b7f4e" } },
       "amber": { "50": { "$type": "color", "$value": "#fff6e5" }, "700": { "$type": "color", "$value": "#9a5b00" } },
@@ -119,6 +120,7 @@
         "default": { "$type": "color", "$value": "{primitive.color.neutral.0}" },
         "soft":    { "$type": "color", "$value": "{primitive.color.neutral.50}", "$description": "Fields and quiet fills." },
         "sunken":  { "$type": "color", "$value": "{primitive.color.neutral.100}", "$description": "Tracks, disabled fills, hover on soft." },
+        "page":    { "$type": "color", "$value": "{primitive.color.warm.50}", "$description": "Tab-root page background. White cards sit on it with a soft shadow instead of a border." },
         "canvas":  { "$type": "color", "$value": "{primitive.color.neutral.100}", "$description": "Background behind app frames and showcase pages." },
         "brand":   { "$type": "color", "$value": "{primitive.color.pink.50}", "$description": "Brand-washed screen backgrounds (welcome)." },
         "inverse": { "$type": "color", "$value": "{primitive.color.neutral.900}", "$description": "Ink fills: primary actions, toasts." }
@@ -210,13 +212,13 @@
       "stroke-bold": { "$type": "number", "$value": "2", "$description": "Icons inside filled buttons and small sizes." }
     },
     "radius": {
-      "$description": "Compact rounded rectangles. xs/sm: tags, chips, small inner elements. md: controls (buttons, fields, list groups, option cards). lg: cards and message bubbles. xl: sheets, dialogs, large photo cards. 2xl: framed screens. pill: only for genuinely pill-shaped things (progress bars, switches, slider tracks, count badges).",
+      "$description": "Soft rounded rectangles, deliberately not identical across tiers. xs/sm: tags, chips, small inner elements. md: controls (buttons, fields, option cards). lg: cards, list groups and message bubbles. xl: sheets, dialogs, the floating tab bar. 2xl: hero photo cards and framed screens. pill: only for genuinely pill-shaped things (progress bars, switches, slider tracks, count badges).",
       "xs":   { "$type": "dimension", "$value": "{primitive.dimension.6}" },
-      "sm":   { "$type": "dimension", "$value": "{primitive.dimension.8}" },
-      "md":   { "$type": "dimension", "$value": "{primitive.dimension.12}" },
-      "lg":   { "$type": "dimension", "$value": "{primitive.dimension.16}" },
-      "xl":   { "$type": "dimension", "$value": "{primitive.dimension.20}" },
-      "2xl":  { "$type": "dimension", "$value": "{primitive.dimension.24}" },
+      "sm":   { "$type": "dimension", "$value": "{primitive.dimension.10}" },
+      "md":   { "$type": "dimension", "$value": "{primitive.dimension.14}" },
+      "lg":   { "$type": "dimension", "$value": "{primitive.dimension.18}" },
+      "xl":   { "$type": "dimension", "$value": "{primitive.dimension.24}" },
+      "2xl":  { "$type": "dimension", "$value": "{primitive.dimension.28}" },
       "pill": { "$type": "dimension", "$value": "999px" }
     },
     "border": {
@@ -227,8 +229,9 @@
     "shadow": {
       "$description": "Elevation scale. Neutral ink at low opacity. Flat controls and fields use none; they rely on surface contrast or a hairline border.",
       "xs":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.05)", "$description": "Tiny lift for small moving parts: switch knob, slider thumb, selected segment, selected option card." },
-      "sm":     { "$type": "shadow", "$value": "0 0 0 1px rgb(20 23 31 / 0.04), 0 2px 8px -2px rgb(20 23 31 / 0.06)", "$description": "Cards, prompt cards, floating icon buttons and brand-filled controls over content." },
+      "sm":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.04), 0 6px 16px -6px rgb(20 23 31 / 0.08)", "$description": "Raised cards and list groups, floating icon buttons. Replaces outlines: no ring, just a soft contact shadow." },
       "md":     { "$type": "shadow", "$value": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -6px 20px -8px rgb(20 23 31 / 0.10)", "$description": "Bottom sheets and bottom panels (shadow falls upward)." },
+      "float":  { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.05), 0 12px 32px -12px rgb(20 23 31 / 0.14)", "$description": "Persistent chrome that floats over the page: the bottom tab bar and the hero profile card." },
       "lg":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.06), 0 10px 28px -8px rgb(20 23 31 / 0.20)", "$description": "Dialogs, toasts and popovers: the only tier that must clearly read as layered." },
       "button": { "$type": "shadow", "$value": "inset 0 1px 0 rgb(255 255 255 / 0.10), 0 1px 2px rgb(20 23 31 / 0.14)", "$description": "Primary ink buttons: a faint top highlight and a contact shadow." }
     },
@@ -276,6 +279,6 @@
     "progress":    { "segment-width": { "$type": "dimension", "$value": "{primitive.dimension.18}" }, "segment-height": { "$type": "dimension", "$value": "{primitive.dimension.8}" } },
     "code-cell":   { "height": { "$type": "dimension", "$value": "{primitive.dimension.60}" }, "radius": { "$type": "dimension", "$value": "{primitive.dimension.10}" } },
     "switch":      { "width": { "$type": "dimension", "$value": "51px" }, "height": { "$type": "dimension", "$value": "31px" } },
-    "tab-bar":     { "height": { "$type": "dimension", "$value": "{primitive.dimension.56}" } }
+    "tab-bar":     { "height": { "$type": "dimension", "$value": "{primitive.dimension.64}" } }
   }
 }

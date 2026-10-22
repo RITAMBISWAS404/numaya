@@ -62,7 +62,7 @@ are [O] at preview resolution; pixel values are estimates.
 | Tip card | `TipCard` |
 | Colour emphasis on one headline word | Welcome headline emphasis via `color.text.brand-display` (exact `#F770E3`) |
 | Spinner replacing the CTA label | `Button loading` |
-| Floating capsule tab bar | `TabBar` spec (floating variant), future work |
+| Floating capsule tab bar | `TabBar` floats as an inset rounded bar (not a full capsule) with a brand-tint active item |
 
 ## What Numaya does not adopt
 - Meetup purple, sparkles and doodle decorations, and its illustration style.

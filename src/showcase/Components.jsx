@@ -432,7 +432,7 @@ function Profile() {
         <Specimen title="PhotoGrid · add · remove · uploading" note="First photo is Main">
           <PhotoGrid photos={photos} onAdd={add} onRemove={(id) => setPhotos((p) => p.filter((x) => x.id !== id))} />
         </Specimen>
-        <Specimen title="ProfileCard + ActionBar" note="Photo placeholder; legibility overlay is functional">
+        <Specimen title="ProfileCard + ActionBar" note="Photo inset in a white card; identity sits on white, so no scrim. Pass actions to place them on the seam">
           <div className="sc-stack">
             <ProfileCard
               name="Maya"
@@ -491,7 +491,7 @@ function Navigation() {
             <ProgressSegments step={3} steps={4} />
           </Row>
         </Specimen>
-        <Specimen title="TabBar" note="Active: filled icon, ink label and a short brand-pink indicator on the top edge" wide>
+        <Specimen title="TabBar" note="Floating bar. Active: brand-tint surface, filled icon, ink semibold label" wide>
           <div className="sc-bleed">
             <TabBar
               current={tab}

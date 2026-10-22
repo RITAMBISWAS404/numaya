@@ -276,39 +276,53 @@ export function PhotoGrid({ photos, slots = 6, onAdd, onRemove, hint = "Hold and
 }
 
 /**
- * Discovery card: photo, legibility scrim, name/age, verified, details, shared interests.
- * Actions are separate (ActionBar) so the card works in stacks and lists.
+ * Discovery card: photo (inset in a white card), identity, details and shared interests.
+ * `actions` (usually an ActionBar) sits on the seam between photo and identity; without it the
+ * card stands alone and actions render separately, so the card still works in stacks and lists.
  */
-export function ProfileCard({ name, age, verified, details = [], shared = [], photoCount = 3, photoIndex = 0, tone = 0, isNew = false }) {
+export function ProfileCard({ name, age, verified, details = [], shared = [], photoCount = 3, photoIndex = 0, tone = 0, isNew = false, actions }) {
   return (
-    <article className="profile-card" aria-label={`${name}, ${age}`}>
-      <ImagePlaceholder tone={tone} ratio="3 / 4" className="profile-card__photo" label={`Photo of ${name}`}>
-        <span className="profile-card__initial" aria-hidden="true">
-          {name?.[0]}
-        </span>
-      </ImagePlaceholder>
-      <div className="profile-card__progress" aria-hidden="true">
-        {Array.from({ length: photoCount }, (_, i) => (
-          <span key={i} className={cx(i === photoIndex && "is-current")} />
-        ))}
+    <article className={cx("profile-card", actions && "profile-card--with-actions")} aria-label={`${name}, ${age}`}>
+      <div className="profile-card__media">
+        <ImagePlaceholder tone={tone} ratio="5 / 6" className="profile-card__photo" label={`Photo of ${name}`}>
+          <span className="profile-card__initial" aria-hidden="true">
+            {name?.[0]}
+          </span>
+        </ImagePlaceholder>
+        <div className="profile-card__progress" aria-hidden="true">
+          {Array.from({ length: photoCount }, (_, i) => (
+            <span key={i} className={cx(i === photoIndex && "is-current")} />
+          ))}
+        </div>
+        {isNew && (
+          <span className="profile-card__flag">
+            <Badge tone="brand">New here</Badge>
+          </span>
+        )}
       </div>
-      <div className="profile-card__overlay">
-        {isNew && <Badge tone="inverse">New here</Badge>}
+      {actions && <div className="profile-card__actions">{actions}</div>}
+      <div className="profile-card__body">
         <h3 className="profile-card__name">
           {name}, {age}
           {verified && <VerifiedBadge compact />}
         </h3>
-        {details.map((d) => (
-          <p key={d.text} className="profile-card__detail">
-            <Icon name={d.icon} size={16} /> {d.text}
-          </p>
-        ))}
+        {details.length > 0 && (
+          <ul className="profile-card__details">
+            {details.map((d) => (
+              <li key={d.text} className="profile-card__detail">
+                <Icon name={d.icon} size={16} /> {d.text}
+              </li>
+            ))}
+          </ul>
+        )}
         {shared.length > 0 && (
           <div className="profile-card__shared">
-            <p className="profile-card__shared-title">You both like</p>
+            <p className="profile-card__shared-title">
+              <Icon name="heart" size={14} weight="fill" className="profile-card__shared-mark" /> You both like
+            </p>
             <div className="profile-card__shared-chips">
               {shared.map((s) => (
-                <span key={s} className="chip chip--static chip--on-photo">
+                <span key={s} className="chip chip--static chip--shared">
                   {s}
                 </span>
               ))}

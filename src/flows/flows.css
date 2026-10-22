@@ -150,6 +150,11 @@ body {
   flex: none;
 }
 
+/* Tab roots: the floating bar sits below the content; the body needs less bottom padding. */
+.fl-screen__body:has(+ .tab-bar) {
+  padding-bottom: var(--space-4);
+}
+
 .fl-stack {
   display: grid;
   align-content: start;
@@ -317,15 +322,23 @@ body {
   flex: 1;
 }
 
-/* Discover: filter summary and swipe -------------------------------------- */
-.fl-filters {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  margin: calc(-1 * var(--space-2)) 0 var(--space-4);
-  color: var(--color-text-muted);
-  font-size: var(--type-caption-size);
+/* Discover: page surface, filter control and swipe ------------------------- */
+.fl-screen--page {
+  background: var(--color-surface-page);
+}
+
+/* The filter summary is a raised control on the page, not an outlined box. */
+.fl-filter-btn.btn--secondary,
+.fl-filter-btn.btn--secondary:hover:not(:disabled) {
+  height: 36px;
+  padding: 0 var(--space-3);
+  box-shadow: var(--shadow-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.fl-filter-btn .btn__icon {
+  width: 16px;
+  height: 16px;
 }
 
 .fl-swipe {
@@ -344,7 +357,8 @@ body {
 
 .fl-swipe__stamp {
   position: absolute;
-  top: var(--space-6);
+  z-index: var(--z-raised);
+  top: var(--space-12);
   padding: 6px 14px;
   border-radius: var(--radius-sm);
   font-size: var(--type-label-size);

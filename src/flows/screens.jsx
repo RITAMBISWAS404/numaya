@@ -52,7 +52,7 @@ const ageOf = (year) => (year.length === 4 ? new Date().getFullYear() - Number(y
 /** Shared screen scaffold inside a preview frame. */
 function Frame({ top, footer, tab, go, children, tone }) {
   return (
-    <div className={`fl-screen${tone === "brand" ? " fl-screen--brand" : ""}`}>
+    <div className={`fl-screen${tone ? ` fl-screen--${tone}` : ""}`}>
       {top}
       <div className="fl-screen__body">{children}</div>
       {footer && <div className="fl-screen__footer">{footer}</div>}
@@ -218,7 +218,8 @@ function useSwipe(onDecide) {
   const [dx, setDx] = useState(0);
   const handlers = {
     onPointerDown: (e) => {
-      if (e.button !== 0) return;
+      // Buttons inside the card (pass, like) keep their own clicks.
+      if (e.button !== 0 || e.target.closest("button")) return;
       start.current = e.clientX;
       e.currentTarget.setPointerCapture?.(e.pointerId);
     },
@@ -259,7 +260,31 @@ export function Discovery({ go }) {
   const intent = dx >= SWIPE_THRESHOLD / 2 ? "like" : dx <= -SWIPE_THRESHOLD / 2 ? "pass" : null;
 
   return (
-    <Frame top={<TopBar largeTitle="Discover" />} tab="discover" go={go}>
+    <Frame
+      tone="page"
+      top={
+        <TopBar
+          largeTitle="Discover"
+          actions={
+            !snoozed && (
+              <Button
+                variant="secondary"
+                size="sm"
+                block={false}
+                icon="filter"
+                className="fl-filter-btn"
+                aria-label={`Filters: ages ${age[0]}–${age[1]}, within ${distance} km. Change`}
+                onClick={() => go("settings")}
+              >
+                Ages {age[0]}–{age[1]} · {distance} km
+              </Button>
+            )
+          }
+        />
+      }
+      tab="discover"
+      go={go}
+    >
       {snoozed ? (
         <div className="fl-center fl-fill">
           <EmptyState icon="eyeOff" title="Discover is paused" action="Resume" onAction={() => dispatch({ type: "prefs", patch: { snooze: false } })}>
@@ -268,25 +293,23 @@ export function Discovery({ go }) {
         </div>
       ) : (
       <>
-      <p className="fl-filters">
-        Ages {age[0]}–{age[1]} · within {distance} km
-        <button type="button" className="text-button" onClick={() => go("settings")}>
-          Change
-        </button>
-      </p>
       {person ? (
         <div className="fl-stack">
           <div
             className={`fl-swipe${dx ? " is-dragging" : ""}`}
             style={{ "--dx": `${dx}px`, "--rot": `${dx / 24}deg` }}
             {...handlers}
-            aria-label={`${person.name}. Swipe right to like, left to pass, or use the buttons below.`}
+            aria-label={`${person.name}. Swipe right to like, left to pass, or use the Pass and Like buttons.`}
             role="group"
           >
-            <ProfileCard key={id} {...person} details={[...person.details, { icon: "location", text: `${person.distanceKm} km away` }]} />
+            <ProfileCard
+              key={id}
+              {...person}
+              details={[...person.details, { icon: "location", text: `${person.distanceKm} km away` }]}
+              actions={<ActionBar onPass={() => decide(false)} onSuper={() => decide(true)} onLike={() => decide(true)} />}
+            />
             {intent && <span className={`fl-swipe__stamp fl-swipe__stamp--${intent}`}>{intent === "like" ? "Like" : "Pass"}</span>}
           </div>
-          <ActionBar onPass={() => decide(false)} onSuper={() => decide(true)} onLike={() => decide(true)} />
           <PromptCard prompt={person.prompt.q} answer={person.prompt.a} />
           <ListGroup footnote="Sample profiles. Distances are illustrative, not real locations.">
             {person.facts.map((f) => (

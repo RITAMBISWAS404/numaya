@@ -19,6 +19,7 @@
   --p-color-neutral-800: #2b303b;
   --p-color-neutral-850: #1a1d26;
   --p-color-neutral-900: #14171f;
+  --p-color-warm-50: #f8f5f6;
   --p-color-red-50: #fdf0f2;
   --p-color-red-600: #c8364f;
   --p-color-green-50: #eaf7f0;
@@ -93,6 +94,7 @@
   --color-surface: var(--p-color-neutral-0);
   --color-surface-soft: var(--p-color-neutral-50);
   --color-surface-sunken: var(--p-color-neutral-100);
+  --color-surface-page: var(--p-color-warm-50);
   --color-surface-canvas: var(--p-color-neutral-100);
   --color-surface-brand: var(--p-color-pink-50);
   --color-surface-inverse: var(--p-color-neutral-900);
@@ -199,18 +201,19 @@
   --icon-stroke: 1.75;
   --icon-stroke-bold: 2;
   --radius-xs: var(--p-dimension-6);
-  --radius-sm: var(--p-dimension-8);
-  --radius-md: var(--p-dimension-12);
-  --radius-lg: var(--p-dimension-16);
-  --radius-xl: var(--p-dimension-20);
-  --radius-2xl: var(--p-dimension-24);
+  --radius-sm: var(--p-dimension-10);
+  --radius-md: var(--p-dimension-14);
+  --radius-lg: var(--p-dimension-18);
+  --radius-xl: var(--p-dimension-24);
+  --radius-2xl: var(--p-dimension-28);
   --radius-pill: 999px;
   --border-hairline: var(--p-dimension-1);
   --border-selected: 1.5px;
   --border-focus: var(--p-dimension-2);
   --shadow-xs: 0 1px 2px rgb(20 23 31 / 0.05);
-  --shadow-sm: 0 0 0 1px rgb(20 23 31 / 0.04), 0 2px 8px -2px rgb(20 23 31 / 0.06);
+  --shadow-sm: 0 1px 2px rgb(20 23 31 / 0.04), 0 6px 16px -6px rgb(20 23 31 / 0.08);
   --shadow-md: 0 -1px 0 rgb(20 23 31 / 0.04), 0 -6px 20px -8px rgb(20 23 31 / 0.10);
+  --shadow-float: 0 1px 2px rgb(20 23 31 / 0.05), 0 12px 32px -12px rgb(20 23 31 / 0.14);
   --shadow-lg: 0 1px 2px rgb(20 23 31 / 0.06), 0 10px 28px -8px rgb(20 23 31 / 0.20);
   --shadow-button: inset 0 1px 0 rgb(255 255 255 / 0.10), 0 1px 2px rgb(20 23 31 / 0.14);
   --opacity-disabled: 0.45;
@@ -245,7 +248,7 @@
   --code-cell-radius: var(--p-dimension-10);
   --switch-width: 51px;
   --switch-height: 31px;
-  --tab-bar-height: var(--p-dimension-56);
+  --tab-bar-height: var(--p-dimension-64);
 }
 
 @media (prefers-reduced-motion: reduce) {

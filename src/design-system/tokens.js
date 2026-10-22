@@ -154,6 +154,15 @@ export const tokens = [
     "description": null
   },
   {
+    "id": "primitive.color.warm.50",
+    "name": "--p-color-warm-50",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#f8f5f6",
+    "resolved": "#f8f5f6",
+    "description": "Blush-warm neutral (white with a trace of the brand pink, desaturated). Page surface so white cards read as raised."
+  },
+  {
     "id": "primitive.color.red.50",
     "name": "--p-color-red-50",
     "layer": "primitive",
@@ -800,6 +809,15 @@ export const tokens = [
     "value": "{primitive.color.neutral.100}",
     "resolved": "#eceff3",
     "description": "Tracks, disabled fills, hover on soft."
+  },
+  {
+    "id": "semantic.color.surface.page",
+    "name": "--color-surface-page",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.warm.50}",
+    "resolved": "#f8f5f6",
+    "description": "Tab-root page background. White cards sit on it with a soft shadow instead of a border."
   },
   {
     "id": "semantic.color.surface.canvas",
@@ -1760,8 +1778,8 @@ export const tokens = [
     "name": "--radius-sm",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.8}",
-    "resolved": "8px",
+    "value": "{primitive.dimension.10}",
+    "resolved": "10px",
     "description": null
   },
   {
@@ -1769,8 +1787,8 @@ export const tokens = [
     "name": "--radius-md",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.12}",
-    "resolved": "12px",
+    "value": "{primitive.dimension.14}",
+    "resolved": "14px",
     "description": null
   },
   {
@@ -1778,8 +1796,8 @@ export const tokens = [
     "name": "--radius-lg",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.16}",
-    "resolved": "16px",
+    "value": "{primitive.dimension.18}",
+    "resolved": "18px",
     "description": null
   },
   {
@@ -1787,8 +1805,8 @@ export const tokens = [
     "name": "--radius-xl",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.20}",
-    "resolved": "20px",
+    "value": "{primitive.dimension.24}",
+    "resolved": "24px",
     "description": null
   },
   {
@@ -1796,8 +1814,8 @@ export const tokens = [
     "name": "--radius-2xl",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.24}",
-    "resolved": "24px",
+    "value": "{primitive.dimension.28}",
+    "resolved": "28px",
     "description": null
   },
   {
@@ -1850,9 +1868,9 @@ export const tokens = [
     "name": "--shadow-sm",
     "layer": "semantic",
     "type": "shadow",
-    "value": "0 0 0 1px rgb(20 23 31 / 0.04), 0 2px 8px -2px rgb(20 23 31 / 0.06)",
-    "resolved": "0 0 0 1px rgb(20 23 31 / 0.04), 0 2px 8px -2px rgb(20 23 31 / 0.06)",
-    "description": "Cards, prompt cards, floating icon buttons and brand-filled controls over content."
+    "value": "0 1px 2px rgb(20 23 31 / 0.04), 0 6px 16px -6px rgb(20 23 31 / 0.08)",
+    "resolved": "0 1px 2px rgb(20 23 31 / 0.04), 0 6px 16px -6px rgb(20 23 31 / 0.08)",
+    "description": "Raised cards and list groups, floating icon buttons. Replaces outlines: no ring, just a soft contact shadow."
   },
   {
     "id": "semantic.shadow.md",
@@ -1862,6 +1880,15 @@ export const tokens = [
     "value": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -6px 20px -8px rgb(20 23 31 / 0.10)",
     "resolved": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -6px 20px -8px rgb(20 23 31 / 0.10)",
     "description": "Bottom sheets and bottom panels (shadow falls upward)."
+  },
+  {
+    "id": "semantic.shadow.float",
+    "name": "--shadow-float",
+    "layer": "semantic",
+    "type": "shadow",
+    "value": "0 1px 2px rgb(20 23 31 / 0.05), 0 12px 32px -12px rgb(20 23 31 / 0.14)",
+    "resolved": "0 1px 2px rgb(20 23 31 / 0.05), 0 12px 32px -12px rgb(20 23 31 / 0.14)",
+    "description": "Persistent chrome that floats over the page: the bottom tab bar and the hero profile card."
   },
   {
     "id": "semantic.shadow.lg",
@@ -2160,8 +2187,8 @@ export const tokens = [
     "name": "--tab-bar-height",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.56}",
-    "resolved": "56px",
+    "value": "{primitive.dimension.64}",
+    "resolved": "64px",
     "description": null
   }
 ];

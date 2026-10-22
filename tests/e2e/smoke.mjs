@@ -194,7 +194,8 @@ try {
           likeFg: cs("#discovery .action-bar__btn--like").color,
           chipShadow: cs("#interests .chip.is-selected").boxShadow,
           switchOn: cs("#settings .switch:checked").backgroundColor,
-          tabDot: cs("#discovery .tab-bar__item.is-current", "::before").backgroundColor,
+          tabActive: cs("#discovery .tab-bar__item.is-current").backgroundColor,
+          tabActiveFg: cs("#discovery .tab-bar__item.is-current").color,
           progress: cs("#basics .progress__segment.is-done .progress__fill").backgroundColor,
           verified: cs("#chats .avatar__badge, #discovery .verified__mark").backgroundColor,
         };
@@ -202,7 +203,7 @@ try {
       check("flows: like button is brand pink with an ink glyph", states.likeBg === PINK && states.likeFg === INK, `${states.likeBg} / ${states.likeFg}`);
       check("flows: selected chip uses the brand pink border", states.chipShadow.includes(PINK), states.chipShadow.slice(0, 60));
       check("flows: switch on uses brand pink", states.switchOn === PINK, states.switchOn);
-      check("flows: active tab indicator uses brand pink", states.tabDot === PINK, states.tabDot);
+      check("flows: active tab sits on the brand tint with an ink label", states.tabActive === "rgb(254, 238, 252)" && states.tabActiveFg === INK, `${states.tabActive} / ${states.tabActiveFg}`);
       check("flows: progress fill uses brand pink", states.progress === PINK, states.progress);
       // Geometry, elevation, icons and bottom navigation.
       const geo = await p.evaluate(() => {
@@ -216,6 +217,12 @@ try {
           btnCorner: cs(".btn").cornerShape,
           promptShadowAlpha: alpha(cs("#profile .prompt").boxShadow),
           tabShadow: getComputedStyle(tab).boxShadow,
+          tabRadius: parseFloat(getComputedStyle(tab).borderTopLeftRadius),
+          tabInset: (() => { const f = tab.closest(".fl-screen").getBoundingClientRect(), r = tab.getBoundingClientRect(); return Math.min(r.left - f.left, f.right - r.right, f.bottom - r.bottom); })(),
+          tabBelowBody: tab.getBoundingClientRect().top >= document.querySelector("#discovery .fl-screen__body").getBoundingClientRect().bottom - 0.5,
+          cardBorder: getComputedStyle(document.querySelector("#discovery .profile-card")).borderTopWidth,
+          pageBg: getComputedStyle(document.querySelector("#discovery .fl-screen")).backgroundColor,
+          likeTop: document.querySelector("#discovery .action-bar__btn--like").getBoundingClientRect().bottom <= tab.getBoundingClientRect().top,
           tabItemMin: Math.min(...items.map((r) => Math.min(r.width, r.height))),
           tabCurrent: tab.querySelectorAll(".tab-bar__item[aria-current='page']").length,
           icons: document.querySelectorAll("#discovery svg.ph, #discovery [class*='phosphor'], #discovery svg[viewBox='0 0 256 256']").length,
@@ -225,7 +232,12 @@ try {
       check("geometry: buttons use the compact radius, not a pill", geo.btnRadius > 0 && geo.btnRadius <= 14, `${geo.btnRadius}px`);
       check("geometry: squircle corners apply where supported", !geo.squircleSupported || geo.btnCorner.includes("squircle"), `${geo.squircleSupported} / ${geo.btnCorner}`);
       check("elevation: card shadow is very light", geo.promptShadowAlpha > 0 && geo.promptShadowAlpha <= 0.08, `alpha ${geo.promptShadowAlpha}`);
-      check("navigation: tab bar has no shadow", geo.tabShadow === "none", geo.tabShadow);
+      const tabAlpha = Math.max(0, ...[...geo.tabShadow.matchAll(/rgba\(\d+, \d+, \d+, ([0-9.]+)\)/g)].map((m) => parseFloat(m[1])));
+      check("navigation: floating bar has one soft shadow, no heavy elevation", tabAlpha > 0 && tabAlpha <= 0.14, geo.tabShadow.slice(0, 80));
+      check("navigation: bar is inset from the frame edges and softly rounded, not a capsule", geo.tabInset >= 8 && geo.tabRadius >= 18 && geo.tabRadius <= 28, `inset ${geo.tabInset} / radius ${geo.tabRadius}`);
+      check("navigation: bar sits below the scrolling content, never over it", geo.tabBelowBody);
+      check("discover: actions are visible above the tab bar without scrolling", geo.likeTop);
+      check("surfaces: Discover page is tinted and the hero card has no border", geo.pageBg !== "rgb(255, 255, 255)" && geo.cardBorder === "0px", `${geo.pageBg} / ${geo.cardBorder}`);
       check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);
       check("navigation: exactly one current tab", geo.tabCurrent === 1);
       check("icons: Phosphor glyphs render and no legacy stroke icons remain", geo.icons > 0 && geo.legacyStrokeIcons === 0, `${geo.icons} phosphor / ${geo.legacyStrokeIcons} legacy`);

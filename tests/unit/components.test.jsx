@@ -8,8 +8,10 @@ import {
   CodeInput,
   Composer,
   Dialog,
+  ActionBar,
   Fab,
   Icon,
+  ProfileCard,
   IconButton,
   MessageBubble,
   OptionCards,
@@ -250,6 +252,22 @@ describe("identity", () => {
   it("VerifiedBadge always carries a text label", () => {
     render(<VerifiedBadge compact />);
     expect(screen.getByText("Verified")).toBeInTheDocument();
+  });
+});
+
+describe("discovery card", () => {
+  it("ProfileCard renders identity on the card body and actions on the seam", async () => {
+    const user = userEvent.setup();
+    const onLike = vi.fn();
+    const { container } = render(
+      <ProfileCard name="Maya" age={29} verified shared={["Jazz"]} details={[{ icon: "user", text: "Designer" }]} actions={<ActionBar onPass={() => {}} onSuper={() => {}} onLike={onLike} />} />,
+    );
+    expect(screen.getByRole("article", { name: "Maya, 29" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Maya, 29/ })).toBeInTheDocument();
+    expect(container.querySelector(".profile-card__actions + .profile-card__body")).not.toBeNull();
+    expect(screen.getByText("Jazz")).toHaveClass("chip--shared");
+    await user.click(screen.getByRole("button", { name: "Like" }));
+    expect(onLike).toHaveBeenCalled();
   });
 });
 
