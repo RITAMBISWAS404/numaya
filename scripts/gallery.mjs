@@ -165,7 +165,7 @@ const SHOTS = [
   { group: 6, slug: "qa-verified-intro", title: "QA 375: You’re verified → profile setup", screen: "intro", viewport: QA, notes: "Scrolls slightly at this height; the body becomes a tab stop." },
   { group: 6, slug: "qa-interests", title: "QA 375: Interests and prompt", screen: "interests", viewport: QA },
   { group: 6, slug: "qa-discover", title: "QA 375: Discover profile card", screen: "discovery", viewport: QA },
-  { group: 6, slug: "qa-match", title: "QA 375: It’s a match", screen: "match", viewport: QA, notes: "Ribbon hidden below 760px tall.", state: session({ matches: ["priya", "jo", "maya"], seen: ["maya"], lastMatch: "maya" }) },
+  { group: 6, slug: "qa-match", title: "QA 375: It’s a match", screen: "match", viewport: QA, state: session({ matches: ["priya", "jo", "maya"], seen: ["maya"], lastMatch: "maya" }) },
   { group: 6, slug: "qa-chats", title: "QA 375: Chats", screen: "chats", viewport: QA },
   { group: 6, slug: "qa-chat-long-messages", title: "QA 375: Conversation with long messages", screen: "chat", viewport: QA, state: session({ threads: LONG_THREAD }) },
   { group: 6, slug: "qa-settings", title: "QA 375: Settings", screen: "settings", viewport: QA },

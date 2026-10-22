@@ -122,7 +122,7 @@ after any change.
 | 065 | QA 375: You’re verified → profile setup | Viewport · `flows.html?screen=intro` | Scrolls slightly at this height; the body becomes a tab stop. | [065-qa-verified-intro-375x667.png](screens/065-qa-verified-intro-375x667.png) |
 | 066 | QA 375: Interests and prompt | Viewport · `flows.html?screen=interests` |  | [066-qa-interests-375x667.png](screens/066-qa-interests-375x667.png) |
 | 067 | QA 375: Discover profile card | Viewport · `flows.html?screen=discovery` |  | [067-qa-discover-375x667.png](screens/067-qa-discover-375x667.png) |
-| 068 | QA 375: It’s a match | Viewport · `flows.html?screen=match` | Ribbon hidden below 760px tall. | [068-qa-match-375x667.png](screens/068-qa-match-375x667.png) |
+| 068 | QA 375: It’s a match | Viewport · `flows.html?screen=match` |  | [068-qa-match-375x667.png](screens/068-qa-match-375x667.png) |
 | 069 | QA 375: Chats | Viewport · `flows.html?screen=chats` |  | [069-qa-chats-375x667.png](screens/069-qa-chats-375x667.png) |
 | 070 | QA 375: Conversation with long messages | Viewport · `flows.html?screen=chat` |  | [070-qa-chat-long-messages-375x667.png](screens/070-qa-chat-long-messages-375x667.png) |
 | 071 | QA 375: Settings | Viewport · `flows.html?screen=settings` |  | [071-qa-settings-375x667.png](screens/071-qa-settings-375x667.png) |

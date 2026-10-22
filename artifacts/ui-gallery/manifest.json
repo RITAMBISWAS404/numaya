@@ -972,8 +972,7 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/068-qa-match-375x667.png",
-      "notes": "Ribbon hidden below 760px tall."
+      "image": "screens/068-qa-match-375x667.png"
     },
     {
       "id": "069",
