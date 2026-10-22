@@ -276,60 +276,59 @@ export function PhotoGrid({ photos, slots = 6, onAdd, onRemove, hint = "Hold and
 }
 
 /**
- * Discovery card: photo (inset in a white card), identity, details and shared interests.
- * `actions` (usually an ActionBar) sits on the seam between photo and identity; without it the
- * card stands alone and actions render separately, so the card still works in stacks and lists.
+ * Discovery card. The photo carries the card; identity (name, age, verified, details) and shared
+ * interests sit on its lower edge over a legibility scrim. `actions` (usually an ActionBar) overlaps
+ * the card's bottom edge so the decision is attached to the person. Without a photo, a neutral
+ * stand-in with a silhouette is shown: it never pretends to be a photograph.
  */
-export function ProfileCard({ name, age, verified, details = [], shared = [], photoCount = 3, photoIndex = 0, tone = 0, isNew = false, actions }) {
+export function ProfileCard({ name, age, verified, details = [], shared = [], photoCount = 3, photoIndex = 0, isNew = false, src, actions }) {
   return (
     <article className={cx("profile-card", actions && "profile-card--with-actions")} aria-label={`${name}, ${age}`}>
       <div className="profile-card__media">
-        <ImagePlaceholder tone={tone} ratio="5 / 6" className="profile-card__photo" label={`Photo of ${name}`}>
-          <span className="profile-card__initial" aria-hidden="true">
-            {name?.[0]}
-          </span>
-        </ImagePlaceholder>
+        {src ? (
+          <img className="profile-card__img" src={src} alt={`Photo of ${name}`} />
+        ) : (
+          <div className="profile-card__stand-in" role="img" aria-label={`${name} has not added a photo yet`}>
+            <Icon name="user" size={136} weight="fill" />
+          </div>
+        )}
         <div className="profile-card__progress" aria-hidden="true">
           {Array.from({ length: photoCount }, (_, i) => (
             <span key={i} className={cx(i === photoIndex && "is-current")} />
           ))}
         </div>
-        {isNew && (
-          <span className="profile-card__flag">
-            <Badge tone="brand">New here</Badge>
-          </span>
-        )}
+        {isNew && <span className="profile-card__flag">New here</span>}
+        <div className="profile-card__overlay">
+          <h3 className="profile-card__name">
+            {name}, {age}
+            {verified && <VerifiedBadge compact />}
+          </h3>
+          {details.length > 0 && (
+            <ul className="profile-card__details">
+              {details.map((d) => (
+                <li key={d.text} className="profile-card__detail">
+                  <Icon name={d.icon} size={16} /> {d.text}
+                </li>
+              ))}
+            </ul>
+          )}
+          {shared.length > 0 && (
+            <div className="profile-card__shared">
+              <p className="profile-card__shared-title">
+                <Icon name="heart" size={14} weight="fill" className="profile-card__shared-mark" /> You both like
+              </p>
+              <div className="profile-card__shared-chips">
+                {shared.map((s) => (
+                  <span key={s} className="chip chip--static chip--on-photo">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
       {actions && <div className="profile-card__actions">{actions}</div>}
-      <div className="profile-card__body">
-        <h3 className="profile-card__name">
-          {name}, {age}
-          {verified && <VerifiedBadge compact />}
-        </h3>
-        {details.length > 0 && (
-          <ul className="profile-card__details">
-            {details.map((d) => (
-              <li key={d.text} className="profile-card__detail">
-                <Icon name={d.icon} size={16} /> {d.text}
-              </li>
-            ))}
-          </ul>
-        )}
-        {shared.length > 0 && (
-          <div className="profile-card__shared">
-            <p className="profile-card__shared-title">
-              <Icon name="heart" size={14} weight="fill" className="profile-card__shared-mark" /> You both like
-            </p>
-            <div className="profile-card__shared-chips">
-              {shared.map((s) => (
-                <span key={s} className="chip chip--static chip--shared">
-                  {s}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
     </article>
   );
 }

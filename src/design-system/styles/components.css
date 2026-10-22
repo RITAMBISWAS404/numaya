@@ -255,7 +255,7 @@
   align-items: center;
   justify-content: space-between;
   height: 56px;
-  padding: 0 var(--layout-gutter-tight);
+  padding: 0 var(--space-3);
 }
 
 .topbar__spacer {
@@ -697,7 +697,7 @@
 }
 
 .topbar--large {
-  height: 64px;
+  height: 56px;
   padding: 0 var(--layout-gutter);
 }
 
@@ -729,7 +729,8 @@
   gap: var(--space-1);
   height: var(--tab-bar-height);
   margin: var(--space-2) var(--layout-gutter) var(--safe-bottom);
-  padding: 6px;
+  /* Nested corners: bar radius (xl 28) = item radius (lg 20) + this 8px inset. */
+  padding: var(--space-2);
   border-radius: var(--radius-xl);
   background: var(--color-surface);
   box-shadow: var(--shadow-float);

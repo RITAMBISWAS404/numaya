@@ -98,12 +98,18 @@ describe("geometry and elevation", () => {
   const px = (name) => parseFloat(value(name));
   const maxAlpha = (name) => Math.max(...[...value(name).matchAll(/\/ ([0-9.]+)\)/g)].map((m) => parseFloat(m[1])));
 
-  it("radius scale increases and keeps controls compact", () => {
+  it("radius scale increases, stays soft and never turns controls into capsules", () => {
     const scale = ["xs", "sm", "md", "lg", "xl", "2xl"].map((k) => px(`--radius-${k}`));
     expect(scale).toEqual([...scale].sort((a, b) => a - b));
     expect(new Set(scale).size).toBe(scale.length);
-    expect(px("--radius-md")).toBeLessThanOrEqual(14);
-    expect(px("--radius-xl")).toBeLessThanOrEqual(24);
+    // Controls are softly rounded but well below half their height (54px buttons).
+    expect(px("--radius-md")).toBeGreaterThanOrEqual(12);
+    expect(px("--radius-md")).toBeLessThan(px("--button-height") / 2 - 8);
+    expect(px("--radius-2xl")).toBeLessThanOrEqual(32);
+  });
+
+  it("nested corners follow outer = inner + inset (tab bar around its items)", () => {
+    expect(px("--radius-xl") - px("--radius-lg")).toBe(px("--space-2"));
   });
 
   it("shadows are neutral and low opacity, strongest only on layered overlays", () => {

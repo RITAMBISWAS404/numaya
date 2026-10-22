@@ -24,7 +24,7 @@ JSDoc. Live variants and states: `showcase.html`. Tier: **P** primitive, **C** c
 | `Avatar`, `VerifiedBadge`, `Badge`, `CountBadge`, `Tag` | P | Identity and status | sizes xs–xl, ring (completion/time), verified; tones | Verified always has a text label; decorative avatars hidden |
 | `Card`, `Section`, `Divider`, `ListGroup`, `ListRow`, `TipCard`, `ConsequenceList` | P/C | Surfaces and lists | row kinds nav, value, action, destructive, locked | Rows are buttons only when pressable |
 | `PromptCard`, `ImagePlaceholder`, `PhotoSlot`, `PhotoGrid` | C | Profile content | editable prompt; empty/filled/uploading/main slots | Add/remove buttons labelled by position |
-| `ProfileCard`, `ActionBar`, `PageDots` | X | Discovery | new, verified, details, shared interests (brand tint); optional `actions` slot on the photo seam; pass / super / like | Card labelled "Name, age"; like = brand fill |
+| `ProfileCard`, `ActionBar`, `PageDots` | X | Discovery | photo-led: identity and shared interests over a scrim on the photo, neutral slate stand-in when there is no photo, optional `actions` overlapping the bottom edge; sizing hooks `--profile-card-photo-height`, `--profile-card-photo-min`, `--profile-card-ratio`; pass / super / like | Card labelled "Name, age"; like = brand fill |
 | `Sheet`, `ActionSheet`, `Dialog` | P/C | Modal surfaces | dismissable or not; destructive dialog | Focus trap, Escape, restore focus; dialog focuses Cancel |
 | `Toast`, `Banner`, `CoachMark` | P/C | Feedback | busy/status toast; info, success, warning, error, offline banners | Live regions; errors use `role="alert"` |
 | `Skeleton`, `EmptyState`, `ResultPanel` | C | Loading, empty, completion | neutral / error; success / danger | Skeletons hidden from AT; one next step |

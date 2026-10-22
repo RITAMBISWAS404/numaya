@@ -94,6 +94,7 @@
   --color-surface: var(--p-color-neutral-0);
   --color-surface-soft: var(--p-color-neutral-50);
   --color-surface-sunken: var(--p-color-neutral-100);
+  --color-surface-photo: var(--p-color-neutral-750);
   --color-surface-page: var(--p-color-warm-50);
   --color-surface-canvas: var(--p-color-neutral-100);
   --color-surface-brand: var(--p-color-pink-50);
@@ -183,8 +184,8 @@
   --space-8: var(--p-dimension-32);
   --space-10: var(--p-dimension-40);
   --space-12: var(--p-dimension-48);
-  --layout-gutter: var(--p-dimension-24);
-  --layout-gutter-tight: var(--p-dimension-16);
+  --layout-gutter: var(--p-dimension-16);
+  --layout-gutter-tight: var(--p-dimension-8);
   --layout-content-max: 430px;
   --layout-stack-gap: var(--p-dimension-12);
   --layout-section-gap: var(--p-dimension-32);
@@ -200,12 +201,12 @@
   --size-avatar-xl: var(--p-dimension-96);
   --icon-stroke: 1.75;
   --icon-stroke-bold: 2;
-  --radius-xs: var(--p-dimension-6);
-  --radius-sm: var(--p-dimension-10);
-  --radius-md: var(--p-dimension-14);
-  --radius-lg: var(--p-dimension-18);
-  --radius-xl: var(--p-dimension-24);
-  --radius-2xl: var(--p-dimension-28);
+  --radius-xs: var(--p-dimension-8);
+  --radius-sm: var(--p-dimension-12);
+  --radius-md: var(--p-dimension-16);
+  --radius-lg: var(--p-dimension-20);
+  --radius-xl: var(--p-dimension-28);
+  --radius-2xl: var(--p-dimension-32);
   --radius-pill: 999px;
   --border-hairline: var(--p-dimension-1);
   --border-selected: 1.5px;

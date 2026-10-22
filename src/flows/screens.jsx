@@ -53,9 +53,9 @@ const TAB_TARGET = { discover: "discovery", chats: "chats", profile: "profile" }
 const ageOf = (year) => (year.length === 4 ? new Date().getFullYear() - Number(year) : null);
 
 /** Shared screen scaffold inside a preview frame. */
-function Frame({ top, footer, tab, go, children, tone }) {
+function Frame({ top, footer, tab, go, children, tone, kind }) {
   return (
-    <div className={`fl-screen${tone ? ` fl-screen--${tone}` : ""}`}>
+    <div className={`fl-screen${tone ? ` fl-screen--${tone}` : ""}${kind ? ` fl-screen--${kind}` : ""}`}>
       {top}
       <div className="fl-screen__body">{children}</div>
       {footer && <div className="fl-screen__footer">{footer}</div>}
@@ -265,6 +265,7 @@ export function Discovery({ go }) {
   return (
     <Frame
       tone="page"
+      kind="discover"
       top={
         <TopBar
           largeTitle="Discover"
@@ -575,7 +576,7 @@ export function MyProfile({ go }) {
                 {age ? `, ${age}` : ""}
               </p>
               <span className="fl-badges">
-                <Badge tone="brand">Profile {Math.round(completion * 100)}% complete</Badge>
+                <Badge tone="neutral">Profile {Math.round(completion * 100)}% complete</Badge>
                 {state.prefs.snooze && (
                   <Badge tone="warning" icon="eyeOff">
                     Snoozed

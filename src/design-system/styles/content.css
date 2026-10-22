@@ -21,8 +21,8 @@
   place-items: center;
   overflow: hidden;
   border-radius: 50%;
-  background: var(--color-brand-tint);
-  color: var(--color-text-brand-deep);
+  background: var(--color-surface-sunken);
+  color: var(--color-text-primary);
   font-family: var(--font-display);
   font-variation-settings: var(--font-display-axes);
   font-size: calc(var(--avatar-size) * 0.47);
@@ -392,12 +392,10 @@ button.list-row__hit:hover {
 }
 
 .prompt__label {
-  color: var(--color-text-brand);
-  font-size: var(--type-eyebrow-size);
-  line-height: var(--type-eyebrow-line);
-  font-weight: var(--type-eyebrow-weight);
-  letter-spacing: var(--type-eyebrow-tracking);
-  text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-size: var(--type-label-size);
+  line-height: var(--type-label-line);
+  font-weight: var(--font-weight-semibold);
 }
 
 .prompt__answer {
@@ -427,11 +425,11 @@ button.list-row__hit:hover {
   border-radius: var(--radius-lg);
 }
 
-/* Placeholder tones stay in the brand-tint / warm-neutral family so a grid of them reads as one set. */
-.image-placeholder--sky   { background: var(--color-brand-tint); color: var(--color-text-muted); }
-.image-placeholder--stone { background: var(--color-surface-sunken); color: var(--color-text-muted); }
-.image-placeholder--mist  { background: var(--color-brand-tint); color: var(--color-text-muted); }
-.image-placeholder--sand  { background: var(--color-surface-sunken); color: var(--color-text-muted); }
+/* Placeholder tones are neutral so a grid of them reads as one set and pink stays for meaning. */
+.image-placeholder--sky   { background: var(--color-surface-sunken); color: var(--color-text-muted); }
+.image-placeholder--stone { background: var(--color-surface-soft); color: var(--color-text-muted); }
+.image-placeholder--mist  { background: var(--color-surface-sunken); color: var(--color-text-muted); }
+.image-placeholder--sand  { background: var(--color-surface-soft); color: var(--color-text-muted); }
 
 .image-placeholder__icon {
   opacity: 0.7;
@@ -511,46 +509,47 @@ button.list-row__hit:hover {
   opacity: var(--opacity-pending);
 }
 
-/* Hero card: white, borderless, floating on the page. The photo is inset so the card reads as an
-   object, not a grey block. No scrim: identity sits on white below the photo, so text contrast does
-   not depend on the image. */
+/* Hero card: the photo is the card. Identity sits on its lower edge over a functional scrim. */
 .profile-card {
   position: relative;
-  padding: var(--space-2);
-  border-radius: var(--radius-2xl);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-float);
+  display: grid;
 }
 
 .profile-card__media {
   position: relative;
+  display: grid;
+  overflow: hidden;
+  min-height: var(--profile-card-photo-min, 420px);
+  height: var(--profile-card-photo-height, auto);
+  aspect-ratio: var(--profile-card-ratio, 3 / 4);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-photo);
+  box-shadow: var(--shadow-float);
 }
 
-.profile-card__photo {
-  border-radius: calc(var(--radius-2xl) - var(--space-2));
+.profile-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* Placeholder only: a brand-tint field with a display-size serif initial in the exact brand pink
-   (decorative, aria-hidden). Real photos replace it. */
-.profile-card .image-placeholder {
-  background: var(--color-brand-tint);
-  color: var(--color-brand);
-}
-
-.profile-card__initial {
-  margin-bottom: 8%;
-  font-family: var(--font-display);
-  font-variation-settings: var(--font-display-axes);
-  font-size: 136px;
-  line-height: 1;
-  font-weight: 400;
+/* No photo yet: a neutral slate field with a soft silhouette, deliberately not photographic. */
+.profile-card__stand-in {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding-bottom: 30%;
+  color: color-mix(in srgb, var(--color-text-on-inverse) 9%, transparent);
 }
 
 .profile-card__progress {
   position: absolute;
   top: 10px;
-  left: 14px;
-  right: 14px;
+  left: 12px;
+  right: 12px;
   display: flex;
   gap: 4px;
 }
@@ -559,40 +558,42 @@ button.list-row__hit:hover {
   flex: 1;
   height: 3px;
   border-radius: var(--radius-pill);
-  background: var(--color-overlay-hover-light);
+  background: color-mix(in srgb, var(--color-text-on-inverse) 32%, transparent);
 }
 
 .profile-card__progress span.is-current {
-  background: var(--color-surface);
+  background: var(--color-text-on-inverse);
 }
 
 .profile-card__flag {
   position: absolute;
   top: var(--space-6);
   left: var(--space-3);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-surface-inverse) 42%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: var(--color-text-on-inverse);
+  font-size: var(--type-caption-size);
+  font-weight: var(--font-weight-semibold);
 }
 
-.profile-card__flag .badge {
-  background: var(--color-surface);
-  box-shadow: var(--shadow-xs);
-}
-
-/* Actions straddle the photo edge so the decision stays above the fold. */
-.profile-card__actions {
-  position: relative;
-  z-index: var(--z-raised);
-  margin-top: -36px;
-}
-
-.profile-card__body {
+/* Functional legibility overlay so white text always sits on a dark region. */
+.profile-card__overlay {
+  position: absolute;
+  inset: auto 0 0;
   display: grid;
   justify-items: start;
-  gap: var(--space-2);
-  padding: var(--space-4) var(--space-3) var(--space-3);
+  gap: var(--space-1);
+  padding: 72px var(--space-4) var(--space-4);
+  background: linear-gradient(180deg, transparent 0%, var(--color-overlay-photo) 58%);
+  color: var(--color-text-on-inverse);
 }
 
-.profile-card--with-actions .profile-card__body {
-  padding-top: var(--space-3);
+/* Room for the action buttons that overlap the bottom edge. */
+.profile-card--with-actions .profile-card__overlay {
+  padding-bottom: 44px;
 }
 
 .profile-card__name {
@@ -603,16 +604,16 @@ button.list-row__hit:hover {
   gap: 8px;
   font-family: var(--font-display);
   font-variation-settings: var(--font-display-axes);
-  font-size: var(--type-headline-size);
-  line-height: var(--type-headline-line);
-  font-weight: var(--type-headline-weight);
-  letter-spacing: var(--type-headline-tracking);
+  font-size: var(--type-display-size);
+  line-height: var(--type-display-line);
+  font-weight: var(--type-display-weight);
+  letter-spacing: var(--type-display-tracking);
 }
 
 .profile-card__details {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1) var(--space-4);
+  gap: 2px var(--space-3);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -621,33 +622,23 @@ button.list-row__hit:hover {
 .profile-card__detail {
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: var(--color-text-secondary);
+  gap: 5px;
+  color: color-mix(in srgb, var(--color-text-on-inverse) 88%, transparent);
   font-size: var(--type-body-sm-size);
-}
-
-.profile-card__detail svg {
-  color: var(--color-text-muted);
 }
 
 .profile-card__shared {
   display: grid;
-  gap: var(--space-2);
-  width: 100%;
+  gap: 6px;
   margin-top: var(--space-2);
-  padding-top: var(--space-3);
-  border-top: var(--border-hairline) solid var(--color-border-subtle);
 }
 
 .profile-card__shared-title {
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: var(--color-text-muted);
-  font-size: var(--type-eyebrow-size);
-  font-weight: var(--type-eyebrow-weight);
-  letter-spacing: var(--type-eyebrow-tracking);
-  text-transform: uppercase;
+  gap: 5px;
+  font-size: var(--type-caption-size);
+  font-weight: var(--font-weight-semibold);
 }
 
 .profile-card__shared-mark {
@@ -660,12 +651,19 @@ button.list-row__hit:hover {
   gap: 6px;
 }
 
-/* Shared interests: brand tint with ink text (the one place interests carry the brand). */
-.chip--shared {
-  height: 32px;
-  background: var(--color-brand-tint);
+/* Shared interests on the photo: white with ink text, the same soft chip shape as elsewhere. */
+.chip--on-photo {
+  height: 30px;
+  background: var(--color-surface);
   color: var(--color-text-primary);
   font-weight: var(--font-weight-medium);
+}
+
+/* Actions straddle the card's bottom edge. */
+.profile-card__actions {
+  position: relative;
+  z-index: var(--z-raised);
+  margin-top: -34px;
 }
 
 .action-bar {
@@ -765,8 +763,9 @@ button.list-row__hit:hover {
   height: 64px;
   margin-bottom: var(--space-2);
   border-radius: 50%;
-  background: var(--color-brand-tint);
-  color: var(--color-text-brand);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-text-primary);
 }
 
 .empty-state--error .empty-state__icon {
@@ -862,15 +861,15 @@ button.list-row__hit:hover {
 
 .match__photo--left {
   left: 6px;
-  background: var(--color-brand-subtle);
+  background: var(--color-surface-sunken);
   color: var(--color-text-primary);
   transform: rotate(-7deg);
 }
 
 .match__photo--right {
   right: 6px;
-  background: var(--color-brand-tint);
-  color: var(--color-brand);
+  background: var(--color-surface-photo);
+  color: var(--color-text-on-inverse);
   transform: rotate(6deg);
 }
 

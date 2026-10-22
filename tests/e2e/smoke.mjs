@@ -218,6 +218,9 @@ try {
           promptShadowAlpha: alpha(cs("#profile .prompt").boxShadow),
           tabShadow: getComputedStyle(tab).boxShadow,
           tabRadius: parseFloat(getComputedStyle(tab).borderTopLeftRadius),
+          tabPad: parseFloat(getComputedStyle(tab).paddingTop),
+          tabItemRadius: parseFloat(getComputedStyle(tab.querySelector(".tab-bar__item")).borderTopLeftRadius),
+          photoShare: (() => { const c = document.querySelector("#discovery .profile-card__media").getBoundingClientRect(), s = document.querySelector("#discovery .fl-screen").getBoundingClientRect(); return { w: c.width / s.width, h: c.height / s.height }; })(),
           tabInset: (() => { const f = tab.closest(".fl-screen").getBoundingClientRect(), r = tab.getBoundingClientRect(); return Math.min(r.left - f.left, f.right - r.right, f.bottom - r.bottom); })(),
           tabBelowBody: tab.getBoundingClientRect().top >= document.querySelector("#discovery .fl-screen__body").getBoundingClientRect().bottom - 0.5,
           cardBorder: getComputedStyle(document.querySelector("#discovery .profile-card")).borderTopWidth,
@@ -229,7 +232,8 @@ try {
           legacyStrokeIcons: document.querySelectorAll("#discovery svg[stroke-linecap='round'][viewBox='0 0 24 24']").length,
         };
       });
-      check("geometry: buttons use the compact radius, not a pill", geo.btnRadius > 0 && geo.btnRadius <= 14, `${geo.btnRadius}px`);
+      check("geometry: buttons are softly rounded, not capsules", geo.btnRadius >= 12 && geo.btnRadius <= 18, `${geo.btnRadius}px`);
+      check("geometry: tab items nest inside the bar (outer radius = inner radius + inset)", Math.abs(geo.tabRadius - geo.tabPad - geo.tabItemRadius) < 0.5, `${geo.tabRadius} = ${geo.tabItemRadius} + ${geo.tabPad}`);
       check("geometry: squircle corners apply where supported", !geo.squircleSupported || geo.btnCorner.includes("squircle"), `${geo.squircleSupported} / ${geo.btnCorner}`);
       check("elevation: card shadow is very light", geo.promptShadowAlpha > 0 && geo.promptShadowAlpha <= 0.08, `alpha ${geo.promptShadowAlpha}`);
       const tabAlpha = Math.max(0, ...[...geo.tabShadow.matchAll(/rgba\(\d+, \d+, \d+, ([0-9.]+)\)/g)].map((m) => parseFloat(m[1])));
@@ -237,6 +241,7 @@ try {
       check("navigation: bar is inset from the frame edges and softly rounded, not a capsule", geo.tabInset >= 8 && geo.tabRadius >= 18 && geo.tabRadius <= 28, `inset ${geo.tabInset} / radius ${geo.tabRadius}`);
       check("navigation: bar sits below the scrolling content, never over it", geo.tabBelowBody);
       check("discover: actions are visible above the tab bar without scrolling", geo.likeTop);
+      check("discover: the photo dominates the screen (≥ 90% width, ≥ 55% height)", geo.photoShare.w >= 0.9 && geo.photoShare.h >= 0.55, `${geo.photoShare.w.toFixed(2)} × ${geo.photoShare.h.toFixed(2)}`);
       check("surfaces: Discover page is tinted and the hero card has no border", geo.pageBg !== "rgb(255, 255, 255)" && geo.cardBorder === "0px", `${geo.pageBg} / ${geo.cardBorder}`);
       const roll = await p.evaluate(() => {
         const cs = (sel) => getComputedStyle(document.querySelector(sel));

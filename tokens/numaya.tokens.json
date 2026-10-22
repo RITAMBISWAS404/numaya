@@ -120,6 +120,7 @@
         "default": { "$type": "color", "$value": "{primitive.color.neutral.0}" },
         "soft":    { "$type": "color", "$value": "{primitive.color.neutral.50}", "$description": "Fields and quiet fills." },
         "sunken":  { "$type": "color", "$value": "{primitive.color.neutral.100}", "$description": "Tracks, disabled fills, hover on soft." },
+        "photo":   { "$type": "color", "$value": "{primitive.color.neutral.750}", "$description": "Stand-in for a missing profile photo. Neutral slate so white identity text reads on it; never pink." },
         "page":    { "$type": "color", "$value": "{primitive.color.warm.50}", "$description": "Tab-root page background. White cards sit on it with a soft shadow instead of a border." },
         "canvas":  { "$type": "color", "$value": "{primitive.color.neutral.100}", "$description": "Background behind app frames and showcase pages." },
         "brand":   { "$type": "color", "$value": "{primitive.color.pink.50}", "$description": "Brand-washed screen backgrounds (welcome)." },
@@ -189,8 +190,8 @@
       "12": { "$type": "dimension", "$value": "{primitive.dimension.48}" }
     },
     "layout": {
-      "gutter":      { "$type": "dimension", "$value": "{primitive.dimension.24}", "$description": "Screen side padding." },
-      "gutter-tight":{ "$type": "dimension", "$value": "{primitive.dimension.16}", "$description": "Dense lists, top bars." },
+      "gutter":      { "$type": "dimension", "$value": "{primitive.dimension.16}", "$description": "Screen side padding." },
+      "gutter-tight":{ "$type": "dimension", "$value": "{primitive.dimension.8}", "$description": "Edge-to-edge content: the Discover card, chat header controls." },
       "content-max": { "$type": "dimension", "$value": "430px", "$description": "Max content width on phones; wider viewports centre the column." },
       "stack-gap":   { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "Gap between stacked controls." },
       "section-gap": { "$type": "dimension", "$value": "{primitive.dimension.32}", "$description": "Gap between content sections." }
@@ -212,13 +213,13 @@
       "stroke-bold": { "$type": "number", "$value": "2", "$description": "Icons inside filled buttons and small sizes." }
     },
     "radius": {
-      "$description": "Soft rounded rectangles, deliberately not identical across tiers. xs/sm: tags, chips, small inner elements. md: controls (buttons, fields, option cards). lg: cards, list groups and message bubbles. xl: sheets, dialogs, the floating tab bar. 2xl: hero photo cards and framed screens. pill: only for genuinely pill-shaped things (progress bars, switches, slider tracks, count badges).",
-      "xs":   { "$type": "dimension", "$value": "{primitive.dimension.6}" },
-      "sm":   { "$type": "dimension", "$value": "{primitive.dimension.10}" },
-      "md":   { "$type": "dimension", "$value": "{primitive.dimension.14}" },
-      "lg":   { "$type": "dimension", "$value": "{primitive.dimension.18}" },
-      "xl":   { "$type": "dimension", "$value": "{primitive.dimension.24}" },
-      "2xl":  { "$type": "dimension", "$value": "{primitive.dimension.28}" },
+      "$description": "Soft rounded rectangles; tiers differ on purpose. Nested corners follow outer = inner + inset (tab bar xl 28 = item lg 20 + 8px padding). xs/sm: tags, chips, small inner elements. md: controls (buttons, fields, option cards). lg: cards, list groups, message bubbles, tab items. xl: hero profile card, sheets, dialogs, the floating tab bar. 2xl: framed screens. pill: only for genuinely pill-shaped things (progress bars, switches, slider tracks, count badges).",
+      "xs":   { "$type": "dimension", "$value": "{primitive.dimension.8}" },
+      "sm":   { "$type": "dimension", "$value": "{primitive.dimension.12}" },
+      "md":   { "$type": "dimension", "$value": "{primitive.dimension.16}" },
+      "lg":   { "$type": "dimension", "$value": "{primitive.dimension.20}" },
+      "xl":   { "$type": "dimension", "$value": "{primitive.dimension.28}" },
+      "2xl":  { "$type": "dimension", "$value": "{primitive.dimension.32}" },
       "pill": { "$type": "dimension", "$value": "999px" }
     },
     "border": {

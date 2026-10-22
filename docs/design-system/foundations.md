@@ -47,17 +47,21 @@ or brand colour. Numerals in inputs, codes and prices use `tabular-nums`.
 
 ## Space, size, shape
 
-- **Spacing:** 4-point scale `--space-1…12`. Gutter `--layout-gutter` 24px (dense: 16px). Section
+- **Spacing:** 4-point scale `--space-1…12`. Gutter `--layout-gutter` 16px (edge-to-edge: 8px). Section
   gap 32px, stacked controls 12px.
 - **Sizes:** touch target ≥ `--size-touch-min` 44px; input 56px; button 54px (sm 40, quiet 48);
   Fab 56; icon button 40 (sm 36); avatars 24/36/48/64/96.
 - **Radius** (compact rounded rectangles; `border-radius` is the baseline, with `corner-shape: squircle`
-  layered on where supported via `shape.css`): xs 6 (tags, badges) · sm 10 (chips, inner elements) ·
-  md 14 (buttons, fields, option cards) · lg 18 (cards, list groups, message bubbles, tab items) · xl 24
-  (sheets, dialogs, the floating tab bar) · 2xl 28 (hero profile card, framed screens). Circles stay circles (avatars, icon buttons, Fab).
+  layered on where supported via `shape.css`): xs 8 (tags, badges) · sm 12 (chips, inner elements) ·
+  md 16 (buttons, fields, option cards) · lg 20 (cards, list groups, message bubbles, tab items) · xl 28
+  (hero profile card, sheets, dialogs, the floating tab bar) · 2xl 32 (framed screens). Nested corners
+  follow outer = inner + inset: the tab bar (xl 28) wraps items (lg 20) with an 8px inset. Circles stay circles (avatars, icon buttons, Fab).
   `pill` is only for shapes whose meaning is a pill: progress bars, switches, slider tracks, count
   badges. Never for ordinary buttons, chips, tabs or badges.
 - **Borders:** hairline 1px, selected 1.5px, focus 2px.
+- **Gutters:** 16px screen padding; the Discover card runs to 8px from the edges so the photo leads.
+- **Pink footprint:** like, selected and active states, verification, progress, toggles and the match
+  mark. Avatars, placeholders, empty states, info banners and completion badges are neutral.
 - **Surfaces:** app screens (Discover, Chats, a conversation, Match, Profile, Settings) sit on
   `--color-surface-page`, a blush-warm neutral; cards and list groups are white and raised with a
   shadow instead of an outline, with inset dividers only between rows. Onboarding forms stay white and

@@ -11,6 +11,7 @@ const defined = new Set([...tokensCss.matchAll(/(--[a-z0-9-]+):/g)].map((m) => m
 const RUNTIME = new Set([
   "--safe-top", "--safe-bottom", "--keyboard-inset", "--keypad-h",
   "--x", "--r", "--s", "--i", "--from", "--to", "--code-length", "--code-group", "--sc-min", "--avatar-size", "--dx", "--rot",
+  "--profile-card-photo-height", "--profile-card-photo-min", "--profile-card-ratio",
 ]);
 const files = walk("src").filter((f) => /\.(css|jsx?)$/.test(f) && !f.endsWith("tokens.css") && !f.endsWith("tokens.js"));
 

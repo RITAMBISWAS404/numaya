@@ -811,6 +811,15 @@ export const tokens = [
     "description": "Tracks, disabled fills, hover on soft."
   },
   {
+    "id": "semantic.color.surface.photo",
+    "name": "--color-surface-photo",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.neutral.750}",
+    "resolved": "#353b48",
+    "description": "Stand-in for a missing profile photo. Neutral slate so white identity text reads on it; never pink."
+  },
+  {
     "id": "semantic.color.surface.page",
     "name": "--color-surface-page",
     "layer": "semantic",
@@ -1616,8 +1625,8 @@ export const tokens = [
     "name": "--layout-gutter",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.24}",
-    "resolved": "24px",
+    "value": "{primitive.dimension.16}",
+    "resolved": "16px",
     "description": "Screen side padding."
   },
   {
@@ -1625,9 +1634,9 @@ export const tokens = [
     "name": "--layout-gutter-tight",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.16}",
-    "resolved": "16px",
-    "description": "Dense lists, top bars."
+    "value": "{primitive.dimension.8}",
+    "resolved": "8px",
+    "description": "Edge-to-edge content: the Discover card, chat header controls."
   },
   {
     "id": "semantic.layout.content-max",
@@ -1769,8 +1778,8 @@ export const tokens = [
     "name": "--radius-xs",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.6}",
-    "resolved": "6px",
+    "value": "{primitive.dimension.8}",
+    "resolved": "8px",
     "description": null
   },
   {
@@ -1778,8 +1787,8 @@ export const tokens = [
     "name": "--radius-sm",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.10}",
-    "resolved": "10px",
+    "value": "{primitive.dimension.12}",
+    "resolved": "12px",
     "description": null
   },
   {
@@ -1787,8 +1796,8 @@ export const tokens = [
     "name": "--radius-md",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.14}",
-    "resolved": "14px",
+    "value": "{primitive.dimension.16}",
+    "resolved": "16px",
     "description": null
   },
   {
@@ -1796,8 +1805,8 @@ export const tokens = [
     "name": "--radius-lg",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.18}",
-    "resolved": "18px",
+    "value": "{primitive.dimension.20}",
+    "resolved": "20px",
     "description": null
   },
   {
@@ -1805,8 +1814,8 @@ export const tokens = [
     "name": "--radius-xl",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.24}",
-    "resolved": "24px",
+    "value": "{primitive.dimension.28}",
+    "resolved": "28px",
     "description": null
   },
   {
@@ -1814,8 +1823,8 @@ export const tokens = [
     "name": "--radius-2xl",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.28}",
-    "resolved": "28px",
+    "value": "{primitive.dimension.32}",
+    "resolved": "32px",
     "description": null
   },
   {
