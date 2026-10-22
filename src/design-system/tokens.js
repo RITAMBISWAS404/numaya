@@ -37,15 +37,6 @@ export const tokens = [
     "description": "Numaya brand pink. The single primary brand colour; exact value, never substitute or darken."
   },
   {
-    "id": "primitive.color.warm.100",
-    "name": "--p-color-warm-100",
-    "layer": "primitive",
-    "type": "color",
-    "value": "#f3eeea",
-    "resolved": "#f3eeea",
-    "description": "Warm off-white for decorative ribbons only."
-  },
-  {
     "id": "primitive.color.neutral.0",
     "name": "--p-color-neutral-0",
     "layer": "primitive",
@@ -923,18 +914,18 @@ export const tokens = [
     "name": "--color-decor-ribbon",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.warm.100}",
-    "resolved": "#f3eeea",
-    "description": "Broad decorative ribbon band (whitespace only, never behind content)."
+    "value": "{primitive.color.neutral.50}",
+    "resolved": "#f3f5f8",
+    "description": "Broad decorative ribbon band: very light neutral grey (whitespace only, never over content)."
   },
   {
-    "id": "semantic.color.decor.ribbon-tint",
-    "name": "--color-decor-ribbon-tint",
+    "id": "semantic.color.decor.ribbon-accent",
+    "name": "--color-decor-ribbon-accent",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.pink.100}",
-    "resolved": "#feeefc",
-    "description": "The narrower light-pink touch that runs beside the ribbon band."
+    "value": "{primitive.color.pink.500}",
+    "resolved": "#f770e3",
+    "description": "The thin exact-brand-pink line that runs along part of a ribbon. Sparing: one short accent per ribbon."
   },
   {
     "id": "semantic.color.overlay.scrim",

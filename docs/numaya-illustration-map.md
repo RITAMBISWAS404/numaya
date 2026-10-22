@@ -26,9 +26,10 @@ transparent background; people abstract (no realistic faces), inclusive and unge
 
 ## Intentionally without a slot
 
-- **Verified → profile setup** (flows intro): tried and removed. A slot pushed the three-step list
-  below the fold at 375px; the success badge already anchors the screen. The celebration lives on
-  the prototype's success sheet instead.
+- **Verified → profile setup** (flows intro): tried and removed. A slot pushed the setup progress
+  below the fold at 375px; the success badge and the `SetupProgress` card (done / next / upcoming,
+  filled icons) already tell the story. The celebration lives on the prototype's success sheet.
+- **Match**: the two photos and the heart mark are the artwork; the ribbon fills the whitespace below.
 - **Photos**: the photo grid is the content; artwork would compete with it.
 - **Phone number / verify code screens**: the keypad leaves no free space.
 - **"No one fits your filters"**: keeps its filter icon, which is functional (it names the cause).

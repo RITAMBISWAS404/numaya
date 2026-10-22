@@ -1056,3 +1056,75 @@ button.list-row__hit:hover {
   padding: 0;
   list-style: none;
 }
+
+/* Profile setup progress. A light-neutral container (24px) with 8px inset, so the rows take the
+   16px radius (outer = inner + inset). Completed steps get a pink-tint tile with an ink icon, the
+   active step lifts onto white with an ink tile, upcoming steps are muted. */
+.setup-progress {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  margin: 0;
+  padding: var(--space-2);
+  border-radius: var(--radius-card);
+  background: var(--color-surface-soft);
+  list-style: none;
+  text-align: left;
+}
+
+.setup-progress__step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 52px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+.setup-progress__icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  color: var(--color-text-subtle);
+}
+
+.setup-progress__label {
+  flex: 1;
+}
+
+.setup-progress__status {
+  color: var(--color-text-muted);
+  font-size: var(--type-caption-size);
+  font-weight: var(--font-weight-semibold);
+}
+
+.setup-progress__step.is-done {
+  color: var(--color-text-secondary);
+}
+
+.setup-progress__step.is-done .setup-progress__icon {
+  background: var(--color-brand-subtle);
+  color: var(--color-text-primary);
+}
+
+.setup-progress__step.is-active {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-xs);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.setup-progress__step.is-active .setup-progress__icon {
+  background: var(--color-surface-inverse);
+  color: var(--color-text-on-inverse);
+}
+
+.setup-progress__step.is-active .setup-progress__status {
+  color: var(--color-text-primary);
+}

@@ -10,37 +10,36 @@ export function Emphasis({ children, className }) {
 }
 
 /*
- * Ribbon paths: one broad warm off-white band and a narrower light-pink band beside it, drawn in a
- * wide, short space and scaled to cover the strip their parent gives them (xMidYMid slice). Each
- * variant sits in a strip of genuine whitespace (see expressive.css), never behind content.
+ * Ribbon paths, drawn in a 100 x 100 box stretched to the area their parent gives them
+ * (preserveAspectRatio none); vector-effect keeps the stroke widths in screen pixels, so the band
+ * stays broad and the accent thin at any size. One broad light-grey band; the exact-pink accent is a
+ * short stretch of the same curve (split out of it), shifted in CSS to ride the band's upper edge.
+ * Each variant sits in whitespace (see expressive.css).
  */
 const RIBBONS = {
-  // Welcome hero: the empty strip below the prompt cards, above the panel.
-  welcome: {
-    viewBox: "0 0 400 140",
-    band: "M-40 96C56 64 132 124 222 102S352 76 440 90",
-    tint: "M-40 126C70 104 150 144 248 124S364 104 440 116",
-  },
-  // Match: the empty space between the supporting line and the composer.
-  match: {
-    viewBox: "0 0 400 140",
-    band: "M-40 70C64 116 140 46 230 76S360 128 440 92",
-    tint: "M-40 104C70 138 160 80 250 104S368 140 440 120",
-  },
+  // Welcome: enters on the left, runs beneath the illustration slot and rises on the right.
+  welcome: { band: "M-12 52C10 64 22 94 50 93S90 66 112 56", accent: "M86 75.5C93.3 69 100.3 62.2 108.8 57.6" },
+  // Match: a slow wave through the empty space between the copy and the actions.
+  match: { band: "M-12 64C16 30 40 92 66 58S96 30 112 52", accent: "M-5.4 57.6C3.4 51.2 11.8 53.1 20.1 57" },
 };
 
 /**
- * Decorative flowing ribbon in a strip of whitespace (Happn-inspired, in warm off-white with a light
- * pink touch). aria-hidden, never focusable or clickable; draws once on entrance, static under
- * reduced motion. Its variant class places it (expressive.css); it never sits behind content.
+ * Decorative flowing ribbon in whitespace (Happn-inspired): a broad, very light neutral band with a
+ * short exact-pink accent. aria-hidden, never focusable or clickable; fades in once, static under
+ * reduced motion. Its variant class places it (expressive.css); it never sits over content.
  */
 export function Ribbon({ variant, className }) {
   const r = RIBBONS[variant];
   if (!r) return null;
-  return (
-    <svg className={cx("ribbon", `ribbon--${variant}`, className)} viewBox={r.viewBox} preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-      <path className="ribbon__band" d={r.band} pathLength="1" />
-      <path className="ribbon__tint" d={r.tint} pathLength="1" />
+  const svg = (cls, d) => (
+    <svg className={cls} viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">
+      <path d={d} vectorEffect="non-scaling-stroke" />
     </svg>
+  );
+  return (
+    <span className={cx("ribbon", `ribbon--${variant}`, className)} aria-hidden="true">
+      {svg("ribbon__band", r.band)}
+      {svg("ribbon__accent", r.accent)}
+    </span>
   );
 }

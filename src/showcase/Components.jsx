@@ -41,6 +41,7 @@ import {
   Radio,
   RangeSlider,
   ResultPanel,
+  SetupProgress,
   SearchField,
   SegmentedControl,
   Sheet,
@@ -575,6 +576,16 @@ function Feedback() {
           <ResultPanel tone="neutral" title="You’ve blocked and reported Jo" footer={<Button>Done</Button>}>
             <p>Thanks for helping keep Numaya safe. We’ll update you in Help.</p>
           </ResultPanel>
+        </Specimen>
+        <Specimen title="SetupProgress" note="Done (pink tint, ink check) · next (white, ink tile) · upcoming (muted)">
+          <SetupProgress
+            steps={[
+              { label: "Phone number", icon: "verified", status: "done" },
+              { label: "The basics", icon: "user", status: "active" },
+              { label: "What you’re into", icon: "sparkle", status: "upcoming" },
+              { label: "Photos", icon: "camera", status: "upcoming" },
+            ]}
+          />
         </Specimen>
         <Specimen title="CoachMark" tone="soft">
           <CoachMark title="Or start however you like" step={2} total={2} onDismiss={() => {}}>

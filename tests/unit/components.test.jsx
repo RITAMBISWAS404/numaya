@@ -305,10 +305,11 @@ describe("expressive details", () => {
       </h1>,
     );
     expect(screen.getByRole("heading")).toHaveTextContent("Fewer swipes. Better first dates.");
-    const ribbons = container.querySelectorAll("svg.ribbon");
+    const ribbons = container.querySelectorAll(".ribbon");
     expect(ribbons).toHaveLength(1);
     expect(ribbons[0]).toHaveAttribute("aria-hidden", "true");
-    expect(ribbons[0]).toHaveAttribute("focusable", "false");
+    for (const svg of ribbons[0].querySelectorAll("svg")) expect(svg).toHaveAttribute("focusable", "false");
+    expect(ribbons[0].querySelectorAll("svg")).toHaveLength(2);
   });
 });
 

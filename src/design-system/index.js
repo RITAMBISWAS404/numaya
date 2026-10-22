@@ -32,6 +32,7 @@ export {
   TipCard,
   InfoCard,
   SharedInterests,
+  SetupProgress,
   ConsequenceList,
   PromptCard,
   ImagePlaceholder,

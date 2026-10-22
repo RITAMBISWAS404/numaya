@@ -10,9 +10,6 @@
         "200": { "$type": "color", "$value": "#fdd4f7", "$description": "30% mix: brand-tinted borders and image placeholders." },
         "500": { "$type": "color", "$value": "#f770e3", "$description": "Numaya brand pink. The single primary brand colour; exact value, never substitute or darken." }
       },
-      "warm": {
-        "100": { "$type": "color", "$value": "#f3eeea", "$description": "Warm off-white for decorative ribbons only." }
-      },
       "neutral": {
         "0":   { "$type": "color", "$value": "#ffffff" },
         "50":  { "$type": "color", "$value": "#f3f5f8" },
@@ -140,8 +137,8 @@
         "field": { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "Focus stroke of text fields, search, code cells and the composer: the exact brand pink, one 2px stroke plus the halo, no ink ring. The stroke is 2.51:1 on white, below the 3:1 non-text guide, so a focused field also turns from grey to white (a second, colour-independent cue). Buttons and other controls keep the ink ring." }
       },
       "decor": {
-        "ribbon":      { "$type": "color", "$value": "{primitive.color.warm.100}", "$description": "Broad decorative ribbon band (whitespace only, never behind content)." },
-        "ribbon-tint": { "$type": "color", "$value": "{primitive.color.pink.100}", "$description": "The narrower light-pink touch that runs beside the ribbon band." }
+        "ribbon":        { "$type": "color", "$value": "{primitive.color.neutral.50}", "$description": "Broad decorative ribbon band: very light neutral grey (whitespace only, never over content)." },
+        "ribbon-accent": { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "The thin exact-brand-pink line that runs along part of a ribbon. Sparing: one short accent per ribbon." }
       },
       "overlay": {
         "scrim": { "$type": "color", "$value": "{primitive.color.alpha.ink-34}" },

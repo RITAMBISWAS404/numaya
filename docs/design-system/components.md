@@ -28,6 +28,7 @@ JSDoc. Live variants and states: `showcase.html`. Tier: **P** primitive, **C** c
 | `Sheet`, `ActionSheet`, `Dialog` | P/C | Modal surfaces | dismissable or not; destructive dialog | Focus trap, Escape, restore focus; dialog focuses Cancel |
 | `Toast`, `Banner`, `CoachMark` | P/C | Feedback | busy/status toast; info, success, warning, error, offline banners | Live regions; errors use `role="alert"` |
 | `Skeleton`, `EmptyState`, `ResultPanel` | C | Loading, empty, completion | neutral / error; success / danger | Skeletons hidden from AT; one next step |
+| `SetupProgress` | C | Profile setup intro | steps done (pink-tint tile, ink check), active (white row, ink tile, "Next"), upcoming (muted); light-neutral 24px container, 16px rows | Ordered list; active step is `aria-current="step"`; upcoming written out for screen readers |
 | `MessageBubble`, `SystemMessage`, `Composer`, `ConversationRow`, `MatchQueue` | X | Chat and matches | sending, delivered, failed (retry/delete); your move; unread; 56×70 portrait previews with a new-match ring or countdown ring | Enter sends, Shift+Enter newline; failures announced |
 | `PlanPicker`, `ComparisonTable`, `LegalText` | X | Premium | selected plan, ribbon, savings | Radio group; legal text always visible |
 | `PermissionPrimer`, `MatchCelebration` | X | Permissions, match | not determined / denied → Settings | Never loops; "Not now" defers |

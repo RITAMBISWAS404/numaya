@@ -219,45 +219,13 @@ body {
 }
 
 .fl-intro {
-  gap: var(--space-8);
-  padding-top: var(--space-10);
+  gap: var(--space-5);
+  padding-top: var(--space-4);
 }
 
 /* Match: the ribbon sits in the empty strip at the bottom, behind nothing. */
 .fl-match {
   position: relative;
-}
-
-.fl-steps {
-  display: grid;
-  gap: var(--space-3);
-  width: 100%;
-  margin: 0;
-  padding: var(--space-4) var(--space-5);
-  list-style: none;
-  border-radius: var(--radius-card);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-sm);
-  text-align: left;
-}
-
-.fl-steps li {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  font-weight: var(--font-weight-medium);
-}
-
-.fl-steps__index {
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--color-surface-sunken);
-  color: var(--color-text-primary);
-  font-size: 12px;
-  font-weight: var(--font-weight-bold);
 }
 
 .fl-add-prompt {

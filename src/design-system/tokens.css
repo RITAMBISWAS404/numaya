@@ -6,7 +6,6 @@
   --p-color-pink-100: #feeefc;
   --p-color-pink-200: #fdd4f7;
   --p-color-pink-500: #f770e3;
-  --p-color-warm-100: #f3eeea;
   --p-color-neutral-0: #ffffff;
   --p-color-neutral-50: #f3f5f8;
   --p-color-neutral-100: #eceff3;
@@ -106,8 +105,8 @@
   --color-focus-ring: var(--p-color-neutral-900);
   --color-focus-halo: var(--p-color-alpha-pink-32);
   --color-focus-field: var(--p-color-pink-500);
-  --color-decor-ribbon: var(--p-color-warm-100);
-  --color-decor-ribbon-tint: var(--p-color-pink-100);
+  --color-decor-ribbon: var(--p-color-neutral-50);
+  --color-decor-ribbon-accent: var(--p-color-pink-500);
   --color-overlay-scrim: var(--p-color-alpha-ink-34);
   --color-overlay-hover-light: var(--p-color-alpha-white-55);
   --color-overlay-photo: var(--p-color-alpha-ink-62);

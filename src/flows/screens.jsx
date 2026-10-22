@@ -19,6 +19,7 @@ import {
   IllustrationPlaceholder,
   ImagePlaceholder,
   InfoCard,
+  SetupProgress,
   SharedInterests,
   ListGroup,
   ListRow,
@@ -60,12 +61,36 @@ const TABS = [
 const TAB_TARGET = { discover: "discovery", chats: "chats", profile: "profile" };
 const ageOf = (year) => (year.length === 4 ? new Date().getFullYear() - Number(year) : null);
 
+const FOCUSABLE = "a[href], button, input, select, textarea, [tabindex]:not([tabindex='-1'])";
+
+/** A body that scrolls but holds nothing focusable (e.g. the setup intro on a small phone) becomes a
+    tab stop itself, so keyboard users can still scroll it. */
+function useScrollableFocus(ref) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const update = () => {
+      const needs = el.scrollHeight > el.clientHeight + 1 && !el.querySelector(FOCUSABLE);
+      if (needs) el.setAttribute("tabindex", "0");
+      else el.removeAttribute("tabindex");
+    };
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    if (el.firstElementChild) ro.observe(el.firstElementChild);
+    update();
+    return () => ro.disconnect();
+  }, [ref]);
+}
+
 /** Shared screen scaffold inside a preview frame. */
 function Frame({ top, footer, tab, go, children, tone, kind, onBodyScroll, bodyRef }) {
+  const ownRef = useRef(null);
+  const ref = bodyRef ?? ownRef;
+  useScrollableFocus(ref);
   return (
     <div className={`fl-screen${tone ? ` fl-screen--${tone}` : ""}${kind ? ` fl-screen--${kind}` : ""}`}>
       {top}
-      <div className="fl-screen__body" onScroll={onBodyScroll} ref={bodyRef}>
+      <div className="fl-screen__body" onScroll={onBodyScroll} ref={ref}>
         {children}
       </div>
       {footer && <div className="fl-screen__footer">{footer}</div>}
@@ -86,6 +111,14 @@ function useFlash() {
 }
 
 /* 1 · Onboarding → profile setup -------------------------------------------- */
+/* Where the journey stands on this screen: the number was just verified, the basics come next. */
+const SETUP_STEPS = [
+  { label: "Phone number", icon: "verified", status: "done" },
+  { label: "The basics", icon: "user", status: "active" },
+  { label: "What you’re into", icon: "sparkle", status: "upcoming" },
+  { label: "Photos", icon: "camera", status: "upcoming" },
+];
+
 export function SetupIntro({ go }) {
   return (
     <Frame
@@ -102,14 +135,7 @@ export function SetupIntro({ go }) {
         <ResultPanel title={<>You’re <Emphasis>verified</Emphasis></>}>
           <p>+1 (415) 555-0132 is confirmed. Now let’s make a profile people actually want to reply to.</p>
         </ResultPanel>
-        <ol className="fl-steps">
-          {["The basics", "What you’re into", "Photos"].map((s, i) => (
-            <li key={s}>
-              <span className="fl-steps__index">{i + 1}</span>
-              {s}
-            </li>
-          ))}
-        </ol>
+        <SetupProgress steps={SETUP_STEPS} />
       </div>
     </Frame>
   );

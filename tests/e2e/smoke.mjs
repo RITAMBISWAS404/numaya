@@ -234,13 +234,20 @@ try {
       return {
         where: ribbons.map((r) => r.closest(".fl-frame")?.id).sort().join(),
         hidden: ribbons.every((r) => r.getAttribute("aria-hidden") === "true" && getComputedStyle(r).pointerEvents === "none"),
-        anim: ribbons.flatMap((r) => [...r.querySelectorAll("path")].map((x) => getComputedStyle(x).animationName)),
+        anim: ribbons.flatMap((r) => [...r.querySelectorAll("svg")].map((x) => getComputedStyle(x).animationName)),
+        colours: ribbons.map((r) => `${getComputedStyle(r.querySelector(".ribbon__band path")).stroke}|${getComputedStyle(r.querySelector(".ribbon__accent path")).stroke}`),
+        setup: (() => {
+          const steps = [...document.querySelectorAll("#intro .setup-progress__step")];
+          return { states: steps.map((x) => x.className.match(/is-(\w+)/)?.[1]).join(), current: steps.findIndex((x) => x.getAttribute("aria-current") === "step"), icons: steps.every((x) => x.querySelector(".setup-progress__icon svg[data-weight='fill']")) };
+        })(),
         marker: marker && { text: marker.textContent, color: getComputedStyle(marker).color },
       };
     });
     check("expressive: in the flows a ribbon appears only on the match moment (none at the verified badge)", deco.where === "match", deco.where);
     check("expressive: ribbons are aria-hidden and never take pointer input", deco.hidden);
     check("expressive: reduced motion keeps ribbons static", deco.anim.every((a) => a === "none"), deco.anim.join());
+    check("expressive: ribbons are a very light neutral band with an exact-#F770E3 accent line", deco.colours.length > 0 && deco.colours.every((c) => c === "rgb(243, 245, 248)|rgb(247, 112, 227)"), deco.colours.join());
+    check("setup progress: verified intro shows done / active / upcoming steps with filled icons", deco.setup.states === "done,active,upcoming,upcoming" && deco.setup.current === 1 && deco.setup.icons, JSON.stringify(deco.setup));
     check("expressive: the match title colours one word brand pink", deco.marker?.text === "match" && deco.marker.color === "rgb(247, 112, 227)", JSON.stringify(deco.marker));
     check("motion: no console errors with reduced motion", p.errors.length === 0, p.errors.join(" | "));
     await p.evaluate(() => localStorage.clear());

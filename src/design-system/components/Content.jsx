@@ -209,6 +209,32 @@ export function InfoCard({ icon = "info", title, children, id, className }) {
   );
 }
 
+const SETUP_STATUS = { done: "Done", active: "Next", upcoming: "" };
+
+/**
+ * Profile setup progress: a light-neutral list of steps, each with its filled icon. status per step:
+ * done (pink-tint tile, "Done"), active (lifted white row, ink tile, "Next") or upcoming (muted).
+ * The active step is aria-current="step"; each state is also written out for screen readers.
+ */
+export function SetupProgress({ steps, label = "Profile setup", className }) {
+  return (
+    <ol className={cx("setup-progress", className)} aria-label={label}>
+      {steps.map((step) => (
+        <li key={step.label} className={cx("setup-progress__step", `is-${step.status}`)} aria-current={step.status === "active" ? "step" : undefined}>
+          <span className="setup-progress__icon" aria-hidden="true">
+            <Icon name={step.icon} size={20} />
+          </span>
+          <span className="setup-progress__label">{step.label}</span>
+          <span className="setup-progress__status">
+            {SETUP_STATUS[step.status]}
+            <span className="visually-hidden">{step.status === "upcoming" ? "Not started" : ""}</span>
+          </span>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 /**
  * Interests you share with someone, on their profile. A white card (hairline + soft shadow, card
  * radius) with a small pink mark beside the title; the pills are neutral with a leading icon, so the
