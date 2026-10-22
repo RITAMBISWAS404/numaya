@@ -101,6 +101,12 @@ try {
     await p.keyboard.press("Enter");
     await wait(3300);
     check("verification screen reached", (await p.locator("#verify-title").count()) === 1);
+    const otp = await p.evaluate(() => {
+      const cells = [...document.querySelectorAll(".code__cell")];
+      const active = document.querySelector(".code__cell.is-active");
+      return { n: cells.length, radius: getComputedStyle(cells[0]).borderTopLeftRadius, w: cells.map((c) => Math.round(c.getBoundingClientRect().width)), ring: active && getComputedStyle(active).boxShadow };
+    });
+    check("OTP: six softly rounded 18px cells of equal width; the active cell has a pink stroke and halo, no ink", otp.n === 6 && otp.radius === "18px" && new Set(otp.w).size === 1 && otp.ring?.includes("247, 112, 227") && !otp.ring.includes("20, 23, 31"), JSON.stringify(otp));
     await p.locator(".keypad__suggestion").click({ timeout: 5000 });
     await wait(3200);
     const badge = await p.evaluate(() => {
@@ -464,6 +470,16 @@ try {
       await f("basics").getByLabel("First name").focus();
       await wait(500); // let the focus-ring transition finish before reading computed styles
       const focus = await p.evaluate(() => getComputedStyle(document.querySelector("#basics .input:focus")).boxShadow);
+      const others = {};
+      await f("prompt").getByLabel("Your answer").focus();
+      await wait(500);
+      others.textarea = await p.evaluate(() => getComputedStyle(document.querySelector("#prompt .textarea__input")).boxShadow);
+      await f("chat").locator("textarea").first().focus();
+      await wait(500);
+      others.composer = await p.evaluate(() => getComputedStyle(document.querySelector("#chat .composer__field")).boxShadow);
+      check("focus: multiline answers and the chat composer share the pink focus (no ink ring)", Object.values(others).every((v) => v.includes("247, 112, 227") && !v.includes(INK)), JSON.stringify(others).slice(0, 160));
+      await f("basics").getByLabel("First name").focus();
+      await wait(500);
       check("flows: field focus is one brand-pink 2px stroke with a pink halo, no ink ring", focus.includes(`${PINK} 0px 0px 0px 2px inset`) && focus.includes("rgba(247, 112, 227") && !focus.includes(INK), focus.slice(0, 90));
       for (const [name, path] of [["prototype", ""], ["flows", "flows.html"], ["showcase", "showcase.html"]]) {
         const q = await page({ width: 1440, height: 900 });
