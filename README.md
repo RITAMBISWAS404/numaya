@@ -8,6 +8,8 @@ npx playwright install chromium   # only for the browser smoke test on a fresh m
 npm run dev                       # http://localhost:5173 (prototype) · /flows.html (product flows) · /showcase.html (design system)
 npm run check                     # token check, unit tests, production build
 npm run test:e2e                  # browser smoke test with screenshots
+npm run test:a11y                 # accessibility audit (axe-core)
+npm run gallery                   # numbered screenshot gallery of every screen and state
 ```
 
 - **Prototype:** Welcome → Phone → Verify, in an iPhone simulator on desktop and full screen on
@@ -20,3 +22,7 @@ npm run test:e2e                  # browser smoke test with screenshots
 - **Docs:** see [CLAUDE.md](CLAUDE.md) and [docs/](docs/).
 
 Fonts: Fraunces and Inter (SIL OFL), self-hosted. Icons: Solar by 480 Design (CC BY 4.0) via `@solar-icons/react` (MIT); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Brand pink: `#F770E3`.
+
+**Screen gallery:** [artifacts/ui-gallery/](artifacts/ui-gallery/README.md) holds every screen and
+state in user-flow order at 393 × 852, with contact sheets. Any flow screen can also be opened on its
+own, full screen, at `/flows.html?screen=<id>` (for example `?screen=edit`).

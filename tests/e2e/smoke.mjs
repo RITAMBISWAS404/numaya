@@ -166,6 +166,29 @@ try {
   }
 
   /* ---------------------------------------------------------------- */
+  /* Single-screen mode: one screen fills the phone viewport and navigates */
+  /* ---------------------------------------------------------------- */
+  {
+    const p = await page({ width: 375, height: 667 }, { isMobile: true, hasTouch: true });
+    await p.goto(`${base}flows.html?screen=profile`);
+    await wait(1200);
+    const single = await p.evaluate(() => ({
+      frames: document.querySelectorAll(".fl-frame").length,
+      screen: document.querySelector(".fl-frame")?.id,
+      fills: Math.abs(document.querySelector(".fl-frame__screen").getBoundingClientRect().height - innerHeight) < 1,
+      overflow: document.documentElement.scrollWidth - innerWidth,
+    }));
+    check("single screen: ?screen= shows one screen filling the viewport", single.frames === 1 && single.screen === "profile" && single.fills && single.overflow <= 0, JSON.stringify(single));
+    await p.getByRole("button", { name: "Edit profile" }).click();
+    await wait(500);
+    check("single screen: navigation moves to the next screen and the URL follows", (await p.locator(".fl-frame").getAttribute("id")) === "edit" && p.url().endsWith("?screen=edit"));
+    await p.goto(`${base}flows.html?screen=nope`);
+    await wait(800);
+    check("single screen: an unknown screen falls back to the full gallery", (await p.locator(".fl-frame").count()) > 1);
+    check("single screen: no console errors", p.errors.length === 0, p.errors.join(" | "));
+  }
+
+  /* ---------------------------------------------------------------- */
   /* Motion: reduced-motion fallbacks and keyboard activation           */
   /* ---------------------------------------------------------------- */
   {

@@ -72,7 +72,7 @@ export function Foundations() {
           </Specimen>
           <Specimen title="Brand emphasis in a headline" note={`Marker · ink on --color-brand-marker · ${ratio(tokenByName["--color-text-primary"].resolved, tokenByName["--color-brand-marker"].resolved)} · hero headlines only, one word`}>
             <p className="sc-type-sample" style={{ fontFamily: "var(--font-display)", fontSize: 34 }}>
-              <Marker>Better</Marker> first dates
+              <Marker>Better</Marker>
             </p>
           </Specimen>
           <Specimen title="Brand text at body size" note={`--color-text-brand is ink · ${ratio(tokenByName["--color-text-brand"].resolved, WHITE)} · pink text fails on white`}>

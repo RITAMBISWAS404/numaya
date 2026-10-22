@@ -7,6 +7,8 @@ npm install                       # fresh clone; add `npx playwright install chr
 npm run dev                       # prototype at /, showcase at /showcase.html
 npm run check                     # tokens:check + unit tests + production build
 npm run test:e2e                  # browser smoke test → tests/e2e/artifacts/*.png
+npm run test:a11y                 # axe-core WCAG 2.1 A/AA audit (fails on serious/critical)
+npm run gallery                   # numbered screenshot gallery → artifacts/ui-gallery/
 npm run tokens                    # regenerate src/design-system/tokens.{css,js}
 ```
 

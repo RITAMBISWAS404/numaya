@@ -38,7 +38,39 @@ function PreviewFrame({ screen, active, go }) {
   );
 }
 
+/** The screen requested with `?screen=<id>`, if it exists. */
+function requestedScreen() {
+  const id = new URLSearchParams(window.location.search).get("screen");
+  return SCREENS.some((s) => s.id === id) ? id : null;
+}
+
+/**
+ * Single-screen mode (`flows.html?screen=<id>`): one screen fills the viewport, like the app on a
+ * phone, and navigation inside it moves to the next screen (the URL follows). Used for the
+ * screenshot gallery and for trying a flow end to end on a device.
+ */
+function SingleScreen({ initial }) {
+  const [id, setId] = useState(initial);
+  const go = (next) => {
+    setId(next);
+    window.history.replaceState(null, "", `?screen=${next}`);
+  };
+  const screen = SCREENS.find((s) => s.id === id);
+  return (
+    <StoreProvider>
+      <div className="fl-single">
+        <PreviewFrame key={screen.id} screen={screen} active={false} go={go} />
+      </div>
+    </StoreProvider>
+  );
+}
+
 export function Flows() {
+  const single = requestedScreen();
+  return single ? <SingleScreen initial={single} /> : <Gallery />;
+}
+
+function Gallery() {
   const [active, setActive] = useState(null);
   const go = (id) => {
     setActive(id);

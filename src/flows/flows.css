@@ -325,6 +325,18 @@ body {
   min-height: 100%;
 }
 
+/* Single-screen mode: the screen is the viewport (no gallery chrome, caption, frame or corners). */
+.fl-single .fl-frame__caption {
+  display: none;
+}
+
+.fl-single .fl-frame__screen {
+  height: 100dvh;
+  min-height: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
 @media (max-width: 440px) {
   .fl-top {
     padding: var(--space-3) var(--space-4);
