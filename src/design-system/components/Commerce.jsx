@@ -27,7 +27,7 @@ export function PlanPicker({ label = "Choose a plan", plans, value, onChange }) 
           {p.unit && <span className="plan-card__unit">{p.unit}</span>}
           {p.note && <span className="plan-card__note">{p.note}</span>}
           <span className="plan-card__check" aria-hidden="true">
-            <Icon name="check" size={14} stroke={3} />
+            <Icon name="check" size={11} stroke={3} />
           </span>
         </label>
       ))}

@@ -9,28 +9,21 @@ import { IconButton } from "./Button.jsx";
 /* Avatar sizes in px (mirror --size-avatar-*; a unit test keeps them in sync). The completion ring
    is drawn in pixel space so its 4px band and round caps are the same at every size. */
 export const AVATAR_PX = { xs: 24, sm: 36, md: 48, lg: 64, xl: 96 };
-/* Exponent of the identity shape: CSS corner-shape superellipse(K) draws |x|^(2^K) + |y|^(2^K) = 1. */
-const IDENTITY_EXPONENT = 2 ** 1.5;
+/* Avatars are rounded rectangles: corner radius = 30% of the image's side (mirrors content.css). */
+export const AVATAR_RADIUS = 0.3;
 const RING_BAND = 4;
 const ringPaths = {};
 
-/** Ring centrelines for an avatar of `px`: the identity squircle and the circular fallback. Both start
-    at the top centre and run clockwise, so stroke-dasharray reads as progress. */
+/** Ring centreline for an avatar of `px`: a rounded rectangle concentric with the image (which sits
+    4px inside), starting at the top centre and running clockwise so stroke-dasharray reads as progress. */
 function ringPath(px) {
   if (ringPaths[px]) return ringPaths[px];
-  const c = px / 2;
-  const a = c - RING_BAND / 2;
+  const o = RING_BAND / 2;
+  const w = px - RING_BAND;
+  const r = AVATAR_RADIUS * (px - 2 * RING_BAND) + o;
   const f = (v) => v.toFixed(2);
-  const pts = [];
-  for (let i = 0; i < 96; i++) {
-    const t = -Math.PI / 2 + (i / 96) * 2 * Math.PI;
-    const e = (v) => Math.sign(v) * Math.abs(v) ** (2 / IDENTITY_EXPONENT);
-    pts.push(`${f(c + a * e(Math.cos(t)))} ${f(c + a * e(Math.sin(t)))}`);
-  }
-  ringPaths[px] = {
-    identity: `M${pts.join("L")}Z`,
-    round: `M${f(c)} ${f(c - a)}A${f(a)} ${f(a)} 0 1 1 ${f(c)} ${f(c + a)}A${f(a)} ${f(a)} 0 1 1 ${f(c)} ${f(c - a)}Z`,
-  };
+  const [l, t, rt, b] = [o, o, o + w, o + w];
+  ringPaths[px] = `M${f(px / 2)} ${f(t)}H${f(rt - r)}A${f(r)} ${f(r)} 0 0 1 ${f(rt)} ${f(t + r)}V${f(b - r)}A${f(r)} ${f(r)} 0 0 1 ${f(rt - r)} ${f(b)}H${f(l + r)}A${f(r)} ${f(r)} 0 0 1 ${f(l)} ${f(b - r)}V${f(t + r)}A${f(r)} ${f(r)} 0 0 1 ${f(l + r)} ${f(t)}Z`;
   return ringPaths[px];
 }
 
@@ -48,17 +41,13 @@ export function Avatar({ name, src, size = "md", ring, verified = false, decorat
           viewBox={`0 0 ${AVATAR_PX[size]} ${AVATAR_PX[size]}`}
           aria-hidden="true"
         >
-          {["round", "identity"].map((shape) => (
-            <g key={shape} className={`avatar__ring-shape avatar__ring-shape--${shape}`}>
-              <path d={ringPath(AVATAR_PX[size])[shape]} pathLength="100" className="avatar__ring-track" />
-              <path
-                d={ringPath(AVATAR_PX[size])[shape]}
-                pathLength="100"
-                className="avatar__ring-value"
-                style={{ strokeDasharray: `${Math.round(ring.value * 100)} 100` }}
-              />
-            </g>
-          ))}
+          <path d={ringPath(AVATAR_PX[size])} pathLength="100" className="avatar__ring-track" />
+          <path
+            d={ringPath(AVATAR_PX[size])}
+            pathLength="100"
+            className="avatar__ring-value"
+            style={{ strokeDasharray: `${Math.round(ring.value * 100)} 100` }}
+          />
         </svg>
       )}
       <span className="avatar__image" role={decorative ? undefined : "img"} aria-label={decorative ? undefined : name}>
@@ -66,7 +55,7 @@ export function Avatar({ name, src, size = "md", ring, verified = false, decorat
       </span>
       {verified && (
         <span className="avatar__badge" aria-hidden="true">
-          <Icon name="check" size={10} stroke={3} />
+          <Icon name="check" size={9} stroke={3} />
         </span>
       )}
     </span>
@@ -78,7 +67,7 @@ export function VerifiedBadge({ label = "Verified", compact = false }) {
   return (
     <span className={cx("verified", compact && "verified--compact")}>
       <span className="verified__mark" aria-hidden="true">
-        <Icon name="check" size={compact ? 10 : 12} stroke={3} />
+        <Icon name="check" size={compact ? 9 : 10} stroke={3} />
       </span>
       {compact ? <span className="visually-hidden">{label}</span> : <span>{label}</span>}
     </span>
@@ -198,6 +187,24 @@ export function TipCard({ icon = "sparkle", title, children, onPress }) {
       </span>
       {onPress && <Icon name="chevronRight" size={18} stroke={2} className="tip-card__chevron" />}
     </Tag>
+  );
+}
+
+/**
+ * Information card: a grouped privacy, guidance or safety message on its own quiet surface (white,
+ * hairline, 20px), led by a filled icon. For short hints tied to one field, use the field's hint.
+ */
+export function InfoCard({ icon = "info", title, children, id, className }) {
+  return (
+    <div className={cx("info-card", className)} id={id}>
+      <span className="info-card__icon" aria-hidden="true">
+        <Icon name={icon} size={20} />
+      </span>
+      <span className="info-card__text">
+        <span className="info-card__title">{title}</span>
+        {children && <span className="info-card__body">{children}</span>}
+      </span>
+    </div>
   );
 }
 
@@ -382,7 +389,7 @@ export function ActionBar({ onPass, onSuper, onLike, superDisabled = false }) {
         <Icon name="close" size={26} strokeWidth={2.5} />
       </button>
       <button type="button" className="action-bar__btn action-bar__btn--super" aria-label="Super like" onClick={onSuper} disabled={superDisabled}>
-        <Icon name="star" size={26} weight="fill" />
+        <Icon name="star" size={22} weight="fill" />
       </button>
       <button type="button" className="action-bar__btn action-bar__btn--like" aria-label="Like" onClick={onLike}>
         <Icon name="heart" size={26} weight="fill" />

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   CountryPicker,
   Fab,
-  Note,
+  InfoCard,
   PhoneField,
   Screen,
   ScreenBody,
@@ -99,12 +99,13 @@ export function PhoneNumber({
           onKeyDown={(e) => e.key === "Enter" && submit()}
           describedBy="phone-reassurance"
         />
+        <InfoCard id="phone-reassurance" icon="lock" title="Your number stays private" className="phone-info">
+          We never share it, and it won’t be on your profile.
+        </InfoCard>
       </ScreenBody>
 
       <ScreenFooter>
-        <span className="screen__footer-text">
-          <Note id="phone-reassurance">We never share this with anyone and it won’t be on your profile.</Note>
-        </span>
+        <span className="screen__footer-text" />
         <Fab label="Send code" disabled={!valid} loading={sending} onClick={submit} />
       </ScreenFooter>
 

@@ -60,6 +60,12 @@ try {
 
     const mark = await p.evaluate(() => getComputedStyle(document.querySelector(".welcome__lockup .wordmark rect[mask]")).fill);
     check("wordmark mark is the brand pink", mark === "rgb(247, 112, 227)", mark);
+    const welcome = await p.evaluate(() => {
+      const a = document.querySelector(".legal a");
+      return { slot: !!document.querySelector("[data-illustration='welcome-hero']"), stack: document.querySelectorAll(".prompt-card").length, link: { color: getComputedStyle(a).color, line: getComputedStyle(a).textDecorationColor } };
+    });
+    check("welcome: the hero is a reserved illustration slot (no prompt-card stack)", welcome.slot && welcome.stack === 0);
+    check("welcome: legal links are ink with a brand-pink underline", welcome.link.color === "rgb(20, 23, 31)" && welcome.link.line === "rgb(247, 112, 227)", JSON.stringify(welcome.link));
 
     await p.getByRole("button", { name: "Create an account" }).click();
     await wait(900);
@@ -302,6 +308,20 @@ try {
       check("flows: selecting a chip keeps its size (no reflow)", states.chipSizes[0] === states.chipSizes[1] && states.chipSizes[2] === states.chipSizes[3], states.chipSizes.join(" / "));
       check("flows: success badge puts an ink check on a white inset disc", states.badgeDisc === "rgb(255, 255, 255)" && states.badgeIcon === INK, `${states.badgeDisc} / ${states.badgeIcon}`);
       check("photos: empty slots (white, hairline) are distinct from filled photo placeholders (grey)", states.slotEmpty === "rgb(255, 255, 255)" && /inset/.test(states.slotEmptyEdge) && states.slotFilled !== states.slotEmpty, `${states.slotFilled} vs ${states.slotEmpty}`);
+      const pinkFg = await p.evaluate(() => {
+        const disc = (sel) => { const e = document.querySelector(sel); return e && { bg: getComputedStyle(e, "::before").backgroundColor, fg: getComputedStyle(e).color }; };
+        const cb = document.querySelector("#basics .choice__input--checkbox:checked");
+        return {
+          discs: [disc("#discovery .action-bar__btn--super"), disc("#chats .avatar__badge"), disc("#chat .verified__mark")].filter(Boolean),
+          checkbox: cb && getComputedStyle(cb).backgroundColor,
+          phoneRadius: getComputedStyle(document.querySelector("#basics .input")).borderTopLeftRadius,
+          infoCards: document.querySelectorAll("#photos .info-card, #settings .info-card").length,
+        };
+      });
+      check("pink: pink actions and marks carry their ink glyph on a white inset, never directly on pink", pinkFg.discs.length >= 3 && pinkFg.discs.every((d) => d.bg === "rgb(255, 255, 255)" && d.fg === INK), JSON.stringify(pinkFg.discs));
+      check("selection: a checked checkbox is ink with a white tick (no glyph on pink)", pinkFg.checkbox === INK, pinkFg.checkbox);
+      check("fields: form fields are 16px rounded rectangles, not pills", pinkFg.phoneRadius === "16px", pinkFg.phoneRadius);
+      check("info cards: photo guidance and blocking help use the shared information card", pinkFg.infoCards === 2, String(pinkFg.infoCards));
       check("flows: switch on is a brand-pink track; off is a plain grey track, no outline, white thumb", states.switchOn === PINK && states.switchOff.bg === "rgb(215, 219, 225)" && states.switchOff.edge === "none" && states.switchOff.thumb === "rgb(255, 255, 255)", `${states.switchOn} / ${JSON.stringify(states.switchOff)}`);
       check("flows: sliders have white thumbs on a brand-pink interval over a grey rail (no ink)", states.slider.thumb === "rgb(255, 255, 255)" && states.slider.track.includes(PINK) && states.slider.track.includes("rgb(215, 219, 225)") && !states.slider.track.includes(INK), JSON.stringify(states.slider));
       check("navigation: idle tabs are soft grey with a readable label", states.tabIdleIcon === "rgb(154, 161, 172)" && states.tabIdleLabel === "rgb(100, 107, 120)", `${states.tabIdleIcon} / ${states.tabIdleLabel}`);
@@ -315,21 +335,15 @@ try {
         const items = [...tab.querySelectorAll(".tab-bar__item")].map((i) => i.getBoundingClientRect());
         return {
           btnRadius: parseFloat(cs("#settings .btn--secondary, #basics .btn, .btn").borderTopLeftRadius),
-          squircleSupported: CSS.supports("corner-shape", "squircle"),
-          btnCorner: cs(".btn").cornerShape,
-          chipCorner: cs("#interests .chip").cornerShape,
-          identitySupported: CSS.supports("corner-shape", "superellipse(1.5)"),
-          avatarShape: ["#chats .conversation .avatar__image", "#chats .match-queue .avatar__image", "#profile .avatar__image"].map((sel) => cs(sel).cornerShape),
-          avatarRadius: cs("#chats .avatar__image").borderTopLeftRadius,
+          // No element anywhere may use a non-round corner-shape (no squircles or superellipses).
+          shaped: [...document.querySelectorAll("*")].filter((e) => { const c = getComputedStyle(e).cornerShape; return c && c !== "round"; }).length,
+          avatarRadius: [cs("#chat .top-bar .avatar__image, #chat .avatar__image").borderTopLeftRadius, cs("#profile .avatar__image").borderTopLeftRadius],
           ring: (() => {
             const r = document.querySelector("#profile .avatar__ring");
-            const shown = [...r.querySelectorAll(".avatar__ring-shape")].filter((g) => getComputedStyle(g).display !== "none");
-            const v = shown[0]?.querySelector(".avatar__ring-value");
-            const box = r.getBoundingClientRect(), av = r.parentElement.getBoundingClientRect(), vb = v?.getBoundingClientRect();
-            return { shown: shown.map((g) => g.classList[1]).join(), cap: v && getComputedStyle(v).strokeLinecap, stroke: v && getComputedStyle(v).stroke, width: v && getComputedStyle(v).strokeWidth, img: getComputedStyle(r.nextElementSibling).cornerShape, inside: vb && vb.left >= av.left - 0.5 && vb.top >= av.top - 0.5 && Math.abs(box.width - av.width) < 0.5 };
+            const v = r.querySelector(".avatar__ring-value");
+            const box = r.getBoundingClientRect(), av = r.parentElement.getBoundingClientRect(), vb = v.getBoundingClientRect();
+            return { cap: getComputedStyle(v).strokeLinecap, stroke: getComputedStyle(v).stroke, width: getComputedStyle(v).strokeWidth, rounded: /A/.test(v.getAttribute("d")), inside: vb.left >= av.left - 0.5 && vb.top >= av.top - 0.5 && Math.abs(box.width - av.width) < 0.5 };
           })(),
-          roundCorners: [".action-bar__btn", ".nav-button", ".avatar__badge", ".result__badge", ".composer__send"].map((sel) => document.querySelector(sel) && cs(sel).cornerShape).filter(Boolean),
-          cardCorner: cs("#discovery .fl-pf__section").cornerShape,
           promptShadowAlpha: alpha(cs("#profile .prompt").boxShadow),
           tabShadow: getComputedStyle(tab).boxShadow,
           tabRadius: parseFloat(getComputedStyle(tab).borderTopLeftRadius),
@@ -352,11 +366,9 @@ try {
         };
       });
       check("geometry: buttons are pills (Meetup)", geo.btnRadius >= 999, `${geo.btnRadius}px`);
-      check("geometry: squircle corners apply to cards where supported", !geo.squircleSupported || geo.cardCorner.includes("squircle"), `${geo.squircleSupported} / ${geo.cardCorner}`);
-      check("shape: identity avatars use the soft superellipse where supported (circle fallback)", geo.avatarRadius === "50%" && (!geo.identitySupported || geo.avatarShape.every((c) => c.includes("superellipse(1.5)"))), `${geo.avatarShape.join(" / ")} / r ${geo.avatarRadius}`);
-      check("shape: the completion ring traces the avatar shape (squircle, or circle fallback) with round caps in brand pink", geo.ring.shown === (geo.ring.img.includes("superellipse") ? "avatar__ring-shape--identity" : "avatar__ring-shape--round") && geo.ring.cap === "round" && geo.ring.stroke === PINK && geo.ring.width === "4px" && geo.ring.inside, JSON.stringify(geo.ring));
-      check("shape: action circles, icon buttons, the verified dot and the success badge stay round", geo.roundCorners.length >= 4 && geo.roundCorners.every((c) => c === "round"), geo.roundCorners.join(" / "));
-      check("geometry: pill buttons and chips stay true pills (no squircle)", !geo.btnCorner.includes("squircle") && !geo.chipCorner.includes("squircle"), `${geo.btnCorner} / ${geo.chipCorner}`);
+      check("geometry: no squircle or superellipse corner-shape anywhere (plain border-radius only)", geo.shaped === 0, `${geo.shaped} shaped elements`);
+      check("shape: avatars are rounded rectangles, radius 30% of the image (36px → 10.8px; ringed 96px → 26.4px)", geo.avatarRadius[0] === "10.8px" && geo.avatarRadius[1] === "26.4px", geo.avatarRadius.join(" / "));
+      check("shape: the completion ring traces a rounded rectangle with round caps in brand pink", geo.ring.rounded && geo.ring.cap === "round" && geo.ring.stroke === PINK && geo.ring.width === "4px" && geo.ring.inside, JSON.stringify(geo.ring));
       check("elevation: card shadow is very light", geo.promptShadowAlpha > 0 && geo.promptShadowAlpha <= 0.08, `alpha ${geo.promptShadowAlpha}`);
       const tabAlpha = Math.max(0, ...[...geo.tabShadow.matchAll(/rgba\(\d+, \d+, \d+, ([0-9.]+)\)/g)].map((m) => parseFloat(m[1])));
       check("navigation: floating capsule inset from the edges with a soft shadow (Meetup)", geo.tabInset >= 8 && geo.tabRadius >= 999 && tabAlpha > 0 && tabAlpha <= 0.14, `inset ${geo.tabInset} / radius ${geo.tabRadius} / alpha ${tabAlpha}`);
@@ -370,10 +382,10 @@ try {
         const media = document.querySelector("#discovery .profile-card__media");
         const s = getComputedStyle(media);
         const r = (sel) => parseFloat(getComputedStyle(document.querySelector(sel)).borderTopLeftRadius);
-        return { radius: parseFloat(s.borderTopLeftRadius), card: r("#discovery .fl-pf__section"), input: r("#basics .input"), textarea: r("#prompt .textarea__input"), inputShape: getComputedStyle(document.querySelector("#basics .input")).cornerShape, bg: s.backgroundColor, ext: [...document.querySelectorAll("#discovery img")].filter((i) => /^https?:\/\/(?!localhost)/.test(i.src)).length, placeholders: document.querySelectorAll("#discovery .fl-pf__photo").length };
+        return { radius: parseFloat(s.borderTopLeftRadius), card: r("#discovery .fl-pf__section"), input: r("#basics .input"), textarea: r("#prompt .textarea__input"), bg: s.backgroundColor, ext: [...document.querySelectorAll("#discovery img")].filter((i) => /^https?:\/\/(?!localhost)/.test(i.src)).length, placeholders: document.querySelectorAll("#discovery .fl-pf__photo").length };
       });
       check("discover: photo areas are neutral grey placeholders and no images are hotlinked", imagery.bg === "rgb(215, 219, 225)" && imagery.ext === 0 && imagery.placeholders >= 1, JSON.stringify(imagery));
-      check("geometry: corner hierarchy photo 32 > card 24 > text area 20; single-line fields are true pills", imagery.radius === 32 && imagery.card === 24 && imagery.textarea === 20 && imagery.input >= 999 && imagery.inputShape !== "squircle", `${imagery.radius} / ${imagery.card} / ${imagery.textarea} / ${imagery.input} / ${imagery.inputShape}`);
+      check("geometry: corner hierarchy photo 32 > card 24 > text area 20 > form field 16", imagery.radius === 32 && imagery.card === 24 && imagery.textarea === 20 && imagery.input === 16, `${imagery.radius} / ${imagery.card} / ${imagery.textarea} / ${imagery.input}`);
       const roll = await p.evaluate(() => {
         const cs = (sel) => getComputedStyle(document.querySelector(sel));
         const body = document.querySelector("#chat .fl-screen__body").getBoundingClientRect();

@@ -15,6 +15,7 @@ transparent background; people abstract (no realistic faces), inclusive and unge
 
 | Slot id | Screen / component | Size | Placement | Concept and purpose | Type |
 | --- | --- | --- | --- | --- | --- |
+| `welcome-hero` | Prototype › Welcome (`Welcome.jsx`) | Square, up to 280 × 280; shrinks with the hero's free height | Centred in the hero under the wordmark, above the headline panel (replaced the prompt-card stack) | Two people, abstract, meeting over a conversation (a shared speech bubble or prompt card between them): Numaya is built around conversation, not swipes | Hero |
 | `verified-success` | Prototype › Verify code › success sheet (`VerifyCode.jsx`) | 200 × 120 (5:3) | Centred at the top of the sheet, above the existing check badge and "You're verified" | Two abstract figures waving across a phone-shaped arch: "you're in, someone's on the other side". The moment the user stops filling forms and joins people | Success |
 | `basics-spot` | Flows › The basics (`Basics`, `ScreenHeader art`) | 72 × 72 (1:1) | Right of the two-line title, top-aligned; fields untouched | A name tag or "hello" speech bubble: introducing yourself, light and friendly | Decorative |
 | `interests-spot` | Flows › Interests and prompts (`InterestsPrompts`) | 72 × 72 (1:1) | Right of the title, top-aligned; chips and prompt untouched | A small cluster of things people love (record, wine glass, climbing hold) bumping together: interests as conversation starters | Decorative |
@@ -25,8 +26,6 @@ transparent background; people abstract (no realistic faces), inclusive and unge
 
 ## Intentionally without a slot
 
-- **Welcome** (prototype): the floating prompt-card stack already is the hero visual and tells the
-  conversation story; replacing or crowding it would change the settled composition.
 - **Verified → profile setup** (flows intro): tried and removed. A slot pushed the three-step list
   below the fold at 375px; the success badge already anchors the screen. The celebration lives on
   the prototype's success sheet instead.

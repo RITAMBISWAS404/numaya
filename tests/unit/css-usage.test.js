@@ -10,7 +10,7 @@ const defined = new Set([...tokensCss.matchAll(/(--[a-z0-9-]+):/g)].map((m) => m
 // Runtime and component-local custom properties set in CSS or inline styles.
 const RUNTIME = new Set([
   "--safe-top", "--safe-bottom", "--keyboard-inset", "--keypad-h",
-  "--x", "--r", "--s", "--i", "--from", "--to", "--code-length", "--code-group", "--sc-min", "--avatar-size", "--dx", "--rot", "--p",
+  "--x", "--r", "--s", "--i", "--from", "--to", "--code-length", "--code-group", "--sc-min", "--avatar-size", "--avatar-inset", "--disc-inset", "--dx", "--rot", "--p",
   "--profile-card-photo-height", "--profile-card-photo-min", "--profile-card-ratio",
 ]);
 const files = walk("src").filter((f) => /\.(css|jsx?)$/.test(f) && !f.endsWith("tokens.css") && !f.endsWith("tokens.js"));
@@ -72,19 +72,7 @@ describe("geometry rules", () => {
     expect(block(".btn")).toMatch(/radius-pill/);
   });
 
-  it("applies squircle corners only as a @supports enhancement", () => {
-    const shape = readFileSync("src/design-system/styles/shape.css", "utf8");
-    expect(shape).toMatch(/@supports \(corner-shape: squircle\)/);
-    const withoutSupports = css.replace(shape, "");
-    expect(withoutSupports).not.toMatch(/corner-shape/);
-  });
-
-  it("limits the identity superellipse to avatars and their ring, never pills or round controls", () => {
-    const shape = readFileSync("src/design-system/styles/shape.css", "utf8");
-    const identity = shape.slice(shape.indexOf("@supports (corner-shape: superellipse"));
-    expect(identity).toMatch(/\.avatar__image\s*\{\s*corner-shape: var\(--shape-identity\);/);
-    expect(identity).toMatch(/\.avatar__ring-shape--round\s*\{\s*display: none;/);
-    expect(identity).toMatch(/\.avatar__ring-shape--identity\s*\{\s*display: inline;/);
-    for (const sel of [".btn", ".chip", ".composer", ".action-bar", ".nav-button", ".result__badge", ".avatar__badge"]) expect(identity).not.toContain(sel);
+  it("uses plain border-radius only: no corner-shape, superellipse or squircle anywhere", () => {
+    for (const f of files) expect(readFileSync(f, "utf8"), f).not.toMatch(/corner-shape|superellipse\(/);
   });
 });

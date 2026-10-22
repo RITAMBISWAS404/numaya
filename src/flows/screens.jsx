@@ -17,6 +17,7 @@ import {
   IconButton,
   IllustrationPlaceholder,
   ImagePlaceholder,
+  InfoCard,
   ListGroup,
   ListRow,
   Emphasis,
@@ -217,7 +218,12 @@ export function Photos({ go }) {
     >
       <ScreenHeader title="Add your photos" lede="At least 2, ideally 4. Clear, recent, and just you in the first one." />
       <div className="fl-gap-lg">
-        <PhotoGrid photos={photos} onAdd={add} onRemove={(id) => setPhotos((p) => p.filter((x) => x.id !== id))} hint="Tap + to add a sample photo. The first photo is your main one." />
+        <div className="fl-stack fl-gap-lg">
+          <PhotoGrid photos={photos} onAdd={add} onRemove={(id) => setPhotos((p) => p.filter((x) => x.id !== id))} hint={null} />
+          <InfoCard icon="camera" title="Your first photo leads your profile">
+            Tap + to add a sample photo. You can choose a different main photo later in Edit profile.
+          </InfoCard>
+        </div>
       </div>
     </Frame>
   );
@@ -343,7 +349,7 @@ export function Discovery({ go }) {
               {...person}
               actions={
                 <button type="button" className="action-bar__btn action-bar__btn--super" aria-label="SuperSwipe" onClick={() => decide(true)}>
-                  <Icon name="star" size={26} weight="fill" />
+                  <Icon name="star" size={22} weight="fill" />
                 </button>
               }
             />
@@ -1044,9 +1050,12 @@ export function Settings({ go }) {
           {switchRow("messages", "New messages")}
           {switchRow("likes", "New likes")}
         </ListGroup>
-        <ListGroup title="Privacy and safety" footnote="Blocking and reporting happen from a conversation’s options menu.">
+        <ListGroup title="Privacy and safety">
           <ListRow icon="shield" label="Blocked people" kind="info" value={String(blocked)} />
         </ListGroup>
+        <InfoCard icon="flag" title="Blocking and reporting">
+          Open a conversation’s options menu to unmatch, report or block someone. Reports are anonymous.
+        </InfoCard>
         <ListGroup>
           <ListRow label="Log out" kind="action" onPress={() => go("intro")} />
         </ListGroup>

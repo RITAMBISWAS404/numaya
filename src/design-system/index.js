@@ -30,6 +30,7 @@ export {
   ListGroup,
   ListRow,
   TipCard,
+  InfoCard,
   ConsequenceList,
   PromptCard,
   ImagePlaceholder,

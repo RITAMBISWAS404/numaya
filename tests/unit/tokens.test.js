@@ -162,7 +162,6 @@ describe("geometry and elevation", () => {
 
   it("keeps the avatar ring geometry in step with the identity shape and avatar sizes", async () => {
     const { AVATAR_PX } = await import("../../src/design-system/components/Content.jsx");
-    expect(value("--shape-identity")).toBe("superellipse(1.5)"); // the ring path uses exponent 2^1.5
     for (const [k, px] of Object.entries(AVATAR_PX)) expect(value(`--size-avatar-${k}`)).toBe(`${px}px`);
   });
 });

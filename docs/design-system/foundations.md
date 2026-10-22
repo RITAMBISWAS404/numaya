@@ -51,14 +51,14 @@ or brand colour. Numerals in inputs, codes and prices use `tabular-nums`.
   gap 32px, stacked controls 12px.
 - **Sizes:** touch target ≥ `--size-touch-min` 44px; input 56px; button 54px (sm 40, quiet 48);
   Fab 56; icon button 40 (sm 36); avatars 24/36/48/64/96.
-- **Radius** (compact rounded rectangles; `border-radius` is the baseline, with `corner-shape: squircle`
-  layered on where supported via `shape.css`): xs 8 (tags, badges) · sm 12 (chips, inner elements) ·
+- **Radius** (plain `border-radius` only: no `corner-shape`, superellipse or squircle anywhere, enforced
+  by a unit test): xs 8 (tags, badges) · sm 12 (chips, inner elements) ·
   md 16 (buttons, fields, option cards) · lg 20 (cards, list groups, message bubbles, tab items) · xl 28
   (hero profile card, sheets, dialogs, the floating tab bar) · 2xl 32 (framed screens). Nested corners
-  follow outer = inner + inset: the tab bar (xl 28) wraps items (lg 20) with an 8px inset. Circles stay circles (icon buttons, Fab, Pass / Like / SuperSwipe, the success badge). Identity
-  avatars and their completion ring take `--shape-identity` (`superellipse(1.5)`, a soft squircle) where
-  `corner-shape` is supported, and fall back to the circle; the completion ring traces the same outline
-  as a 4px round-capped stroke.
+  follow outer = inner + inset: the tab bar (xl 28) wraps items (lg 20) with an 8px inset. Form
+  fields are 16px rounded rectangles, text areas 20px, search a pill. Avatars are rounded rectangles
+  (radius 30% of the image side); the completion ring traces the same shape as a 4px round-capped
+  stroke. Circles stay for genuine indicators (the verified dot, the success badge).
   `pill` is only for shapes whose meaning is a pill: progress bars, switches, slider tracks, count
   badges. Never for ordinary buttons, chips, tabs or badges.
 - **Borders:** hairline 1px, selected 1.5px, focus 2px.

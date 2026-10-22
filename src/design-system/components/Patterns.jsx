@@ -48,7 +48,7 @@ export function MatchCelebration({ names, title = <>It’s a <Emphasis>match</Em
           <Icon name="image" size={28} />
         </span>
         <span className="match__mark">
-          <Icon name="heart" size={22} stroke={2} />
+          <Icon name="heart" size={18} />
         </span>
       </div>
       <h2 className="match__title">{title}</h2>

@@ -82,7 +82,7 @@ export const Composer = forwardRef(function Composer(
         />
       </label>
       <button type="submit" className="composer__send" aria-label="Send" disabled={!canSend}>
-        <Icon name="arrowUp" size={20} stroke={2.2} />
+        <Icon name="arrowUp" size={18} stroke={2.2} />
       </button>
     </form>
   );

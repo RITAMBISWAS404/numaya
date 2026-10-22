@@ -1,17 +1,5 @@
 import { useEffect, useState } from "react";
-import { Avatar, Button, Icon, Emphasis, Ribbon, Screen, Toast, Wordmark } from "../../design-system/index.js";
-import { cx } from "../../lib/cx.js";
-
-const PROMPTS = [
-  { id: "date", label: "A perfect first date", answer: "Natural wine, a record shop, and nowhere to be after." },
-  { id: "good-at", label: "I’m weirdly good at", answer: "Remembering the name of every dog I’ve ever met." },
-  {
-    id: "debate",
-    label: "Let’s debate this",
-    answer: "Breakfast for dinner is the superior meal.",
-    person: { initial: "M", name: "Maya", meta: "29 · 2 km away" },
-  },
-];
+import { Button, Emphasis, IllustrationPlaceholder, Ribbon, Screen, Toast, Wordmark } from "../../design-system/index.js";
 
 export function Welcome({ active, onCreate, onSignIn }) {
   const [notice, setNotice] = useState(null);
@@ -34,7 +22,7 @@ export function Welcome({ active, onCreate, onSignIn }) {
         <div className="welcome__lockup">
           <Wordmark />
         </div>
-        <PromptStack />
+        <IllustrationPlaceholder id="welcome-hero" ratio="1 / 1" className="welcome__art" />
       </div>
 
       <div className="welcome__panel">
@@ -67,42 +55,5 @@ export function Welcome({ active, onCreate, onSignIn }) {
         </Toast>
       )}
     </Screen>
-  );
-}
-
-function PromptStack() {
-  const [liked, setLiked] = useState(false);
-
-  return (
-    <div className="prompt-stack">
-      {PROMPTS.map((prompt, index) => (
-        <article
-          key={prompt.id}
-          className={cx("prompt-card", `prompt-card--${index + 1}`)}
-          aria-hidden={prompt.person ? undefined : "true"}
-        >
-          <p className="prompt-card__label">{prompt.label}</p>
-          <p className="prompt-card__answer">{prompt.answer}</p>
-          {prompt.person && (
-            <footer className="prompt-card__footer">
-              <Avatar name={prompt.person.name} size="sm" decorative />
-              <span className="prompt-card__person">
-                <span className="prompt-card__name">{prompt.person.name}</span>
-                <span className="prompt-card__meta">{prompt.person.meta}</span>
-              </span>
-              <button
-                type="button"
-                className={cx("like-button", liked && "is-liked")}
-                aria-pressed={liked}
-                aria-label={liked ? "Unlike this prompt" : "Like this prompt"}
-                onClick={() => setLiked((v) => !v)}
-              >
-                <Icon name="heart" size={20} weight={liked ? "fill" : "regular"} />
-              </button>
-            </footer>
-          )}
-        </article>
-      ))}
-    </div>
   );
 }

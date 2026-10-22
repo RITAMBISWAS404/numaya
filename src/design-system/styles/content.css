@@ -21,7 +21,8 @@
   display: grid;
   place-items: center;
   overflow: hidden;
-  border-radius: 50%;
+  /* A rounded rectangle, radius 30% of the image's side (AVATAR_RADIUS in Content.jsx). */
+  border-radius: calc((var(--avatar-size) - 2 * var(--avatar-inset, 0px)) * 0.3);
   background: var(--color-surface-sunken);
   color: var(--color-text-primary);
   font-family: var(--font-display);
@@ -36,11 +37,14 @@
   object-fit: cover;
 }
 
-/* Completion ring: a 4px stroke with round caps traced along the avatar outline (the identity
-   squircle where the browser supports it, otherwise a circle; see shape.css). The image sits 4px
-   inset, inside the band. */
+/* Completion ring: a 4px stroke with round caps traced along a rounded rectangle concentric with
+   the avatar. The image sits 4px inset, inside the band. */
+.avatar.has-ring {
+  --avatar-inset: 4px;
+}
+
 .avatar.has-ring .avatar__image {
-  margin: 4px;
+  margin: var(--avatar-inset);
 }
 
 .avatar__ring {
@@ -51,10 +55,6 @@
   overflow: visible;
   fill: none;
   stroke-width: 4;
-}
-
-.avatar__ring-shape--identity {
-  display: none;
 }
 
 .avatar__ring-track {
@@ -82,8 +82,8 @@
   height: 18px;
   border-radius: 50%;
   background: var(--color-brand);
-  color: var(--color-on-brand);
   box-shadow: 0 0 0 2px var(--color-surface);
+  --disc-inset: 3px;
 }
 
 .verified {
@@ -102,12 +102,54 @@
   height: 20px;
   border-radius: 50%;
   background: var(--color-brand);
-  color: var(--color-on-brand);
+  --disc-inset: 3px;
 }
 
 .verified--compact .verified__mark {
   width: 18px;
   height: 18px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Pink actions and marks with a white inset                           */
+/* ------------------------------------------------------------------ */
+/* A glyph never sits directly on saturated #F770E3: ink on it reads harsh, and white on it is
+   only 2.51:1. Pink actions and marks keep their fill (and sheen) as a ring and carry the ink
+   glyph on a white inset of the same shape, like the success badge. */
+.action-bar__btn--super,
+.match__mark,
+.composer__send:not(:disabled),
+.avatar__badge,
+.verified__mark,
+.plan-card.is-selected .plan-card__check {
+  isolation: isolate;
+  color: var(--color-text-primary);
+}
+
+.action-bar__btn--super,
+.composer__send:not(:disabled),
+.verified__mark,
+.plan-card.is-selected .plan-card__check {
+  position: relative;
+}
+
+.action-bar__btn--super { --disc-inset: 11px; }
+.match__mark { --disc-inset: 9px; }
+.composer__send:not(:disabled) { --disc-inset: 8px; }
+.plan-card.is-selected .plan-card__check { --disc-inset: 3px; }
+
+.action-bar__btn--super::before,
+.match__mark::before,
+.composer__send:not(:disabled)::before,
+.avatar__badge::before,
+.verified__mark::before,
+.plan-card.is-selected .plan-card__check::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: var(--disc-inset, 8px);
+  border-radius: inherit;
+  background: var(--color-surface);
 }
 
 .badge {
@@ -347,6 +389,44 @@ button.list-row__hit:hover {
 
 .list-row--destructive .list-row__label {
   color: var(--color-danger);
+}
+
+/* Information card: white with a hairline (Meetup grouped surfaces), 20px corners; the filled icon
+   is the brand accent, the title carries the message and the body explains. */
+.info-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle);
+  text-align: left;
+}
+
+.info-card__icon {
+  flex: none;
+  display: grid;
+  margin-top: 1px;
+  color: var(--color-brand);
+}
+
+.info-card__text {
+  display: grid;
+  gap: 2px;
+}
+
+.info-card__title {
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.info-card__body {
+  color: var(--color-text-muted);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
 }
 
 .tip-card {

@@ -1981,15 +1981,6 @@ export const tokens = [
     "description": "Large brand-pink actions only (SuperSwipe, send, match mark): a white top highlight, a neutral contact shadow and a soft glow in the exact brand pink. Never a darker pink."
   },
   {
-    "id": "semantic.shape.identity",
-    "name": "--shape-identity",
-    "layer": "semantic",
-    "type": "other",
-    "value": "superellipse(1.5)",
-    "resolved": "superellipse(1.5)",
-    "description": "Small identity avatars (chat list, new-match queue, chat header, match intro, profile avatar and its completion ring): a soft squircle between a circle and an app-icon square. Falls back to the circle. Not for action circles, icon buttons, badges or pills."
-  },
-  {
     "id": "semantic.gradient.brand-sheen",
     "name": "--gradient-brand-sheen",
     "layer": "semantic",

@@ -354,10 +354,11 @@
   width: 100%;
   min-width: 0;
   height: var(--size-control);
-  padding: 0 var(--space-5);
+  padding: 0 var(--space-4);
   border: 0;
-  /* Single-line fields are pills; multiline text areas keep a rounded rectangle (below). */
-  border-radius: var(--radius-pill);
+  /* Form fields are rounded rectangles (16px); multiline text areas are softer (20px, below) and
+     search is a pill. */
+  border-radius: var(--radius-md);
   outline: none;
   background: var(--color-surface-soft);
   color: var(--color-text-primary);
@@ -634,16 +635,15 @@
   background: var(--color-danger);
 }
 
-/* Brand pink fill with a white light reflection and a soft brand glow; label in ink (7.15:1),
-   white on #F770E3 is only 2.51:1. Pressed returns to the flat brand pink, never a darker pink. */
+/* Brand button: a soft brand tint with a brand-pink ring and an ink label. Text never sits on
+   saturated #F770E3 (ink reads harsh there; white is only 2.51:1). */
 .btn--brand {
-  color: var(--color-on-brand);
-  background: var(--gradient-brand-sheen), var(--color-brand);
-  box-shadow: var(--shadow-brand);
+  color: var(--color-text-primary);
+  background: var(--color-brand-subtle);
+  box-shadow: inset 0 0 0 var(--border-selected) var(--color-brand);
 }
 .btn--brand:active:not(:disabled) {
-  background: var(--color-brand);
-  box-shadow: none;
+  background: var(--color-brand-tint);
 }
 
 .btn:disabled:not(.is-loading) {

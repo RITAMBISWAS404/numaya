@@ -55,19 +55,19 @@ export function Foundations() {
       <Section
         id="brand"
         title="Brand"
-        intro="The Numaya pink #F770E3 is the identity. It appears at its exact value on marks, progress, selection, verification and like/send fills. Anything placed on a solid pink fill is dark ink: white on it is only 2.51:1."
+        intro="The Numaya pink #F770E3 is the identity. It appears at its exact value on marks, progress, selection, verification and like/send fills. No glyph or label sits directly on a solid pink fill: ink there reads harsh and white is only 2.51:1, so pink actions carry their glyph on a white inset, and selected pills are ink with a pink mark."
       >
         <Grid min={240}>
-          <Specimen title="Brand fill + ink glyph" note={`#F770E3 · ink ${ratio(tokenByName["--color-on-brand"].resolved, brandHex)}`}>
+          <Specimen title="Brand fill + white inset + ink glyph" note={`#F770E3 ring · ink on white ${ratio(tokenByName["--color-text-primary"].resolved, WHITE)}`}>
             <span className="sc-brand-demo">
               <span className="sc-brand-demo__mark">
                 <Icon name="check" size={28} stroke={2.75} />
               </span>
             </span>
           </Specimen>
-          <Specimen title="Brand fill + ink label" note={`--color-on-brand on --color-brand · ${ratio(tokenByName["--color-on-brand"].resolved, brandHex)}`}>
-            <span className="sc-pill-demo" style={{ background: "var(--color-brand)", color: "var(--color-on-brand)" }}>
-              Say hello
+          <Specimen title="Selected: ink pill + pink mark" note={`white on ink ${ratio(tokenByName["--color-text-on-inverse"].resolved, tokenByName["--color-surface-inverse"].resolved)} · pink tick on ink ${ratio(brandHex, tokenByName["--color-surface-inverse"].resolved)}`}>
+            <span className="sc-pill-demo" style={{ background: "var(--color-surface-inverse)", color: "var(--color-text-on-inverse)" }}>
+              Jazz <Icon name="check" size={14} stroke={2.2} style={{ color: "var(--color-brand)" }} />
             </span>
           </Specimen>
           <Specimen title="Brand emphasis in a headline" note={`Emphasis · --color-text-accent · exact #F770E3 · ${ratio(tokenByName["--color-text-accent"].resolved, WHITE)} on white · display-size hero headlines only, one word`}>

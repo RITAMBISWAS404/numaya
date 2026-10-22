@@ -464,11 +464,12 @@ button.chip:active {
   border-radius: 50%;
 }
 
-/* Checked: exact brand fill with an ink glyph (state also shown by the glyph). The tick is Solar's
-   check path, inlined so the native input needs no extra markup. */
+/* Checked: an ink box with a white tick (no glyph on saturated pink; chosen over a pink frame with
+   a white inset, whose smaller tick read weakly). The selected option card's pink ring is the brand
+   accent. The tick is Solar's check path, inlined so the native input needs no extra markup. */
 .choice__input--checkbox:checked {
-  background: var(--color-brand)
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314171f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E")
+  background: var(--color-surface-inverse)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E")
     center / 18px no-repeat;
   box-shadow: none;
 }
