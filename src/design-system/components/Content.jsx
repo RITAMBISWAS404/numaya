@@ -276,75 +276,64 @@ export function PhotoGrid({ photos, slots = 6, onAdd, onRemove, hint = "Hold and
 }
 
 /**
- * Discovery card. The photo carries the card; identity (name, age, verified, details) and shared
- * interests sit on its lower edge over a legibility scrim. `actions` (usually an ActionBar) overlaps
- * the card's bottom edge so the decision is attached to the person. Without a photo, a neutral
- * stand-in with a silhouette is shown: it never pretends to be a photograph.
+ * Discovery card (reference: Bumble profile card). The photo fills the card; status pills, name, age
+ * and the headline detail sit bottom-left over a legibility scrim; `actions` (e.g. a SuperSwipe
+ * button) sits bottom-right on the photo. Without a photo, a neutral stand-in with a silhouette is
+ * shown; it never pretends to be a photograph.
  */
-export function ProfileCard({ name, age, verified, details = [], shared = [], photoCount = 3, photoIndex = 0, isNew = false, src, actions }) {
+export function ProfileCard({ name, age, verified, details = [], isNew = false, src, photoAlt, actions }) {
+  const [headline] = details;
   return (
-    <article className={cx("profile-card", actions && "profile-card--with-actions")} aria-label={`${name}, ${age}`}>
+    <article className="profile-card" aria-label={`${name}, ${age}`}>
       <div className="profile-card__media">
         {src ? (
-          <img className="profile-card__img" src={src} alt={`Photo of ${name}`} />
+          <img className="profile-card__img" src={src} alt={photoAlt ?? `Photo of ${name}`} draggable="false" />
         ) : (
           <div className="profile-card__stand-in" role="img" aria-label={`${name} has not added a photo yet`}>
             <Icon name="user" size={136} weight="fill" />
           </div>
         )}
-        <div className="profile-card__progress" aria-hidden="true">
-          {Array.from({ length: photoCount }, (_, i) => (
-            <span key={i} className={cx(i === photoIndex && "is-current")} />
-          ))}
-        </div>
-        {isNew && <span className="profile-card__flag">New here</span>}
         <div className="profile-card__overlay">
-          <h3 className="profile-card__name">
-            {name}, {age}
-            {verified && <VerifiedBadge compact />}
-          </h3>
-          {details.length > 0 && (
-            <ul className="profile-card__details">
-              {details.map((d) => (
-                <li key={d.text} className="profile-card__detail">
-                  <Icon name={d.icon} size={16} /> {d.text}
-                </li>
-              ))}
-            </ul>
-          )}
-          {shared.length > 0 && (
-            <div className="profile-card__shared">
-              <p className="profile-card__shared-title">
-                <Icon name="heart" size={14} weight="fill" className="profile-card__shared-mark" /> You both like
-              </p>
-              <div className="profile-card__shared-chips">
-                {shared.map((s) => (
-                  <span key={s} className="chip chip--static chip--on-photo">
-                    {s}
-                  </span>
-                ))}
-              </div>
+          {(verified || isNew) && (
+            <div className="profile-card__pills">
+              {verified && (
+                <span className="profile-card__pill">
+                  <Icon name="verified" size={14} /> Verified
+                </span>
+              )}
+              {isNew && <span className="profile-card__pill">New here</span>}
             </div>
           )}
+          <h3 className="profile-card__name">
+            {name}, {age}
+          </h3>
+          {headline && (
+            <p className="profile-card__detail">
+              <Icon name={headline.icon} size={16} weight="bold" /> {headline.text}
+            </p>
+          )}
         </div>
+        {actions && <div className="profile-card__actions">{actions}</div>}
       </div>
-      {actions && <div className="profile-card__actions">{actions}</div>}
     </article>
   );
 }
 
-/** Pass / super like / like controls under a discovery card. */
+/**
+ * Pass / SuperSwipe / Like controls (reference: end of a Bumble profile). Pass and Like are ink
+ * circles at the edges; SuperSwipe is the one accent action in the centre.
+ */
 export function ActionBar({ onPass, onSuper, onLike, superDisabled = false }) {
   return (
     <div className="action-bar">
       <button type="button" className="action-bar__btn action-bar__btn--pass" aria-label="Pass" onClick={onPass}>
-        <Icon name="close" size={26} stroke={2.2} />
+        <Icon name="close" size={26} weight="bold" />
       </button>
       <button type="button" className="action-bar__btn action-bar__btn--super" aria-label="Super like" onClick={onSuper} disabled={superDisabled}>
-        <Icon name="star" size={24} stroke={2} />
+        <Icon name="star" size={26} weight="fill" />
       </button>
       <button type="button" className="action-bar__btn action-bar__btn--like" aria-label="Like" onClick={onLike}>
-        <Icon name="heart" size={26} stroke={2} />
+        <Icon name="heart" size={26} weight="fill" />
       </button>
     </div>
   );

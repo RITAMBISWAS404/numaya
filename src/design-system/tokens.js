@@ -46,6 +46,15 @@ export const tokens = [
     "description": null
   },
   {
+    "id": "primitive.color.neutral.25",
+    "name": "--p-color-neutral-25",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#f6f6f7",
+    "resolved": "#f6f6f7",
+    "description": "Near-white grey page (reference baseline): white section cards read as raised."
+  },
+  {
     "id": "primitive.color.neutral.50",
     "name": "--p-color-neutral-50",
     "layer": "primitive",
@@ -152,15 +161,6 @@ export const tokens = [
     "value": "#14171f",
     "resolved": "#14171f",
     "description": null
-  },
-  {
-    "id": "primitive.color.warm.50",
-    "name": "--p-color-warm-50",
-    "layer": "primitive",
-    "type": "color",
-    "value": "#f8f5f6",
-    "resolved": "#f8f5f6",
-    "description": "Blush-warm neutral (white with a trace of the brand pink, desaturated). Page surface so white cards read as raised."
   },
   {
     "id": "primitive.color.red.50",
@@ -824,9 +824,9 @@ export const tokens = [
     "name": "--color-surface-page",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.warm.50}",
-    "resolved": "#f8f5f6",
-    "description": "Tab-root page background. White cards sit on it with a soft shadow instead of a border."
+    "value": "{primitive.color.neutral.25}",
+    "resolved": "#f6f6f7",
+    "description": "App page background (Discover, Chats, Profile, Settings). White cards sit on it with a soft shadow instead of a border."
   },
   {
     "id": "semantic.color.surface.canvas",
@@ -2196,8 +2196,8 @@ export const tokens = [
     "name": "--tab-bar-height",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.64}",
-    "resolved": "64px",
+    "value": "{primitive.dimension.56}",
+    "resolved": "56px",
     "description": null
   }
 ];

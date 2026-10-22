@@ -256,17 +256,17 @@ describe("identity", () => {
 });
 
 describe("discovery card", () => {
-  it("ProfileCard puts identity on the photo, actions on its edge, and labels the photo stand-in honestly", async () => {
+  it("ProfileCard puts identity and actions on the photo and labels the photo stand-in honestly", async () => {
     const user = userEvent.setup();
     const onLike = vi.fn();
     const { container } = render(
-      <ProfileCard name="Maya" age={29} verified shared={["Jazz"]} details={[{ icon: "user", text: "Designer" }]} actions={<ActionBar onPass={() => {}} onSuper={() => {}} onLike={onLike} />} />,
+      <ProfileCard name="Maya" age={29} verified details={[{ icon: "user", text: "Designer" }]} actions={<ActionBar onPass={() => {}} onSuper={() => {}} onLike={onLike} />} />,
     );
     expect(screen.getByRole("article", { name: "Maya, 29" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Maya, 29/ })).toBeInTheDocument();
-    expect(container.querySelector(".profile-card__media + .profile-card__actions")).not.toBeNull();
+    expect(screen.getByText("Verified")).toBeInTheDocument();
+    expect(container.querySelector(".profile-card__media .profile-card__actions")).not.toBeNull();
     expect(screen.getByRole("img", { name: "Maya has not added a photo yet" })).toBeInTheDocument();
-    expect(screen.getByText("Jazz")).toHaveClass("chip--on-photo");
     await user.click(screen.getByRole("button", { name: "Like" }));
     expect(onLike).toHaveBeenCalled();
   });

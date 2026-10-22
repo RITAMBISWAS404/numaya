@@ -719,21 +719,16 @@
   text-transform: uppercase;
 }
 
-/* Floating tab bar: an inset, softly rounded bar on the page with one float shadow and no border.
-   Active = brand-tint surface behind the item + filled ink icon + semibold ink label, so state is
-   never carried by colour alone. The bar sits in the layout flow, so it never covers content. */
+/* Tab bar (reference: Bumble): flat white bar across the bottom, icon over label. Active = filled
+   ink icon + bold ink label; inactive = muted regular icons. No capsule, no tinted blob. */
 .tab-bar {
   display: grid;
   grid-auto-columns: 1fr;
   grid-auto-flow: column;
-  gap: var(--space-1);
-  height: var(--tab-bar-height);
-  margin: var(--space-2) var(--layout-gutter) var(--safe-bottom);
-  /* Nested corners: bar radius (xl 28) = item radius (lg 20) + this 8px inset. */
-  padding: var(--space-2);
-  border-radius: var(--radius-xl);
+  height: calc(var(--tab-bar-height) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
   background: var(--color-surface);
-  box-shadow: var(--shadow-float);
+  box-shadow: 0 calc(-1 * var(--border-hairline)) 0 var(--color-border-subtle);
 }
 
 .tab-bar__item {
@@ -741,14 +736,13 @@
   display: grid;
   align-content: center;
   justify-items: center;
-  gap: 2px;
+  gap: 3px;
   min-width: var(--size-touch-min);
-  border-radius: var(--radius-lg);
   color: var(--color-text-muted);
   font-size: 11px;
   line-height: 13px;
   font-weight: var(--font-weight-medium);
-  transition: color var(--motion-duration-base), background-color var(--motion-duration-base), transform var(--motion-duration-fast) var(--motion-ease-out);
+  transition: color var(--motion-duration-base), opacity var(--motion-duration-fast);
 }
 
 .tab-bar__item:hover {
@@ -756,17 +750,16 @@
 }
 
 .tab-bar__item:active {
-  transform: scale(0.96);
+  opacity: 0.6;
 }
 
 .tab-bar__item:focus-visible {
-  outline-offset: -2px;
+  outline-offset: -4px;
 }
 
 .tab-bar__item.is-current {
-  background: var(--color-brand-tint);
   color: var(--color-text-primary);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-bold);
 }
 
 .tab-bar__icon {

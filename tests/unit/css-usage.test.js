@@ -10,7 +10,7 @@ const defined = new Set([...tokensCss.matchAll(/(--[a-z0-9-]+):/g)].map((m) => m
 // Runtime and component-local custom properties set in CSS or inline styles.
 const RUNTIME = new Set([
   "--safe-top", "--safe-bottom", "--keyboard-inset", "--keypad-h",
-  "--x", "--r", "--s", "--i", "--from", "--to", "--code-length", "--code-group", "--sc-min", "--avatar-size", "--dx", "--rot",
+  "--x", "--r", "--s", "--i", "--from", "--to", "--code-length", "--code-group", "--sc-min", "--avatar-size", "--dx", "--rot", "--p",
   "--profile-card-photo-height", "--profile-card-photo-min", "--profile-card-ratio",
 ]);
 const files = walk("src").filter((f) => /\.(css|jsx?)$/.test(f) && !f.endsWith("tokens.css") && !f.endsWith("tokens.js"));
@@ -50,11 +50,15 @@ describe("geometry rules", () => {
     return m ? m[2] : "";
   };
 
-  it("ordinary controls are not pills", () => {
-    for (const sel of [".btn", ".chip", ".badge", ".tag", ".segmented", ".segmented__item", ".pill"]) {
+  it("ordinary controls are not pills (chips are pills, as in the reference)", () => {
+    for (const sel of [".btn", ".badge", ".tag", ".segmented", ".segmented__item", ".pill"]) {
       expect(block(sel), sel).toContain("border-radius");
       expect(block(sel), sel).not.toMatch(/radius-pill|999px/);
     }
+  });
+
+  it("chips are pills, as in the reference", () => {
+    expect(block(".chip")).toMatch(/radius-pill/);
   });
 
   it("applies squircle corners only as a @supports enhancement", () => {

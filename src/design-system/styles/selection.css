@@ -189,7 +189,8 @@
   gap: 6px;
   height: var(--chip-height);
   padding: 0 var(--space-3) 0 14px;
-  border-radius: var(--radius-sm);
+  /* Pills, as in the reference (interest and "about me" chips). */
+  border-radius: var(--radius-pill);
   /* Unselected: a soft fill, no outline. Selected adds the brand tint and ring. */
   background: var(--color-surface-soft);
   box-shadow: none;
@@ -232,6 +233,11 @@ button.chip:active {
   background: var(--color-surface-soft);
   box-shadow: none;
   font-size: var(--type-label-size);
+}
+
+/* Shared with the viewer (reference: highlighted interest chips): grey chip with an accent ring. */
+.chip--shared {
+  box-shadow: inset 0 0 0 var(--border-selected) var(--color-border-brand);
 }
 
 .chip__remove {
@@ -510,7 +516,7 @@ button.chip:active {
 }
 
 .slider__value {
-  color: var(--color-text-brand);
+  color: var(--color-text-primary);
   font-weight: var(--font-weight-semibold);
   font-variant-numeric: tabular-nums;
 }
@@ -530,10 +536,10 @@ button.chip:active {
   border-radius: var(--radius-pill);
   background: linear-gradient(
     90deg,
-    var(--color-surface-sunken) var(--from),
-    var(--color-brand) var(--from),
-    var(--color-brand) var(--to),
-    var(--color-surface-sunken) var(--to)
+    var(--color-border-strong) var(--from),
+    var(--color-surface-inverse) var(--from),
+    var(--color-surface-inverse) var(--to),
+    var(--color-border-strong) var(--to)
   );
 }
 
@@ -554,9 +560,10 @@ button.chip:active {
 .slider__track input::-webkit-slider-thumb {
   width: 28px;
   height: 28px;
+  /* Reference: solid ink thumbs on an ink active track. */
   border-radius: 50%;
-  background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-focus) var(--color-brand), var(--shadow-xs);
+  background: var(--color-surface-inverse);
+  box-shadow: var(--shadow-xs);
   cursor: grab;
   pointer-events: auto;
   appearance: none;
@@ -566,9 +573,9 @@ button.chip:active {
 .slider__track input::-moz-range-thumb {
   width: 28px;
   height: 28px;
-  border: var(--border-focus) solid var(--color-brand);
+  border: 0;
   border-radius: 50%;
-  background: var(--color-surface);
+  background: var(--color-surface-inverse);
   cursor: grab;
   pointer-events: auto;
 }
@@ -578,5 +585,5 @@ button.chip:active {
 }
 
 .slider__track input:focus-visible::-webkit-slider-thumb {
-  box-shadow: inset 0 0 0 var(--border-focus) var(--color-focus-ring), 0 0 0 4px var(--color-focus-halo);
+  box-shadow: 0 0 0 3px var(--color-surface), 0 0 0 5px var(--color-focus-ring);
 }

@@ -7,6 +7,7 @@
   --p-color-pink-200: #fdd4f7;
   --p-color-pink-500: #f770e3;
   --p-color-neutral-0: #ffffff;
+  --p-color-neutral-25: #f6f6f7;
   --p-color-neutral-50: #f3f5f8;
   --p-color-neutral-100: #eceff3;
   --p-color-neutral-200: #e7e9ed;
@@ -19,7 +20,6 @@
   --p-color-neutral-800: #2b303b;
   --p-color-neutral-850: #1a1d26;
   --p-color-neutral-900: #14171f;
-  --p-color-warm-50: #f8f5f6;
   --p-color-red-50: #fdf0f2;
   --p-color-red-600: #c8364f;
   --p-color-green-50: #eaf7f0;
@@ -95,7 +95,7 @@
   --color-surface-soft: var(--p-color-neutral-50);
   --color-surface-sunken: var(--p-color-neutral-100);
   --color-surface-photo: var(--p-color-neutral-750);
-  --color-surface-page: var(--p-color-warm-50);
+  --color-surface-page: var(--p-color-neutral-25);
   --color-surface-canvas: var(--p-color-neutral-100);
   --color-surface-brand: var(--p-color-pink-50);
   --color-surface-inverse: var(--p-color-neutral-900);
@@ -249,7 +249,7 @@
   --code-cell-radius: var(--p-dimension-10);
   --switch-width: 51px;
   --switch-height: 31px;
-  --tab-bar-height: var(--p-dimension-64);
+  --tab-bar-height: var(--p-dimension-56);
 }
 
 @media (prefers-reduced-motion: reduce) {

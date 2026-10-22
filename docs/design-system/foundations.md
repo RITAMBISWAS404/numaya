@@ -60,7 +60,9 @@ or brand colour. Numerals in inputs, codes and prices use `tabular-nums`.
   badges. Never for ordinary buttons, chips, tabs or badges.
 - **Borders:** hairline 1px, selected 1.5px, focus 2px.
 - **Gutters:** 16px screen padding; the Discover card runs to 8px from the edges so the photo leads.
-- **Pink footprint:** like, selected and active states, verification, progress, toggles and the match
+- **Reference baseline:** chips are pills, Pass and Like are ink circles, sliders are ink, the Discover
+  photo card and section cards use 16px corners. SuperSwipe is the single brand-pink action on Discover.
+- **Pink footprint:** SuperSwipe, selected states, verification, progress, toggles and the match
   mark. Avatars, placeholders, empty states, info banners and completion badges are neutral.
 - **Surfaces:** app screens (Discover, Chats, a conversation, Match, Profile, Settings) sit on
   `--color-surface-page`, a blush-warm neutral; cards and list groups are white and raised with a
@@ -90,10 +92,10 @@ accessible label; the icons themselves are `aria-hidden`.
 
 ## Navigation
 
-The bottom tab bar floats: an inset white bar (`radius.xl`, `shadow.float`, no border) above the
-bottom safe area. It stays in the layout flow under the scrolling content, so it never covers content,
-the composer or bottom actions. The active tab sits on a brand-tint surface with a filled ink icon and
-an ink semibold label; inactive tabs are muted regular icons. Items are at least 52px tall.
+Reference baseline ([Bumble reference map](../bumble-reference-map.md)): a flat white tab bar across the
+bottom with a hairline top edge, icon over label, in the reference order (Profile, Discover, Chats).
+The active tab is a filled ink icon with a bold ink label; inactive tabs are muted regular icons. The
+bar sits in the layout flow under the scrolling content, so it never covers content or composers.
 
 ## Interaction states
 

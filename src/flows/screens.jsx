@@ -42,22 +42,26 @@ import {
   Wordmark,
 } from "../design-system/index.js";
 import { INTERESTS, PEOPLE, REPORT_REASONS } from "./data.js";
+import { photosOf } from "./scenes.js";
 import { conversations, discoveryQueue, hiddenByFilters, newMatches, useStore } from "./store.js";
 
+// Order follows the reference tab bar: Profile first, then browsing, then chats.
 const TABS = [
+  { id: "profile", label: "Profile", icon: "user" },
   { id: "discover", label: "Discover", icon: "cards" },
   { id: "chats", label: "Chats", icon: "message" },
-  { id: "profile", label: "Profile", icon: "user" },
 ];
 const TAB_TARGET = { discover: "discovery", chats: "chats", profile: "profile" };
 const ageOf = (year) => (year.length === 4 ? new Date().getFullYear() - Number(year) : null);
 
 /** Shared screen scaffold inside a preview frame. */
-function Frame({ top, footer, tab, go, children, tone, kind }) {
+function Frame({ top, footer, tab, go, children, tone, kind, onBodyScroll }) {
   return (
     <div className={`fl-screen${tone ? ` fl-screen--${tone}` : ""}${kind ? ` fl-screen--${kind}` : ""}`}>
       {top}
-      <div className="fl-screen__body">{children}</div>
+      <div className="fl-screen__body" onScroll={onBodyScroll}>
+        {children}
+      </div>
       {footer && <div className="fl-screen__footer">{footer}</div>}
       {tab && <TabBar items={TABS} current={tab} onChange={(id) => go(TAB_TARGET[id])} />}
     </div>
@@ -243,14 +247,39 @@ function useSwipe(onDecide) {
   return { dx, handlers };
 }
 
+/** Discover header (reference: centred wordmark, filter icon right, scroll-progress track below). */
+function DiscoverHeader({ age, distance, progress, onFilters, showFilters }) {
+  return (
+    <header className="fl-disc-head">
+      <div className="fl-disc-head__bar">
+        <span className="fl-disc-head__side" aria-hidden="true" />
+        <h1 className="fl-disc-head__title">
+          <Wordmark size="sm" />
+          <span className="visually-hidden">Discover</span>
+        </h1>
+        <span className="fl-disc-head__side fl-disc-head__side--end">
+          {showFilters && (
+            <IconButton icon="filter" variant="plain" label={`Filters: Ages ${age[0]}–${age[1]}, within ${distance} km. Change`} onClick={onFilters} />
+          )}
+        </span>
+      </div>
+      <div className="fl-disc-head__progress" aria-hidden="true">
+        <span style={{ "--p": progress }} />
+      </div>
+    </header>
+  );
+}
+
 export function Discovery({ go }) {
   const [state, dispatch] = useStore();
   const [toast, flash] = useFlash();
+  const [progress, setProgress] = useState(0);
   const queue = discoveryQueue(state);
   const hidden = hiddenByFilters(state);
   const id = queue[0];
   const person = id && PEOPLE[id];
   const { age, distance } = state.prefs;
+  const photos = person ? photosOf(person) : [];
 
   const decide = (liked) => {
     if (!person) return;
@@ -261,33 +290,25 @@ export function Discovery({ go }) {
   const { dx, handlers } = useSwipe(decide);
   const snoozed = state.prefs.snooze;
   const intent = dx >= SWIPE_THRESHOLD / 2 ? "like" : dx <= -SWIPE_THRESHOLD / 2 ? "pass" : null;
+  const onScroll = (e) => {
+    const el = e.currentTarget;
+    const max = el.scrollHeight - el.clientHeight;
+    setProgress(max > 0 ? el.scrollTop / max : 0);
+  };
+  const photo = (i) =>
+    photos[i] && (
+      <img key={`p${i}`} className="fl-pf__photo" src={photos[i]} alt={`${person.name}, photo ${i + 1} (illustration)`} draggable="false" />
+    );
+  const [lookingFor, livesIn, ...otherFacts] = person?.facts ?? [];
 
   return (
     <Frame
       tone="page"
       kind="discover"
-      top={
-        <TopBar
-          largeTitle="Discover"
-          actions={
-            !snoozed && (
-              <Button
-                variant="secondary"
-                size="sm"
-                block={false}
-                icon="filter"
-                className="fl-filter-btn"
-                aria-label={`Filters: ages ${age[0]}–${age[1]}, within ${distance} km. Change`}
-                onClick={() => go("settings")}
-              >
-                Ages {age[0]}–{age[1]} · {distance} km
-              </Button>
-            )
-          }
-        />
-      }
+      top={<DiscoverHeader age={age} distance={distance} progress={progress} showFilters={!snoozed} onFilters={() => go("settings")} />}
       tab="discover"
       go={go}
+      onBodyScroll={onScroll}
     >
       {snoozed ? (
         <div className="fl-center fl-fill">
@@ -295,31 +316,81 @@ export function Discovery({ go }) {
             You’re snoozed, so you won’t see new people and they won’t see you. Your matches and chats are still here.
           </EmptyState>
         </div>
-      ) : (
-      <>
-      {person ? (
-        <div className="fl-stack">
+      ) : person ? (
+        <div className="fl-pf" key={id}>
           <div
             className={`fl-swipe${dx ? " is-dragging" : ""}`}
             style={{ "--dx": `${dx}px`, "--rot": `${dx / 24}deg` }}
             {...handlers}
-            aria-label={`${person.name}. Swipe right to like, left to pass, or use the Pass and Like buttons.`}
+            aria-label={`${person.name}. Swipe right to like, left to pass, or use the buttons at the end of the profile.`}
             role="group"
           >
             <ProfileCard
-              key={id}
               {...person}
-              details={[...person.details, { icon: "location", text: `${person.distanceKm} km away` }]}
-              actions={<ActionBar onPass={() => decide(false)} onSuper={() => decide(true)} onLike={() => decide(true)} />}
+              src={photos[0]}
+              photoAlt={`${person.name}, photo 1 (illustration)`}
+              actions={
+                <button type="button" className="action-bar__btn action-bar__btn--super" aria-label="SuperSwipe" onClick={() => decide(true)}>
+                  <Icon name="star" size={26} weight="fill" />
+                </button>
+              }
             />
             {intent && <span className={`fl-swipe__stamp fl-swipe__stamp--${intent}`}>{intent === "like" ? "Like" : "Pass"}</span>}
           </div>
-          <PromptCard prompt={person.prompt.q} answer={person.prompt.a} />
-          <ListGroup footnote="Sample profiles. Distances are illustrative, not real locations.">
-            {person.facts.map((f) => (
-              <ListRow key={f.label} icon={f.icon} label={f.label} kind="info" value={f.value} />
-            ))}
-          </ListGroup>
+
+          <section className="card fl-pf__section">
+            <h2 className="fl-pf__title">{person.prompt.q}</h2>
+            <p className="fl-pf__body">{person.prompt.a}</p>
+          </section>
+
+          {lookingFor && (
+            <section className="card fl-pf__section">
+              <h2 className="fl-pf__title">About me</h2>
+              <div className="fl-chip-row">
+                {[lookingFor, ...otherFacts].map((f) => (
+                  <span key={f.label} className="chip chip--static" title={f.label}>
+                    <Icon name={f.icon} size={16} /> {f.value}
+                  </span>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {photo(1)}
+
+          {person.shared?.length > 0 && (
+            <section className="card fl-pf__section">
+              <h2 className="fl-pf__title">You both like</h2>
+              <div className="fl-chip-row">
+                {person.shared.map((s) => (
+                  <span key={s} className="chip chip--static chip--shared">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {photo(2)}
+
+          <section className="card fl-pf__section">
+            <h2 className="fl-pf__title">My location</h2>
+            <p className="fl-pf__meta">
+              <Icon name="location" size={20} /> ~{person.distanceKm} km away
+            </p>
+            {livesIn && (
+              <div className="fl-chip-row">
+                <span className="chip chip--static">
+                  {livesIn.label} {livesIn.value}
+                </span>
+              </div>
+            )}
+          </section>
+
+          {photos.slice(3).map((_, i) => photo(i + 3))}
+
+          <ActionBar onPass={() => decide(false)} onSuper={() => decide(true)} onLike={() => decide(true)} />
+          <p className="fl-caption fl-center">Sample profiles with illustrated photos. Distances are illustrative.</p>
         </div>
       ) : (
         <div className="fl-center fl-fill">
@@ -333,8 +404,6 @@ export function Discovery({ go }) {
             </EmptyState>
           )}
         </div>
-      )}
-      </>
       )}
       <Toast open={Boolean(toast)} placement="bottom" icon="heart">
         {toast}
@@ -680,15 +749,18 @@ export function Settings({ go }) {
   return (
     <Frame tone="page" top={<TopBar onBack={() => go("profile")} title="Settings" />}>
       <div className="fl-stack fl-gap-lg">
-        <ListGroup title="Who you see">
+        {/* Filters (reference: Bumble filters): a question heading over each white card. */}
+        <ListGroup title="How old are they?">
           <li className="list-row">
             <div className="list-row__hit fl-slider-row">
               <RangeSlider label="Age" min={18} max={70} value={prefs.age} onChange={(v) => setPrefs({ age: v })} />
             </div>
           </li>
+        </ListGroup>
+        <ListGroup title="How far away are they?">
           <li className="list-row">
             <div className="list-row__hit fl-slider-row">
-              <Slider label="Distance" min={1} max={100} value={prefs.distance} onChange={(v) => setPrefs({ distance: v })} format={(v) => `${v} km`} />
+              <Slider label="Distance" min={1} max={100} value={prefs.distance} onChange={(v) => setPrefs({ distance: v })} format={(v) => `Up to ${v} km`} />
             </div>
           </li>
         </ListGroup>

@@ -321,22 +321,7 @@ body {
   flex: 1;
 }
 
-/* Discover: page surface, filter control and swipe ------------------------- */
-/* The card runs nearly edge to edge and fills the height between header and tab bar, so the photo
-   dominates; the actions overlap its bottom edge (34px below the card). */
-.fl-screen--discover .fl-screen__body {
-  padding-inline: var(--layout-gutter-tight);
-  container-type: size;
-}
-
-.fl-screen--discover .profile-card {
-  --profile-card-ratio: auto;
-  --profile-card-photo-height: calc(100cqh - 36px);
-}
-
-.fl-screen--discover .fl-swipe ~ * {
-  margin-inline: var(--space-2);
-}
+/* Discover (reference: Bumble profile browsing) ------------------------------ */
 .fl-screen--page {
   background: var(--color-surface-page);
 }
@@ -350,12 +335,6 @@ body {
 .fl-screen--page .composer__field:not(:focus-within) {
   background: var(--color-surface);
   box-shadow: var(--shadow-xs);
-}
-
-.fl-filter-btn.btn--secondary {
-  height: 36px;
-  padding: 0 var(--space-3);
-  font-variant-numeric: tabular-nums;
 }
 
 /* Inbox: one raised group of conversations on the page. */
@@ -397,9 +376,101 @@ body {
   color: var(--color-text-subtle);
 }
 
-.fl-filter-btn .btn__icon {
-  width: 16px;
-  height: 16px;
+/* Header: side slots, centred wordmark, short scroll-progress track. */
+.fl-disc-head {
+  flex: none;
+  display: grid;
+  gap: 2px;
+  padding-bottom: var(--space-2);
+}
+
+.fl-disc-head__bar {
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  align-items: center;
+  height: 48px;
+  padding: 0 var(--space-1);
+}
+
+.fl-disc-head__title {
+  display: flex;
+  justify-content: center;
+}
+
+.fl-disc-head__side--end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.fl-disc-head__progress {
+  justify-self: center;
+  width: 128px;
+  height: 3px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--color-border-subtle);
+}
+
+.fl-disc-head__progress span {
+  display: block;
+  width: 36%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-surface-inverse);
+  transform: translateX(calc(var(--p, 0) * 178%));
+}
+
+/* The profile: photo card 8px from the edges filling the viewport, then section cards. */
+.fl-screen--discover .fl-screen__body {
+  padding: 0 var(--layout-gutter-tight) var(--space-4);
+  container-type: size;
+}
+
+.fl-screen--discover .profile-card {
+  --profile-card-ratio: auto;
+  --profile-card-photo-height: 100cqh;
+}
+
+.fl-pf {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.fl-pf__section {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.fl-pf__title {
+  font-size: var(--type-body-size);
+  line-height: 22px;
+  font-weight: var(--font-weight-bold);
+}
+
+.fl-pf__body {
+  font-size: 17px;
+  line-height: 24px;
+}
+
+.fl-pf__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-secondary);
+}
+
+.fl-pf__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  user-select: none;
+}
+
+.fl-pf .action-bar {
+  padding: var(--space-4) var(--space-2) var(--space-2);
 }
 
 .fl-swipe {

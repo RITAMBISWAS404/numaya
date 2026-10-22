@@ -192,6 +192,8 @@ try {
         return {
           likeBg: cs("#discovery .action-bar__btn--like").backgroundColor,
           likeFg: cs("#discovery .action-bar__btn--like").color,
+          superBg: cs("#discovery .profile-card .action-bar__btn--super").backgroundColor,
+          superFg: cs("#discovery .profile-card .action-bar__btn--super").color,
           chipShadow: cs("#interests .chip.is-selected").boxShadow,
           switchOn: cs("#settings .switch:checked").backgroundColor,
           tabActive: cs("#discovery .tab-bar__item.is-current").backgroundColor,
@@ -200,10 +202,11 @@ try {
           verified: cs("#chats .avatar__badge, #discovery .verified__mark").backgroundColor,
         };
       });
-      check("flows: like button is brand pink with an ink glyph", states.likeBg === PINK && states.likeFg === INK, `${states.likeBg} / ${states.likeFg}`);
+      check("flows: like is an ink circle with a white glyph (reference)", states.likeBg === INK && states.likeFg === "rgb(255, 255, 255)", `${states.likeBg} / ${states.likeFg}`);
+      check("flows: SuperSwipe is the single brand-pink action, with an ink glyph", states.superBg === PINK && states.superFg === INK, `${states.superBg} / ${states.superFg}`);
       check("flows: selected chip uses the brand pink border", states.chipShadow.includes(PINK), states.chipShadow.slice(0, 60));
       check("flows: switch on uses brand pink", states.switchOn === PINK, states.switchOn);
-      check("flows: active tab sits on the brand tint with an ink label", states.tabActive === "rgb(254, 238, 252)" && states.tabActiveFg === INK, `${states.tabActive} / ${states.tabActiveFg}`);
+      check("flows: active tab is ink on the flat bar, with no tinted surface (reference)", states.tabActive === "rgba(0, 0, 0, 0)" && states.tabActiveFg === INK, `${states.tabActive} / ${states.tabActiveFg}`);
       check("flows: progress fill uses brand pink", states.progress === PINK, states.progress);
       // Geometry, elevation, icons and bottom navigation.
       const geo = await p.evaluate(() => {
@@ -225,7 +228,8 @@ try {
           tabBelowBody: tab.getBoundingClientRect().top >= document.querySelector("#discovery .fl-screen__body").getBoundingClientRect().bottom - 0.5,
           cardBorder: getComputedStyle(document.querySelector("#discovery .profile-card")).borderTopWidth,
           pageBg: getComputedStyle(document.querySelector("#discovery .fl-screen")).backgroundColor,
-          likeTop: document.querySelector("#discovery .action-bar__btn--like").getBoundingClientRect().bottom <= tab.getBoundingClientRect().top,
+          superTop: document.querySelector("#discovery .profile-card .action-bar__btn--super").getBoundingClientRect().bottom <= tab.getBoundingClientRect().top,
+          actionsAfterSections: (() => { const secs = document.querySelectorAll("#discovery .fl-pf__section"); const bar = document.querySelector("#discovery .fl-pf > .action-bar"); return secs.length >= 2 && [...secs].every((s) => s.compareDocumentPosition(bar) & Node.DOCUMENT_POSITION_FOLLOWING); })(),
           tabItemMin: Math.min(...items.map((r) => Math.min(r.width, r.height))),
           tabCurrent: tab.querySelectorAll(".tab-bar__item[aria-current='page']").length,
           icons: document.querySelectorAll("#discovery svg.ph, #discovery [class*='phosphor'], #discovery svg[viewBox='0 0 256 256']").length,
@@ -233,16 +237,20 @@ try {
         };
       });
       check("geometry: buttons are softly rounded, not capsules", geo.btnRadius >= 12 && geo.btnRadius <= 18, `${geo.btnRadius}px`);
-      check("geometry: tab items nest inside the bar (outer radius = inner radius + inset)", Math.abs(geo.tabRadius - geo.tabPad - geo.tabItemRadius) < 0.5, `${geo.tabRadius} = ${geo.tabItemRadius} + ${geo.tabPad}`);
       check("geometry: squircle corners apply where supported", !geo.squircleSupported || geo.btnCorner.includes("squircle"), `${geo.squircleSupported} / ${geo.btnCorner}`);
       check("elevation: card shadow is very light", geo.promptShadowAlpha > 0 && geo.promptShadowAlpha <= 0.08, `alpha ${geo.promptShadowAlpha}`);
       const tabAlpha = Math.max(0, ...[...geo.tabShadow.matchAll(/rgba\(\d+, \d+, \d+, ([0-9.]+)\)/g)].map((m) => parseFloat(m[1])));
-      check("navigation: floating bar has one soft shadow, no heavy elevation", tabAlpha > 0 && tabAlpha <= 0.14, geo.tabShadow.slice(0, 80));
-      check("navigation: bar is inset from the frame edges and softly rounded, not a capsule", geo.tabInset >= 8 && geo.tabRadius >= 18 && geo.tabRadius <= 28, `inset ${geo.tabInset} / radius ${geo.tabRadius}`);
+      check("navigation: flat full-width bar with only a hairline edge (reference)", geo.tabInset === 0 && geo.tabRadius === 0 && !/\d+px \d+px [1-9]/.test(geo.tabShadow.replace(/rgba?\([^)]*\)/g, "")), `inset ${geo.tabInset} / radius ${geo.tabRadius} / ${geo.tabShadow.slice(0, 60)}`);
       check("navigation: bar sits below the scrolling content, never over it", geo.tabBelowBody);
-      check("discover: actions are visible above the tab bar without scrolling", geo.likeTop);
+      check("discover: SuperSwipe sits on the photo, above the tab bar, without scrolling", geo.superTop);
+      check("discover: Pass and Like follow the profile, after its sections (reference)", geo.actionsAfterSections);
       check("discover: the photo dominates the screen (≥ 90% width, ≥ 55% height)", geo.photoShare.w >= 0.9 && geo.photoShare.h >= 0.55, `${geo.photoShare.w.toFixed(2)} × ${geo.photoShare.h.toFixed(2)}`);
-      check("surfaces: Discover page is tinted and the hero card has no border", geo.pageBg !== "rgb(255, 255, 255)" && geo.cardBorder === "0px", `${geo.pageBg} / ${geo.cardBorder}`);
+      check("surfaces: Discover page is a light grey and the hero card has no border", geo.pageBg !== "rgb(255, 255, 255)" && geo.cardBorder === "0px", `${geo.pageBg} / ${geo.cardBorder}`);
+      const imagery = await p.evaluate(() => {
+        const img = document.querySelector("#discovery .profile-card__img");
+        return { local: Boolean(img) && !/^https?:\/\/(?!localhost)/.test(img.getAttribute("src")), loaded: Boolean(img?.naturalWidth), standIn: Boolean(document.querySelector("#discovery .profile-card__stand-in")) };
+      });
+      check("discover: the card shows a locally bundled photo, not a placeholder panel", imagery.local && imagery.loaded && !imagery.standIn, JSON.stringify(imagery));
       const roll = await p.evaluate(() => {
         const cs = (sel) => getComputedStyle(document.querySelector(sel));
         const body = document.querySelector("#chat .fl-screen__body").getBoundingClientRect();
@@ -254,12 +262,15 @@ try {
           theirs: cs("#chat .message--them .message__bubble").backgroundColor,
           chip: cs("#interests .chip:not(.is-selected)").boxShadow,
           lastVisible: last.bottom <= body.bottom + 0.5,
+          stripCols: cs("#profile .fl-photo-strip").gridTemplateColumns.split(" ").length,
+          inbox: cs("#chats .fl-inbox").backgroundColor,
         };
       });
       check("surfaces: tab roots, chat, match and settings share the page tint", roll.pages.every((c) => c === roll.page), roll.pages.join(" | "));
       check("chat: outgoing bubbles are ink, incoming are white", roll.mine === INK && roll.theirs === "rgb(255, 255, 255)", `${roll.mine} / ${roll.theirs}`);
       check("selection: unselected chips are filled, not outlined", roll.chip === "none", roll.chip);
       check("chat: the last message sits above the composer", roll.lastVisible);
+      check("layout: profile photo strip and raised inbox keep their screen styles", roll.stripCols === 4 && roll.inbox === "rgb(255, 255, 255)", `${roll.stripCols} cols / ${roll.inbox}`);
       check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);
       check("navigation: exactly one current tab", geo.tabCurrent === 1);
       check("icons: Phosphor glyphs render and no legacy stroke icons remain", geo.icons > 0 && geo.legacyStrokeIcons === 0, `${geo.icons} phosphor / ${geo.legacyStrokeIcons} legacy`);
@@ -342,7 +353,8 @@ try {
       check("flows: distance filter empties Discover", (await textOf("discovery")).includes("No one fits your filters"));
       await f("discovery").getByRole("button", { name: "Widen age and distance" }).click();
       await wait(300);
-      check("flows: widening filters brings people back", (await textOf("discovery")).includes("Ages 18–70"));
+      const filterName = async () => (await f("discovery").getByRole("button", { name: /^Filters:/ }).getAttribute("aria-label")) ?? "";
+      check("flows: widening filters brings people back", (await filterName()).includes("Ages 18–70") && !(await textOf("discovery")).includes("No one fits your filters"));
 
       // Snooze pauses Discover, survives reload, and Resume restores it.
       await f("settings").getByRole("switch", { name: /Snooze/ }).check();
@@ -354,7 +366,7 @@ try {
       check("flows: snooze persists across reload", (await textOf("discovery")).includes("Discover is paused"));
       await f("discovery").getByRole("button", { name: "Resume" }).click();
       await wait(300);
-      check("flows: Resume restores Discover", (await textOf("discovery")).includes("Ages 18–70") && !(await textOf("profile")).includes("Snoozed"));
+      check("flows: Resume restores Discover", (await f("discovery").getByRole("button", { name: /^Filters:/ }).count()) === 1 && !(await textOf("discovery")).includes("Discover is paused") && !(await textOf("profile")).includes("Snoozed"));
 
       // Message alerts: off shows feedback and a Chats banner; the banner turns them back on.
       await f("settings").getByRole("switch", { name: /New messages/ }).uncheck();
