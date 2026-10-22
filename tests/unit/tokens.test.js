@@ -139,7 +139,9 @@ describe("geometry and elevation", () => {
     expect(r("xl")).toBeGreaterThan(r("card"));
     expect(r("card")).toBeGreaterThan(r("lg"));
     expect(r("lg")).toBeGreaterThan(r("md"));
-    expect(px("--code-cell-radius")).toBeLessThan(r("md"));
+    // Code cells: softer than the old 16px controls but tighter than cards and sheets.
+    expect(px("--code-cell-radius")).toBeGreaterThan(r("md"));
+    expect(px("--code-cell-radius")).toBeLessThan(r("lg"));
   });
 
   it("nested corners follow outer = inner + inset (tab bar around its items)", () => {

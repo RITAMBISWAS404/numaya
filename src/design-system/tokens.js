@@ -910,6 +910,15 @@ export const tokens = [
     "description": "Soft pink ring around a focused control (decorative; the ring token carries accessibility)."
   },
   {
+    "id": "semantic.color.focus.field",
+    "name": "--color-focus-field",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.pink.500}",
+    "resolved": "#f770e3",
+    "description": "Focus stroke of text fields, search, code cells and the composer: the exact brand pink, one 2px stroke plus the halo, no ink ring. The stroke is 2.51:1 on white, below the 3:1 non-text guide, so a focused field also turns from grey to white (a second, colour-independent cue). Buttons and other controls keep the ink ring."
+  },
+  {
     "id": "semantic.color.overlay.scrim",
     "name": "--color-overlay-scrim",
     "layer": "semantic",
@@ -1882,6 +1891,15 @@ export const tokens = [
     "description": null
   },
   {
+    "id": "semantic.shadow.thumb",
+    "name": "--shadow-thumb",
+    "layer": "semantic",
+    "type": "shadow",
+    "value": "0 0 0 0.5px rgb(20 23 31 / 0.06), 0 2px 6px rgb(20 23 31 / 0.16)",
+    "resolved": "0 0 0 0.5px rgb(20 23 31 / 0.06), 0 2px 6px rgb(20 23 31 / 0.16)",
+    "description": "White switch and slider thumbs: a barely-there edge and a soft drop so the white thumb reads on pink, grey and white without an outline."
+  },
+  {
     "id": "semantic.shadow.xs",
     "name": "--shadow-xs",
     "layer": "semantic",
@@ -2214,9 +2232,9 @@ export const tokens = [
     "name": "--code-cell-radius",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.12}",
-    "resolved": "12px",
-    "description": null
+    "value": "18px",
+    "resolved": "18px",
+    "description": "Six separate soft cells (chosen over one segmented group, whose empty positions disappeared): about a third of the 52px cell width, softer than fields' old 16px but not a capsule."
   },
   {
     "id": "component.switch.width",

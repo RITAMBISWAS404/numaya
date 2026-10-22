@@ -598,7 +598,8 @@ button.list-row__hit:hover {
   display: grid;
   place-items: center;
   padding-bottom: 30%;
-  color: var(--color-text-secondary);
+  /* Muted: the filled placeholder glyph is decorative and should not compete with the name. */
+  color: var(--color-text-muted);
 }
 
 /* Functional legibility overlay so white text always sits on a dark region. */

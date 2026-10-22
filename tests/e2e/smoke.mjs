@@ -279,9 +279,16 @@ try {
           slotEmpty: cs("#photos .photo-slot--empty").backgroundColor,
           slotEmptyEdge: cs("#photos .photo-slot--empty").boxShadow,
           switchOn: cs("#settings .switch:checked").backgroundColor,
+          switchOff: (() => { const s = document.querySelector("#settings .switch:not(:checked)"); const st = getComputedStyle(s); return { bg: st.backgroundColor, edge: st.boxShadow, thumb: getComputedStyle(s, "::after").backgroundColor }; })(),
+          slider: (() => { const t = document.querySelector("#settings .slider__track"); // The native thumb's pseudo-element has no computed style: read its rule instead.
+            const rule = [...document.styleSheets].flatMap((s) => [...s.cssRules]).find((r) => r.selectorText === ".slider__track input::-webkit-slider-thumb");
+            const thumb = rule && getComputedStyle(document.documentElement).getPropertyValue(rule.style.background.match(/var\((--[\w-]+)\)/)?.[1] ?? "").trim();
+            return { track: getComputedStyle(t, "::before").backgroundImage, thumb: thumb === "#ffffff" ? "rgb(255, 255, 255)" : thumb }; })(),
+          tabIdleIcon: cs("#discovery .tab-bar__item:not(.is-current) .tab-bar__icon").color,
+          tabIdleLabel: cs("#discovery .tab-bar__item:not(.is-current)").color,
           tabActive: cs("#discovery .tab-bar__item.is-current").backgroundColor,
           tabActiveFg: cs("#discovery .tab-bar__item.is-current").color,
-          tabActiveIcon: cs("#discovery .tab-bar__item.is-current .tab-bar__icon > svg").color,
+          tabActiveIcon: cs("#discovery .tab-bar__item.is-current .tab-bar__icon").color,
           progress: cs("#basics .progress__segment.is-done .progress__fill").backgroundColor,
           verified: cs("#chats .avatar__badge, #discovery .verified__mark").backgroundColor,
         };
@@ -292,7 +299,9 @@ try {
       check("flows: selecting a chip keeps its size (no reflow)", states.chipSizes[0] === states.chipSizes[1] && states.chipSizes[2] === states.chipSizes[3], states.chipSizes.join(" / "));
       check("flows: success badge puts an ink check on a white inset disc", states.badgeDisc === "rgb(255, 255, 255)" && states.badgeIcon === INK, `${states.badgeDisc} / ${states.badgeIcon}`);
       check("photos: empty slots (white, hairline) are distinct from filled photo placeholders (grey)", states.slotEmpty === "rgb(255, 255, 255)" && /inset/.test(states.slotEmptyEdge) && states.slotFilled !== states.slotEmpty, `${states.slotFilled} vs ${states.slotEmpty}`);
-      check("flows: switch on is ink (Meetup settings)", states.switchOn === INK, states.switchOn);
+      check("flows: switch on is a brand-pink track; off is a plain grey track, no outline, white thumb", states.switchOn === PINK && states.switchOff.bg === "rgb(215, 219, 225)" && states.switchOff.edge === "none" && states.switchOff.thumb === "rgb(255, 255, 255)", `${states.switchOn} / ${JSON.stringify(states.switchOff)}`);
+      check("flows: sliders have white thumbs on a brand-pink interval over a grey rail (no ink)", states.slider.thumb === "rgb(255, 255, 255)" && states.slider.track.includes(PINK) && states.slider.track.includes("rgb(215, 219, 225)") && !states.slider.track.includes(INK), JSON.stringify(states.slider));
+      check("navigation: idle tabs are soft grey with a readable label", states.tabIdleIcon === "rgb(154, 161, 172)" && states.tabIdleLabel === "rgb(100, 107, 120)", `${states.tabIdleIcon} / ${states.tabIdleLabel}`);
       check("flows: active tab sits on a grey pill with a pink icon and an ink label (Meetup)", states.tabActive === "rgb(236, 239, 243)" && states.tabActiveFg === INK && states.tabActiveIcon === PINK, `${states.tabActive} / ${states.tabActiveFg} / ${states.tabActiveIcon}`);
       check("flows: progress fill uses brand pink", states.progress === PINK, states.progress);
       // Geometry, elevation, icons and bottom navigation.
@@ -334,7 +343,8 @@ try {
           tabCurrent: tab.querySelectorAll(".tab-bar__item[aria-current='page']").length,
           icons: document.querySelectorAll("#discovery svg.solar").length,
           foreignIcons: document.querySelectorAll("svg.ph, [class*='phosphor'], svg[viewBox='0 0 256 256']").length,
-          activeTabFilled: !!document.querySelector("#discovery .tab-bar__item.is-current svg[class*='-bold']") && !document.querySelector("#discovery .tab-bar__item:not(.is-current) svg[class*='-bold']"),
+          activeTabFilled: [...document.querySelectorAll("#discovery .tab-bar__item svg")].every((s) => /-bold\b/.test(s.getAttribute("class"))),
+          lineGlyphs: [...document.querySelectorAll("#settings .top-bar svg, #chat .top-bar svg")].map((s) => s.getAttribute("class").match(/solar-([\w-]+)/)?.[1]).filter(Boolean),
           legacyStrokeIcons: document.querySelectorAll("#discovery svg[stroke-linecap='round'][viewBox='0 0 24 24']").length,
         };
       });
@@ -357,10 +367,10 @@ try {
         const media = document.querySelector("#discovery .profile-card__media");
         const s = getComputedStyle(media);
         const r = (sel) => parseFloat(getComputedStyle(document.querySelector(sel)).borderTopLeftRadius);
-        return { radius: parseFloat(s.borderTopLeftRadius), card: r("#discovery .fl-pf__section"), input: r("#basics .input"), bg: s.backgroundColor, ext: [...document.querySelectorAll("#discovery img")].filter((i) => /^https?:\/\/(?!localhost)/.test(i.src)).length, placeholders: document.querySelectorAll("#discovery .fl-pf__photo").length };
+        return { radius: parseFloat(s.borderTopLeftRadius), card: r("#discovery .fl-pf__section"), input: r("#basics .input"), textarea: r("#prompt .textarea__input"), inputShape: getComputedStyle(document.querySelector("#basics .input")).cornerShape, bg: s.backgroundColor, ext: [...document.querySelectorAll("#discovery img")].filter((i) => /^https?:\/\/(?!localhost)/.test(i.src)).length, placeholders: document.querySelectorAll("#discovery .fl-pf__photo").length };
       });
       check("discover: photo areas are neutral grey placeholders and no images are hotlinked", imagery.bg === "rgb(215, 219, 225)" && imagery.ext === 0 && imagery.placeholders >= 1, JSON.stringify(imagery));
-      check("geometry: corner hierarchy photo > card > input (32 / 24 / 16)", imagery.radius === 32 && imagery.card === 24 && imagery.input === 16, `${imagery.radius} / ${imagery.card} / ${imagery.input}`);
+      check("geometry: corner hierarchy photo 32 > card 24 > text area 20; single-line fields are true pills", imagery.radius === 32 && imagery.card === 24 && imagery.textarea === 20 && imagery.input >= 999 && imagery.inputShape !== "squircle", `${imagery.radius} / ${imagery.card} / ${imagery.textarea} / ${imagery.input} / ${imagery.inputShape}`);
       const roll = await p.evaluate(() => {
         const cs = (sel) => getComputedStyle(document.querySelector(sel));
         const body = document.querySelector("#chat .fl-screen__body").getBoundingClientRect();
@@ -400,12 +410,12 @@ try {
       check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);
       check("navigation: exactly one current tab", geo.tabCurrent === 1);
       check("icons: Solar glyphs render and no other icon family or legacy stroke icons remain", geo.icons > 0 && geo.foreignIcons === 0 && geo.legacyStrokeIcons === 0, `${geo.icons} solar / ${geo.foreignIcons} other / ${geo.legacyStrokeIcons} legacy`);
-      check("icons: the current tab uses the filled Solar variant of its own symbol, other tabs stay linear", geo.activeTabFilled);
+      check("icons: every tab uses the filled Solar glyph (colour and the pill mark the current one)", geo.activeTabFilled);
 
       await f("basics").getByLabel("First name").focus();
       await wait(500); // let the focus-ring transition finish before reading computed styles
       const focus = await p.evaluate(() => getComputedStyle(document.querySelector("#basics .input:focus")).boxShadow);
-      check("flows: field focus is an ink ring with a pink halo", focus.includes(INK) && focus.includes("rgba(247, 112, 227"), focus.slice(0, 80));
+      check("flows: field focus is one brand-pink 2px stroke with a pink halo, no ink ring", focus.includes(`${PINK} 0px 0px 0px 2px inset`) && focus.includes("rgba(247, 112, 227") && !focus.includes(INK), focus.slice(0, 90));
       for (const [name, path] of [["prototype", ""], ["flows", "flows.html"], ["showcase", "showcase.html"]]) {
         const q = await page({ width: 1440, height: 900 });
         await q.goto(base + path);

@@ -105,6 +105,7 @@
   --color-border-control: var(--p-color-neutral-450);
   --color-focus-ring: var(--p-color-neutral-900);
   --color-focus-halo: var(--p-color-alpha-pink-32);
+  --color-focus-field: var(--p-color-pink-500);
   --color-overlay-scrim: var(--p-color-alpha-ink-34);
   --color-overlay-hover-light: var(--p-color-alpha-white-55);
   --color-overlay-photo: var(--p-color-alpha-ink-62);
@@ -213,6 +214,7 @@
   --border-hairline: var(--p-dimension-1);
   --border-selected: 1.5px;
   --border-focus: var(--p-dimension-2);
+  --shadow-thumb: 0 0 0 0.5px rgb(20 23 31 / 0.06), 0 2px 6px rgb(20 23 31 / 0.16);
   --shadow-xs: 0 1px 2px rgb(20 23 31 / 0.05);
   --shadow-sm: 0 1px 2px rgb(20 23 31 / 0.04), 0 6px 16px -6px rgb(20 23 31 / 0.08);
   --shadow-md: 0 -1px 0 rgb(20 23 31 / 0.04), 0 -6px 20px -8px rgb(20 23 31 / 0.10);
@@ -251,7 +253,7 @@
   --progress-segment-width: var(--p-dimension-18);
   --progress-segment-height: var(--p-dimension-8);
   --code-cell-height: var(--p-dimension-60);
-  --code-cell-radius: var(--p-dimension-12);
+  --code-cell-radius: 18px;
   --switch-width: 51px;
   --switch-height: 31px;
   --tab-bar-height: var(--p-dimension-64);

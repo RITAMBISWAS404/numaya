@@ -361,7 +361,7 @@ export function ProfileCard({ name, age, verified, details = [], isNew = false, 
           </h3>
           {headline && (
             <p className="profile-card__detail">
-              <Icon name={headline.icon} size={16} weight="bold" /> {headline.text}
+              <Icon name={headline.icon} size={16} /> {headline.text}
             </p>
           )}
         </div>

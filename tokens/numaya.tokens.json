@@ -134,7 +134,8 @@
       },
       "focus": {
         "ring": { "$type": "color", "$value": "{primitive.color.neutral.900}", "$description": "Keyboard focus indicator. Ink (17:1) because pink is only 2.51:1 against white, below the 3:1 non-text minimum; the pink halo carries the brand." },
-        "halo": { "$type": "color", "$value": "{primitive.color.alpha.pink-32}", "$description": "Soft pink ring around a focused control (decorative; the ring token carries accessibility)." }
+        "halo": { "$type": "color", "$value": "{primitive.color.alpha.pink-32}", "$description": "Soft pink ring around a focused control (decorative; the ring token carries accessibility)." },
+        "field": { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "Focus stroke of text fields, search, code cells and the composer: the exact brand pink, one 2px stroke plus the halo, no ink ring. The stroke is 2.51:1 on white, below the 3:1 non-text guide, so a focused field also turns from grey to white (a second, colour-independent cue). Buttons and other controls keep the ink ring." }
       },
       "overlay": {
         "scrim": { "$type": "color", "$value": "{primitive.color.alpha.ink-34}" },
@@ -231,6 +232,7 @@
     },
     "shadow": {
       "$description": "Elevation scale. Neutral ink at low opacity. Flat controls and fields use none; they rely on surface contrast or a hairline border.",
+      "thumb":  { "$type": "shadow", "$value": "0 0 0 0.5px rgb(20 23 31 / 0.06), 0 2px 6px rgb(20 23 31 / 0.16)", "$description": "White switch and slider thumbs: a barely-there edge and a soft drop so the white thumb reads on pink, grey and white without an outline." },
       "xs":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.05)", "$description": "Tiny lift for small moving parts: switch knob, slider thumb, selected segment, selected option card." },
       "sm":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.04), 0 6px 16px -6px rgb(20 23 31 / 0.08)", "$description": "Raised cards and list groups, floating icon buttons. Replaces outlines: no ring, just a soft contact shadow." },
       "md":     { "$type": "shadow", "$value": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -6px 20px -8px rgb(20 23 31 / 0.10)", "$description": "Bottom sheets and bottom panels (shadow falls upward)." },
@@ -289,7 +291,7 @@
     "icon-button": { "size": { "$type": "dimension", "$value": "{primitive.dimension.40}" }, "size-sm": { "$type": "dimension", "$value": "{primitive.dimension.36}" } },
     "chip":        { "height": { "$type": "dimension", "$value": "{primitive.dimension.36}" } },
     "progress":    { "segment-width": { "$type": "dimension", "$value": "{primitive.dimension.18}" }, "segment-height": { "$type": "dimension", "$value": "{primitive.dimension.8}" } },
-    "code-cell":   { "height": { "$type": "dimension", "$value": "{primitive.dimension.60}" }, "radius": { "$type": "dimension", "$value": "{primitive.dimension.12}" } },
+    "code-cell":   { "height": { "$type": "dimension", "$value": "{primitive.dimension.60}" }, "radius": { "$type": "dimension", "$value": "18px", "$description": "Six separate soft cells (chosen over one segmented group, whose empty positions disappeared): about a third of the 52px cell width, softer than fields' old 16px but not a capsule." } },
     "switch":      { "width": { "$type": "dimension", "$value": "51px" }, "height": { "$type": "dimension", "$value": "31px" } },
     "tab-bar":     { "height": { "$type": "dimension", "$value": "{primitive.dimension.64}" } }
   }

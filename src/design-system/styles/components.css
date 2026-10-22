@@ -354,9 +354,10 @@
   width: 100%;
   min-width: 0;
   height: var(--size-control);
-  padding: 0 var(--space-4);
+  padding: 0 var(--space-5);
   border: 0;
-  border-radius: var(--radius-md);
+  /* Single-line fields are pills; multiline text areas keep a rounded rectangle (below). */
+  border-radius: var(--radius-pill);
   outline: none;
   background: var(--color-surface-soft);
   color: var(--color-text-primary);
@@ -379,12 +380,14 @@
   background: var(--color-surface-sunken);
 }
 
+/* One focus treatment for every field: a brand-pink stroke and the soft pink halo, no ink ring.
+   The field also turns white, so focus does not rely on the pink stroke alone. */
 .input:focus,
 .input:focus-visible,
 .input[aria-expanded="true"] {
   outline: none;
   background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-selected) var(--color-focus-ring), 0 0 0 4px var(--color-focus-halo);
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-focus-field), 0 0 0 4px var(--color-focus-halo);
 }
 
 .input--select {
@@ -420,8 +423,8 @@
   align-items: center;
   gap: 10px;
   height: 48px;
-  padding: 0 14px;
-  border-radius: var(--radius-md);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
   background: var(--color-surface-soft);
   color: var(--color-text-muted);
   transition: background-color var(--motion-duration-base), box-shadow var(--motion-duration-base);
@@ -429,7 +432,7 @@
 
 .search:focus-within {
   background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-selected) var(--color-focus-ring), 0 0 0 4px var(--color-focus-halo);
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-focus-field), 0 0 0 4px var(--color-focus-halo);
 }
 
 .search__input {
@@ -759,7 +762,7 @@
   gap: 2px;
   min-width: var(--size-touch-min);
   border-radius: var(--radius-pill);
-  color: var(--color-text-secondary);
+  color: var(--color-text-muted);
   font-size: 11px;
   line-height: 13px;
   font-weight: var(--font-weight-medium);
@@ -784,13 +787,21 @@
   font-weight: var(--font-weight-bold);
 }
 
-.tab-bar__item.is-current .tab-bar__icon > svg {
+.tab-bar__item.is-current .tab-bar__icon {
   color: var(--color-brand);
 }
 
+/* Every tab uses the filled Solar glyph: inactive ones in a soft grey (label stays readable at
+   5.4:1), the current one in brand pink on the grey pill with a bold ink label. */
 .tab-bar__icon {
   position: relative;
   display: grid;
+  color: var(--color-text-subtle);
+  transition: color var(--motion-duration-base);
+}
+
+.tab-bar__item:hover .tab-bar__icon {
+  color: var(--color-text-muted);
 }
 
 .tab-bar__icon .count-badge {
@@ -805,7 +816,7 @@
 .input.is-invalid,
 .input.is-invalid:focus {
   background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-selected) var(--color-danger);
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-danger);
 }
 
 .input:disabled {
@@ -821,6 +832,7 @@
 .textarea__input {
   height: auto;
   min-height: 120px;
+  border-radius: var(--radius-lg);
   padding: var(--space-4) var(--space-4) var(--space-8);
   resize: none;
   line-height: var(--type-body-line);

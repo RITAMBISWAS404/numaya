@@ -126,7 +126,7 @@
 
 .code__cell.is-active {
   background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-selected) var(--color-focus-ring), 0 0 0 4px var(--color-focus-halo);
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-focus-field), 0 0 0 4px var(--color-focus-halo);
 }
 
 .code__caret {
@@ -345,8 +345,8 @@ button.chip:active {
   height: var(--switch-height);
   margin: 0;
   border-radius: var(--radius-pill);
-  background: var(--color-surface-sunken);
-  box-shadow: inset 0 0 0 var(--border-selected) var(--color-border-control);
+  /* Off: a plain neutral track with the white thumb, no outline. */
+  background: var(--color-border-strong);
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
@@ -362,15 +362,14 @@ button.chip:active {
   height: 25px;
   border-radius: 50%;
   background: var(--color-surface);
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-thumb);
   transition: transform var(--motion-duration-base) var(--motion-ease-out);
 }
 
-/* On: ink, as in the Meetup settings references (S1, S2); state is also carried by the knob
-   position. Pink stays for selection and actions. */
+/* On: the brand-pink track with the same white thumb; state is also carried by the thumb
+   position (right = on), so it never relies on colour alone. */
 .switch:checked {
-  background: var(--color-surface-inverse);
-  box-shadow: none;
+  background: var(--color-brand);
 }
 
 .switch:checked::after {
@@ -554,16 +553,17 @@ button.chip:active {
 .slider__track::before {
   content: "";
   position: absolute;
-  top: 12px;
+  top: 11px;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 6px;
   border-radius: var(--radius-pill);
+  /* Neutral rail, brand-pink selected interval. */
   background: linear-gradient(
     90deg,
     var(--color-border-strong) var(--from),
-    var(--color-surface-inverse) var(--from),
-    var(--color-surface-inverse) var(--to),
+    var(--color-brand) var(--from),
+    var(--color-brand) var(--to),
     var(--color-border-strong) var(--to)
   );
 }
@@ -585,10 +585,10 @@ button.chip:active {
 .slider__track input::-webkit-slider-thumb {
   width: 28px;
   height: 28px;
-  /* Reference: solid ink thumbs on an ink active track. */
+  /* White thumbs with a soft neutral shadow (no outline) on the pink interval. */
   border-radius: 50%;
-  background: var(--color-surface-inverse);
-  box-shadow: var(--shadow-xs);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-thumb);
   cursor: grab;
   pointer-events: auto;
   appearance: none;
@@ -600,7 +600,8 @@ button.chip:active {
   height: 28px;
   border: 0;
   border-radius: 50%;
-  background: var(--color-surface-inverse);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-thumb);
   cursor: grab;
   pointer-events: auto;
 }
@@ -610,5 +611,5 @@ button.chip:active {
 }
 
 .slider__track input:focus-visible::-webkit-slider-thumb {
-  box-shadow: 0 0 0 3px var(--color-surface), 0 0 0 5px var(--color-focus-ring);
+  box-shadow: var(--shadow-thumb), 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-focus-ring);
 }

@@ -5,10 +5,9 @@
  * excluded: squircle would change their shape.
  */
 @supports (corner-shape: squircle) {
-  /* Pill buttons, chips and the pill composer are deliberately absent: a squircle on a 999px
-     radius renders as a superellipse rectangle, not a pill. */
-  .input,
-  .search,
+  /* Pill buttons, chips, single-line fields, search and the pill composer are deliberately
+     absent: a squircle on a 999px radius renders as a superellipse rectangle, not a pill. */
+  .textarea__input,
   .card,
   .badge,
   .tag,

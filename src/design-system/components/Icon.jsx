@@ -31,24 +31,44 @@ import { Tuning2Icon as L_Tuning2Icon } from "@solar-icons/react/linear/tuning-2
 import { UndoLeftRoundIcon as L_UndoLeftRoundIcon } from "@solar-icons/react/linear/undo-left-round";
 import { UserIcon as L_UserIcon } from "@solar-icons/react/linear/user";
 import { VerifiedCheckIcon as L_VerifiedCheckIcon } from "@solar-icons/react/linear/verified-check";
+import { BackspaceIcon as B_BackspaceIcon } from "@solar-icons/react/bold/backspace";
+import { BellIcon as B_BellIcon } from "@solar-icons/react/bold/bell";
+import { CameraIcon as B_CameraIcon } from "@solar-icons/react/bold/camera";
 import { ChatRoundIcon as B_ChatRoundIcon } from "@solar-icons/react/bold/chat-round";
+import { CloudCrossIcon as B_CloudCrossIcon } from "@solar-icons/react/bold/cloud-cross";
 import { CopyIcon as B_CopyIcon } from "@solar-icons/react/bold/copy";
+import { DangerTriangleIcon as B_DangerTriangleIcon } from "@solar-icons/react/bold/danger-triangle";
+import { FlagIcon as B_FlagIcon } from "@solar-icons/react/bold/flag";
+import { GalleryIcon as B_GalleryIcon } from "@solar-icons/react/bold/gallery";
 import { HeartIcon as B_HeartIcon } from "@solar-icons/react/bold/heart";
+import { InfoCircleIcon as B_InfoCircleIcon } from "@solar-icons/react/bold/info-circle";
+import { LockKeyholeMinimalisticIcon as B_LockKeyholeMinimalisticIcon } from "@solar-icons/react/bold/lock-keyhole-minimalistic";
+import { MapPointIcon as B_MapPointIcon } from "@solar-icons/react/bold/map-point";
 import { MenuDotsIcon as B_MenuDotsIcon } from "@solar-icons/react/bold/menu-dots";
+import { MicrophoneIcon as B_MicrophoneIcon } from "@solar-icons/react/bold/microphone";
+import { SettingsIcon as B_SettingsIcon } from "@solar-icons/react/bold/settings";
+import { ShieldCheckIcon as B_ShieldCheckIcon } from "@solar-icons/react/bold/shield-check";
 import { StarIcon as B_StarIcon } from "@solar-icons/react/bold/star";
+import { StarsIcon as B_StarsIcon } from "@solar-icons/react/bold/stars";
+import { Tuning2Icon as B_Tuning2Icon } from "@solar-icons/react/bold/tuning-2";
 import { UserIcon as B_UserIcon } from "@solar-icons/react/bold/user";
+import { VerifiedCheckIcon as B_VerifiedCheckIcon } from "@solar-icons/react/bold/verified-check";
 
 /**
  * Numaya icon wrapper over the Solar icon set (artwork by 480 Design, CC BY 4.0; see
  * THIRD_PARTY_NOTICES.md). One family only, imported per icon so the bundle carries only what is used.
  *
- * Semantic names stay stable; the Solar glyph behind each is chosen here. Weights:
- * - "regular": Solar Linear at a 1.5 stroke, for inactive, navigation and supporting icons.
- * - "bold": Solar Linear at a 2 stroke, for glyphs inside filled controls and at small sizes.
- * - "fill": Solar Bold, the filled drawing of the same symbol, for active and selected states (the
- *   current tab, a liked heart). Icons without a filled counterpart fall back to "bold".
- * `stroke` is kept for call-site compatibility: stroke >= 2 maps to "bold". A `strokeWidth` prop overrides
- * the weight's stroke for the rare glyph that must match a heavier neighbour (the Pass X).
+ * Semantic names stay stable; the Solar glyph behind each is chosen here. Filled by default:
+ * every icon with a recognisable filled drawing (FILLED) renders as Solar Bold unless a weight is
+ * given. Line glyphs with no filled form (chevrons, arrows, check, plus, close, search, closed eye,
+ * undo) render as Solar Linear: their Bold drawings are a solid triangle, a solid blob or the same
+ * line, which reads worse. Weights:
+ * - "fill": Solar Bold (the default where available).
+ * - "regular": Solar Linear at a 1.5 stroke, only where an outline carries meaning (the unliked
+ *   heart of a like toggle).
+ * - "bold": Solar Linear at a 2 stroke, for line glyphs inside filled controls and at small sizes.
+ * `stroke` is kept for call-site compatibility: stroke >= 2 maps to "bold" for line glyphs. A
+ * `strokeWidth` prop overrides the stroke for a glyph that must match a heavier neighbour (the Pass X).
  * Icons are decorative (aria-hidden); icon-only controls carry their own accessible label.
  */
 const LINEAR = {
@@ -90,10 +110,26 @@ const LINEAR = {
 };
 
 const FILLED = {
+  lock: B_LockKeyholeMinimalisticIcon,
   heart: B_HeartIcon,
   star: B_StarIcon,
+  delete: B_BackspaceIcon,
   message: B_ChatRoundIcon,
+  shield: B_ShieldCheckIcon,
+  verified: B_VerifiedCheckIcon,
+  flag: B_FlagIcon,
+  info: B_InfoCircleIcon,
+  alert: B_DangerTriangleIcon,
+  wifiOff: B_CloudCrossIcon,
+  camera: B_CameraIcon,
+  image: B_GalleryIcon,
+  mic: B_MicrophoneIcon,
+  filter: B_Tuning2Icon,
+  settings: B_SettingsIcon,
   user: B_UserIcon,
+  location: B_MapPointIcon,
+  bell: B_BellIcon,
+  sparkle: B_StarsIcon,
   cards: B_CopyIcon,
 };
 
@@ -103,7 +139,7 @@ export const ICON_NAMES = Object.keys(LINEAR);
 
 export function Icon({ name, size = 24, stroke, strokeWidth, weight, className, ...rest }) {
   if (!LINEAR[name]) return null;
-  const resolved = weight ?? (stroke !== undefined && stroke >= 2 ? "bold" : "regular");
+  const resolved = weight ?? (FILLED[name] ? "fill" : stroke !== undefined && stroke >= 2 ? "bold" : "regular");
   const filled = resolved === "fill" && FILLED[name];
   const Glyph = filled || LINEAR[name];
   return (
