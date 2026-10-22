@@ -1,72 +1,9 @@
 /* ------------------------------------------------------------------ */
-/* Expressive details: heading emphasis and decorative ribbons        */
+/* Expressive details: headline emphasis                              */
 /* ------------------------------------------------------------------ */
 
-/* Headline emphasis: the letters in the exact brand pink, nothing else (display sizes only). */
+/* Headline emphasis: the letters in the accent pink, nothing else (Meetup 'The people platform'). */
 .emphasis {
   color: var(--color-text-accent);
   font-style: inherit;
-}
-
-/* Ribbons sit in a strip of whitespace inside a positioned parent and never take input. */
-.ribbon {
-  position: absolute;
-  left: 0;
-  right: 0;
-  pointer-events: none;
-}
-
-.ribbon > svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  fill: none;
-  stroke-linecap: round;
-}
-
-.ribbon__band {
-  stroke: var(--color-decor-ribbon);
-  stroke-width: 64px;
-  animation: ribbon-in 900ms var(--motion-ease-out) 120ms both;
-}
-
-/* The accent rides just above the 64px band (same curve, offset in screen pixels). */
-.ribbon__accent {
-  translate: 0 -38px;
-  stroke: var(--color-decor-ribbon-accent);
-  stroke-width: 3px;
-  animation: ribbon-in 900ms var(--motion-ease-out) 360ms both;
-}
-
-/* Welcome: the whole hero, behind the wordmark and the illustration slot (the hero is isolated and
-   the ribbon sits at z-index -1, so it never covers either). */
-.ribbon--welcome {
-  top: 0;
-  height: 100%;
-}
-
-/* Match: the bottom of the empty area under the copy; only where the screen is tall enough that
-   the strip stays clear of the text. */
-.ribbon--match {
-  bottom: 0;
-  height: 96px;
-}
-
-@media (max-height: 759px) {
-  .ribbon--match {
-    display: none;
-  }
-}
-
-@keyframes ribbon-in {
-  from { opacity: 0; transform: translateY(8px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ribbon__band,
-  .ribbon__accent {
-    animation: none;
-  }
 }

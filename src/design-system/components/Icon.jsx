@@ -1,4 +1,6 @@
 import { AddIcon as L_AddIcon } from "@solar-icons/react/linear/add";
+import { AddCircleIcon as L_AddCircleIcon } from "@solar-icons/react/linear/add-circle";
+import { MinusCircleIcon as L_MinusCircleIcon } from "@solar-icons/react/linear/minus-circle";
 import { AltArrowDownIcon as L_AltArrowDownIcon } from "@solar-icons/react/linear/alt-arrow-down";
 import { AltArrowLeftIcon as L_AltArrowLeftIcon } from "@solar-icons/react/linear/alt-arrow-left";
 import { AltArrowRightIcon as L_AltArrowRightIcon } from "@solar-icons/react/linear/alt-arrow-right";
@@ -89,6 +91,8 @@ const LINEAR = {
   arrowUp: L_ArrowUpIcon,
   check: L_CheckIcon,
   plus: L_AddIcon,
+  plusCircle: L_AddCircleIcon,
+  minusCircle: L_MinusCircleIcon,
   close: L_CloseIcon,
   search: L_MagnifierIcon,
   lock: L_LockKeyholeMinimalisticIcon,

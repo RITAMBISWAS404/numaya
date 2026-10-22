@@ -26,10 +26,11 @@ describe("token pipeline", () => {
     }
   });
 
-  it("keeps the single brand colour at exactly #F770E3", () => {
-    expect(value("--color-brand").toLowerCase()).toBe("#f770e3");
-    expect(value("--color-border-brand").toLowerCase()).toBe("#f770e3");
-    expect(value("--p-color-pink-500").toLowerCase()).toBe("#f770e3");
+  it("uses the sampled Meetup purple as the brand, with no trace of the old pink", () => {
+    expect(value("--color-brand").toLowerCase()).toBe("#7262c7");
+    expect(value("--color-border-brand").toLowerCase()).toBe("#7262c7");
+    expect(value("--color-focus-ring").toLowerCase()).toBe("#7262c7");
+    expect(css).not.toMatch(/f770e3|247 112 227/i);
   });
 
   it("has no legacy blue brand tokens or literals", () => {
@@ -37,50 +38,37 @@ describe("token pipeline", () => {
     expect(css).not.toMatch(/--color-brand-(strong|pressed)/);
   });
 
-  it("derives tints by lightening the brand pink, with no darker second pink", () => {
+  it("derives lavender tints by lightening the brand purple", () => {
     const l = (hex) => luminance(hexToRgb(hex));
     const brand = l(value("--color-brand"));
-    for (const t of ["--color-brand-tint", "--color-brand-subtle", "--color-surface-brand"]) expect(l(value(t))).toBeGreaterThan(brand);
-    const pinks = tokens.keys().toArray().filter((id) => id.startsWith("primitive.color.pink."));
-    expect(pinks.map((id) => id.split(".").pop())).toEqual(["50", "100", "200", "500"]);
+    for (const t of ["--color-brand-tint", "--color-brand-soft", "--color-brand-subtle", "--color-surface-brand", "--color-brand-hero"]) expect(l(value(t))).toBeGreaterThan(brand);
+    const purples = tokens.keys().toArray().filter((id) => id.startsWith("primitive.color.purple."));
+    expect(purples.map((id) => id.split(".").pop())).toEqual(["50", "100", "200", "300", "600", "800"]);
   });
 
-  it("puts white glyphs, never ink, on solid brand fills, and only on the known glyph marks", () => {
+  it("puts white text and glyphs on solid brand purple at AA", () => {
     expect(value("--color-on-brand").toLowerCase()).toBe("#ffffff");
-    // Every rule that uses on-brand is one of the icon-only pink marks (no text sits on pink).
-    const GLYPH_MARKS = /action-bar__btn--super|match__mark|composer__send|avatar__badge|verified__mark|plan-card__check|result__badge|setup-progress__step\.is-done|brief-step\.is-done|sc-brand-demo__mark/;
+    expect(contrast(value("--color-on-brand"), value("--color-brand"))).toBeGreaterThanOrEqual(4.5);
+  });
+
+  it("keeps the secondary Meetup palette to its roles (marks and framing, never text)", () => {
+    const accents = [...tokens.values()].filter((t) => t.path[1] === "color" && t.path[2] === "accent").map((t) => cssVarName(t.path));
+    expect(accents.sort()).toEqual(["--color-accent-green", "--color-accent-orange", "--color-accent-pink", "--color-accent-pink-tint", "--color-accent-promo", "--color-accent-yellow"]);
     const productCss = readdirSync("src", { recursive: true })
       .filter((f) => f.endsWith(".css") && !f.endsWith("tokens.css"))
-      .map((f) => readFileSync(`src/${f}`, "utf8").replace(/\/\*[\s\S]*?\*\//g, ""))
+      .map((f) => readFileSync(`src/${f}`, "utf8"))
       .join("\n");
-    const rules = [...productCss.matchAll(/([^{}]+)\{[^{}]*var\(--color-on-brand\)[^{}]*\}/g)].map((m) => m[1].trim());
-    expect(rules.length).toBeGreaterThan(5);
-    for (const sel of rules) expect(sel).toMatch(GLYPH_MARKS);
-  });
-});
-
-describe("brand pink treatments", () => {
-  const brandL = luminance(hexToRgb("#f770e3"));
-  const colours = () => {
-    const out = [];
-    for (const m of css.matchAll(/#([0-9a-f]{6})\b/gi)) out.push(hexToRgb(`#${m[1]}`));
-    for (const m of css.matchAll(/rgb\((\d+) (\d+) (\d+)/g)) out.push([+m[1], +m[2], +m[3]]);
-    return out;
-  };
-
-  it("never defines a pink darker than #F770E3", () => {
-    const pinks = colours().filter(([r, g, b]) => r - g > 60 && b - g > 60);
-    expect(pinks.length).toBeGreaterThan(0);
-    for (const c of pinks) expect(luminance(c)).toBeGreaterThanOrEqual(brandL - 1e-9);
+    // No accent colour is ever used as a text colour.
+    expect(productCss).not.toMatch(/(?<![-\w])color:\s*var\(--color-accent-/);
   });
 
-  it("sheen is white light only and the glow uses the exact brand pink, softly", () => {
+  it("flat sheen is white light only and the floating shadow is a soft purple", () => {
     const sheen = value("--gradient-brand-sheen");
     expect([...sheen.matchAll(/rgb\((\d+ \d+ \d+)/g)].every((m) => m[1] === "255 255 255")).toBe(true);
     const glow = value("--shadow-brand");
-    const pinkLayers = [...glow.matchAll(/rgb\((\d+ \d+ \d+) \/ ([0-9.]+)\)/g)].filter((m) => m[1] !== "255 255 255" && m[1] !== "20 23 31");
-    expect(pinkLayers.map((m) => m[1])).toEqual(["247 112 227"]);
-    expect(parseFloat(pinkLayers[0][2])).toBeLessThanOrEqual(0.5);
+    const tinted = [...glow.matchAll(/rgb\((\d+ \d+ \d+) \/ ([0-9.]+)\)/g)].filter((m) => m[1] !== "20 19 22");
+    expect(tinted.map((m) => m[1])).toEqual(["114 98 199"]);
+    expect(parseFloat(tinted[0][2])).toBeLessThanOrEqual(0.5);
   });
 });
 
@@ -102,6 +90,11 @@ describe("contrast requirements", () => {
     ["--color-success", "--color-success-tint"],
     ["--color-warning", "--color-warning-tint"],
     ["--color-text-primary", "--color-brand-tint"],
+    ["--color-on-brand", "--color-brand"],
+    ["--color-text-accent", "--color-surface"],
+    ["--color-text-brand-deep", "--color-brand-soft"],
+    ["--color-text-secondary", "--color-accent-promo"],
+    ["--color-text-on-inverse", "--color-danger-badge"],
   ];
 
   it.each(AA_TEXT)("%s on %s meets 4.5:1", (fg, bg) => {
@@ -113,20 +106,12 @@ describe("contrast requirements", () => {
     expect(contrast(value("--color-focus-ring"), value("--color-surface"))).toBeGreaterThanOrEqual(3);
   });
 
-  it("documents the only accepted exceptions", () => {
-    // Exactly one text token is pink: the display-only headline accent, a documented exception.
+  it("documents the only accepted exception", () => {
+    // Brand purple is used for text (links) and on-brand is AA, so the only sub-AA text token is the
+    // placeholder/disabled grey.
     const textTokens = [...tokens.values()].filter((t) => t.path[1] === "color" && t.path[2] === "text").map((t) => cssVarName(t.path));
-    const pink = textTokens.filter((t) => value(t).toLowerCase() === value("--color-brand").toLowerCase());
-    expect(pink).toEqual(["--color-text-accent"]);
-    const accent = contrast(value("--color-text-accent"), value("--color-surface"));
-    expect(accent).toBeGreaterThan(2.4);
-    expect(accent).toBeLessThan(3);
-    // White glyphs on the brand fill are 2.51:1: a documented, glyph-only exception (never text).
-    const onBrand = contrast(value("--color-on-brand"), value("--color-brand"));
-    expect(onBrand).toBeGreaterThan(2.4);
-    expect(onBrand).toBeLessThan(3);
-    // Placeholder and disabled text.
-    expect(contrast(value("--color-text-subtle"), value("--color-surface"))).toBeLessThan(3);
+    const failing = textTokens.filter((t) => t !== "--color-text-on-inverse" && contrast(value(t), value("--color-surface")) < 4.5);
+    expect(failing).toEqual(["--color-text-subtle"]);
   });
 });
 

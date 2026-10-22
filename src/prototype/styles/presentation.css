@@ -113,7 +113,7 @@
   box-shadow: none;
 }
 
-/* Done: a white check on the brand pink (glyph only, see color.on-brand). */
+/* Done: a white check on brand purple. */
 .brief-step.is-done .brief-step__index {
   background: var(--color-brand);
   color: var(--color-on-brand);

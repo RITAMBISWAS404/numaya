@@ -39,7 +39,7 @@ export function Chip({ kind = "toggle", selected = false, unavailable = false, i
     >
       {icon && <Icon name={icon} size={16} className="chip__icon" />}
       {children}
-      <Icon name={selected ? "check" : "plus"} size={14} stroke={2.2} className="chip__affordance" />
+      <Icon name={selected ? "minusCircle" : "plusCircle"} size={16} stroke={2} className="chip__affordance" />
     </button>
   );
 }

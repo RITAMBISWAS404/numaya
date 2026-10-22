@@ -33,7 +33,6 @@ import {
   PromptCard,
   RangeSlider,
   ResultPanel,
-  Ribbon,
   ScreenHeader,
   Section,
   SegmentedControl,
@@ -551,7 +550,6 @@ export function Match({ go }) {
       }
     >
       <div className="fl-center fl-fill fl-match">
-        <Ribbon variant="match" />
         <MatchCelebration names={[state.profile.name || "You", person.name]}>
           You and {person.name} liked each other. They answered “{person.prompt.q}”. Start there.
         </MatchCelebration>

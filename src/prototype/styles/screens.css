@@ -77,14 +77,15 @@
   text-wrap: pretty;
 }
 
-/* Legal links: ink text (pink at this size is 2.51:1) with a brand-pink underline as the cue. */
+/* Legal links (Meetup "Terms of Service"): purple, semibold (4.90:1), with a thin underline so they
+   are not told apart from the grey sentence by colour alone. */
 .legal a {
-  color: var(--color-text-primary);
+  color: var(--color-text-brand);
   font-weight: var(--font-weight-semibold);
   text-decoration: underline;
-  text-decoration-thickness: 2px;
+  text-decoration-thickness: 1px;
   text-underline-offset: 3px;
-  text-decoration-color: var(--color-brand);
+  text-decoration-color: color-mix(in srgb, var(--color-text-brand) 45%, transparent);
 }
 .legal a:hover {
   text-decoration-color: currentColor;

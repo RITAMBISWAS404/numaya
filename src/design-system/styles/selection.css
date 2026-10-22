@@ -193,11 +193,10 @@
   gap: 6px;
   height: var(--chip-height);
   padding: 0 var(--space-3) 0 14px;
-  /* Pills, as in the reference (interest and "about me" chips). */
+  /* Meetup interest pills: white with a hairline and an add-circle; selected turns purple. */
   border-radius: var(--radius-pill);
-  /* Unselected: a soft fill, no outline. Selected adds the brand tint and ring. */
-  background: var(--color-surface-soft);
-  box-shadow: none;
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-strong);
   color: var(--color-text-primary);
   font-size: 14.5px;
   font-weight: var(--font-weight-medium);
@@ -217,19 +216,19 @@ button.chip:active {
   color: var(--color-text-muted);
 }
 
-/* Selected: an ink pill with white text and icon and a brand-pink tick (pink on ink is 7.15:1;
-   white on the brand pink would be 2.51:1). Chosen over solid pink and a pale tint from rendered
-   comparisons. Same height and padding as unselected chips, so selecting never reflows the row; a
-   brief settle confirms the change, and the tick and aria-pressed carry the state without motion. */
+/* Selected (Meetup): a brand-purple pill with white text, icon and a minus-circle (white on purple
+   is 4.90:1). Same height and padding as unselected chips, so selecting never reflows the row; a
+   brief settle confirms the change, and the icon swap and aria-pressed carry the state. */
 .chip.is-selected {
-  background: var(--color-surface-inverse);
+  background: var(--color-brand);
   box-shadow: none;
-  color: var(--color-text-on-inverse);
+  color: var(--color-on-brand);
   animation: chip-select var(--motion-duration-base) var(--motion-ease-out);
 }
 
-.chip.is-selected .chip__icon {
-  color: var(--color-text-on-inverse);
+.chip.is-selected .chip__icon,
+.chip.is-selected .chip__affordance {
+  color: var(--color-on-brand);
 }
 
 @keyframes chip-select {
@@ -242,20 +241,15 @@ button.chip:active {
   }
 }
 
-.chip.is-selected .chip__affordance {
-  color: var(--color-brand);
-}
-
 .chip.is-unavailable {
   color: var(--color-text-subtle);
   box-shadow: none;
   cursor: not-allowed;
 }
 
+/* Display chips (profile interests, facts): the same white hairline pill, without the affordance. */
 .chip--static {
   padding: 0 var(--space-3);
-  background: var(--color-surface-soft);
-  box-shadow: none;
   font-size: var(--type-label-size);
 }
 
@@ -345,7 +339,7 @@ button.chip:active {
   height: var(--switch-height);
   margin: 0;
   border-radius: var(--radius-pill);
-  /* Off: a plain neutral track with the white thumb, no outline. */
+  /* Off: a plain neutral track with the white thumb, no outline (Meetup). */
   background: var(--color-border-strong);
   cursor: pointer;
   appearance: none;
@@ -366,10 +360,10 @@ button.chip:active {
   transition: transform var(--motion-duration-base) var(--motion-ease-out);
 }
 
-/* On: the brand-pink track with the same white thumb; state is also carried by the thumb
-   position (right = on), so it never relies on colour alone. */
+/* On: an ink track with the white thumb, as in Meetup's current settings; state is also carried
+   by the thumb position (right = on), so it never relies on colour alone. */
 .switch:checked {
-  background: var(--color-brand);
+  background: var(--color-surface-inverse);
 }
 
 .switch:checked::after {
@@ -393,25 +387,23 @@ button.chip:active {
   cursor: pointer;
 }
 
+/* Meetup choice rows: white with a hairline; the selected row takes a 2px ink outline. */
 .option-card {
   padding: 14px var(--space-4);
-  border-radius: var(--radius-md);
-  background: var(--color-surface-soft);
-  box-shadow: inset 0 0 0 var(--border-selected) transparent;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-strong);
   transition: background-color var(--motion-duration-base), box-shadow var(--motion-duration-base);
 }
 
-.option-card:active {
-  background: var(--color-surface-sunken);
-}
-
+.option-card:active,
 .option-card:hover {
-  background: var(--color-surface-sunken);
+  background: var(--color-surface-soft);
 }
 
 .option-card.is-selected {
   background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-selected) var(--color-border-brand), var(--shadow-xs);
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-surface-inverse);
 }
 
 .choice.is-disabled,
@@ -459,19 +451,18 @@ button.chip:active {
   border-radius: 50%;
 }
 
-/* Checked: an ink box with a white tick (no glyph on saturated pink; chosen over a pink frame with
-   a white inset, whose smaller tick read weakly). The selected option card's pink ring is the brand
-   accent. The tick is Solar's check path, inlined so the native input needs no extra markup. */
+/* Checked (Meetup): an ink box with a white tick, and an ink radio with a white gap around its dot.
+   The tick is Solar's check path, inlined so the native input needs no extra markup. */
 .choice__input--checkbox:checked {
   background: var(--color-surface-inverse)
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E")
     center / 18px no-repeat;
-  /* The restrained pink cue: a soft brand-tint halo around the ink box. */
-  box-shadow: 0 0 0 3px var(--color-brand-subtle);
+  box-shadow: none;
 }
 
 .choice__input--radio:checked {
-  box-shadow: inset 0 0 0 7px var(--color-brand);
+  background: var(--color-surface-inverse);
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-surface-inverse), inset 0 0 0 6px var(--color-surface);
 }
 
 .choice__input:disabled {
@@ -560,7 +551,7 @@ button.chip:active {
   right: 0;
   height: 6px;
   border-radius: var(--radius-pill);
-  /* Neutral rail, brand-pink selected interval. */
+  /* Neutral rail, brand-purple selected interval. */
   background: linear-gradient(
     90deg,
     var(--color-border-strong) var(--from),
@@ -587,7 +578,7 @@ button.chip:active {
 .slider__track input::-webkit-slider-thumb {
   width: 28px;
   height: 28px;
-  /* White thumbs with a soft neutral shadow (no outline) on the pink interval. */
+  /* White thumbs with a soft neutral shadow (no outline) on the purple interval. */
   border-radius: 50%;
   background: var(--color-surface);
   box-shadow: var(--shadow-thumb);

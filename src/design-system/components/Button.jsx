@@ -14,8 +14,8 @@ export function Spinner({ size = "md", label, className }) {
 
 /**
  * Text action. Variants: primary (ink), secondary (outlined), quiet (text),
- * destructive (danger text), destructive-solid (white on danger), brand (ink label on
- * the brand-pink fill; never white text on #F770E3).
+ * destructive (danger text), destructive-solid (white on danger), brand (soft lavender with a
+ * deep-purple label, Meetup "Sign up with email").
  */
 export function Button({
   variant = "primary",

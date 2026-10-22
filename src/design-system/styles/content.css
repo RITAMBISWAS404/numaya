@@ -108,8 +108,7 @@
   height: 18px;
 }
 
-/* Pink actions and marks carry a white glyph directly on the exact brand pink (no darker pink, no
-   ink on pink, no white disc). White on #F770E3 is 2.51:1, a documented exception: these glyphs are
+/* Purple marks carry a white glyph (4.90:1). These glyphs are
    bold or filled, never text, and every one has an accessible name or a text label beside it. */
 .avatar__badge,
 .verified__mark {
@@ -355,8 +354,8 @@ button.list-row__hit:hover {
   color: var(--color-danger);
 }
 
-/* Information card: white with a hairline (Meetup grouped surfaces), 20px corners; the filled icon
-   is the brand accent, the title carries the message and the body explains. */
+/* Information card: Meetup's periwinkle guidance card ("Start a new group"): flat, 20px corners, a
+   purple filled icon, an ink title and a secondary-ink body (9:1 on the periwinkle). */
 .info-card {
   display: flex;
   align-items: flex-start;
@@ -364,8 +363,7 @@ button.list-row__hit:hover {
   width: 100%;
   padding: var(--space-4);
   border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle);
+  background: var(--color-accent-promo);
   text-align: left;
 }
 
@@ -388,7 +386,7 @@ button.list-row__hit:hover {
 }
 
 .info-card__body {
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   font-size: var(--type-caption-size);
   line-height: var(--type-caption-line);
 }
@@ -463,12 +461,12 @@ button.list-row__hit:hover {
 /* ------------------------------------------------------------------ */
 /* Profile content                                                     */
 /* ------------------------------------------------------------------ */
+/* Prompt answers: Meetup's flat grey quote card ("About me"), no border or shadow. */
 .prompt {
   position: relative;
   padding: var(--space-5);
-  border-radius: var(--radius-card);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-soft);
 }
 
 .prompt__label {
@@ -505,7 +503,7 @@ button.list-row__hit:hover {
   border-radius: var(--radius-card);
 }
 
-/* Placeholder tones are neutral so a grid of them reads as one set and pink stays for meaning. */
+/* Placeholder tones are neutral so a grid of them reads as one set and colour stays for meaning. */
 .image-placeholder--sky   { background: var(--color-surface-sunken); color: var(--color-text-muted); }
 .image-placeholder--stone { background: var(--color-surface-soft); color: var(--color-text-muted); }
 .image-placeholder--mist  { background: var(--color-surface-sunken); color: var(--color-text-muted); }
@@ -718,7 +716,7 @@ button.list-row__hit:hover {
   place-items: center;
   width: 60px;
   height: 60px;
-  /* Meetup primary treatment: ink with a soft sheen. */
+  /* Meetup primary treatment (Chat, Add friend, Ticket): ink with a soft sheen. */
   border-radius: 50%;
   background: linear-gradient(180deg, var(--button-primary-bg-top) 0%, var(--button-primary-bg-bottom) 100%);
   color: var(--color-text-on-inverse);
@@ -740,16 +738,15 @@ button.list-row__hit:hover {
   border-radius: var(--radius-xl);
 }
 
-/* SuperSwipe: the single accent action. Exact brand pink with a white light reflection and a soft
-   brand glow; ink glyph (white would be 2.51:1). Pressed flattens to the brand pink, never darker. */
+/* SuperSwipe: the single purple action, like Meetup's floating "Map" pill: flat brand purple with a
+   white star and a soft purple drop. */
 .action-bar__btn--super {
-  background: var(--gradient-brand-sheen), var(--color-brand);
+  background: var(--color-brand);
   color: var(--color-on-brand);
   box-shadow: var(--shadow-brand);
 }
 
 .action-bar__btn--super:active {
-  background: var(--color-brand);
   box-shadow: none;
 }
 
@@ -949,7 +946,7 @@ button.list-row__hit:hover {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--gradient-brand-sheen), var(--color-brand);
+  background: var(--color-brand);
   color: var(--color-on-brand);
   box-shadow: 0 0 0 4px var(--color-surface), var(--shadow-brand);
   transform: translateX(-50%);
@@ -993,8 +990,8 @@ button.list-row__hit:hover {
   }
 }
 
-/* Shared interests ("You both like"): a white card like every other profile section; the only pink
-   is the small heart mark beside the title (decorative), so nothing sits on a pink fill. */
+/* Shared interests ("You both like"): Meetup's "Get to know …" card: white with a hairline like every
+   profile section, a small purple mark beside the title, and grey shared-interest pills. */
 .shared-interests {
   display: grid;
   gap: var(--space-3);
@@ -1027,8 +1024,13 @@ button.list-row__hit:hover {
   list-style: none;
 }
 
+.shared-interests__pill {
+  background: var(--color-surface-soft);
+  box-shadow: none;
+}
+
 /* Profile setup progress: a white card (24px, hairline + soft shadow) like the other cards. Steps
-   are rows with a 36px round tile and a 2px connector to the next tile; no nested cards. Done: pink
+   are rows with a 36px round tile and a 2px connector to the next tile; no nested cards. Done: purple
    tile with a white check. Active: ink tile, semibold label and a "Next" pill. Upcoming: muted. */
 .setup-progress {
   display: grid;

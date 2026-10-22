@@ -1,7 +1,8 @@
 import { useId } from "react";
 
-/** A soft square with a bite taken out of the corner. */
-export function BrandMark({ size = 28, color = "var(--color-brand)" }) {
+/** A soft square in brand purple with a bite taken out of the corner, and a small accent-pink dot
+    sitting in the bite (the Numaya mark, reconciled with the Meetup-derived palette). */
+export function BrandMark({ size = 28, color = "var(--color-brand)", accent = "var(--color-accent-pink)" }) {
   const maskId = useId();
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
@@ -12,6 +13,7 @@ export function BrandMark({ size = 28, color = "var(--color-brand)" }) {
         </mask>
       </defs>
       <rect x="2" y="2" width="28" height="28" rx="9" fill={color} mask={`url(#${maskId})`} />
+      {accent && <circle className="brand-mark__dot" cx="27" cy="5" r="3.5" fill={accent} />}
     </svg>
   );
 }

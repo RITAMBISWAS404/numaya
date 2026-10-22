@@ -1,8 +1,76 @@
 # Numaya × Meetup UI map
 
-**Bumble for UX and layout** ([reference map](bumble-reference-map.md)), **Meetup for UI and visual
-styling**, **Numaya for brand** (`#F770E3`, Fraunces headings, Inter text). This map fixes one visual
-decision per component family so later passes stay consistent.
+**Bumble for UX and layout** ([reference map](bumble-reference-map.md)), **Meetup for the whole UI
+system** (palette, surfaces, components, spacing), **Numaya for identity** (name, wordmark, Fraunces
+headings, Inter text, Solar icons). Since the October 2026 migration the old pink `#F770E3` is retired:
+the brand colour is Meetup's sampled purple. This map fixes one visual decision per component family.
+
+## Meetup visual-system migration (October 2026)
+
+### References opened for the migration
+
+All Meetup iOS, current generation, opened on Mobbin as screenshots (previews; the full-resolution
+host was blocked by this environment's network policy, so colours were sampled from the previews:
+expect ±3 per channel on flat fills; text and thin strokes were not sampled):
+
+- Home and discovery: [Home with groups and promo card](https://mobbin.com/screens/0072c542-3013-4dd1-adfd-05501bd1076d),
+  [Home organiser](https://mobbin.com/screens/662f6722-eca0-4ca7-9a3e-ba589067884b),
+  [Explore feed](https://mobbin.com/screens/0e8d493f-e3f1-4597-942b-a7e7ea5a62f5),
+  [Explore with promo card and Map pill](https://mobbin.com/screens/ea458b63-9d70-4f56-9031-7a8db8697efe),
+  [Events list](https://mobbin.com/screens/b99188cb-7a5a-4d08-8bb5-fe86cd4cba50),
+  [Map](https://mobbin.com/screens/51be1ff0-2146-486d-9c1a-6d89ff7747d3),
+  [Groups for you](https://mobbin.com/screens/610a06c3-1957-4428-8a66-dde9f1bdbb5f)
+- Messages: [Inbox](https://mobbin.com/screens/972d35a9-c98c-4deb-8c71-62a0fd7c77dc),
+  [Conversation](https://mobbin.com/screens/e70b2111-8414-4442-ad3c-5de21640243d),
+  [Options menu](https://mobbin.com/screens/8efe8c92-9b80-4f96-af11-e6ae831b4f8e),
+  [Archive with blocked contact](https://mobbin.com/screens/1efededf-fe03-4d0e-a651-1b9163b0e6d1),
+  [New message sheet](https://mobbin.com/screens/6c0dbe27-9374-44f8-b6b9-db3d85352967)
+- Interests and onboarding: [What are your interests?](https://mobbin.com/screens/db6c8532-ffb9-4330-b7b4-97a964211985),
+  [Topics, selected](https://mobbin.com/screens/618e22f6-dd11-4a89-9d0b-b45b66c61942),
+  [Interests sheet](https://mobbin.com/screens/5d433f66-84c6-4f0b-b73f-42d4bbeb9793),
+  [Sign-up welcome](https://mobbin.com/screens/3e2d6c66-4d14-47f3-9f4a-8f29d4356cd3),
+  [How did you discover Meetup? (radio rows)](https://mobbin.com/screens/b16039cc-3074-467b-9dd3-5f56b5be9d5c),
+  [Gender](https://mobbin.com/screens/cef0a642-1a8f-4541-9835-d63b311d079c),
+  [Date of birth](https://mobbin.com/screens/0a4292b0-fea2-4c14-b9e1-4cd9c75d8a17),
+  [Sign-up form](https://mobbin.com/screens/6760209a-dfe6-41e6-8d18-7fcff04f8c37)
+- Profiles: [Member profile](https://mobbin.com/screens/40b51c15-f93b-4933-be0a-2836829bd73d),
+  [Own profile](https://mobbin.com/screens/05cf9ce9-ff6e-449c-8a9a-5cf2876c43cb),
+  [Shared interests card](https://mobbin.com/screens/579b6ac3-4c0c-4c6a-a32e-02449a816356),
+  [Groups list](https://mobbin.com/screens/d4ad380b-6911-454a-9e59-ce449430d6c4)
+- Settings and states: [Email updates (ink switches)](https://mobbin.com/screens/9ea56474-24b7-40e9-811b-aa3996dd467c),
+  [Confirm dialog](https://mobbin.com/screens/b644330a-714a-49a4-b7d1-6d4af7c4d5ed),
+  [Notifications empty state](https://mobbin.com/screens/b3631553-1b10-44f7-a9a2-1e0d9ba59526)
+- Excluded as an older generation: the teal group-notification sheets
+  ([1](https://mobbin.com/screens/09f80e63-7f4f-42be-8ac8-a5c2d05f55a1), [2](https://mobbin.com/screens/a7057490-79e6-4bda-b202-9c0212ee628e)).
+- Not opened: uidiscovery.com, the Meetup design blog and Studio Frank (outbound hosts blocked here);
+  the `#A888F8` candidate from a third-party collection is not confirmed. The nearest sampled value is
+  the sign-up hero purple `#9C85E6`, used only as `brand.hero`.
+
+### Sampled palette and roles
+
+| Token | Value | Status | Sampled on | Used for in Numaya |
+| --- | --- | --- | --- | --- |
+| `purple.600` → `brand` | `#7262C7` | Confirmed (5 components agree within ±3) | Selected pills, interest chips, outgoing bubbles, progress segments, check FAB, Map pill | Selected chips and pills, outgoing bubbles, SuperSwipe, send, progress, verified marks, links, focus. White on it 4.90:1 |
+| `purple.300` → `brand.hero` | `#9C85E6` | Confirmed | Sign-up hero wash | Decorative only (not behind small text) |
+| `purple.100` → `surface.brand` | `#F0ECF9` | Confirmed | Home header wash | Welcome hero wash, lavender highlights |
+| `purple.50` → `brand.tint`, `brand.soft` | `#FAF7FE` | Derived from sampled `#F8F1FD`, lifted for 4.6:1 purple text | "Sign up with email" | Soft brand button, "Next" pill, selected tints |
+| `purple.200` → `brand.subtle` | `#E2DCF7` | Derived | — | Lavender hairlines and tinted placeholders |
+| `purple.800` → `text.brand-deep` | `#4F4296` | Derived | — | Purple text on grey or lavender (active tab label, eyebrows) |
+| `periwinkle.100` → `accent.promo` | `#D6DCFD` | Confirmed | "Start a new group" card | `InfoCard` guidance cards |
+| `neutral.800` | `#2D2C2F` | Confirmed | "Next" CTA | Primary ink buttons (with a soft sheen) |
+| `neutral.900` → `text.primary`, `surface.inverse` | `#141316` | Confirmed | Switch on, checkbox | Text, switches, checkboxes, radios, selected option outline |
+| `neutral.100` → `surface.soft` | `#F2F2F2` | Confirmed | Search, fields, "Joined", incoming bubbles, "About me" card | Fields, secondary buttons, incoming bubbles, prompt cards, shared-interest pills |
+| `neutral.200` → `surface.sunken`, `border.subtle` | `#E9E8EB` | Confirmed (`#EEEDEE` tab pill, card hairlines) | Active tab pill | Active tab pill, hairlines, tracks |
+| `pink.700` → `text.accent` | `#C1486A` | Confirmed | "The **people** platform" | One emphasised headline word (4.77:1) |
+| `pink.500` → `accent.pink` | `#EA698C` | Confirmed | Organiser badge | Wordmark dot, category marks |
+| `yellow.200` → `accent.yellow` | `#FCD284` | Confirmed | Empty-state blob | Avatar and illustration framing |
+| `orange.500` → `accent.orange` | `#D58B50` | Confirmed (small sample) | "In 2m" chip | Time and status icons |
+| `green.500` → `accent.green` | `#5D946A` | Confirmed (small sample) | Image check badge | Confirmation marks; success text uses a deepened `#336E48` |
+| `red.500` | `#DD544F` | Confirmed | Friends count badge | Danger and badge text use a deepened `#B93A36` (5.6:1) |
+
+Not determined with confidence: Meetup's exact text greys (antialiased) and its slider styling (no
+slider in the current generation). Body greys were derived as neutral (not blue-tinted) steps.
+
 
 ## Reference set
 
@@ -36,23 +104,23 @@ Mobbin as screenshots:
 | Page | White pages; a faint accent wash at the top of Home / Group | White page (`surface.default`); Discover header gets a faint brand-tint wash |
 | Cards / groups | White, 1px light-grey hairline, barely-there shadow, ≈ 20px corners (event cards), ≈ 16px (settings groups) | `card`: hairline + `shadow.xs`, `radius.lg` 20; list groups: hairline, `radius.md` 16 |
 | Photography | Large photos ≈ 24px corners; translucent circular icon buttons on the photo | `radius.photo` 24; overlays on photos are dark translucent pills / circles |
-| Accent placement | Selected filter pill, one floating action ("Map"), progress pills, tinted info card ("About our members"), links | Pink: SuperSwipe (floating action), progress, selected states, the small heart mark on the "You both like" card. Links stay ink (pink text is 2.51:1) |
-| Primary button | Near-black **pill** with a soft sheen | `btn--primary`: ink gradient, `radius.pill` |
-| Secondary button | Light-grey **pill**, no border ("See all events…") | `btn--secondary`: `surface.sunken`, no outline, pill |
+| Accent placement | Selected filter pill, one floating action ("Map"), progress pills, promo cards, links | Purple: selected chips and pills, SuperSwipe (floating action), progress, outgoing bubbles, send, links. Periwinkle for guidance cards. Secondary colours only by role (badges, framing, status) |
+| Primary button | Near-black **pill** with a soft sheen ("Next", "Continue", "Sign up") | `btn--primary`: ink gradient (`#2D2C2F` → `#141316`), `radius.pill` |
+| Secondary button | Light-grey **pill**, no border ("Joined", dialog "Cancel"); soft lavender ("Sign up with email") | `btn--secondary`: `surface.soft` grey pill; `btn--brand`: `brand.soft` lavender with a deep-purple label |
 | Icon actions | White circles with a soft shadow (back, close); translucent circles on photos | `IconButton floating` for header controls; Pass / Super / Like and the floating SuperSwipe on the photo are 72×56 horizontal pills; send is a 56×44 pill beside the pill composer; compact navigation (back, close, filters) stays circular |
-| Chips / tags | Pills; unselected light-grey fill or white + hairline; selected = solid accent | Static chips grey pills; shared-interest chips neutral icon pills inside the white "You both like" card. **Selected interests: ink pill, white text and icon, brand-pink tick** (refinement sprint, chosen over solid pink with white text, which is 2.51:1, and a pale tint, which looked tentative). Every interest leads with a filled Solar cue |
-| Toggles | **Black** when on | **Pink track when on, plain grey when off**, white thumb with a soft shadow, no outline (refinement sprint; product preference over Meetup's black). State is also carried by the thumb position |
+| Chips / tags | Interest pills: white + hairline with an add-circle; selected = solid purple with white text and a minus-circle. Filter pills: grey unselected, purple selected | Same: `Chip` toggle is white + hairline + `plusCircle`, selected `brand` + white + `minusCircle`; static chips white + hairline; shared-interest pills grey |
+| Toggles | **Ink** when on | **Ink track when on** (`surface.inverse`), plain grey when off, white thumb with a soft shadow. State also carried by thumb position |
 | Tab bar | Floating frosted capsule, icon over label, active item on a light-grey pill with accent icon | Same treatment; destinations and order stay Bumble's (Profile, Discover, Chats) |
 | Section headings | Bold, ≈ 20px, count in grey, "See all" link right | Fraunces 20 (Numaya type); counts grey |
 | Dividers | Hairlines inside cards, inset | Kept |
 | Corner hierarchy | Large photos softest, cards next, controls tighter | `radius.photo` 32 (Discover card, profile photos, match photos) ≥ sheets `xl` 28 > `radius.card` 24 (section cards, grouped rows, prompt cards, options menu, illustration areas) > `lg` 20 (bubbles, banners) > `md` 16 (inputs, option cards, photo slots) > code cells 12; pills and circles unchanged |
 | Icons | Outlined, ≈ 1.5px strokes, filled for active states | **Solar** (480 Design, CC BY 4.0) throughout, replacing Phosphor by product decision. **Filled (Solar Bold) by default** wherever a recognisable filled drawing exists; line glyphs (chevrons, arrows, check, plus, close, search) stay Linear because their Bold forms read as triangles or blobs. Tabs are all filled: soft grey when idle, brand pink when current. Earlier objections were resolved in context: Discover uses Solar `Copy` (two stacked rounded cards) instead of the device-like carousel glyph, and the Pass X takes a 2.5 stroke. Credits in the flows footer, the prototype brief and the showcase |
-| Success badge | Accent ring around a light centre | Result badge (success): a 9-sided "cookie" in exact #F770E3 with a white check on a pale tint halo of the same shape (Material shape set). Reserved for success; safety outcomes (unmatched, blocked) keep a round neutral badge with an ink glyph |
+| Success badge | Accent ring around a light centre | Result badge (success): a 9-sided "cookie" in brand purple with a white check on a lavender halo of the same shape (Material shape set). Reserved for success; safety outcomes stay round and neutral |
 | Motion and press feedback | Quick, quiet feedback; content never waits on animation | Every pressable has a press state (scale for buttons, circles and tiles; a background tint for rows and cards). Entrances: a new Discover profile rises in, the match photos settle into their tilt and the mark lands, a selected chip settles. Exits use the motion tokens. Under reduced motion everything becomes a fade or an instant change |
 | Identity shape | Circular avatars throughout | **Rounded-rectangle avatars** (radius 30% of the side; plain `border-radius`, no squircle), with the completion ring tracing the same shape. The earlier `corner-shape` squircle was removed everywhere by product decision |
-| Headline emphasis and ribbons | Meetup keeps accent off text; Happn (Mobbin: [onboarding](https://mobbin.com/screens/d6072148-63b5-4804-8673-58673b54252d), ["It's a Crush"](https://mobbin.com/screens/01d44bd9-f87c-480f-b0bd-01fc54833959)) sweeps broad organic bands through empty space | `Emphasis`: one word in exact #F770E3 letters (no marker or underline) on five hero headlines: Welcome "Better", "You're verified" (prototype sheet and setup intro), "What are you into?", "It's a match". Functional step titles (basics, photos, phone, code) stay ink. `Ribbon`: one broad, smooth band in very light neutral grey (`decor.ribbon`, 64px) with one short thin line in exact #F770E3 (`decor.ribbon-accent`, 3px) riding its upper edge. Currently one screen: the empty strip above the match composer (screens ≥ 760px tall). Removed from the Welcome hero, which is reserved for the illustration composition. Never on the verified badge, the setup intro or the match photos. aria-hidden, no pointer events, fades in once, static under reduced motion |
-| Brand pink treatment | Accent fills are flat on small elements; the primary accent action has subtle depth | Large pink actions (SuperSwipe, send, match mark, success badge, `btn--brand`): `gradient.brand-sheen` (white light only) over the exact pink + `shadow.brand` (white top highlight, soft glow in the exact pink). Chips, bubbles, badges, progress, tab icon and form controls stay flat. Pressed = flat pink; never a darker pink; ink glyphs (white fails contrast) |
-| Glyphs on brand pink | — | **White glyphs on the exact #F770E3** (SuperSwipe star, match heart, send arrow, verified checks, plan check, done steps); never ink on pink, no white-disc insets, no darker pink. White on pink is 2.51:1: a documented, glyph-only exception, each glyph with an accessible name. Selected chips and checkboxes are ink with a pink cue instead |
+| Headline emphasis | Meetup colours one headline word ("The **people** platform") | `Emphasis`: one word in `text.accent` (`#C1486A`, 4.77:1) on hero headlines (Welcome, You're verified, What are you into?, It's a match). Decorative ribbons were removed entirely (rejected by the team) |
+| Brand purple treatment | Purple fills are flat; only floating purple actions have a soft drop | `shadow.brand` (soft purple drop) on SuperSwipe and the match mark; chips, bubbles, progress and send stay flat. The old pink sheen and glow are retired |
+| Glyphs on brand purple | White glyphs and text on purple | White on `#7262C7` is 4.90:1 (AA), so text and glyphs may sit on purple |
 | Empty states | Illustration, bold title, grey text, black pill CTA | Illustration area = neutral grey placeholder (supplied later); black pill CTA |
 
 ## Component families

@@ -81,7 +81,7 @@ body {
 }
 
 .fl-frame__flow {
-  color: var(--color-text-brand);
+  color: var(--color-text-brand-deep); /* purple text on the grey canvas would be 4.4:1 */
   font-size: var(--type-eyebrow-size);
   font-weight: var(--type-eyebrow-weight);
   letter-spacing: var(--type-eyebrow-tracking);
@@ -230,10 +230,6 @@ body {
   }
 }
 
-/* Match: the ribbon sits in the empty strip at the bottom, behind nothing. */
-.fl-match {
-  position: relative;
-}
 
 .fl-add-prompt {
   height: 56px;
@@ -616,7 +612,7 @@ body {
 
 .fl-swipe__stamp--like {
   left: var(--space-5);
-  /* White with a brand-pink ring and ink text (no text on saturated pink). */
+  /* White with a brand-purple ring and ink text. */
   background: var(--color-surface);
   box-shadow: inset 0 0 0 var(--border-focus) var(--color-brand);
   color: var(--color-text-primary);

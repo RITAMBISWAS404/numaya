@@ -9,7 +9,7 @@ research. **No production framework is chosen yet** ([architecture](docs/enginee
 - UX research and screen specs: [docs/research/](docs/research/README.md)
 
 ## Non-negotiables
-- Brand pink is exactly `#F770E3` (the only brand colour; no second dark pink). Text and glyphs on solid pink fills are dark ink, never white (white is 2.51:1). Pink text on white fails contrast, so brand-context text uses ink.
+- Visual system follows Meetup (palette, surfaces, components); UX follows Bumble. Brand colour is Meetup's sampled purple `#7262C7` (white on it is 4.90:1); the old pink `#F770E3` is retired. Secondary Meetup colours (`--color-accent-*`) are for marks and framing only, never text. See [docs/numaya-meetup-ui-map.md](docs/numaya-meetup-ui-map.md).
 - Import UI only from `src/design-system/index.js`; style with semantic tokens only.
 - Edit tokens in `tokens/numaya.tokens.json`, then `npm run tokens`. Never edit generated files.
 - Do not build screens the spec does not describe. Cover every state the spec lists.

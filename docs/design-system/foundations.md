@@ -5,16 +5,19 @@ the **rules**. Live swatches and specimens: `showcase.html` (Foundations section
 
 ## Colour
 
+Meetup-derived palette (sampled values and references in the [UI map](../numaya-meetup-ui-map.md#sampled-palette-and-roles)).
+
 | Role | Tokens | Rule |
 | --- | --- | --- |
-| Brand | `--color-brand` (exact `#F770E3`), `-tint`, `-subtle` (lightened mixes of the brand; no darker second pink) | Marks, progress, selected fills, verified mark, like/send fills, switches, slider interval, field focus. Never darkened |
-| On brand | `--color-on-brand` (white) | Glyphs only, never text, on a solid brand fill: bold or filled, 12px+ at a heavy stroke, always with an accessible name or a label beside it. 2.51:1, a documented exception (see below). Ink on pink is never used |
-| Headline emphasis | `Emphasis` → `--color-text-accent` (exact `#F770E3`) | One word in a display-size hero headline (Welcome, You're verified, What are you into?, It's a match). The letters themselves; no marker or underline |
-| Brand-context text | `--color-text-brand`, `-brand-deep` (resolve to ink) | Links, eyebrows, labels. Pink text on white fails, so these use the neutral ink; links stay underlined |
-| Text | `--color-text-primary`, `-secondary`, `-muted`, `-subtle`, `-on-inverse`, `-brand-deep` | Dark text only on white, neutral or tinted surfaces |
-| Surface | `--color-surface`, `-soft`, `-sunken`, `-canvas`, `-brand`, `-inverse` | Ink (`inverse`) for primary buttons and toasts |
-| Border / focus | `--color-border-subtle`, `-strong`, `-brand`, `-control`; `--color-focus-ring`, `-halo` | Unchecked controls use `border-control` (≥ 3:1) |
-| Feedback | `--color-danger`, `--color-success`, `--color-warning` (+ `-tint`) | Distinct from the brand palette; never use the brand pink for status |
+| Brand | `--color-brand` (Meetup purple `#7262C7`), `-tint`, `-soft`, `-subtle`, `-hero` | Selected chips and pills, outgoing bubbles, SuperSwipe, send, progress, verified marks, links, focus |
+| On brand | `--color-on-brand` (white) | Text and glyphs on a solid purple fill: 4.90:1 |
+| Accents | `--color-accent-promo`, `-pink`, `-pink-tint`, `-yellow`, `-orange`, `-green` | Meetup's secondary palette, by role only: guidance cards (periwinkle), badges and category marks, avatar and illustration framing, status icons. Never text, never a second UI accent |
+| Headline emphasis | `Emphasis` → `--color-text-accent` (`#C1486A`) | One word in a hero headline (Meetup "The people platform"). 4.77:1 |
+| Brand-context text | `--color-text-brand` (purple, on white), `-brand-deep` (on grey or lavender) | Links (underlined where they sit inside a sentence), eyebrows, the active tab label |
+| Text | `--color-text-primary`, `-secondary`, `-muted`, `-subtle`, `-on-inverse` | Neutral greys (not blue-tinted) |
+| Surface | `--color-surface`, `-soft` (Meetup grey `#F2F2F2`), `-sunken`, `-canvas`, `-brand` (lavender wash), `-inverse` | White pages; grey fills for fields, secondary buttons, incoming bubbles and quote cards; ink for primary CTAs, switches and checkboxes |
+| Border / focus | `--color-border-subtle`, `-strong`, `-brand`, `-control`; `--color-focus-ring` (purple), `-halo`, `-field` | Unchecked controls use `border-control` (≥ 3:1) |
+| Feedback | `--color-danger` (+ `-tint`, `-badge`), `--color-success`, `--color-warning` (+ `-tint`) | Deepened from Meetup's red and green for AA text |
 | Overlay | `--color-overlay-scrim`, `-photo`, `-hover-light` | `photo` is a functional legibility overlay on images |
 
 ### Contrast
@@ -23,12 +26,16 @@ All pairs below are enforced by `tests/unit/tokens.test.js`.
 
 | Pair | Ratio | Status |
 | --- | --- | --- |
-| Primary / secondary / muted text on white | 17.9 / 10.4 / 5.4 | AA |
-| Ink (`text-brand`) on brand tint | 16 | AA |
-| Focus ring (ink) on white | 17.9 | Non-text AA. The pink halo is decorative |
-| **White glyphs on `#F770E3`** (`on-brand`) | **2.51** | **Documented exception, glyphs only.** Chosen by the product owner over ink on pink and over white-disc insets. Below the 3:1 non-text minimum, so every such glyph is redundant with an accessible name or adjacent text (SuperSwipe, send, verified, match), and no text ever sits on pink |
-| **`#F770E3` text on white** (`text-accent`) | **2.51** | **Exception, by product decision.** Display-size hero emphasis only (one word per headline, readable in context); below the 3:1 large-text minimum. Never for body, links, labels or instructions. Excluded from the axe audit by selector (`.emphasis`) |
-| `text-subtle` on white | 2.6 | Exception: placeholders and disabled labels only |
+| Primary / secondary / muted text on white | 18.8 / 10.9 / 5.8 | AA |
+| White on brand purple (`on-brand`), purple text on white | 4.90 | AA |
+| Purple text on `brand.tint` | 4.62 | AA |
+| Deep purple on lavender / grey | 7.1+ | AA |
+| Emphasis pink (`text-accent`) on white | 4.77 | AA |
+| Secondary text on the periwinkle guidance card | 9+ | AA |
+| Focus ring (purple) on white | 4.90 | Non-text AA |
+| `text-subtle` on white | 2.8 | Exception: placeholders and disabled labels only |
+
+Purple text on grey fills is 4.4:1, so text on grey uses `text-brand-deep`.
 
 ## Typography
 
@@ -65,14 +72,13 @@ or brand colour. Numerals in inputs, codes and prices use `tabular-nums`.
 - **Gutters:** 16px screen padding; the Discover card runs to 8px from the edges so the photo leads.
 - **Reference baseline (Bumble layout, Meetup styling):** white pages; cards are white with a hairline
   and a faint shadow (20px), grouped rows 16px, photos 24px (`radius.photo`); buttons and chips are
-  pills (primary ink, secondary light grey); Pass and Like are ink pills (72×56) beside the SuperSwipe pill, which is also a pill when it floats on the photo; sliders are ink. SuperSwipe is the single brand-pink action on Discover.
-- **Pink footprint:** SuperSwipe, selected states, verification, progress, toggles and the match
-  mark. Avatars, placeholders, empty states, info banners and completion badges are neutral.
-- **Surfaces:** app screens (Discover, Chats, a conversation, Match, Profile, Settings) sit on
-  `--color-surface-page`, a blush-warm neutral; cards and list groups are white and raised with a
-  shadow instead of an outline, with inset dividers only between rows. Onboarding forms stay white and
-  content-led. Chips are soft fills (selected adds the brand tint and ring). In chat, incoming bubbles
-  are white and outgoing are ink; pink is kept for send, unread, new matches and the like action.
+  pills (primary ink, secondary light grey); Pass and Like are ink pills (72×56) beside the SuperSwipe pill, which is also a pill when it floats on the photo. SuperSwipe is the single purple action on Discover.
+- **Purple footprint:** SuperSwipe, selected chips and pills, outgoing bubbles, send, verification,
+  progress, links and focus. Switches, checkboxes, radios and primary CTAs are ink (Meetup).
+- **Surfaces (Meetup):** white pages; section cards and list groups are white with a hairline and a
+  faint shadow, inset dividers between rows; quote-like content (prompt answers) sits on flat grey;
+  guidance cards are periwinkle. Interest chips are white pills with a hairline (selected: purple).
+  In chat, incoming bubbles are grey with ink text and outgoing are purple with white text.
 - **Elevation** (neutral ink, very low opacity; flat controls and fields use none): `--shadow-xs` tiny
   moving parts · `sm` cards, list groups and floating icon buttons (no ring) · `float` persistent
   floating chrome (tab bar, hero profile card) · `md` bottom sheets and panels · `lg` dialogs,
@@ -95,8 +101,8 @@ icon family, no emoji icons; credits in [THIRD_PARTY_NOTICES.md](../../THIRD_PAR
 Line glyphs without a meaningful fill (chevrons, arrows, check, plus, close, search, closed eye, undo)
 render as Solar Linear: `regular` (1.5 stroke) or `bold` (2 stroke, inside filled controls and at
 small sizes). `regular` on a fillable icon is used only where an outline carries meaning (the
-unliked heart of a like toggle). Tabs are all filled: soft grey (`text-subtle`) when idle with a
-`text-muted` label, brand pink with a bold ink label when current. The
+unliked heart of a like toggle). Tabs follow Meetup: line glyphs in ink when idle, the filled glyph in
+brand purple with a deep-purple label when current. The
 ellipsis ("more") always uses Solar's solid dots; the Pass X uses a 2.5 stroke to hold its own in
 the ink circle. Duotone and Broken styles are not used. Sizes 16 / 20 / 24 (tab bar 24). Icon-only controls always have an
 accessible label; the icons themselves are `aria-hidden`.
@@ -105,7 +111,7 @@ accessible label; the icons themselves are `aria-hidden`.
 
 Bumble destinations and order (Profile, Discover, Chats) with Meetup styling
 ([UI map](../numaya-meetup-ui-map.md)): a frosted capsule floating above the bottom edge, icon over
-label. The active item sits on a light-grey pill with a filled pink icon and a bold ink label. The bar
+label. The active item sits on a light-grey pill with a filled purple icon and a deep-purple label. The bar
 stays in the layout flow under the scrolling content, so it never covers content or composers.
 
 ## Interaction states

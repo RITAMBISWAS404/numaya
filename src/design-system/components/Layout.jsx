@@ -71,7 +71,7 @@ export function TopBar({ onBack, step, steps, title, largeTitle, actions }) {
   );
 }
 
-/** Onboarding progress: short segments in the brand pink. */
+/** Onboarding progress: short segments in brand purple (Meetup sign-up steps). */
 export function ProgressSegments({ step, steps, label = "Sign-up progress" }) {
   return (
     <div
@@ -120,7 +120,7 @@ export function TabBar({ items, current, onChange }) {
           onClick={() => onChange(item.id)}
         >
           <span className="tab-bar__icon">
-            <Icon name={item.icon} size={24} />
+            <Icon name={item.icon} size={24} weight={item.id === current ? "fill" : "regular"} />
             {item.badge ? <CountBadge count={item.badge} label={`${item.badge} new in ${item.label}`} /> : null}
           </span>
           <span className="tab-bar__label">{item.label}</span>

@@ -6,7 +6,6 @@ import {
   Button,
   ChipGroup,
   Emphasis,
-  Ribbon,
   CodeInput,
   Composer,
   Dialog,
@@ -296,20 +295,19 @@ describe("illustration slots", () => {
 });
 
 describe("expressive details", () => {
-  it("Emphasis keeps its words as readable text; Ribbon is hidden from assistive tech", () => {
+  it("Emphasis keeps its words as readable text", () => {
     const { container } = render(
       <h1>
         Fewer swipes. <Emphasis>Better</Emphasis> first dates.
-        <Ribbon variant="welcome" />
-        <Ribbon variant="unknown" />
       </h1>,
     );
     expect(screen.getByRole("heading")).toHaveTextContent("Fewer swipes. Better first dates.");
-    const ribbons = container.querySelectorAll(".ribbon");
-    expect(ribbons).toHaveLength(1);
-    expect(ribbons[0]).toHaveAttribute("aria-hidden", "true");
-    for (const svg of ribbons[0].querySelectorAll("svg")) expect(svg).toHaveAttribute("focusable", "false");
-    expect(ribbons[0].querySelectorAll("svg")).toHaveLength(2);
+    expect(container.querySelector("em.emphasis")).toHaveTextContent("Better");
+  });
+
+  it("the design system no longer exports a decorative ribbon", async () => {
+    const ds = await import("../../src/design-system/index.js");
+    expect(ds.Ribbon).toBeUndefined();
   });
 });
 

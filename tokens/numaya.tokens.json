@@ -4,34 +4,46 @@
   "primitive": {
     "$description": "Raw values. Never referenced directly by component CSS; use semantic or component tokens.",
     "color": {
-      "pink": {
-        "50":  { "$type": "color", "$value": "#fff6fd", "$description": "6% mix of #F770E3 with white: brand-washed screen background." },
-        "100": { "$type": "color", "$value": "#feeefc", "$description": "12% mix: selected and highlighted surfaces." },
-        "200": { "$type": "color", "$value": "#fdd4f7", "$description": "30% mix: brand-tinted borders and image placeholders." },
-        "500": { "$type": "color", "$value": "#f770e3", "$description": "Numaya brand pink. The single primary brand colour; exact value, never substitute or darken." }
+      "purple": {
+        "50":  { "$type": "color", "$value": "#faf7fe", "$description": "Soft lavender (Meetup 'Sign up with email' sampled #F8F1FD, lifted slightly so purple text on it is 4.6:1)." },
+        "100": { "$type": "color", "$value": "#f0ecf9", "$description": "Meetup lavender wash (sampled #F0ECF9, Home header wash): brand surfaces and selected tints." },
+        "200": { "$type": "color", "$value": "#e2dcf7", "$description": "Lavender border and placeholder tint (derived between 100 and 300)." },
+        "300": { "$type": "color", "$value": "#9c85e6", "$description": "Meetup hero purple (sampled #9C85E6, sign-up hero): large decorative fills only (3.0:1 with white)." },
+        "600": { "$type": "color", "$value": "#7262c7", "$description": "Meetup primary purple (sampled #7262C7 on selected pills, interest chips, outgoing bubbles, progress, check FAB). White on it is 4.90:1." },
+        "800": { "$type": "color", "$value": "#4f4296", "$description": "Deep purple for text on lavender tints (derived; 7.1:1 on purple.100)." }
       },
+      "periwinkle": {
+        "100": { "$type": "color", "$value": "#d6dcfd", "$description": "Meetup promo card fill (sampled #D6DCFD, 'Start a new group')." }
+      },
+      "pink": {
+        "100": { "$type": "color", "$value": "#fde8ee", "$description": "Pink tint (derived) for avatar and category framing." },
+        "500": { "$type": "color", "$value": "#ea698c", "$description": "Meetup accent pink (sampled #EA698C, organiser badge): badges and category marks, never text." },
+        "700": { "$type": "color", "$value": "#c1486a", "$description": "Meetup emphasis pink (sampled #C1486A, 'The people platform'): one emphasised headline word. 4.77:1 on white." }
+      },
+      "yellow": { "200": { "$type": "color", "$value": "#fcd284", "$description": "Meetup illustration yellow (sampled #FCD284, empty-state blob): illustration and avatar framing." } },
+      "orange": { "500": { "$type": "color", "$value": "#d58b50", "$description": "Meetup time/status orange (sampled #D58B50, 'In 2m'): icons and marks only (2.75:1 on white)." } },
       "neutral": {
         "0":   { "$type": "color", "$value": "#ffffff" },
-        "50":  { "$type": "color", "$value": "#f3f5f8" },
-        "100": { "$type": "color", "$value": "#eceff3" },
-        "200": { "$type": "color", "$value": "#e7e9ed" },
-        "300": { "$type": "color", "$value": "#d7dbe1" },
-        "400": { "$type": "color", "$value": "#9aa1ac" },
-        "450": { "$type": "color", "$value": "#8a919c" },
-        "500": { "$type": "color", "$value": "#646b78" },
-        "700": { "$type": "color", "$value": "#3a404c" },
-        "750": { "$type": "color", "$value": "#353b48" },
-        "800": { "$type": "color", "$value": "#2b303b" },
-        "850": { "$type": "color", "$value": "#1a1d26" },
-        "900": { "$type": "color", "$value": "#14171f" }
+        "50":  { "$type": "color", "$value": "#f7f7f8" },
+        "100": { "$type": "color", "$value": "#f2f2f2", "$description": "Meetup field, chip and incoming-bubble grey (sampled #F2F2F2)." },
+        "200": { "$type": "color", "$value": "#e9e8eb", "$description": "Meetup hairlines and the active tab pill (sampled #EEEDEE)." },
+        "300": { "$type": "color", "$value": "#dadadd" },
+        "400": { "$type": "color", "$value": "#9b9ba0" },
+        "450": { "$type": "color", "$value": "#8a8a90" },
+        "500": { "$type": "color", "$value": "#66656b" },
+        "700": { "$type": "color", "$value": "#3c3b40" },
+        "750": { "$type": "color", "$value": "#353438" },
+        "800": { "$type": "color", "$value": "#2d2c2f", "$description": "Meetup primary CTA ink (sampled #2D2C2F, 'Next')." },
+        "850": { "$type": "color", "$value": "#1f1e21" },
+        "900": { "$type": "color", "$value": "#141316", "$description": "Meetup ink (sampled #141316, switch on): text and ink fills." }
       },
-      "red":   { "50": { "$type": "color", "$value": "#fdf0f2" }, "600": { "$type": "color", "$value": "#c8364f" } },
-      "green": { "50": { "$type": "color", "$value": "#eaf7f0" }, "700": { "$type": "color", "$value": "#1b7f4e" } },
+      "red":   { "50": { "$type": "color", "$value": "#fcefee" }, "500": { "$type": "color", "$value": "#dd544f", "$description": "Meetup notification red (sampled #DD544F)." }, "600": { "$type": "color", "$value": "#b93a36", "$description": "Danger text and badge fill (sampled Meetup red #DD544F, deepened to 5.6:1 with white and 5.0:1 on its tint)." } },
+      "green": { "50": { "$type": "color", "$value": "#ebf4ee" }, "500": { "$type": "color", "$value": "#5d946a", "$description": "Meetup check green (sampled #5D946A): status marks." }, "700": { "$type": "color", "$value": "#336e48", "$description": "Success text (sampled Meetup green #5D946A deepened to 6.1:1 on white, 5.5:1 on its tint)." } },
       "amber": { "50": { "$type": "color", "$value": "#fff6e5" }, "700": { "$type": "color", "$value": "#9a5b00" } },
       "alpha": {
-        "ink-34":   { "$type": "color", "$value": "rgb(20 23 31 / 0.34)" },
-        "ink-62":   { "$type": "color", "$value": "rgb(20 23 31 / 0.62)" },
-        "pink-32":  { "$type": "color", "$value": "rgb(247 112 227 / 0.32)" },
+        "ink-34":   { "$type": "color", "$value": "rgb(20 19 22 / 0.34)" },
+        "ink-62":   { "$type": "color", "$value": "rgb(20 19 22 / 0.62)" },
+        "purple-24": { "$type": "color", "$value": "rgb(114 98 199 / 0.24)" },
         "white-55": { "$type": "color", "$value": "rgb(255 255 255 / 0.55)" }
       }
     },
@@ -100,52 +112,59 @@
     "$description": "The public API for product UI. Names describe intent, not appearance.",
     "color": {
       "brand": {
-        "default": { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "Brand pink #F770E3: marks, progress, selected, verified, like/send fills, switches. Glyphs on it use color.on-brand (white, glyph-only, 2.51:1); no text sits on it." },
-        "tint":    { "$type": "color", "$value": "{primitive.color.pink.100}", "$description": "Light brand surface for selected and highlighted states; dark text allowed." },
-        "subtle":  { "$type": "color", "$value": "{primitive.color.pink.200}", "$description": "Brand-tinted borders and image placeholders." }
+        "default": { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "Meetup primary purple: selected pills and chips, outgoing bubbles, progress, links, send and confirm actions, switches' focus. White text and glyphs on it are 4.90:1 (AA)." },
+        "tint":    { "$type": "color", "$value": "{primitive.color.purple.50}", "$description": "Light lavender surface for selected and highlighted states; purple text 4.6:1, brand-deep or ink text." },
+        "subtle":  { "$type": "color", "$value": "{primitive.color.purple.200}", "$description": "Lavender borders and tinted placeholders." },
+        "soft":    { "$type": "color", "$value": "{primitive.color.purple.50}", "$description": "Soft lavender secondary-button fill (Meetup 'Sign up with email')." },
+        "hero":    { "$type": "color", "$value": "{primitive.color.purple.300}", "$description": "Large decorative purple (hero washes, illustration framing). Never behind small text." }
       },
-      "on-brand": { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Glyphs (never text) on a solid brand-pink fill: white, bold or filled, 16px or larger, always with an accessible name or a text label beside it. A documented exception: white on #F770E3 is 2.51:1." },
+      "on-brand": { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Text and glyphs on a solid brand-purple fill: white, 4.90:1." },
+      "accent": {
+        "$description": "Meetup secondary palette, used by role only (badges, category and avatar framing, status marks), never as a second UI accent.",
+        "promo":  { "$type": "color", "$value": "{primitive.color.periwinkle.100}", "$description": "Promotional and guidance cards (Meetup 'Start a new group')." },
+        "pink":   { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "Badges and category marks." },
+        "pink-tint": { "$type": "color", "$value": "{primitive.color.pink.100}" },
+        "yellow": { "$type": "color", "$value": "{primitive.color.yellow.200}", "$description": "Illustration and avatar framing." },
+        "orange": { "$type": "color", "$value": "{primitive.color.orange.500}", "$description": "Time and status icons." },
+        "green":  { "$type": "color", "$value": "{primitive.color.green.500}", "$description": "Confirmation marks." }
+      },
       "text": {
         "primary":    { "$type": "color", "$value": "{primitive.color.neutral.900}" },
         "secondary":  { "$type": "color", "$value": "{primitive.color.neutral.700}" },
-        "muted":      { "$type": "color", "$value": "{primitive.color.neutral.500}", "$description": "Body copy, ledes, meta. 5.2:1 on white." },
-        "subtle":     { "$type": "color", "$value": "{primitive.color.neutral.400}", "$description": "Placeholders and disabled labels only (2.6:1, documented exception)." },
-        "brand":      { "$type": "color", "$value": "{primitive.color.neutral.900}", "$description": "Brand-context text (links, labels, eyebrows) on light surfaces. Resolves to ink because pink text on white is only 2.51:1; links stay underlined." },
-        "brand-deep": { "$type": "color", "$value": "{primitive.color.neutral.900}", "$description": "Text on brand.tint surfaces (16:1)." },
-        "accent":     { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "Exact brand pink for one emphasised word in a display-size hero headline (Emphasis). 2.51:1 on white: a deliberate, display-only exception (large decorative emphasis of words that also read in context). Never for body text, labels, links or instructions." },
+        "muted":      { "$type": "color", "$value": "{primitive.color.neutral.500}", "$description": "Body copy, ledes, meta. 5.8:1 on white." },
+        "subtle":     { "$type": "color", "$value": "{primitive.color.neutral.400}", "$description": "Placeholders and disabled labels only (2.8:1, documented exception)." },
+        "brand":      { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "Links and brand-context text on white (Meetup 'See all', legal links). 4.90:1." },
+        "brand-deep": { "$type": "color", "$value": "{primitive.color.purple.800}", "$description": "Text on lavender tints (7.1:1)." },
+        "accent":     { "$type": "color", "$value": "{primitive.color.pink.700}", "$description": "One emphasised word in a hero headline (Meetup 'The people platform'). 4.77:1 on white." },
         "on-inverse": { "$type": "color", "$value": "{primitive.color.neutral.0}" }
       },
       "surface": {
         "default": { "$type": "color", "$value": "{primitive.color.neutral.0}" },
-        "soft":    { "$type": "color", "$value": "{primitive.color.neutral.50}", "$description": "Fields and quiet fills." },
-        "sunken":  { "$type": "color", "$value": "{primitive.color.neutral.100}", "$description": "Tracks, disabled fills, hover on soft." },
-        "photo":   { "$type": "color", "$value": "{primitive.color.neutral.300}", "$description": "Neutral grey placeholder for a profile photo until licensed photography is supplied. Text over it sits on the photo legibility gradient." },
-        "page":    { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "App page background (Meetup reference: white pages; cards separate with a hairline and a faint shadow)." },
+        "soft":    { "$type": "color", "$value": "{primitive.color.neutral.100}", "$description": "Meetup grey fills: fields, search, unselected filter pills, incoming bubbles, quote cards." },
+        "sunken":  { "$type": "color", "$value": "{primitive.color.neutral.200}", "$description": "Tracks, disabled fills, the active tab pill." },
+        "photo":   { "$type": "color", "$value": "{primitive.color.neutral.300}", "$description": "Neutral grey placeholder for a profile photo until licensed photography is supplied." },
+        "page":    { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "App page background (Meetup: white pages; cards separate with a hairline and a faint shadow)." },
         "canvas":  { "$type": "color", "$value": "{primitive.color.neutral.100}", "$description": "Background behind app frames and showcase pages." },
-        "brand":   { "$type": "color", "$value": "{primitive.color.pink.50}", "$description": "Brand-washed screen backgrounds (welcome)." },
-        "inverse": { "$type": "color", "$value": "{primitive.color.neutral.900}", "$description": "Ink fills: primary actions, toasts." }
+        "brand":   { "$type": "color", "$value": "{primitive.color.purple.100}", "$description": "Lavender wash at the top of brand screens (Meetup Home header)." },
+        "inverse": { "$type": "color", "$value": "{primitive.color.neutral.900}", "$description": "Ink fills: primary CTAs, checked checkboxes, switches, toasts." }
       },
       "border": {
-        "subtle":  { "$type": "color", "$value": "{primitive.color.neutral.200}" },
+        "subtle":  { "$type": "color", "$value": "{primitive.color.neutral.200}", "$description": "Card and chip hairlines (Meetup)." },
         "strong":  { "$type": "color", "$value": "{primitive.color.neutral.300}" },
-        "brand":   { "$type": "color", "$value": "{primitive.color.pink.500}" },
-        "control": { "$type": "color", "$value": "{primitive.color.neutral.450}", "$description": "Outlines of unchecked checkboxes, radios and switches (3.2:1, meets non-text contrast)." }
+        "brand":   { "$type": "color", "$value": "{primitive.color.purple.600}" },
+        "control": { "$type": "color", "$value": "{primitive.color.neutral.450}", "$description": "Outlines of unchecked checkboxes and radios (3.4:1, meets non-text contrast)." }
       },
       "focus": {
-        "ring": { "$type": "color", "$value": "{primitive.color.neutral.900}", "$description": "Keyboard focus indicator. Ink (17:1) because pink is only 2.51:1 against white, below the 3:1 non-text minimum; the pink halo carries the brand." },
-        "halo": { "$type": "color", "$value": "{primitive.color.alpha.pink-32}", "$description": "Soft pink ring around a focused control (decorative; the ring token carries accessibility)." },
-        "field": { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "Focus stroke of text fields, search, code cells and the composer: the exact brand pink, one 2px stroke plus the halo, no ink ring. The stroke is 2.51:1 on white, below the 3:1 non-text guide, so a focused field also turns from grey to white (a second, colour-independent cue). Buttons and other controls keep the ink ring." }
-      },
-      "decor": {
-        "ribbon":        { "$type": "color", "$value": "{primitive.color.neutral.50}", "$description": "Broad decorative ribbon band: very light neutral grey (whitespace only, never over content)." },
-        "ribbon-accent": { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "The thin exact-brand-pink line that runs along part of a ribbon. Sparing: one short accent per ribbon." }
+        "ring":  { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "Keyboard focus indicator: brand purple, 4.90:1 on white." },
+        "halo":  { "$type": "color", "$value": "{primitive.color.alpha.purple-24}", "$description": "Soft lavender ring around a focused control." },
+        "field": { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "Focus stroke of fields, search, code cells and the composer: one 2px purple stroke plus the halo." }
       },
       "overlay": {
         "scrim": { "$type": "color", "$value": "{primitive.color.alpha.ink-34}" },
         "hover-light": { "$type": "color", "$value": "{primitive.color.alpha.white-55}" },
         "photo": { "$type": "color", "$value": "{primitive.color.alpha.ink-62}", "$description": "Bottom legibility overlay for text on photos (functional, not decorative)." }
       },
-      "danger":  { "default": { "$type": "color", "$value": "{primitive.color.red.600}" },   "tint": { "$type": "color", "$value": "{primitive.color.red.50}" } },
+      "danger":  { "default": { "$type": "color", "$value": "{primitive.color.red.600}" },   "tint": { "$type": "color", "$value": "{primitive.color.red.50}" }, "badge": { "$type": "color", "$value": "{primitive.color.red.600}", "$description": "Unread and notification count badges (Meetup red), white numerals 4.9:1." } },
       "success": { "default": { "$type": "color", "$value": "{primitive.color.green.700}" }, "tint": { "$type": "color", "$value": "{primitive.color.green.50}" } },
       "warning": { "default": { "$type": "color", "$value": "{primitive.color.amber.700}" }, "tint": { "$type": "color", "$value": "{primitive.color.amber.50}" } }
     },
@@ -235,18 +254,18 @@
     },
     "shadow": {
       "$description": "Elevation scale. Neutral ink at low opacity. Flat controls and fields use none; they rely on surface contrast or a hairline border.",
-      "thumb":  { "$type": "shadow", "$value": "0 0 0 0.5px rgb(20 23 31 / 0.06), 0 2px 6px rgb(20 23 31 / 0.16)", "$description": "White switch and slider thumbs: a barely-there edge and a soft drop so the white thumb reads on pink, grey and white without an outline." },
-      "xs":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.05)", "$description": "Tiny lift for small moving parts: switch knob, slider thumb, selected segment, selected option card." },
-      "sm":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.04), 0 6px 16px -6px rgb(20 23 31 / 0.08)", "$description": "Raised cards and list groups, floating icon buttons. Replaces outlines: no ring, just a soft contact shadow." },
-      "md":     { "$type": "shadow", "$value": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -6px 20px -8px rgb(20 23 31 / 0.10)", "$description": "Bottom sheets and bottom panels (shadow falls upward)." },
-      "float":  { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.05), 0 12px 32px -12px rgb(20 23 31 / 0.14)", "$description": "Persistent chrome that floats over the page: the bottom tab bar and the hero profile card." },
-      "lg":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.06), 0 10px 28px -8px rgb(20 23 31 / 0.20)", "$description": "Dialogs, toasts and popovers: the only tier that must clearly read as layered." },
-      "button": { "$type": "shadow", "$value": "inset 0 1px 0 rgb(255 255 255 / 0.10), 0 1px 2px rgb(20 23 31 / 0.14)", "$description": "Primary ink buttons: a faint top highlight and a contact shadow." },
-      "brand":  { "$type": "shadow", "$value": "inset 0 1px 0 rgb(255 255 255 / 0.40), 0 1px 2px rgb(20 23 31 / 0.08), 0 8px 20px -8px rgb(247 112 227 / 0.45)", "$description": "Large brand-pink actions only (SuperSwipe, send, match mark): a white top highlight, a neutral contact shadow and a soft glow in the exact brand pink. Never a darker pink." }
+      "thumb":  { "$type": "shadow", "$value": "0 0 0 0.5px rgb(20 19 22 / 0.06), 0 2px 6px rgb(20 19 22 / 0.16)", "$description": "White switch and slider thumbs: a barely-there edge and a soft drop so the white thumb reads on ink, purple, grey and white without an outline." },
+      "xs":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.05)", "$description": "Tiny lift for small moving parts: switch knob, slider thumb, selected segment, selected option card." },
+      "sm":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.04), 0 6px 16px -6px rgb(20 19 22 / 0.08)", "$description": "Raised cards and list groups, floating icon buttons. Replaces outlines: no ring, just a soft contact shadow." },
+      "md":     { "$type": "shadow", "$value": "0 -1px 0 rgb(20 19 22 / 0.04), 0 -6px 20px -8px rgb(20 19 22 / 0.10)", "$description": "Bottom sheets and bottom panels (shadow falls upward)." },
+      "float":  { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.05), 0 12px 32px -12px rgb(20 19 22 / 0.14)", "$description": "Persistent chrome that floats over the page: the bottom tab bar and the hero profile card." },
+      "lg":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.06), 0 10px 28px -8px rgb(20 19 22 / 0.20)", "$description": "Dialogs, toasts and popovers: the only tier that must clearly read as layered." },
+      "button": { "$type": "shadow", "$value": "inset 0 1px 0 rgb(255 255 255 / 0.10), 0 1px 2px rgb(20 19 22 / 0.14)", "$description": "Primary ink buttons: a faint top highlight and a contact shadow." },
+      "brand":  { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.08), 0 6px 16px -6px rgb(114 98 199 / 0.40)", "$description": "Floating purple actions (Meetup 'Map' pill, confirm FAB): a contact shadow and a soft purple drop. Flat purple pills inside content use none." }
     },
     "gradient": {
       "$description": "Surface treatments layered over a fill colour.",
-      "brand-sheen": { "$type": "other", "$value": "linear-gradient(180deg, rgb(255 255 255 / 0.30) 0%, rgb(255 255 255 / 0.10) 42%, rgb(255 255 255 / 0) 72%)", "$description": "White light reflection over the exact brand pink (lighter tints only, never darker). Layer it above var(--color-brand) on large pink actions; small badges, chips, bubbles and progress stay flat." }
+      "brand-sheen": { "$type": "other", "$value": "linear-gradient(180deg, rgb(255 255 255 / 0.14) 0%, rgb(255 255 255 / 0) 60%)", "$description": "A faint top light over large purple actions, matching the soft sheen of Meetup's ink CTAs. Chips, bubbles and progress stay flat." }
     },
     "opacity": {
       "disabled": { "$type": "number", "$value": "0.45" },

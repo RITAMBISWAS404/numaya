@@ -55,7 +55,7 @@ try {
       );
       return { color: el && getComputedStyle(el).color, bg: el && getComputedStyle(el).backgroundImage, deco: el && getComputedStyle(el).textDecorationLine, after };
     });
-    check("headline emphasis is the word itself in exact #F770E3 (no marker, underline or background)", emphasis.color === "rgb(247, 112, 227)" && emphasis.bg === "none" && emphasis.deco === "none", `${emphasis.color} / ${emphasis.bg} / ${emphasis.deco}`);
+    check("headline emphasis is the word itself in the Meetup accent pink #C1486A (no marker, underline or background)", emphasis.color === "rgb(193, 72, 106)" && emphasis.bg === "none" && emphasis.deco === "none", `${emphasis.color} / ${emphasis.bg} / ${emphasis.deco}`);
     check("headline has no decorative underline", !emphasis.after);
 
     const hero = await p.evaluate(() => {
@@ -69,7 +69,7 @@ try {
       return { slot: !!document.querySelector("[data-illustration='welcome-hero']"), stack: document.querySelectorAll(".prompt-card").length, link: { color: getComputedStyle(a).color, line: getComputedStyle(a).textDecorationColor } };
     });
     check("welcome: the hero is a reserved illustration slot (no prompt-card stack)", welcome.slot && welcome.stack === 0);
-    check("welcome: legal links are ink with a brand-pink underline", welcome.link.color === "rgb(20, 23, 31)" && welcome.link.line === "rgb(247, 112, 227)", JSON.stringify(welcome.link));
+    check("welcome: legal links are brand purple with a thin purple underline", welcome.link.color === "rgb(114, 98, 199)" && /0\.447059 0\.384314 0\.780392|114, 98, 199/.test(welcome.link.line), JSON.stringify(welcome.link));
 
     await p.getByRole("button", { name: "Create an account" }).click();
     await wait(900);
@@ -106,7 +106,7 @@ try {
       const active = document.querySelector(".code__cell.is-active");
       return { n: cells.length, radius: getComputedStyle(cells[0]).borderTopLeftRadius, w: cells.map((c) => Math.round(c.getBoundingClientRect().width)), ring: active && getComputedStyle(active).boxShadow };
     });
-    check("OTP: six softly rounded 18px cells of equal width; the active cell has a pink stroke and halo, no ink", otp.n === 6 && otp.radius === "18px" && new Set(otp.w).size === 1 && otp.ring?.includes("247, 112, 227") && !otp.ring.includes("20, 23, 31"), JSON.stringify(otp));
+    check("OTP: six softly rounded 18px cells of equal width; the active cell has a purple stroke and halo, no ink", otp.n === 6 && otp.radius === "18px" && new Set(otp.w).size === 1 && otp.ring?.includes("114, 98, 199") && !otp.ring.includes("20, 19, 22"), JSON.stringify(otp));
     await p.locator(".keypad__suggestion").click({ timeout: 5000 });
     await wait(3200);
     const badge = await p.evaluate(() => {
@@ -114,8 +114,8 @@ try {
       const fill = el?.querySelector(".result__shape-fill");
       return el && { bg: fill && getComputedStyle(fill).fill, fg: getComputedStyle(el).color };
     });
-    check("verified badge fill is exactly #F770E3", badge?.bg === "rgb(247, 112, 227)", badge?.bg);
-    check("verified badge check is white, never ink on pink", badge?.fg === "rgb(255, 255, 255)", badge?.fg);
+    check("verified badge fill is the brand purple #7262C7", badge?.bg === "rgb(114, 98, 199)", badge?.bg);
+    check("verified badge check is white on purple", badge?.fg === "rgb(255, 255, 255)", badge?.fg);
     await p.screenshot({ path: `${OUT}/prototype-verified.png` });
 
     await p.getByRole("button", { name: "Start over" }).first().click();
@@ -240,13 +240,9 @@ try {
     check("keyboard: Like has a visible focus ring and Enter opens the match", focusVisible && (await p.locator("#match").innerText()).includes("You and Maya liked each other"));
     await wait(600);
     const deco = await p.evaluate(() => {
-      const ribbons = [...document.querySelectorAll(".ribbon")];
       const marker = document.querySelector("#match .emphasis");
       return {
-        where: ribbons.map((r) => r.closest(".fl-frame")?.id).sort().join(),
-        hidden: ribbons.every((r) => r.getAttribute("aria-hidden") === "true" && getComputedStyle(r).pointerEvents === "none"),
-        anim: ribbons.flatMap((r) => [...r.querySelectorAll("svg")].map((x) => getComputedStyle(x).animationName)),
-        colours: ribbons.map((r) => `${getComputedStyle(r.querySelector(".ribbon__band path")).stroke}|${getComputedStyle(r.querySelector(".ribbon__accent path")).stroke}`),
+        ribbons: document.querySelectorAll(".ribbon, [class*='ribbon__']").length,
         setup: (() => {
           const steps = [...document.querySelectorAll("#intro .setup-progress__step")];
           return { states: steps.map((x) => x.className.match(/is-(\w+)/)?.[1]).join(), current: steps.findIndex((x) => x.getAttribute("aria-current") === "step"), icons: steps.every((x) => x.querySelector(".setup-progress__icon svg[data-weight='fill']")) };
@@ -254,12 +250,9 @@ try {
         marker: marker && { text: marker.textContent, color: getComputedStyle(marker).color },
       };
     });
-    check("expressive: in the flows a ribbon appears only on the match moment (none at the verified badge)", deco.where === "match", deco.where);
-    check("expressive: ribbons are aria-hidden and never take pointer input", deco.hidden);
-    check("expressive: reduced motion keeps ribbons static", deco.anim.every((a) => a === "none"), deco.anim.join());
-    check("expressive: ribbons are a very light neutral band with an exact-#F770E3 accent line", deco.colours.length > 0 && deco.colours.every((c) => c === "rgb(243, 245, 248)|rgb(247, 112, 227)"), deco.colours.join());
+    check("expressive: no decorative ribbons or threads anywhere in the flows", deco.ribbons === 0, String(deco.ribbons));
     check("setup progress: a fresh intro shows Basics next and Interests, Photos upcoming, with filled icons", deco.setup.states === "active,upcoming,upcoming" && deco.setup.current === 0 && deco.setup.icons, JSON.stringify(deco.setup));
-    check("expressive: the match title colours one word brand pink", deco.marker?.text === "match" && deco.marker.color === "rgb(247, 112, 227)", JSON.stringify(deco.marker));
+    check("expressive: the match title colours one word in the accent pink", deco.marker?.text === "match" && deco.marker.color === "rgb(193, 72, 106)", JSON.stringify(deco.marker));
     check("motion: no console errors with reduced motion", p.errors.length === 0, p.errors.join(" | "));
     await p.evaluate(() => localStorage.clear());
   }
@@ -283,9 +276,10 @@ try {
       const header = await p.evaluate(() => getComputedStyle(document.querySelector(".fl-top")).position);
       check("flows: navigation strip is not sticky", header !== "sticky" && header !== "fixed", header);
 
-      // Brand pink in real interactive states (computed styles), and no legacy blue anywhere on the page.
-      const PINK = "rgb(247, 112, 227)";
-      const INK = "rgb(20, 23, 31)";
+      // Brand purple in real interactive states (computed styles), and no legacy colours anywhere on the page.
+      const BRAND = "rgb(114, 98, 199)";
+      const INK = "rgb(20, 19, 22)";
+      const WHITE = "rgb(255, 255, 255)";
       const states = await p.evaluate(() => {
         const cs = (sel, pseudo) => getComputedStyle(document.querySelector(sel), pseudo);
         return {
@@ -321,11 +315,11 @@ try {
         };
       });
       check("flows: like is an ink action (Meetup primary sheen) with a white glyph", states.likeBg.includes(INK) && states.likeFg === "rgb(255, 255, 255)", `${states.likeBg.slice(0, 60)} / ${states.likeFg}`);
-      check("flows: SuperSwipe is the single brand-pink action, with a white glyph (never ink on pink)", states.superBg === PINK && states.superFg === "rgb(255, 255, 255)", `${states.superBg} / ${states.superFg}`);
-      check("flows: selected interest is an ink pill with white text and a brand-pink tick", states.chipBg === INK && states.chipRing === "none" && states.chipFg === "rgb(255, 255, 255)" && states.chipTick === PINK, `${states.chipBg} / ${states.chipFg} / ${states.chipTick}`);
+      check("flows: SuperSwipe is the single brand-purple action, with a white star", states.superBg === BRAND && states.superFg === WHITE, `${states.superBg} / ${states.superFg}`);
+      check("flows: selected interest is a brand-purple pill with white text and a white minus-circle (Meetup)", states.chipBg === BRAND && states.chipRing === "none" && states.chipFg === WHITE && states.chipTick === WHITE, `${states.chipBg} / ${states.chipFg} / ${states.chipTick}`);
       check("flows: every interest chip leads with a filled Solar cue", states.chipIcons);
       check("flows: selecting a chip keeps its size (no reflow)", states.chipSizes[0] === states.chipSizes[1] && states.chipSizes[2] === states.chipSizes[3], states.chipSizes.join(" / "));
-      check("flows: success badge is a pink cookie shape with a white check and no white disc", states.badgeShape === PINK && states.badgeIcon === "rgb(255, 255, 255)" && states.badgeDisc === "none", `${states.badgeShape} / ${states.badgeIcon} / ${states.badgeDisc}`);
+      check("flows: success badge is a purple cookie shape with a white check and no white disc", states.badgeShape === BRAND && states.badgeIcon === "rgb(255, 255, 255)" && states.badgeDisc === "none", `${states.badgeShape} / ${states.badgeIcon} / ${states.badgeDisc}`);
       check("photos: empty slots (white, hairline) are distinct from filled photo placeholders (grey)", states.slotEmpty === "rgb(255, 255, 255)" && /inset/.test(states.slotEmptyEdge) && states.slotFilled !== states.slotEmpty, `${states.slotFilled} vs ${states.slotEmpty}`);
       const pinkFg = await p.evaluate(() => {
         const disc = (sel) => { const e = document.querySelector(sel); return e && { inset: getComputedStyle(e, "::before").content, bg: getComputedStyle(e).backgroundColor, fg: getComputedStyle(e).color }; };
@@ -355,18 +349,18 @@ try {
           send: getComputedStyle(document.querySelector("#chat .composer__send")).borderTopLeftRadius,
         };
       });
-      check("pink: pink actions and marks carry white glyphs, with no white inset disc and never ink", pinkFg.discs.length >= 3 && pinkFg.discs.every((d) => d.inset === "none" && d.fg === "rgb(255, 255, 255)" && d.fg !== INK), JSON.stringify(pinkFg.discs));
-      check("selection: a checked checkbox is ink with a white tick (no glyph on pink)", pinkFg.checkbox === INK, pinkFg.checkbox);
+      check("brand: purple actions and marks are solid #7262C7 with white glyphs, no inset disc", pinkFg.discs.length >= 3 && pinkFg.discs.every((d) => d.inset === "none" && d.bg === BRAND && d.fg === WHITE), JSON.stringify(pinkFg.discs));
+      check("selection: a checked checkbox is ink with a white tick (Meetup)", pinkFg.checkbox === INK, pinkFg.checkbox);
       check("fields: form fields are 16px rounded rectangles, not pills", pinkFg.phoneRadius === "16px", pinkFg.phoneRadius);
       check("info cards: photo guidance and blocking help use the shared information card", pinkFg.infoCards === 2, String(pinkFg.infoCards));
-      check("you both like: a white 24px card, pink only on the small heart mark, neutral pills with icons", pinkFg.shared?.bg === "rgb(255, 255, 255)" && pinkFg.shared.radius === "24px" && pinkFg.shared.mark === PINK && pinkFg.shared.pills > 0 && pinkFg.shared.icons && pinkFg.shared.pillBg !== PINK, JSON.stringify(pinkFg.shared));
-      check("match queue: new matches are 60x80 vertical capsules with an unclipped pink ring", pinkFg.portrait?.w === 60 && pinkFg.portrait.h === 80 && pinkFg.portrait.radius === "999px" && pinkFg.portrait.ring.includes(PINK) && pinkFg.portrait.clear, JSON.stringify(pinkFg.portrait));
-      check("actions: Pass / Super / Like and the floating SuperSwipe are 72x56 pills; send is a pill", pinkFg.actions.length === 3 && pinkFg.actions.every((a) => a === "72x56/28px") && pinkFg.floating === "28px" && pinkFg.send === "999px", `${pinkFg.actions.join(" ")} / ${pinkFg.floating} / ${pinkFg.send}`);
-      check("flows: switch on is a brand-pink track; off is a plain grey track, no outline, white thumb", states.switchOn === PINK && states.switchOff.bg === "rgb(215, 219, 225)" && states.switchOff.edge === "none" && states.switchOff.thumb === "rgb(255, 255, 255)", `${states.switchOn} / ${JSON.stringify(states.switchOff)}`);
-      check("flows: sliders have white thumbs on a brand-pink interval over a grey rail (no ink)", states.slider.thumb === "rgb(255, 255, 255)" && states.slider.track.includes(PINK) && states.slider.track.includes("rgb(215, 219, 225)") && !states.slider.track.includes(INK), JSON.stringify(states.slider));
-      check("navigation: idle tabs are soft grey with a readable label", states.tabIdleIcon === "rgb(154, 161, 172)" && states.tabIdleLabel === "rgb(100, 107, 120)", `${states.tabIdleIcon} / ${states.tabIdleLabel}`);
-      check("flows: active tab sits on a grey pill with a pink icon and an ink label (Meetup)", states.tabActive === "rgb(236, 239, 243)" && states.tabActiveFg === INK && states.tabActiveIcon === PINK, `${states.tabActive} / ${states.tabActiveFg} / ${states.tabActiveIcon}`);
-      check("flows: progress fill uses brand pink", states.progress === PINK, states.progress);
+      check("you both like: a white 24px card, a small purple mark, grey shared-interest pills with icons (Meetup)", pinkFg.shared?.bg === WHITE && pinkFg.shared.radius === "24px" && pinkFg.shared.mark === BRAND && pinkFg.shared.pills > 0 && pinkFg.shared.icons && pinkFg.shared.pillBg === "rgb(242, 242, 242)", JSON.stringify(pinkFg.shared));
+      check("match queue: new matches are 60x80 vertical capsules with an unclipped purple ring", pinkFg.portrait?.w === 60 && pinkFg.portrait.h === 80 && pinkFg.portrait.radius === "999px" && pinkFg.portrait.ring.includes(BRAND) && pinkFg.portrait.clear, JSON.stringify(pinkFg.portrait));
+      check("actions: Pass / Super / Like and the floating SuperSwipe are 72x56 pills; send is a circle (Meetup composer)", pinkFg.actions.length === 3 && pinkFg.actions.every((a) => a === "72x56/28px") && pinkFg.floating === "28px" && pinkFg.send === "50%", `${pinkFg.actions.join(" ")} / ${pinkFg.floating} / ${pinkFg.send}`);
+      check("flows: switch on is an ink track (Meetup); off is a plain grey track, no outline, white thumb", states.switchOn === INK && states.switchOff.bg === "rgb(218, 218, 221)" && states.switchOff.edge === "none" && states.switchOff.thumb === "rgb(255, 255, 255)", `${states.switchOn} / ${JSON.stringify(states.switchOff)}`);
+      check("flows: sliders have white thumbs on a brand-purple interval over a grey rail (no ink)", states.slider.thumb === WHITE && states.slider.track.includes(BRAND) && states.slider.track.includes("rgb(218, 218, 221)") && !states.slider.track.includes(INK), JSON.stringify(states.slider));
+      check("navigation: idle tabs are ink line icons with an ink label (Meetup)", states.tabIdleIcon === "rgb(60, 59, 64)" && states.tabIdleLabel === "rgb(60, 59, 64)", `${states.tabIdleIcon} / ${states.tabIdleLabel}`);
+      check("flows: active tab sits on a grey pill with a purple icon and a deep-purple label (Meetup)", states.tabActive === "rgb(233, 232, 235)" && states.tabActiveFg === "rgb(79, 66, 150)" && states.tabActiveIcon === BRAND, `${states.tabActive} / ${states.tabActiveFg} / ${states.tabActiveIcon}`);
+      check("flows: progress fill uses brand purple", states.progress === BRAND, states.progress);
       // Geometry, elevation, icons and bottom navigation.
       const geo = await p.evaluate(() => {
         const cs = (sel) => getComputedStyle(document.querySelector(sel));
@@ -385,6 +379,7 @@ try {
             return { cap: getComputedStyle(v).strokeLinecap, stroke: getComputedStyle(v).stroke, width: getComputedStyle(v).strokeWidth, rounded: /A/.test(v.getAttribute("d")), inside: vb.left >= av.left - 0.5 && vb.top >= av.top - 0.5 && Math.abs(box.width - av.width) < 0.5 };
           })(),
           promptShadowAlpha: alpha(cs("#profile .prompt").boxShadow),
+          promptBg: cs("#profile .prompt").backgroundColor,
           tabShadow: getComputedStyle(tab).boxShadow,
           tabRadius: parseFloat(getComputedStyle(tab).borderTopLeftRadius),
           tabPad: parseFloat(getComputedStyle(tab).paddingTop),
@@ -400,7 +395,7 @@ try {
           tabCurrent: tab.querySelectorAll(".tab-bar__item[aria-current='page']").length,
           icons: document.querySelectorAll("#discovery svg.solar").length,
           foreignIcons: document.querySelectorAll("svg.ph, [class*='phosphor'], svg[viewBox='0 0 256 256']").length,
-          activeTabFilled: [...document.querySelectorAll("#discovery .tab-bar__item svg")].every((s) => /-bold\b/.test(s.getAttribute("class"))),
+          tabWeights: [...document.querySelectorAll("#discovery .tab-bar__item")].map((t) => `${t.classList.contains("is-current") ? "on" : "off"}:${t.querySelector("svg").dataset.weight}`),
           lineGlyphs: [...document.querySelectorAll("#settings .top-bar svg, #chat .top-bar svg")].map((s) => s.getAttribute("class").match(/solar-([\w-]+)/)?.[1]).filter(Boolean),
           legacyStrokeIcons: document.querySelectorAll("#discovery svg[stroke-linecap='round'][viewBox='0 0 24 24']").length,
         };
@@ -408,8 +403,8 @@ try {
       check("geometry: buttons are pills (Meetup)", geo.btnRadius >= 999, `${geo.btnRadius}px`);
       check("geometry: no squircle or superellipse corner-shape anywhere (plain border-radius only)", geo.shaped === 0, `${geo.shaped} shaped elements`);
       check("shape: avatars are rounded rectangles, radius 30% of the image (36px → 10.8px; ringed 96px → 26.4px)", geo.avatarRadius[0] === "10.8px" && geo.avatarRadius[1] === "26.4px", geo.avatarRadius.join(" / "));
-      check("shape: the completion ring traces a rounded rectangle with round caps in brand pink", geo.ring.rounded && geo.ring.cap === "round" && geo.ring.stroke === PINK && geo.ring.width === "4px" && geo.ring.inside, JSON.stringify(geo.ring));
-      check("elevation: card shadow is very light", geo.promptShadowAlpha > 0 && geo.promptShadowAlpha <= 0.08, `alpha ${geo.promptShadowAlpha}`);
+      check("shape: the completion ring traces a rounded rectangle with round caps in brand purple", geo.ring.rounded && geo.ring.cap === "round" && geo.ring.stroke === BRAND && geo.ring.width === "4px" && geo.ring.inside, JSON.stringify(geo.ring));
+      check("surfaces: prompt answers are flat grey quote cards (Meetup 'About me'), no shadow", geo.promptShadowAlpha === 0 && geo.promptBg === "rgb(242, 242, 242)", `alpha ${geo.promptShadowAlpha} / ${geo.promptBg}`);
       const tabAlpha = Math.max(0, ...[...geo.tabShadow.matchAll(/rgba\(\d+, \d+, \d+, ([0-9.]+)\)/g)].map((m) => parseFloat(m[1])));
       check("navigation: floating capsule inset from the edges with a soft shadow (Meetup)", geo.tabInset >= 8 && geo.tabRadius >= 999 && tabAlpha > 0 && tabAlpha <= 0.14, `inset ${geo.tabInset} / radius ${geo.tabRadius} / alpha ${tabAlpha}`);
       check("navigation: bar sits below the scrolling content, never over it", geo.tabBelowBody);
@@ -424,7 +419,7 @@ try {
         const r = (sel) => parseFloat(getComputedStyle(document.querySelector(sel)).borderTopLeftRadius);
         return { radius: parseFloat(s.borderTopLeftRadius), card: r("#discovery .fl-pf__section"), input: r("#basics .input"), textarea: r("#prompt .textarea__input"), bg: s.backgroundColor, ext: [...document.querySelectorAll("#discovery img")].filter((i) => /^https?:\/\/(?!localhost)/.test(i.src)).length, placeholders: document.querySelectorAll("#discovery .fl-pf__photo").length };
       });
-      check("discover: photo areas are neutral grey placeholders and no images are hotlinked", imagery.bg === "rgb(215, 219, 225)" && imagery.ext === 0 && imagery.placeholders >= 1, JSON.stringify(imagery));
+      check("discover: photo areas are neutral grey placeholders and no images are hotlinked", imagery.bg === "rgb(218, 218, 221)" && imagery.ext === 0 && imagery.placeholders >= 1, JSON.stringify(imagery));
       check("geometry: corner hierarchy photo 32 > card 24 > text area 20 > form field 16", imagery.radius === 32 && imagery.card === 24 && imagery.textarea === 20 && imagery.input === 16, `${imagery.radius} / ${imagery.card} / ${imagery.textarea} / ${imagery.input}`);
       const roll = await p.evaluate(() => {
         const cs = (sel) => getComputedStyle(document.querySelector(sel));
@@ -436,6 +431,7 @@ try {
           mine: cs("#chat .message--me .message__bubble").backgroundColor,
           mineFg: cs("#chat .message--me .message__bubble").color,
           theirs: cs("#chat .message--them .message__bubble").backgroundColor,
+          theirsFg: cs("#chat .message--them .message__bubble").color,
           chip: cs("#interests .chip:not(.is-selected)").boxShadow,
           lastVisible: last.bottom <= body.bottom + 0.5,
           stripCols: cs("#profile .fl-photo-strip").gridTemplateColumns.split(" ").length,
@@ -444,8 +440,8 @@ try {
         };
       });
       check("surfaces: tab roots, chat, match and settings share the page tint", roll.pages.every((c) => c === roll.page), roll.pages.join(" | "));
-      check("chat: outgoing bubbles are a soft brand tint with ink text (not saturated pink), incoming light grey", roll.mine === "rgb(253, 212, 247)" && roll.mineFg === INK && roll.theirs === "rgb(236, 239, 243)", `${roll.mine} / ${roll.mineFg} / ${roll.theirs}`);
-      check("selection: unselected chips are filled, not outlined", roll.chip === "none", roll.chip);
+      check("chat: outgoing bubbles are solid brand purple with white text, incoming light grey with ink (Meetup)", roll.mine === BRAND && roll.mineFg === WHITE && roll.theirs === "rgb(242, 242, 242)" && roll.theirsFg === INK, `${roll.mine} / ${roll.mineFg} / ${roll.theirs}`);
+      check("selection: unselected chips are white pills with a hairline (Meetup)", /inset/.test(roll.chip) && roll.chip.includes("1px"), roll.chip);
       check("chat: the last message sits above the composer", roll.lastVisible);
       const art = await p.evaluate(() => {
         const slots = [...document.querySelectorAll("[data-illustration]")];
@@ -465,7 +461,7 @@ try {
       check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);
       check("navigation: exactly one current tab", geo.tabCurrent === 1);
       check("icons: Solar glyphs render and no other icon family or legacy stroke icons remain", geo.icons > 0 && geo.foreignIcons === 0 && geo.legacyStrokeIcons === 0, `${geo.icons} solar / ${geo.foreignIcons} other / ${geo.legacyStrokeIcons} legacy`);
-      check("icons: every tab uses the filled Solar glyph (colour and the pill mark the current one)", geo.activeTabFilled);
+      check("icons: the current tab uses the filled Solar glyph, the others the line glyph (Meetup)", geo.tabWeights.every((w) => w === "on:fill" || w === "off:regular") && geo.tabWeights.filter((w) => w === "on:fill").length === 1, geo.tabWeights.join(" "));
 
       await f("basics").getByLabel("First name").focus();
       await wait(500); // let the focus-ring transition finish before reading computed styles
@@ -477,16 +473,17 @@ try {
       await f("chat").locator("textarea").first().focus();
       await wait(500);
       others.composer = await p.evaluate(() => getComputedStyle(document.querySelector("#chat .composer__field")).boxShadow);
-      check("focus: multiline answers and the chat composer share the pink focus (no ink ring)", Object.values(others).every((v) => v.includes("247, 112, 227") && !v.includes(INK)), JSON.stringify(others).slice(0, 160));
+      check("focus: multiline answers and the chat composer share the purple focus (no ink ring)", Object.values(others).every((v) => v.includes("114, 98, 199") && !v.includes(INK)), JSON.stringify(others).slice(0, 160));
       await f("basics").getByLabel("First name").focus();
       await wait(500);
-      check("flows: field focus is one brand-pink 2px stroke with a pink halo, no ink ring", focus.includes(`${PINK} 0px 0px 0px 2px inset`) && focus.includes("rgba(247, 112, 227") && !focus.includes(INK), focus.slice(0, 90));
+      check("flows: field focus is one brand-purple 2px stroke with a lavender halo, no ink ring", focus.includes(`${BRAND} 0px 0px 0px 2px inset`) && focus.includes("rgba(114, 98, 199") && !focus.includes(INK), focus.slice(0, 90));
       for (const [name, path] of [["prototype", ""], ["flows", "flows.html"], ["showcase", "showcase.html"]]) {
         const q = await page({ width: 1440, height: 900 });
         await q.goto(base + path);
         await wait(1200);
         const legacy = await q.evaluate(() => {
-          const re = /99, 175, 233|31, 111, 176|23, 80, 127|63, 146, 212/;
+          // Legacy blue and the retired #F770E3 pink theme (and its tints).
+          const re = /99, 175, 233|31, 111, 176|23, 80, 127|63, 146, 212|247, 112, 227|253, 212, 247|254, 238, 252|255, 246, 253/;
           let n = 0;
           for (const el of document.querySelectorAll("*")) {
             const s = getComputedStyle(el);
@@ -494,7 +491,7 @@ try {
           }
           return n;
         });
-        check(`${name}: no legacy blue is rendered`, legacy === 0, `${legacy} elements`);
+        check(`${name}: no legacy blue or retired pink is rendered`, legacy === 0, `${legacy} elements`);
       }
 
       await f("basics").getByLabel("First name").fill("Jordan");
@@ -538,7 +535,7 @@ try {
       await wait(600);
       check("flows: report ends in a block confirmation", (await textOf("chat")).includes("You’ve blocked and reported Maya"));
       const outcome = await p.evaluate(() => { const b = document.querySelector("#chat .result__badge"); const st = getComputedStyle(b); return { neutral: b.closest(".result").classList.contains("result--neutral"), bg: st.backgroundImage + " " + st.backgroundColor, shadow: st.boxShadow, round: st.borderTopLeftRadius, cookie: !!b.querySelector(".result__shape") }; });
-      check("flows: safety outcomes use the round neutral badge (no brand pink, glow or success cookie)", outcome.neutral && !outcome.bg.includes(PINK) && !outcome.shadow.includes("247, 112, 227") && outcome.round === "50%" && !outcome.cookie, JSON.stringify(outcome));
+      check("flows: safety outcomes use the round neutral badge (no brand purple, glow or success cookie)", outcome.neutral && !outcome.bg.includes(BRAND) && !outcome.shadow.includes("114, 98, 199") && outcome.round === "50%" && !outcome.cookie, JSON.stringify(outcome));
       check("flows: blocked person leaves the inbox", !(await textOf("chats")).includes("Maya"));
       check("flows: settings counts the blocked person", /Blocked people 1/.test(await textOf("settings")));
       await f("chats").getByRole("button", { name: /Jo/ }).first().click();

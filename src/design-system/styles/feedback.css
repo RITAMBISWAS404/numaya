@@ -6,7 +6,7 @@
   text-align: center;
 }
 
-/* Success badge: a 9-sided "cookie" in the exact brand pink with a white check, on a pale tint
+/* Success badge: a 9-sided "cookie" in brand purple with a white check, on a lavender tint
    halo of the same shape. The shape is reserved for success, so it never reads like the round
    neutral or danger outcomes. Drawn as SVG (Content.jsx) so the halo follows the scallops. */
 .result__badge {

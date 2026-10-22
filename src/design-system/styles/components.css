@@ -62,13 +62,13 @@
   background: linear-gradient(180deg, var(--button-primary-bg-hover-top) 0%, var(--button-primary-bg-hover-bottom) 100%);
 }
 
-/* Secondary (Meetup "See all events"): light-grey pill, no outline. */
+/* Secondary (Meetup "Joined", dialog "Cancel"): a flat light-grey pill, no outline. */
 .btn--secondary {
   color: var(--color-text-primary);
-  background: var(--color-surface-sunken);
+  background: var(--color-surface-soft);
 }
 .btn--secondary:hover:not(:disabled) {
-  background: var(--color-border-subtle);
+  background: var(--color-surface-sunken);
 }
 
 .btn--quiet {
@@ -381,8 +381,8 @@
   background: var(--color-surface-sunken);
 }
 
-/* One focus treatment for every field: a brand-pink stroke and the soft pink halo, no ink ring.
-   The field also turns white, so focus does not rely on the pink stroke alone. */
+/* One focus treatment for every field: a 2px brand-purple stroke and a soft lavender halo.
+   The grey field also turns white, a second cue beside the stroke. */
 .input:focus,
 .input:focus-visible,
 .input[aria-expanded="true"] {
@@ -635,12 +635,13 @@
   background: var(--color-danger);
 }
 
-/* Brand button: a soft brand tint with a brand-pink ring and an ink label. Text never sits on
-   saturated #F770E3 (ink reads harsh there; white is only 2.51:1). */
+/* Brand button (Meetup "Sign up with email", "Join"): a soft lavender pill with a faint lavender
+   edge and a deep-purple label (7.1:1). The solid purple fill is kept for chips, bubbles and the
+   floating actions, as in the reference. */
 .btn--brand {
-  color: var(--color-text-primary);
-  background: var(--color-brand-subtle);
-  box-shadow: inset 0 0 0 var(--border-selected) var(--color-brand);
+  color: var(--color-text-brand-deep);
+  background: var(--color-brand-soft);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-brand-subtle);
 }
 .btn--brand:active:not(:disabled) {
   background: var(--color-brand-tint);
@@ -728,7 +729,8 @@
 }
 
 .screen-header__eyebrow {
-  color: var(--color-text-brand);
+  /* Deep purple: 11px caps stay above 4.5:1 on white and on grey fills alike. */
+  color: var(--color-text-brand-deep);
   font-size: var(--type-eyebrow-size);
   line-height: var(--type-eyebrow-line);
   font-weight: var(--type-eyebrow-weight);
@@ -737,8 +739,8 @@
 }
 
 /* Tab bar: Bumble destinations and order, Meetup styling. A frosted capsule floating above the bottom
-   edge; the active item sits on a light-grey pill with a filled pink icon and a bold ink label (pink
-   label text would be 2.51:1). The bar stays in the layout flow, so it never covers content. */
+   edge; inactive items are line icons in ink, the active item sits on a light-grey pill with a filled
+   purple icon and a deep-purple label. The bar stays in the layout flow, so it never covers content. */
 .tab-bar {
   display: grid;
   grid-auto-columns: 1fr;
@@ -762,7 +764,7 @@
   gap: 2px;
   min-width: var(--size-touch-min);
   border-radius: var(--radius-pill);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
   font-size: 11px;
   line-height: 13px;
   font-weight: var(--font-weight-medium);
@@ -783,25 +785,24 @@
 
 .tab-bar__item.is-current {
   background: var(--color-surface-sunken);
-  color: var(--color-text-primary);
-  font-weight: var(--font-weight-bold);
+  color: var(--color-text-brand-deep);
+  font-weight: var(--font-weight-semibold);
 }
 
 .tab-bar__item.is-current .tab-bar__icon {
   color: var(--color-brand);
 }
 
-/* Every tab uses the filled Solar glyph: inactive ones in a soft grey (label stays readable at
-   5.4:1), the current one in brand pink on the grey pill with a bold ink label. */
+/* Inactive tabs use the Solar line glyph in ink (Meetup); the current one the filled glyph in purple. */
 .tab-bar__icon {
   position: relative;
   display: grid;
-  color: var(--color-text-subtle);
+  color: var(--color-text-secondary);
   transition: color var(--motion-duration-base);
 }
 
 .tab-bar__item:hover .tab-bar__icon {
-  color: var(--color-text-muted);
+  color: var(--color-text-primary);
 }
 
 .tab-bar__icon .count-badge {

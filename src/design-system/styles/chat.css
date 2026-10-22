@@ -32,19 +32,17 @@
   animation: rise-in var(--motion-duration-base) var(--motion-ease-out);
 }
 
-/* Mine: a soft brand tint (brand-subtle, the 30% mix) with ink text: clearly separate from their
-   grey bubbles and calm in long threads. Chosen over saturated pink, a paler tint and ink bubbles
-   from rendered comparisons. */
+/* Mine (Meetup): solid brand purple with white text (4.90:1). */
 .message--me .message__bubble {
   border-bottom-right-radius: var(--radius-xs);
-  background: var(--color-brand-subtle);
-  color: var(--color-text-primary);
+  background: var(--color-brand);
+  color: var(--color-on-brand);
 }
 
-/* Theirs: light grey, flat. */
+/* Theirs (Meetup): the light grey surface, flat, ink text. */
 .message--them .message__bubble {
   border-bottom-left-radius: var(--radius-xs);
-  background: var(--color-surface-sunken);
+  background: var(--color-surface-soft);
   color: var(--color-text-primary);
 }
 
@@ -146,29 +144,27 @@
   color: var(--color-text-subtle);
 }
 
-/* Send: exact brand fill with a white glyph; disabled falls back to neutral. */
+/* Send: brand purple with a white arrow once there is text; empty, it is the quiet grey circle of
+   the Meetup composer. */
 .composer__send {
   display: grid;
   place-items: center;
   flex: none;
-  /* A short horizontal pill beside the pill field (chosen over a circle in a rendered comparison). */
-  width: 56px;
+  /* A flat circle beside the pill field, as in the Meetup composer. */
+  width: var(--size-touch-min);
   height: var(--size-touch-min);
-  border-radius: var(--radius-pill);
-  background: var(--gradient-brand-sheen), var(--color-brand);
-  box-shadow: var(--shadow-brand);
+  border-radius: 50%;
+  background: var(--color-brand);
   color: var(--color-on-brand);
   transition: background-color var(--motion-duration-base), box-shadow var(--motion-duration-base), transform var(--motion-duration-fast) var(--motion-ease-out);
 }
 
 .composer__send:active:not(:disabled) {
-  background: var(--color-brand);
-  box-shadow: none;
   transform: scale(0.92);
 }
 
 .composer__send:disabled {
-  background: var(--color-surface-sunken);
+  background: var(--color-surface-soft);
   box-shadow: none;
   color: var(--color-text-subtle);
 }
@@ -273,8 +269,8 @@
   height: 20px;
   padding: 0 6px;
   border-radius: var(--radius-pill);
-  /* Ink with white numbers: text never sits on saturated pink. */
-  background: var(--color-surface-inverse);
+  /* Brand purple with white numerals (4.90:1), like Meetup's filter count. */
+  background: var(--color-brand);
   color: var(--color-text-on-inverse);
   font-size: 11px;
   font-weight: var(--font-weight-bold);
