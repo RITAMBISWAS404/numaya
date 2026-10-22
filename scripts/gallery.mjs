@@ -27,6 +27,7 @@ const SCREENS = resolve(OUT, "screens");
 const SHEETS = resolve(OUT, "contact-sheets");
 const MOBILE = { width: 393, height: 852 };
 const DESKTOP = { width: 1440, height: 900 };
+const QA = { width: 375, height: 667 }; // small-phone QA (iPhone SE size)
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /* Seeded sessions (same shape the preview saves). */
@@ -99,6 +100,8 @@ const SHOTS = [
   // 02 · Discover, profile and filters
   { group: 2, slug: "discover", title: "Discover profile card", screen: "discovery" },
   { group: 2, slug: "discover", title: "Discover: the full profile scroll", screen: "discovery", full: true },
+  { group: 2, slug: "discover-you-both-like", title: "Discover: “You both like” card", screen: "discovery", scrollToSelector: "#root .shared-interests" },
+  { group: 2, slug: "discover-actions", title: "Discover: Pass / SuperSwipe / Like at the end of the profile", screen: "discovery", scrollToSelector: "#root .action-bar" },
   { group: 2, slug: "discover-filters-sheet", title: "Discover filters sheet", screen: "discovery", setup: (p) => p.getByRole("button", { name: /^Filters/ }).click() },
   { group: 2, slug: "discover-no-one-fits", title: "Discover: no one fits the filters", notes: "Seeded distance 1 km.", screen: "discovery", state: session({ prefs: { distance: 1 } }) },
   { group: 2, slug: "discover-seen-everyone", title: "Discover: seen everyone", notes: "Seeded with every sample profile already decided.", screen: "discovery", state: session({ seen: ALL_PEOPLE }) },
@@ -148,6 +151,21 @@ const SHOTS = [
   { group: 5, slug: "desktop-flow-previews", title: "Desktop: flow previews gallery", url: "flows.html", viewport: DESKTOP },
   { group: 5, slug: "desktop-edit-profile", title: "Desktop: flow previews, Profile → Edit profile → Edit prompt", url: "flows.html#profile", viewport: DESKTOP, scrollToFrame: "edit" },
   { group: 5, slug: "desktop-design-system", title: "Desktop: design-system showcase", url: "showcase.html", viewport: DESKTOP },
+
+  // 06 · Small-phone QA (375 × 667): the screens most at risk of crowding
+  { group: 6, slug: "qa-welcome", title: "QA 375: Welcome", app: "proto", viewport: QA },
+  {
+    group: 6, slug: "qa-phone-entry", title: "QA 375: Phone number with keypad", app: "proto", viewport: QA,
+    setup: async (p) => { await p.getByRole("button", { name: "Create an account" }).click(); await wait(900); await p.locator("#phone-number").fill("4155550132"); },
+  },
+  { group: 6, slug: "qa-verify-code", title: "QA 375: Verify code", app: "proto", viewport: QA, setup: async (p) => { await toVerify(p); await bannerGone(p); } },
+  { group: 6, slug: "qa-verified-intro", title: "QA 375: You’re verified → profile setup", screen: "intro", viewport: QA, notes: "Scrolls slightly at this height; the body becomes a tab stop." },
+  { group: 6, slug: "qa-interests", title: "QA 375: Interests and prompt", screen: "interests", viewport: QA },
+  { group: 6, slug: "qa-discover", title: "QA 375: Discover profile card", screen: "discovery", viewport: QA },
+  { group: 6, slug: "qa-match", title: "QA 375: It’s a match", screen: "match", viewport: QA, notes: "Ribbon hidden below 760px tall.", state: session({ matches: ["priya", "jo", "maya"], seen: ["maya"], lastMatch: "maya" }) },
+  { group: 6, slug: "qa-chats", title: "QA 375: Chats", screen: "chats", viewport: QA },
+  { group: 6, slug: "qa-chat-long-messages", title: "QA 375: Conversation with long messages", screen: "chat", viewport: QA, state: session({ threads: LONG_THREAD }) },
+  { group: 6, slug: "qa-settings", title: "QA 375: Settings", screen: "settings", viewport: QA },
 ];
 
 const GROUPS = {
@@ -156,6 +174,7 @@ const GROUPS = {
   3: { file: "03-matches-messaging", title: "Matches and messaging" },
   4: { file: "04-profile-settings", title: "Profile, editing and settings" },
   5: { file: "05-desktop", title: "Desktop context" },
+  6: { file: "06-qa-375", title: "Small-phone QA (375 × 667)" },
 };
 
 async function toVerify(p) {
@@ -193,7 +212,7 @@ try {
   for (const [i, shot] of SHOTS.entries()) {
     const id = String(i + 1).padStart(3, "0");
     const vp = shot.viewport ?? MOBILE;
-    const mobile = vp === MOBILE;
+    const mobile = vp.width < 600;
     const ctx = await browser.newContext({ viewport: vp, deviceScaleFactor: 2, reducedMotion: "reduce", ...(mobile ? { isMobile: true, hasTouch: true } : {}) });
     const seed = shot.state ? JSON.stringify({ version: 1, state: shot.state }) : null;
     await ctx.addInitScript(
@@ -218,6 +237,7 @@ try {
       await shot.setup(p);
       await wait(900);
     }
+    if (shot.scrollToSelector) await p.locator(shot.scrollToSelector).first().evaluate((el) => el.scrollIntoView({ block: "center" }));
     if (shot.scrollTo) await p.getByLabel(shot.scrollTo).evaluate((el) => el.scrollIntoView({ block: "center" }));
     if (shot.scrollToFrame) {
       await p.locator(`#${shot.scrollToFrame}`).scrollIntoViewIfNeeded();
@@ -309,6 +329,7 @@ const lines = [
   "  the prototype (`index.html`) on a phone context.",
   "- **Full page** (`-fullpage-393w`): long, scrolling screens captured with all their content.",
   "- **Desktop** (`-1440x900`): the prototype, flow previews and design system at desktop width.",
+  "- **Small-phone QA** (`-375x667`): the screens most at risk of crowding, at iPhone SE size.",
   "- States are reached by interaction, or by seeding the preview's saved session for states that take",
   "  many steps (see `state` in [manifest.json](manifest.json)). Captured with reduced motion so",
   "  animations show their settled frame; the demo verification code is fixed.",

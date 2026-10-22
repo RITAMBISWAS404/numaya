@@ -508,7 +508,7 @@ button.chip:active {
 
 .segmented__item {
   height: 36px;
-  border-radius: var(--radius-sm);
+  border-radius: calc(var(--radius-md) - 3px); /* nested: outer 16 = inner 13 + 3px inset */
   color: var(--color-text-muted);
   font-size: var(--type-label-size);
   font-weight: var(--font-weight-semibold);

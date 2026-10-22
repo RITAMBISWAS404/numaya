@@ -9,6 +9,7 @@ after any change.
   the prototype (`index.html`) on a phone context.
 - **Full page** (`-fullpage-393w`): long, scrolling screens captured with all their content.
 - **Desktop** (`-1440x900`): the prototype, flow previews and design system at desktop width.
+- **Small-phone QA** (`-375x667`): the screens most at risk of crowding, at iPhone SE size.
 - States are reached by interaction, or by seeding the preview's saved session for states that take
   many steps (see `state` in [manifest.json](manifest.json)). Captured with reduced motion so
   animations show their settled frame; the demo verification code is fixed.
@@ -23,6 +24,7 @@ after any change.
 - [Matches and messaging](contact-sheets/03-matches-messaging.png)
 - [Profile, editing and settings](contact-sheets/04-profile-settings.png)
 - [Desktop context](contact-sheets/05-desktop.png)
+- [Small-phone QA (375 × 667)](contact-sheets/06-qa-375.png)
 
 ## Onboarding
 
@@ -52,57 +54,74 @@ after any change.
 | --- | --- | --- | --- | --- |
 | 018 | Discover profile card | Viewport · `flows.html?screen=discovery` |  | [018-discover-393x852.png](screens/018-discover-393x852.png) |
 | 019 | Discover: the full profile scroll | Full page · `flows.html?screen=discovery` |  | [019-discover-fullpage-393w.png](screens/019-discover-fullpage-393w.png) |
-| 020 | Discover filters sheet | Viewport · `flows.html?screen=discovery` |  | [020-discover-filters-sheet-393x852.png](screens/020-discover-filters-sheet-393x852.png) |
-| 021 | Discover: no one fits the filters | Viewport · `flows.html?screen=discovery` | Seeded distance 1 km. | [021-discover-no-one-fits-393x852.png](screens/021-discover-no-one-fits-393x852.png) |
-| 022 | Discover: seen everyone | Viewport · `flows.html?screen=discovery` | Seeded with every sample profile already decided. | [022-discover-seen-everyone-393x852.png](screens/022-discover-seen-everyone-393x852.png) |
-| 023 | Discover paused (snoozed) | Viewport · `flows.html?screen=discovery` | Seeded with Snooze on. | [023-discover-paused-393x852.png](screens/023-discover-paused-393x852.png) |
+| 020 | Discover: “You both like” card | Viewport · `flows.html?screen=discovery` |  | [020-discover-you-both-like-393x852.png](screens/020-discover-you-both-like-393x852.png) |
+| 021 | Discover: Pass / SuperSwipe / Like at the end of the profile | Viewport · `flows.html?screen=discovery` |  | [021-discover-actions-393x852.png](screens/021-discover-actions-393x852.png) |
+| 022 | Discover filters sheet | Viewport · `flows.html?screen=discovery` |  | [022-discover-filters-sheet-393x852.png](screens/022-discover-filters-sheet-393x852.png) |
+| 023 | Discover: no one fits the filters | Viewport · `flows.html?screen=discovery` | Seeded distance 1 km. | [023-discover-no-one-fits-393x852.png](screens/023-discover-no-one-fits-393x852.png) |
+| 024 | Discover: seen everyone | Viewport · `flows.html?screen=discovery` | Seeded with every sample profile already decided. | [024-discover-seen-everyone-393x852.png](screens/024-discover-seen-everyone-393x852.png) |
+| 025 | Discover paused (snoozed) | Viewport · `flows.html?screen=discovery` | Seeded with Snooze on. | [025-discover-paused-393x852.png](screens/025-discover-paused-393x852.png) |
 
 ## Matches and messaging
 
 | # | Screen or state | Capture | Notes | Image |
 | --- | --- | --- | --- | --- |
-| 024 | It’s a match | Viewport · `flows.html?screen=match` | Seeded as right after liking Maya, who liked you. | [024-match-393x852.png](screens/024-match-393x852.png) |
-| 025 | No new match yet | Viewport · `flows.html?screen=match` |  | [025-match-empty-393x852.png](screens/025-match-empty-393x852.png) |
-| 026 | Chats: new matches and conversations | Viewport · `flows.html?screen=chats` |  | [026-chats-393x852.png](screens/026-chats-393x852.png) |
-| 027 | Chats: message alerts off banner | Viewport · `flows.html?screen=chats` | Seeded with new-message alerts off. | [027-chats-alerts-off-393x852.png](screens/027-chats-alerts-off-393x852.png) |
-| 028 | Chats: empty | Viewport · `flows.html?screen=chats` | Seeded with no matches. | [028-chats-empty-393x852.png](screens/028-chats-empty-393x852.png) |
-| 029 | Conversation | Viewport · `flows.html?screen=chat` |  | [029-chat-conversation-393x852.png](screens/029-chat-conversation-393x852.png) |
-| 030 | Conversation: new match intro | Viewport · `flows.html?screen=chat` | Seeded with Jo (no messages yet) as the open chat. | [030-chat-new-match-393x852.png](screens/030-chat-new-match-393x852.png) |
-| 031 | Conversation: long messages (edge case) | Viewport · `flows.html?screen=chat` | Edge case: seeded thread with long messages. | [031-chat-long-messages-393x852.png](screens/031-chat-long-messages-393x852.png) |
-| 032 | Conversation options menu | Viewport · `flows.html?screen=chat` |  | [032-chat-options-menu-393x852.png](screens/032-chat-options-menu-393x852.png) |
-| 033 | Unmatch confirmation sheet | Viewport · `flows.html?screen=chat` |  | [033-chat-unmatch-sheet-393x852.png](screens/033-chat-unmatch-sheet-393x852.png) |
-| 034 | Report or block sheet | Viewport · `flows.html?screen=chat` |  | [034-chat-report-sheet-393x852.png](screens/034-chat-report-sheet-393x852.png) |
-| 035 | Ended: unmatched | Viewport · `flows.html?screen=chat` | Seeded: Priya unmatched. | [035-chat-unmatched-393x852.png](screens/035-chat-unmatched-393x852.png) |
-| 036 | Ended: blocked and reported | Viewport · `flows.html?screen=chat` | Seeded: Priya blocked and reported. | [036-chat-blocked-393x852.png](screens/036-chat-blocked-393x852.png) |
+| 026 | It’s a match | Viewport · `flows.html?screen=match` | Seeded as right after liking Maya, who liked you. | [026-match-393x852.png](screens/026-match-393x852.png) |
+| 027 | No new match yet | Viewport · `flows.html?screen=match` |  | [027-match-empty-393x852.png](screens/027-match-empty-393x852.png) |
+| 028 | Chats: new matches and conversations | Viewport · `flows.html?screen=chats` |  | [028-chats-393x852.png](screens/028-chats-393x852.png) |
+| 029 | Chats: message alerts off banner | Viewport · `flows.html?screen=chats` | Seeded with new-message alerts off. | [029-chats-alerts-off-393x852.png](screens/029-chats-alerts-off-393x852.png) |
+| 030 | Chats: empty | Viewport · `flows.html?screen=chats` | Seeded with no matches. | [030-chats-empty-393x852.png](screens/030-chats-empty-393x852.png) |
+| 031 | Conversation | Viewport · `flows.html?screen=chat` |  | [031-chat-conversation-393x852.png](screens/031-chat-conversation-393x852.png) |
+| 032 | Conversation: new match intro | Viewport · `flows.html?screen=chat` | Seeded with Jo (no messages yet) as the open chat. | [032-chat-new-match-393x852.png](screens/032-chat-new-match-393x852.png) |
+| 033 | Conversation: long messages (edge case) | Viewport · `flows.html?screen=chat` | Edge case: seeded thread with long messages. | [033-chat-long-messages-393x852.png](screens/033-chat-long-messages-393x852.png) |
+| 034 | Conversation options menu | Viewport · `flows.html?screen=chat` |  | [034-chat-options-menu-393x852.png](screens/034-chat-options-menu-393x852.png) |
+| 035 | Unmatch confirmation sheet | Viewport · `flows.html?screen=chat` |  | [035-chat-unmatch-sheet-393x852.png](screens/035-chat-unmatch-sheet-393x852.png) |
+| 036 | Report or block sheet | Viewport · `flows.html?screen=chat` |  | [036-chat-report-sheet-393x852.png](screens/036-chat-report-sheet-393x852.png) |
+| 037 | Ended: unmatched | Viewport · `flows.html?screen=chat` | Seeded: Priya unmatched. | [037-chat-unmatched-393x852.png](screens/037-chat-unmatched-393x852.png) |
+| 038 | Ended: blocked and reported | Viewport · `flows.html?screen=chat` | Seeded: Priya blocked and reported. | [038-chat-blocked-393x852.png](screens/038-chat-blocked-393x852.png) |
 
 ## Profile, editing and settings
 
 | # | Screen or state | Capture | Notes | Image |
 | --- | --- | --- | --- | --- |
-| 037 | My profile | Viewport · `flows.html?screen=profile` |  | [037-profile-393x852.png](screens/037-profile-393x852.png) |
-| 038 | My profile (full page) | Full page · `flows.html?screen=profile` |  | [038-profile-fullpage-393w.png](screens/038-profile-fullpage-393w.png) |
-| 039 | My profile: long name (edge case) | Viewport · `flows.html?screen=profile` | Edge case: seeded 21-character name. | [039-profile-long-name-393x852.png](screens/039-profile-long-name-393x852.png) |
-| 040 | Edit profile | Viewport · `flows.html?screen=edit` |  | [040-edit-profile-393x852.png](screens/040-edit-profile-393x852.png) |
-| 041 | Edit profile (full page) | Full page · `flows.html?screen=edit` |  | [041-edit-profile-fullpage-393w.png](screens/041-edit-profile-fullpage-393w.png) |
-| 042 | Edit profile: photo options sheet | Viewport · `flows.html?screen=edit` |  | [042-edit-photo-options-393x852.png](screens/042-edit-photo-options-393x852.png) |
-| 043 | Edit profile: empty name error | Viewport · `flows.html?screen=edit` |  | [043-edit-name-error-393x852.png](screens/043-edit-name-error-393x852.png) |
-| 044 | Edit profile: Preview | Viewport · `flows.html?screen=edit` |  | [044-edit-preview-393x852.png](screens/044-edit-preview-393x852.png) |
-| 045 | Edit profile: Preview (full page) | Full page · `flows.html?screen=edit` |  | [045-edit-preview-fullpage-393w.png](screens/045-edit-preview-fullpage-393w.png) |
-| 046 | Edit prompt | Viewport · `flows.html?screen=prompt` |  | [046-prompt-editor-393x852.png](screens/046-prompt-editor-393x852.png) |
-| 047 | Edit prompt: answer field focused | Viewport · `flows.html?screen=prompt` |  | [047-prompt-editor-focused-393x852.png](screens/047-prompt-editor-focused-393x852.png) |
-| 048 | Edit prompt: new question and answer, ready to save | Viewport · `flows.html?screen=prompt` |  | [048-prompt-editor-changed-393x852.png](screens/048-prompt-editor-changed-393x852.png) |
-| 049 | Settings | Viewport · `flows.html?screen=settings` |  | [049-settings-393x852.png](screens/049-settings-393x852.png) |
-| 050 | Settings (full page) | Full page · `flows.html?screen=settings` |  | [050-settings-fullpage-393w.png](screens/050-settings-fullpage-393w.png) |
-| 051 | Settings: Snooze on | Viewport · `flows.html?screen=settings` | Seeded with Snooze on. | [051-settings-snooze-on-393x852.png](screens/051-settings-snooze-on-393x852.png) |
-| 052 | Delete account sheet | Viewport · `flows.html?screen=settings` |  | [052-settings-delete-sheet-393x852.png](screens/052-settings-delete-sheet-393x852.png) |
+| 039 | My profile | Viewport · `flows.html?screen=profile` |  | [039-profile-393x852.png](screens/039-profile-393x852.png) |
+| 040 | My profile (full page) | Full page · `flows.html?screen=profile` |  | [040-profile-fullpage-393w.png](screens/040-profile-fullpage-393w.png) |
+| 041 | My profile: long name (edge case) | Viewport · `flows.html?screen=profile` | Edge case: seeded 21-character name. | [041-profile-long-name-393x852.png](screens/041-profile-long-name-393x852.png) |
+| 042 | Edit profile | Viewport · `flows.html?screen=edit` |  | [042-edit-profile-393x852.png](screens/042-edit-profile-393x852.png) |
+| 043 | Edit profile (full page) | Full page · `flows.html?screen=edit` |  | [043-edit-profile-fullpage-393w.png](screens/043-edit-profile-fullpage-393w.png) |
+| 044 | Edit profile: photo options sheet | Viewport · `flows.html?screen=edit` |  | [044-edit-photo-options-393x852.png](screens/044-edit-photo-options-393x852.png) |
+| 045 | Edit profile: empty name error | Viewport · `flows.html?screen=edit` |  | [045-edit-name-error-393x852.png](screens/045-edit-name-error-393x852.png) |
+| 046 | Edit profile: Preview | Viewport · `flows.html?screen=edit` |  | [046-edit-preview-393x852.png](screens/046-edit-preview-393x852.png) |
+| 047 | Edit profile: Preview (full page) | Full page · `flows.html?screen=edit` |  | [047-edit-preview-fullpage-393w.png](screens/047-edit-preview-fullpage-393w.png) |
+| 048 | Edit prompt | Viewport · `flows.html?screen=prompt` |  | [048-prompt-editor-393x852.png](screens/048-prompt-editor-393x852.png) |
+| 049 | Edit prompt: answer field focused | Viewport · `flows.html?screen=prompt` |  | [049-prompt-editor-focused-393x852.png](screens/049-prompt-editor-focused-393x852.png) |
+| 050 | Edit prompt: new question and answer, ready to save | Viewport · `flows.html?screen=prompt` |  | [050-prompt-editor-changed-393x852.png](screens/050-prompt-editor-changed-393x852.png) |
+| 051 | Settings | Viewport · `flows.html?screen=settings` |  | [051-settings-393x852.png](screens/051-settings-393x852.png) |
+| 052 | Settings (full page) | Full page · `flows.html?screen=settings` |  | [052-settings-fullpage-393w.png](screens/052-settings-fullpage-393w.png) |
+| 053 | Settings: Snooze on | Viewport · `flows.html?screen=settings` | Seeded with Snooze on. | [053-settings-snooze-on-393x852.png](screens/053-settings-snooze-on-393x852.png) |
+| 054 | Delete account sheet | Viewport · `flows.html?screen=settings` |  | [054-settings-delete-sheet-393x852.png](screens/054-settings-delete-sheet-393x852.png) |
 
 ## Desktop context
 
 | # | Screen or state | Capture | Notes | Image |
 | --- | --- | --- | --- | --- |
-| 053 | Desktop: onboarding prototype with brief | Viewport · `index.html (onboarding prototype)` |  | [053-desktop-prototype-1440x900.png](screens/053-desktop-prototype-1440x900.png) |
-| 054 | Desktop: flow previews gallery | Viewport · `flows.html` |  | [054-desktop-flow-previews-1440x900.png](screens/054-desktop-flow-previews-1440x900.png) |
-| 055 | Desktop: flow previews, Profile → Edit profile → Edit prompt | Viewport · `flows.html#profile` |  | [055-desktop-edit-profile-1440x900.png](screens/055-desktop-edit-profile-1440x900.png) |
-| 056 | Desktop: design-system showcase | Viewport · `showcase.html` |  | [056-desktop-design-system-1440x900.png](screens/056-desktop-design-system-1440x900.png) |
+| 055 | Desktop: onboarding prototype with brief | Viewport · `index.html (onboarding prototype)` |  | [055-desktop-prototype-1440x900.png](screens/055-desktop-prototype-1440x900.png) |
+| 056 | Desktop: flow previews gallery | Viewport · `flows.html` |  | [056-desktop-flow-previews-1440x900.png](screens/056-desktop-flow-previews-1440x900.png) |
+| 057 | Desktop: flow previews, Profile → Edit profile → Edit prompt | Viewport · `flows.html#profile` |  | [057-desktop-edit-profile-1440x900.png](screens/057-desktop-edit-profile-1440x900.png) |
+| 058 | Desktop: design-system showcase | Viewport · `showcase.html` |  | [058-desktop-design-system-1440x900.png](screens/058-desktop-design-system-1440x900.png) |
 
-56 captures: 51 viewport, 5 full page (6 MB of screenshots; all-screens sheet 733 KB).
+## Small-phone QA (375 × 667)
+
+| # | Screen or state | Capture | Notes | Image |
+| --- | --- | --- | --- | --- |
+| 059 | QA 375: Welcome | Viewport · `index.html (onboarding prototype)` |  | [059-qa-welcome-375x667.png](screens/059-qa-welcome-375x667.png) |
+| 060 | QA 375: Phone number with keypad | Viewport · `index.html (onboarding prototype)` |  | [060-qa-phone-entry-375x667.png](screens/060-qa-phone-entry-375x667.png) |
+| 061 | QA 375: Verify code | Viewport · `index.html (onboarding prototype)` |  | [061-qa-verify-code-375x667.png](screens/061-qa-verify-code-375x667.png) |
+| 062 | QA 375: You’re verified → profile setup | Viewport · `flows.html?screen=intro` | Scrolls slightly at this height; the body becomes a tab stop. | [062-qa-verified-intro-375x667.png](screens/062-qa-verified-intro-375x667.png) |
+| 063 | QA 375: Interests and prompt | Viewport · `flows.html?screen=interests` |  | [063-qa-interests-375x667.png](screens/063-qa-interests-375x667.png) |
+| 064 | QA 375: Discover profile card | Viewport · `flows.html?screen=discovery` |  | [064-qa-discover-375x667.png](screens/064-qa-discover-375x667.png) |
+| 065 | QA 375: It’s a match | Viewport · `flows.html?screen=match` | Ribbon hidden below 760px tall. | [065-qa-match-375x667.png](screens/065-qa-match-375x667.png) |
+| 066 | QA 375: Chats | Viewport · `flows.html?screen=chats` |  | [066-qa-chats-375x667.png](screens/066-qa-chats-375x667.png) |
+| 067 | QA 375: Conversation with long messages | Viewport · `flows.html?screen=chat` |  | [067-qa-chat-long-messages-375x667.png](screens/067-qa-chat-long-messages-375x667.png) |
+| 068 | QA 375: Settings | Viewport · `flows.html?screen=settings` |  | [068-qa-settings-375x667.png](screens/068-qa-settings-375x667.png) |
+
+68 captures: 63 viewport, 5 full page (7 MB of screenshots; all-screens sheet 919 KB).
