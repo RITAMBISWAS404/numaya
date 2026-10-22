@@ -218,10 +218,12 @@ button.chip:active {
 
 /* Selected (Meetup filter pills): solid accent fill with ink text (7.15:1). A brief settle confirms
    the change; the check icon and aria-pressed carry the state without motion. */
+/* Selected: light brand tint with a brand-pink ring and ink text. Same height and padding as
+   unselected chips (the ring is inset), so selecting never reflows the row. */
 .chip.is-selected {
-  background: var(--color-brand);
-  box-shadow: none;
-  color: var(--color-on-brand);
+  background: var(--color-brand-tint);
+  box-shadow: inset 0 0 0 var(--border-selected) var(--color-border-brand);
+  color: var(--color-text-primary);
   animation: chip-select var(--motion-duration-base) var(--motion-ease-out);
 }
 
@@ -236,7 +238,7 @@ button.chip:active {
 }
 
 .chip.is-selected .chip__affordance {
-  color: var(--color-on-brand);
+  color: var(--color-text-primary);
 }
 
 .chip.is-unavailable {
