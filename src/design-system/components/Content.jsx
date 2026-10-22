@@ -266,7 +266,7 @@ export function ImagePlaceholder({ label, tone = 0, ratio = "4 / 5", className, 
 }
 
 /** Photo slot in the profile grid. Empty slots are add buttons. */
-export function PhotoSlot({ index, filled = false, tone = 0, main = false, uploading = false, onAdd, onRemove }) {
+export function PhotoSlot({ index, filled = false, tone = 0, main = false, uploading = false, onAdd, onRemove, onSelect }) {
   if (!filled) {
     return (
       <button type="button" className="photo-slot photo-slot--empty" aria-label={`Add photo ${index + 1}`} onClick={onAdd}>
@@ -279,6 +279,9 @@ export function PhotoSlot({ index, filled = false, tone = 0, main = false, uploa
       <ImagePlaceholder tone={tone} ratio="3 / 4" label={`Photo ${index + 1}`}>
         <span className="photo-slot__index">{main ? "Main" : index + 1}</span>
       </ImagePlaceholder>
+      {onSelect && !uploading && (
+        <button type="button" className="photo-slot__select" aria-label={`Photo ${index + 1}${main ? ", main photo" : ""}: options`} onClick={onSelect} />
+      )}
       {uploading ? (
         <span className="photo-slot__status" role="status">
           <span className="spinner spinner--sm" aria-hidden="true" />
@@ -293,8 +296,8 @@ export function PhotoSlot({ index, filled = false, tone = 0, main = false, uploa
   );
 }
 
-/** 3 × 2 profile photo grid. photos: [{ id, tone, uploading? }]. */
-export function PhotoGrid({ photos, slots = 6, onAdd, onRemove, hint = "Hold and drag to reorder" }) {
+/** 3 × 2 profile photo grid. photos: [{ id, tone, uploading? }]. `onSelect(id)` makes filled photos tappable (photo options). */
+export function PhotoGrid({ photos, slots = 6, onAdd, onRemove, onSelect, hint = "Hold and drag to reorder" }) {
   return (
     <div className="photo-grid-wrap">
       <div className="photo-grid">
@@ -310,6 +313,7 @@ export function PhotoGrid({ photos, slots = 6, onAdd, onRemove, hint = "Hold and
               uploading={p?.uploading}
               onAdd={() => onAdd?.(i)}
               onRemove={() => onRemove?.(p.id)}
+              onSelect={onSelect && p ? () => onSelect(p.id) : undefined}
             />
           );
         })}

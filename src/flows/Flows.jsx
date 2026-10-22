@@ -14,6 +14,8 @@ export const SCREENS = [
   { id: "chats", flow: "Messaging", title: "Conversations", Component: S.Chats },
   { id: "chat", flow: "Messaging + safety", title: "Chat, report and block", Component: S.Chat },
   { id: "profile", flow: "Profile", title: "My profile", Component: S.MyProfile },
+  { id: "edit", flow: "Profile", title: "Edit profile and preview", Component: S.EditProfile },
+  { id: "prompt", flow: "Profile", title: "Edit prompt", Component: S.PromptEditor },
   { id: "settings", flow: "Settings", title: "Preferences and privacy", Component: S.Settings },
 ];
 

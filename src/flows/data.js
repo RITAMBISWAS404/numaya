@@ -75,3 +75,13 @@ export const REPORT_REASONS = [
   ["shield", "Might be under 18"],
   ["location", "Something that happened offline"],
 ];
+
+/** Prompt questions offered by the prompt editor (Bumble-style profile prompts). */
+export const PROMPT_QUESTIONS = [
+  "A perfect first date",
+  "I’m weirdly good at",
+  "Let’s debate this",
+  "My Sunday ritual",
+  "A green flag",
+  "I’ll never shut up about",
+];

@@ -227,7 +227,7 @@ try {
     const p = await page(vp);
     await p.goto(`${base}flows.html`);
     await wait(1200);
-    check(`flows ${name}: 10 preview screens render`, (await p.locator(".fl-frame").count()) === 10);
+    check(`flows ${name}: 12 preview screens render`, (await p.locator(".fl-frame").count()) === 12);
     const overflow = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     check(`flows ${name}: no horizontal overflow`, overflow <= 0, `${overflow}px`);
     if (name === "desktop") {
@@ -502,10 +502,72 @@ try {
       await f("settings").getByRole("switch", { name: /New messages/ }).uncheck();
       await wait(1000);
 
+      // Discover filters sheet: opens from the header, previews the count, applies on confirm.
+      await f("discovery").getByRole("button", { name: /^Filters:/ }).click();
+      await wait(500);
+      const filters = p.getByRole("dialog", { name: "Filters" });
+      await filters.getByLabel("Distance").fill("40");
+      await wait(200);
+      const applyLabel = (await filters.getByRole("button", { name: /^Show|^Apply/ }).textContent()) ?? "";
+      check("discover: filters open in a sheet from the header and preview how many people fit", (await filters.count()) === 1 && /^Show \d+ (person|people)$/.test(applyLabel), applyLabel);
+      check("discover: filter changes wait for Apply", (await filterName()).includes("within 100 km"), await filterName());
+      await filters.getByRole("button", { name: /^Show|^Apply/ }).click();
+      await wait(500);
+      check("discover: Apply updates the filters and closes the sheet", (await filterName()).includes("within 40 km") && (await p.getByRole("dialog").count()) === 0 && (await f("settings").getByLabel("Distance").inputValue()) === "40", await filterName());
+      await f("settings").getByLabel("Distance").fill("100");
+      await wait(200);
+
+      // Edit profile: reached from Profile, edits save, Preview shows the profile as others see it.
+      await f("profile").getByRole("button", { name: "Edit profile" }).click();
+      await wait(400);
+      await f("edit").getByLabel("First name").fill("Jordan Lee");
+      check("edit: name edits save to the profile", (await textOf("profile")).includes("Jordan Lee"));
+      await f("edit").getByLabel("First name").fill("");
+      check("edit: an empty name explains what to do", (await textOf("edit")).includes("Add your first name"));
+      await f("edit").getByLabel("First name").fill("Jordan");
+      await f("edit").getByRole("button", { name: "Climbing" }).click();
+      check("edit: interests edit in place and reach the profile", (await textOf("profile")).includes("Climbing"));
+      // Photo options: make photo 2 the main one; removing stops at 2 photos.
+      const firstId = await p.evaluate(() => JSON.parse(localStorage.getItem("numaya.preview.v1")).state.profile.photos.map((x) => x.id));
+      await f("edit").getByRole("button", { name: "Photo 2: options" }).click();
+      await wait(500);
+      await p.getByRole("button", { name: "Make main photo" }).click();
+      await wait(500);
+      const afterIds = await p.evaluate(() => JSON.parse(localStorage.getItem("numaya.preview.v1")).state.profile.photos.map((x) => x.id));
+      check("edit: Make main photo moves the photo to the front", afterIds[0] === firstId[1] && afterIds[1] === firstId[0] && (await textOf("edit")).includes("Main photo updated"));
+      for (let i = 0; i < 3; i++) {
+        const n = await f("edit").locator(".photo-slot__remove").count();
+        if (n <= 2) break;
+        await f("edit").getByRole("button", { name: `Remove photo ${n}` }).click();
+        await wait(200);
+      }
+      await f("edit").getByRole("button", { name: "Remove photo 2" }).click();
+      await wait(300);
+      check("edit: photos cannot drop below 2", (await f("edit").locator(".photo-slot__remove").count()) === 2 && (await textOf("edit")).includes("Keep at least 2 photos"));
+      await f("edit").getByRole("tab", { name: "Preview" }).click();
+      await wait(400);
+      check("edit: Preview shows your card, prompt and interests as others see them", (await f("edit").locator(".profile-card").getAttribute("aria-label"))?.startsWith("Jordan,") && (await textOf("edit")).includes("Climbing"));
+      await f("edit").getByRole("tab", { name: "Edit" }).click();
+      await wait(300);
+
+      // Prompt editor: reached from Edit profile, Save needs a change and an answer, result shows everywhere.
+      await f("edit").getByRole("button", { name: /^Edit answer to/ }).click();
+      await wait(400);
+      const save = f("prompt").getByRole("button", { name: "Save prompt" });
+      check("prompt: Save waits for a change", await save.isDisabled());
+      await f("prompt").getByText("My Sunday ritual").click();
+      await f("prompt").getByLabel("Your answer").fill("   ");
+      check("prompt: an empty answer cannot be saved", (await save.isDisabled()) && (await textOf("prompt")).includes("Write an answer to save"));
+      await f("prompt").getByLabel("Your answer").fill("Farmers market, then a very long lunch.");
+      await save.click();
+      await wait(300);
+      check("prompt: a saved prompt shows on Profile, Edit profile and onboarding", (await textOf("profile")).includes("My Sunday ritual") && (await textOf("edit")).includes("Farmers market") && (await textOf("interests")).includes("My Sunday ritual"));
+
       // Persistence: reload keeps the session; delete account clears it.
       await p.reload();
       await wait(1200);
       check("flows: reload restores the session", (await textOf("profile")).includes("Jordan") && (await textOf("settings")).includes("Blocked people 1"));
+      check("flows: reload keeps the edited prompt and main photo", (await textOf("profile")).includes("Farmers market, then a very long lunch."));
       await f("settings").getByRole("button", { name: "Delete account" }).click();
       await wait(500);
       const delSheet = p.getByRole("dialog", { name: "Delete your account?" });
@@ -523,7 +585,7 @@ try {
         !(await textOf("chats")).includes("alerts are off") && (await f("settings").getByRole("switch", { name: /Snooze/ }).isChecked()) === false,
       );
 
-      for (const id of ["basics", "discovery", "match", "chats", "chat", "profile", "settings"]) {
+      for (const id of ["basics", "discovery", "match", "chats", "chat", "profile", "edit", "prompt", "settings"]) {
         await f(id).locator(".fl-frame__screen").screenshot({ path: `${OUT}/flows-${id}.png` });
       }
     } else {

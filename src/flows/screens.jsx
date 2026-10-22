@@ -32,18 +32,20 @@ import {
   Ribbon,
   ScreenHeader,
   Section,
+  SegmentedControl,
   Sheet,
   Slider,
   Switch,
   SystemMessage,
   TabBar,
+  TextArea,
   TextField,
   Toast,
   TopBar,
   VerifiedBadge,
   Wordmark,
 } from "../design-system/index.js";
-import { INTERESTS, PEOPLE, REPORT_REASONS } from "./data.js";
+import { INTERESTS, PEOPLE, PROMPT_QUESTIONS, REPORT_REASONS } from "./data.js";
 import { conversations, discoveryQueue, hiddenByFilters, newMatches, useStore } from "./store.js";
 
 // Order follows the reference tab bar: Profile first, then browsing, then chats.
@@ -190,8 +192,8 @@ export function InterestsPrompts({ go }) {
       />
       <div className="fl-stack fl-gap-lg">
         <ChipGroup label="Interests" options={INTERESTS} value={interests} onChange={(v) => dispatch({ type: "profile", patch: { interests: v } })} max={5} />
-        <Section title="Your prompt" description="Matches reply to this. More prompts arrive in a later step.">
-          <PromptCard prompt="A perfect first date" answer="A record shop, a long walk, and nowhere to be after." />
+        <Section title="Your prompt" description="Matches reply to this. You can change it any time from your profile.">
+          <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} />
         </Section>
       </div>
     </Frame>
@@ -299,6 +301,7 @@ export function Discovery({ go }) {
   };
   const { dx, handlers } = useSwipe(decide);
   const snoozed = state.prefs.snooze;
+  const [filtering, setFiltering] = useState(false);
   // Pass and Like sit at the end of the profile: the next person starts at their photo, not mid-scroll.
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: 0 });
@@ -318,7 +321,7 @@ export function Discovery({ go }) {
     <Frame
       tone="page"
       kind="discover"
-      top={<DiscoverHeader age={age} distance={distance} progress={progress} showFilters={!snoozed} onFilters={() => go("settings")} />}
+      top={<DiscoverHeader age={age} distance={distance} progress={progress} showFilters={!snoozed} onFilters={() => setFiltering(true)} />}
       tab="discover"
       go={go}
       onBodyScroll={onScroll}
@@ -420,7 +423,57 @@ export function Discovery({ go }) {
       <Toast open={Boolean(toast)} placement="bottom" icon="heart">
         {toast}
       </Toast>
+      <FiltersSheet open={filtering} onClose={() => setFiltering(false)} />
     </Frame>
+  );
+}
+
+/**
+ * Discover filters (reference: Bumble filters, opened from the Discover header): question headings
+ * over white cards, ink sliders, and an Apply pill that shows how many people the draft would let
+ * through. Settings edits the same preferences.
+ */
+function FiltersSheet({ open, onClose }) {
+  const [state, dispatch] = useStore();
+  const [draft, setDraft] = useState(state.prefs);
+  useEffect(() => {
+    if (open) setDraft(state.prefs);
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+  const count = discoveryQueue({ ...state, prefs: draft }).length;
+  return (
+    <Sheet open={open} onClose={onClose} labelledBy="fl-filters-title">
+      <div className="sheet__header">
+        <h2 id="fl-filters-title" className="sheet__title">
+          Filters
+        </h2>
+        <IconButton icon="close" label="Close" variant="flat" size="sm" onClick={onClose} />
+      </div>
+      <div className="fl-stack fl-sheet-body">
+        <ListGroup title="How old are they?">
+          <li className="list-row">
+            <div className="list-row__hit fl-slider-row">
+              <RangeSlider label="Age" min={18} max={70} value={draft.age} onChange={(v) => setDraft((d) => ({ ...d, age: v }))} />
+            </div>
+          </li>
+        </ListGroup>
+        <ListGroup title="How far away are they?">
+          <li className="list-row">
+            <div className="list-row__hit fl-slider-row">
+              <Slider label="Distance" min={1} max={100} value={draft.distance} onChange={(v) => setDraft((d) => ({ ...d, distance: v }))} format={(v) => `Up to ${v} km`} />
+            </div>
+          </li>
+        </ListGroup>
+        <Button
+          onClick={() => {
+            dispatch({ type: "prefs", patch: { age: draft.age, distance: draft.distance } });
+            onClose();
+          }}
+        >
+          {count ? `Show ${count} ${count === 1 ? "person" : "people"}` : "Apply filters"}
+        </Button>
+        {!count && <p className="fl-caption fl-center">No one new fits these filters yet.</p>}
+      </div>
+    </Sheet>
   );
 }
 
@@ -707,7 +760,7 @@ export function MyProfile({ go }) {
               {age ? `, ${age}` : ""}
             </p>
             <div className="fl-badges">
-              <Button variant="secondary" size="sm" block={false} icon="user" onClick={() => go("basics")}>
+              <Button variant="secondary" size="sm" block={false} icon="user" onClick={() => go("edit")}>
                 Edit profile
               </Button>
               {state.prefs.snooze && (
@@ -724,7 +777,7 @@ export function MyProfile({ go }) {
           title="Photos"
           description={`${photos.length} of 6 added. Pick some that show the true you.`}
           action={
-            <button type="button" className="text-button" aria-label="Edit photos" onClick={() => go("photos")}>
+            <button type="button" className="text-button" aria-label="Edit photos" onClick={() => go("edit")}>
               Edit
             </button>
           }
@@ -734,7 +787,7 @@ export function MyProfile({ go }) {
               photos[i] ? (
                 <ImagePlaceholder key={photos[i].id} ratio="3 / 4" className="fl-photo-strip__photo" label={`Photo ${i + 1} (placeholder)`} />
               ) : (
-                <button key={`empty-${i}`} type="button" className="fl-photo-strip__empty" aria-label={`Add photo ${i + 1}`} onClick={() => go("photos")}>
+                <button key={`empty-${i}`} type="button" className="fl-photo-strip__empty" aria-label={`Add photo ${i + 1}`} onClick={() => go("edit")}>
                   <Icon name="plus" size={20} />
                 </button>
               ),
@@ -743,11 +796,11 @@ export function MyProfile({ go }) {
         </Section>
 
         <Section title="Prompts" description="Let people know what it’s like to date you.">
-          <PromptCard prompt="A perfect first date" answer="A record shop, a long walk, and nowhere to be after." onEdit={() => go("interests")} />
+          <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} onEdit={() => go("prompt")} />
         </Section>
 
         <Section title="Interests" description="Get specific about the things you love.">
-          <button type="button" className="card fl-edit-card" aria-label={`Edit interests: ${interests.join(", ") || "none yet"}`} onClick={() => go("interests")}>
+          <button type="button" className="card fl-edit-card" aria-label={`Edit interests: ${interests.join(", ") || "none yet"}`} onClick={() => go("edit")}>
             <span className="fl-chip-row">
               {interests.length ? (
                 interests.map((i) => (
@@ -766,6 +819,169 @@ export function MyProfile({ go }) {
         <ListGroup title="Trust">
           <ListRow icon="shield" label="Verification" kind="info" value="Phone verified" />
         </ListGroup>
+      </div>
+    </Frame>
+  );
+}
+
+/** Your profile as others see it in Discover (Bumble edit profile → Preview). */
+function ProfilePreview({ profile }) {
+  const age = ageOf(profile.year);
+  return (
+    <div className="fl-pf fl-preview">
+      <ProfileCard name={profile.name || "You"} age={age ?? "–"} details={[]} />
+      <section className="card fl-pf__section">
+        <h2 className="fl-pf__title">{profile.prompt.q}</h2>
+        <p className="fl-pf__body">{profile.prompt.a}</p>
+      </section>
+      {profile.interests.length > 0 && (
+        <section className="card fl-pf__section">
+          <h2 className="fl-pf__title">Interests</h2>
+          <div className="fl-chip-row">
+            {profile.interests.map((s) => (
+              <span key={s} className="chip chip--static">
+                {s}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
+      {profile.photos.slice(1, 3).map((p, i) => (
+        <ImagePlaceholder key={p.id} tone={0} ratio="4 / 5" className="fl-pf__photo" label={`Your photo ${i + 2} (placeholder)`} />
+      ))}
+      <p className="fl-caption fl-center">This is how people see you in Discover. Changes save as you make them.</p>
+    </div>
+  );
+}
+
+const GENDER_LABEL = { woman: "Woman", man: "Man", nonbinary: "Nonbinary" };
+
+/**
+ * Edit profile (reference: Bumble edit profile): photos with options, the prompt, interests and
+ * About you, with an Edit / Preview switch at the top. Changes save immediately, as in the reference.
+ */
+export function EditProfile({ go }) {
+  const [state, dispatch] = useStore();
+  const { profile } = state;
+  const [view, setView] = useState("edit");
+  const [photoId, setPhotoId] = useState(null);
+  const [toast, flash] = useFlash();
+  const set = (patch) => dispatch({ type: "profile", patch });
+  const photos = profile.photos;
+  const index = photos.findIndex((p) => p.id === photoId);
+  const age = ageOf(profile.year);
+  const add = () => photos.length < 6 && set({ photos: [...photos, { id: Date.now(), tone: photos.length % 4 }] });
+  const remove = (id) => {
+    if (photos.length <= 2) return flash("Keep at least 2 photos");
+    set({ photos: photos.filter((p) => p.id !== id) });
+  };
+  return (
+    <Frame tone="page" top={<TopBar onBack={() => go("profile")} title="Edit profile" />}>
+      <div className="fl-stack fl-gap-lg">
+        <SegmentedControl
+          label="Profile view"
+          value={view}
+          onChange={setView}
+          options={[
+            { value: "edit", label: "Edit" },
+            { value: "preview", label: "Preview" },
+          ]}
+        />
+        {view === "preview" ? (
+          <ProfilePreview profile={profile} />
+        ) : (
+          <>
+            <Section title="Photos" description="Tap a photo to make it your main one. Keep at least 2.">
+              <PhotoGrid photos={photos} onAdd={add} onRemove={remove} onSelect={setPhotoId} hint="Your main photo leads your profile in Discover." />
+            </Section>
+            <Section title="Prompt" description="Matches reply to this.">
+              <PromptCard prompt={profile.prompt.q} answer={profile.prompt.a} onEdit={() => go("prompt")} />
+            </Section>
+            <ChipGroup label="Interests" options={INTERESTS} value={profile.interests} onChange={(v) => set({ interests: v })} max={5} />
+            <TextField
+              label="First name"
+              value={profile.name}
+              onChange={(e) => set({ name: e.target.value })}
+              autoComplete="given-name"
+              error={profile.name.trim() ? null : "Add your first name so people know what to call you."}
+            />
+            <ListGroup title="About you" footnote="Age and gender come from sign-up. Contact support to change your birth year.">
+              <ListRow label="Age" kind="info" value={age ? String(age) : "Not set"} />
+              <ListRow label="Gender" kind="info" value={GENDER_LABEL[profile.gender] ?? "Not set"} />
+            </ListGroup>
+          </>
+        )}
+      </div>
+      <ActionSheet
+        open={photoId !== null}
+        onClose={() => setPhotoId(null)}
+        actions={[
+          ...(index > 0
+            ? [
+                {
+                  label: "Make main photo",
+                  onSelect: () => {
+                    set({ photos: [photos[index], ...photos.filter((p) => p.id !== photoId)] });
+                    setPhotoId(null);
+                    flash("Main photo updated");
+                  },
+                },
+              ]
+            : []),
+          {
+            label: "Remove photo",
+            tone: "destructive",
+            onSelect: () => {
+              remove(photoId);
+              setPhotoId(null);
+            },
+          },
+        ]}
+      />
+      <Toast open={Boolean(toast)} placement="bottom" icon="check">
+        {toast}
+      </Toast>
+    </Frame>
+  );
+}
+
+const ANSWER_MAX = 150;
+
+/** Prompt editor (reference: Bumble prompts): pick a question, write the answer, save. */
+export function PromptEditor({ go }) {
+  const [state, dispatch] = useStore();
+  const saved = state.profile.prompt;
+  const [q, setQ] = useState(saved.q);
+  const [a, setA] = useState(saved.a);
+  // Another frame (or a reset) changed the saved prompt: start from it.
+  useEffect(() => {
+    setQ(saved.q);
+    setA(saved.a);
+  }, [saved.q, saved.a]);
+  const answer = a.trim();
+  const changed = q !== saved.q || answer !== saved.a;
+  return (
+    <Frame
+      tone="page"
+      top={<TopBar onBack={() => go("edit")} title="Your prompt" />}
+      footer={
+        <div className="fl-stack fl-stack--full">
+          <Button
+            disabled={!answer || !changed}
+            onClick={() => {
+              dispatch({ type: "profile", patch: { prompt: { q, a: answer } } });
+              go("edit");
+            }}
+          >
+            Save prompt
+          </Button>
+          <p className="fl-caption fl-center">{answer ? (changed ? "Saved prompts show on your profile straight away." : "No changes yet.") : "Write an answer to save."}</p>
+        </div>
+      }
+    >
+      <div className="fl-stack fl-gap-lg">
+        <OptionCards legend="Pick a prompt" value={q} onChange={setQ} options={PROMPT_QUESTIONS.map((p) => ({ value: p, label: p }))} />
+        <TextArea label="Your answer" value={a} maxLength={ANSWER_MAX} onChange={(e) => setA(e.target.value)} placeholder="Be specific. It gives people something to reply to." />
       </div>
     </Frame>
   );

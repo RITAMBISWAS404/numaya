@@ -9,6 +9,7 @@ export const initialState = {
     gender: "man",
     looking: ["long-term"],
     interests: ["Natural wine", "Jazz", "Cooking"],
+    prompt: { q: "A perfect first date", a: "A record shop, a long walk, and nowhere to be after." },
     photos: [
       { id: 1, tone: 0 },
       { id: 2, tone: 1 },

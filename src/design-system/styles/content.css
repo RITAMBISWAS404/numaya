@@ -523,6 +523,18 @@ button.list-row__hit:hover {
   background: var(--color-surface-soft);
 }
 
+/* Optional tap target over a filled photo (opens photo options); the remove button stays above it. */
+.photo-slot__select {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+  transition: background-color var(--motion-duration-fast);
+}
+
+.photo-slot__select:active {
+  background: var(--color-overlay-hover-light);
+}
+
 .photo-slot__index {
   position: absolute;
   left: 8px;

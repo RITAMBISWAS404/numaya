@@ -47,6 +47,24 @@ const TARGETS = [
       await p.locator("#chat").getByRole("button", { name: "Unmatch" }).first().click();
     },
   },
+  {
+    name: "discover filters sheet",
+    url: "flows.html",
+    scope: "#discovery",
+    open: async (p) => p.locator("#discovery").getByRole("button", { name: /^Filters/ }).click(),
+  },
+  {
+    name: "edit profile preview",
+    url: "flows.html",
+    scope: "#edit",
+    open: async (p) => p.locator("#edit").getByRole("tab", { name: "Preview" }).click(),
+  },
+  {
+    name: "photo options sheet",
+    url: "flows.html",
+    scope: "#edit",
+    open: async (p) => p.locator("#edit").getByRole("button", { name: "Photo 2: options" }).click(),
+  },
   { name: "design-system showcase", url: "showcase.html" },
 ];
 
