@@ -545,6 +545,7 @@ export function Chat({ go }) {
       <Frame tone="page" top={<TopBar onBack={() => go("chats")} />}>
         <div className="fl-center fl-fill">
           <ResultPanel
+            tone="neutral"
             title={ended === "blocked" ? `You’ve blocked and reported ${person.name}` : `You’ve unmatched ${person.name}`}
             footer={<Button onClick={() => go("chats")}>Back to chats</Button>}
           >

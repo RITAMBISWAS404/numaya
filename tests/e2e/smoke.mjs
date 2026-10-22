@@ -271,7 +271,13 @@ try {
           identitySupported: CSS.supports("corner-shape", "superellipse(1.5)"),
           avatarShape: ["#chats .conversation .avatar__image", "#chats .match-queue .avatar__image", "#profile .avatar__image"].map((sel) => cs(sel).cornerShape),
           avatarRadius: cs("#chats .avatar__image").borderTopLeftRadius,
-          ring: (() => { const r = document.querySelector("#profile .avatar__ring"); const st = getComputedStyle(r); return { corner: st.cornerShape, bg: st.backgroundImage, img: getComputedStyle(r.nextElementSibling).cornerShape }; })(),
+          ring: (() => {
+            const r = document.querySelector("#profile .avatar__ring");
+            const shown = [...r.querySelectorAll(".avatar__ring-shape")].filter((g) => getComputedStyle(g).display !== "none");
+            const v = shown[0]?.querySelector(".avatar__ring-value");
+            const box = r.getBoundingClientRect(), av = r.parentElement.getBoundingClientRect(), vb = v?.getBoundingClientRect();
+            return { shown: shown.map((g) => g.classList[1]).join(), cap: v && getComputedStyle(v).strokeLinecap, stroke: v && getComputedStyle(v).stroke, width: v && getComputedStyle(v).strokeWidth, img: getComputedStyle(r.nextElementSibling).cornerShape, inside: vb && vb.left >= av.left - 0.5 && vb.top >= av.top - 0.5 && Math.abs(box.width - av.width) < 0.5 };
+          })(),
           roundCorners: [".action-bar__btn", ".nav-button", ".avatar__badge", ".result__badge", ".composer__send"].map((sel) => document.querySelector(sel) && cs(sel).cornerShape).filter(Boolean),
           cardCorner: cs("#discovery .fl-pf__section").cornerShape,
           promptShadowAlpha: alpha(cs("#profile .prompt").boxShadow),
@@ -295,7 +301,7 @@ try {
       check("geometry: buttons are pills (Meetup)", geo.btnRadius >= 999, `${geo.btnRadius}px`);
       check("geometry: squircle corners apply to cards where supported", !geo.squircleSupported || geo.cardCorner.includes("squircle"), `${geo.squircleSupported} / ${geo.cardCorner}`);
       check("shape: identity avatars use the soft superellipse where supported (circle fallback)", geo.avatarRadius === "50%" && (!geo.identitySupported || geo.avatarShape.every((c) => c.includes("superellipse(1.5)"))), `${geo.avatarShape.join(" / ")} / r ${geo.avatarRadius}`);
-      check("shape: the profile completion ring follows the avatar shape and fills in brand pink", geo.ring.corner === geo.ring.img && geo.ring.bg.includes("conic-gradient") && geo.ring.bg.includes(PINK), `${geo.ring.corner} / ${geo.ring.bg.slice(0, 60)}`);
+      check("shape: the completion ring traces the avatar shape (squircle, or circle fallback) with round caps in brand pink", geo.ring.shown === (geo.ring.img.includes("superellipse") ? "avatar__ring-shape--identity" : "avatar__ring-shape--round") && geo.ring.cap === "round" && geo.ring.stroke === PINK && geo.ring.width === "4px" && geo.ring.inside, JSON.stringify(geo.ring));
       check("shape: action circles, icon buttons, the verified dot and the success badge stay round", geo.roundCorners.length >= 4 && geo.roundCorners.every((c) => c === "round"), geo.roundCorners.join(" / "));
       check("geometry: pill buttons and chips stay true pills (no squircle)", !geo.btnCorner.includes("squircle") && !geo.chipCorner.includes("squircle"), `${geo.btnCorner} / ${geo.chipCorner}`);
       check("elevation: card shadow is very light", geo.promptShadowAlpha > 0 && geo.promptShadowAlpha <= 0.08, `alpha ${geo.promptShadowAlpha}`);
@@ -415,6 +421,8 @@ try {
       await p.getByRole("button", { name: "Fake profile" }).click();
       await wait(600);
       check("flows: report ends in a block confirmation", (await textOf("chat")).includes("You’ve blocked and reported Maya"));
+      const outcome = await p.evaluate(() => { const b = document.querySelector("#chat .result__badge"); const st = getComputedStyle(b); return { neutral: b.closest(".result").classList.contains("result--neutral"), bg: st.backgroundImage + " " + st.backgroundColor, shadow: st.boxShadow, disc: getComputedStyle(b, "::before").backgroundColor }; });
+      check("flows: safety outcomes use the neutral badge (no brand pink or glow), still a white disc", outcome.neutral && !outcome.bg.includes(PINK) && !outcome.shadow.includes("247, 112, 227") && outcome.disc === "rgb(255, 255, 255)", JSON.stringify(outcome));
       check("flows: blocked person leaves the inbox", !(await textOf("chats")).includes("Maya"));
       check("flows: settings counts the blocked person", /Blocked people 1/.test(await textOf("settings")));
       await f("chats").getByRole("button", { name: /Jo/ }).first().click();

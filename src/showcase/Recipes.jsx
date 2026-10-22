@@ -271,7 +271,7 @@ function Safety() {
         <TopBar onBack={() => {}} title="Maya" />
         <div className="sc-screen__body sc-center">
           {reported ? (
-            <ResultPanel title="You’ve blocked and reported Maya" footer={<Button onClick={() => setReported(null)}>Done</Button>}>
+            <ResultPanel tone="neutral" title="You’ve blocked and reported Maya" footer={<Button onClick={() => setReported(null)}>Done</Button>}>
               <p>Reason: {reported}. We’ll update you in Help. Maya won’t be told.</p>
             </ResultPanel>
           ) : (

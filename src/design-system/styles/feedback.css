@@ -83,6 +83,13 @@
   box-shadow: 0 0 0 8px var(--color-danger-tint);
 }
 
+/* Safety outcomes (unmatched, blocked): the same badge construction in quiet neutrals, so ending a
+   conversation is confirmed without the brand celebration of verification. */
+.result--neutral .result__badge {
+  background: var(--color-border-strong);
+  box-shadow: 0 0 0 8px var(--color-surface-soft);
+}
+
 /* ------------------------------------------------------------------ */
 /* Action sheet                                                        */
 /* ------------------------------------------------------------------ */

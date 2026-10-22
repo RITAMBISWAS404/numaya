@@ -561,8 +561,8 @@ function Feedback() {
             </EmptyState>
           </div>
         </Specimen>
-        <Specimen title="ResultPanel" note="Badge: exact brand fill, ink check">
-          <ResultPanel title="You’ve blocked and reported Jo" footer={<Button>Done</Button>}>
+        <Specimen title="ResultPanel" note="Tones: success (brand ring, verification), neutral (safety outcomes), danger. White inset disc, ink check">
+          <ResultPanel tone="neutral" title="You’ve blocked and reported Jo" footer={<Button>Done</Button>}>
             <p>Thanks for helping keep Numaya safe. We’ll update you in Help.</p>
           </ResultPanel>
         </Specimen>

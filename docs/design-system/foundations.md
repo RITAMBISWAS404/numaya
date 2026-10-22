@@ -57,7 +57,8 @@ or brand colour. Numerals in inputs, codes and prices use `tabular-nums`.
   (hero profile card, sheets, dialogs, the floating tab bar) · 2xl 32 (framed screens). Nested corners
   follow outer = inner + inset: the tab bar (xl 28) wraps items (lg 20) with an 8px inset. Circles stay circles (icon buttons, Fab, Pass / Like / SuperSwipe, the success badge). Identity
   avatars and their completion ring take `--shape-identity` (`superellipse(1.5)`, a soft squircle) where
-  `corner-shape` is supported, and fall back to the circle.
+  `corner-shape` is supported, and fall back to the circle; the completion ring traces the same outline
+  as a 4px round-capped stroke.
   `pill` is only for shapes whose meaning is a pill: progress bars, switches, slider tracks, count
   badges. Never for ordinary buttons, chips, tabs or badges.
 - **Borders:** hairline 1px, selected 1.5px, focus 2px.

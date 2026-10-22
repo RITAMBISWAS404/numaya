@@ -6,6 +6,34 @@ import { IconButton } from "./Button.jsx";
 /* Identity                                                                    */
 /* -------------------------------------------------------------------------- */
 
+/* Avatar sizes in px (mirror --size-avatar-*; a unit test keeps them in sync). The completion ring
+   is drawn in pixel space so its 4px band and round caps are the same at every size. */
+export const AVATAR_PX = { xs: 24, sm: 36, md: 48, lg: 64, xl: 96 };
+/* Exponent of the identity shape: CSS corner-shape superellipse(K) draws |x|^(2^K) + |y|^(2^K) = 1. */
+const IDENTITY_EXPONENT = 2 ** 1.5;
+const RING_BAND = 4;
+const ringPaths = {};
+
+/** Ring centrelines for an avatar of `px`: the identity squircle and the circular fallback. Both start
+    at the top centre and run clockwise, so stroke-dasharray reads as progress. */
+function ringPath(px) {
+  if (ringPaths[px]) return ringPaths[px];
+  const c = px / 2;
+  const a = c - RING_BAND / 2;
+  const f = (v) => v.toFixed(2);
+  const pts = [];
+  for (let i = 0; i < 96; i++) {
+    const t = -Math.PI / 2 + (i / 96) * 2 * Math.PI;
+    const e = (v) => Math.sign(v) * Math.abs(v) ** (2 / IDENTITY_EXPONENT);
+    pts.push(`${f(c + a * e(Math.cos(t)))} ${f(c + a * e(Math.sin(t)))}`);
+  }
+  ringPaths[px] = {
+    identity: `M${pts.join("L")}Z`,
+    round: `M${f(c)} ${f(c - a)}A${f(a)} ${f(a)} 0 1 1 ${f(c)} ${f(c + a)}A${f(a)} ${f(a)} 0 1 1 ${f(c)} ${f(c - a)}Z`,
+  };
+  return ringPaths[px];
+}
+
 /**
  * Avatar. size: xs | sm | md | lg | xl. Optional ring: { value 0–1, tone: "brand" | "muted" }
  * for profile completion or match countdown.
@@ -15,11 +43,23 @@ export function Avatar({ name, src, size = "md", ring, verified = false, decorat
   return (
     <span className={cx("avatar", `avatar--${size}`, ring && "has-ring", className)} aria-hidden={decorative || undefined}>
       {ring && (
-        <span
+        <svg
           className={cx("avatar__ring", `avatar__ring--${ring.tone ?? "brand"}`)}
-          style={{ "--ring-value": `${Math.round(ring.value * 100)}%` }}
+          viewBox={`0 0 ${AVATAR_PX[size]} ${AVATAR_PX[size]}`}
           aria-hidden="true"
-        />
+        >
+          {["round", "identity"].map((shape) => (
+            <g key={shape} className={`avatar__ring-shape avatar__ring-shape--${shape}`}>
+              <path d={ringPath(AVATAR_PX[size])[shape]} pathLength="100" className="avatar__ring-track" />
+              <path
+                d={ringPath(AVATAR_PX[size])[shape]}
+                pathLength="100"
+                className="avatar__ring-value"
+                style={{ strokeDasharray: `${Math.round(ring.value * 100)} 100` }}
+              />
+            </g>
+          ))}
+        </svg>
       )}
       <span className="avatar__image" role={decorative ? undefined : "img"} aria-label={decorative ? undefined : name}>
         {src ? <img src={src} alt="" /> : initial}
@@ -397,7 +437,7 @@ export function EmptyState({ icon = "sparkle", art = false, artSrc, title, child
   );
 }
 
-/** Completion feedback after a flow (verified, reported, purchased). */
+/** Completion feedback after a flow. tone: success (verified, purchased) | neutral (unmatched, blocked) | danger. */
 export function ResultPanel({ tone = "success", icon = "check", title, children, footer }) {
   return (
     <div className={cx("result", `result--${tone}`)}>

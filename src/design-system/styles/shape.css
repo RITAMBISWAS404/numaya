@@ -40,8 +40,16 @@
    Action circles (Pass / Like / SuperSwipe), icon buttons, the verified dot, the success badge and
    pills are not listed and stay round. Without support the avatar is a circle. */
 @supports (corner-shape: superellipse(1.5)) {
-  .avatar__image,
-  .avatar__ring {
+  .avatar__image {
     corner-shape: var(--shape-identity);
+  }
+
+  /* The ring is an SVG stroke, so it switches to the matching squircle path instead. */
+  .avatar__ring-shape--round {
+    display: none;
+  }
+
+  .avatar__ring-shape--identity {
+    display: inline;
   }
 }
