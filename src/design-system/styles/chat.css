@@ -30,16 +30,26 @@
   animation: rise-in var(--motion-duration-base) var(--motion-ease-out);
 }
 
-/* Mine: brand tint with dark text (light surface rule). */
+/* Mine: ink with white text, like the primary action. Pink is kept for send, unread and states. */
 .message--me .message__bubble {
   border-bottom-right-radius: var(--radius-xs);
-  background: var(--color-brand-tint);
-  color: var(--color-text-primary);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-on-inverse);
 }
 
+/* Theirs: white, lifted off the page with the smallest shadow. */
 .message--them .message__bubble {
   border-bottom-left-radius: var(--radius-xs);
-  background: var(--color-surface-soft);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-xs);
+}
+
+.message.is-grouped.message--me .message__bubble {
+  border-top-right-radius: var(--radius-xs);
+}
+
+.message.is-grouped.message--them .message__bubble {
+  border-top-left-radius: var(--radius-xs);
 }
 
 .message.is-sending .message__bubble {
@@ -165,6 +175,21 @@
   text-align: left;
 }
 
+/* Inset divider that starts after the avatar. */
+.conversation + .conversation .conversation__hit {
+  position: relative;
+}
+
+.conversation + .conversation .conversation__hit::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(var(--size-avatar-md) + var(--space-3));
+  right: 0;
+  height: var(--border-hairline);
+  background: var(--color-border-subtle);
+}
+
 .conversation__text {
   flex: 1;
   min-width: 0;
@@ -231,8 +256,13 @@
 .match-queue__item {
   display: grid;
   justify-items: center;
-  gap: 6px;
+  gap: 8px;
   width: 72px;
+}
+
+/* New, unopened matches carry a brand ring with a page-coloured gap. */
+.match-queue__item .avatar:not(.has-ring) .avatar__image {
+  box-shadow: 0 0 0 2.5px var(--color-surface-page), 0 0 0 5px var(--color-brand);
 }
 
 .match-queue__name {

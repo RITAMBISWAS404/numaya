@@ -98,7 +98,7 @@ export function ActionSheet({ open, onClose, title, actions }) {
           </button>
         ))}
       </div>
-      <Button variant="secondary" onClick={onClose}>
+      <Button variant="quiet" onClick={onClose}>
         Cancel
       </Button>
     </Sheet>

@@ -157,7 +157,7 @@
 .card {
   border-radius: var(--radius-lg);
   background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle);
+  box-shadow: var(--shadow-sm);
 }
 
 .card--padded {
@@ -427,10 +427,11 @@ button.list-row__hit:hover {
   border-radius: var(--radius-lg);
 }
 
-.image-placeholder--sky   { background: var(--color-brand-tint); color: var(--color-text-brand); }
+/* Placeholder tones stay in the brand-tint / warm-neutral family so a grid of them reads as one set. */
+.image-placeholder--sky   { background: var(--color-brand-tint); color: var(--color-text-muted); }
 .image-placeholder--stone { background: var(--color-surface-sunken); color: var(--color-text-muted); }
-.image-placeholder--mist  { background: var(--color-surface-soft); color: var(--color-text-muted); }
-.image-placeholder--sand  { background: var(--color-warning-tint); color: var(--color-warning); }
+.image-placeholder--mist  { background: var(--color-brand-tint); color: var(--color-text-muted); }
+.image-placeholder--sand  { background: var(--color-surface-sunken); color: var(--color-text-muted); }
 
 .image-placeholder__icon {
   opacity: 0.7;
@@ -471,8 +472,7 @@ button.list-row__hit:hover {
   width: 100%;
   border-radius: var(--radius-md);
   background: var(--color-surface-soft);
-  box-shadow: inset 0 0 0 var(--border-selected) var(--color-border-strong);
-  color: var(--color-text-muted);
+  color: var(--color-text-primary);
   transition: background-color var(--motion-duration-fast), color var(--motion-duration-fast);
 }
 
@@ -842,34 +842,36 @@ button.list-row__hit:hover {
 .match__photos {
   position: relative;
   width: 264px;
-  height: 200px;
+  height: 212px;
 }
 
 .match__photo {
   position: absolute;
-  top: 0;
+  top: 8px;
   display: grid;
   place-items: center;
-  width: 136px;
-  height: 184px;
-  border-radius: var(--radius-lg);
+  width: 138px;
+  height: 180px;
+  border-radius: var(--radius-xl);
   font-family: var(--font-display);
-  font-size: 56px;
-  box-shadow: var(--shadow-sm);
+  font-variation-settings: var(--font-display-axes);
+  font-size: 64px;
+  /* White inset frame + float shadow: the same "photo in a card" language as the Discover card. */
+  box-shadow: inset 0 0 0 6px var(--color-surface), var(--shadow-float);
 }
 
 .match__photo--left {
-  left: 10px;
-  background: var(--color-brand-tint);
-  color: var(--color-text-brand-deep);
-  transform: rotate(-6deg);
+  left: 6px;
+  background: var(--color-brand-subtle);
+  color: var(--color-text-primary);
+  transform: rotate(-7deg);
 }
 
 .match__photo--right {
-  right: 10px;
-  background: var(--color-surface-sunken);
-  color: var(--color-text-secondary);
-  transform: rotate(5deg);
+  right: 6px;
+  background: var(--color-brand-tint);
+  color: var(--color-brand);
+  transform: rotate(6deg);
 }
 
 .match__mark {
@@ -885,6 +887,7 @@ button.list-row__hit:hover {
   color: var(--color-on-brand);
   box-shadow: 0 0 0 4px var(--color-surface), var(--shadow-sm);
   transform: translateX(-50%);
+  z-index: var(--z-raised);
 }
 
 @media (prefers-reduced-motion: reduce) {

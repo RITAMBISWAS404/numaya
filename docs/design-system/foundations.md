@@ -58,8 +58,11 @@ or brand colour. Numerals in inputs, codes and prices use `tabular-nums`.
   `pill` is only for shapes whose meaning is a pill: progress bars, switches, slider tracks, count
   badges. Never for ordinary buttons, chips, tabs or badges.
 - **Borders:** hairline 1px, selected 1.5px, focus 2px.
-- **Surfaces:** tab-root screens sit on `--color-surface-page` (a blush-warm neutral); content cards
-  and list groups are white and raised with a shadow instead of an outline. Other screens stay white.
+- **Surfaces:** app screens (Discover, Chats, a conversation, Match, Profile, Settings) sit on
+  `--color-surface-page`, a blush-warm neutral; cards and list groups are white and raised with a
+  shadow instead of an outline, with inset dividers only between rows. Onboarding forms stay white and
+  content-led. Chips are soft fills (selected adds the brand tint and ring). In chat, incoming bubbles
+  are white and outgoing are ink; pink is kept for send, unread, new matches and the like action.
 - **Elevation** (neutral ink, very low opacity; flat controls and fields use none): `--shadow-xs` tiny
   moving parts · `sm` cards, list groups and floating icon buttons (no ring) · `float` persistent
   floating chrome (tab bar, hero profile card) · `md` bottom sheets and panels · `lg` dialogs,

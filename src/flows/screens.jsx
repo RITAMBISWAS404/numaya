@@ -6,6 +6,7 @@ import {
   Badge,
   Banner,
   Button,
+  Card,
   ChipGroup,
   Composer,
   ConsequenceList,
@@ -34,7 +35,9 @@ import {
   TextField,
   Toast,
   TopBar,
+  Icon,
   IconButton,
+  ImagePlaceholder,
   VerifiedBadge,
   Wordmark,
 } from "../design-system/index.js";
@@ -348,7 +351,7 @@ export function Match({ go }) {
 
   if (!person || state.ended[id]) {
     return (
-      <Frame top={<TopBar onBack={() => go("discovery")} />}>
+      <Frame tone="page" top={<TopBar onBack={() => go("discovery")} />}>
         <div className="fl-center fl-fill">
           <EmptyState icon="heart" title="No new match yet" action="Go to Discover" onAction={() => go("discovery")}>
             Like someone who has already liked you and you’ll see it here.
@@ -368,6 +371,7 @@ export function Match({ go }) {
 
   return (
     <Frame
+      tone="page"
       top={<TopBar onBack={() => go("discovery")} />}
       footer={
         <div className="fl-stack fl-stack--full">
@@ -397,7 +401,7 @@ export function Chats({ go }) {
   const fresh = newMatches(state).map((id) => ({ id, name: PEOPLE[id].name }));
   const rows = conversations(state);
   return (
-    <Frame top={<TopBar largeTitle="Chats" />} tab="chats" go={go}>
+    <Frame tone="page" top={<TopBar largeTitle="Chats" />} tab="chats" go={go}>
       <div className="fl-stack fl-gap-lg">
         {!state.prefs.messages && (
           <Banner tone="info" title="New message alerts are off" action="Turn on" onAction={() => dispatch({ type: "prefs", patch: { messages: true } })}>
@@ -413,7 +417,7 @@ export function Chats({ go }) {
         <section>
           <p className="fl-label">Conversations</p>
           {rows.length ? (
-            <ul className="fl-list">
+            <ul className="fl-list fl-inbox">
               {rows.map((c) => (
                 <ConversationRow key={c.id} {...c} onPress={() => open(c.id)} />
               ))}
@@ -448,7 +452,7 @@ export function Chat({ go }) {
 
   if (ended) {
     return (
-      <Frame top={<TopBar onBack={() => go("chats")} />}>
+      <Frame tone="page" top={<TopBar onBack={() => go("chats")} />}>
         <div className="fl-center fl-fill">
           <ResultPanel
             title={ended === "blocked" ? `You’ve blocked and reported ${person.name}` : `You’ve unmatched ${person.name}`}
@@ -467,6 +471,7 @@ export function Chat({ go }) {
 
   return (
     <Frame
+      tone="page"
       top={
         <header className="fl-chat-head">
           <IconButton icon="chevronLeft" label="Back to chats" variant="plain" onClick={() => go("chats")} />
@@ -554,32 +559,82 @@ export function MyProfile({ go }) {
   const age = ageOf(year);
   const completion = Math.min(1, 0.4 + Math.min(photos.length, 4) * 0.1 + Math.min(interests.length, 5) * 0.04);
   return (
-    <Frame top={<TopBar largeTitle="Profile" actions={<IconButton icon="settings" label="Settings" variant="plain" onClick={() => go("settings")} />} />} tab="profile" go={go}>
+    <Frame
+      tone="page"
+      top={<TopBar largeTitle="Profile" actions={<IconButton icon="settings" label="Settings" variant="plain" onClick={() => go("settings")} />} />}
+      tab="profile"
+      go={go}
+    >
       <div className="fl-stack fl-gap-lg">
-        <div className="fl-me">
-          <Avatar name={name || "You"} size="xl" ring={{ value: completion }} />
-          <div>
-            <p className="fl-me__name">
-              {name || "You"}
-              {age ? `, ${age}` : ""}
-            </p>
-            <span className="fl-badges">
-              <Badge tone="brand">Profile {Math.round(completion * 100)}% complete</Badge>
-              {state.prefs.snooze && (
-                <Badge tone="warning" icon="eyeOff">
-                  Snoozed
-                </Badge>
-              )}
-            </span>
+        <div className="fl-me-card">
+          <div className="fl-me">
+            <Avatar name={name || "You"} size="xl" ring={{ value: completion }} />
+            <div>
+              <p className="fl-me__name">
+                {name || "You"}
+                {age ? `, ${age}` : ""}
+              </p>
+              <span className="fl-badges">
+                <Badge tone="brand">Profile {Math.round(completion * 100)}% complete</Badge>
+                {state.prefs.snooze && (
+                  <Badge tone="warning" icon="eyeOff">
+                    Snoozed
+                  </Badge>
+                )}
+              </span>
+            </div>
           </div>
+          <Button variant="secondary" icon="user" onClick={() => go("basics")}>
+            Edit profile
+          </Button>
         </div>
-        <Button variant="secondary" icon="user" onClick={() => go("basics")}>
-          Edit profile
-        </Button>
+        <Card>
+          <Section
+            title="Photos"
+            description={`${photos.length} of 6 added`}
+            action={
+              <button type="button" className="text-button" aria-label="Edit photos" onClick={() => go("photos")}>
+                Edit
+              </button>
+            }
+          >
+            <div className="fl-photo-strip">
+              {Array.from({ length: 4 }, (_, i) =>
+                photos[i] ? (
+                  <ImagePlaceholder key={photos[i].id} tone={photos[i].tone} ratio="3 / 4" label={`Photo ${i + 1}`} />
+                ) : (
+                  <span key={`empty-${i}`} className="fl-photo-strip__empty" aria-hidden="true">
+                    <Icon name="plus" size={18} />
+                  </span>
+                ),
+              )}
+            </div>
+          </Section>
+        </Card>
         <PromptCard prompt="A perfect first date" answer="A record shop, a long walk, and nowhere to be after." />
-        <ListGroup title="Your profile">
-          <ListRow icon="image" label="Photos" kind="value" value={`${photos.length} of 6`} onPress={() => go("photos")} />
-          <ListRow icon="sparkle" label="Interests" kind="value" value={interests.slice(0, 2).join(", ") + (interests.length > 2 ? ` +${interests.length - 2}` : "")} onPress={() => go("interests")} />
+        <Card>
+          <Section
+            title="Interests"
+            action={
+              <button type="button" className="text-button" aria-label="Edit interests" onClick={() => go("interests")}>
+                Edit
+              </button>
+            }
+          >
+            <div className="fl-chip-row">
+              {interests.length ? (
+                interests.map((i) => (
+                  <span key={i} className="chip chip--static">
+                    {i}
+                  </span>
+                ))
+              ) : (
+                <p className="fl-caption">Pick a few so people have something to ask about.</p>
+              )}
+            </div>
+          </Section>
+        </Card>
+        <ListGroup title="Trust">
           <ListRow icon="shield" label="Verification" kind="info" value="Phone verified" />
         </ListGroup>
       </div>
@@ -622,7 +677,7 @@ export function Settings({ go }) {
     </li>
   );
   return (
-    <Frame top={<TopBar onBack={() => go("profile")} title="Settings" />}>
+    <Frame tone="page" top={<TopBar onBack={() => go("profile")} title="Settings" />}>
       <div className="fl-stack fl-gap-lg">
         <ListGroup title="Who you see">
           <li className="list-row">
@@ -648,6 +703,8 @@ export function Settings({ go }) {
         </ListGroup>
         <ListGroup>
           <ListRow label="Log out" kind="action" onPress={() => go("intro")} />
+        </ListGroup>
+        <ListGroup footnote="Deleting removes your profile, matches and messages.">
           <ListRow label="Delete account" kind="destructive" onPress={() => setDeleting(true)} />
         </ListGroup>
       </div>

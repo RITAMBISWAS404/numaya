@@ -238,6 +238,23 @@ try {
       check("navigation: bar sits below the scrolling content, never over it", geo.tabBelowBody);
       check("discover: actions are visible above the tab bar without scrolling", geo.likeTop);
       check("surfaces: Discover page is tinted and the hero card has no border", geo.pageBg !== "rgb(255, 255, 255)" && geo.cardBorder === "0px", `${geo.pageBg} / ${geo.cardBorder}`);
+      const roll = await p.evaluate(() => {
+        const cs = (sel) => getComputedStyle(document.querySelector(sel));
+        const body = document.querySelector("#chat .fl-screen__body").getBoundingClientRect();
+        const last = [...document.querySelectorAll("#chat .message")].at(-1).getBoundingClientRect();
+        return {
+          pages: ["chats", "chat", "profile", "settings", "match"].map((id) => cs(`#${id} .fl-screen`).backgroundColor),
+          page: cs("#discovery .fl-screen").backgroundColor,
+          mine: cs("#chat .message--me .message__bubble").backgroundColor,
+          theirs: cs("#chat .message--them .message__bubble").backgroundColor,
+          chip: cs("#interests .chip:not(.is-selected)").boxShadow,
+          lastVisible: last.bottom <= body.bottom + 0.5,
+        };
+      });
+      check("surfaces: tab roots, chat, match and settings share the page tint", roll.pages.every((c) => c === roll.page), roll.pages.join(" | "));
+      check("chat: outgoing bubbles are ink, incoming are white", roll.mine === INK && roll.theirs === "rgb(255, 255, 255)", `${roll.mine} / ${roll.theirs}`);
+      check("selection: unselected chips are filled, not outlined", roll.chip === "none", roll.chip);
+      check("chat: the last message sits above the composer", roll.lastVisible);
       check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);
       check("navigation: exactly one current tab", geo.tabCurrent === 1);
       check("icons: Phosphor glyphs render and no legacy stroke icons remain", geo.icons > 0 && geo.legacyStrokeIcons === 0, `${geo.icons} phosphor / ${geo.legacyStrokeIcons} legacy`);
