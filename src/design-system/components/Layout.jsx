@@ -20,13 +20,24 @@ export function ScreenBody({ className, children }) {
 }
 
 /** Display headline + optional lede. One per screen; it labels the screen. */
-export function ScreenHeader({ id, title, lede, eyebrow }) {
+/** Screen title and lede. `art` places a small spot illustration beside the title. */
+export function ScreenHeader({ id, title, lede, eyebrow, art }) {
+  const heading = (
+    <h1 id={id} className="screen-header__title">
+      {title}
+    </h1>
+  );
   return (
     <div className="screen-header">
       {eyebrow && <p className="screen-header__eyebrow">{eyebrow}</p>}
-      <h1 id={id} className="screen-header__title">
-        {title}
-      </h1>
+      {art ? (
+        <div className="screen-header__row">
+          {heading}
+          {art}
+        </div>
+      ) : (
+        heading
+      )}
       {lede && <p className="screen-header__lede">{lede}</p>}
     </div>
   );

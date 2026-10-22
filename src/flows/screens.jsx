@@ -36,6 +36,7 @@ import {
   TopBar,
   Icon,
   IconButton,
+  IllustrationPlaceholder,
   ImagePlaceholder,
   VerifiedBadge,
   Wordmark,
@@ -125,7 +126,7 @@ export function Basics({ go }) {
         </>
       }
     >
-      <ScreenHeader title="Let’s start with the basics" />
+      <ScreenHeader title="Let’s start with the basics" art={<IllustrationPlaceholder id="basics-spot" ratio="1 / 1" width="72px" size="sm" />} />
       <div className="fl-stack fl-gap-lg">
         <TextField label="First name" value={name} onChange={(e) => set({ name: e.target.value })} autoComplete="given-name" />
         <TextField
@@ -177,7 +178,11 @@ export function InterestsPrompts({ go }) {
         </>
       }
     >
-      <ScreenHeader title="What are you into?" lede="Pick 3 to 5. They start conversations and help us find people like you." />
+      <ScreenHeader
+        title="What are you into?"
+        lede="Pick 3 to 5. They start conversations and help us find people like you."
+        art={<IllustrationPlaceholder id="interests-spot" ratio="1 / 1" width="72px" size="sm" />}
+      />
       <div className="fl-stack fl-gap-lg">
         <ChipGroup label="Interests" options={INTERESTS} value={interests} onChange={(v) => dispatch({ type: "profile", patch: { interests: v } })} max={5} />
         <Section title="Your prompt" description="Matches reply to this. More prompts arrive in a later step.">
@@ -309,7 +314,7 @@ export function Discovery({ go }) {
     >
       {snoozed ? (
         <div className="fl-center fl-fill">
-          <EmptyState icon="eyeOff" title="Discover is paused" action="Resume" onAction={() => dispatch({ type: "prefs", patch: { snooze: false } })}>
+          <EmptyState art="discover-paused" title="Discover is paused" action="Resume" onAction={() => dispatch({ type: "prefs", patch: { snooze: false } })}>
             You’re snoozed, so you won’t see new people and they won’t see you. Your matches and chats are still here.
           </EmptyState>
         </div>
@@ -394,7 +399,7 @@ export function Discovery({ go }) {
               {hidden} {hidden === 1 ? "person is" : "people are"} just outside ages {age[0]}–{age[1]} or {distance} km.
             </EmptyState>
           ) : (
-            <EmptyState title="You’ve seen everyone for now" action="Show them again" onAction={() => dispatch({ type: "resetDiscovery" })}>
+            <EmptyState art="discover-seen-everyone" title="You’ve seen everyone for now" action="Show them again" onAction={() => dispatch({ type: "resetDiscovery" })}>
               New people join every day. People you passed on can come back around.
             </EmptyState>
           )}
@@ -427,7 +432,7 @@ export function Match({ go }) {
     return (
       <Frame tone="page" top={<CloseHeader label="Back to Discover" onClose={() => go("discovery")} />}>
         <div className="fl-center fl-fill">
-          <EmptyState art title="No new match yet" action="Go to Discover" onAction={() => go("discovery")}>
+          <EmptyState art="match-empty" title="No new match yet" action="Go to Discover" onAction={() => go("discovery")}>
             Like someone who has already liked you and you’ll see it here.
           </EmptyState>
         </div>
@@ -500,7 +505,7 @@ export function Chats({ go }) {
             </ul>
           </section>
         ) : (
-          <EmptyState art title="Connections start here" action="Find your people" onAction={() => go("discovery")}>
+          <EmptyState art="chats-empty" title="Connections start here" action="Find your people" onAction={() => go("discovery")}>
             When you like each other, you’ll match. Here’s where you can chat.
           </EmptyState>
         )}

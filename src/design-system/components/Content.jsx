@@ -201,6 +201,20 @@ export function PromptCard({ prompt, answer, onEdit, onRemove, className }) {
   );
 }
 
+/**
+ * Reserved area for supplied artwork (see docs/numaya-illustration-map.md). A quiet neutral block
+ * until `src` is provided; decorative, so it is hidden from assistive tech either way. Distinct from
+ * photo placeholders, which stand in for people's photos.
+ */
+export function IllustrationPlaceholder({ id, src, ratio = "1 / 1", width, size = "md", className }) {
+  const props = {
+    className: cx("illustration", `illustration--${size}`, className),
+    style: { aspectRatio: ratio, width },
+    "data-illustration": id,
+  };
+  return src ? <img {...props} src={src} alt="" /> : <div {...props} aria-hidden="true" />;
+}
+
 const PLACEHOLDER_TONES = ["sky", "stone", "mist", "sand"];
 
 /** Image with a calm neutral placeholder while loading or when absent. */
@@ -364,12 +378,15 @@ export function Skeleton({ width = "100%", height = 16, radius = "var(--radius-x
 }
 
 /** One clear next step when there is nothing to show. */
-/** Empty state. `art` reserves the illustration area with a neutral placeholder instead of an icon. */
-export function EmptyState({ icon = "sparkle", art = false, title, children, action, onAction, tone = "neutral" }) {
+/**
+ * Empty state. `art` reserves an illustration slot instead of the icon: pass the slot id from the
+ * illustration map (or `true` for an unnamed slot); `artSrc` fills it once artwork exists.
+ */
+export function EmptyState({ icon = "sparkle", art = false, artSrc, title, children, action, onAction, tone = "neutral" }) {
   return (
     <div className={cx("empty-state", tone === "error" && "empty-state--error")}>
       {art ? (
-        <span className="empty-state__art" aria-hidden="true" />
+        <IllustrationPlaceholder id={typeof art === "string" ? art : undefined} src={artSrc} ratio="5 / 4" width="160px" className="empty-state__art" />
       ) : (
         <span className="empty-state__icon" aria-hidden="true">
           <Icon name={icon} size={28} />

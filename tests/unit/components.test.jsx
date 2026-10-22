@@ -9,7 +9,9 @@ import {
   Composer,
   Dialog,
   ActionBar,
+  EmptyState,
   Fab,
+  IllustrationPlaceholder,
   Icon,
   ProfileCard,
   IconButton,
@@ -269,6 +271,25 @@ describe("discovery card", () => {
     expect(screen.getByRole("img", { name: "Maya has not added a photo yet" })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Like" }));
     expect(onLike).toHaveBeenCalled();
+  });
+});
+
+describe("illustration slots", () => {
+  it("reserve a decorative area that later accepts artwork without a layout change", () => {
+    const { container, rerender } = render(<IllustrationPlaceholder id="match-empty" ratio="5 / 4" width="160px" />);
+    const slot = container.querySelector("[data-illustration='match-empty']");
+    expect(slot).toHaveAttribute("aria-hidden", "true");
+    expect(slot.style.aspectRatio).toBe("5 / 4");
+    rerender(<IllustrationPlaceholder id="match-empty" ratio="5 / 4" width="160px" src="/art/match-empty.svg" />);
+    const img = container.querySelector("img[data-illustration='match-empty']");
+    expect(img).toHaveAttribute("alt", "");
+    expect(img.style.aspectRatio).toBe("5 / 4");
+  });
+
+  it("EmptyState swaps its icon for a named illustration slot", () => {
+    const { container } = render(<EmptyState art="chats-empty" title="Connections start here" />);
+    expect(container.querySelector("[data-illustration='chats-empty']")).not.toBeNull();
+    expect(container.querySelector(".empty-state__icon")).toBeNull();
   });
 });
 

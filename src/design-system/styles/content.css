@@ -717,13 +717,23 @@ button.list-row__hit:hover {
   text-align: center;
 }
 
-/* Reserved illustration area (artwork supplied separately): a neutral placeholder. */
-.empty-state__art {
-  width: 140px;
-  height: 112px;
-  margin-bottom: var(--space-3);
+/* Illustration slots (artwork supplied separately; docs/numaya-illustration-map.md): a quiet
+   neutral block with the card corner, no border or shadow. Spot slots use the smaller corner. */
+.illustration {
+  display: block;
+  flex: none;
+  max-width: 100%;
   border-radius: var(--radius-card);
   background: var(--color-surface-sunken);
+  object-fit: contain;
+}
+
+.illustration--sm {
+  border-radius: var(--radius-lg);
+}
+
+.empty-state__art {
+  margin-bottom: var(--space-3);
 }
 
 .empty-state__icon {

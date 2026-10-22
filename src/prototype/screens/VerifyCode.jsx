@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  IllustrationPlaceholder,
   Button,
   CodeInput,
   Fab,
@@ -218,6 +219,7 @@ export function VerifyCode({
           </Toast>
           <Toast open={resent}>New code sent</Toast>
           <Sheet open={done} labelledBy="done-title">
+            <IllustrationPlaceholder id="verified-success" ratio="5 / 3" width="200px" className="verify-art" />
             <ResultPanel
               title={<span id="done-title">{intent === "signin" ? "You’re signed in" : "You’re verified"}</span>}
               footer={

@@ -5,11 +5,11 @@
  * excluded: squircle would change their shape.
  */
 @supports (corner-shape: squircle) {
-  .btn,
+  /* Pill buttons, chips and the pill composer are deliberately absent: a squircle on a 999px
+     radius renders as a superellipse rectangle, not a pill. */
   .input,
   .search,
   .card,
-  .chip,
   .badge,
   .tag,
   .tip-card,
@@ -22,14 +22,14 @@
   .coach,
   .banner,
   .pill,
-  .profile-card,
+  .profile-card__media,
   .image-placeholder,
+  .illustration,
   .photo-slot,
   .plan-card,
   .segmented,
   .segmented__item,
   .message__bubble,
-  .composer__field,
   .code__cell,
   .country-row {
     corner-shape: squircle;

@@ -252,3 +252,9 @@
   font-weight: var(--font-weight-medium);
   font-variant-numeric: tabular-nums;
 }
+
+/* Verification success: reserved celebration artwork above the result (docs/numaya-illustration-map.md). */
+.verify-art {
+  align-self: center;
+  margin: var(--space-2) 0 var(--space-1);
+}

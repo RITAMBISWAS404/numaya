@@ -33,6 +33,7 @@ export {
   ConsequenceList,
   PromptCard,
   ImagePlaceholder,
+  IllustrationPlaceholder,
   PhotoSlot,
   PhotoGrid,
   ProfileCard,

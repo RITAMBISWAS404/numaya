@@ -224,6 +224,8 @@ try {
           btnRadius: parseFloat(cs("#settings .btn--secondary, #basics .btn, .btn").borderTopLeftRadius),
           squircleSupported: CSS.supports("corner-shape", "squircle"),
           btnCorner: cs(".btn").cornerShape,
+          chipCorner: cs("#interests .chip").cornerShape,
+          cardCorner: cs("#discovery .fl-pf__section").cornerShape,
           promptShadowAlpha: alpha(cs("#profile .prompt").boxShadow),
           tabShadow: getComputedStyle(tab).boxShadow,
           tabRadius: parseFloat(getComputedStyle(tab).borderTopLeftRadius),
@@ -243,7 +245,8 @@ try {
         };
       });
       check("geometry: buttons are pills (Meetup)", geo.btnRadius >= 999, `${geo.btnRadius}px`);
-      check("geometry: squircle corners apply where supported", !geo.squircleSupported || geo.btnCorner.includes("squircle"), `${geo.squircleSupported} / ${geo.btnCorner}`);
+      check("geometry: squircle corners apply to cards where supported", !geo.squircleSupported || geo.cardCorner.includes("squircle"), `${geo.squircleSupported} / ${geo.cardCorner}`);
+      check("geometry: pill buttons and chips stay true pills (no squircle)", !geo.btnCorner.includes("squircle") && !geo.chipCorner.includes("squircle"), `${geo.btnCorner} / ${geo.chipCorner}`);
       check("elevation: card shadow is very light", geo.promptShadowAlpha > 0 && geo.promptShadowAlpha <= 0.08, `alpha ${geo.promptShadowAlpha}`);
       const tabAlpha = Math.max(0, ...[...geo.tabShadow.matchAll(/rgba\(\d+, \d+, \d+, ([0-9.]+)\)/g)].map((m) => parseFloat(m[1])));
       check("navigation: floating capsule inset from the edges with a soft shadow (Meetup)", geo.tabInset >= 8 && geo.tabRadius >= 999 && tabAlpha > 0 && tabAlpha <= 0.14, `inset ${geo.tabInset} / radius ${geo.tabRadius} / alpha ${tabAlpha}`);
@@ -282,6 +285,20 @@ try {
       check("chat: outgoing bubbles are brand pink with ink text, incoming light grey (Bumble + Meetup)", roll.mine === PINK && roll.mineFg === INK && roll.theirs === "rgb(236, 239, 243)", `${roll.mine} / ${roll.mineFg} / ${roll.theirs}`);
       check("selection: unselected chips are filled, not outlined", roll.chip === "none", roll.chip);
       check("chat: the last message sits above the composer", roll.lastVisible);
+      const art = await p.evaluate(() => {
+        const slots = [...document.querySelectorAll("[data-illustration]")];
+        const fab = document.querySelector("#basics .fab").getBoundingClientRect();
+        const screen = document.querySelector("#basics .fl-frame__screen").getBoundingClientRect();
+        return {
+          ids: slots.map((el) => el.dataset.illustration).sort(),
+          hidden: slots.every((el) => el.getAttribute("aria-hidden") === "true" || el.getAttribute("alt") === ""),
+          photoIsArt: document.querySelectorAll(".profile-card__media [data-illustration], .photo-slot [data-illustration], .match__photos [data-illustration]").length,
+          fabVisible: fab.bottom <= screen.bottom,
+        };
+      });
+      check("illustrations: planned slots are present and decorative", ["basics-spot", "interests-spot"].every((id) => art.ids.includes(id)) && art.hidden, art.ids.join(", "));
+      check("illustrations: photo placeholders are never illustration slots", art.photoIsArt === 0);
+      check("illustrations: the onboarding next button stays on screen", art.fabVisible);
       check("layout: profile photo strip keeps 4 columns; inbox rows are plain, not boxed (Bumble)", roll.stripCols === 4 && roll.inboxRows > 0 && !roll.inboxBoxed, `${roll.stripCols} cols / ${roll.inboxRows} rows / boxed ${roll.inboxBoxed}`);
       check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);
       check("navigation: exactly one current tab", geo.tabCurrent === 1);
