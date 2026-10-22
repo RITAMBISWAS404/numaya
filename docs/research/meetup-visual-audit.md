@@ -1,5 +1,7 @@
 # Meetup visual audit (iOS)
 
+> **Historical.** Written for the earlier pink (`#F770E3`) theme. The current palette is the Meetup-derived system (decision D-21, [UI map](../numaya-meetup-ui-map.md)).
+
 **Role:** visual patterns, composition, surfaces, spacing, component treatment and hierarchy.
 Not flows, not brand. Based on Mobbin previews of the
 [Meetup onboarding flow](https://mobbin.com/flows/e35f43d2-bbfe-46dc-9c8d-f34cace68d08), the

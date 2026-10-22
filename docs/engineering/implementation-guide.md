@@ -27,15 +27,16 @@ npm run tokens                    # regenerate src/design-system/tokens.{css,js}
 
 ## Brand and typography rules
 
-- `#F770E3` (`--color-brand`) is used exactly. Never substitute
-  another pink for a brand-bearing element, add a darker second pink, or change the token globally.
-- Foreground on solid brand fills is dark ink (`--color-on-brand`), never white. Brand-context text
-  (`--color-text-brand`) is ink because pink text fails contrast. See the
+- The UI follows Meetup's visual system ([UI map](../numaya-meetup-ui-map.md)); UX follows Bumble.
+  The brand is Meetup's sampled purple `#7262C7` (`--color-brand`); the old pink `#F770E3` is retired
+  and a test fails if it renders.
+- Foreground on solid purple is white (`--color-on-brand`, 4.90:1). Purple text (`--color-text-brand`)
+  is for links on white; on grey or lavender use `--color-text-brand-deep`. See the
   [contrast table](../design-system/foundations.md#contrast).
-- Headline emphasis uses `Emphasis` (the word in `--color-text-accent`, exact `#F770E3`), only on
-  display-size hero headlines (Welcome, You're verified, What are you into?, It's a match).
-  Decorative `Ribbon`s live only in whitespace (Welcome, Match); never behind badges, headings,
-  photos, fields, buttons or illustration slots.
+- Secondary Meetup colours (`--color-accent-*`) frame and mark (avatars, badges, guidance cards,
+  status icons); never text and never a second UI accent.
+- Headline emphasis uses `Emphasis` (the word in `--color-text-accent`, `#C1486A`), only on hero
+  headlines (Welcome, You're verified, What are you into?, It's a match). No decorative ribbons.
 - Fraunces for display, Inter for everything operational. No other fonts.
 
 ## Changing tokens

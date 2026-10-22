@@ -189,8 +189,9 @@
   transition: padding-bottom var(--motion-duration-push) var(--motion-ease-emphasized);
 }
 
+/* Brand screens (Welcome): Meetup's Home header wash, lavender fading into the white page. */
 .screen--wash {
-  background: var(--color-surface-brand);
+  background: linear-gradient(180deg, var(--color-surface-brand) 0%, var(--color-surface-brand) 35%, var(--color-surface) 100%);
 }
 
 .screen__body {

@@ -62,9 +62,8 @@ describe("token pipeline", () => {
     expect(productCss).not.toMatch(/(?<![-\w])color:\s*var\(--color-accent-/);
   });
 
-  it("flat sheen is white light only and the floating shadow is a soft purple", () => {
-    const sheen = value("--gradient-brand-sheen");
-    expect([...sheen.matchAll(/rgb\((\d+ \d+ \d+)/g)].every((m) => m[1] === "255 255 255")).toBe(true);
+  it("purple fills are flat (no sheen token) and the floating shadow is a soft purple", () => {
+    expect(css).not.toMatch(/--gradient-brand-sheen/);
     const glow = value("--shadow-brand");
     const tinted = [...glow.matchAll(/rgb\((\d+ \d+ \d+) \/ ([0-9.]+)\)/g)].filter((m) => m[1] !== "20 19 22");
     expect(tinted.map((m) => m[1])).toEqual(["114 98 199"]);

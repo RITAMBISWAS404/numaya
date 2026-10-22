@@ -6,7 +6,7 @@ JSDoc. Live variants and states: `showcase.html`. Tier: **P** primitive, **C** c
 
 | Component | Tier | Purpose | Key variants / states | A11y notes |
 | --- | --- | --- | --- | --- |
-| `Button` | P | Text action | primary, secondary, quiet, destructive, destructive-solid, brand (ink label on the brand-pink fill); sm; inline; icon; loading; disabled | `aria-busy` when loading; one primary per screen |
+| `Button` | P | Text action | primary, secondary, quiet, destructive, destructive-solid, brand (soft lavender with a deep-purple label, Meetup "Sign up with email"); sm; inline; icon; loading; disabled | `aria-busy` when loading; one primary per screen |
 | `Fab` | P | Forward step on data-entry screens | enabled, disabled, loading | `label` required |
 | `IconButton`, `BackButton` | P | Icon-only action | floating, flat, plain; sm; pressed | `label` required; `aria-pressed` for toggles |
 | `TextButton`, `Link` | P | Inline action / navigation | brand, muted, danger; disabled | Real `<a>` for navigation |
@@ -28,7 +28,7 @@ JSDoc. Live variants and states: `showcase.html`. Tier: **P** primitive, **C** c
 | `Sheet`, `ActionSheet`, `Dialog` | P/C | Modal surfaces | dismissable or not; destructive dialog | Focus trap, Escape, restore focus; dialog focuses Cancel |
 | `Toast`, `Banner`, `CoachMark` | P/C | Feedback | busy/status toast; info, success, warning, error, offline banners | Live regions; errors use `role="alert"` |
 | `Skeleton`, `EmptyState`, `ResultPanel` | C | Loading, empty, completion | neutral / error; success / danger | Skeletons hidden from AT; one next step |
-| `SetupProgress` | C | Profile setup intro | white 24px card with a header ("1 of 3 done"); steps done (pink tile, white check), active (ink tile, "Next" tint pill), upcoming (muted grey tile); a 2px connector joins the tiles; state comes from the store (`setupDone`) | Ordered list; active step is `aria-current="step"`; every state is written out |
+| `SetupProgress` | C | Profile setup intro | white 24px card with a header ("1 of 3 done"); steps done (purple tile, white check), active (ink tile, "Next" tint pill), upcoming (muted grey tile); a 2px connector joins the tiles; state comes from the store (`setupDone`) | Ordered list; active step is `aria-current="step"`; every state is written out |
 | `MessageBubble`, `SystemMessage`, `Composer`, `ConversationRow`, `MatchQueue` | X | Chat and matches | sending, delivered, failed (retry/delete); your move; unread; 60×80 capsule previews with a new-match ring or a countdown ring that follows the capsule; send is a 56×44 pill | Enter sends, Shift+Enter newline; failures announced |
 | `PlanPicker`, `ComparisonTable`, `LegalText` | X | Premium | selected plan, ribbon, savings | Radio group; legal text always visible |
 | `PermissionPrimer`, `MatchCelebration` | X | Permissions, match | not determined / denied → Settings | Never loops; "Not now" defers |

@@ -21,8 +21,8 @@ Generation-B traits used as the design authority:
 
 - **Palette:** white and light-grey surfaces, black text and black primary controls (pill CTAs, Pass
   and Like circles, slider thumbs, toggles, selected segment). One accent (Bumble yellow) only on
-  SuperSwipe, the opening-move mark, premium surfaces and "Your move"-type cues. Numaya keeps its
-  accent token (`#F770E3`) in that single accent role.
+  SuperSwipe, the opening-move mark, premium surfaces and "Your move"-type cues. Numaya's accent
+  in that single role is the Meetup-derived purple (`#7262C7`, see the [UI map](numaya-meetup-ui-map.md)).
 - **Geometry:** photo card ≈ 8px from the screen edges, corner ≈ 16px; section cards ≈ 16px with a
   very soft shadow; chips, tags, segmented selection and primary CTAs are **pills**; icon actions are
   **circles**; text fields ≈ 12–16px corners.

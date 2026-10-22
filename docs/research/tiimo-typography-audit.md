@@ -1,5 +1,7 @@
 # Tiimo typography audit (iOS)
 
+> **Historical.** Written for the earlier pink (`#F770E3`) theme. The current palette is the Meetup-derived system (decision D-21, [UI map](../numaya-meetup-ui-map.md)).
+
 **Role:** typography inspiration only. Based on Mobbin previews of Tiimo onboarding screens:
 [notifications](https://mobbin.com/screens/edec19f7-e515-437d-9ea6-2bd731be0d8c),
 [morning routines](https://mobbin.com/screens/c6ae3650-762d-41f8-af89-100e55011f0f),

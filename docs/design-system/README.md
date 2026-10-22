@@ -32,7 +32,7 @@ src/design-system/index.js       public API: import from here only
 
 | Layer | CSS name | Holds | Who may reference it |
 | --- | --- | --- | --- |
-| Primitive | `--p-color-pink-500`, `--p-dimension-16` | Raw values (palette, scales) | Semantic and component tokens only |
+| Primitive | `--p-color-purple-600`, `--p-dimension-16` | Raw values (palette, scales) | Semantic and component tokens only |
 | Semantic | `--color-text-muted`, `--space-4`, `--type-body-size` | Meaning | All component and screen CSS |
 | Component | `--button-height`, `--code-cell-radius` | Explicit reusable needs a semantic token cannot express | That component's CSS |
 
@@ -58,8 +58,9 @@ or the real page):
 ## Principles
 
 1. **Semantic first.** Screens use semantic tokens and library components, never raw values.
-2. **Brand with restraint.** `#F770E3` marks meaning (selected, verified, progress, brand
-   moments). It is never diluted and never carries dark foreground content.
+2. **Meetup system, Numaya identity.** Meetup's purple `#7262C7` marks meaning (selected, verified,
+   progress, links, the one floating action) with white on it; ink carries primary actions and
+   controls; Meetup's secondary colours only frame (avatars, badges, guidance cards).
 3. **Expression vs operation.** Fraunces expresses (headlines, names, prompt answers); Inter
    operates (everything you read to act).
 4. **States are part of the component.** Loading, error, disabled, pending and empty are

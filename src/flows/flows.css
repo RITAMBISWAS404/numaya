@@ -136,10 +136,6 @@ body {
   background: var(--color-surface);
 }
 
-.fl-screen--brand {
-  background: var(--color-surface-brand);
-}
-
 .fl-screen__body {
   flex: 1;
   min-height: 0;

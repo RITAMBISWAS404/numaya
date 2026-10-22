@@ -2152,15 +2152,6 @@ export const tokens = [
     "description": "Floating purple actions (Meetup 'Map' pill, confirm FAB): a contact shadow and a soft purple drop. Flat purple pills inside content use none."
   },
   {
-    "id": "semantic.gradient.brand-sheen",
-    "name": "--gradient-brand-sheen",
-    "layer": "semantic",
-    "type": "other",
-    "value": "linear-gradient(180deg, rgb(255 255 255 / 0.14) 0%, rgb(255 255 255 / 0) 60%)",
-    "resolved": "linear-gradient(180deg, rgb(255 255 255 / 0.14) 0%, rgb(255 255 255 / 0) 60%)",
-    "description": "A faint top light over large purple actions, matching the soft sheen of Meetup's ink CTAs. Chips, bubbles and progress stay flat."
-  },
-  {
     "id": "semantic.opacity.disabled",
     "name": "--opacity-disabled",
     "layer": "semantic",

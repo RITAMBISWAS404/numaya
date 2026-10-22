@@ -6,11 +6,11 @@ Reserved slots for artwork supplied separately. Each slot is an `IllustrationPla
 / empty `alt`): the surrounding text carries the meaning.
 
 Placeholders are a quiet `surface.sunken` block with the card corner (24px; 20px for spot slots), no
-border, shadow or pink. Profile **photo** placeholders (Discover card, photo grid, profile strip, match
+border, shadow or accent colour. Profile **photo** placeholders (Discover card, photo grid, profile strip, match
 photos) are a different thing and are never illustration slots.
 
-**Art direction for all slots:** Numaya pink `#F770E3` as the single accent (never a darker pink),
-ink and warm neutrals otherwise; simple, friendly line-and-shape style with Fraunces-like softness;
+**Art direction for all slots:** the Meetup-derived palette: brand purple `#7262C7` as the lead
+accent, with the secondary pink, yellow and periwinkle framing used sparingly; ink and neutrals otherwise; simple, friendly line-and-shape style with Fraunces-like softness;
 transparent background; people abstract (no realistic faces), inclusive and ungendered.
 
 | Slot id | Screen / component | Size | Placement | Concept and purpose | Type |
@@ -29,7 +29,7 @@ transparent background; people abstract (no realistic faces), inclusive and unge
 - **Verified → profile setup** (flows intro): tried and removed. A slot pushed the setup progress
   below the fold at 375px; the success badge and the `SetupProgress` card (done / next / upcoming,
   filled icons) already tell the story. The celebration lives on the prototype's success sheet.
-- **Match**: the two photos and the heart mark are the artwork; the ribbon fills the whitespace below.
+- **Match**: the two photos and the heart mark are the artwork; the whitespace below stays empty.
 - **Photos**: the photo grid is the content; artwork would compete with it.
 - **Phone number / verify code screens**: the keypad leaves no free space.
 - **"No one fits your filters"**: keeps its filter icon, which is functional (it names the cause).
