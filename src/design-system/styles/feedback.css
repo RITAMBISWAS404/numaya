@@ -12,9 +12,9 @@
   width: var(--size-avatar-lg);
   height: var(--size-avatar-lg);
   border-radius: 50%;
-  background: var(--color-brand);
+  background: var(--gradient-brand-sheen), var(--color-brand);
   color: var(--color-on-brand);
-  box-shadow: 0 0 0 8px var(--color-brand-tint), var(--shadow-sm);
+  box-shadow: 0 0 0 8px var(--color-brand-tint), var(--shadow-brand);
   animation: badge-in 560ms var(--motion-ease-out) 140ms both;
 }
 

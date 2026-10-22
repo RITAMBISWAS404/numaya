@@ -624,10 +624,16 @@
   background: var(--color-danger);
 }
 
-/* Brand pink fill: label in ink (7.15:1); white on #F770E3 is only 2.51:1. */
+/* Brand pink fill with a white light reflection and a soft brand glow; label in ink (7.15:1),
+   white on #F770E3 is only 2.51:1. Pressed returns to the flat brand pink, never a darker pink. */
 .btn--brand {
   color: var(--color-on-brand);
+  background: var(--gradient-brand-sheen), var(--color-brand);
+  box-shadow: var(--shadow-brand);
+}
+.btn--brand:active:not(:disabled) {
   background: var(--color-brand);
+  box-shadow: none;
 }
 
 .btn:disabled:not(.is-loading) {

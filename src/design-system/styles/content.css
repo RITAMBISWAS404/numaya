@@ -654,11 +654,17 @@ button.list-row__hit:hover {
   transform: scale(0.92);
 }
 
-/* SuperSwipe: the single accent action; ink glyph on the brand fill (white would be 2.51:1). */
+/* SuperSwipe: the single accent action. Exact brand pink with a white light reflection and a soft
+   brand glow; ink glyph (white would be 2.51:1). Pressed flattens to the brand pink, never darker. */
 .action-bar__btn--super {
-  background: var(--color-brand);
+  background: var(--gradient-brand-sheen), var(--color-brand);
   color: var(--color-on-brand);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-brand);
+}
+
+.action-bar__btn--super:active {
+  background: var(--color-brand);
+  box-shadow: none;
 }
 
 .action-bar__btn:disabled {
@@ -842,9 +848,9 @@ button.list-row__hit:hover {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--color-brand);
+  background: var(--gradient-brand-sheen), var(--color-brand);
   color: var(--color-on-brand);
-  box-shadow: 0 0 0 4px var(--color-surface), var(--shadow-sm);
+  box-shadow: 0 0 0 4px var(--color-surface), var(--shadow-brand);
   transform: translateX(-50%);
   z-index: var(--z-raised);
 }

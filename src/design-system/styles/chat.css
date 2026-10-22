@@ -152,17 +152,21 @@
   width: var(--size-touch-min);
   height: var(--size-touch-min);
   border-radius: 50%;
-  background: var(--color-brand);
+  background: var(--gradient-brand-sheen), var(--color-brand);
+  box-shadow: var(--shadow-brand);
   color: var(--color-on-brand);
-  transition: background-color var(--motion-duration-base), transform var(--motion-duration-fast) var(--motion-ease-out);
+  transition: background-color var(--motion-duration-base), box-shadow var(--motion-duration-base), transform var(--motion-duration-fast) var(--motion-ease-out);
 }
 
 .composer__send:active:not(:disabled) {
+  background: var(--color-brand);
+  box-shadow: none;
   transform: scale(0.92);
 }
 
 .composer__send:disabled {
   background: var(--color-surface-sunken);
+  box-shadow: none;
   color: var(--color-text-subtle);
 }
 

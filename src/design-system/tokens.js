@@ -1918,6 +1918,24 @@ export const tokens = [
     "description": "Primary ink buttons: a faint top highlight and a contact shadow."
   },
   {
+    "id": "semantic.shadow.brand",
+    "name": "--shadow-brand",
+    "layer": "semantic",
+    "type": "shadow",
+    "value": "inset 0 1px 0 rgb(255 255 255 / 0.40), 0 1px 2px rgb(20 23 31 / 0.08), 0 8px 20px -8px rgb(247 112 227 / 0.45)",
+    "resolved": "inset 0 1px 0 rgb(255 255 255 / 0.40), 0 1px 2px rgb(20 23 31 / 0.08), 0 8px 20px -8px rgb(247 112 227 / 0.45)",
+    "description": "Large brand-pink actions only (SuperSwipe, send, match mark): a white top highlight, a neutral contact shadow and a soft glow in the exact brand pink. Never a darker pink."
+  },
+  {
+    "id": "semantic.gradient.brand-sheen",
+    "name": "--gradient-brand-sheen",
+    "layer": "semantic",
+    "type": "other",
+    "value": "linear-gradient(180deg, rgb(255 255 255 / 0.30) 0%, rgb(255 255 255 / 0.10) 42%, rgb(255 255 255 / 0) 72%)",
+    "resolved": "linear-gradient(180deg, rgb(255 255 255 / 0.30) 0%, rgb(255 255 255 / 0.10) 42%, rgb(255 255 255 / 0) 72%)",
+    "description": "White light reflection over the exact brand pink (lighter tints only, never darker). Layer it above var(--color-brand) on large pink actions; small badges, chips, bubbles and progress stay flat."
+  },
+  {
     "id": "semantic.opacity.disabled",
     "name": "--opacity-disabled",
     "layer": "semantic",

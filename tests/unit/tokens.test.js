@@ -52,6 +52,31 @@ describe("token pipeline", () => {
   });
 });
 
+describe("brand pink treatments", () => {
+  const brandL = luminance(hexToRgb("#f770e3"));
+  const colours = () => {
+    const out = [];
+    for (const m of css.matchAll(/#([0-9a-f]{6})\b/gi)) out.push(hexToRgb(`#${m[1]}`));
+    for (const m of css.matchAll(/rgb\((\d+) (\d+) (\d+)/g)) out.push([+m[1], +m[2], +m[3]]);
+    return out;
+  };
+
+  it("never defines a pink darker than #F770E3", () => {
+    const pinks = colours().filter(([r, g, b]) => r - g > 60 && b - g > 60);
+    expect(pinks.length).toBeGreaterThan(0);
+    for (const c of pinks) expect(luminance(c)).toBeGreaterThanOrEqual(brandL - 1e-9);
+  });
+
+  it("sheen is white light only and the glow uses the exact brand pink, softly", () => {
+    const sheen = value("--gradient-brand-sheen");
+    expect([...sheen.matchAll(/rgb\((\d+ \d+ \d+)/g)].every((m) => m[1] === "255 255 255")).toBe(true);
+    const glow = value("--shadow-brand");
+    const pinkLayers = [...glow.matchAll(/rgb\((\d+ \d+ \d+) \/ ([0-9.]+)\)/g)].filter((m) => m[1] !== "255 255 255" && m[1] !== "20 23 31");
+    expect(pinkLayers.map((m) => m[1])).toEqual(["247 112 227"]);
+    expect(parseFloat(pinkLayers[0][2])).toBeLessThanOrEqual(0.5);
+  });
+});
+
 describe("contrast requirements", () => {
   const AA_TEXT = [
     ["--color-text-primary", "--color-surface"],

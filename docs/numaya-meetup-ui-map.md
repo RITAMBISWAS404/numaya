@@ -45,6 +45,7 @@ Mobbin as screenshots:
 | Tab bar | Floating frosted capsule, icon over label, active item on a light-grey pill with accent icon | Same treatment; destinations and order stay Bumble's (Profile, Discover, Chats) |
 | Section headings | Bold, ≈ 20px, count in grey, "See all" link right | Fraunces 20 (Numaya type); counts grey |
 | Dividers | Hairlines inside cards, inset | Kept |
+| Brand pink treatment | Accent fills are flat on small elements; the primary accent action has subtle depth | Large pink actions (SuperSwipe, send, match mark, success badge, `btn--brand`): `gradient.brand-sheen` (white light only) over the exact pink + `shadow.brand` (white top highlight, soft glow in the exact pink). Chips, bubbles, badges, progress, tab icon and form controls stay flat. Pressed = flat pink; never a darker pink; ink glyphs (white fails contrast) |
 | Empty states | Illustration, bold title, grey text, black pill CTA | Illustration area = neutral grey placeholder (supplied later); black pill CTA |
 
 ## Component families
