@@ -65,7 +65,7 @@ or brand colour. Numerals in inputs, codes and prices use `tabular-nums`.
 - **Gutters:** 16px screen padding; the Discover card runs to 8px from the edges so the photo leads.
 - **Reference baseline (Bumble layout, Meetup styling):** white pages; cards are white with a hairline
   and a faint shadow (20px), grouped rows 16px, photos 24px (`radius.photo`); buttons and chips are
-  pills (primary ink, secondary light grey); Pass and Like are ink circles; sliders are ink. SuperSwipe is the single brand-pink action on Discover.
+  pills (primary ink, secondary light grey); Pass and Like are ink pills (72×56) beside the SuperSwipe pill; sliders are ink. SuperSwipe is the single brand-pink action on Discover.
 - **Pink footprint:** SuperSwipe, selected states, verification, progress, toggles and the match
   mark. Avatars, placeholders, empty states, info banners and completion badges are neutral.
 - **Surfaces:** app screens (Discover, Chats, a conversation, Match, Profile, Settings) sit on

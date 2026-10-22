@@ -582,17 +582,6 @@ body {
   padding: var(--space-5);
 }
 
-/* Tinted highlight card (Meetup "About our members"): brand tint with white pill chips inside. */
-.fl-pf__section--tint {
-  background: var(--color-surface-brand);
-  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-brand-subtle);
-}
-
-.fl-pf__section--tint .chip {
-  background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-brand-subtle);
-}
-
 /* Section titles in Fraunces (Numaya type), sized like Meetup section headings. */
 .fl-pf__title {
   font-family: var(--font-display);

@@ -282,10 +282,10 @@
 .match-queue {
   display: flex;
   gap: var(--space-4);
-  /* Room for the 5px new-match ring, which the horizontal scroller would otherwise clip; the
-     negative margin keeps the layout where it was. */
-  margin: -6px -6px 0;
-  padding: 6px 6px 0;
+  /* The portraits' 4px ring band plus this 2px padding give the 5px new-match ring room, so the
+     horizontal scroller never clips it; the negative margin aligns the first portrait with the text. */
+  margin: -2px -6px 0;
+  padding: 2px 2px 0;
   overflow-x: auto;
   list-style: none;
   scrollbar-width: none;
@@ -295,11 +295,44 @@
   display: grid;
   justify-items: center;
   gap: 8px;
-  width: 72px;
+  width: 64px;
 }
 
-/* New, unopened matches carry a brand ring with a page-coloured gap. */
-.match-queue__item .avatar:not(.has-ring) .avatar__image {
+/* Portrait preview, 56 x 70 at the md radius. */
+.match-queue__portrait {
+  position: relative;
+  display: grid;
+}
+
+.match-queue__portrait {
+  padding: 4px; /* the ring band; new-match portraits keep it so names stay aligned */
+}
+
+.match-queue__image {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  width: 56px;
+  height: 70px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-sunken);
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: 26px;
+  font-weight: 560;
+}
+
+.match-queue__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* New, unopened matches carry a brand ring with a page-coloured gap. Drawn as a box-shadow outside
+   the portrait; the list's padding keeps the scroller from clipping it. */
+.match-queue__portrait.is-new .match-queue__image {
   box-shadow: 0 0 0 2.5px var(--color-surface-page), 0 0 0 5px var(--color-brand);
 }
 

@@ -766,6 +766,15 @@ button.list-row__hit:hover {
   transform: scale(0.92);
 }
 
+/* In the Pass / Super / Like row the actions are horizontal pills (72 x 56, radius 28): larger
+   targets that echo the pill fields and chips. Single floating actions (SuperSwipe on a photo, back,
+   close, send) stay circles: one glyph, centred over content, where a circle reads as a button. */
+.action-bar .action-bar__btn {
+  width: 72px;
+  height: 56px;
+  border-radius: var(--radius-xl);
+}
+
 /* SuperSwipe: the single accent action. Exact brand pink with a white light reflection and a soft
    brand glow; ink glyph (white would be 2.51:1). Pressed flattens to the brand pink, never darker. */
 .action-bar__btn--super {
@@ -1012,4 +1021,38 @@ button.list-row__hit:hover {
   .match__mark {
     animation-name: fade-in;
   }
+}
+
+/* Shared interests ("You both like"): a white card like every other profile section; the only pink
+   is the small heart mark beside the title (decorative), so nothing sits on a pink fill. */
+.shared-interests {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.shared-interests__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: var(--type-title-size);
+  line-height: var(--type-title-line);
+  font-weight: var(--type-title-weight);
+  letter-spacing: var(--type-title-tracking);
+}
+
+.shared-interests__mark {
+  display: grid;
+  color: var(--color-brand);
+}
+
+.shared-interests__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }

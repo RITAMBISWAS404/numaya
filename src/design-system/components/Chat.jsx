@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { cx } from "../../lib/cx.js";
-import { Avatar } from "./Content.jsx";
+import { Avatar, ringRectPath } from "./Content.jsx";
 import { Icon } from "./Icon.jsx";
 
 /**
@@ -115,13 +115,35 @@ export function ConversationRow({ name, preview, time, unread = 0, yourMove = fa
 }
 
 /** Horizontal queue of new matches. ring.value = time remaining (0–1) when timers apply. */
+/* Match-queue portraits: 56 x 70 at the md radius; the countdown ring sits 4px outside. */
+const PORTRAIT = { w: 56, h: 70, r: 16, band: 4 };
+const PORTRAIT_RING = ringRectPath(PORTRAIT.w + 2 * PORTRAIT.band, PORTRAIT.h + 2 * PORTRAIT.band, PORTRAIT.r + PORTRAIT.band / 2);
+
+/**
+ * New matches as portrait previews (Bumble match queue). Unopened matches carry a brand ring; a
+ * `remaining` value (0–1) draws the time left as a ring instead (muted when under 20%).
+ */
 export function MatchQueue({ matches, onSelect }) {
   return (
     <ul className="match-queue" aria-label="New matches">
       {matches.map((m) => (
         <li key={m.id}>
           <button type="button" className="match-queue__item" onClick={() => onSelect?.(m.id)}>
-            <Avatar name={m.name} size="lg" ring={m.remaining != null ? { value: m.remaining, tone: m.remaining < 0.2 ? "muted" : "brand" } : undefined} />
+            <span className={cx("match-queue__portrait", m.remaining != null ? "has-ring" : "is-new")}>
+              {m.remaining != null && (
+                <svg
+                  className={cx("avatar__ring", m.remaining < 0.2 && "avatar__ring--muted")}
+                  viewBox={`0 0 ${PORTRAIT.w + 2 * PORTRAIT.band} ${PORTRAIT.h + 2 * PORTRAIT.band}`}
+                  aria-hidden="true"
+                >
+                  <path d={PORTRAIT_RING} pathLength="100" className="avatar__ring-track" />
+                  <path d={PORTRAIT_RING} pathLength="100" className="avatar__ring-value" style={{ strokeDasharray: `${Math.round(m.remaining * 100)} 100` }} />
+                </svg>
+              )}
+              <span className="match-queue__image" role="img" aria-label={m.name}>
+                {m.src ? <img src={m.src} alt="" /> : m.name?.trim()?.[0]?.toUpperCase()}
+              </span>
+            </span>
             <span className="match-queue__name">{m.name}</span>
           </button>
         </li>

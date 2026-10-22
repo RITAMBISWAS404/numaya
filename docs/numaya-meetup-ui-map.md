@@ -36,10 +36,10 @@ Mobbin as screenshots:
 | Page | White pages; a faint accent wash at the top of Home / Group | White page (`surface.default`); Discover header gets a faint brand-tint wash |
 | Cards / groups | White, 1px light-grey hairline, barely-there shadow, ≈ 20px corners (event cards), ≈ 16px (settings groups) | `card`: hairline + `shadow.xs`, `radius.lg` 20; list groups: hairline, `radius.md` 16 |
 | Photography | Large photos ≈ 24px corners; translucent circular icon buttons on the photo | `radius.photo` 24; overlays on photos are dark translucent pills / circles |
-| Accent placement | Selected filter pill, one floating action ("Map"), progress pills, tinted info card ("About our members"), links | Pink: SuperSwipe (floating action), progress, selected states, the tinted "You both like" card. Links stay ink (pink text is 2.51:1) |
+| Accent placement | Selected filter pill, one floating action ("Map"), progress pills, tinted info card ("About our members"), links | Pink: SuperSwipe (floating action), progress, selected states, the small heart mark on the "You both like" card. Links stay ink (pink text is 2.51:1) |
 | Primary button | Near-black **pill** with a soft sheen | `btn--primary`: ink gradient, `radius.pill` |
 | Secondary button | Light-grey **pill**, no border ("See all events…") | `btn--secondary`: `surface.sunken`, no outline, pill |
-| Icon actions | White circles with a soft shadow (back, close); translucent circles on photos | `IconButton floating` for header controls; Pass / Like ink circles (Bumble positions) |
+| Icon actions | White circles with a soft shadow (back, close); translucent circles on photos | `IconButton floating` for header controls; Pass / Super / Like are 72×56 horizontal pills; single floating actions (SuperSwipe on a photo, back, close, send) stay circles |
 | Chips / tags | Pills; unselected light-grey fill or white + hairline; selected = solid accent | Static chips grey pills; shared-interest chips white pills on the tint card. **Selected interests: ink pill, white text and icon, brand-pink tick** (refinement sprint, chosen over solid pink with white text, which is 2.51:1, and a pale tint, which looked tentative). Every interest leads with a filled Solar cue |
 | Toggles | **Black** when on | **Pink track when on, plain grey when off**, white thumb with a soft shadow, no outline (refinement sprint; product preference over Meetup's black). State is also carried by the thumb position |
 | Tab bar | Floating frosted capsule, icon over label, active item on a light-grey pill with accent icon | Same treatment; destinations and order stay Bumble's (Profile, Discover, Chats) |
@@ -61,8 +61,8 @@ Mobbin as screenshots:
 | --- | --- | --- | --- | --- | --- |
 | Photo card (`ProfileCard`) | Discover | Photo-led profile card, identity bottom-left, SuperSwipe bottom-right | E1 photo cards | 24px corners, dark legibility gradient, translucent pills on photo | Photo is a neutral grey placeholder until licensed photos are supplied |
 | Section card (`.card`) | Discover profile scroll, Profile | Profile sections | E2/E3 bordered cards, G group cards | White, hairline, faint shadow, 20px | — |
-| Tinted card | "You both like" on Discover | Highlight what's shared | G "About our members" | Brand-tint surface, white pill chips inside | Pink tint instead of lavender |
-| Actions (`ActionBar`) | End of Discover profile | Pass / SuperSwipe / Like | E4 ink "Ticket" button, E1 "Map" accent pill | Ink gradient circles, accent SuperSwipe | Circles kept (Bumble positions) |
+| Shared interests (`SharedInterests`) | "You both like" on Discover | Highlight what's shared | G "About our members" | White card (hairline + soft shadow, 24px), a small pink heart beside the title, neutral pills with leading icons | No pink fill: the highlight is the mark and the icons |
+| Actions (`ActionBar`) | End of Discover profile | Pass / SuperSwipe / Like | E4 ink "Ticket" button, E1 "Map" accent pill | Ink gradient pills (72×56, radius 28), accent SuperSwipe pill with a white inset | Pills instead of circles, chosen from a rendered comparison: larger targets that echo the pill fields and chips. Bumble positions kept |
 | Buttons (`Button`) | All screens | Primary, secondary, quiet, destructive | O, H, E4 | Ink pill, grey pill, text | — |
 | Icon buttons (`IconButton`) | Headers, sheets | Back, close, filters | O back circle, G header | White circle + soft shadow | — |
 | Chips (`ChipGroup`, static chips) | Interests, Edit profile, Discover | Interests, facts | E2 filter pills, G "looking to" pills | Pills; interests carry a leading filled Solar cue (wine, music note, chef hat, hiking, camera, palette, running, gamepad, plane, pen); selected = ink with a pink tick | Solar has no climbing, museum or dice glyph: hiking, palette and a gamepad are the nearest cues |
@@ -71,7 +71,7 @@ Mobbin as screenshots:
 | Switch | Settings | Preferences | S1/S2 | Pink when on, grey when off, white thumb, no outline | Pink instead of Meetup's black |
 | Tab bar (`TabBar`) | Discover, Chats, Profile | Bumble destinations | E1/H | Frosted floating capsule, grey active pill | Pink active icon, ink label (pink text fails contrast) |
 | Header | Discover | Centred wordmark, filter right, progress | O/G headers | Faint top wash, white-circle icon buttons | Wordmark is Numaya's |
-| Avatars | Chats, Chat, Match, Profile | Identity | E2 avatar stacks, M2 | Rounded rectangles (30% radius); neutral initials; new matches get a pink ring that follows the shape | Rounded rectangles instead of Meetup's circles |
+| Avatars | Chats, Chat, Match, Profile | Identity | E2 avatar stacks, M2 | Rounded rectangles (30% radius); neutral initials; new matches get a pink ring that follows the shape. The match queue uses 56×70 portrait previews at 16px with the ring outside the portrait | Rounded rectangles instead of Meetup's circles |
 | Message bubbles | Chat | Mine right, theirs left (Bumble) | M1 | Mine = soft brand tint (`brand-subtle`) with ink text, theirs = light grey (chosen over saturated pink, a paler tint and ink bubbles); ≈ 20px with a small tail corner; status under the last | Ink text on pink (contrast) |
 | Composer | Chat, Match | Pill input + send | M1 | White pill, hairline + faint shadow, circular send (grey disabled, pink enabled) | — |
 | Inbox rows | Chats | Avatar, name, preview, time, "Your move" (Bumble) | M2 | Plain rows, no dividers or cards; bold name, grey preview; grey "Your move" pill | — |

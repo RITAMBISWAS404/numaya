@@ -31,6 +31,7 @@ export {
   ListRow,
   TipCard,
   InfoCard,
+  SharedInterests,
   ConsequenceList,
   PromptCard,
   ImagePlaceholder,

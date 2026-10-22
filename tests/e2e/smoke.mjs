@@ -301,7 +301,7 @@ try {
           verified: cs("#chats .avatar__badge, #discovery .verified__mark").backgroundColor,
         };
       });
-      check("flows: like is an ink circle (Meetup primary sheen) with a white glyph", states.likeBg.includes(INK) && states.likeFg === "rgb(255, 255, 255)", `${states.likeBg.slice(0, 60)} / ${states.likeFg}`);
+      check("flows: like is an ink action (Meetup primary sheen) with a white glyph", states.likeBg.includes(INK) && states.likeFg === "rgb(255, 255, 255)", `${states.likeBg.slice(0, 60)} / ${states.likeFg}`);
       check("flows: SuperSwipe is the single brand-pink action, with an ink glyph", states.superBg === PINK && states.superFg === INK, `${states.superBg} / ${states.superFg}`);
       check("flows: selected interest is an ink pill with white text and a brand-pink tick", states.chipBg === INK && states.chipRing === "none" && states.chipFg === "rgb(255, 255, 255)" && states.chipTick === PINK, `${states.chipBg} / ${states.chipFg} / ${states.chipTick}`);
       check("flows: every interest chip leads with a filled Solar cue", states.chipIcons);
@@ -316,12 +316,33 @@ try {
           checkbox: cb && getComputedStyle(cb).backgroundColor,
           phoneRadius: getComputedStyle(document.querySelector("#basics .input")).borderTopLeftRadius,
           infoCards: document.querySelectorAll("#photos .info-card, #settings .info-card").length,
+          shared: (() => {
+            const c = document.querySelector("#discovery .shared-interests");
+            if (!c) return null;
+            const st = getComputedStyle(c);
+            const pills = [...c.querySelectorAll(".shared-interests__pill")];
+            return { bg: st.backgroundColor, radius: st.borderTopLeftRadius, mark: getComputedStyle(c.querySelector(".shared-interests__mark")).color, pills: pills.length, icons: pills.every((x) => x.querySelector(".chip__icon")), pillBg: pills[0] && getComputedStyle(pills[0]).backgroundColor };
+          })(),
+          portrait: (() => {
+            const e = document.querySelector("#chats .match-queue__image");
+            if (!e) return null;
+            const r = e.getBoundingClientRect();
+            const q = document.querySelector("#chats .match-queue");
+            const qr = q.getBoundingClientRect();
+            return { w: Math.round(r.width), h: Math.round(r.height), radius: getComputedStyle(e).borderTopLeftRadius, ring: getComputedStyle(e).boxShadow, clear: r.top - 5 >= qr.top && r.left - 5 >= qr.left };
+          })(),
+          actions: [...document.querySelectorAll("#discovery .action-bar .action-bar__btn")].map((b) => { const r = b.getBoundingClientRect(); return `${Math.round(r.width)}x${Math.round(r.height)}/${getComputedStyle(b).borderTopLeftRadius}`; }),
+          floating: getComputedStyle(document.querySelector("#discovery .profile-card .action-bar__btn--super")).borderTopLeftRadius,
+          send: getComputedStyle(document.querySelector("#chat .composer__send")).borderTopLeftRadius,
         };
       });
       check("pink: pink actions and marks carry their ink glyph on a white inset, never directly on pink", pinkFg.discs.length >= 3 && pinkFg.discs.every((d) => d.bg === "rgb(255, 255, 255)" && d.fg === INK), JSON.stringify(pinkFg.discs));
       check("selection: a checked checkbox is ink with a white tick (no glyph on pink)", pinkFg.checkbox === INK, pinkFg.checkbox);
       check("fields: form fields are 16px rounded rectangles, not pills", pinkFg.phoneRadius === "16px", pinkFg.phoneRadius);
       check("info cards: photo guidance and blocking help use the shared information card", pinkFg.infoCards === 2, String(pinkFg.infoCards));
+      check("you both like: a white 24px card, pink only on the small heart mark, neutral pills with icons", pinkFg.shared?.bg === "rgb(255, 255, 255)" && pinkFg.shared.radius === "24px" && pinkFg.shared.mark === PINK && pinkFg.shared.pills > 0 && pinkFg.shared.icons && pinkFg.shared.pillBg !== PINK, JSON.stringify(pinkFg.shared));
+      check("match queue: new matches are 56x70 portraits at the 16px radius with an unclipped pink ring", pinkFg.portrait?.w === 56 && pinkFg.portrait.h === 70 && pinkFg.portrait.radius === "16px" && pinkFg.portrait.ring.includes(PINK) && pinkFg.portrait.clear, JSON.stringify(pinkFg.portrait));
+      check("actions: Pass / Super / Like are 72x56 pills; floating SuperSwipe and send stay circles", pinkFg.actions.length === 3 && pinkFg.actions.every((a) => a === "72x56/28px") && pinkFg.floating === "50%" && pinkFg.send === "50%", `${pinkFg.actions.join(" ")} / ${pinkFg.floating} / ${pinkFg.send}`);
       check("flows: switch on is a brand-pink track; off is a plain grey track, no outline, white thumb", states.switchOn === PINK && states.switchOff.bg === "rgb(215, 219, 225)" && states.switchOff.edge === "none" && states.switchOff.thumb === "rgb(255, 255, 255)", `${states.switchOn} / ${JSON.stringify(states.switchOff)}`);
       check("flows: sliders have white thumbs on a brand-pink interval over a grey rail (no ink)", states.slider.thumb === "rgb(255, 255, 255)" && states.slider.track.includes(PINK) && states.slider.track.includes("rgb(215, 219, 225)") && !states.slider.track.includes(INK), JSON.stringify(states.slider));
       check("navigation: idle tabs are soft grey with a readable label", states.tabIdleIcon === "rgb(154, 161, 172)" && states.tabIdleLabel === "rgb(100, 107, 120)", `${states.tabIdleIcon} / ${states.tabIdleLabel}`);

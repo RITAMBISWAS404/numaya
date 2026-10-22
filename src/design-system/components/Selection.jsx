@@ -11,7 +11,7 @@ export function Chip({ kind = "toggle", selected = false, unavailable = false, i
   if (kind === "static") {
     return (
       <span className={cx("chip", "chip--static", className)}>
-        {icon && <Icon name={icon} size={16} />}
+        {icon && <Icon name={icon} size={16} className="chip__icon" />}
         {children}
       </span>
     );

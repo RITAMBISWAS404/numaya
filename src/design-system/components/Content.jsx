@@ -14,16 +14,17 @@ export const AVATAR_RADIUS = 0.3;
 const RING_BAND = 4;
 const ringPaths = {};
 
-/** Ring centreline for an avatar of `px`: a rounded rectangle concentric with the image (which sits
-    4px inside), starting at the top centre and running clockwise so stroke-dasharray reads as progress. */
-function ringPath(px) {
-  if (ringPaths[px]) return ringPaths[px];
-  const o = RING_BAND / 2;
-  const w = px - RING_BAND;
-  const r = AVATAR_RADIUS * (px - 2 * RING_BAND) + o;
+/** Rounded rectangle centreline starting at the top centre and running clockwise, so a
+    stroke-dasharray on pathLength=100 reads as progress. Shared by avatar and portrait rings. */
+export function ringRectPath(w, h, r, inset = RING_BAND / 2) {
   const f = (v) => v.toFixed(2);
-  const [l, t, rt, b] = [o, o, o + w, o + w];
-  ringPaths[px] = `M${f(px / 2)} ${f(t)}H${f(rt - r)}A${f(r)} ${f(r)} 0 0 1 ${f(rt)} ${f(t + r)}V${f(b - r)}A${f(r)} ${f(r)} 0 0 1 ${f(rt - r)} ${f(b)}H${f(l + r)}A${f(r)} ${f(r)} 0 0 1 ${f(l)} ${f(b - r)}V${f(t + r)}A${f(r)} ${f(r)} 0 0 1 ${f(l + r)} ${f(t)}Z`;
+  const [l, t, rt, b] = [inset, inset, w - inset, h - inset];
+  return `M${f(w / 2)} ${f(t)}H${f(rt - r)}A${f(r)} ${f(r)} 0 0 1 ${f(rt)} ${f(t + r)}V${f(b - r)}A${f(r)} ${f(r)} 0 0 1 ${f(rt - r)} ${f(b)}H${f(l + r)}A${f(r)} ${f(r)} 0 0 1 ${f(l)} ${f(b - r)}V${f(t + r)}A${f(r)} ${f(r)} 0 0 1 ${f(l + r)} ${f(t)}Z`;
+}
+
+/** Ring centreline for an avatar of `px`: concentric with the image, which sits 4px inside. */
+function ringPath(px) {
+  ringPaths[px] ??= ringRectPath(px, px, AVATAR_RADIUS * (px - 2 * RING_BAND) + RING_BAND / 2);
   return ringPaths[px];
 }
 
@@ -205,6 +206,33 @@ export function InfoCard({ icon = "info", title, children, id, className }) {
         {children && <span className="info-card__body">{children}</span>}
       </span>
     </div>
+  );
+}
+
+/**
+ * Interests you share with someone, on their profile. A white card (hairline + soft shadow, card
+ * radius) with a small pink mark beside the title; the pills are neutral with a leading icon, so the
+ * card reads as a highlight without a pink fill. items: [{ label, icon? }].
+ */
+export function SharedInterests({ title = "You both like", items, className }) {
+  if (!items?.length) return null;
+  return (
+    <section className={cx("card", "shared-interests", className)}>
+      <h2 className="shared-interests__title">
+        <span className="shared-interests__mark" aria-hidden="true">
+          <Icon name="heart" size={20} />
+        </span>
+        {title}
+      </h2>
+      <ul className="shared-interests__list">
+        {items.map((item) => (
+          <li key={item.label} className="chip chip--static shared-interests__pill">
+            {item.icon && <Icon name={item.icon} size={16} className="chip__icon" />}
+            {item.label}
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 

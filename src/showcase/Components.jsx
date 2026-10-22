@@ -35,6 +35,7 @@ import {
   PhotoGrid,
   PlanPicker,
   ProfileCard,
+  SharedInterests,
   ProgressSegments,
   PromptCard,
   Radio,
@@ -448,6 +449,15 @@ function Profile() {
             />
             <ActionBar onPass={() => {}} onSuper={() => {}} onLike={() => {}} />
           </div>
+        </Specimen>
+        <Specimen title="SharedInterests" note="“You both like”: white card, small pink mark, neutral pills with icons">
+          <SharedInterests
+            items={[
+              { label: "Jazz", icon: "music" },
+              { label: "Natural wine", icon: "wine" },
+              { label: "Film photography", icon: "camera" },
+            ]}
+          />
         </Specimen>
         <Specimen title="PageDots">
           <div className="sc-stack">

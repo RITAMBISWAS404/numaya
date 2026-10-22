@@ -259,11 +259,6 @@ button.chip:active {
   font-size: var(--type-label-size);
 }
 
-/* Shared with the viewer (reference: highlighted interest chips): grey chip with an accent ring. */
-.chip--shared {
-  box-shadow: inset 0 0 0 var(--border-selected) var(--color-border-brand);
-}
-
 .chip__remove {
   display: grid;
   place-items: center;

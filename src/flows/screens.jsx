@@ -7,6 +7,7 @@ import {
   Banner,
   Button,
   Card,
+  Chip,
   ChipGroup,
   Composer,
   ConsequenceList,
@@ -18,6 +19,7 @@ import {
   IllustrationPlaceholder,
   ImagePlaceholder,
   InfoCard,
+  SharedInterests,
   ListGroup,
   ListRow,
   Emphasis,
@@ -376,18 +378,7 @@ export function Discovery({ go }) {
 
           {photo(1)}
 
-          {person.shared?.length > 0 && (
-            <section className="card fl-pf__section fl-pf__section--tint">
-              <h2 className="fl-pf__title">You both like</h2>
-              <div className="fl-chip-row">
-                {person.shared.map((s) => (
-                  <span key={s} className="chip chip--static chip--shared">
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </section>
-          )}
+          <SharedInterests items={person.shared?.map((label) => ({ label, icon: INTEREST_ICONS[label] }))} />
 
           {photo(2)}
 
@@ -808,9 +799,9 @@ export function MyProfile({ go }) {
             <span className="fl-chip-row">
               {interests.length ? (
                 interests.map((i) => (
-                  <span key={i} className="chip chip--static">
+                  <Chip key={i} kind="static" icon={INTEREST_ICONS[i]}>
                     {i}
-                  </span>
+                  </Chip>
                 ))
               ) : (
                 <span className="fl-caption">Pick a few so people have something to ask about.</span>
@@ -843,9 +834,9 @@ function ProfilePreview({ profile }) {
           <h2 className="fl-pf__title">Interests</h2>
           <div className="fl-chip-row">
             {profile.interests.map((s) => (
-              <span key={s} className="chip chip--static">
+              <Chip key={s} kind="static" icon={INTEREST_ICONS[s]}>
                 {s}
-              </span>
+              </Chip>
             ))}
           </div>
         </section>
