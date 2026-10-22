@@ -77,12 +77,31 @@
   text-align: center;
 }
 
+/* Bumble options menu: a floating white card of centred actions over the scrim; Cancel is a second
+   card below (Meetup elevation: the only overlay tier with a visible shadow). */
+.sheet--actions .sheet__panel {
+  padding: 0 var(--space-3) calc(var(--safe-bottom) + var(--space-2));
+  background: transparent;
+  box-shadow: none;
+}
+
+.sheet--actions .sheet__grabber {
+  display: none;
+}
+
 .action-sheet__list {
   display: grid;
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-2);
   overflow: hidden;
-  border-radius: var(--radius-md);
-  background: var(--color-surface-soft);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.sheet--actions .sheet__panel > .btn {
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
 }
 
 .action-sheet__item {
@@ -101,7 +120,7 @@
 }
 
 .action-sheet__item:hover {
-  background: var(--color-surface-sunken);
+  background: var(--color-surface-soft);
 }
 
 .action-sheet__item.is-destructive {

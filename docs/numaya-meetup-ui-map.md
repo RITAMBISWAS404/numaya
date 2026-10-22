@@ -23,8 +23,11 @@ Mobbin as screenshots:
   S2 [Profile privacy toggles](https://mobbin.com/screens/e50ddb9b-03b7-4103-869c-0c617427c316) ·
   S3 [Member settings](https://mobbin.com/screens/c6c1231a-263e-4287-8ac1-74500dc1a38e)
 
-**Gaps:** no Meetup filter sheet or slider was found (search returned other apps); no Meetup chat
-screen was inspected this pass (Pass 3 will). Those components follow the nearest Meetup pattern below.
+- M1 [Direct message](https://mobbin.com/screens/e70b2111-8414-4442-ad3c-5de21640243d) ·
+  M2 [Messages inbox](https://mobbin.com/screens/972d35a9-c98c-4deb-8c71-62a0fd7c77dc) ·
+  M3 [Archive with blocked contact](https://mobbin.com/screens/1efededf-fe03-4d0e-a651-1b9163b0e6d1)
+
+**Gaps:** no Meetup filter sheet or slider was found (search returned other apps). Those components follow the nearest Meetup pattern below.
 
 ## Visual system (from the references)
 
@@ -60,8 +63,13 @@ screen was inspected this pass (Pass 3 will). Those components follow the neares
 | Switch | Settings | Preferences | S1/S2 | Ink when on | Applied in Pass 4 |
 | Tab bar (`TabBar`) | Discover, Chats, Profile | Bumble destinations | E1/H | Frosted floating capsule, grey active pill | Pink active icon, ink label (pink text fails contrast) |
 | Header | Discover | Centred wordmark, filter right, progress | O/G headers | Faint top wash, white-circle icon buttons | Wordmark is Numaya's |
-| Avatars | Chats, Chat, Match, Profile | Identity | E2 avatar stacks | Circles, white ring when stacked | Pass 3 |
-| Sheets / dialogs | Chat, Settings, prototype | Overlays | (Pass 3: Meetup sheets) | Rounded top 28px, ink pill CTA | Pass 3 |
+| Avatars | Chats, Chat, Match, Profile | Identity | E2 avatar stacks, M2 | Circles; neutral initials; new matches get a pink ring | — |
+| Message bubbles | Chat | Mine right, theirs left (Bumble) | M1 | Mine = accent fill (pink, ink text), theirs = light grey; ≈ 20px with a small tail corner; status under the last | Ink text on pink (contrast) |
+| Composer | Chat, Match | Pill input + send | M1 | White pill, hairline + faint shadow, circular send (grey disabled, pink enabled) | — |
+| Inbox rows | Chats | Avatar, name, preview, time, "Your move" (Bumble) | M2 | Plain rows, no dividers or cards; bold name, grey preview; grey "Your move" pill | — |
+| Chat header | Chat | Back, avatar, name, options (Bumble) | M1 | White-circle back and options buttons | — |
+| Options menu | Chat | Unmatch / Report (Bumble) | — | Floating white card, centred rows, strongest overlay shadow | Separate Cancel card |
+| Sheets / dialogs | Chat, Settings, prototype | Overlays | (Bumble structure) | Rounded top, Fraunces title, X, grey info card, ink pill CTA | Settings dialogs: Pass 4 |
 | Fields (`TextField`, `PhoneField`, `CodeInput`) | Onboarding | Forms | O date of birth field | Light-grey filled field, ≈ 16px | Pass 4 |
 | Progress (`ProgressSegments`) | Onboarding | Step progress | O progress pills | Short pills, accent filled | Already matches |
 | Empty states | Discover, Match, Chats | No content | H "Nothing saved yet" | Grey illustration placeholder, bold title, black pill CTA | Illustrations supplied later |

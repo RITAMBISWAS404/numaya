@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { cx } from "../../lib/cx.js";
-import { Avatar, Tag } from "./Content.jsx";
+import { Avatar } from "./Content.jsx";
 import { Icon } from "./Icon.jsx";
 
 /**
@@ -93,7 +93,7 @@ export function ConversationRow({ name, preview, time, unread = 0, yourMove = fa
   return (
     <li className="conversation">
       <button type="button" className="conversation__hit" onClick={onPress}>
-        <Avatar name={name} size="md" verified={verified} />
+        <Avatar name={name} size="lg" verified={verified} />
         <span className="conversation__text">
           <span className="conversation__top">
             <span className="conversation__name">{name}</span>
@@ -101,7 +101,7 @@ export function ConversationRow({ name, preview, time, unread = 0, yourMove = fa
           </span>
           <span className="conversation__bottom">
             <span className={cx("conversation__preview", unread > 0 && "is-unread")}>{preview}</span>
-            {yourMove && <Tag tone="brand">Your move</Tag>}
+            {yourMove && <span className="conversation__move">Your move</span>}
             {unread > 0 && (
               <span className="conversation__unread" aria-label={`${unread} unread`}>
                 {unread}

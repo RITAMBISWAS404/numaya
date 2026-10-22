@@ -276,11 +276,13 @@ body {
   display: block;
 }
 
+/* Conversation header: back, avatar and name left-aligned, options right (Bumble); white-circle
+   controls (Meetup). */
 .fl-chat-head {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--layout-gutter-tight);
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
 }
 
 .fl-chat-head__name {
@@ -326,17 +328,77 @@ body {
   background: var(--color-surface-page);
 }
 
-.fl-screen--page .composer__field:not(:focus-within) {
-  background: var(--color-surface);
-  box-shadow: var(--shadow-xs);
+/* Messaging (Bumble layout, Meetup styling) ------------------------------- */
+.fl-close-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 var(--space-3);
 }
 
-/* Inbox: one raised group of conversations on the page. */
-.fl-inbox {
-  padding: var(--space-1) var(--space-4);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-sm);
+.fl-section-title {
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: var(--type-title-size);
+  line-height: var(--type-title-line);
+  font-weight: var(--type-title-weight);
+  letter-spacing: var(--type-title-tracking);
+}
+
+.fl-section-title__count {
+  color: var(--color-text-muted);
+}
+
+/* New-match conversation: the person centred above an empty thread. */
+.fl-chat-intro {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: var(--space-1);
+  padding-top: var(--space-8);
+  text-align: center;
+}
+
+.fl-chat-intro .avatar {
+  margin-bottom: var(--space-3);
+}
+
+.fl-chat-intro__name {
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: var(--type-headline-size);
+  line-height: var(--type-headline-line);
+  font-weight: var(--type-headline-weight);
+}
+
+.fl-sheet-body {
+  gap: var(--space-5);
+}
+
+/* Grey info card inside a sheet (Bumble "Think they've broken our guidelines?"). */
+.fl-sheet-note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+  text-align: left;
+}
+
+.fl-sheet-note > span {
+  display: grid;
+  gap: 2px;
+  color: var(--color-text-muted);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+}
+
+.fl-sheet-note strong {
+  color: var(--color-text-primary);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* Profile: identity header sits directly on the page; sections below are raised groups. */

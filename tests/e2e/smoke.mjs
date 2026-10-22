@@ -262,18 +262,20 @@ try {
           pages: ["chats", "chat", "profile", "settings", "match"].map((id) => cs(`#${id} .fl-screen`).backgroundColor),
           page: cs("#discovery .fl-screen").backgroundColor,
           mine: cs("#chat .message--me .message__bubble").backgroundColor,
+          mineFg: cs("#chat .message--me .message__bubble").color,
           theirs: cs("#chat .message--them .message__bubble").backgroundColor,
           chip: cs("#interests .chip:not(.is-selected)").boxShadow,
           lastVisible: last.bottom <= body.bottom + 0.5,
           stripCols: cs("#profile .fl-photo-strip").gridTemplateColumns.split(" ").length,
-          inbox: cs("#chats .fl-inbox").backgroundColor,
+          inboxRows: document.querySelectorAll("#chats .conversation").length,
+          inboxBoxed: [...document.querySelectorAll("#chats .conversation, #chats .fl-list")].some((el) => getComputedStyle(el).boxShadow !== "none" || getComputedStyle(el).backgroundColor !== "rgba(0, 0, 0, 0)"),
         };
       });
       check("surfaces: tab roots, chat, match and settings share the page tint", roll.pages.every((c) => c === roll.page), roll.pages.join(" | "));
-      check("chat: outgoing bubbles are ink, incoming are white", roll.mine === INK && roll.theirs === "rgb(255, 255, 255)", `${roll.mine} / ${roll.theirs}`);
+      check("chat: outgoing bubbles are brand pink with ink text, incoming light grey (Bumble + Meetup)", roll.mine === PINK && roll.mineFg === INK && roll.theirs === "rgb(236, 239, 243)", `${roll.mine} / ${roll.mineFg} / ${roll.theirs}`);
       check("selection: unselected chips are filled, not outlined", roll.chip === "none", roll.chip);
       check("chat: the last message sits above the composer", roll.lastVisible);
-      check("layout: profile photo strip and raised inbox keep their screen styles", roll.stripCols === 4 && roll.inbox === "rgb(255, 255, 255)", `${roll.stripCols} cols / ${roll.inbox}`);
+      check("layout: profile photo strip keeps 4 columns; inbox rows are plain, not boxed (Bumble)", roll.stripCols === 4 && roll.inboxRows > 0 && !roll.inboxBoxed, `${roll.stripCols} cols / ${roll.inboxRows} rows / boxed ${roll.inboxBoxed}`);
       check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);
       check("navigation: exactly one current tab", geo.tabCurrent === 1);
       check("icons: Phosphor glyphs render and no legacy stroke icons remain", geo.icons > 0 && geo.legacyStrokeIcons === 0, `${geo.icons} phosphor / ${geo.legacyStrokeIcons} legacy`);
@@ -321,6 +323,16 @@ try {
       check("flows: sent messages persist after switching chats", (await textOf("chat")).includes("Saturday works."));
       check("flows: inbox preview shows the latest message", (await textOf("chats")).includes("You: Saturday works."));
 
+      // Options menu → Unmatch opens a bottom sheet (Bumble), which can be dismissed without ending the chat.
+      await f("chat").getByRole("button", { name: "Conversation options" }).click();
+      await wait(500);
+      await p.getByRole("button", { name: "Unmatch", exact: true }).click();
+      await wait(500);
+      const unmatch = p.getByRole("dialog", { name: "Unmatch Maya?" });
+      check("chat: unmatch confirms in a sheet that offers reporting instead", (await unmatch.count()) === 1 && (await unmatch.innerText()).includes("Report them instead"));
+      await p.keyboard.press("Escape");
+      await wait(500);
+      check("chat: dismissing the unmatch sheet keeps the conversation", (await textOf("chat")).includes("Saturday works.") && (await p.getByRole("dialog").count()) === 0);
       await f("chat").getByRole("button", { name: "Conversation options" }).click();
       await wait(500);
       await p.getByRole("button", { name: "Report or block" }).click();
@@ -330,6 +342,9 @@ try {
       check("flows: report ends in a block confirmation", (await textOf("chat")).includes("You’ve blocked and reported Maya"));
       check("flows: blocked person leaves the inbox", !(await textOf("chats")).includes("Maya"));
       check("flows: settings counts the blocked person", /Blocked people 1/.test(await textOf("settings")));
+      await f("chats").getByRole("button", { name: /Jo/ }).first().click();
+      await wait(500);
+      check("chat: a new match opens on the centred intro before the first message (Bumble)", (await textOf("chat")).includes("Jo, 32") && (await f("chat").locator(".message").count()) === 0);
 
       const clipped = await p.evaluate(() =>
         [...document.querySelectorAll(".fl-screen__body")].filter((b) => b.scrollWidth > b.clientWidth + 1).map((b) => b.closest(".fl-frame").id),

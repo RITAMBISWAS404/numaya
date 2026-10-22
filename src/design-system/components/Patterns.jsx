@@ -32,13 +32,20 @@ export function PermissionPrimer({ icon, title, children, allowLabel = "Allow", 
   );
 }
 
-/** Two photos with a centre brand mark, title and supporting line. Composer sits below. */
+/**
+ * Two tilted photos with a centre brand mark, title and supporting line (Bumble "What a match!").
+ * Photo areas are neutral placeholders until profile photography is supplied. Composer sits below.
+ */
 export function MatchCelebration({ names, title = "It’s a match", children }) {
   return (
     <div className="match">
-      <div className="match__photos" aria-hidden="true">
-        <span className={cx("match__photo", "match__photo--left")}>{names[0]?.[0]}</span>
-        <span className={cx("match__photo", "match__photo--right")}>{names[1]?.[0]}</span>
+      <div className="match__photos" role="img" aria-label={`Photos of ${names.join(" and ")} (placeholders)`}>
+        <span className={cx("match__photo", "match__photo--left")}>
+          <Icon name="image" size={28} />
+        </span>
+        <span className={cx("match__photo", "match__photo--right")}>
+          <Icon name="image" size={28} />
+        </span>
         <span className="match__mark">
           <Icon name="heart" size={22} stroke={2} />
         </span>

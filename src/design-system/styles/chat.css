@@ -21,6 +21,8 @@
   justify-self: start;
 }
 
+/* Bubbles (Bumble layout: mine right in the accent, theirs left in light grey; Meetup styling:
+   ≈ 20px corners with a small tail corner on the sender's side). */
 .message__bubble {
   padding: 10px 14px;
   border-radius: var(--radius-lg);
@@ -30,18 +32,18 @@
   animation: rise-in var(--motion-duration-base) var(--motion-ease-out);
 }
 
-/* Mine: ink with white text, like the primary action. Pink is kept for send, unread and states. */
+/* Mine: brand pink with ink text (7.15:1; white on #F770E3 would be 2.51:1). */
 .message--me .message__bubble {
   border-bottom-right-radius: var(--radius-xs);
-  background: var(--color-surface-inverse);
-  color: var(--color-text-on-inverse);
+  background: var(--color-brand);
+  color: var(--color-on-brand);
 }
 
-/* Theirs: white, lifted off the page with the smallest shadow. */
+/* Theirs: light grey, flat. */
 .message--them .message__bubble {
   border-bottom-left-radius: var(--radius-xs);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-xs);
+  background: var(--color-surface-sunken);
+  color: var(--color-text-primary);
 }
 
 .message.is-grouped.message--me .message__bubble {
@@ -106,13 +108,15 @@
   color: var(--color-text-secondary);
 }
 
+/* Composer field (Meetup): white pill with a hairline and a faint shadow. */
 .composer__field {
   flex: 1;
   display: flex;
   min-height: var(--size-touch-min);
   padding: 0 var(--space-4);
-  border-radius: var(--radius-md);
-  background: var(--color-surface-soft);
+  border-radius: 22px;
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle), var(--shadow-xs);
   transition: background-color var(--motion-duration-base), box-shadow var(--motion-duration-base);
 }
 
@@ -175,19 +179,22 @@
   text-align: left;
 }
 
-/* Inset divider that starts after the avatar. */
-.conversation + .conversation .conversation__hit {
-  position: relative;
+/* Bumble inbox: plain rows, no dividers or cards; spacing separates them. */
+.conversation__hit {
+  padding: var(--space-2) 0;
 }
 
-.conversation + .conversation .conversation__hit::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: calc(var(--size-avatar-md) + var(--space-3));
-  right: 0;
-  height: var(--border-hairline);
-  background: var(--color-border-subtle);
+.conversation__move {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-sunken);
+  color: var(--color-text-secondary);
+  font-size: 12.5px;
+  font-weight: var(--font-weight-semibold);
 }
 
 .conversation__text {
@@ -207,7 +214,8 @@
 
 .conversation__name {
   flex: 1;
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--type-body-size);
+  font-weight: var(--font-weight-bold);
 }
 
 .conversation__time {

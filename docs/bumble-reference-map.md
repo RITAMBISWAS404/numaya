@@ -59,6 +59,26 @@ Screens that need no new reference: none. Screens with partial evidence: country
 error / success (P3), Discover empty states (5), Date filters (5b, BFF used), match empty (6), unmatch
 dialog and ended chat (8), delete dialog (10). These use the closest generation-B pattern.
 
+## Pass 3 messaging references
+
+Additional Bumble (generation B) screenshots inspected for the matches and messaging pass:
+
+- [Options menu](https://mobbin.com/screens/2b7d85d8-0c31-4b18-b2b8-bbbe4c4fb60a): floating white card
+  of centred actions, Unmatch in ink, Report in red; no visible cancel.
+- [Unmatch sheet](https://mobbin.com/screens/ca9e18a7-c77b-417d-a4ed-0319daf3ba17): bottom sheet, X,
+  bold title, two consequence rows with icons, grey "Think they've broken our guidelines?" card, black
+  pill "Unmatch", red "Report instead".
+- [New-match conversation](https://mobbin.com/screens/ad0081dd-60b8-4bbb-9b92-289e4104c044) and
+  [expiring variant](https://mobbin.com/screens/1ff4526d-6ab6-48a2-8e73-dc0b9f5f93de): large centred
+  avatar, name and age, status line, tip card above the composer.
+- [First message sent](https://mobbin.com/screens/854bf187-42e3-4416-b46a-bf94aca1868c).
+
+Implemented in Numaya with these deviations: no timers, opening-move tips, calls or media (not Numaya
+features); Cancel is kept as a second card under the options menu for an explicit dismiss; the unmatch
+sheet's "Report instead" is the grey card itself (it opens the existing report flow).
+**Gaps:** no reference for the ended / blocked conversation result or the empty match screen; both
+keep Numaya's states with the nearest pattern (centred result, reserved illustration + black pill CTA).
+
 ## Imagery
 
 Bumble profile photos are not reused. External image hosts are blocked by this environment's network

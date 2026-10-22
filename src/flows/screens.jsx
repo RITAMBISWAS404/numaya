@@ -409,6 +409,15 @@ export function Discovery({ go }) {
 }
 
 /* 4 · Matching -------------------------------------------------------------- */
+/** Close-only header (Bumble match screen: X top-left). */
+function CloseHeader({ onClose, label = "Close" }) {
+  return (
+    <header className="fl-close-head">
+      <IconButton icon="close" label={label} variant="floating" onClick={onClose} />
+    </header>
+  );
+}
+
 export function Match({ go }) {
   const [state, dispatch] = useStore();
   const [text, setText] = useState("");
@@ -417,9 +426,9 @@ export function Match({ go }) {
 
   if (!person || state.ended[id]) {
     return (
-      <Frame tone="page" top={<TopBar onBack={() => go("discovery")} />}>
+      <Frame tone="page" top={<CloseHeader label="Back to Discover" onClose={() => go("discovery")} />}>
         <div className="fl-center fl-fill">
-          <EmptyState icon="heart" title="No new match yet" action="Go to Discover" onAction={() => go("discovery")}>
+          <EmptyState art title="No new match yet" action="Go to Discover" onAction={() => go("discovery")}>
             Like someone who has already liked you and you’ll see it here.
           </EmptyState>
         </div>
@@ -438,10 +447,10 @@ export function Match({ go }) {
   return (
     <Frame
       tone="page"
-      top={<TopBar onBack={() => go("discovery")} />}
+      top={<CloseHeader label="Back to Discover" onClose={() => go("discovery")} />}
       footer={
         <div className="fl-stack fl-stack--full">
-          <Composer value={text} onChange={setText} placeholder={person.opener ?? "Say hello…"} onSend={send} />
+          <Composer value={text} onChange={setText} placeholder={person.opener ?? "Send a message…"} onSend={send} />
           <Button variant="quiet" onClick={() => go("discovery")}>
             Keep browsing
           </Button>
@@ -475,23 +484,27 @@ export function Chats({ go }) {
           </Banner>
         )}
         {fresh.length > 0 && (
-          <section>
-            <p className="fl-label">New matches</p>
+          <section className="fl-stack">
+            <h2 className="fl-section-title">
+              Your matches <span className="fl-section-title__count">({fresh.length})</span>
+            </h2>
             <MatchQueue matches={fresh} onSelect={open} />
           </section>
         )}
-        <section>
-          <p className="fl-label">Conversations</p>
-          {rows.length ? (
-            <ul className="fl-list fl-inbox">
+        {rows.length ? (
+          <section className="fl-stack">
+            <h2 className="fl-section-title">Chats</h2>
+            <ul className="fl-list">
               {rows.map((c) => (
                 <ConversationRow key={c.id} {...c} onPress={() => open(c.id)} />
               ))}
             </ul>
-          ) : (
-            <p className="fl-caption">No conversations yet.</p>
-          )}
-        </section>
+          </section>
+        ) : (
+          <EmptyState art title="Connections start here" action="Find your people" onAction={() => go("discovery")}>
+            When you like each other, you’ll match. Here’s where you can chat.
+          </EmptyState>
+        )}
       </div>
     </Frame>
   );
@@ -540,30 +553,41 @@ export function Chat({ go }) {
       tone="page"
       top={
         <header className="fl-chat-head">
-          <IconButton icon="chevronLeft" label="Back to chats" variant="plain" onClick={() => go("chats")} />
+          <IconButton icon="chevronLeft" label="Back to chats" variant="floating" size="sm" onClick={() => go("chats")} />
           <Avatar name={person.name} size="sm" decorative />
           <span className="fl-chat-head__name">
             {person.name}
             {person.verified && <VerifiedBadge compact />}
           </span>
-          <IconButton icon="more" label="Conversation options" variant="plain" onClick={() => setMenu(true)} />
+          <IconButton icon="more" label="Conversation options" variant="floating" size="sm" onClick={() => setMenu(true)} />
         </header>
       }
       footer={<Composer value={text} onChange={setText} onSend={send} placeholder={`Message ${person.name}`} />}
     >
-      <div className="fl-messages">
-        <SystemMessage>You matched with {person.name}</SystemMessage>
-        {messages.map((m, i) => (
-          <MessageBubble
-            key={m.id}
-            from={m.from}
-            status={m.from === "me" && i === messages.length - 1 ? m.status : undefined}
-            grouped={i > 0 && messages[i - 1].from === m.from}
-          >
-            {m.text}
-          </MessageBubble>
-        ))}
-      </div>
+      {messages.length === 0 ? (
+        /* Bumble new-match conversation: the person is centred until the first message. */
+        <div className="fl-chat-intro">
+          <Avatar name={person.name} size="xl" verified={person.verified} />
+          <p className="fl-chat-intro__name">
+            {person.name}, {person.age}
+          </p>
+          <p className="fl-caption">You matched. Say hello and make it personal.</p>
+        </div>
+      ) : (
+        <div className="fl-messages">
+          <SystemMessage>You matched with {person.name}</SystemMessage>
+          {messages.map((m, i) => (
+            <MessageBubble
+              key={m.id}
+              from={m.from}
+              status={m.from === "me" && i === messages.length - 1 ? m.status : undefined}
+              grouped={i > 0 && messages[i - 1].from === m.from}
+            >
+              {m.text}
+            </MessageBubble>
+          ))}
+        </div>
+      )}
 
       <ActionSheet
         open={menu}
@@ -581,11 +605,10 @@ export function Chat({ go }) {
           <IconButton icon="close" label="Close" variant="flat" size="sm" onClick={() => setReport(false)} />
         </div>
         <p className="fl-caption fl-mb">Your report is anonymous. Reporting also blocks them.</p>
-        <ListGroup>
-          {REPORT_REASONS.map(([icon, label]) => (
+        <ListGroup plain>
+          {REPORT_REASONS.map(([, label]) => (
             <ListRow
               key={label}
-              icon={icon}
               label={label}
               onPress={() => {
                 setReport(false);
@@ -596,24 +619,45 @@ export function Chat({ go }) {
           ))}
         </ListGroup>
       </Sheet>
-      <Dialog
-        open={confirm}
-        onClose={() => setConfirm(false)}
-        title={`Unmatch ${person.name}?`}
-        tone="destructive"
-        confirmLabel="Unmatch"
-        onConfirm={() => {
-          setConfirm(false);
-          dispatch({ type: "end", id, reason: "unmatched" });
-        }}
-      >
-        <ConsequenceList
-          items={[
-            { icon: "eyeOff", text: "You won’t see each other again" },
-            { icon: "message", text: "This conversation will be closed" },
-          ]}
-        />
-      </Dialog>
+      {/* Unmatch confirmation as a bottom sheet (Bumble "Unmatch {name}"). */}
+      <Sheet open={confirm} onClose={() => setConfirm(false)} labelledBy="fl-unmatch-title">
+        <div className="sheet__header">
+          <h2 id="fl-unmatch-title" className="sheet__title">
+            Unmatch {person.name}?
+          </h2>
+          <IconButton icon="close" label="Close" variant="flat" size="sm" onClick={() => setConfirm(false)} />
+        </div>
+        <div className="fl-stack fl-sheet-body">
+          <ConsequenceList
+            items={[
+              { icon: "eyeOff", text: "You won’t see each other again" },
+              { icon: "message", text: "This conversation will be closed" },
+            ]}
+          />
+          <button
+            type="button"
+            className="fl-sheet-note"
+            onClick={() => {
+              setConfirm(false);
+              setReport(true);
+            }}
+          >
+            <Icon name="flag" size={20} />
+            <span>
+              <strong>Think they’ve broken our guidelines?</strong>
+              <span>Report them instead. Reporting also blocks them.</span>
+            </span>
+          </button>
+          <Button
+            onClick={() => {
+              setConfirm(false);
+              dispatch({ type: "end", id, reason: "unmatched" });
+            }}
+          >
+            Unmatch
+          </Button>
+        </div>
+      </Sheet>
     </Frame>
   );
 }

@@ -231,6 +231,25 @@
   box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle);
 }
 
+/* Plain list (Bumble report reasons): rows separated by hairlines, no enclosing group. */
+.list-group--plain .list-group__items {
+  border-radius: 0;
+  background: transparent;
+  box-shadow: inset 0 var(--border-hairline) 0 var(--color-border-subtle);
+}
+
+.list-group--plain .list-row + .list-row {
+  margin-left: 0;
+}
+
+.list-group--plain .list-row__hit {
+  padding-inline: 0;
+}
+
+.list-group--plain .list-row__label {
+  font-weight: var(--font-weight-semibold);
+}
+
 .list-group__footnote {
   padding: 0 var(--space-1);
   color: var(--color-text-muted);
@@ -688,6 +707,15 @@ button.list-row__hit:hover {
   text-align: center;
 }
 
+/* Reserved illustration area (artwork supplied separately): a neutral placeholder. */
+.empty-state__art {
+  width: 140px;
+  height: 112px;
+  margin-bottom: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-sunken);
+}
+
 .empty-state__icon {
   display: grid;
   place-items: center;
@@ -772,8 +800,8 @@ button.list-row__hit:hover {
 
 .match__photos {
   position: relative;
-  width: 264px;
-  height: 212px;
+  width: 300px;
+  height: 236px;
 }
 
 .match__photo {
@@ -781,28 +809,24 @@ button.list-row__hit:hover {
   top: 8px;
   display: grid;
   place-items: center;
-  width: 138px;
-  height: 180px;
-  border-radius: var(--radius-xl);
-  font-family: var(--font-display);
-  font-variation-settings: var(--font-display-axes);
-  font-size: 64px;
-  /* White inset frame + float shadow: the same "photo in a card" language as the Discover card. */
-  box-shadow: inset 0 0 0 6px var(--color-surface), var(--shadow-float);
+  width: 156px;
+  height: 204px;
+  border-radius: var(--radius-photo);
+  /* Photo placeholder (neutral grey) with a white edge so the overlap reads. */
+  background: var(--color-surface-photo);
+  color: var(--color-text-secondary);
+  box-shadow: 0 0 0 3px var(--color-surface), var(--shadow-sm);
 }
 
 .match__photo--left {
-  left: 6px;
-  background: var(--color-surface-sunken);
-  color: var(--color-text-primary);
-  transform: rotate(-7deg);
+  left: 4px;
+  transform: rotate(-8deg);
 }
 
 .match__photo--right {
-  right: 6px;
-  background: var(--color-surface-photo);
-  color: var(--color-text-on-inverse);
-  transform: rotate(6deg);
+  right: 4px;
+  top: 0;
+  transform: rotate(7deg);
 }
 
 .match__mark {

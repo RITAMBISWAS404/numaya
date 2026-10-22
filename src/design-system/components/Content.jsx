@@ -110,9 +110,9 @@ export function Divider({ inset = false }) {
 }
 
 /** Rounded group of list rows with an optional footnote (settings, profile details). */
-export function ListGroup({ title, footnote, children }) {
+export function ListGroup({ title, footnote, plain = false, children }) {
   return (
-    <div className="list-group">
+    <div className={cx("list-group", plain && "list-group--plain")}>
       {title && <p className="list-group__title">{title}</p>}
       <ul className="list-group__items">{children}</ul>
       {footnote && <p className="list-group__footnote">{footnote}</p>}
@@ -364,16 +364,21 @@ export function Skeleton({ width = "100%", height = 16, radius = "var(--radius-x
 }
 
 /** One clear next step when there is nothing to show. */
-export function EmptyState({ icon = "sparkle", title, children, action, onAction, tone = "neutral" }) {
+/** Empty state. `art` reserves the illustration area with a neutral placeholder instead of an icon. */
+export function EmptyState({ icon = "sparkle", art = false, title, children, action, onAction, tone = "neutral" }) {
   return (
     <div className={cx("empty-state", tone === "error" && "empty-state--error")}>
-      <span className="empty-state__icon" aria-hidden="true">
-        <Icon name={icon} size={28} />
-      </span>
+      {art ? (
+        <span className="empty-state__art" aria-hidden="true" />
+      ) : (
+        <span className="empty-state__icon" aria-hidden="true">
+          <Icon name={icon} size={28} />
+        </span>
+      )}
       <h3 className="empty-state__title">{title}</h3>
       {children && <p className="empty-state__body">{children}</p>}
       {action && (
-        <button type="button" className="btn btn--secondary btn--inline btn--sm" onClick={onAction}>
+        <button type="button" className={cx("btn btn--inline btn--sm", art ? "btn--primary" : "btn--secondary")} onClick={onAction}>
           <span className="btn__label">{action}</span>
         </button>
       )}
