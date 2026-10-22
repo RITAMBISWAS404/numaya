@@ -256,9 +256,11 @@ try {
       const imagery = await p.evaluate(() => {
         const media = document.querySelector("#discovery .profile-card__media");
         const s = getComputedStyle(media);
-        return { radius: parseFloat(s.borderTopLeftRadius), bg: s.backgroundColor, ext: [...document.querySelectorAll("#discovery img")].filter((i) => /^https?:\/\/(?!localhost)/.test(i.src)).length, placeholders: document.querySelectorAll("#discovery .fl-pf__photo").length };
+        const r = (sel) => parseFloat(getComputedStyle(document.querySelector(sel)).borderTopLeftRadius);
+        return { radius: parseFloat(s.borderTopLeftRadius), card: r("#discovery .fl-pf__section"), input: r("#basics .input"), bg: s.backgroundColor, ext: [...document.querySelectorAll("#discovery img")].filter((i) => /^https?:\/\/(?!localhost)/.test(i.src)).length, placeholders: document.querySelectorAll("#discovery .fl-pf__photo").length };
       });
-      check("discover: photo areas are neutral grey placeholders with 24px corners and no hotlinked images", imagery.radius === 24 && imagery.bg === "rgb(215, 219, 225)" && imagery.ext === 0 && imagery.placeholders >= 1, JSON.stringify(imagery));
+      check("discover: photo areas are neutral grey placeholders and no images are hotlinked", imagery.bg === "rgb(215, 219, 225)" && imagery.ext === 0 && imagery.placeholders >= 1, JSON.stringify(imagery));
+      check("geometry: corner hierarchy photo > card > input (32 / 24 / 16)", imagery.radius === 32 && imagery.card === 24 && imagery.input === 16, `${imagery.radius} / ${imagery.card} / ${imagery.input}`);
       const roll = await p.evaluate(() => {
         const cs = (sel) => getComputedStyle(document.querySelector(sel));
         const body = document.querySelector("#chat .fl-screen__body").getBoundingClientRect();

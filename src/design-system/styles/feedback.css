@@ -93,13 +93,13 @@
   display: grid;
   margin-bottom: var(--space-2);
   overflow: hidden;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
   background: var(--color-surface);
   box-shadow: var(--shadow-lg);
 }
 
 .sheet--actions .sheet__panel > .btn {
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
   background: var(--color-surface);
   box-shadow: var(--shadow-lg);
 }
@@ -248,7 +248,7 @@
   align-items: flex-start;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
 }
 
 .banner--info    { background: var(--color-surface); box-shadow: var(--shadow-sm); color: var(--color-text-primary); }

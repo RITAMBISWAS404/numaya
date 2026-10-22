@@ -219,7 +219,8 @@
       "lg":   { "$type": "dimension", "$value": "{primitive.dimension.20}" },
       "xl":   { "$type": "dimension", "$value": "{primitive.dimension.28}" },
       "2xl":  { "$type": "dimension", "$value": "{primitive.dimension.32}" },
-      "photo":{ "$type": "dimension", "$value": "{primitive.dimension.24}", "$description": "Large photography (Meetup reference: ≈ 24px on event and profile photos)." },
+      "photo":{ "$type": "dimension", "$value": "{primitive.dimension.32}", "$description": "Large photography and hero images (Discover card, profile photos, match photos): the softest corner in the system." },
+      "card": { "$type": "dimension", "$value": "{primitive.dimension.24}", "$description": "Major content containers: section cards, grouped rows, prompt cards, the floating options menu, reserved illustration areas. Between photo (32) and controls (md 16)." },
       "pill": { "$type": "dimension", "$value": "999px" }
     },
     "border": {
@@ -283,7 +284,7 @@
     "icon-button": { "size": { "$type": "dimension", "$value": "{primitive.dimension.40}" }, "size-sm": { "$type": "dimension", "$value": "{primitive.dimension.36}" } },
     "chip":        { "height": { "$type": "dimension", "$value": "{primitive.dimension.36}" } },
     "progress":    { "segment-width": { "$type": "dimension", "$value": "{primitive.dimension.18}" }, "segment-height": { "$type": "dimension", "$value": "{primitive.dimension.8}" } },
-    "code-cell":   { "height": { "$type": "dimension", "$value": "{primitive.dimension.60}" }, "radius": { "$type": "dimension", "$value": "{primitive.dimension.10}" } },
+    "code-cell":   { "height": { "$type": "dimension", "$value": "{primitive.dimension.60}" }, "radius": { "$type": "dimension", "$value": "{primitive.dimension.12}" } },
     "switch":      { "width": { "$type": "dimension", "$value": "51px" }, "height": { "$type": "dimension", "$value": "31px" } },
     "tab-bar":     { "height": { "$type": "dimension", "$value": "{primitive.dimension.64}" } }
   }

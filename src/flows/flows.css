@@ -219,7 +219,7 @@ body {
   margin: 0;
   padding: var(--space-4) var(--space-5);
   list-style: none;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-card);
   background: var(--color-surface);
   box-shadow: var(--shadow-sm);
   text-align: left;
@@ -422,7 +422,7 @@ body {
 /* Same slot language as the photo grid: grey photo placeholders, white hairline empty slots. */
 .fl-photo-strip .image-placeholder,
 .fl-photo-strip__empty {
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
 }
 
 .fl-photo-strip .image-placeholder {

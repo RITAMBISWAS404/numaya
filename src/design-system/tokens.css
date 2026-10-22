@@ -206,7 +206,8 @@
   --radius-lg: var(--p-dimension-20);
   --radius-xl: var(--p-dimension-28);
   --radius-2xl: var(--p-dimension-32);
-  --radius-photo: var(--p-dimension-24);
+  --radius-photo: var(--p-dimension-32);
+  --radius-card: var(--p-dimension-24);
   --radius-pill: 999px;
   --border-hairline: var(--p-dimension-1);
   --border-selected: 1.5px;
@@ -248,7 +249,7 @@
   --progress-segment-width: var(--p-dimension-18);
   --progress-segment-height: var(--p-dimension-8);
   --code-cell-height: var(--p-dimension-60);
-  --code-cell-radius: var(--p-dimension-10);
+  --code-cell-radius: var(--p-dimension-12);
   --switch-width: 51px;
   --switch-height: 31px;
   --tab-bar-height: var(--p-dimension-64);

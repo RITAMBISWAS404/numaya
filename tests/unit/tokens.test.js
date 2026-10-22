@@ -133,6 +133,15 @@ describe("geometry and elevation", () => {
     expect(px("--radius-2xl")).toBeLessThanOrEqual(32);
   });
 
+  it("keeps a corner hierarchy: photos softest, then sheets, cards, controls", () => {
+    const r = (k) => px(`--radius-${k}`);
+    expect(r("photo")).toBeGreaterThanOrEqual(r("xl"));
+    expect(r("xl")).toBeGreaterThan(r("card"));
+    expect(r("card")).toBeGreaterThan(r("lg"));
+    expect(r("lg")).toBeGreaterThan(r("md"));
+    expect(px("--code-cell-radius")).toBeLessThan(r("md"));
+  });
+
   it("nested corners follow outer = inner + inset (tab bar around its items)", () => {
     expect(px("--radius-xl") - px("--radius-lg")).toBe(px("--space-2"));
   });

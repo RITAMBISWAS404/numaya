@@ -1823,9 +1823,18 @@ export const tokens = [
     "name": "--radius-photo",
     "layer": "semantic",
     "type": "dimension",
+    "value": "{primitive.dimension.32}",
+    "resolved": "32px",
+    "description": "Large photography and hero images (Discover card, profile photos, match photos): the softest corner in the system."
+  },
+  {
+    "id": "semantic.radius.card",
+    "name": "--radius-card",
+    "layer": "semantic",
+    "type": "dimension",
     "value": "{primitive.dimension.24}",
     "resolved": "24px",
-    "description": "Large photography (Meetup reference: ≈ 24px on event and profile photos)."
+    "description": "Major content containers: section cards, grouped rows, prompt cards, the floating options menu, reserved illustration areas. Between photo (32) and controls (md 16)."
   },
   {
     "id": "semantic.radius.pill",
@@ -2187,8 +2196,8 @@ export const tokens = [
     "name": "--code-cell-radius",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.10}",
-    "resolved": "10px",
+    "value": "{primitive.dimension.12}",
+    "resolved": "12px",
     "description": null
   },
   {
