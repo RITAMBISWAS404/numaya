@@ -181,7 +181,13 @@ body {
 }
 
 .fl-stack.fl-gap-lg {
-  gap: var(--space-5);
+  gap: var(--layout-field-gap);
+}
+
+/* Section-level stacks (profile, edit profile, settings, inbox): sections and groups separate at the
+   Meetup section rhythm, wider than the field gap, so headings, rows and footnotes group clearly. */
+.fl-stack.fl-sections {
+  gap: var(--layout-section-gap);
 }
 
 .fl-center {

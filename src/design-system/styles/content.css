@@ -31,6 +31,12 @@
   font-weight: 560;
 }
 
+/* Meetup pastel framing for initial avatars (ink initials stay above 12:1 on every tint). */
+.avatar--tone-0 .avatar__image, .match-queue__image.avatar--tone-0 { background: var(--color-accent-pink-tint); }
+.avatar--tone-1 .avatar__image, .match-queue__image.avatar--tone-1 { background: var(--color-accent-promo); }
+.avatar--tone-2 .avatar__image, .match-queue__image.avatar--tone-2 { background: var(--color-surface-brand); }
+.avatar--tone-3 .avatar__image, .match-queue__image.avatar--tone-3 { background: var(--color-accent-yellow-tint); }
+
 .avatar__image img {
   width: 100%;
   height: 100%;

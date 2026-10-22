@@ -12,6 +12,7 @@
   --p-color-pink-100: #fde8ee;
   --p-color-pink-500: #ea698c;
   --p-color-pink-700: #c1486a;
+  --p-color-yellow-100: #fdf0d0;
   --p-color-yellow-200: #fcd284;
   --p-color-orange-500: #d58b50;
   --p-color-neutral-0: #ffffff;
@@ -98,6 +99,7 @@
   --color-accent-pink: var(--p-color-pink-500);
   --color-accent-pink-tint: var(--p-color-pink-100);
   --color-accent-yellow: var(--p-color-yellow-200);
+  --color-accent-yellow-tint: var(--p-color-yellow-100);
   --color-accent-orange: var(--p-color-orange-500);
   --color-accent-green: var(--p-color-green-500);
   --color-text-primary: var(--p-color-neutral-900);
@@ -207,7 +209,8 @@
   --layout-gutter-tight: var(--p-dimension-8);
   --layout-content-max: 430px;
   --layout-stack-gap: var(--p-dimension-12);
-  --layout-section-gap: var(--p-dimension-32);
+  --layout-section-gap: var(--p-dimension-28);
+  --layout-field-gap: var(--p-dimension-20);
   --size-control: var(--p-dimension-56);
   --size-touch-min: var(--p-dimension-44);
   --size-icon-sm: var(--p-dimension-16);

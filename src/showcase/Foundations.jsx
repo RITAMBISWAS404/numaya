@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ICON_NAMES, Icon, Emphasis } from "../design-system/index.js";
+import { Avatar, ICON_NAMES, Icon, Emphasis, Wordmark } from "../design-system/index.js";
 import { tokens, tokenByName } from "../design-system/tokens.js";
 import { contrast } from "../lib/contrast.js";
 import { Grid, Section, Specimen } from "./ui.jsx";
@@ -55,34 +55,37 @@ export function Foundations() {
       <Section
         id="brand"
         title="Brand"
-        intro="The Numaya pink #F770E3 is the identity. It appears at its exact value on marks, progress, selection, verification and SuperSwipe/send fills, and is never darkened. Pink fills carry white glyphs only, bold or filled and always with an accessible name: white on #F770E3 is 2.51:1, a documented exception, so no text ever sits on pink. Ink never sits on pink. Selected pills and checkboxes are ink with a pink cue."
+        intro="Numaya keeps its name, wordmark, Fraunces, Inter and Solar icons; the visual system follows Meetup. The brand colour is Meetup's purple #7262C7 (sampled from the current iOS app): selected chips and pills, outgoing bubbles, SuperSwipe, send, progress, links and focus. White on it is 4.90:1. Primary actions, switches and checkboxes are ink. Meetup's secondary colours frame avatars, badges and guidance cards, never text."
       >
         <Grid min={240}>
-          <Specimen title="Brand fill + white glyph" note={`#F770E3 · white glyph ${ratio(WHITE, brandHex)} (glyph only, documented exception)`}>
-            <span className="sc-brand-demo">
-              <span className="sc-brand-demo__mark">
-                <Icon name="check" size={28} stroke={2.75} />
-              </span>
+          <Specimen title="Wordmark" note="The Numaya mark in brand purple with an accent-pink dot">
+            <Wordmark />
+          </Specimen>
+          <Specimen title="Brand fill + white text" note={`#7262C7 · white ${ratio(WHITE, brandHex)}`}>
+            <span className="sc-pill-demo" style={{ background: "var(--color-brand)", color: "var(--color-on-brand)" }}>
+              Jazz <Icon name="minusCircle" size={16} />
             </span>
           </Specimen>
-          <Specimen title="Selected: ink pill + pink mark" note={`white on ink ${ratio(tokenByName["--color-text-on-inverse"].resolved, tokenByName["--color-surface-inverse"].resolved)} · pink tick on ink ${ratio(brandHex, tokenByName["--color-surface-inverse"].resolved)}`}>
-            <span className="sc-pill-demo" style={{ background: "var(--color-surface-inverse)", color: "var(--color-text-on-inverse)" }}>
-              Jazz <Icon name="check" size={14} stroke={2.2} style={{ color: "var(--color-brand)" }} />
-            </span>
+          <Specimen title="Brand text (links)" note={`--color-text-brand · ${ratio(tokenByName["--color-text-brand"].resolved, WHITE)} on white; deep purple on grey`}>
+            <p className="sc-type-sample" style={{ color: "var(--color-text-brand)", fontWeight: 600 }}>
+              See all
+            </p>
           </Specimen>
-          <Specimen title="Brand emphasis in a headline" note={`Emphasis · --color-text-accent · exact #F770E3 · ${ratio(tokenByName["--color-text-accent"].resolved, WHITE)} on white · display-size hero headlines only, one word`}>
+          <Specimen title="Headline emphasis" note={`Emphasis · --color-text-accent · ${ratio(tokenByName["--color-text-accent"].resolved, WHITE)} on white`}>
             <p className="sc-type-sample" style={{ fontFamily: "var(--font-display)", fontSize: 34 }}>
               <Emphasis>Better</Emphasis>
             </p>
           </Specimen>
-          <Specimen title="Brand text at body size" note={`--color-text-brand is ink · ${ratio(tokenByName["--color-text-brand"].resolved, WHITE)} · pink text fails on white`}>
-            <p className="sc-type-sample" style={{ color: "var(--color-text-brand)", fontWeight: 600 }}>
-              Change number
-            </p>
+          <Specimen title="Guidance card" note="Periwinkle accent.promo (Meetup promo card) with a purple icon">
+            <span className="sc-pill-demo" style={{ background: "var(--color-accent-promo)", color: "var(--color-text-primary)", borderRadius: 20, padding: "12px 16px" }}>
+              <Icon name="lock" size={20} style={{ color: "var(--color-brand)" }} /> Your number stays private
+            </span>
           </Specimen>
-          <Specimen title="Never" note="Ink (or any text) on a solid brand fill" tone="soft">
-            <span className="sc-pill-demo sc-pill-demo--never" style={{ background: "var(--color-brand)", color: "var(--color-text-primary)", boxShadow: "none" }}>
-              <Icon name="close" size={16} stroke={2.4} /> Ink on #F770E3
+          <Specimen title="Avatar framing" note="Initial avatars take a Meetup pastel by name">
+            <span style={{ display: "flex", gap: 8 }}>
+              {["Maya", "Sam", "Noor", "Jo"].map((n) => (
+                <Avatar key={n} name={n} size="md" />
+              ))}
             </span>
           </Specimen>
         </Grid>
@@ -91,6 +94,7 @@ export function Foundations() {
       <Section id="color" title="Colour roles" intro="Semantic tokens only. Component CSS never references primitives or hex values.">
         {[
           ["Brand", "--color-brand"],
+          ["Accent", "--color-accent"],
           ["Text", "--color-text"],
           ["Surface", "--color-surface"],
           ["Border and focus", "--color-border"],

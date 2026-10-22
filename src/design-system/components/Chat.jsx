@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { cx } from "../../lib/cx.js";
-import { Avatar, ringRectPath } from "./Content.jsx";
+import { Avatar, avatarTone, ringRectPath } from "./Content.jsx";
 import { Icon } from "./Icon.jsx";
 
 /**
@@ -141,7 +141,7 @@ export function MatchQueue({ matches, onSelect }) {
                   <path d={PORTRAIT_RING} pathLength="100" className="avatar__ring-value" style={{ strokeDasharray: `${Math.round(m.remaining * 100)} 100` }} />
                 </svg>
               )}
-              <span className="match-queue__image" role="img" aria-label={m.name}>
+              <span className={cx("match-queue__image", !m.src && `avatar--tone-${avatarTone(m.name)}`)} role="img" aria-label={m.name}>
                 {m.src ? <img src={m.src} alt="" /> : m.name?.trim()?.[0]?.toUpperCase()}
               </span>
             </span>

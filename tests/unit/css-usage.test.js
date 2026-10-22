@@ -51,10 +51,16 @@ describe("geometry rules", () => {
   };
 
   it("ordinary controls are not pills (chips and buttons are pills, as in the references)", () => {
-    for (const sel of [".badge", ".tag", ".segmented", ".segmented__item", ".pill"]) {
+    for (const sel of [".badge", ".tag", ".pill"]) {
       expect(block(sel), sel).toContain("border-radius");
       expect(block(sel), sel).not.toMatch(/radius-pill|999px/);
     }
+  });
+
+  it("segmented options are separate filter pills, as in the Meetup reference", () => {
+    expect(block(".segmented__item")).toMatch(/border-radius:\s*var\(--radius-pill\)/);
+    expect(block(".segmented__item.is-selected")).toMatch(/background:\s*var\(--color-brand\)/);
+    expect(block(".segmented")).not.toMatch(/background/);
   });
 
   it("every pressable control has press feedback", () => {

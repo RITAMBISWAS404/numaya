@@ -32,10 +32,14 @@ function ringPath(px) {
  * Avatar. size: xs | sm | md | lg | xl. Optional ring: { value 0–1, tone: "brand" | "muted" }
  * for profile completion or match countdown.
  */
+/** Initial avatars take one of four Meetup pastel framings (pink, periwinkle, lavender, yellow),
+    chosen from the name so a person keeps the same tint everywhere. */
+export const avatarTone = (name = "") => [...name].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % 4;
+
 export function Avatar({ name, src, size = "md", ring, verified = false, decorative = false, className }) {
   const initial = name?.trim()?.[0]?.toUpperCase() ?? "";
   return (
-    <span className={cx("avatar", `avatar--${size}`, ring && "has-ring", className)} aria-hidden={decorative || undefined}>
+    <span className={cx("avatar", `avatar--${size}`, !src && `avatar--tone-${avatarTone(name)}`, ring && "has-ring", className)} aria-hidden={decorative || undefined}>
       {ring && (
         <svg
           className={cx("avatar__ring", `avatar__ring--${ring.tone ?? "brand"}`)}

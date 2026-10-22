@@ -91,6 +91,15 @@ export const tokens = [
     "description": "Meetup emphasis pink (sampled #C1486A, 'The people platform'): one emphasised headline word. 4.77:1 on white."
   },
   {
+    "id": "primitive.color.yellow.100",
+    "name": "--p-color-yellow-100",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#fdf0d0",
+    "resolved": "#fdf0d0",
+    "description": "Yellow tint (derived from #FCD284) for avatar framing."
+  },
+  {
     "id": "primitive.color.yellow.200",
     "name": "--p-color-yellow-200",
     "layer": "primitive",
@@ -844,7 +853,16 @@ export const tokens = [
     "type": "color",
     "value": "{primitive.color.yellow.200}",
     "resolved": "#fcd284",
-    "description": "Illustration and avatar framing."
+    "description": "Illustration framing."
+  },
+  {
+    "id": "semantic.color.accent.yellow-tint",
+    "name": "--color-accent-yellow-tint",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.yellow.100}",
+    "resolved": "#fdf0d0",
+    "description": "Avatar framing."
   },
   {
     "id": "semantic.color.accent.orange",
@@ -1832,9 +1850,18 @@ export const tokens = [
     "name": "--layout-section-gap",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.32}",
-    "resolved": "32px",
-    "description": "Gap between content sections."
+    "value": "{primitive.dimension.28}",
+    "resolved": "28px",
+    "description": "Gap between distinct content sections and grouped lists (Meetup rhythm), clearly larger than the 20px between form fields, so a group's footnote reads with its group."
+  },
+  {
+    "id": "semantic.layout.field-gap",
+    "name": "--layout-field-gap",
+    "layer": "semantic",
+    "type": "dimension",
+    "value": "{primitive.dimension.20}",
+    "resolved": "20px",
+    "description": "Gap between form fields and between a field group and the next field."
   },
   {
     "id": "semantic.size.control",

@@ -22,11 +22,9 @@ await server.listen();
 const base = server.resolvedUrls.local[0];
 const browser = await chromium.launch();
 
-/* Deliberate exceptions, each documented where it is shown. */
-const EXCLUDE = [
-  ".sc-pill-demo--never", // the showcase's "Never: ink on #F770E3" anti-example
-  ".emphasis", // one display-size hero word in exact #F770E3 (2.51:1): requested, documented exception (color.text.accent)
-];
+/* Deliberate exceptions, each documented where it is shown. None since the Meetup palette: brand
+   purple and the emphasis pink both meet AA. */
+const EXCLUDE = [];
 
 /** Each target loads a page at 393 × 852, optionally opens a state, then audits `scope`. */
 const TARGETS = [

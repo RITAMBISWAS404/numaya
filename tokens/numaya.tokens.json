@@ -20,7 +20,7 @@
         "500": { "$type": "color", "$value": "#ea698c", "$description": "Meetup accent pink (sampled #EA698C, organiser badge): badges and category marks, never text." },
         "700": { "$type": "color", "$value": "#c1486a", "$description": "Meetup emphasis pink (sampled #C1486A, 'The people platform'): one emphasised headline word. 4.77:1 on white." }
       },
-      "yellow": { "200": { "$type": "color", "$value": "#fcd284", "$description": "Meetup illustration yellow (sampled #FCD284, empty-state blob): illustration and avatar framing." } },
+      "yellow": { "100": { "$type": "color", "$value": "#fdf0d0", "$description": "Yellow tint (derived from #FCD284) for avatar framing." }, "200": { "$type": "color", "$value": "#fcd284", "$description": "Meetup illustration yellow (sampled #FCD284, empty-state blob): illustration and avatar framing." } },
       "orange": { "500": { "$type": "color", "$value": "#d58b50", "$description": "Meetup time/status orange (sampled #D58B50, 'In 2m'): icons and marks only (2.75:1 on white)." } },
       "neutral": {
         "0":   { "$type": "color", "$value": "#ffffff" },
@@ -124,7 +124,8 @@
         "promo":  { "$type": "color", "$value": "{primitive.color.periwinkle.100}", "$description": "Promotional and guidance cards (Meetup 'Start a new group')." },
         "pink":   { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "Badges and category marks." },
         "pink-tint": { "$type": "color", "$value": "{primitive.color.pink.100}" },
-        "yellow": { "$type": "color", "$value": "{primitive.color.yellow.200}", "$description": "Illustration and avatar framing." },
+        "yellow": { "$type": "color", "$value": "{primitive.color.yellow.200}", "$description": "Illustration framing." },
+        "yellow-tint": { "$type": "color", "$value": "{primitive.color.yellow.100}", "$description": "Avatar framing." },
         "orange": { "$type": "color", "$value": "{primitive.color.orange.500}", "$description": "Time and status icons." },
         "green":  { "$type": "color", "$value": "{primitive.color.green.500}", "$description": "Confirmation marks." }
       },
@@ -217,7 +218,8 @@
       "gutter-tight":{ "$type": "dimension", "$value": "{primitive.dimension.8}", "$description": "Edge-to-edge content: the Discover card, chat header controls." },
       "content-max": { "$type": "dimension", "$value": "430px", "$description": "Max content width on phones; wider viewports centre the column." },
       "stack-gap":   { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "Gap between stacked controls." },
-      "section-gap": { "$type": "dimension", "$value": "{primitive.dimension.32}", "$description": "Gap between content sections." }
+      "section-gap": { "$type": "dimension", "$value": "{primitive.dimension.28}", "$description": "Gap between distinct content sections and grouped lists (Meetup rhythm), clearly larger than the 20px between form fields, so a group's footnote reads with its group." },
+      "field-gap":   { "$type": "dimension", "$value": "{primitive.dimension.20}", "$description": "Gap between form fields and between a field group and the next field." }
     },
     "size": {
       "control":     { "$type": "dimension", "$value": "{primitive.dimension.56}", "$description": "Text input height." },

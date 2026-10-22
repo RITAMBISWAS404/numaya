@@ -82,7 +82,7 @@ function Actions() {
             <Button variant="quiet">Quiet</Button>
           </div>
         </Specimen>
-        <Specimen title="Button · brand · destructive" note="Brand pink fill with an ink label">
+        <Specimen title="Button · brand · destructive" note="Soft lavender with a deep-purple label (Meetup \u201cSign up with email\u201d)">
           <div className="sc-stack">
             <Button variant="brand">Get verified</Button>
             <Button variant="destructive">Report</Button>
@@ -224,7 +224,7 @@ function SelectionControls() {
   const [age, setAge] = useState([27, 36]);
 
   return (
-    <Section id="selection" title="Selection" intro="Selected states use the brand pink plus a shape cue (check, knob, dot): never colour alone.">
+    <Section id="selection" title="Selection" intro="Meetup selection: purple pills with white text and a minus-circle; ink switches, checkboxes and radio rows. Every state also has a shape cue (icon, knob, dot, outline): never colour alone.">
       <Grid>
         <Specimen title="ChipGroup · max 3" note="At the quota, others become unavailable" wide>
           <ChipGroup label="Interests" options={INTERESTS} value={chips} onChange={setChips} max={3} />
@@ -451,7 +451,7 @@ function Profile() {
             <ActionBar onPass={() => {}} onSuper={() => {}} onLike={() => {}} />
           </div>
         </Specimen>
-        <Specimen title="SharedInterests" note="“You both like”: white card, small pink mark, neutral pills with icons">
+        <Specimen title="SharedInterests" note="“You both like”: white card, small purple mark, grey pills with icons (Meetup “Shared interests”)">
           <SharedInterests
             items={[
               { label: "Jazz", icon: "music" },
@@ -577,7 +577,7 @@ function Feedback() {
             <p>Thanks for helping keep Numaya safe. We’ll update you in Help.</p>
           </ResultPanel>
         </Specimen>
-        <Specimen title="SetupProgress" note="White card · done (pink tile, white check) · next (ink tile) · upcoming (muted)">
+        <Specimen title="SetupProgress" note="White card · done (purple tile, white check) · next (ink tile) · upcoming (muted)">
           <SetupProgress
             title="Your profile"
             steps={[

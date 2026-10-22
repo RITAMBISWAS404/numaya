@@ -219,7 +219,7 @@ export function InterestsPrompts({ go }) {
         lede="Pick 3 to 5. They start conversations and help us find people like you."
         art={<IllustrationPlaceholder id="interests-spot" ratio="1 / 1" width="72px" size="sm" />}
       />
-      <div className="fl-stack fl-gap-lg">
+      <div className="fl-stack fl-gap-lg fl-sections">
         <ChipGroup label="Interests" options={INTERESTS} icons={INTEREST_ICONS} value={interests} onChange={(v) => dispatch({ type: "profile", patch: { interests: v } })} max={5} />
         <Section title="Your prompt" description="Matches reply to this. You can change it any time from your profile.">
           <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} />
@@ -569,7 +569,7 @@ export function Chats({ go }) {
   const rows = conversations(state);
   return (
     <Frame tone="page" top={<TopBar largeTitle="Chats" />} tab="chats" go={go}>
-      <div className="fl-stack fl-gap-lg">
+      <div className="fl-stack fl-gap-lg fl-sections">
         {!state.prefs.messages && (
           <Banner tone="info" title="New message alerts are off" action="Turn on" onAction={() => dispatch({ type: "prefs", patch: { messages: true } })}>
             You’ll still see new messages here.
@@ -768,7 +768,7 @@ export function MyProfile({ go }) {
       tab="profile"
       go={go}
     >
-      <div className="fl-stack fl-gap-lg">
+      <div className="fl-stack fl-gap-lg fl-sections">
         {/* Bumble profile tab: avatar with completion ring and % pill, name, edit action. */}
         <div className="fl-me">
           <div className="fl-me__avatar">
@@ -900,7 +900,7 @@ export function EditProfile({ go }) {
   };
   return (
     <Frame tone="page" top={<TopBar onBack={() => go("profile")} title="Edit profile" />}>
-      <div className="fl-stack fl-gap-lg">
+      <div className="fl-stack fl-gap-lg fl-sections">
         <SegmentedControl
           label="Profile view"
           value={view}
@@ -1046,7 +1046,7 @@ export function Settings({ go }) {
   );
   return (
     <Frame tone="page" top={<TopBar onBack={() => go("profile")} title="Settings" />}>
-      <div className="fl-stack fl-gap-lg">
+      <div className="fl-stack fl-gap-lg fl-sections">
         {/* Filters (reference: Bumble filters): a question heading over each white card. */}
         <ListGroup title="How old are they?">
           <li className="list-row">

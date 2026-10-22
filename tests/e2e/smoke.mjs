@@ -405,6 +405,22 @@ try {
       check("shape: avatars are rounded rectangles, radius 30% of the image (36px → 10.8px; ringed 96px → 26.4px)", geo.avatarRadius[0] === "10.8px" && geo.avatarRadius[1] === "26.4px", geo.avatarRadius.join(" / "));
       check("shape: the completion ring traces a rounded rectangle with round caps in brand purple", geo.ring.rounded && geo.ring.cap === "round" && geo.ring.stroke === BRAND && geo.ring.width === "4px" && geo.ring.inside, JSON.stringify(geo.ring));
       check("surfaces: prompt answers are flat grey quote cards (Meetup 'About me'), no shadow", geo.promptShadowAlpha === 0 && geo.promptBg === "rgb(242, 242, 242)", `alpha ${geo.promptShadowAlpha} / ${geo.promptBg}`);
+      const m2 = await p.evaluate(() => {
+        const cs = (sel) => document.querySelector(sel) && getComputedStyle(document.querySelector(sel));
+        const groups = [...document.querySelectorAll("#settings .fl-sections > *")].map((e) => e.getBoundingClientRect());
+        const fields = [...document.querySelectorAll("#basics .fl-gap-lg > *")].map((e) => e.getBoundingClientRect());
+        return {
+          segSel: cs("#edit .segmented__item.is-selected") && [cs("#edit .segmented__item.is-selected").backgroundColor, cs("#edit .segmented__item.is-selected").color, cs("#edit .segmented__item.is-selected").borderTopLeftRadius],
+          sectionGap: Math.round(groups[1].top - groups[0].bottom),
+          fieldGap: Math.round(fields[1].top - fields[0].bottom),
+          tones: [...document.querySelectorAll(".avatar__image")].map((e) => getComputedStyle(e).backgroundColor).filter((c, i, a) => a.indexOf(c) === i).length,
+          info: cs("#photos .info-card").backgroundColor,
+        };
+      });
+      check("selection: the segmented control uses Meetup filter pills (purple selected, white text)", m2.segSel?.[0] === BRAND && m2.segSel[1] === WHITE && m2.segSel[2] === "999px", JSON.stringify(m2.segSel));
+      check("spacing: sections separate at 28px, wider than the 20px between form fields", m2.sectionGap === 28 && m2.fieldGap === 20, `${m2.sectionGap} / ${m2.fieldGap}`);
+      check("identity: initial avatars carry more than one Meetup pastel framing", m2.tones >= 2, String(m2.tones));
+      check("surfaces: information cards use the periwinkle guidance surface (Meetup promo card)", m2.info === "rgb(214, 220, 253)", m2.info);
       const tabAlpha = Math.max(0, ...[...geo.tabShadow.matchAll(/rgba\(\d+, \d+, \d+, ([0-9.]+)\)/g)].map((m) => parseFloat(m[1])));
       check("navigation: floating capsule inset from the edges with a soft shadow (Meetup)", geo.tabInset >= 8 && geo.tabRadius >= 999 && tabAlpha > 0 && tabAlpha <= 0.14, `inset ${geo.tabInset} / radius ${geo.tabRadius} / alpha ${tabAlpha}`);
       check("navigation: bar sits below the scrolling content, never over it", geo.tabBelowBody);
