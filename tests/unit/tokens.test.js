@@ -40,9 +40,9 @@ describe("token pipeline", () => {
   it("derives tints by lightening the brand pink, with no darker second pink", () => {
     const l = (hex) => luminance(hexToRgb(hex));
     const brand = l(value("--color-brand"));
-    for (const t of ["--color-brand-tint", "--color-brand-subtle", "--color-brand-marker", "--color-surface-brand"]) expect(l(value(t))).toBeGreaterThan(brand);
+    for (const t of ["--color-brand-tint", "--color-brand-subtle", "--color-surface-brand"]) expect(l(value(t))).toBeGreaterThan(brand);
     const pinks = tokens.keys().toArray().filter((id) => id.startsWith("primitive.color.pink."));
-    expect(pinks.map((id) => id.split(".").pop())).toEqual(["50", "100", "200", "300", "500"]);
+    expect(pinks.map((id) => id.split(".").pop())).toEqual(["50", "100", "200", "500"]);
   });
 
   it("puts dark ink, not white, on solid brand fills", () => {
@@ -107,11 +107,13 @@ describe("contrast requirements", () => {
   });
 
   it("documents the only accepted exceptions", () => {
-    // No text token is pink: headline emphasis is ink on the light-pink marker instead.
+    // Exactly one text token is pink: the display-only headline accent, a documented exception.
     const textTokens = [...tokens.values()].filter((t) => t.path[1] === "color" && t.path[2] === "text").map((t) => cssVarName(t.path));
-    expect(textTokens.length).toBeGreaterThan(3);
-    for (const t of textTokens) expect(value(t).toLowerCase()).not.toBe(value("--color-brand").toLowerCase());
-    expect(contrast(value("--color-text-primary"), value("--color-brand-marker"))).toBeGreaterThanOrEqual(4.5);
+    const pink = textTokens.filter((t) => value(t).toLowerCase() === value("--color-brand").toLowerCase());
+    expect(pink).toEqual(["--color-text-accent"]);
+    const accent = contrast(value("--color-text-accent"), value("--color-surface"));
+    expect(accent).toBeGreaterThan(2.4);
+    expect(accent).toBeLessThan(3);
     // White on the brand fill fails, which is why on-brand is ink.
     expect(contrast(WHITE, value("--color-brand"))).toBeLessThan(3);
     // Placeholder and disabled text.

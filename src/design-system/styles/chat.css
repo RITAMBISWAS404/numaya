@@ -32,11 +32,13 @@
   animation: rise-in var(--motion-duration-base) var(--motion-ease-out);
 }
 
-/* Mine: brand pink with ink text (7.15:1; white on #F770E3 would be 2.51:1). */
+/* Mine: a soft brand tint (brand-subtle, the 30% mix) with ink text: clearly separate from their
+   grey bubbles and calm in long threads. Chosen over saturated pink, a paler tint and ink bubbles
+   from rendered comparisons. */
 .message--me .message__bubble {
   border-bottom-right-radius: var(--radius-xs);
-  background: var(--color-brand);
-  color: var(--color-on-brand);
+  background: var(--color-brand-subtle);
+  color: var(--color-text-primary);
 }
 
 /* Theirs: light grey, flat. */

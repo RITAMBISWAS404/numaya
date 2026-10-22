@@ -5,7 +5,7 @@ import {
   Fab,
   Field,
   IllustrationPlaceholder,
-  Marker,
+  Emphasis,
   ResultPanel,
   Screen,
   ScreenBody,
@@ -222,7 +222,7 @@ export function VerifyCode({
           <Sheet open={done} labelledBy="done-title">
             <IllustrationPlaceholder id="verified-success" ratio="5 / 3" width="200px" className="verify-art" />
             <ResultPanel
-              title={<span id="done-title">{intent === "signin" ? "You’re signed in" : <>You’re <Marker>verified</Marker></>}</span>}
+              title={<span id="done-title">{intent === "signin" ? "You’re signed in" : <>You’re <Emphasis>verified</Emphasis></>}</span>}
               footer={
                 <>
                   <p className="result__caption">This prototype ends here.</p>

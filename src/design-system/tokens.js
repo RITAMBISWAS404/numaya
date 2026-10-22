@@ -28,15 +28,6 @@ export const tokens = [
     "description": "30% mix: brand-tinted borders and image placeholders."
   },
   {
-    "id": "primitive.color.pink.300",
-    "name": "--p-color-pink-300",
-    "layer": "primitive",
-    "type": "color",
-    "value": "#fbbff2",
-    "resolved": "#fbbff2",
-    "description": "45% mix of #F770E3 with white: the heading marker behind ink text. Lighter than the brand, never a darker pink."
-  },
-  {
     "id": "primitive.color.pink.500",
     "name": "--p-color-pink-500",
     "layer": "primitive",
@@ -44,6 +35,15 @@ export const tokens = [
     "value": "#f770e3",
     "resolved": "#f770e3",
     "description": "Numaya brand pink. The single primary brand colour; exact value, never substitute or darken."
+  },
+  {
+    "id": "primitive.color.warm.100",
+    "name": "--p-color-warm-100",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#f3eeea",
+    "resolved": "#f3eeea",
+    "description": "Warm off-white for decorative ribbons only."
   },
   {
     "id": "primitive.color.neutral.0",
@@ -703,15 +703,6 @@ export const tokens = [
     "description": "Brand-tinted borders and image placeholders."
   },
   {
-    "id": "semantic.color.brand.marker",
-    "name": "--color-brand-marker",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.pink.300}",
-    "resolved": "#fbbff2",
-    "description": "Marker stroke behind one emphasised word in a hero headline (Marker). Text on it stays ink."
-  },
-  {
     "id": "semantic.color.on-brand",
     "name": "--color-on-brand",
     "layer": "semantic",
@@ -773,6 +764,15 @@ export const tokens = [
     "value": "{primitive.color.neutral.900}",
     "resolved": "#14171f",
     "description": "Text on brand.tint surfaces (16:1)."
+  },
+  {
+    "id": "semantic.color.text.accent",
+    "name": "--color-text-accent",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.pink.500}",
+    "resolved": "#f770e3",
+    "description": "Exact brand pink for one emphasised word in a display-size hero headline (Emphasis). 2.51:1 on white: a deliberate, display-only exception (large decorative emphasis of words that also read in context). Never for body text, labels, links or instructions."
   },
   {
     "id": "semantic.color.text.on-inverse",
@@ -917,6 +917,24 @@ export const tokens = [
     "value": "{primitive.color.pink.500}",
     "resolved": "#f770e3",
     "description": "Focus stroke of text fields, search, code cells and the composer: the exact brand pink, one 2px stroke plus the halo, no ink ring. The stroke is 2.51:1 on white, below the 3:1 non-text guide, so a focused field also turns from grey to white (a second, colour-independent cue). Buttons and other controls keep the ink ring."
+  },
+  {
+    "id": "semantic.color.decor.ribbon",
+    "name": "--color-decor-ribbon",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.warm.100}",
+    "resolved": "#f3eeea",
+    "description": "Broad decorative ribbon band (whitespace only, never behind content)."
+  },
+  {
+    "id": "semantic.color.decor.ribbon-tint",
+    "name": "--color-decor-ribbon-tint",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.pink.100}",
+    "resolved": "#feeefc",
+    "description": "The narrower light-pink touch that runs beside the ribbon band."
   },
   {
     "id": "semantic.color.overlay.scrim",

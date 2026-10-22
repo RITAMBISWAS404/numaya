@@ -53,9 +53,9 @@ try {
       const after = [...document.querySelectorAll(".welcome__title *")].some(
         (e) => !["none", "normal"].includes(getComputedStyle(e, "::after").content),
       );
-      return { color: el && getComputedStyle(el).color, marker: el && getComputedStyle(el).backgroundImage, after };
+      return { color: el && getComputedStyle(el).color, bg: el && getComputedStyle(el).backgroundImage, deco: el && getComputedStyle(el).textDecorationLine, after };
     });
-    check("headline emphasis is ink on a light brand-pink marker, never pink text", emphasis.color === "rgb(20, 23, 31)" && emphasis.marker.includes("rgb(251, 191, 242)"), `${emphasis.color} / ${emphasis.marker}`);
+    check("headline emphasis is the word itself in exact #F770E3 (no marker, underline or background)", emphasis.color === "rgb(247, 112, 227)" && emphasis.bg === "none" && emphasis.deco === "none", `${emphasis.color} / ${emphasis.bg} / ${emphasis.deco}`);
     check("headline has no decorative underline", !emphasis.after);
 
     const mark = await p.evaluate(() => getComputedStyle(document.querySelector(".welcome__lockup .wordmark rect[mask]")).fill);
@@ -224,18 +224,18 @@ try {
     await wait(600);
     const deco = await p.evaluate(() => {
       const ribbons = [...document.querySelectorAll(".ribbon")];
-      const marker = document.querySelector("#match .marker");
+      const marker = document.querySelector("#match .emphasis");
       return {
         where: ribbons.map((r) => r.closest(".fl-frame")?.id).sort().join(),
         hidden: ribbons.every((r) => r.getAttribute("aria-hidden") === "true" && getComputedStyle(r).pointerEvents === "none"),
         anim: ribbons.flatMap((r) => [...r.querySelectorAll("path")].map((x) => getComputedStyle(x).animationName)),
-        marker: marker && { text: marker.textContent, color: getComputedStyle(marker).color, anim: getComputedStyle(marker).animationName },
+        marker: marker && { text: marker.textContent, color: getComputedStyle(marker).color },
       };
     });
-    check("expressive: ribbons appear only on the verified intro and the match moment in the flows", deco.where === "intro,match", deco.where);
+    check("expressive: in the flows a ribbon appears only on the match moment (none at the verified badge)", deco.where === "match", deco.where);
     check("expressive: ribbons are aria-hidden and never take pointer input", deco.hidden);
-    check("expressive: reduced motion keeps ribbons and the marker static", deco.anim.every((a) => a === "none") && deco.marker?.anim === "none", `${deco.anim.join()} / ${deco.marker?.anim}`);
-    check("expressive: the match title marks one word in ink", deco.marker?.text === "match" && deco.marker.color === "rgb(20, 23, 31)", JSON.stringify(deco.marker));
+    check("expressive: reduced motion keeps ribbons static", deco.anim.every((a) => a === "none"), deco.anim.join());
+    check("expressive: the match title colours one word brand pink", deco.marker?.text === "match" && deco.marker.color === "rgb(247, 112, 227)", JSON.stringify(deco.marker));
     check("motion: no console errors with reduced motion", p.errors.length === 0, p.errors.join(" | "));
     await p.evaluate(() => localStorage.clear());
   }
@@ -275,6 +275,8 @@ try {
           badgeDisc: cs("#intro .result__badge", "::before").backgroundColor,
           badgeIcon: cs("#intro .result__badge").color,
           chipFg: cs("#interests .chip.is-selected").color,
+          chipTick: cs("#interests .chip.is-selected .chip__affordance").color,
+          chipIcons: [...document.querySelectorAll("#interests .chip")].every((c) => c.querySelector(".chip__icon[class*='-bold']")),
           slotFilled: cs("#photos .photo-slot .image-placeholder").backgroundColor,
           slotEmpty: cs("#photos .photo-slot--empty").backgroundColor,
           slotEmptyEdge: cs("#photos .photo-slot--empty").boxShadow,
@@ -295,7 +297,8 @@ try {
       });
       check("flows: like is an ink circle (Meetup primary sheen) with a white glyph", states.likeBg.includes(INK) && states.likeFg === "rgb(255, 255, 255)", `${states.likeBg.slice(0, 60)} / ${states.likeFg}`);
       check("flows: SuperSwipe is the single brand-pink action, with an ink glyph", states.superBg === PINK && states.superFg === INK, `${states.superBg} / ${states.superFg}`);
-      check("flows: selected chip is a light brand tint with a brand-pink ring and ink text", states.chipBg === "rgb(254, 238, 252)" && states.chipRing.includes(PINK) && states.chipFg === INK, `${states.chipBg} / ${states.chipFg}`);
+      check("flows: selected interest is an ink pill with white text and a brand-pink tick", states.chipBg === INK && states.chipRing === "none" && states.chipFg === "rgb(255, 255, 255)" && states.chipTick === PINK, `${states.chipBg} / ${states.chipFg} / ${states.chipTick}`);
+      check("flows: every interest chip leads with a filled Solar cue", states.chipIcons);
       check("flows: selecting a chip keeps its size (no reflow)", states.chipSizes[0] === states.chipSizes[1] && states.chipSizes[2] === states.chipSizes[3], states.chipSizes.join(" / "));
       check("flows: success badge puts an ink check on a white inset disc", states.badgeDisc === "rgb(255, 255, 255)" && states.badgeIcon === INK, `${states.badgeDisc} / ${states.badgeIcon}`);
       check("photos: empty slots (white, hairline) are distinct from filled photo placeholders (grey)", states.slotEmpty === "rgb(255, 255, 255)" && /inset/.test(states.slotEmptyEdge) && states.slotFilled !== states.slotEmpty, `${states.slotFilled} vs ${states.slotEmpty}`);
@@ -389,7 +392,7 @@ try {
         };
       });
       check("surfaces: tab roots, chat, match and settings share the page tint", roll.pages.every((c) => c === roll.page), roll.pages.join(" | "));
-      check("chat: outgoing bubbles are brand pink with ink text, incoming light grey (Bumble + Meetup)", roll.mine === PINK && roll.mineFg === INK && roll.theirs === "rgb(236, 239, 243)", `${roll.mine} / ${roll.mineFg} / ${roll.theirs}`);
+      check("chat: outgoing bubbles are a soft brand tint with ink text (not saturated pink), incoming light grey", roll.mine === "rgb(253, 212, 247)" && roll.mineFg === INK && roll.theirs === "rgb(236, 239, 243)", `${roll.mine} / ${roll.mineFg} / ${roll.theirs}`);
       check("selection: unselected chips are filled, not outlined", roll.chip === "none", roll.chip);
       check("chat: the last message sits above the composer", roll.lastVisible);
       const art = await p.evaluate(() => {

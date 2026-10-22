@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   Button,
   ChipGroup,
-  Marker,
+  Emphasis,
   Ribbon,
   CodeInput,
   Composer,
@@ -296,10 +296,10 @@ describe("illustration slots", () => {
 });
 
 describe("expressive details", () => {
-  it("Marker keeps its words as readable text; Ribbon is hidden from assistive tech", () => {
+  it("Emphasis keeps its words as readable text; Ribbon is hidden from assistive tech", () => {
     const { container } = render(
       <h1>
-        Fewer swipes. <Marker>Better</Marker> first dates.
+        Fewer swipes. <Emphasis>Better</Emphasis> first dates.
         <Ribbon variant="welcome" />
         <Ribbon variant="unknown" />
       </h1>,

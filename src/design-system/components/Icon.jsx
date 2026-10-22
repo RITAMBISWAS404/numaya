@@ -35,17 +35,25 @@ import { BackspaceIcon as B_BackspaceIcon } from "@solar-icons/react/bold/backsp
 import { BellIcon as B_BellIcon } from "@solar-icons/react/bold/bell";
 import { CameraIcon as B_CameraIcon } from "@solar-icons/react/bold/camera";
 import { ChatRoundIcon as B_ChatRoundIcon } from "@solar-icons/react/bold/chat-round";
+import { ChefHatIcon as B_ChefHatIcon } from "@solar-icons/react/bold/chef-hat";
 import { CloudCrossIcon as B_CloudCrossIcon } from "@solar-icons/react/bold/cloud-cross";
 import { CopyIcon as B_CopyIcon } from "@solar-icons/react/bold/copy";
 import { DangerTriangleIcon as B_DangerTriangleIcon } from "@solar-icons/react/bold/danger-triangle";
 import { FlagIcon as B_FlagIcon } from "@solar-icons/react/bold/flag";
 import { GalleryIcon as B_GalleryIcon } from "@solar-icons/react/bold/gallery";
+import { GamepadIcon as B_GamepadIcon } from "@solar-icons/react/bold/gamepad";
 import { HeartIcon as B_HeartIcon } from "@solar-icons/react/bold/heart";
+import { HikingIcon as B_HikingIcon } from "@solar-icons/react/bold/hiking";
 import { InfoCircleIcon as B_InfoCircleIcon } from "@solar-icons/react/bold/info-circle";
 import { LockKeyholeMinimalisticIcon as B_LockKeyholeMinimalisticIcon } from "@solar-icons/react/bold/lock-keyhole-minimalistic";
 import { MapPointIcon as B_MapPointIcon } from "@solar-icons/react/bold/map-point";
 import { MenuDotsIcon as B_MenuDotsIcon } from "@solar-icons/react/bold/menu-dots";
 import { MicrophoneIcon as B_MicrophoneIcon } from "@solar-icons/react/bold/microphone";
+import { MusicNoteIcon as B_MusicNoteIcon } from "@solar-icons/react/bold/music-note";
+import { PaletteIcon as B_PaletteIcon } from "@solar-icons/react/bold/palette";
+import { Pen2Icon as B_Pen2Icon } from "@solar-icons/react/bold/pen-2";
+import { PlaneIcon as B_PlaneIcon } from "@solar-icons/react/bold/plane";
+import { RunningIcon as B_RunningIcon } from "@solar-icons/react/bold/running";
 import { SettingsIcon as B_SettingsIcon } from "@solar-icons/react/bold/settings";
 import { ShieldCheckIcon as B_ShieldCheckIcon } from "@solar-icons/react/bold/shield-check";
 import { StarIcon as B_StarIcon } from "@solar-icons/react/bold/star";
@@ -53,6 +61,7 @@ import { StarsIcon as B_StarsIcon } from "@solar-icons/react/bold/stars";
 import { Tuning2Icon as B_Tuning2Icon } from "@solar-icons/react/bold/tuning-2";
 import { UserIcon as B_UserIcon } from "@solar-icons/react/bold/user";
 import { VerifiedCheckIcon as B_VerifiedCheckIcon } from "@solar-icons/react/bold/verified-check";
+import { WineglassIcon as B_WineglassIcon } from "@solar-icons/react/bold/wineglass";
 
 /**
  * Numaya icon wrapper over the Solar icon set (artwork by 480 Design, CC BY 4.0; see
@@ -131,14 +140,24 @@ const FILLED = {
   bell: B_BellIcon,
   sparkle: B_StarsIcon,
   cards: B_CopyIcon,
+  // Interest cues (filled only; Solar has no climbing or dice glyph, so hiking and a gamepad stand in).
+  wine: B_WineglassIcon,
+  music: B_MusicNoteIcon,
+  cooking: B_ChefHatIcon,
+  hiking: B_HikingIcon,
+  art: B_PaletteIcon,
+  running: B_RunningIcon,
+  games: B_GamepadIcon,
+  plane: B_PlaneIcon,
+  pen: B_Pen2Icon,
 };
 
 const STROKE = { regular: 1.5, bold: 2 };
 
-export const ICON_NAMES = Object.keys(LINEAR);
+export const ICON_NAMES = [...new Set([...Object.keys(LINEAR), ...Object.keys(FILLED)])];
 
 export function Icon({ name, size = 24, stroke, strokeWidth, weight, className, ...rest }) {
-  if (!LINEAR[name]) return null;
+  if (!LINEAR[name] && !FILLED[name]) return null;
   const resolved = weight ?? (FILLED[name] ? "fill" : stroke !== undefined && stroke >= 2 ? "bold" : "regular");
   const filled = resolved === "fill" && FILLED[name];
   const Glyph = filled || LINEAR[name];

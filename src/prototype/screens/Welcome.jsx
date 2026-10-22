@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Avatar, Button, Icon, Marker, Ribbon, Screen, Toast, Wordmark } from "../../design-system/index.js";
+import { Avatar, Button, Icon, Emphasis, Ribbon, Screen, Toast, Wordmark } from "../../design-system/index.js";
 import { cx } from "../../lib/cx.js";
 
 const PROMPTS = [
@@ -41,7 +41,7 @@ export function Welcome({ active, onCreate, onSignIn }) {
         <h1 id="welcome-title" className="welcome__title">
           Fewer swipes.
           <br />
-          <Marker className="welcome__emphasis">Better</Marker> first dates.
+          <Emphasis className="welcome__emphasis">Better</Emphasis> first dates.
         </h1>
         <p className="welcome__lede">
           Profiles built around conversation, so the right person knows what to say.

@@ -37,7 +37,7 @@ export function Chip({ kind = "toggle", selected = false, unavailable = false, i
         onToggle?.(!selected);
       }}
     >
-      {icon && <Icon name={icon} size={16} />}
+      {icon && <Icon name={icon} size={16} className="chip__icon" />}
       {children}
       <Icon name={selected ? "check" : "plus"} size={14} stroke={2.2} className="chip__affordance" />
     </button>
@@ -45,7 +45,7 @@ export function Chip({ kind = "toggle", selected = false, unavailable = false, i
 }
 
 /** Multi- or single-select chips with an optional maximum. */
-export function ChipGroup({ label, options, value, onChange, max, single = false }) {
+export function ChipGroup({ label, options, value, onChange, max, single = false, icons }) {
   const labelId = useId();
   const atMax = max != null && value.length >= max;
   const toggle = (opt, next) => {
@@ -68,6 +68,7 @@ export function ChipGroup({ label, options, value, onChange, max, single = false
         {options.map((opt) => (
           <Chip
             key={opt}
+            icon={icons?.[opt]}
             selected={value.includes(opt)}
             unavailable={!single && atMax}
             onToggle={(next) => toggle(opt, next)}

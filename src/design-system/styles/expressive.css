@@ -1,30 +1,19 @@
 /* ------------------------------------------------------------------ */
-/* Expressive details: heading marker and decorative ribbons          */
+/* Expressive details: heading emphasis and decorative ribbons        */
 /* ------------------------------------------------------------------ */
 
-/* Ink text over a light brand-pink marker stroke on the lower part of the word. */
-.marker {
-  padding: 0 0.08em;
-  margin: 0 -0.04em;
-  color: var(--color-text-primary);
+/* Headline emphasis: the letters in the exact brand pink, nothing else (display sizes only). */
+.emphasis {
+  color: var(--color-text-accent);
   font-style: inherit;
-  background: linear-gradient(var(--color-brand-marker), var(--color-brand-marker)) 0 90% / 100% 0.44em no-repeat;
-  border-radius: 0.12em;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-  animation: marker-draw 640ms var(--motion-ease-out) 420ms both;
 }
 
-@keyframes marker-draw {
-  from { background-size: 0% 0.44em; }
-}
-
-/* Ribbons fill their positioned parent, sit behind its content and never take input. */
+/* Ribbons sit in a strip of whitespace inside a positioned parent and never take input. */
 .ribbon {
   position: absolute;
-  inset: 0;
+  left: 0;
+  right: 0;
   width: 100%;
-  height: 100%;
   overflow: visible;
   pointer-events: none;
   fill: none;
@@ -32,23 +21,36 @@
 }
 
 .ribbon__band {
-  stroke: var(--color-brand-tint);
-  stroke-width: 30;
+  stroke: var(--color-decor-ribbon);
+  stroke-width: 34;
   stroke-dasharray: 1;
-  animation: ribbon-draw 1100ms var(--motion-ease-out) 120ms both;
+  animation: ribbon-draw 1200ms var(--motion-ease-out) 160ms both;
 }
 
-.ribbon__line {
-  stroke: var(--color-brand);
-  stroke-opacity: 0.35;
-  stroke-width: 1.5;
+.ribbon__tint {
+  stroke: var(--color-decor-ribbon-tint);
+  stroke-width: 12;
   stroke-dasharray: 1;
-  animation: ribbon-draw 1300ms var(--motion-ease-out) calc(260ms + var(--i, 0) * 120ms) both;
+  animation: ribbon-draw 1400ms var(--motion-ease-out) 320ms both;
 }
 
-/* On the brand-washed welcome background the band needs one step more tint to read. */
-.ribbon--welcome .ribbon__band {
-  stroke: var(--color-brand-subtle);
+/* Welcome: the strip below the prompt cards (the hero's bottom fifth). */
+.ribbon--welcome {
+  bottom: 0;
+  height: 22%;
+}
+
+/* Match: the bottom of the empty area under the copy; only where the screen is tall enough that
+   the strip stays clear of the text. */
+.ribbon--match {
+  bottom: 0;
+  height: 96px;
+}
+
+@media (max-height: 759px) {
+  .ribbon--match {
+    display: none;
+  }
 }
 
 @keyframes ribbon-draw {
@@ -56,9 +58,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marker,
   .ribbon__band,
-  .ribbon__line {
+  .ribbon__tint {
     animation: none;
   }
 }

@@ -1,6 +1,6 @@
 import { cx } from "../../lib/cx.js";
 import { Button } from "./Button.jsx";
-import { Marker, Ribbon } from "./Expressive.jsx";
+import { Emphasis } from "./Expressive.jsx";
 import { Icon } from "./Icon.jsx";
 
 /**
@@ -37,11 +37,10 @@ export function PermissionPrimer({ icon, title, children, allowLabel = "Allow", 
  * Two tilted photos with a centre brand mark, title and supporting line (Bumble "What a match!").
  * Photo areas are neutral placeholders until profile photography is supplied. Composer sits below.
  */
-export function MatchCelebration({ names, title = <>It’s a <Marker>match</Marker></>, children }) {
+export function MatchCelebration({ names, title = <>It’s a <Emphasis>match</Emphasis></>, children }) {
   return (
     <div className="match">
       <div className="match__photos" role="img" aria-label={`Photos of ${names.join(" and ")} (placeholders)`}>
-        <Ribbon variant="match" />
         <span className={cx("match__photo", "match__photo--left")}>
           <Icon name="image" size={28} />
         </span>

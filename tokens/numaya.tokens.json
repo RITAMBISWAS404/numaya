@@ -8,8 +8,10 @@
         "50":  { "$type": "color", "$value": "#fff6fd", "$description": "6% mix of #F770E3 with white: brand-washed screen background." },
         "100": { "$type": "color", "$value": "#feeefc", "$description": "12% mix: selected and highlighted surfaces." },
         "200": { "$type": "color", "$value": "#fdd4f7", "$description": "30% mix: brand-tinted borders and image placeholders." },
-        "300": { "$type": "color", "$value": "#fbbff2", "$description": "45% mix of #F770E3 with white: the heading marker behind ink text. Lighter than the brand, never a darker pink." },
         "500": { "$type": "color", "$value": "#f770e3", "$description": "Numaya brand pink. The single primary brand colour; exact value, never substitute or darken." }
+      },
+      "warm": {
+        "100": { "$type": "color", "$value": "#f3eeea", "$description": "Warm off-white for decorative ribbons only." }
       },
       "neutral": {
         "0":   { "$type": "color", "$value": "#ffffff" },
@@ -103,8 +105,7 @@
       "brand": {
         "default": { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "Brand pink #F770E3: marks, progress, selected, verified, like/send fills, switches. Foreground on it must be color.on-brand (ink). White on it is only 2.51:1." },
         "tint":    { "$type": "color", "$value": "{primitive.color.pink.100}", "$description": "Light brand surface for selected and highlighted states; dark text allowed." },
-        "subtle":  { "$type": "color", "$value": "{primitive.color.pink.200}", "$description": "Brand-tinted borders and image placeholders." },
-        "marker":  { "$type": "color", "$value": "{primitive.color.pink.300}", "$description": "Marker stroke behind one emphasised word in a hero headline (Marker). Text on it stays ink." }
+        "subtle":  { "$type": "color", "$value": "{primitive.color.pink.200}", "$description": "Brand-tinted borders and image placeholders." }
       },
       "on-brand": { "$type": "color", "$value": "{primitive.color.neutral.900}", "$description": "Foreground (text and glyphs) on any solid brand-pink fill. Always dark ink: 7.15:1 on #F770E3." },
       "text": {
@@ -114,6 +115,7 @@
         "subtle":     { "$type": "color", "$value": "{primitive.color.neutral.400}", "$description": "Placeholders and disabled labels only (2.6:1, documented exception)." },
         "brand":      { "$type": "color", "$value": "{primitive.color.neutral.900}", "$description": "Brand-context text (links, labels, eyebrows) on light surfaces. Resolves to ink because pink text on white is only 2.51:1; links stay underlined." },
         "brand-deep": { "$type": "color", "$value": "{primitive.color.neutral.900}", "$description": "Text on brand.tint surfaces (16:1)." },
+        "accent":     { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "Exact brand pink for one emphasised word in a display-size hero headline (Emphasis). 2.51:1 on white: a deliberate, display-only exception (large decorative emphasis of words that also read in context). Never for body text, labels, links or instructions." },
         "on-inverse": { "$type": "color", "$value": "{primitive.color.neutral.0}" }
       },
       "surface": {
@@ -136,6 +138,10 @@
         "ring": { "$type": "color", "$value": "{primitive.color.neutral.900}", "$description": "Keyboard focus indicator. Ink (17:1) because pink is only 2.51:1 against white, below the 3:1 non-text minimum; the pink halo carries the brand." },
         "halo": { "$type": "color", "$value": "{primitive.color.alpha.pink-32}", "$description": "Soft pink ring around a focused control (decorative; the ring token carries accessibility)." },
         "field": { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "Focus stroke of text fields, search, code cells and the composer: the exact brand pink, one 2px stroke plus the halo, no ink ring. The stroke is 2.51:1 on white, below the 3:1 non-text guide, so a focused field also turns from grey to white (a second, colour-independent cue). Buttons and other controls keep the ink ring." }
+      },
+      "decor": {
+        "ribbon":      { "$type": "color", "$value": "{primitive.color.warm.100}", "$description": "Broad decorative ribbon band (whitespace only, never behind content)." },
+        "ribbon-tint": { "$type": "color", "$value": "{primitive.color.pink.100}", "$description": "The narrower light-pink touch that runs beside the ribbon band." }
       },
       "overlay": {
         "scrim": { "$type": "color", "$value": "{primitive.color.alpha.ink-34}" },
