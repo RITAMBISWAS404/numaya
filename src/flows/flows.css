@@ -47,6 +47,17 @@ body {
   color: var(--color-text-brand-deep);
 }
 
+.fl-credits {
+  padding: 0 var(--space-6) var(--space-8);
+  color: var(--color-text-muted);
+  font-size: var(--type-caption-size);
+  text-align: center;
+}
+
+.fl-credits a {
+  color: inherit;
+}
+
 .fl-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 393px), 393px));

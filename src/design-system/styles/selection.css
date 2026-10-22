@@ -460,10 +460,11 @@ button.chip:active {
   border-radius: 50%;
 }
 
-/* Checked: exact brand fill with an ink glyph (state also shown by the glyph). */
+/* Checked: exact brand fill with an ink glyph (state also shown by the glyph). The tick is Solar's
+   check path, inlined so the native input needs no extra markup. */
 .choice__input--checkbox:checked {
   background: var(--color-brand)
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314171f' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4L18 8.5'/%3E%3C/svg%3E")
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314171f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E")
     center / 18px no-repeat;
   box-shadow: none;
 }

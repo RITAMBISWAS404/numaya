@@ -68,7 +68,7 @@ describe("fields", () => {
   it("PhoneField shows the formatted national number and the country", () => {
     render(<PhoneField country={DEFAULT_COUNTRY} digits="4155550132" onDigitsChange={() => {}} onCountryPress={() => {}} />);
     expect(screen.getByLabelText("Phone number")).toHaveValue("(415) 555-0132");
-    expect(screen.getByRole("button", { name: /Country: United States \+1/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Country: United States, US \+1/ })).toBeInTheDocument();
   });
 
   it("CodeInput strips non-digits and caps the length", async () => {
@@ -294,7 +294,7 @@ describe("illustration slots", () => {
 });
 
 describe("icons and navigation", () => {
-  it("Icon renders decorative Phosphor glyphs and ignores unknown names", () => {
+  it("Icon renders decorative Solar glyphs, matched filled variants, and ignores unknown names", () => {
     const { container } = render(
       <>
         <Icon name="heart" weight="fill" />
@@ -305,6 +305,10 @@ describe("icons and navigation", () => {
     const svgs = container.querySelectorAll("svg");
     expect(svgs).toHaveLength(2);
     svgs.forEach((s) => expect(s).toHaveAttribute("aria-hidden", "true"));
+    svgs.forEach((s) => expect(s.getAttribute("class")).toMatch(/\bsolar\b/));
+    expect(svgs[0].getAttribute("class")).toContain("solar-heart-bold");
+    expect(svgs[1].getAttribute("class")).toContain("solar-check-linear");
+    expect(svgs[1].style.strokeWidth).toBe("2");
   });
 
   it("TabBar marks the current tab, reports changes and labels badges", async () => {

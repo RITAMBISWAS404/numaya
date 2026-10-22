@@ -24,10 +24,10 @@ export const PhoneField = forwardRef(function PhoneField(
           className="input input--select"
           aria-haspopup="dialog"
           aria-expanded={countryExpanded}
-          aria-label={`Country: ${country.name} ${country.dial}`}
+          aria-label={`Country: ${country.name}, ${country.iso} ${country.dial}`}
           onClick={onCountryPress}
         >
-          <span className="input__code">{country.iso}</span>
+          <span className="input__code">{country.iso}</span>{" "}
           <span>{country.dial}</span>
           <Icon name="chevronDown" size={18} stroke={1.8} className="input__chevron" />
         </button>

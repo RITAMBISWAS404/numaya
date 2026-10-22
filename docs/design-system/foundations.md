@@ -88,10 +88,14 @@ collapse (1ms / 120ms / 160ms) and movement becomes fades. Spinners keep rotatin
 
 ## Icons
 
-[Phosphor Icons](https://phosphoricons.com) via `@phosphor-icons/react`, imported individually through
-the shared `Icon` wrapper (no other icon family, no emoji icons). Regular weight for inactive and
-secondary icons, Bold inside filled controls and small sizes, Fill selectively for active states
-(active tab, liked heart). Sizes 16 / 20 / 24 (tab bar 24). Icon-only controls always have an
+[Solar](https://www.figma.com/community/file/1166831539721848736) by 480 Design (CC BY 4.0) via
+`@solar-icons/react` (MIT, pinned), imported per icon through the shared `Icon` wrapper (no other
+icon family, no emoji icons; credits in [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)).
+Weights keep their semantic names: `regular` = Solar Linear at a 1.5 stroke (inactive, navigation,
+supporting icons); `bold` = Linear at a 2 stroke (inside filled controls, small sizes); `fill` = Solar
+Bold, the filled drawing of the same symbol, for active states (current tab, liked heart). The
+ellipsis ("more") always uses Solar's solid dots; the Pass X uses a 2.5 stroke to hold its own in
+the ink circle. Duotone and Broken styles are not used. Sizes 16 / 20 / 24 (tab bar 24). Icon-only controls always have an
 accessible label; the icons themselves are `aria-hidden`.
 
 ## Navigation

@@ -375,7 +375,7 @@ export function ActionBar({ onPass, onSuper, onLike, superDisabled = false }) {
   return (
     <div className="action-bar">
       <button type="button" className="action-bar__btn action-bar__btn--pass" aria-label="Pass" onClick={onPass}>
-        <Icon name="close" size={26} weight="bold" />
+        <Icon name="close" size={26} strokeWidth={2.5} />
       </button>
       <button type="button" className="action-bar__btn action-bar__btn--super" aria-label="Super like" onClick={onSuper} disabled={superDisabled}>
         <Icon name="star" size={26} weight="fill" />

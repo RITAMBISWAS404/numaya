@@ -172,6 +172,10 @@
   line-height: 19px;
 }
 
+.brief__credit a {
+  color: inherit;
+}
+
 .brief__refs {
   display: grid;
   gap: 6px;

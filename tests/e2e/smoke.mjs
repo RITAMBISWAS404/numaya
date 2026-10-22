@@ -294,7 +294,9 @@ try {
           actionsAfterSections: (() => { const secs = document.querySelectorAll("#discovery .fl-pf__section"); const bar = document.querySelector("#discovery .fl-pf > .action-bar"); return secs.length >= 2 && [...secs].every((s) => s.compareDocumentPosition(bar) & Node.DOCUMENT_POSITION_FOLLOWING); })(),
           tabItemMin: Math.min(...items.map((r) => Math.min(r.width, r.height))),
           tabCurrent: tab.querySelectorAll(".tab-bar__item[aria-current='page']").length,
-          icons: document.querySelectorAll("#discovery svg.ph, #discovery [class*='phosphor'], #discovery svg[viewBox='0 0 256 256']").length,
+          icons: document.querySelectorAll("#discovery svg.solar").length,
+          foreignIcons: document.querySelectorAll("svg.ph, [class*='phosphor'], svg[viewBox='0 0 256 256']").length,
+          activeTabFilled: !!document.querySelector("#discovery .tab-bar__item.is-current svg[class*='-bold']") && !document.querySelector("#discovery .tab-bar__item:not(.is-current) svg[class*='-bold']"),
           legacyStrokeIcons: document.querySelectorAll("#discovery svg[stroke-linecap='round'][viewBox='0 0 24 24']").length,
         };
       });
@@ -359,7 +361,8 @@ try {
       check("layout: profile photo strip keeps 4 columns; inbox rows are plain, not boxed (Bumble)", roll.stripCols === 4 && roll.inboxRows > 0 && !roll.inboxBoxed, `${roll.stripCols} cols / ${roll.inboxRows} rows / boxed ${roll.inboxBoxed}`);
       check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);
       check("navigation: exactly one current tab", geo.tabCurrent === 1);
-      check("icons: Phosphor glyphs render and no legacy stroke icons remain", geo.icons > 0 && geo.legacyStrokeIcons === 0, `${geo.icons} phosphor / ${geo.legacyStrokeIcons} legacy`);
+      check("icons: Solar glyphs render and no other icon family or legacy stroke icons remain", geo.icons > 0 && geo.foreignIcons === 0 && geo.legacyStrokeIcons === 0, `${geo.icons} solar / ${geo.foreignIcons} other / ${geo.legacyStrokeIcons} legacy`);
+      check("icons: the current tab uses the filled Solar variant of its own symbol, other tabs stay linear", geo.activeTabFilled);
 
       await f("basics").getByLabel("First name").focus();
       await wait(500); // let the focus-ring transition finish before reading computed styles

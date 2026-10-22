@@ -303,7 +303,6 @@
 .banner__body {
   font-size: var(--type-caption-size);
   line-height: var(--type-caption-line);
-  opacity: 0.92;
 }
 
 .banner__action {
