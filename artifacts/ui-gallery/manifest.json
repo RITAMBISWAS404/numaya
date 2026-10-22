@@ -615,7 +615,7 @@
       "state": "initial",
       "viewport": {
         "width": 393,
-        "height": 998,
+        "height": 1030,
         "deviceScaleFactor": 2
       },
       "capture": "full-page",
@@ -658,7 +658,7 @@
       "state": "initial",
       "viewport": {
         "width": 393,
-        "height": 1375,
+        "height": 1409,
         "deviceScaleFactor": 2
       },
       "capture": "full-page",
@@ -714,7 +714,7 @@
       "state": "reached by interaction",
       "viewport": {
         "width": 393,
-        "height": 1912,
+        "height": 1914,
         "deviceScaleFactor": 2
       },
       "capture": "full-page",
@@ -784,7 +784,7 @@
       "state": "initial",
       "viewport": {
         "width": 393,
-        "height": 1166,
+        "height": 1222,
         "deviceScaleFactor": 2
       },
       "capture": "full-page",
