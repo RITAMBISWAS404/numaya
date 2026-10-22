@@ -479,7 +479,7 @@
 }
 
 .pill.is-closing {
-  animation: pill-out 200ms ease-in both;
+  animation: pill-out var(--motion-duration-base) var(--motion-ease-in-out) both;
 }
 
 @keyframes pill-in {
@@ -544,10 +544,10 @@
 }
 
 .sheet.is-closing .sheet__scrim {
-  animation: fade-out 260ms ease both;
+  animation: fade-out var(--motion-duration-base) var(--motion-ease-in-out) both;
 }
 .sheet.is-closing .sheet__panel {
-  animation: sheet-out 280ms var(--motion-ease-in-out) both;
+  animation: sheet-out var(--motion-duration-base) var(--motion-ease-in-out) both;
 }
 
 @keyframes sheet-in {

@@ -188,6 +188,27 @@
   padding: var(--space-2) 0;
 }
 
+/* Press feedback for inbox rows and new-match avatars. */
+.conversation__hit,
+.match-queue__item {
+  border-radius: var(--radius-md);
+  transition: background-color var(--motion-duration-fast), transform var(--motion-duration-fast) var(--motion-ease-out);
+}
+
+.conversation__hit {
+  margin-inline: calc(-1 * var(--space-2));
+  padding-inline: var(--space-2);
+  width: calc(100% + 2 * var(--space-2));
+}
+
+.conversation__hit:active {
+  background: var(--color-surface-soft);
+}
+
+.match-queue__item:active {
+  transform: scale(0.96);
+}
+
 .conversation__move {
   flex: none;
   display: inline-flex;

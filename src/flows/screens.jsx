@@ -54,11 +54,11 @@ const TAB_TARGET = { discover: "discovery", chats: "chats", profile: "profile" }
 const ageOf = (year) => (year.length === 4 ? new Date().getFullYear() - Number(year) : null);
 
 /** Shared screen scaffold inside a preview frame. */
-function Frame({ top, footer, tab, go, children, tone, kind, onBodyScroll }) {
+function Frame({ top, footer, tab, go, children, tone, kind, onBodyScroll, bodyRef }) {
   return (
     <div className={`fl-screen${tone ? ` fl-screen--${tone}` : ""}${kind ? ` fl-screen--${kind}` : ""}`}>
       {top}
-      <div className="fl-screen__body" onScroll={onBodyScroll}>
+      <div className="fl-screen__body" onScroll={onBodyScroll} ref={bodyRef}>
         {children}
       </div>
       {footer && <div className="fl-screen__footer">{footer}</div>}
@@ -277,6 +277,7 @@ export function Discovery({ go }) {
   const [state, dispatch] = useStore();
   const [toast, flash] = useFlash();
   const [progress, setProgress] = useState(0);
+  const bodyRef = useRef(null);
   const queue = discoveryQueue(state);
   const hidden = hiddenByFilters(state);
   const id = queue[0];
@@ -293,6 +294,11 @@ export function Discovery({ go }) {
   };
   const { dx, handlers } = useSwipe(decide);
   const snoozed = state.prefs.snooze;
+  // Pass and Like sit at the end of the profile: the next person starts at their photo, not mid-scroll.
+  useEffect(() => {
+    bodyRef.current?.scrollTo({ top: 0 });
+    setProgress(0);
+  }, [id]);
   const intent = dx >= SWIPE_THRESHOLD / 2 ? "like" : dx <= -SWIPE_THRESHOLD / 2 ? "pass" : null;
   const onScroll = (e) => {
     const el = e.currentTarget;
@@ -311,6 +317,7 @@ export function Discovery({ go }) {
       tab="discover"
       go={go}
       onBodyScroll={onScroll}
+      bodyRef={bodyRef}
     >
       {snoozed ? (
         <div className="fl-center fl-fill">

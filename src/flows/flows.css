@@ -647,3 +647,35 @@ body {
   flex-wrap: wrap;
   gap: 6px;
 }
+
+/* Press feedback for screen-level pressables. */
+.fl-edit-card,
+.fl-sheet-note,
+.fl-photo-strip__empty {
+  transition: background-color var(--motion-duration-fast), transform var(--motion-duration-fast) var(--motion-ease-out);
+}
+
+.fl-edit-card:active,
+.fl-sheet-note:active {
+  background: var(--color-surface-sunken);
+}
+
+.fl-photo-strip__empty:active {
+  transform: scale(0.97);
+}
+
+/* A new profile arrives with a short rise after Like, Pass or SuperSwipe; fades only under
+   reduced motion (durations also collapse via the motion tokens). */
+.fl-pf {
+  animation: fl-pf-in var(--motion-duration-slow) var(--motion-ease-out) both;
+}
+
+@keyframes fl-pf-in {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fl-pf {
+    animation-name: fade-in;
+  }
+}

@@ -57,6 +57,16 @@ describe("geometry rules", () => {
     }
   });
 
+  it("every pressable control has press feedback", () => {
+    for (const sel of [".btn", ".nav-button", ".fab", "button.chip", ".tab-bar__item", ".action-bar__btn", ".composer__send", ".option-card", "button.list-row__hit", ".conversation__hit", ".match-queue__item", ".action-sheet__item", ".country-row", ".photo-slot--empty", ".fl-edit-card", ".fl-photo-strip__empty"]) {
+      expect(css, sel).toMatch(new RegExp(`${sel.replace(/\./g, "\\.")}(:[a-z-]+\\([^)]*\\))*:active`));
+    }
+  });
+
+  it("closing animations run on the motion tokens, so reduced motion shortens them", () => {
+    for (const m of css.matchAll(/animation:\s*(sheet-out|fade-out|pill-out)[^;]*;/g)) expect(m[0]).toMatch(/var\(--motion-duration-/);
+  });
+
   it("chips are pills, as in the reference", () => {
     expect(block(".chip")).toMatch(/radius-pill/);
     expect(block(".btn")).toMatch(/radius-pill/);

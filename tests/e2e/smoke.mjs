@@ -166,6 +166,43 @@ try {
   }
 
   /* ---------------------------------------------------------------- */
+  /* Motion: reduced-motion fallbacks and keyboard activation           */
+  /* ---------------------------------------------------------------- */
+  {
+    const p = await page({ width: 1440, height: 900 }, { reducedMotion: "reduce" });
+    await p.goto(`${base}flows.html`);
+    await wait(1200);
+    const rm = await p.evaluate(() => {
+      const cs = (sel) => getComputedStyle(document.querySelector(sel));
+      const secs = (v) => Math.max(...v.split(",").map((x) => parseFloat(x) * (x.includes("ms") ? 0.001 : 1)));
+      return {
+        profile: cs("#discovery .fl-pf").animationName,
+        chip: cs("#interests .chip.is-selected").animationName,
+        profileDur: secs(cs("#discovery .fl-pf").animationDuration),
+        btnDur: secs(cs(".btn").transitionDuration),
+      };
+    });
+    check("motion: reduced motion turns entrances into fades and drops the chip pop", rm.profile === "fade-in" && rm.chip === "none", `${rm.profile} / ${rm.chip}`);
+    check("motion: reduced motion collapses transition and entrance durations", rm.profileDur <= 0.12 && rm.btnDur <= 0.12, `${rm.profileDur}s / ${rm.btnDur}s`);
+    // Keyboard: Space toggles an interest chip; Enter on Like decides.
+    const chip = p.locator("#interests .chip", { hasText: "Climbing" });
+    await chip.focus();
+    await p.keyboard.press("Space");
+    await wait(200);
+    check("keyboard: Space toggles an interest chip", (await chip.getAttribute("aria-pressed")) === "true");
+    await p.keyboard.press("Space");
+    await wait(200);
+    const like = p.locator("#discovery").getByRole("button", { name: "Like", exact: true });
+    await like.focus();
+    const focusVisible = await p.evaluate(() => getComputedStyle(document.activeElement).outlineStyle !== "none");
+    await p.keyboard.press("Enter");
+    await wait(800);
+    check("keyboard: Like has a visible focus ring and Enter opens the match", focusVisible && (await p.locator("#match").innerText()).includes("You and Maya liked each other"));
+    check("motion: no console errors with reduced motion", p.errors.length === 0, p.errors.join(" | "));
+    await p.evaluate(() => localStorage.clear());
+  }
+
+  /* ---------------------------------------------------------------- */
   /* Product flow previews                                             */
   /* ---------------------------------------------------------------- */
   for (const [name, vp] of [
@@ -387,6 +424,10 @@ try {
       await wait(500);
       const after = await textOf("discovery");
       check("flows: swiping left passes to the next profile", before.includes("Sam, 31") && after.includes("Noor, 28"));
+      await f("discovery").getByRole("button", { name: "Pass", exact: true }).click();
+      await wait(500);
+      const top = await p.evaluate(() => document.querySelector("#discovery .fl-screen__body").scrollTop);
+      check("discover: after Pass the next profile starts at its photo, not mid-scroll", top === 0, `scrollTop ${top}`);
 
       // Filters: narrowing distance empties Discover; the empty state widens it again.
       const dist = f("settings").getByLabel("Distance");

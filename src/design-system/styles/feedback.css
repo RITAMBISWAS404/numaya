@@ -123,6 +123,10 @@
   background: var(--color-surface-soft);
 }
 
+.action-sheet__item:active {
+  background: var(--color-surface-sunken);
+}
+
 .action-sheet__item.is-destructive {
   color: var(--color-danger);
 }
@@ -160,7 +164,7 @@
 
 .dialog.is-closing .dialog__scrim,
 .dialog.is-closing .dialog__panel {
-  animation: fade-out 180ms ease both;
+  animation: fade-out var(--motion-duration-fast) var(--motion-ease-in-out) both;
 }
 
 @keyframes dialog-in {
