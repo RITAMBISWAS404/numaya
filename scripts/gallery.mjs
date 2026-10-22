@@ -49,7 +49,7 @@ const LONG_THREAD = {
 const SHOTS = [
   // 01 · Onboarding
   { group: 1, slug: "welcome", title: "Welcome", app: "proto" },
-  { group: 1, slug: "phone-entry", title: "Phone number (empty)", app: "proto", setup: (p) => p.getByRole("button", { name: "Create an account" }).click() },
+  { group: 1, slug: "phone-entry", title: "Phone number (empty, field focused)", app: "proto", setup: (p) => p.getByRole("button", { name: "Create an account" }).click() },
   {
     group: 1, slug: "country-selector", title: "Country selector sheet", app: "proto",
     setup: async (p) => { await p.getByRole("button", { name: "Create an account" }).click(); await wait(900); await p.getByRole("button", { name: /^Country:/ }).click(); },
@@ -62,10 +62,18 @@ const SHOTS = [
     group: 1, slug: "phone-entry-complete", title: "Phone number (complete, Send code enabled)", app: "proto",
     setup: async (p) => { await p.getByRole("button", { name: "Create an account" }).click(); await wait(900); await p.locator("#phone-number").fill("4155550132"); },
   },
-  { group: 1, slug: "verify-code", title: "Verify code with the text-message banner", app: "proto", setup: (p) => toVerify(p) },
+  {
+    group: 1, slug: "verify-code-sms-banner", title: "Verify code: simulated text-message banner (autofill)", app: "proto", setup: (p) => toVerify(p),
+    notes: "The simulated iOS banner is part of the prototype's autofill demo; the other code states are captured after it hides.",
+  },
+  { group: 1, slug: "verify-code-focused", title: "Verify code: first cell focused", app: "proto", setup: async (p) => { await toVerify(p); await bannerGone(p); } },
+  {
+    group: 1, slug: "verify-code-typing", title: "Verify code: three digits entered", app: "proto", notes: "298 typed.",
+    setup: async (p) => { await toVerify(p); await bannerGone(p); await p.locator(".code__input").fill("298"); },
+  },
   {
     group: 1, slug: "verify-code-error", title: "Verify code: wrong code", notes: "Wrong code 111111 typed.", app: "proto",
-    setup: async (p) => { await toVerify(p); await p.locator(".code__input").fill("111111"); await wait(2600); },
+    setup: async (p) => { await toVerify(p); await bannerGone(p); await p.locator(".code__input").fill("111111"); await wait(2600); },
   },
   {
     group: 1, slug: "verify-success", title: "Verified success sheet", notes: "Code from the simulated text message typed in; the demo code is fixed for captures.", app: "proto",
@@ -79,6 +87,7 @@ const SHOTS = [
   },
   { group: 1, slug: "verified-intro", title: "You’re verified → profile setup", screen: "intro" },
   { group: 1, slug: "basics", title: "The basics", screen: "basics" },
+  { group: 1, slug: "basics-name-focused", title: "The basics: first-name field focused", screen: "basics", setup: (p) => p.getByLabel("First name").focus() },
   { group: 1, slug: "basics-underage-error", title: "The basics: under-18 error", notes: "Birth year 2012 typed.", screen: "basics", setup: (p) => p.getByLabel("Year you were born").fill("2012") },
   { group: 1, slug: "interests-prompt", title: "Interests and prompt", screen: "interests" },
   {
@@ -124,12 +133,14 @@ const SHOTS = [
   { group: 4, slug: "edit-preview", title: "Edit profile: Preview", screen: "edit", setup: (p) => p.getByRole("tab", { name: "Preview" }).click() },
   { group: 4, slug: "edit-preview", title: "Edit profile: Preview (full page)", screen: "edit", full: true, setup: (p) => p.getByRole("tab", { name: "Preview" }).click() },
   { group: 4, slug: "prompt-editor", title: "Edit prompt", screen: "prompt" },
+  { group: 4, slug: "prompt-editor-focused", title: "Edit prompt: answer field focused", screen: "prompt", setup: (p) => p.getByLabel("Your answer").focus() },
   {
     group: 4, slug: "prompt-editor-changed", title: "Edit prompt: new question and answer, ready to save", screen: "prompt",
     setup: async (p) => { await p.getByText("My Sunday ritual").click(); await p.getByLabel("Your answer").fill("Farmers market, then a very long lunch."); },
   },
   { group: 4, slug: "settings", title: "Settings", screen: "settings" },
   { group: 4, slug: "settings", title: "Settings (full page)", screen: "settings", full: true },
+  { group: 4, slug: "settings-snooze-on", title: "Settings: Snooze on", screen: "settings", state: session({ prefs: { snooze: true } }), notes: "Seeded with Snooze on." },
   { group: 4, slug: "settings-delete-sheet", title: "Delete account sheet", screen: "settings", setup: (p) => p.getByRole("button", { name: "Delete account" }).click() },
 
   // 05 · Desktop context
@@ -153,6 +164,12 @@ async function toVerify(p) {
   await p.locator("#phone-number").fill("4155550132");
   await p.getByRole("button", { name: "Send code" }).click();
   await wait(3200);
+}
+
+/** The simulated text-message banner hides 6 s after it appears. */
+async function bannerGone(p) {
+  await p.locator(".notification").waitFor({ state: "detached", timeout: 12000 });
+  await wait(300);
 }
 
 async function openMenu(p, action) {
