@@ -480,24 +480,28 @@ button.list-row__hit:hover {
   aspect-ratio: 3 / 4;
 }
 
+/* Photo slots (Bumble grid, Meetup photo treatment): filled slots are grey photo placeholders,
+   empty slots are white with a hairline and a centred +, so the two never look alike. */
 .photo-slot .image-placeholder {
   height: 100%;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-photo);
+  color: var(--color-text-secondary);
 }
 
 .photo-slot--empty {
   display: grid;
   place-items: center;
   width: 100%;
-  border-radius: var(--radius-md);
-  background: var(--color-surface-soft);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-strong);
   color: var(--color-text-primary);
   transition: background-color var(--motion-duration-fast), color var(--motion-duration-fast);
 }
 
 .photo-slot--empty:hover {
-  background: var(--color-brand-tint);
-  color: var(--color-text-brand);
+  background: var(--color-surface-soft);
 }
 
 .photo-slot__index {
@@ -505,7 +509,7 @@ button.list-row__hit:hover {
   left: 8px;
   bottom: 8px;
   padding: 2px 8px;
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-pill);
   background: var(--color-surface);
   color: var(--color-text-primary);
   font-size: 11px;

@@ -212,14 +212,15 @@ button.chip:active {
   color: var(--color-text-muted);
 }
 
+/* Selected (Meetup filter pills): solid accent fill with ink text (7.15:1). */
 .chip.is-selected {
-  background: var(--color-brand-tint);
-  box-shadow: inset 0 0 0 var(--border-selected) var(--color-border-brand);
-  color: var(--color-text-brand-deep);
+  background: var(--color-brand);
+  box-shadow: none;
+  color: var(--color-on-brand);
 }
 
 .chip.is-selected .chip__affordance {
-  color: var(--color-text-brand);
+  color: var(--color-on-brand);
 }
 
 .chip.is-unavailable {
@@ -347,9 +348,10 @@ button.chip:active {
   transition: transform var(--motion-duration-base) var(--motion-ease-out);
 }
 
-/* On: exact brand pink; state is also carried by the knob position. */
+/* On: ink, as in the Meetup settings references (S1, S2); state is also carried by the knob
+   position. Pink stays for selection and actions. */
 .switch:checked {
-  background: var(--color-brand);
+  background: var(--color-surface-inverse);
   box-shadow: none;
 }
 

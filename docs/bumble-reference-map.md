@@ -79,6 +79,21 @@ sheet's "Report instead" is the grey card itself (it opens the existing report f
 **Gaps:** no reference for the ended / blocked conversation result or the empty match screen; both
 keep Numaya's states with the nearest pattern (centred result, reserved illustration + black pill CTA).
 
+## Pass 4 (profile, settings, onboarding)
+
+Implemented from the references already mapped above (profile tab `d54f9b27`, edit profile
+`066ebe0f` / `e2ceec9a`, photo grid `41327fa1`, settings `b99220ec`, onboarding P1–P3 and 1–4):
+
+- Profile: avatar with completion ring and a "%" pill, name and an Edit profile pill; Photos,
+  Prompts and Interests as titled sections with a grey helper line and tappable content + chevron.
+- Photo grid: filled slots are grey photo placeholders; empty slots are white with a hairline and +.
+- Settings: grouped rows with footnotes; account deletion confirms in a bottom sheet, like Unmatch.
+- Onboarding keeps its flow; intro moves to the white page; prompt labels are sentence case.
+
+**Deviations:** Bumble's premium sections (plans, Spotlight, SuperSwipe packs), bio and "About you"
+fields are not added (not Numaya features). **Gap:** no delete-account screenshot; it reuses the
+unmatch sheet pattern.
+
 ## Imagery
 
 Bumble profile photos are not reused. External image hosts are blocked by this environment's network

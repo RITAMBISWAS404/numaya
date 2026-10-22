@@ -11,7 +11,6 @@ import {
   Composer,
   ConsequenceList,
   ConversationRow,
-  Dialog,
   EmptyState,
   Fab,
   ListGroup,
@@ -82,7 +81,7 @@ function useFlash() {
 export function SetupIntro({ go }) {
   return (
     <Frame
-      tone="brand"
+      tone="page"
       footer={
         <div className="fl-stack fl-stack--full">
           <Button onClick={() => go("basics")}>Build my profile</Button>
@@ -671,67 +670,67 @@ export function MyProfile({ go }) {
   return (
     <Frame
       tone="page"
-      top={<TopBar largeTitle="Profile" actions={<IconButton icon="settings" label="Settings" variant="plain" onClick={() => go("settings")} />} />}
+      top={<TopBar largeTitle="Profile" actions={<IconButton icon="settings" label="Settings" variant="floating" size="sm" onClick={() => go("settings")} />} />}
       tab="profile"
       go={go}
     >
       <div className="fl-stack fl-gap-lg">
-        <div className="fl-me-card">
-          <div className="fl-me">
+        {/* Bumble profile tab: avatar with completion ring and % pill, name, edit action. */}
+        <div className="fl-me">
+          <div className="fl-me__avatar">
             <Avatar name={name || "You"} size="xl" ring={{ value: completion }} />
-            <div>
-              <p className="fl-me__name">
-                {name || "You"}
-                {age ? `, ${age}` : ""}
-              </p>
-              <span className="fl-badges">
-                <Badge tone="neutral">Profile {Math.round(completion * 100)}% complete</Badge>
-                {state.prefs.snooze && (
-                  <Badge tone="warning" icon="eyeOff">
-                    Snoozed
-                  </Badge>
-                )}
-              </span>
-            </div>
+            <span className="fl-me__pct" aria-label={`Profile ${Math.round(completion * 100)}% complete`}>
+              {Math.round(completion * 100)}%
+            </span>
           </div>
-          <Button variant="secondary" icon="user" onClick={() => go("basics")}>
-            Edit profile
-          </Button>
-        </div>
-        <Card>
-          <Section
-            title="Photos"
-            description={`${photos.length} of 6 added`}
-            action={
-              <button type="button" className="text-button" aria-label="Edit photos" onClick={() => go("photos")}>
-                Edit
-              </button>
-            }
-          >
-            <div className="fl-photo-strip">
-              {Array.from({ length: 4 }, (_, i) =>
-                photos[i] ? (
-                  <ImagePlaceholder key={photos[i].id} tone={photos[i].tone} ratio="3 / 4" label={`Photo ${i + 1}`} />
-                ) : (
-                  <span key={`empty-${i}`} className="fl-photo-strip__empty" aria-hidden="true">
-                    <Icon name="plus" size={18} />
-                  </span>
-                ),
+          <div className="fl-me__text">
+            <p className="fl-me__name">
+              {name || "You"}
+              {age ? `, ${age}` : ""}
+            </p>
+            <div className="fl-badges">
+              <Button variant="secondary" size="sm" block={false} icon="user" onClick={() => go("basics")}>
+                Edit profile
+              </Button>
+              {state.prefs.snooze && (
+                <Badge tone="warning" icon="eyeOff">
+                  Snoozed
+                </Badge>
               )}
             </div>
-          </Section>
-        </Card>
-        <PromptCard prompt="A perfect first date" answer="A record shop, a long walk, and nowhere to be after." />
-        <Card>
-          <Section
-            title="Interests"
-            action={
-              <button type="button" className="text-button" aria-label="Edit interests" onClick={() => go("interests")}>
-                Edit
-              </button>
-            }
-          >
-            <div className="fl-chip-row">
+          </div>
+        </div>
+
+        {/* Bumble edit profile: section title, grey helper, then the content to edit. */}
+        <Section
+          title="Photos"
+          description={`${photos.length} of 6 added. Pick some that show the true you.`}
+          action={
+            <button type="button" className="text-button" aria-label="Edit photos" onClick={() => go("photos")}>
+              Edit
+            </button>
+          }
+        >
+          <div className="fl-photo-strip">
+            {Array.from({ length: 4 }, (_, i) =>
+              photos[i] ? (
+                <ImagePlaceholder key={photos[i].id} ratio="3 / 4" className="fl-photo-strip__photo" label={`Photo ${i + 1} (placeholder)`} />
+              ) : (
+                <button key={`empty-${i}`} type="button" className="fl-photo-strip__empty" aria-label={`Add photo ${i + 1}`} onClick={() => go("photos")}>
+                  <Icon name="plus" size={20} />
+                </button>
+              ),
+            )}
+          </div>
+        </Section>
+
+        <Section title="Prompts" description="Let people know what it’s like to date you.">
+          <PromptCard prompt="A perfect first date" answer="A record shop, a long walk, and nowhere to be after." onEdit={() => go("interests")} />
+        </Section>
+
+        <Section title="Interests" description="Get specific about the things you love.">
+          <button type="button" className="card fl-edit-card" aria-label={`Edit interests: ${interests.join(", ") || "none yet"}`} onClick={() => go("interests")}>
+            <span className="fl-chip-row">
               {interests.length ? (
                 interests.map((i) => (
                   <span key={i} className="chip chip--static">
@@ -739,11 +738,13 @@ export function MyProfile({ go }) {
                   </span>
                 ))
               ) : (
-                <p className="fl-caption">Pick a few so people have something to ask about.</p>
+                <span className="fl-caption">Pick a few so people have something to ask about.</span>
               )}
-            </div>
-          </Section>
-        </Card>
+            </span>
+            <Icon name="chevronRight" size={20} className="fl-edit-card__chevron" />
+          </button>
+        </Section>
+
         <ListGroup title="Trust">
           <ListRow icon="shield" label="Verification" kind="info" value="Phone verified" />
         </ListGroup>
@@ -824,20 +825,31 @@ export function Settings({ go }) {
       <Toast open={Boolean(toast)} placement="bottom" icon="check">
         {toast}
       </Toast>
-      <Dialog
-        open={deleting}
-        onClose={() => setDeleting(false)}
-        title="Delete your account?"
-        tone="destructive"
-        confirmLabel="Delete account"
-        onConfirm={() => {
-          setDeleting(false);
-          dispatch({ type: "reset" });
-          go("intro");
-        }}
-      >
-        Your profile, matches and messages will be removed. In this preview, saved data is cleared and the demo restarts.
-      </Dialog>
+      {/* Destructive confirmation as a bottom sheet, like Unmatch (Bumble); Cancel takes focus first. */}
+      <Sheet open={deleting} onClose={() => setDeleting(false)} labelledBy="fl-delete-title">
+        <div className="sheet__header">
+          <h2 id="fl-delete-title" className="sheet__title">
+            Delete your account?
+          </h2>
+          <IconButton icon="close" label="Close" variant="flat" size="sm" onClick={() => setDeleting(false)} />
+        </div>
+        <div className="fl-stack fl-sheet-body">
+          <p className="fl-sheet-text">Your profile, matches and messages will be removed. In this preview, saved data is cleared and the demo restarts.</p>
+          <Button
+            variant="destructive-solid"
+            onClick={() => {
+              setDeleting(false);
+              dispatch({ type: "reset" });
+              go("intro");
+            }}
+          >
+            Delete account
+          </Button>
+          <Button variant="quiet" data-autofocus onClick={() => setDeleting(false)}>
+            Cancel
+          </Button>
+        </div>
+      </Sheet>
     </Frame>
   );
 }

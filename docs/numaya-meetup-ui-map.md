@@ -40,8 +40,8 @@ Mobbin as screenshots:
 | Primary button | Near-black **pill** with a soft sheen | `btn--primary`: ink gradient, `radius.pill` |
 | Secondary button | Light-grey **pill**, no border ("See all events…") | `btn--secondary`: `surface.sunken`, no outline, pill |
 | Icon actions | White circles with a soft shadow (back, close); translucent circles on photos | `IconButton floating` for header controls; Pass / Like ink circles (Bumble positions) |
-| Chips / tags | Pills; unselected light-grey fill or white + hairline; selected = solid accent | Static chips grey pills; shared-interest chips white pills on the tint card; selected = pink fill + ink text (applied in Pass 3 / 4) |
-| Toggles | **Black** when on | Ink switches (applied with Settings, Pass 4) |
+| Chips / tags | Pills; unselected light-grey fill or white + hairline; selected = solid accent | Static chips grey pills; shared-interest chips white pills on the tint card; selected = pink fill + ink text |
+| Toggles | **Black** when on | Ink switches |
 | Tab bar | Floating frosted capsule, icon over label, active item on a light-grey pill with accent icon | Same treatment; destinations and order stay Bumble's (Profile, Discover, Chats) |
 | Section headings | Bold, ≈ 20px, count in grey, "See all" link right | Fraunces 20 (Numaya type); counts grey |
 | Dividers | Hairlines inside cards, inset | Kept |
@@ -60,7 +60,7 @@ Mobbin as screenshots:
 | Chips (`ChipGroup`, static chips) | Interests, Discover | Interests, facts | E2 filter pills, G "looking to" pills | Pills, grey or white + hairline | — |
 | Sliders (`Slider`, `RangeSlider`) | Filters (Settings) | Age, distance | — (gap) | Ink track and thumbs, grey rail, in a bordered group | No Meetup slider found |
 | List groups (`ListGroup`, `ListRow`) | Filters, Settings, Profile, report sheet | Grouped rows | S1/S2 | Hairline-bordered 16px groups, grey heading above, grey footnote below, inset dividers | — |
-| Switch | Settings | Preferences | S1/S2 | Ink when on | Applied in Pass 4 |
+| Switch | Settings | Preferences | S1/S2 | Ink when on | — |
 | Tab bar (`TabBar`) | Discover, Chats, Profile | Bumble destinations | E1/H | Frosted floating capsule, grey active pill | Pink active icon, ink label (pink text fails contrast) |
 | Header | Discover | Centred wordmark, filter right, progress | O/G headers | Faint top wash, white-circle icon buttons | Wordmark is Numaya's |
 | Avatars | Chats, Chat, Match, Profile | Identity | E2 avatar stacks, M2 | Circles; neutral initials; new matches get a pink ring | — |
@@ -69,7 +69,7 @@ Mobbin as screenshots:
 | Inbox rows | Chats | Avatar, name, preview, time, "Your move" (Bumble) | M2 | Plain rows, no dividers or cards; bold name, grey preview; grey "Your move" pill | — |
 | Chat header | Chat | Back, avatar, name, options (Bumble) | M1 | White-circle back and options buttons | — |
 | Options menu | Chat | Unmatch / Report (Bumble) | — | Floating white card, centred rows, strongest overlay shadow | Separate Cancel card |
-| Sheets / dialogs | Chat, Settings, prototype | Overlays | (Bumble structure) | Rounded top, Fraunces title, X, grey info card, ink pill CTA | Settings dialogs: Pass 4 |
-| Fields (`TextField`, `PhoneField`, `CodeInput`) | Onboarding | Forms | O date of birth field | Light-grey filled field, ≈ 16px | Pass 4 |
+| Sheets / dialogs | Chat, Settings, prototype | Overlays | (Bumble structure) | Rounded top, Fraunces title, X, grey info card, ink (or danger) pill CTA; destructive confirmations focus Cancel first | — |
+| Fields (`TextField`, `PhoneField`, `CodeInput`) | Onboarding | Forms | O date of birth field | Light-grey filled field, ≈ 16px | — |
 | Progress (`ProgressSegments`) | Onboarding | Step progress | O progress pills | Short pills, accent filled | Already matches |
 | Empty states | Discover, Match, Chats | No content | H "Nothing saved yet" | Grey illustration placeholder, bold title, black pill CTA | Illustrations supplied later |

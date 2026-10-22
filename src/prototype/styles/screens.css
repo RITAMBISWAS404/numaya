@@ -69,13 +69,12 @@
   }
 }
 
+/* Sentence-case prompt label, matching the shared PromptCard. */
 .prompt-card__label {
-  font-size: var(--type-eyebrow-size);
-  line-height: var(--type-eyebrow-line);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
   font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--type-eyebrow-tracking);
-  text-transform: uppercase;
-  color: var(--color-text-brand);
+  color: var(--color-text-muted);
 }
 
 .prompt-card__answer {

@@ -419,17 +419,70 @@ body {
   gap: var(--space-2);
 }
 
+/* Same slot language as the photo grid: grey photo placeholders, white hairline empty slots. */
 .fl-photo-strip .image-placeholder,
 .fl-photo-strip__empty {
   border-radius: var(--radius-sm);
+}
+
+.fl-photo-strip .image-placeholder {
+  background: var(--color-surface-photo);
+  color: var(--color-text-secondary);
 }
 
 .fl-photo-strip__empty {
   display: grid;
   place-items: center;
   aspect-ratio: 3 / 4;
-  background: var(--color-surface-soft);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-strong);
+  color: var(--color-text-primary);
+}
+
+/* Profile header (Bumble profile tab): avatar with completion ring and a % pill under it. */
+.fl-me__avatar {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+
+.fl-me__pct {
+  position: absolute;
+  bottom: -8px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-on-inverse);
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.fl-me__text {
+  min-width: 0;
+}
+
+/* Tappable edit card (Bumble edit profile: content + chevron). */
+.fl-edit-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4);
+  text-align: left;
+}
+
+.fl-edit-card > .fl-chip-row {
+  flex: 1;
+}
+
+.fl-edit-card__chevron {
+  flex: none;
   color: var(--color-text-subtle);
+}
+
+.fl-sheet-text {
+  color: var(--color-text-muted);
 }
 
 /* Header: side slots, centred wordmark, short scroll-progress track; faint brand wash at the top

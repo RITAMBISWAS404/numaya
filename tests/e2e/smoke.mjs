@@ -194,7 +194,11 @@ try {
           likeFg: cs("#discovery .action-bar__btn--like").color,
           superBg: cs("#discovery .profile-card .action-bar__btn--super").backgroundColor,
           superFg: cs("#discovery .profile-card .action-bar__btn--super").color,
-          chipShadow: cs("#interests .chip.is-selected").boxShadow,
+          chipBg: cs("#interests .chip.is-selected").backgroundColor,
+          chipFg: cs("#interests .chip.is-selected").color,
+          slotFilled: cs("#photos .photo-slot .image-placeholder").backgroundColor,
+          slotEmpty: cs("#photos .photo-slot--empty").backgroundColor,
+          slotEmptyEdge: cs("#photos .photo-slot--empty").boxShadow,
           switchOn: cs("#settings .switch:checked").backgroundColor,
           tabActive: cs("#discovery .tab-bar__item.is-current").backgroundColor,
           tabActiveFg: cs("#discovery .tab-bar__item.is-current").color,
@@ -205,8 +209,9 @@ try {
       });
       check("flows: like is an ink circle (Meetup primary sheen) with a white glyph", states.likeBg.includes(INK) && states.likeFg === "rgb(255, 255, 255)", `${states.likeBg.slice(0, 60)} / ${states.likeFg}`);
       check("flows: SuperSwipe is the single brand-pink action, with an ink glyph", states.superBg === PINK && states.superFg === INK, `${states.superBg} / ${states.superFg}`);
-      check("flows: selected chip uses the brand pink border", states.chipShadow.includes(PINK), states.chipShadow.slice(0, 60));
-      check("flows: switch on uses brand pink", states.switchOn === PINK, states.switchOn);
+      check("flows: selected chip is a solid brand-pink pill with ink text (Meetup)", states.chipBg === PINK && states.chipFg === INK, `${states.chipBg} / ${states.chipFg}`);
+      check("photos: empty slots (white, hairline) are distinct from filled photo placeholders (grey)", states.slotEmpty === "rgb(255, 255, 255)" && /inset/.test(states.slotEmptyEdge) && states.slotFilled !== states.slotEmpty, `${states.slotFilled} vs ${states.slotEmpty}`);
+      check("flows: switch on is ink (Meetup settings)", states.switchOn === INK, states.switchOn);
       check("flows: active tab sits on a grey pill with a pink icon and an ink label (Meetup)", states.tabActive === "rgb(236, 239, 243)" && states.tabActiveFg === INK && states.tabActiveIcon === PINK, `${states.tabActive} / ${states.tabActiveFg} / ${states.tabActiveIcon}`);
       check("flows: progress fill uses brand pink", states.progress === PINK, states.progress);
       // Geometry, elevation, icons and bottom navigation.
@@ -402,6 +407,10 @@ try {
       await wait(1200);
       check("flows: reload restores the session", (await textOf("profile")).includes("Jordan") && (await textOf("settings")).includes("Blocked people 1"));
       await f("settings").getByRole("button", { name: "Delete account" }).click();
+      await wait(500);
+      const delSheet = p.getByRole("dialog", { name: "Delete your account?" });
+      const delFocus = await p.evaluate(() => document.activeElement?.textContent);
+      check("settings: delete confirms in a sheet with Cancel focused first", (await delSheet.count()) === 1 && delFocus === "Cancel", delFocus);
       await wait(400);
       await p.getByRole("button", { name: "Delete account" }).last().click();
       await wait(400);
