@@ -32,7 +32,6 @@
         "ink-34":   { "$type": "color", "$value": "rgb(20 23 31 / 0.34)" },
         "ink-62":   { "$type": "color", "$value": "rgb(20 23 31 / 0.62)" },
         "pink-32":  { "$type": "color", "$value": "rgb(247 112 227 / 0.32)" },
-        "pink-40":  { "$type": "color", "$value": "rgb(247 112 227 / 0.4)" },
         "white-55": { "$type": "color", "$value": "rgb(255 255 255 / 0.55)" }
       }
     },
@@ -211,12 +210,13 @@
       "stroke-bold": { "$type": "number", "$value": "2", "$description": "Icons inside filled buttons and small sizes." }
     },
     "radius": {
-      "xs":   { "$type": "dimension", "$value": "{primitive.dimension.8}" },
-      "sm":   { "$type": "dimension", "$value": "{primitive.dimension.12}" },
-      "md":   { "$type": "dimension", "$value": "{primitive.dimension.16}" },
-      "lg":   { "$type": "dimension", "$value": "{primitive.dimension.20}" },
-      "xl":   { "$type": "dimension", "$value": "{primitive.dimension.28}" },
-      "2xl":  { "$type": "dimension", "$value": "{primitive.dimension.32}" },
+      "$description": "Compact rounded rectangles. xs/sm: tags, chips, small inner elements. md: controls (buttons, fields, list groups, option cards). lg: cards and message bubbles. xl: sheets, dialogs, large photo cards. 2xl: framed screens. pill: only for genuinely pill-shaped things (progress bars, switches, slider tracks, count badges).",
+      "xs":   { "$type": "dimension", "$value": "{primitive.dimension.6}" },
+      "sm":   { "$type": "dimension", "$value": "{primitive.dimension.8}" },
+      "md":   { "$type": "dimension", "$value": "{primitive.dimension.12}" },
+      "lg":   { "$type": "dimension", "$value": "{primitive.dimension.16}" },
+      "xl":   { "$type": "dimension", "$value": "{primitive.dimension.20}" },
+      "2xl":  { "$type": "dimension", "$value": "{primitive.dimension.24}" },
       "pill": { "$type": "dimension", "$value": "999px" }
     },
     "border": {
@@ -225,17 +225,12 @@
       "focus":    { "$type": "dimension", "$value": "{primitive.dimension.2}" }
     },
     "shadow": {
-      "xs":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.04)", "$description": "Resting lift for outlined controls and selected rows." },
-      "float":  { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.05), 0 6px 18px rgb(20 23 31 / 0.07), inset 0 0 0 1px rgb(20 23 31 / 0.04)", "$description": "Floating chrome: nav buttons over content." },
-      "card":   { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.04), 0 14px 34px -10px rgb(20 23 31 / 0.16), inset 0 0 0 1px rgb(20 23 31 / 0.05)", "$description": "Raised content cards (prompt, discovery)." },
-      "button": { "$type": "shadow", "$value": "inset 0 1px 0 rgb(255 255 255 / 0.14), inset 0 -1px 0 rgb(0 0 0 / 0.3), 0 1px 2px rgb(20 23 31 / 0.18), 0 8px 18px -6px rgb(20 23 31 / 0.38)" },
-      "sheet":  { "$type": "shadow", "$value": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -18px 48px -12px rgb(20 23 31 / 0.18)" },
-      "toast":  { "$type": "shadow", "$value": "0 12px 30px -10px rgb(20 23 31 / 0.5)" },
-      "brand":  { "$type": "shadow", "$value": "0 8px 20px -6px {primitive.color.alpha.pink-40}", "$description": "Lift under brand-filled marks." },
-      "knob":   { "$type": "shadow", "$value": "0 2px 4px rgb(20 23 31 / 0.18)", "$description": "Switch knob." },
-      "thumb":  { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.04), 0 2px 6px rgb(20 23 31 / 0.16)", "$description": "Slider thumbs." },
-      "segment":{ "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.04), 0 2px 6px rgb(20 23 31 / 0.06)", "$description": "Selected segment in a segmented control." },
-      "panel":  { "$type": "shadow", "$value": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -24px 48px -28px rgb(20 23 31 / 0.18)" }
+      "$description": "Elevation scale. Neutral ink at low opacity. Flat controls and fields use none; they rely on surface contrast or a hairline border.",
+      "xs":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.05)", "$description": "Tiny lift for small moving parts: switch knob, slider thumb, selected segment, selected option card." },
+      "sm":     { "$type": "shadow", "$value": "0 0 0 1px rgb(20 23 31 / 0.04), 0 2px 8px -2px rgb(20 23 31 / 0.06)", "$description": "Cards, prompt cards, floating icon buttons and brand-filled controls over content." },
+      "md":     { "$type": "shadow", "$value": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -6px 20px -8px rgb(20 23 31 / 0.10)", "$description": "Bottom sheets and bottom panels (shadow falls upward)." },
+      "lg":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 23 31 / 0.06), 0 10px 28px -8px rgb(20 23 31 / 0.20)", "$description": "Dialogs, toasts and popovers: the only tier that must clearly read as layered." },
+      "button": { "$type": "shadow", "$value": "inset 0 1px 0 rgb(255 255 255 / 0.10), 0 1px 2px rgb(20 23 31 / 0.14)", "$description": "Primary ink buttons: a faint top highlight and a contact shadow." }
     },
     "opacity": {
       "disabled": { "$type": "number", "$value": "0.45" },
@@ -279,7 +274,7 @@
     "icon-button": { "size": { "$type": "dimension", "$value": "{primitive.dimension.40}" }, "size-sm": { "$type": "dimension", "$value": "{primitive.dimension.36}" } },
     "chip":        { "height": { "$type": "dimension", "$value": "{primitive.dimension.36}" } },
     "progress":    { "segment-width": { "$type": "dimension", "$value": "{primitive.dimension.18}" }, "segment-height": { "$type": "dimension", "$value": "{primitive.dimension.8}" } },
-    "code-cell":   { "height": { "$type": "dimension", "$value": "{primitive.dimension.60}" }, "radius": { "$type": "dimension", "$value": "{primitive.dimension.14}" } },
+    "code-cell":   { "height": { "$type": "dimension", "$value": "{primitive.dimension.60}" }, "radius": { "$type": "dimension", "$value": "{primitive.dimension.10}" } },
     "switch":      { "width": { "$type": "dimension", "$value": "51px" }, "height": { "$type": "dimension", "$value": "31px" } },
     "tab-bar":     { "height": { "$type": "dimension", "$value": "{primitive.dimension.56}" } }
   }

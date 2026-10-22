@@ -33,7 +33,7 @@
   z-index: -2;
   inset: 48px 28px -28px;
   border-radius: 80px;
-  background: rgb(20 23 31 / 0.34);
+  background: rgb(20 23 31 / 0.16);
   filter: blur(36px);
 }
 
@@ -357,7 +357,7 @@
   background: rgb(246 247 249 / 0.86);
   -webkit-backdrop-filter: blur(24px) saturate(1.8);
   backdrop-filter: blur(24px) saturate(1.8);
-  box-shadow: 0 12px 40px -12px rgb(20 23 31 / 0.32), inset 0 0 0 0.5px rgb(20 23 31 / 0.06);
+  box-shadow: 0 8px 24px -8px rgb(20 23 31 / 0.18), inset 0 0 0 0.5px rgb(20 23 31 / 0.06);
   text-align: left;
   pointer-events: auto;
   animation: banner-in 560ms var(--motion-ease-emphasized) both;

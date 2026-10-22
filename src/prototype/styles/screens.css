@@ -50,9 +50,9 @@
   left: 0;
   right: 0;
   padding: 18px 20px 20px;
-  border-radius: 22px;
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-sm);
   transform: translateX(var(--x)) rotate(var(--r)) scale(var(--s));
   transform-origin: 50% 100%;
   animation: card-in 820ms var(--motion-ease-out) both;
@@ -162,9 +162,9 @@
 .welcome__panel {
   flex: none;
   padding: var(--space-8) var(--layout-gutter) calc(var(--safe-bottom) + var(--space-2));
-  border-radius: 32px 32px 0 0;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   background: var(--color-surface);
-  box-shadow: var(--shadow-panel);
+  box-shadow: var(--shadow-md);
   text-align: center;
 }
 

@@ -194,7 +194,7 @@ try {
           likeFg: cs("#discovery .action-bar__btn--like").color,
           chipShadow: cs("#interests .chip.is-selected").boxShadow,
           switchOn: cs("#settings .switch:checked").backgroundColor,
-          tabDot: cs("#discovery .tab-bar__item.is-current .tab-bar__icon", "::after").backgroundColor,
+          tabDot: cs("#discovery .tab-bar__item.is-current", "::before").backgroundColor,
           progress: cs("#basics .progress__segment.is-done .progress__fill").backgroundColor,
           verified: cs("#chats .avatar__badge, #discovery .verified__mark").backgroundColor,
         };
@@ -204,6 +204,32 @@ try {
       check("flows: switch on uses brand pink", states.switchOn === PINK, states.switchOn);
       check("flows: active tab indicator uses brand pink", states.tabDot === PINK, states.tabDot);
       check("flows: progress fill uses brand pink", states.progress === PINK, states.progress);
+      // Geometry, elevation, icons and bottom navigation.
+      const geo = await p.evaluate(() => {
+        const cs = (sel) => getComputedStyle(document.querySelector(sel));
+        const alpha = (v) => Math.max(0, ...[...v.matchAll(/rgba\(\d+, \d+, \d+, ([0-9.]+)\)/g)].map((m) => parseFloat(m[1])));
+        const tab = document.querySelector("#discovery .tab-bar");
+        const items = [...tab.querySelectorAll(".tab-bar__item")].map((i) => i.getBoundingClientRect());
+        return {
+          btnRadius: parseFloat(cs("#settings .btn--secondary, #basics .btn, .btn").borderTopLeftRadius),
+          squircleSupported: CSS.supports("corner-shape", "squircle"),
+          btnCorner: cs(".btn").cornerShape,
+          promptShadowAlpha: alpha(cs("#profile .prompt").boxShadow),
+          tabShadow: getComputedStyle(tab).boxShadow,
+          tabItemMin: Math.min(...items.map((r) => Math.min(r.width, r.height))),
+          tabCurrent: tab.querySelectorAll(".tab-bar__item[aria-current='page']").length,
+          icons: document.querySelectorAll("#discovery svg.ph, #discovery [class*='phosphor'], #discovery svg[viewBox='0 0 256 256']").length,
+          legacyStrokeIcons: document.querySelectorAll("#discovery svg[stroke-linecap='round'][viewBox='0 0 24 24']").length,
+        };
+      });
+      check("geometry: buttons use the compact radius, not a pill", geo.btnRadius > 0 && geo.btnRadius <= 14, `${geo.btnRadius}px`);
+      check("geometry: squircle corners apply where supported", !geo.squircleSupported || geo.btnCorner.includes("squircle"), `${geo.squircleSupported} / ${geo.btnCorner}`);
+      check("elevation: card shadow is very light", geo.promptShadowAlpha > 0 && geo.promptShadowAlpha <= 0.08, `alpha ${geo.promptShadowAlpha}`);
+      check("navigation: tab bar has no shadow", geo.tabShadow === "none", geo.tabShadow);
+      check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);
+      check("navigation: exactly one current tab", geo.tabCurrent === 1);
+      check("icons: Phosphor glyphs render and no legacy stroke icons remain", geo.icons > 0 && geo.legacyStrokeIcons === 0, `${geo.icons} phosphor / ${geo.legacyStrokeIcons} legacy`);
+
       await f("basics").getByLabel("First name").focus();
       await wait(500); // let the focus-ring transition finish before reading computed styles
       const focus = await p.evaluate(() => getComputedStyle(document.querySelector("#basics .input:focus")).boxShadow);

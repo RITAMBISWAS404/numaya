@@ -9,6 +9,7 @@ import {
   Composer,
   Dialog,
   Fab,
+  Icon,
   IconButton,
   MessageBubble,
   OptionCards,
@@ -16,6 +17,7 @@ import {
   PlanPicker,
   RangeSlider,
   SegmentedControl,
+  TabBar,
   Sheet,
   Switch,
   TextField,
@@ -248,5 +250,39 @@ describe("identity", () => {
   it("VerifiedBadge always carries a text label", () => {
     render(<VerifiedBadge compact />);
     expect(screen.getByText("Verified")).toBeInTheDocument();
+  });
+});
+
+describe("icons and navigation", () => {
+  it("Icon renders decorative Phosphor glyphs and ignores unknown names", () => {
+    const { container } = render(
+      <>
+        <Icon name="heart" weight="fill" />
+        <Icon name="check" stroke={2.4} />
+        <Icon name="doesNotExist" />
+      </>,
+    );
+    const svgs = container.querySelectorAll("svg");
+    expect(svgs).toHaveLength(2);
+    svgs.forEach((s) => expect(s).toHaveAttribute("aria-hidden", "true"));
+  });
+
+  it("TabBar marks the current tab, reports changes and labels badges", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(
+      <TabBar
+        current="discover"
+        onChange={onChange}
+        items={[
+          { id: "discover", label: "Discover", icon: "cards" },
+          { id: "chats", label: "Chats", icon: "message", badge: 3 },
+        ]}
+      />,
+    );
+    expect(screen.getByRole("button", { name: /Discover/ })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByLabelText("3 new in Chats")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /Chats/ }));
+    expect(onChange).toHaveBeenCalledWith("chats");
   });
 });

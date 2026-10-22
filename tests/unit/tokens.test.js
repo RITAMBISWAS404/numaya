@@ -91,3 +91,26 @@ describe("contrast requirements", () => {
     expect(contrast(value("--color-text-subtle"), value("--color-surface"))).toBeLessThan(3);
   });
 });
+
+describe("geometry and elevation", () => {
+  const px = (name) => parseFloat(value(name));
+  const maxAlpha = (name) => Math.max(...[...value(name).matchAll(/\/ ([0-9.]+)\)/g)].map((m) => parseFloat(m[1])));
+
+  it("radius scale increases and keeps controls compact", () => {
+    const scale = ["xs", "sm", "md", "lg", "xl", "2xl"].map((k) => px(`--radius-${k}`));
+    expect(scale).toEqual([...scale].sort((a, b) => a - b));
+    expect(new Set(scale).size).toBe(scale.length);
+    expect(px("--radius-md")).toBeLessThanOrEqual(14);
+    expect(px("--radius-xl")).toBeLessThanOrEqual(24);
+  });
+
+  it("shadows are neutral and low opacity, strongest only on layered overlays", () => {
+    for (const t of ["xs", "sm", "md", "button"]) expect(maxAlpha(`--shadow-${t}`)).toBeLessThanOrEqual(0.14);
+    expect(maxAlpha("--shadow-lg")).toBeLessThanOrEqual(0.2);
+    for (const t of ["xs", "sm", "md", "lg", "button"]) {
+      const v = value(`--shadow-${t}`);
+      expect(v).not.toMatch(/247 112 227/); // no pink glow
+      expect(v.match(/rgb\(/g).length).toBeLessThanOrEqual(3);
+    }
+  });
+});

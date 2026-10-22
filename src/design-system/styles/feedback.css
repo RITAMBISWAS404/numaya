@@ -14,7 +14,7 @@
   border-radius: 50%;
   background: var(--color-brand);
   color: var(--color-on-brand);
-  box-shadow: 0 0 0 8px var(--color-brand-tint), var(--shadow-brand);
+  box-shadow: 0 0 0 8px var(--color-brand-tint), var(--shadow-sm);
   animation: badge-in 560ms var(--motion-ease-out) 140ms both;
 }
 
@@ -134,7 +134,7 @@
   padding: var(--space-6);
   border-radius: var(--radius-xl);
   background: var(--color-surface);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-lg);
   text-align: center;
   animation: dialog-in var(--motion-duration-slow) var(--motion-ease-out) both;
 }
@@ -177,7 +177,7 @@
   padding: var(--space-4) var(--space-5);
   border-radius: var(--radius-lg);
   background: var(--color-surface);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-lg);
 }
 
 .coach::after {

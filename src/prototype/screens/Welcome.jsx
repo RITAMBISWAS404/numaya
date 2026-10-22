@@ -96,7 +96,7 @@ function PromptStack() {
                 aria-label={liked ? "Unlike this prompt" : "Like this prompt"}
                 onClick={() => setLiked((v) => !v)}
               >
-                <Icon name="heart" size={20} stroke={1.8} />
+                <Icon name="heart" size={20} weight={liked ? "fill" : "regular"} />
               </button>
             </footer>
           )}

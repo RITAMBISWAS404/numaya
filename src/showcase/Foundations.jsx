@@ -218,7 +218,7 @@ export function Foundations() {
         </div>
       </Section>
 
-      <Section id="icons" title="Icons" intro="24px grid, 1.75 stroke (2 inside filled controls), round caps, currentColor. Icon-only controls always carry an accessible label.">
+      <Section id="icons" title="Icons" intro="Phosphor Icons, one family. Regular for inactive and secondary icons, Bold inside filled controls, Fill for active states (the active tab, a liked heart). Icon-only controls always carry an accessible label.">
         <div className="sc-icons">
           {ICON_NAMES.map((n) => (
             <div key={n} className="sc-icons__item">

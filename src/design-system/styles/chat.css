@@ -23,7 +23,7 @@
 
 .message__bubble {
   padding: 10px 14px;
-  border-radius: 20px;
+  border-radius: var(--radius-lg);
   font-size: var(--type-body-size);
   line-height: 22px;
   overflow-wrap: anywhere;
@@ -32,13 +32,13 @@
 
 /* Mine: brand tint with dark text (light surface rule). */
 .message--me .message__bubble {
-  border-bottom-right-radius: 6px;
+  border-bottom-right-radius: var(--radius-xs);
   background: var(--color-brand-tint);
   color: var(--color-text-primary);
 }
 
 .message--them .message__bubble {
-  border-bottom-left-radius: 6px;
+  border-bottom-left-radius: var(--radius-xs);
   background: var(--color-surface-soft);
 }
 
@@ -101,7 +101,7 @@
   display: flex;
   min-height: var(--size-touch-min);
   padding: 0 var(--space-4);
-  border-radius: 22px;
+  border-radius: var(--radius-md);
   background: var(--color-surface-soft);
   transition: background-color var(--motion-duration-base), box-shadow var(--motion-duration-base);
 }

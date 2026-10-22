@@ -42,7 +42,7 @@ import { INTERESTS, PEOPLE, REPORT_REASONS } from "./data.js";
 import { conversations, discoveryQueue, hiddenByFilters, newMatches, useStore } from "./store.js";
 
 const TABS = [
-  { id: "discover", label: "Discover", icon: "sparkle" },
+  { id: "discover", label: "Discover", icon: "cards" },
   { id: "chats", label: "Chats", icon: "message" },
   { id: "profile", label: "Profile", icon: "user" },
 ];

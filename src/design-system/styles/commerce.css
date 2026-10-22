@@ -38,14 +38,14 @@
 
 .plan-card.is-selected {
   background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-focus) var(--color-border-brand), var(--shadow-card);
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-border-brand), var(--shadow-sm);
 }
 
 .plan-card__ribbon {
   position: absolute;
   top: -10px;
   padding: 3px 10px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-xs);
   background: var(--color-surface-inverse);
   color: var(--color-text-on-inverse);
   font-size: 10px;

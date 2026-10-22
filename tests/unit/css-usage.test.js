@@ -41,3 +41,25 @@ describe("CSS custom property usage", () => {
     expect(offenders).toEqual([]);
   });
 });
+
+describe("geometry rules", () => {
+  const css = files.filter((f) => f.endsWith(".css")).map((f) => readFileSync(f, "utf8")).join("\n");
+  const block = (selector) => {
+    const m = css.match(new RegExp(`(^|\\n)${selector.replace(/\./g, "\\.")}\\s*\\{([^}]*)\\}`));
+    return m ? m[2] : "";
+  };
+
+  it("ordinary controls are not pills", () => {
+    for (const sel of [".btn", ".chip", ".badge", ".tag", ".segmented", ".segmented__item", ".pill"]) {
+      expect(block(sel), sel).toContain("border-radius");
+      expect(block(sel), sel).not.toMatch(/radius-pill|999px/);
+    }
+  });
+
+  it("applies squircle corners only as a @supports enhancement", () => {
+    const shape = readFileSync("src/design-system/styles/shape.css", "utf8");
+    expect(shape).toMatch(/@supports \(corner-shape: squircle\)/);
+    const withoutSupports = css.replace(shape, "");
+    expect(withoutSupports).not.toMatch(/corner-shape/);
+  });
+});

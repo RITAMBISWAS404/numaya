@@ -51,10 +51,16 @@ or brand colour. Numerals in inputs, codes and prices use `tabular-nums`.
   gap 32px, stacked controls 12px.
 - **Sizes:** touch target ≥ `--size-touch-min` 44px; input 56px; button 54px (sm 40, quiet 48);
   Fab 56; icon button 40 (sm 36); avatars 24/36/48/64/96.
-- **Radius:** xs 8 · sm 12 · md 16 (fields, rows) · lg 20 (cards) · xl 28 (sheets) · 2xl 32 · pill.
+- **Radius** (compact rounded rectangles; `border-radius` is the baseline, with `corner-shape: squircle`
+  layered on where supported via `shape.css`): xs 6 (tags, badges) · sm 8 (chips, inner elements) ·
+  md 12 (buttons, fields, list groups, option cards) · lg 16 (cards, message bubbles) · xl 20 (sheets,
+  dialogs, photo cards) · 2xl 24 (framed screens). Circles stay circles (avatars, icon buttons, Fab).
+  `pill` is only for shapes whose meaning is a pill: progress bars, switches, slider tracks, count
+  badges. Never for ordinary buttons, chips, tabs or badges.
 - **Borders:** hairline 1px, selected 1.5px, focus 2px.
-- **Elevation:** `--shadow-xs`, `float` (chrome over content), `card`, `button`, `sheet`, `toast`,
-  `brand` (under brand fills), `knob`, `thumb`, `segment`, `panel`.
+- **Elevation** (neutral ink, very low opacity; flat controls and fields use none): `--shadow-xs` tiny
+  moving parts · `sm` cards and floating icon buttons · `md` bottom sheets and panels · `lg` dialogs,
+  toasts and popovers (the only tier that must clearly layer) · `button` the primary ink button.
 - **Layout:** single column, max `--layout-content-max` 430px; wider viewports centre it. Respect
   `--safe-top`, `--safe-bottom` and `--keyboard-inset` (runtime, see [README](README.md#runtime-variables)).
 
@@ -66,8 +72,18 @@ collapse (1ms / 120ms / 160ms) and movement becomes fades. Spinners keep rotatin
 
 ## Icons
 
-24px grid, stroke `--icon-stroke` 1.75 (2 in filled controls), round caps, `currentColor`.
-Sizes 16 / 20 / 24. Icon-only controls always have an accessible label.
+[Phosphor Icons](https://phosphoricons.com) via `@phosphor-icons/react`, imported individually through
+the shared `Icon` wrapper (no other icon family, no emoji icons). Regular weight for inactive and
+secondary icons, Bold inside filled controls and small sizes, Fill selectively for active states
+(active tab, liked heart). Sizes 16 / 20 / 24 (tab bar 26). Icon-only controls always have an
+accessible label; the icons themselves are `aria-hidden`.
+
+## Navigation
+
+The bottom tab bar is a flat bar with a hairline top border and no shadow. The active tab is a filled
+ink icon, an ink semibold label and a short brand-pink indicator on the bar's top edge. Inactive tabs
+are muted regular icons. Touch targets are at least 44px, the bar includes the bottom safe area, and
+there is no floating capsule or tinted blob.
 
 ## Interaction states
 

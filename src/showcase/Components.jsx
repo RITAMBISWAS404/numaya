@@ -491,13 +491,13 @@ function Navigation() {
             <ProgressSegments step={3} steps={4} />
           </Row>
         </Specimen>
-        <Specimen title="TabBar" note="Current item: ink label + brand dot" wide>
+        <Specimen title="TabBar" note="Active: filled icon, ink label and a short brand-pink indicator on the top edge" wide>
           <div className="sc-bleed">
             <TabBar
               current={tab}
               onChange={setTab}
               items={[
-                { id: "discover", label: "Discover", icon: "sparkle" },
+                { id: "discover", label: "Discover", icon: "cards" },
                 { id: "likes", label: "Likes", icon: "heart", badge: 3 },
                 { id: "chats", label: "Chats", icon: "message", badge: 12 },
                 { id: "profile", label: "Profile", icon: "user" },

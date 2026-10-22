@@ -36,7 +36,7 @@
   width: 100%;
   height: var(--button-height);
   padding: 0 var(--space-6);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   font-size: var(--type-button-size);
   line-height: 1;
   font-weight: var(--font-weight-semibold);
@@ -64,10 +64,10 @@
 .btn--secondary {
   color: var(--color-text-primary);
   background: var(--color-surface);
-  box-shadow: inset 0 0 0 1px var(--color-border-strong), var(--shadow-xs);
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
 }
 .btn--secondary:hover:not(:disabled) {
-  box-shadow: inset 0 0 0 1px var(--color-text-subtle), var(--shadow-xs);
+  box-shadow: inset 0 0 0 1px var(--color-text-subtle);
 }
 
 .btn--quiet {
@@ -138,7 +138,7 @@
   border-radius: 50%;
   color: var(--color-text-primary);
   background: var(--color-surface);
-  box-shadow: var(--shadow-float);
+  box-shadow: var(--shadow-sm);
   transition: transform var(--motion-duration-fast) var(--motion-ease-out), background-color var(--motion-duration-base);
 }
 
@@ -392,7 +392,7 @@
   min-width: 30px;
   height: 22px;
   padding: 0 5px;
-  border-radius: 6px;
+  border-radius: var(--radius-xs);
   background: var(--color-surface);
   box-shadow: inset 0 0 0 1px var(--color-border-strong);
   color: var(--color-text-secondary);
@@ -450,7 +450,7 @@
   align-items: center;
   gap: 8px;
   padding: 9px 16px 10px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   background: var(--color-surface-inverse);
   color: var(--color-text-on-inverse);
   font-size: 14px;
@@ -458,7 +458,7 @@
   font-weight: var(--font-weight-semibold);
   white-space: nowrap;
   z-index: var(--z-toast);
-  box-shadow: var(--shadow-toast);
+  box-shadow: var(--shadow-lg);
   transform: translateX(-50%);
   animation: pill-in var(--motion-duration-slow) var(--motion-ease-out) both;
 }
@@ -527,7 +527,7 @@
   padding: 8px var(--layout-gutter) calc(var(--safe-bottom) + 16px);
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   background: var(--color-surface);
-  box-shadow: var(--shadow-sheet);
+  box-shadow: var(--shadow-md);
   animation: sheet-in var(--motion-duration-push) var(--motion-ease-emphasized) both;
 }
 
@@ -627,7 +627,6 @@
 .btn--brand {
   color: var(--color-on-brand);
   background: var(--color-brand);
-  box-shadow: var(--shadow-xs);
 }
 
 .btn:disabled:not(.is-loading) {
@@ -720,6 +719,8 @@
   text-transform: uppercase;
 }
 
+/* Flat bar, hairline top border, no shadow. Active = filled ink icon + ink label + a short brand-pink
+   indicator on the bar's top edge; state is never carried by colour alone. */
 .tab-bar {
   display: grid;
   grid-auto-columns: 1fr;
@@ -731,30 +732,44 @@
 }
 
 .tab-bar__item {
+  position: relative;
   display: grid;
   align-content: center;
   justify-items: center;
-  gap: 2px;
+  gap: 3px;
   min-width: var(--size-touch-min);
   color: var(--color-text-muted);
   font-size: 11px;
   line-height: 13px;
   font-weight: var(--font-weight-medium);
-  transition: color var(--motion-duration-base);
+  transition: color var(--motion-duration-base), opacity var(--motion-duration-fast);
+}
+
+.tab-bar__item:hover {
+  color: var(--color-text-secondary);
+}
+
+.tab-bar__item:active {
+  opacity: 0.6;
+}
+
+.tab-bar__item:focus-visible {
+  outline-offset: -4px;
 }
 
 .tab-bar__item.is-current {
   color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
 }
 
-.tab-bar__item.is-current .tab-bar__icon::after {
+.tab-bar__item.is-current::before {
   content: "";
   position: absolute;
+  top: -1px;
   left: 50%;
-  bottom: -6px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
+  width: 24px;
+  height: 3px;
+  border-radius: 0 0 var(--radius-xs) var(--radius-xs);
   background: var(--color-brand);
   transform: translateX(-50%);
 }

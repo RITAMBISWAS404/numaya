@@ -20,7 +20,7 @@ JSDoc. Live variants and states: `showcase.html`. Tier: **P** primitive, **C** c
 | `SegmentedControl` | P | 2–3 views | — | Tabs with arrow-key movement |
 | `Slider`, `RangeSlider` | P | Numeric filters | single, dual (thumbs never cross) | `aria-valuetext` formatted |
 | `Screen`, `ScreenBody`, `ScreenHeader`, `ScreenFooter` | P | Screen scaffold | brand tone; keypad/keyboard aware | One `h1` per screen |
-| `TopBar`, `ProgressSegments`, `TabBar`, `Note` | C | Navigation and progress | back + progress, title + actions, large title; tab badges | Progress is a `progressbar`; current tab `aria-current` |
+| `TopBar`, `ProgressSegments`, `TabBar`, `Note` | C | Navigation and progress | back + progress, title + actions, large title; tab badges; tab bar is flat with a filled active icon and a pink top indicator | Progress is a `progressbar`; current tab `aria-current` |
 | `Avatar`, `VerifiedBadge`, `Badge`, `CountBadge`, `Tag` | P | Identity and status | sizes xs–xl, ring (completion/time), verified; tones | Verified always has a text label; decorative avatars hidden |
 | `Card`, `Section`, `Divider`, `ListGroup`, `ListRow`, `TipCard`, `ConsequenceList` | P/C | Surfaces and lists | row kinds nav, value, action, destructive, locked | Rows are buttons only when pressable |
 | `PromptCard`, `ImagePlaceholder`, `PhotoSlot`, `PhotoGrid` | C | Profile content | editable prompt; empty/filled/uploading/main slots | Add/remove buttons labelled by position |

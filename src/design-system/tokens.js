@@ -235,15 +235,6 @@ export const tokens = [
     "description": null
   },
   {
-    "id": "primitive.color.alpha.pink-40",
-    "name": "--p-color-alpha-pink-40",
-    "layer": "primitive",
-    "type": "color",
-    "value": "rgb(247 112 227 / 0.4)",
-    "resolved": "rgb(247 112 227 / 0.4)",
-    "description": null
-  },
-  {
     "id": "primitive.color.alpha.white-55",
     "name": "--p-color-alpha-white-55",
     "layer": "primitive",
@@ -1760,8 +1751,8 @@ export const tokens = [
     "name": "--radius-xs",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.8}",
-    "resolved": "8px",
+    "value": "{primitive.dimension.6}",
+    "resolved": "6px",
     "description": null
   },
   {
@@ -1769,8 +1760,8 @@ export const tokens = [
     "name": "--radius-sm",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.12}",
-    "resolved": "12px",
+    "value": "{primitive.dimension.8}",
+    "resolved": "8px",
     "description": null
   },
   {
@@ -1778,8 +1769,8 @@ export const tokens = [
     "name": "--radius-md",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.16}",
-    "resolved": "16px",
+    "value": "{primitive.dimension.12}",
+    "resolved": "12px",
     "description": null
   },
   {
@@ -1787,8 +1778,8 @@ export const tokens = [
     "name": "--radius-lg",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.20}",
-    "resolved": "20px",
+    "value": "{primitive.dimension.16}",
+    "resolved": "16px",
     "description": null
   },
   {
@@ -1796,8 +1787,8 @@ export const tokens = [
     "name": "--radius-xl",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.28}",
-    "resolved": "28px",
+    "value": "{primitive.dimension.20}",
+    "resolved": "20px",
     "description": null
   },
   {
@@ -1805,8 +1796,8 @@ export const tokens = [
     "name": "--radius-2xl",
     "layer": "semantic",
     "type": "dimension",
-    "value": "{primitive.dimension.32}",
-    "resolved": "32px",
+    "value": "{primitive.dimension.24}",
+    "resolved": "24px",
     "description": null
   },
   {
@@ -1850,99 +1841,45 @@ export const tokens = [
     "name": "--shadow-xs",
     "layer": "semantic",
     "type": "shadow",
-    "value": "0 1px 2px rgb(20 23 31 / 0.04)",
-    "resolved": "0 1px 2px rgb(20 23 31 / 0.04)",
-    "description": "Resting lift for outlined controls and selected rows."
+    "value": "0 1px 2px rgb(20 23 31 / 0.05)",
+    "resolved": "0 1px 2px rgb(20 23 31 / 0.05)",
+    "description": "Tiny lift for small moving parts: switch knob, slider thumb, selected segment, selected option card."
   },
   {
-    "id": "semantic.shadow.float",
-    "name": "--shadow-float",
+    "id": "semantic.shadow.sm",
+    "name": "--shadow-sm",
     "layer": "semantic",
     "type": "shadow",
-    "value": "0 1px 2px rgb(20 23 31 / 0.05), 0 6px 18px rgb(20 23 31 / 0.07), inset 0 0 0 1px rgb(20 23 31 / 0.04)",
-    "resolved": "0 1px 2px rgb(20 23 31 / 0.05), 0 6px 18px rgb(20 23 31 / 0.07), inset 0 0 0 1px rgb(20 23 31 / 0.04)",
-    "description": "Floating chrome: nav buttons over content."
+    "value": "0 0 0 1px rgb(20 23 31 / 0.04), 0 2px 8px -2px rgb(20 23 31 / 0.06)",
+    "resolved": "0 0 0 1px rgb(20 23 31 / 0.04), 0 2px 8px -2px rgb(20 23 31 / 0.06)",
+    "description": "Cards, prompt cards, floating icon buttons and brand-filled controls over content."
   },
   {
-    "id": "semantic.shadow.card",
-    "name": "--shadow-card",
+    "id": "semantic.shadow.md",
+    "name": "--shadow-md",
     "layer": "semantic",
     "type": "shadow",
-    "value": "0 1px 2px rgb(20 23 31 / 0.04), 0 14px 34px -10px rgb(20 23 31 / 0.16), inset 0 0 0 1px rgb(20 23 31 / 0.05)",
-    "resolved": "0 1px 2px rgb(20 23 31 / 0.04), 0 14px 34px -10px rgb(20 23 31 / 0.16), inset 0 0 0 1px rgb(20 23 31 / 0.05)",
-    "description": "Raised content cards (prompt, discovery)."
+    "value": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -6px 20px -8px rgb(20 23 31 / 0.10)",
+    "resolved": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -6px 20px -8px rgb(20 23 31 / 0.10)",
+    "description": "Bottom sheets and bottom panels (shadow falls upward)."
+  },
+  {
+    "id": "semantic.shadow.lg",
+    "name": "--shadow-lg",
+    "layer": "semantic",
+    "type": "shadow",
+    "value": "0 1px 2px rgb(20 23 31 / 0.06), 0 10px 28px -8px rgb(20 23 31 / 0.20)",
+    "resolved": "0 1px 2px rgb(20 23 31 / 0.06), 0 10px 28px -8px rgb(20 23 31 / 0.20)",
+    "description": "Dialogs, toasts and popovers: the only tier that must clearly read as layered."
   },
   {
     "id": "semantic.shadow.button",
     "name": "--shadow-button",
     "layer": "semantic",
     "type": "shadow",
-    "value": "inset 0 1px 0 rgb(255 255 255 / 0.14), inset 0 -1px 0 rgb(0 0 0 / 0.3), 0 1px 2px rgb(20 23 31 / 0.18), 0 8px 18px -6px rgb(20 23 31 / 0.38)",
-    "resolved": "inset 0 1px 0 rgb(255 255 255 / 0.14), inset 0 -1px 0 rgb(0 0 0 / 0.3), 0 1px 2px rgb(20 23 31 / 0.18), 0 8px 18px -6px rgb(20 23 31 / 0.38)",
-    "description": null
-  },
-  {
-    "id": "semantic.shadow.sheet",
-    "name": "--shadow-sheet",
-    "layer": "semantic",
-    "type": "shadow",
-    "value": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -18px 48px -12px rgb(20 23 31 / 0.18)",
-    "resolved": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -18px 48px -12px rgb(20 23 31 / 0.18)",
-    "description": null
-  },
-  {
-    "id": "semantic.shadow.toast",
-    "name": "--shadow-toast",
-    "layer": "semantic",
-    "type": "shadow",
-    "value": "0 12px 30px -10px rgb(20 23 31 / 0.5)",
-    "resolved": "0 12px 30px -10px rgb(20 23 31 / 0.5)",
-    "description": null
-  },
-  {
-    "id": "semantic.shadow.brand",
-    "name": "--shadow-brand",
-    "layer": "semantic",
-    "type": "shadow",
-    "value": "0 8px 20px -6px {primitive.color.alpha.pink-40}",
-    "resolved": "0 8px 20px -6px rgb(247 112 227 / 0.4)",
-    "description": "Lift under brand-filled marks."
-  },
-  {
-    "id": "semantic.shadow.knob",
-    "name": "--shadow-knob",
-    "layer": "semantic",
-    "type": "shadow",
-    "value": "0 2px 4px rgb(20 23 31 / 0.18)",
-    "resolved": "0 2px 4px rgb(20 23 31 / 0.18)",
-    "description": "Switch knob."
-  },
-  {
-    "id": "semantic.shadow.thumb",
-    "name": "--shadow-thumb",
-    "layer": "semantic",
-    "type": "shadow",
-    "value": "0 1px 2px rgb(20 23 31 / 0.04), 0 2px 6px rgb(20 23 31 / 0.16)",
-    "resolved": "0 1px 2px rgb(20 23 31 / 0.04), 0 2px 6px rgb(20 23 31 / 0.16)",
-    "description": "Slider thumbs."
-  },
-  {
-    "id": "semantic.shadow.segment",
-    "name": "--shadow-segment",
-    "layer": "semantic",
-    "type": "shadow",
-    "value": "0 1px 2px rgb(20 23 31 / 0.04), 0 2px 6px rgb(20 23 31 / 0.06)",
-    "resolved": "0 1px 2px rgb(20 23 31 / 0.04), 0 2px 6px rgb(20 23 31 / 0.06)",
-    "description": "Selected segment in a segmented control."
-  },
-  {
-    "id": "semantic.shadow.panel",
-    "name": "--shadow-panel",
-    "layer": "semantic",
-    "type": "shadow",
-    "value": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -24px 48px -28px rgb(20 23 31 / 0.18)",
-    "resolved": "0 -1px 0 rgb(20 23 31 / 0.04), 0 -24px 48px -28px rgb(20 23 31 / 0.18)",
-    "description": null
+    "value": "inset 0 1px 0 rgb(255 255 255 / 0.10), 0 1px 2px rgb(20 23 31 / 0.14)",
+    "resolved": "inset 0 1px 0 rgb(255 255 255 / 0.10), 0 1px 2px rgb(20 23 31 / 0.14)",
+    "description": "Primary ink buttons: a faint top highlight and a contact shadow."
   },
   {
     "id": "semantic.opacity.disabled",
@@ -2196,8 +2133,8 @@ export const tokens = [
     "name": "--code-cell-radius",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.14}",
-    "resolved": "14px",
+    "value": "{primitive.dimension.10}",
+    "resolved": "10px",
     "description": null
   },
   {
