@@ -279,8 +279,10 @@
 .match-queue {
   display: flex;
   gap: var(--space-4);
-  margin: 0;
-  padding: 0;
+  /* Room for the 5px new-match ring, which the horizontal scroller would otherwise clip; the
+     negative margin keeps the layout where it was. */
+  margin: -6px -6px 0;
+  padding: 6px 6px 0;
   overflow-x: auto;
   list-style: none;
   scrollbar-width: none;

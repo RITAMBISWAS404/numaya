@@ -15,17 +15,11 @@ export function Avatar({ name, src, size = "md", ring, verified = false, decorat
   return (
     <span className={cx("avatar", `avatar--${size}`, ring && "has-ring", className)} aria-hidden={decorative || undefined}>
       {ring && (
-        <svg className={cx("avatar__ring", `avatar__ring--${ring.tone ?? "brand"}`)} viewBox="0 0 36 36" aria-hidden="true">
-          <circle cx="18" cy="18" r="16.5" pathLength="100" className="avatar__ring-track" />
-          <circle
-            cx="18"
-            cy="18"
-            r="16.5"
-            pathLength="100"
-            className="avatar__ring-value"
-            style={{ strokeDasharray: `${Math.round(ring.value * 100)} 100` }}
-          />
-        </svg>
+        <span
+          className={cx("avatar__ring", `avatar__ring--${ring.tone ?? "brand"}`)}
+          style={{ "--ring-value": `${Math.round(ring.value * 100)}%` }}
+          aria-hidden="true"
+        />
       )}
       <span className="avatar__image" role={decorative ? undefined : "img"} aria-label={decorative ? undefined : name}>
         {src ? <img src={src} alt="" /> : initial}

@@ -268,6 +268,11 @@ try {
           squircleSupported: CSS.supports("corner-shape", "squircle"),
           btnCorner: cs(".btn").cornerShape,
           chipCorner: cs("#interests .chip").cornerShape,
+          identitySupported: CSS.supports("corner-shape", "superellipse(1.5)"),
+          avatarShape: ["#chats .conversation .avatar__image", "#chats .match-queue .avatar__image", "#profile .avatar__image"].map((sel) => cs(sel).cornerShape),
+          avatarRadius: cs("#chats .avatar__image").borderTopLeftRadius,
+          ring: (() => { const r = document.querySelector("#profile .avatar__ring"); const st = getComputedStyle(r); return { corner: st.cornerShape, bg: st.backgroundImage, img: getComputedStyle(r.nextElementSibling).cornerShape }; })(),
+          roundCorners: [".action-bar__btn", ".nav-button", ".avatar__badge", ".result__badge", ".composer__send"].map((sel) => document.querySelector(sel) && cs(sel).cornerShape).filter(Boolean),
           cardCorner: cs("#discovery .fl-pf__section").cornerShape,
           promptShadowAlpha: alpha(cs("#profile .prompt").boxShadow),
           tabShadow: getComputedStyle(tab).boxShadow,
@@ -289,6 +294,9 @@ try {
       });
       check("geometry: buttons are pills (Meetup)", geo.btnRadius >= 999, `${geo.btnRadius}px`);
       check("geometry: squircle corners apply to cards where supported", !geo.squircleSupported || geo.cardCorner.includes("squircle"), `${geo.squircleSupported} / ${geo.cardCorner}`);
+      check("shape: identity avatars use the soft superellipse where supported (circle fallback)", geo.avatarRadius === "50%" && (!geo.identitySupported || geo.avatarShape.every((c) => c.includes("superellipse(1.5)"))), `${geo.avatarShape.join(" / ")} / r ${geo.avatarRadius}`);
+      check("shape: the profile completion ring follows the avatar shape and fills in brand pink", geo.ring.corner === geo.ring.img && geo.ring.bg.includes("conic-gradient") && geo.ring.bg.includes(PINK), `${geo.ring.corner} / ${geo.ring.bg.slice(0, 60)}`);
+      check("shape: action circles, icon buttons, the verified dot and the success badge stay round", geo.roundCorners.length >= 4 && geo.roundCorners.every((c) => c === "round"), geo.roundCorners.join(" / "));
       check("geometry: pill buttons and chips stay true pills (no squircle)", !geo.btnCorner.includes("squircle") && !geo.chipCorner.includes("squircle"), `${geo.btnCorner} / ${geo.chipCorner}`);
       check("elevation: card shadow is very light", geo.promptShadowAlpha > 0 && geo.promptShadowAlpha <= 0.08, `alpha ${geo.promptShadowAlpha}`);
       const tabAlpha = Math.max(0, ...[...geo.tabShadow.matchAll(/rgba\(\d+, \d+, \d+, ([0-9.]+)\)/g)].map((m) => parseFloat(m[1])));

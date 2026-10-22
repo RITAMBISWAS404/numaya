@@ -35,3 +35,13 @@
     corner-shape: squircle;
   }
 }
+
+/* Identity avatars (and the completion ring around them) get the softer identity superellipse.
+   Action circles (Pass / Like / SuperSwipe), icon buttons, the verified dot, the success badge and
+   pills are not listed and stay round. Without support the avatar is a circle. */
+@supports (corner-shape: superellipse(1.5)) {
+  .avatar__image,
+  .avatar__ring {
+    corner-shape: var(--shape-identity);
+  }
+}
