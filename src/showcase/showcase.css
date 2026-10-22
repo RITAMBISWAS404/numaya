@@ -364,21 +364,10 @@ code {
   place-items: center;
   width: 64px;
   height: 64px;
-  position: relative;
-  isolation: isolate;
   border-radius: 50%;
   background: var(--color-brand);
-  color: var(--color-text-primary);
+  color: var(--color-on-brand);
   box-shadow: 0 0 0 8px var(--color-brand-tint), var(--shadow-sm);
-}
-
-.sc-brand-demo__mark::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 10px;
-  border-radius: 50%;
-  background: var(--color-surface);
 }
 
 .sc-pill-demo {

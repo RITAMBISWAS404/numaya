@@ -100,11 +100,11 @@
     "$description": "The public API for product UI. Names describe intent, not appearance.",
     "color": {
       "brand": {
-        "default": { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "Brand pink #F770E3: marks, progress, selected, verified, like/send fills, switches. Foreground on it must be color.on-brand (ink). White on it is only 2.51:1." },
+        "default": { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "Brand pink #F770E3: marks, progress, selected, verified, like/send fills, switches. Glyphs on it use color.on-brand (white, glyph-only, 2.51:1); no text sits on it." },
         "tint":    { "$type": "color", "$value": "{primitive.color.pink.100}", "$description": "Light brand surface for selected and highlighted states; dark text allowed." },
         "subtle":  { "$type": "color", "$value": "{primitive.color.pink.200}", "$description": "Brand-tinted borders and image placeholders." }
       },
-      "on-brand": { "$type": "color", "$value": "{primitive.color.neutral.900}", "$description": "Foreground (text and glyphs) on any solid brand-pink fill. Always dark ink: 7.15:1 on #F770E3." },
+      "on-brand": { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Glyphs (never text) on a solid brand-pink fill: white, bold or filled, 16px or larger, always with an accessible name or a text label beside it. A documented exception: white on #F770E3 is 2.51:1." },
       "text": {
         "primary":    { "$type": "color", "$value": "{primitive.color.neutral.900}" },
         "secondary":  { "$type": "color", "$value": "{primitive.color.neutral.700}" },

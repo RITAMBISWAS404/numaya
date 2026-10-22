@@ -78,12 +78,11 @@
   bottom: -1px;
   display: grid;
   place-items: center;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: var(--color-brand);
   box-shadow: 0 0 0 2px var(--color-surface);
-  --disc-inset: 3px;
 }
 
 .verified {
@@ -102,7 +101,6 @@
   height: 20px;
   border-radius: 50%;
   background: var(--color-brand);
-  --disc-inset: 3px;
 }
 
 .verified--compact .verified__mark {
@@ -110,46 +108,12 @@
   height: 18px;
 }
 
-/* ------------------------------------------------------------------ */
-/* Pink actions and marks with a white inset                           */
-/* ------------------------------------------------------------------ */
-/* A glyph never sits directly on saturated #F770E3: ink on it reads harsh, and white on it is
-   only 2.51:1. Pink actions and marks keep their fill (and sheen) as a ring and carry the ink
-   glyph on a white inset of the same shape, like the success badge. */
-.action-bar__btn--super,
-.match__mark,
-.composer__send:not(:disabled),
+/* Pink actions and marks carry a white glyph directly on the exact brand pink (no darker pink, no
+   ink on pink, no white disc). White on #F770E3 is 2.51:1, a documented exception: these glyphs are
+   bold or filled, never text, and every one has an accessible name or a text label beside it. */
 .avatar__badge,
-.verified__mark,
-.plan-card.is-selected .plan-card__check {
-  isolation: isolate;
-  color: var(--color-text-primary);
-}
-
-.action-bar__btn--super,
-.composer__send:not(:disabled),
-.verified__mark,
-.plan-card.is-selected .plan-card__check {
-  position: relative;
-}
-
-.action-bar__btn--super { --disc-inset: 11px; }
-.match__mark { --disc-inset: 9px; }
-.composer__send:not(:disabled) { --disc-inset: 8px; }
-.plan-card.is-selected .plan-card__check { --disc-inset: 3px; }
-
-.action-bar__btn--super::before,
-.match__mark::before,
-.composer__send:not(:disabled)::before,
-.avatar__badge::before,
-.verified__mark::before,
-.plan-card.is-selected .plan-card__check::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: var(--disc-inset, 8px);
-  border-radius: inherit;
-  background: var(--color-surface);
+.verified__mark {
+  color: var(--color-on-brand);
 }
 
 .badge {
@@ -849,6 +813,11 @@ button.list-row__hit:hover {
   object-fit: contain;
 }
 
+/* Reserved: holds the slot's space with nothing drawn (the Welcome hero, until artwork arrives). */
+.illustration--reserved {
+  background: none;
+}
+
 .illustration--sm {
   border-radius: var(--radius-lg);
 }
@@ -1057,30 +1026,70 @@ button.list-row__hit:hover {
   list-style: none;
 }
 
-/* Profile setup progress. A light-neutral container (24px) with 8px inset, so the rows take the
-   16px radius (outer = inner + inset). Completed steps get a pink-tint tile with an ink icon, the
-   active step lifts onto white with an ink tile, upcoming steps are muted. */
+/* Profile setup progress: a white card (24px, hairline + soft shadow) like the other cards. Steps
+   are rows with a 36px round tile and a 2px connector to the next tile; no nested cards. Done: pink
+   tile with a white check. Active: ink tile, semibold label and a "Next" pill. Upcoming: muted. */
 .setup-progress {
   display: grid;
-  gap: 2px;
+  gap: var(--space-2);
   width: 100%;
-  margin: 0;
-  padding: var(--space-2);
+  padding: var(--space-4) var(--space-5);
   border-radius: var(--radius-card);
-  background: var(--color-surface-soft);
-  list-style: none;
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle), var(--shadow-xs);
   text-align: left;
 }
 
+.setup-progress__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.setup-progress__title {
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: var(--type-title-sm-size);
+  line-height: var(--type-title-sm-line);
+}
+
+.setup-progress__count {
+  color: var(--color-text-muted);
+  font-size: var(--type-caption-size);
+  font-variant-numeric: tabular-nums;
+}
+
+.setup-progress__list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .setup-progress__step {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  min-height: 52px;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
+  padding: var(--space-2) 0;
   color: var(--color-text-muted);
-  font-weight: var(--font-weight-medium);
+}
+
+/* Connector from this tile down to the next one. */
+.setup-progress__step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 17px;
+  top: calc(50% + 20px);
+  bottom: calc(-50% + 20px);
+  width: 2px;
+  border-radius: 1px;
+  background: var(--color-border-subtle);
+}
+
+.setup-progress__step.is-done:not(:last-child)::after {
+  background: var(--color-brand);
 }
 
 .setup-progress__icon {
@@ -1090,15 +1099,29 @@ button.list-row__hit:hover {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--color-surface);
+  background: var(--color-surface-sunken);
   color: var(--color-text-subtle);
 }
 
-.setup-progress__label {
+.setup-progress__text {
   flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.setup-progress__label {
+  font-weight: var(--font-weight-medium);
+}
+
+.setup-progress__detail {
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+  color: var(--color-text-muted);
 }
 
 .setup-progress__status {
+  flex: none;
   color: var(--color-text-muted);
   font-size: var(--type-caption-size);
   font-weight: var(--font-weight-semibold);
@@ -1109,14 +1132,15 @@ button.list-row__hit:hover {
 }
 
 .setup-progress__step.is-done .setup-progress__icon {
-  background: var(--color-brand-subtle);
-  color: var(--color-text-primary);
+  background: var(--color-brand);
+  color: var(--color-on-brand);
 }
 
 .setup-progress__step.is-active {
-  background: var(--color-surface);
-  box-shadow: var(--shadow-xs);
   color: var(--color-text-primary);
+}
+
+.setup-progress__step.is-active .setup-progress__label {
   font-weight: var(--font-weight-semibold);
 }
 
@@ -1126,5 +1150,8 @@ button.list-row__hit:hover {
 }
 
 .setup-progress__step.is-active .setup-progress__status {
-  color: var(--color-text-primary);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-brand-tint);
+  color: var(--color-text-brand-deep);
 }

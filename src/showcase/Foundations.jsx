@@ -55,10 +55,10 @@ export function Foundations() {
       <Section
         id="brand"
         title="Brand"
-        intro="The Numaya pink #F770E3 is the identity. It appears at its exact value on marks, progress, selection, verification and like/send fills. No glyph or label sits directly on a solid pink fill: ink there reads harsh and white is only 2.51:1, so pink actions carry their glyph on a white inset, and selected pills are ink with a pink mark."
+        intro="The Numaya pink #F770E3 is the identity. It appears at its exact value on marks, progress, selection, verification and SuperSwipe/send fills, and is never darkened. Pink fills carry white glyphs only, bold or filled and always with an accessible name: white on #F770E3 is 2.51:1, a documented exception, so no text ever sits on pink. Ink never sits on pink. Selected pills and checkboxes are ink with a pink cue."
       >
         <Grid min={240}>
-          <Specimen title="Brand fill + white inset + ink glyph" note={`#F770E3 ring · ink on white ${ratio(tokenByName["--color-text-primary"].resolved, WHITE)}`}>
+          <Specimen title="Brand fill + white glyph" note={`#F770E3 · white glyph ${ratio(WHITE, brandHex)} (glyph only, documented exception)`}>
             <span className="sc-brand-demo">
               <span className="sc-brand-demo__mark">
                 <Icon name="check" size={28} stroke={2.75} />
@@ -80,9 +80,9 @@ export function Foundations() {
               Change number
             </p>
           </Specimen>
-          <Specimen title="Never" note="White content on a solid brand fill" tone="soft">
-            <span className="sc-pill-demo sc-pill-demo--never" style={{ background: "var(--color-brand)", color: "var(--color-text-on-inverse)", boxShadow: "none" }}>
-              <Icon name="close" size={16} stroke={2.4} /> White on #F770E3
+          <Specimen title="Never" note="Ink (or any text) on a solid brand fill" tone="soft">
+            <span className="sc-pill-demo sc-pill-demo--never" style={{ background: "var(--color-brand)", color: "var(--color-text-primary)", boxShadow: "none" }}>
+              <Icon name="close" size={16} stroke={2.4} /> Ink on #F770E3
             </span>
           </Specimen>
         </Grid>

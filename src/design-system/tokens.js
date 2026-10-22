@@ -673,7 +673,7 @@ export const tokens = [
     "type": "color",
     "value": "{primitive.color.pink.500}",
     "resolved": "#f770e3",
-    "description": "Brand pink #F770E3: marks, progress, selected, verified, like/send fills, switches. Foreground on it must be color.on-brand (ink). White on it is only 2.51:1."
+    "description": "Brand pink #F770E3: marks, progress, selected, verified, like/send fills, switches. Glyphs on it use color.on-brand (white, glyph-only, 2.51:1); no text sits on it."
   },
   {
     "id": "semantic.color.brand.tint",
@@ -698,9 +698,9 @@ export const tokens = [
     "name": "--color-on-brand",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.neutral.900}",
-    "resolved": "#14171f",
-    "description": "Foreground (text and glyphs) on any solid brand-pink fill. Always dark ink: 7.15:1 on #F770E3."
+    "value": "{primitive.color.neutral.0}",
+    "resolved": "#ffffff",
+    "description": "Glyphs (never text) on a solid brand-pink fill: white, bold or filled, 16px or larger, always with an accessible name or a text label beside it. A documented exception: white on #F770E3 is 2.51:1."
   },
   {
     "id": "semantic.color.text.primary",

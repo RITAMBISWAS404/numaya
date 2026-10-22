@@ -17,6 +17,7 @@ export const initialState = {
     ],
   },
   prefs: { age: [27, 38], distance: 15, snooze: false, messages: true, likes: true },
+  setupDone: [], // profile-setup steps finished with their next button: basics, interests, photos
   seen: [], // discovery ids already liked or passed
   matches: ["priya", "jo"], // matched people, newest last
   lastMatch: null, // id shown on the match screen
@@ -32,6 +33,8 @@ export const initialState = {
 
 export function reducer(state, action) {
   switch (action.type) {
+    case "setupDone":
+      return state.setupDone.includes(action.step) ? state : { ...state, setupDone: [...state.setupDone, action.step] };
     case "profile":
       return { ...state, profile: { ...state.profile, ...action.patch } };
     case "decide": {

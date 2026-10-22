@@ -8,7 +8,7 @@ the **rules**. Live swatches and specimens: `showcase.html` (Foundations section
 | Role | Tokens | Rule |
 | --- | --- | --- |
 | Brand | `--color-brand` (exact `#F770E3`), `-tint`, `-subtle` (lightened mixes of the brand; no darker second pink) | Marks, progress, selected fills, verified mark, like/send fills, switches, slider interval, field focus. Never darkened |
-| On brand | `--color-on-brand` (dark ink) | The only foreground allowed on a solid brand fill: 7.15:1. White on `#F770E3` is 2.51:1 and is not allowed |
+| On brand | `--color-on-brand` (white) | Glyphs only, never text, on a solid brand fill: bold or filled, 12px+ at a heavy stroke, always with an accessible name or a label beside it. 2.51:1, a documented exception (see below). Ink on pink is never used |
 | Headline emphasis | `Emphasis` → `--color-text-accent` (exact `#F770E3`) | One word in a display-size hero headline (Welcome, You're verified, What are you into?, It's a match). The letters themselves; no marker or underline |
 | Brand-context text | `--color-text-brand`, `-brand-deep` (resolve to ink) | Links, eyebrows, labels. Pink text on white fails, so these use the neutral ink; links stay underlined |
 | Text | `--color-text-primary`, `-secondary`, `-muted`, `-subtle`, `-on-inverse`, `-brand-deep` | Dark text only on white, neutral or tinted surfaces |
@@ -24,9 +24,9 @@ All pairs below are enforced by `tests/unit/tokens.test.js`.
 | Pair | Ratio | Status |
 | --- | --- | --- |
 | Primary / secondary / muted text on white | 17.9 / 10.4 / 5.4 | AA |
-| Ink (`on-brand`, `text-brand`) on `#F770E3` / on brand tint | 7.15 / 16 | AA |
+| Ink (`text-brand`) on brand tint | 16 | AA |
 | Focus ring (ink) on white | 17.9 | Non-text AA. The pink halo is decorative |
-| **White on `#F770E3`** | **2.51** | **Not allowed.** This is why `on-brand` is ink |
+| **White glyphs on `#F770E3`** (`on-brand`) | **2.51** | **Documented exception, glyphs only.** Chosen by the product owner over ink on pink and over white-disc insets. Below the 3:1 non-text minimum, so every such glyph is redundant with an accessible name or adjacent text (SuperSwipe, send, verified, match), and no text ever sits on pink |
 | **`#F770E3` text on white** (`text-accent`) | **2.51** | **Exception, by product decision.** Display-size hero emphasis only (one word per headline, readable in context); below the 3:1 large-text minimum. Never for body, links, labels or instructions. Excluded from the axe audit by selector (`.emphasis`) |
 | `text-subtle` on white | 2.6 | Exception: placeholders and disabled labels only |
 

@@ -219,8 +219,15 @@ body {
 }
 
 .fl-intro {
-  gap: var(--space-5);
-  padding-top: var(--space-4);
+  gap: var(--space-4);
+  padding-top: var(--space-3);
+}
+
+/* Short phones: the success badge anchors the screen, so the wordmark steps aside for the steps. */
+@media (max-height: 700px) {
+  .fl-intro > .wordmark {
+    display: none;
+  }
 }
 
 /* Match: the ribbon sits in the empty strip at the bottom, behind nothing. */

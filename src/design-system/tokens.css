@@ -81,7 +81,7 @@
   --color-brand: var(--p-color-pink-500);
   --color-brand-tint: var(--p-color-pink-100);
   --color-brand-subtle: var(--p-color-pink-200);
-  --color-on-brand: var(--p-color-neutral-900);
+  --color-on-brand: var(--p-color-neutral-0);
   --color-text-primary: var(--p-color-neutral-900);
   --color-text-secondary: var(--p-color-neutral-700);
   --color-text-muted: var(--p-color-neutral-500);

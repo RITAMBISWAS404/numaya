@@ -577,13 +577,13 @@ function Feedback() {
             <p>Thanks for helping keep Numaya safe. We’ll update you in Help.</p>
           </ResultPanel>
         </Specimen>
-        <Specimen title="SetupProgress" note="Done (pink tint, ink check) · next (white, ink tile) · upcoming (muted)">
+        <Specimen title="SetupProgress" note="White card · done (pink tile, white check) · next (ink tile) · upcoming (muted)">
           <SetupProgress
+            title="Your profile"
             steps={[
-              { label: "Phone number", icon: "verified", status: "done" },
-              { label: "The basics", icon: "user", status: "active" },
-              { label: "What you’re into", icon: "sparkle", status: "upcoming" },
-              { label: "Photos", icon: "camera", status: "upcoming" },
+              { label: "The basics", detail: "Name, age and what you’re looking for", icon: "user", status: "done" },
+              { label: "Interests and prompt", detail: "What you’re into, in your words", icon: "sparkle", status: "active" },
+              { label: "Photos", detail: "At least two", icon: "camera", status: "upcoming" },
             ]}
           />
         </Specimen>

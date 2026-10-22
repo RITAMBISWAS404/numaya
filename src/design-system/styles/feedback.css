@@ -6,32 +6,46 @@
   text-align: center;
 }
 
-/* Success badge: the brand-pink ring (sheen + glow) holds a white inset disc, so the ink check sits on
-   white (high contrast) instead of directly on saturated pink. */
+/* Success badge: a 9-sided "cookie" in the exact brand pink with a white check, on a pale tint
+   halo of the same shape. The shape is reserved for success, so it never reads like the round
+   neutral or danger outcomes. Drawn as SVG (Content.jsx) so the halo follows the scallops. */
 .result__badge {
   position: relative;
   display: grid;
   place-items: center;
-  width: var(--size-avatar-lg);
-  height: var(--size-avatar-lg);
-  border-radius: 50%;
-  background: var(--gradient-brand-sheen), var(--color-brand);
-  color: var(--color-text-primary);
-  box-shadow: 0 0 0 8px var(--color-brand-tint), var(--shadow-brand);
+  width: 76px;
+  height: 76px;
+  color: var(--color-on-brand);
   animation: badge-in 560ms var(--motion-ease-out) 140ms both;
 }
 
-.result__badge::before {
-  content: "";
+.result__shape {
   position: absolute;
-  inset: 10px;
-  border-radius: 50%;
-  background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
-.result__badge > svg {
+.result__shape-halo {
+  fill: var(--color-brand-tint);
+}
+
+.result__shape-fill {
+  fill: var(--color-brand);
+}
+
+.result__badge > .icon,
+.result__badge > svg:not(.result__shape) {
   position: relative;
+}
+
+/* Neutral and danger outcomes stay round. */
+.result--neutral .result__badge,
+.result--danger .result__badge {
+  width: var(--size-avatar-lg);
+  height: var(--size-avatar-lg);
+  border-radius: 50%;
 }
 
 @keyframes badge-in {
@@ -79,6 +93,7 @@
 }
 
 .result--danger .result__badge {
+  color: var(--color-text-on-inverse);
   background: var(--color-danger);
   box-shadow: 0 0 0 8px var(--color-danger-tint);
 }
@@ -86,6 +101,7 @@
 /* Safety outcomes (unmatched, blocked): the same badge construction in quiet neutrals, so ending a
    conversation is confirmed without the brand celebration of verification. */
 .result--neutral .result__badge {
+  color: var(--color-text-primary);
   background: var(--color-border-strong);
   box-shadow: 0 0 0 8px var(--color-surface-soft);
 }

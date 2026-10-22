@@ -113,22 +113,11 @@
   box-shadow: none;
 }
 
-/* Done: the pink ring with a white inset and an ink check, like the success badge. */
+/* Done: a white check on the brand pink (glyph only, see color.on-brand). */
 .brief-step.is-done .brief-step__index {
-  position: relative;
-  isolation: isolate;
   background: var(--color-brand);
-  color: var(--color-text-primary);
+  color: var(--color-on-brand);
   box-shadow: none;
-}
-
-.brief-step.is-done .brief-step__index::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 4px;
-  border-radius: inherit;
-  background: var(--color-surface);
 }
 
 .brief-step__text {

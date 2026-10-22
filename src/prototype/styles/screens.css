@@ -17,21 +17,11 @@
   container-type: size;
 }
 
-.welcome__hero > .ribbon {
-  z-index: -1;
-}
-
-.welcome__lockup {
-  flex: none;
-  padding-top: var(--space-2);
-  animation: rise-in 600ms var(--motion-ease-out) both;
-}
-
-/* Reserved hero illustration (docs/numaya-illustration-map.md: welcome-hero). A square slot that
-   takes the hero's free height, so the panel with the CTA never leaves the screen. */
+/* Reserved hero illustration (docs/numaya-illustration-map.md: welcome-hero). An invisible square
+   slot that takes the hero's free height, so the panel with the CTA never leaves the screen. */
 .welcome__art {
   flex: none;
-  width: min(280px, 76cqw, calc(100cqh - 112px));
+  width: min(320px, 84cqw, calc(100cqh - 32px));
   margin: auto 0;
   animation: rise-in 640ms var(--motion-ease-out) 80ms both;
 }
@@ -102,7 +92,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .welcome__art,
-  .welcome__lockup,
   .welcome__panel > * {
     animation-name: fade-in;
   }

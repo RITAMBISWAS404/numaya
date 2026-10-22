@@ -24,7 +24,7 @@ const browser = await chromium.launch();
 
 /* Deliberate exceptions, each documented where it is shown. */
 const EXCLUDE = [
-  ".sc-pill-demo--never", // the showcase's "Never: white on #F770E3" anti-example
+  ".sc-pill-demo--never", // the showcase's "Never: ink on #F770E3" anti-example
   ".emphasis", // one display-size hero word in exact #F770E3 (2.51:1): requested, documented exception (color.text.accent)
 ];
 

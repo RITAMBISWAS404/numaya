@@ -58,8 +58,12 @@ try {
     check("headline emphasis is the word itself in exact #F770E3 (no marker, underline or background)", emphasis.color === "rgb(247, 112, 227)" && emphasis.bg === "none" && emphasis.deco === "none", `${emphasis.color} / ${emphasis.bg} / ${emphasis.deco}`);
     check("headline has no decorative underline", !emphasis.after);
 
-    const mark = await p.evaluate(() => getComputedStyle(document.querySelector(".welcome__lockup .wordmark rect[mask]")).fill);
-    check("wordmark mark is the brand pink", mark === "rgb(247, 112, 227)", mark);
+    const hero = await p.evaluate(() => {
+      const h = document.querySelector(".welcome__hero");
+      const slot = h.querySelector("[data-illustration='welcome-hero']");
+      return { logo: h.querySelectorAll(".wordmark").length, ribbon: h.querySelectorAll(".ribbon").length, bg: getComputedStyle(slot).backgroundColor, w: Math.round(slot.getBoundingClientRect().width) };
+    });
+    check("welcome: the hero holds an invisible reserved slot (no logo, ribbon or grey box)", hero.logo === 0 && hero.ribbon === 0 && hero.bg === "rgba(0, 0, 0, 0)" && hero.w >= 200, JSON.stringify(hero));
     const welcome = await p.evaluate(() => {
       const a = document.querySelector(".legal a");
       return { slot: !!document.querySelector("[data-illustration='welcome-hero']"), stack: document.querySelectorAll(".prompt-card").length, link: { color: getComputedStyle(a).color, line: getComputedStyle(a).textDecorationColor } };
@@ -101,10 +105,11 @@ try {
     await wait(3200);
     const badge = await p.evaluate(() => {
       const el = document.querySelector(".result__badge");
-      return el && { bg: getComputedStyle(el).backgroundColor, fg: getComputedStyle(el).color };
+      const fill = el?.querySelector(".result__shape-fill");
+      return el && { bg: fill && getComputedStyle(fill).fill, fg: getComputedStyle(el).color };
     });
     check("verified badge fill is exactly #F770E3", badge?.bg === "rgb(247, 112, 227)", badge?.bg);
-    check("verified badge check is dark ink, not white", badge?.fg === "rgb(20, 23, 31)", badge?.fg);
+    check("verified badge check is white, never ink on pink", badge?.fg === "rgb(255, 255, 255)", badge?.fg);
     await p.screenshot({ path: `${OUT}/prototype-verified.png` });
 
     await p.getByRole("button", { name: "Start over" }).first().click();
@@ -247,7 +252,7 @@ try {
     check("expressive: ribbons are aria-hidden and never take pointer input", deco.hidden);
     check("expressive: reduced motion keeps ribbons static", deco.anim.every((a) => a === "none"), deco.anim.join());
     check("expressive: ribbons are a very light neutral band with an exact-#F770E3 accent line", deco.colours.length > 0 && deco.colours.every((c) => c === "rgb(243, 245, 248)|rgb(247, 112, 227)"), deco.colours.join());
-    check("setup progress: verified intro shows done / active / upcoming steps with filled icons", deco.setup.states === "done,active,upcoming,upcoming" && deco.setup.current === 1 && deco.setup.icons, JSON.stringify(deco.setup));
+    check("setup progress: a fresh intro shows Basics next and Interests, Photos upcoming, with filled icons", deco.setup.states === "active,upcoming,upcoming" && deco.setup.current === 0 && deco.setup.icons, JSON.stringify(deco.setup));
     check("expressive: the match title colours one word brand pink", deco.marker?.text === "match" && deco.marker.color === "rgb(247, 112, 227)", JSON.stringify(deco.marker));
     check("motion: no console errors with reduced motion", p.errors.length === 0, p.errors.join(" | "));
     await p.evaluate(() => localStorage.clear());
@@ -285,7 +290,8 @@ try {
           chipBg: cs("#interests .chip.is-selected").backgroundColor,
           chipRing: cs("#interests .chip.is-selected").boxShadow,
           chipSizes: (() => { const sel = document.querySelector("#interests .chip.is-selected"), un = document.querySelector("#interests .chip:not(.is-selected)"); const a = getComputedStyle(sel), b = getComputedStyle(un); return [sel.getBoundingClientRect().height, un.getBoundingClientRect().height, a.paddingLeft, b.paddingLeft]; })(),
-          badgeDisc: cs("#intro .result__badge", "::before").backgroundColor,
+          badgeShape: cs("#intro .result__shape-fill")?.fill,
+          badgeDisc: cs("#intro .result__badge", "::before").content,
           badgeIcon: cs("#intro .result__badge").color,
           chipFg: cs("#interests .chip.is-selected").color,
           chipTick: cs("#interests .chip.is-selected .chip__affordance").color,
@@ -309,17 +315,17 @@ try {
         };
       });
       check("flows: like is an ink action (Meetup primary sheen) with a white glyph", states.likeBg.includes(INK) && states.likeFg === "rgb(255, 255, 255)", `${states.likeBg.slice(0, 60)} / ${states.likeFg}`);
-      check("flows: SuperSwipe is the single brand-pink action, with an ink glyph", states.superBg === PINK && states.superFg === INK, `${states.superBg} / ${states.superFg}`);
+      check("flows: SuperSwipe is the single brand-pink action, with a white glyph (never ink on pink)", states.superBg === PINK && states.superFg === "rgb(255, 255, 255)", `${states.superBg} / ${states.superFg}`);
       check("flows: selected interest is an ink pill with white text and a brand-pink tick", states.chipBg === INK && states.chipRing === "none" && states.chipFg === "rgb(255, 255, 255)" && states.chipTick === PINK, `${states.chipBg} / ${states.chipFg} / ${states.chipTick}`);
       check("flows: every interest chip leads with a filled Solar cue", states.chipIcons);
       check("flows: selecting a chip keeps its size (no reflow)", states.chipSizes[0] === states.chipSizes[1] && states.chipSizes[2] === states.chipSizes[3], states.chipSizes.join(" / "));
-      check("flows: success badge puts an ink check on a white inset disc", states.badgeDisc === "rgb(255, 255, 255)" && states.badgeIcon === INK, `${states.badgeDisc} / ${states.badgeIcon}`);
+      check("flows: success badge is a pink cookie shape with a white check and no white disc", states.badgeShape === PINK && states.badgeIcon === "rgb(255, 255, 255)" && states.badgeDisc === "none", `${states.badgeShape} / ${states.badgeIcon} / ${states.badgeDisc}`);
       check("photos: empty slots (white, hairline) are distinct from filled photo placeholders (grey)", states.slotEmpty === "rgb(255, 255, 255)" && /inset/.test(states.slotEmptyEdge) && states.slotFilled !== states.slotEmpty, `${states.slotFilled} vs ${states.slotEmpty}`);
       const pinkFg = await p.evaluate(() => {
-        const disc = (sel) => { const e = document.querySelector(sel); return e && { bg: getComputedStyle(e, "::before").backgroundColor, fg: getComputedStyle(e).color }; };
+        const disc = (sel) => { const e = document.querySelector(sel); return e && { inset: getComputedStyle(e, "::before").content, bg: getComputedStyle(e).backgroundColor, fg: getComputedStyle(e).color }; };
         const cb = document.querySelector("#basics .choice__input--checkbox:checked");
         return {
-          discs: [disc("#discovery .action-bar__btn--super"), disc("#chats .avatar__badge"), disc("#chat .verified__mark")].filter(Boolean),
+          discs: [disc("#discovery .action-bar__btn--super"), disc("#chats .avatar__badge"), disc("#chat .verified__mark"), disc("#chat .composer__send:not(:disabled)")].filter(Boolean),
           checkbox: cb && getComputedStyle(cb).backgroundColor,
           phoneRadius: getComputedStyle(document.querySelector("#basics .input")).borderTopLeftRadius,
           infoCards: document.querySelectorAll("#photos .info-card, #settings .info-card").length,
@@ -343,7 +349,7 @@ try {
           send: getComputedStyle(document.querySelector("#chat .composer__send")).borderTopLeftRadius,
         };
       });
-      check("pink: pink actions and marks carry their ink glyph on a white inset, never directly on pink", pinkFg.discs.length >= 3 && pinkFg.discs.every((d) => d.bg === "rgb(255, 255, 255)" && d.fg === INK), JSON.stringify(pinkFg.discs));
+      check("pink: pink actions and marks carry white glyphs, with no white inset disc and never ink", pinkFg.discs.length >= 3 && pinkFg.discs.every((d) => d.inset === "none" && d.fg === "rgb(255, 255, 255)" && d.fg !== INK), JSON.stringify(pinkFg.discs));
       check("selection: a checked checkbox is ink with a white tick (no glyph on pink)", pinkFg.checkbox === INK, pinkFg.checkbox);
       check("fields: form fields are 16px rounded rectangles, not pills", pinkFg.phoneRadius === "16px", pinkFg.phoneRadius);
       check("info cards: photo guidance and blocking help use the shared information card", pinkFg.infoCards === 2, String(pinkFg.infoCards));
@@ -515,8 +521,8 @@ try {
       await p.getByRole("button", { name: "Fake profile" }).click();
       await wait(600);
       check("flows: report ends in a block confirmation", (await textOf("chat")).includes("You’ve blocked and reported Maya"));
-      const outcome = await p.evaluate(() => { const b = document.querySelector("#chat .result__badge"); const st = getComputedStyle(b); return { neutral: b.closest(".result").classList.contains("result--neutral"), bg: st.backgroundImage + " " + st.backgroundColor, shadow: st.boxShadow, disc: getComputedStyle(b, "::before").backgroundColor }; });
-      check("flows: safety outcomes use the neutral badge (no brand pink or glow), still a white disc", outcome.neutral && !outcome.bg.includes(PINK) && !outcome.shadow.includes("247, 112, 227") && outcome.disc === "rgb(255, 255, 255)", JSON.stringify(outcome));
+      const outcome = await p.evaluate(() => { const b = document.querySelector("#chat .result__badge"); const st = getComputedStyle(b); return { neutral: b.closest(".result").classList.contains("result--neutral"), bg: st.backgroundImage + " " + st.backgroundColor, shadow: st.boxShadow, round: st.borderTopLeftRadius, cookie: !!b.querySelector(".result__shape") }; });
+      check("flows: safety outcomes use the round neutral badge (no brand pink, glow or success cookie)", outcome.neutral && !outcome.bg.includes(PINK) && !outcome.shadow.includes("247, 112, 227") && outcome.round === "50%" && !outcome.cookie, JSON.stringify(outcome));
       check("flows: blocked person leaves the inbox", !(await textOf("chats")).includes("Maya"));
       check("flows: settings counts the blocked person", /Blocked people 1/.test(await textOf("settings")));
       await f("chats").getByRole("button", { name: /Jo/ }).first().click();

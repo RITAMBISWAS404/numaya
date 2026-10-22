@@ -20,6 +20,12 @@ describe("flow preview store", () => {
     expect(newMatches(s)).toEqual(["jo"]);
   });
 
+  it("records each finished profile-setup step once, in order", () => {
+    expect(initialState.setupDone).toEqual([]);
+    const s = run({ type: "setupDone", step: "basics" }, { type: "setupDone", step: "basics" }, { type: "setupDone", step: "interests" });
+    expect(s.setupDone).toEqual(["basics", "interests"]);
+  });
+
   it("blocking or unmatching removes the person everywhere", () => {
     const s = run({ type: "end", id: "priya", reason: "blocked" }, { type: "end", id: "jo", reason: "unmatched" });
     expect(conversations(s)).toEqual([]);

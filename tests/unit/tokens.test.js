@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { build, cssVarName } from "../../scripts/tokens.mjs";
 import { contrast, hexToRgb, luminance } from "../../src/lib/contrast.js";
@@ -45,9 +45,17 @@ describe("token pipeline", () => {
     expect(pinks.map((id) => id.split(".").pop())).toEqual(["50", "100", "200", "500"]);
   });
 
-  it("puts dark ink, not white, on solid brand fills", () => {
-    expect(value("--color-on-brand").toLowerCase()).toBe(value("--p-color-neutral-900").toLowerCase());
-    expect(contrast(value("--color-on-brand"), value("--color-brand"))).toBeGreaterThanOrEqual(4.5);
+  it("puts white glyphs, never ink, on solid brand fills, and only on the known glyph marks", () => {
+    expect(value("--color-on-brand").toLowerCase()).toBe("#ffffff");
+    // Every rule that uses on-brand is one of the icon-only pink marks (no text sits on pink).
+    const GLYPH_MARKS = /action-bar__btn--super|match__mark|composer__send|avatar__badge|verified__mark|plan-card__check|result__badge|setup-progress__step\.is-done|brief-step\.is-done|sc-brand-demo__mark/;
+    const productCss = readdirSync("src", { recursive: true })
+      .filter((f) => f.endsWith(".css") && !f.endsWith("tokens.css"))
+      .map((f) => readFileSync(`src/${f}`, "utf8").replace(/\/\*[\s\S]*?\*\//g, ""))
+      .join("\n");
+    const rules = [...productCss.matchAll(/([^{}]+)\{[^{}]*var\(--color-on-brand\)[^{}]*\}/g)].map((m) => m[1].trim());
+    expect(rules.length).toBeGreaterThan(5);
+    for (const sel of rules) expect(sel).toMatch(GLYPH_MARKS);
   });
 });
 
@@ -86,7 +94,6 @@ describe("contrast requirements", () => {
     ["--color-text-primary", "--color-surface-page"],
     ["--color-text-brand", "--color-surface"],
     ["--color-text-brand-deep", "--color-brand-tint"],
-    ["--color-on-brand", "--color-brand"],
     ["--color-text-brand", "--color-surface"],
     ["--color-text-brand", "--color-brand-tint"],
     ["--color-text-on-inverse", "--color-surface-inverse"],
@@ -114,8 +121,10 @@ describe("contrast requirements", () => {
     const accent = contrast(value("--color-text-accent"), value("--color-surface"));
     expect(accent).toBeGreaterThan(2.4);
     expect(accent).toBeLessThan(3);
-    // White on the brand fill fails, which is why on-brand is ink.
-    expect(contrast(WHITE, value("--color-brand"))).toBeLessThan(3);
+    // White glyphs on the brand fill are 2.51:1: a documented, glyph-only exception (never text).
+    const onBrand = contrast(value("--color-on-brand"), value("--color-brand"));
+    expect(onBrand).toBeGreaterThan(2.4);
+    expect(onBrand).toBeLessThan(3);
     // Placeholder and disabled text.
     expect(contrast(value("--color-text-subtle"), value("--color-surface"))).toBeLessThan(3);
   });

@@ -111,22 +111,26 @@ function useFlash() {
 }
 
 /* 1 · Onboarding → profile setup -------------------------------------------- */
-/* Where the journey stands on this screen: the number was just verified, the basics come next. */
+/* Profile setup steps, in order. A step is done once its next button has been pressed; the first
+   step not done is the current one. */
 const SETUP_STEPS = [
-  { label: "Phone number", icon: "verified", status: "done" },
-  { label: "The basics", icon: "user", status: "active" },
-  { label: "What you’re into", icon: "sparkle", status: "upcoming" },
-  { label: "Photos", icon: "camera", status: "upcoming" },
+  { id: "basics", label: "The basics", icon: "user", screen: "basics" },
+  { id: "interests", label: "Interests and prompt", icon: "sparkle", screen: "interests" },
+  { id: "photos", label: "Photos", icon: "camera", screen: "photos" },
 ];
 
 export function SetupIntro({ go }) {
+  const [state] = useStore();
+  const done = state.setupDone ?? [];
+  const next = SETUP_STEPS.find((s) => !done.includes(s.id));
+  const steps = SETUP_STEPS.map((s) => ({ ...s, status: done.includes(s.id) ? "done" : s === next ? "active" : "upcoming" }));
   return (
     <Frame
       tone="page"
       footer={
         <div className="fl-stack fl-stack--full">
-          <Button onClick={() => go("basics")}>Build my profile</Button>
-          <p className="fl-caption fl-center">About two minutes. You can finish later.</p>
+          <Button onClick={() => go(next ? next.screen : "discovery")}>{!done.length ? "Build my profile" : next ? "Continue my profile" : "Go to Discover"}</Button>
+          <p className="fl-caption fl-center">{next ? "About two minutes. You can finish later." : "Your profile is ready."}</p>
         </div>
       }
     >
@@ -135,7 +139,7 @@ export function SetupIntro({ go }) {
         <ResultPanel title={<>You’re <Emphasis>verified</Emphasis></>}>
           <p>+1 (415) 555-0132 is confirmed. Now let’s make a profile people actually want to reply to.</p>
         </ResultPanel>
-        <SetupProgress steps={SETUP_STEPS} />
+        <SetupProgress title="Your profile" steps={steps} />
       </div>
     </Frame>
   );
@@ -155,7 +159,7 @@ export function Basics({ go }) {
       footer={
         <>
           <span className="fl-caption">Shown on your profile: first name and age</span>
-          <Fab disabled={!valid} onClick={() => go("interests")} />
+          <Fab disabled={!valid} onClick={() => { dispatch({ type: "setupDone", step: "basics" }); go("interests"); }} />
         </>
       }
     >
@@ -207,7 +211,7 @@ export function InterestsPrompts({ go }) {
       footer={
         <>
           <span className="fl-caption">{interests.length < 3 ? `Pick ${3 - interests.length} more` : `${interests.length}/5 interests`}</span>
-          <Fab disabled={interests.length < 3} onClick={() => go("photos")} />
+          <Fab disabled={interests.length < 3} onClick={() => { dispatch({ type: "setupDone", step: "interests" }); go("photos"); }} />
         </>
       }
     >
@@ -240,7 +244,7 @@ export function Photos({ go }) {
       footer={
         <>
           <span className="fl-caption">{photos.length < 4 ? `Add ${4 - photos.length} more for the best results` : "Looking great"}</span>
-          <Fab disabled={photos.length < 2} onClick={() => go("discovery")} />
+          <Fab disabled={photos.length < 2} onClick={() => { dispatch({ type: "setupDone", step: "photos" }); go("discovery"); }} />
         </>
       }
     >
