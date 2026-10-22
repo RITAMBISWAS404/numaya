@@ -730,10 +730,11 @@ button.list-row__hit:hover {
   transform: scale(0.92);
 }
 
-/* In the Pass / Super / Like row the actions are horizontal pills (72 x 56, radius 28): larger
-   targets that echo the pill fields and chips. Single floating actions (SuperSwipe on a photo, back,
-   close, send) stay circles: one glyph, centred over content, where a circle reads as a button. */
-.action-bar .action-bar__btn {
+/* Pass / Super / Like and the floating SuperSwipe on the photo are horizontal pills (72 x 56, radius
+   28): larger targets that echo the pill fields and chips, chosen over circles from rendered
+   comparisons. Compact navigation (back, close, filters) stays circular. */
+.action-bar .action-bar__btn,
+.profile-card__actions .action-bar__btn {
   width: 72px;
   height: 56px;
   border-radius: var(--radius-xl);

@@ -151,9 +151,10 @@
   display: grid;
   place-items: center;
   flex: none;
-  width: var(--size-touch-min);
+  /* A short horizontal pill beside the pill field (chosen over a circle in a rendered comparison). */
+  width: 56px;
   height: var(--size-touch-min);
-  border-radius: 50%;
+  border-radius: var(--radius-pill);
   background: var(--gradient-brand-sheen), var(--color-brand);
   box-shadow: var(--shadow-brand);
   color: var(--color-on-brand);
@@ -295,10 +296,10 @@
   display: grid;
   justify-items: center;
   gap: 8px;
-  width: 64px;
+  width: 68px;
 }
 
-/* Portrait preview, 56 x 70 at the md radius. */
+/* Portrait preview: a 60 x 80 vertical capsule (fully rounded ends), chosen over 56 x 76. */
 .match-queue__portrait {
   position: relative;
   display: grid;
@@ -313,9 +314,9 @@
   display: grid;
   place-items: center;
   overflow: hidden;
-  width: 56px;
-  height: 70px;
-  border-radius: var(--radius-md);
+  width: 60px;
+  height: 80px;
+  border-radius: var(--radius-pill);
   background: var(--color-surface-sunken);
   color: var(--color-text-primary);
   font-family: var(--font-display);

@@ -115,12 +115,13 @@ export function ConversationRow({ name, preview, time, unread = 0, yourMove = fa
 }
 
 /** Horizontal queue of new matches. ring.value = time remaining (0–1) when timers apply. */
-/* Match-queue portraits: 56 x 70 at the md radius; the countdown ring sits 4px outside. */
-const PORTRAIT = { w: 56, h: 70, r: 16, band: 4 };
+/* Match-queue portraits: vertical capsules (fully rounded ends); the countdown ring sits 4px outside
+   and follows the capsule. Sizes mirror chat.css. */
+const PORTRAIT = { w: 60, h: 80, r: 30, band: 4 };
 const PORTRAIT_RING = ringRectPath(PORTRAIT.w + 2 * PORTRAIT.band, PORTRAIT.h + 2 * PORTRAIT.band, PORTRAIT.r + PORTRAIT.band / 2);
 
 /**
- * New matches as portrait previews (Bumble match queue). Unopened matches carry a brand ring; a
+ * New matches as capsule portrait previews (Bumble match queue). Unopened matches carry a brand ring; a
  * `remaining` value (0–1) draws the time left as a ring instead (muted when under 20%).
  */
 export function MatchQueue({ matches, onSelect }) {
