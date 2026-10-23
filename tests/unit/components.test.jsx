@@ -5,7 +5,6 @@ import { describe, expect, it, vi } from "vitest";
 import {
   Button,
   ChipGroup,
-  Emphasis,
   CodeInput,
   Composer,
   Dialog,
@@ -297,14 +296,9 @@ describe("illustration slots", () => {
 });
 
 describe("expressive details", () => {
-  it("Emphasis keeps its words as readable text", () => {
-    const { container } = render(
-      <h1>
-        Fewer swipes. <Emphasis>Better</Emphasis> first dates.
-      </h1>,
-    );
-    expect(screen.getByRole("heading")).toHaveTextContent("Fewer swipes. Better first dates.");
-    expect(container.querySelector("em.emphasis")).toHaveTextContent("Better");
+  it("headlines carry no coloured-word emphasis component any more", async () => {
+    const ds = await import("../../src/design-system/index.js");
+    expect(ds.Emphasis).toBeUndefined();
   });
 
   it("the design system no longer exports a decorative ribbon", async () => {
@@ -314,33 +308,34 @@ describe("expressive details", () => {
 });
 
 describe("icons and navigation", () => {
-  it("Icon renders decorative Phosphor glyphs in the requested weight, and ignores unknown names", () => {
+  it("Icon renders Material Symbols Rounded, filled by default, outline only on request", () => {
     const { container } = render(
       <>
-        <Icon name="heart" weight="fill" />
+        <Icon name="heart" />
         <Icon name="check" stroke={2.4} />
-        <Icon name="message" />
-        <Icon name="lock" weight="duotone" />
-        <Icon name="verified" />
+        <Icon name="message" weight="outline" />
+        <Icon name="plus" />
         <Icon name="doesNotExist" />
       </>,
     );
     const svgs = [...container.querySelectorAll("svg")];
-    expect(svgs).toHaveLength(5);
+    expect(svgs).toHaveLength(4);
     svgs.forEach((s) => expect(s).toHaveAttribute("aria-hidden", "true"));
-    svgs.forEach((s) => expect(s.getAttribute("class")).toMatch(/\bicon\b/));
-    expect(svgs.map((s) => `${s.dataset.icon}:${s.dataset.weight}`)).toEqual(["heart:fill", "check:bold", "message:regular", "lock:duotone", "verified:fill"]);
-    // Phosphor draws every weight on a 256 grid; Solar (24) is gone.
-    svgs.forEach((s) => expect(s.getAttribute("viewBox")).toBe("0 0 256 256"));
-    // Duotone carries the lavender-ready translucent layer.
-    expect(svgs[3].querySelector("[opacity]")).not.toBeNull();
+    svgs.forEach((s) => expect(s.getAttribute("viewBox")).toBe("0 -960 960 960"));
+    expect(svgs.map((s) => `${s.dataset.icon}:${s.dataset.fill}`)).toEqual(["heart:1", "check:1", "message:0", "plus:1"]);
+    // The outline drawing differs from the filled one.
+    const { container: c2 } = render(<Icon name="message" />);
+    expect(c2.querySelector("path").getAttribute("d")).not.toBe(svgs[2].querySelector("path").getAttribute("d"));
   });
 
-  it("no Solar icon package is installed or imported", async () => {
+  it("one icon family: no Solar, Phosphor, Lucide or other icon package is installed or imported", async () => {
     const { readFileSync, readdirSync } = await import("node:fs");
-    expect(JSON.parse(readFileSync("package.json", "utf8")).dependencies["@solar-icons/react"]).toBeUndefined();
+    const pkg = JSON.parse(readFileSync("package.json", "utf8"));
+    const deps = Object.keys({ ...pkg.dependencies, ...pkg.devDependencies });
+    expect(deps.filter((d) => /solar|phosphor|lucide|heroicons|tabler|feather|fontawesome/i.test(d))).toEqual([]);
+    expect(pkg.devDependencies["@material-symbols/svg-500"]).toMatch(/^\d+\.\d+\.\d+$/);
     const src = readdirSync("src", { recursive: true }).filter((f) => /\.(jsx?|css)$/.test(f));
-    for (const f of src) expect(readFileSync(`src/${f}`, "utf8"), f).not.toMatch(/@solar-icons/);
+    for (const f of src) expect(readFileSync(`src/${f}`, "utf8"), f).not.toMatch(/@solar-icons|@phosphor-icons|lucide-react/);
   });
 
   it("TabBar marks the current tab, reports changes and labels badges", async () => {

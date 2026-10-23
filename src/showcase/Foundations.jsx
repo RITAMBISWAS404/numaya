@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Avatar, ICON_NAMES, Icon, Emphasis, Wordmark } from "../design-system/index.js";
+import { Avatar, ICON_NAMES, Icon, Wordmark } from "../design-system/index.js";
 import { tokens, tokenByName } from "../design-system/tokens.js";
 import { contrast } from "../lib/contrast.js";
 import { Grid, Section, Specimen } from "./ui.jsx";
@@ -63,17 +63,12 @@ export function Foundations() {
           </Specimen>
           <Specimen title="Brand fill + white text" note={`#7262C7 · white ${ratio(WHITE, brandHex)}`}>
             <span className="sc-pill-demo" style={{ background: "var(--color-brand)", color: "var(--color-on-brand)" }}>
-              Jazz <Icon name="minusCircle" size={16} />
+              Jazz <Icon name="minus" size={18} />
             </span>
           </Specimen>
           <Specimen title="Brand text (links)" note={`--color-text-brand · ${ratio(tokenByName["--color-text-brand"].resolved, WHITE)} on white; deep purple on grey`}>
             <p className="sc-type-sample" style={{ color: "var(--color-text-brand)", fontWeight: 600 }}>
               See all
-            </p>
-          </Specimen>
-          <Specimen title="Headline emphasis" note={`Emphasis · --color-text-accent · ${ratio(tokenByName["--color-text-accent"].resolved, WHITE)} on white`}>
-            <p className="sc-type-sample" style={{ fontFamily: "var(--font-display)", fontSize: 34 }}>
-              <Emphasis>Better</Emphasis>
             </p>
           </Specimen>
           <Specimen title="Guidance card" note="Periwinkle accent.promo (Meetup promo card) with a purple icon">
@@ -222,7 +217,7 @@ export function Foundations() {
         </div>
       </Section>
 
-      <Section id="icons" title="Icons" intro="Phosphor Icons (MIT), one family, chosen as the closest open match to Meetup's iconography (Meetup's own set is proprietary). Regular line glyphs by default, the fill weight for active and emphasised states (current tab, Like, verified), bold inside small marks, duotone for spot icons on guidance cards and empty states. Icon-only controls always carry an accessible label.">
+      <Section id="icons" title="Icons" intro="Material Symbols Rounded (Google, Apache 2.0), one family: weight 500, optical size 24, filled (FILL 1) by default. The unfilled drawing appears only where it marks a different state (inactive tabs beside the filled current tab). Extracted from the pinned official SVG set at build time; no icon font or remote request. Icon-only controls always carry an accessible label.">
         <div className="sc-icons">
           {ICON_NAMES.map((n) => (
             <div key={n} className="sc-icons__item">
@@ -232,8 +227,8 @@ export function Foundations() {
           ))}
         </div>
         <div className="sc-icons">
-          {["fill", "duotone"].map((w) =>
-            ["heart", "message", "bell", "user", "lock", "camera"].map((n) => (
+          {["outline"].map((w) =>
+            ["heart", "message", "user", "cards", "settings", "bell"].map((n) => (
               <div key={w + n} className="sc-icons__item">
                 <Icon name={n} weight={w} />
                 <code>{n} · {w}</code>

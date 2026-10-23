@@ -1,21 +1,21 @@
 # Third-party notices
 
-## Phosphor Icons (icon artwork and React wrapper)
+## Material Symbols Rounded (icon artwork)
 
-- **Authors:** Phosphor Icons (Tobias Fried, Helena Zhang) — [phosphoricons.com](https://phosphoricons.com),
-  [github.com/phosphor-icons/react](https://github.com/phosphor-icons/react)
-- **Package:** `@phosphor-icons/react` 2.1.10 (pinned)
-- **Licence:** MIT (artwork and code). Copyright (c) 2020 Phosphor Icons.
-- **Use in Numaya:** the interface icons, rendered through the shared `Icon` component
-  (`src/design-system/components/Icon.jsx`), imported per icon. Chosen in October 2026 as the
-  closest open match to the current Meetup iOS iconography; it is not Meetup's own icon set.
-- **Changes:** none to the drawings; weight (regular, bold, fill, duotone) and colour are set by
-  the surrounding component.
+- **Creator:** Google — [fonts.google.com/icons](https://fonts.google.com/icons),
+  [github.com/google/material-design-icons](https://github.com/google/material-design-icons)
+- **Distribution used:** `@material-symbols/svg-500` 0.47.6 (pinned dev dependency; a packaging of
+  Google's official SVGs, [github.com/marella/material-symbols](https://github.com/marella/material-symbols))
+- **Licence:** [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0); full text shipped at
+  `src/design-system/icons/LICENSE-material-symbols.txt`.
+- **Use in Numaya:** the interface icons, Rounded style, weight 500, optical size 24, filled (FILL 1)
+  and unfilled (FILL 0) drawings, extracted by `scripts/icons.mjs` into
+  `src/design-system/icons/material-symbols.js` and rendered by the shared `Icon` component.
+- **Changes:** none to the drawings; only the path data is copied, coloured by `currentColor`.
 - **Visible credit:** the flow previews footer, the prototype brief and the design-system Icons
-  section name Phosphor and its licence.
+  section name Material Symbols, Google and the licence.
 
-The earlier Solar icon set (480 Design, CC BY 4.0) and its `@solar-icons/react` wrapper were removed
-in the same pass; no Solar artwork ships any more.
+Earlier icon sets (Solar, then Phosphor) were removed; no other icon artwork ships.
 
 ## Fonts
 

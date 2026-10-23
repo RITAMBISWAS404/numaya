@@ -454,9 +454,9 @@ function Profile() {
         <Specimen title="SharedInterests" note="“You both like”: white card, small purple mark, grey pills with icons (Meetup “Shared interests”)">
           <SharedInterests
             items={[
-              { label: "Jazz", icon: "music" },
-              { label: "Natural wine", icon: "wine" },
-              { label: "Film photography", icon: "camera" },
+              { label: "Jazz" },
+              { label: "Natural wine" },
+              { label: "Film photography" },
             ]}
           />
         </Specimen>
@@ -582,7 +582,7 @@ function Feedback() {
             title="Your profile"
             steps={[
               { label: "The basics", detail: "Name, age and what you’re looking for", icon: "user", status: "done" },
-              { label: "Interests and prompt", detail: "What you’re into, in your words", icon: "sparkle", status: "active" },
+              { label: "Interests and prompt", detail: "What you’re into, in your words", icon: "interests", status: "active" },
               { label: "Photos", detail: "At least two", icon: "camera", status: "upcoming" },
             ]}
           />

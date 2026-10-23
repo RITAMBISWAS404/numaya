@@ -12,7 +12,8 @@ Meetup-derived palette (sampled values and references in the [UI map](../numaya-
 | Brand | `--color-brand` (Meetup purple `#7262C7`), `-tint`, `-soft`, `-subtle`, `-hero` | Selected chips and pills, outgoing bubbles, SuperSwipe, send, progress, verified marks, links, focus |
 | On brand | `--color-on-brand` (white) | Text and glyphs on a solid purple fill: 4.90:1 |
 | Accents | `--color-accent-promo`, `-pink`, `-pink-tint`, `-yellow`, `-orange`, `-green` | Meetup's secondary palette, by role only: guidance cards (periwinkle), badges and category marks, avatar and illustration framing, status icons. Never text, never a second UI accent |
-| Headline emphasis | `Emphasis` → `--color-text-accent` (`#C1486A`) | One word in a hero headline (Meetup "The people platform"). 4.77:1 |
+| Headings | `--color-text-primary` | One colour per heading. No coloured-word emphasis (removed, with the `Emphasis` component and its token) |
+| Controls | `--color-control-selected` (purple), `-selected-text` (white), `-track-off` (neutral) | One selected-state system: checked radios and checkboxes, switch tracks, slider intervals, selected pills and segmented options. Off states stay neutral |
 | Brand-context text | `--color-text-brand` (purple, on white), `-brand-deep` (on grey or lavender) | Links (underlined where they sit inside a sentence), eyebrows, the active tab label |
 | Text | `--color-text-primary`, `-secondary`, `-muted`, `-subtle`, `-on-inverse` | Neutral greys (not blue-tinted) |
 | Surface | `--color-surface`, `-soft` (Meetup grey `#F2F2F2`), `-sunken`, `-canvas`, `-brand` (lavender wash), `-inverse` | White pages; grey fills for fields, secondary buttons, incoming bubbles and quote cards; ink for primary CTAs, switches and checkboxes |
@@ -30,7 +31,6 @@ All pairs below are enforced by `tests/unit/tokens.test.js`.
 | White on brand purple (`on-brand`), purple text on white | 4.90 | AA |
 | Purple text on `brand.tint` | 4.62 | AA |
 | Deep purple on lavender / grey | 7.1+ | AA |
-| Emphasis pink (`text-accent`) on white | 4.77 | AA |
 | Secondary text on the periwinkle guidance card | 9+ | AA |
 | Focus ring (purple) on white | 4.90 | Non-text AA |
 | `text-subtle` on white | 2.8 | Exception: placeholders and disabled labels only |
@@ -49,8 +49,7 @@ Purple text on grey fills is 4.4:1, so text on grey uses `text-brand-deep`.
 | `input`, `button`, `label` | Inter | 18 / 24 / 500, 16 / 20 / 600, 13.5 / 18 / 500 |
 | `caption`, `micro`, `eyebrow` | Inter | 13 / 18, 12.5 / 17, 11 / 14 / 600 uppercase +0.12em |
 
-Fraunces uses `--font-display-axes` (`SOFT 50, WONK 0`). Never bold the serif; emphasis is size
-or brand colour. Numerals in inputs, codes and prices use `tabular-nums`.
+Fraunces uses `--font-display-axes` (`SOFT 50, WONK 0`). Headings use one colour; hierarchy comes from size and weight, never from colouring individual words. Numerals in inputs, codes and prices use `tabular-nums`.
 
 ## Space, size, shape
 
@@ -96,23 +95,26 @@ collapse (1ms / 120ms / 160ms) and movement becomes fades. Spinners keep rotatin
 
 ## Icons
 
-[Phosphor Icons](https://phosphoricons.com) (MIT) via `@phosphor-icons/react` 2.1.10 (pinned),
-imported per icon through the shared `Icon` wrapper. Chosen as the closest open match to the
-current Meetup iOS iconography (thin rounded line glyphs; the same glyph filled in purple when
-active; lavender-filled spot icons). Meetup's own set is proprietary and unpublished, so this is a
-stylistic match, not Meetup's assets. No other icon family ships (credits in
-[THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)).
+**Material Symbols Rounded** (Google, Apache 2.0). Source: the version-pinned official SVG
+distribution `@material-symbols/svg-500` (dev dependency, weight 500, optical size 24).
+`scripts/icons.mjs` extracts only the symbols Numaya uses, filled (FILL 1) and unfilled (FILL 0),
+into the committed module `src/design-system/icons/material-symbols.js`; `npm run icons:check`
+(part of `check` and `build`) fails if it is stale. Production ships no icon font and makes no remote
+request. Licence: `src/design-system/icons/LICENSE-material-symbols.txt`, credits in
+[THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md).
 
-- **regular** (default): line glyphs everywhere: tabs, menus, list rows, chips, fields, top bars.
-- **fill**: the current tab, Like and SuperSwipe, the match heart, the "You both like" mark,
-  verified seals, setup-progress tiles.
-- **bold**: line glyphs inside small marks (badge checks) or beside heavy neighbours (the Pass X).
-- **duotone**: spot icons on guidance cards, empty states and permission primers (Meetup's
-  lavender-filled spot icons).
-
-Sizes 16 / 20 / 24 (tab bar 24, spot icons 22–28). Icon-only controls always have an accessible
-label; the icons themselves are `aria-hidden`. Action-sheet rows carry a line icon before the label,
-left-aligned, as in Meetup's options menu.
+- **One wrapper:** `Icon` (semantic names, official symbol names mapped in `scripts/icons.mjs`).
+  Add an icon there, then `npm run icons`.
+- **Filled by default** (FILL 1). The unfilled drawing (`weight="outline"`) only where it marks a
+  different state: inactive tabs beside the filled current tab.
+- **Sizes:** 18 inside pills, 20 compact rows and buttons, 24 standard and navigation, 26–28
+  large actions and spot icons. Always square, `currentColor`, aligned by the container.
+- **No decorative containers:** plain glyphs; no circles around add / remove, no badge stacked on a
+  shape. Status tiles that need a backing shape use the component's own surface.
+- **Pills are text-first.** Interest pills carry no leading icon; their add / remove affordance is the
+  plain `add` / `remove` glyph. Profile-fact chips keep a leading icon only where it names the
+  category (looking for, lives in). **No emoji as UI icons;** emoji only when users type them as content.
+- Icons are `aria-hidden`; icon-only controls always carry an accessible label.
 
 ## Navigation
 

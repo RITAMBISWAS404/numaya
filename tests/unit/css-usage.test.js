@@ -59,7 +59,7 @@ describe("geometry rules", () => {
 
   it("segmented options are separate filter pills, as in the Meetup reference", () => {
     expect(block(".segmented__item")).toMatch(/border-radius:\s*var\(--radius-pill\)/);
-    expect(block(".segmented__item.is-selected")).toMatch(/background:\s*var\(--color-brand\)/);
+    expect(block(".segmented__item.is-selected")).toMatch(/background:\s*var\(--color-control-selected\)/);
     expect(block(".segmented")).not.toMatch(/background/);
   });
 

@@ -23,7 +23,6 @@ import {
   SharedInterests,
   ListGroup,
   ListRow,
-  Emphasis,
   MatchCelebration,
   MatchQueue,
   MessageBubble,
@@ -48,7 +47,7 @@ import {
   VerifiedBadge,
   Wordmark,
 } from "../design-system/index.js";
-import { INTEREST_ICONS, INTERESTS, PEOPLE, PROMPT_QUESTIONS, REPORT_REASONS } from "./data.js";
+import { INTERESTS, PEOPLE, PROMPT_QUESTIONS, REPORT_REASONS } from "./data.js";
 import { conversations, discoveryQueue, hiddenByFilters, newMatches, useStore } from "./store.js";
 
 // Order follows the reference tab bar: Profile first, then browsing, then chats.
@@ -114,7 +113,7 @@ function useFlash() {
    step not done is the current one. */
 const SETUP_STEPS = [
   { id: "basics", label: "The basics", icon: "user", screen: "basics" },
-  { id: "interests", label: "Interests and prompt", icon: "sparkle", screen: "interests" },
+  { id: "interests", label: "Interests and prompt", icon: "interests", screen: "interests" },
   { id: "photos", label: "Photos", icon: "camera", screen: "photos" },
 ];
 
@@ -135,7 +134,7 @@ export function SetupIntro({ go }) {
     >
       <div className="fl-center fl-intro">
         <Wordmark />
-        <ResultPanel title={<>You’re <Emphasis>verified</Emphasis></>}>
+        <ResultPanel title="You’re verified">
           <p>+1 (415) 555-0132 is confirmed. Now let’s make a profile people actually want to reply to.</p>
         </ResultPanel>
         <SetupProgress title="Your profile" steps={steps} />
@@ -215,12 +214,12 @@ export function InterestsPrompts({ go }) {
       }
     >
       <ScreenHeader
-        title={<>What are you <Emphasis>into</Emphasis>?</>}
+        title="What are you into?"
         lede="Pick 3 to 5. They start conversations and help us find people like you."
         art={<IllustrationPlaceholder id="interests-spot" ratio="1 / 1" width="72px" size="sm" />}
       />
       <div className="fl-stack fl-gap-lg fl-sections">
-        <ChipGroup label="Interests" options={INTERESTS} icons={INTEREST_ICONS} value={interests} onChange={(v) => dispatch({ type: "profile", patch: { interests: v } })} max={5} />
+        <ChipGroup label="Interests" options={INTERESTS} value={interests} onChange={(v) => dispatch({ type: "profile", patch: { interests: v } })} max={5} />
         <Section title="Your prompt" description="Matches reply to this. You can change it any time from your profile.">
           <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} />
         </Section>
@@ -407,7 +406,7 @@ export function Discovery({ go }) {
 
           {photo(1)}
 
-          <SharedInterests items={person.shared?.map((label) => ({ label, icon: INTEREST_ICONS[label] }))} />
+          <SharedInterests items={person.shared?.map((label) => ({ label }))} />
 
           {photo(2)}
 
@@ -827,7 +826,7 @@ export function MyProfile({ go }) {
             <span className="fl-chip-row">
               {interests.length ? (
                 interests.map((i) => (
-                  <Chip key={i} kind="static" icon={INTEREST_ICONS[i]}>
+                  <Chip key={i} kind="static">
                     {i}
                   </Chip>
                 ))
@@ -862,7 +861,7 @@ function ProfilePreview({ profile }) {
           <h2 className="fl-pf__title">Interests</h2>
           <div className="fl-chip-row">
             {profile.interests.map((s) => (
-              <Chip key={s} kind="static" icon={INTEREST_ICONS[s]}>
+              <Chip key={s} kind="static">
                 {s}
               </Chip>
             ))}
@@ -920,7 +919,7 @@ export function EditProfile({ go }) {
             <Section title="Prompt" description="Matches reply to this.">
               <PromptCard prompt={profile.prompt.q} answer={profile.prompt.a} onEdit={() => go("prompt")} />
             </Section>
-            <ChipGroup label="Interests" options={INTERESTS} icons={INTEREST_ICONS} value={profile.interests} onChange={(v) => set({ interests: v })} max={5} />
+            <ChipGroup label="Interests" options={INTERESTS} value={profile.interests} onChange={(v) => set({ interests: v })} max={5} />
             <TextField
               label="First name"
               value={profile.name}

@@ -1,6 +1,5 @@
 import { cx } from "../../lib/cx.js";
 import { Button } from "./Button.jsx";
-import { Emphasis } from "./Expressive.jsx";
 import { Icon } from "./Icon.jsx";
 
 /**
@@ -11,7 +10,7 @@ export function PermissionPrimer({ icon, title, children, allowLabel = "Allow", 
   return (
     <div className="primer">
       <span className="primer__icon" aria-hidden="true">
-        <Icon name={icon} size={28} weight="duotone" />
+        <Icon name={icon} size={28} />
       </span>
       <h2 className="primer__title">{title}</h2>
       <div className="primer__body">{children}</div>
@@ -37,7 +36,7 @@ export function PermissionPrimer({ icon, title, children, allowLabel = "Allow", 
  * Two tilted photos with a centre brand mark, title and supporting line (Bumble "What a match!").
  * Photo areas are neutral placeholders until profile photography is supplied. Composer sits below.
  */
-export function MatchCelebration({ names, title = <>It’s a <Emphasis>match</Emphasis></>, children }) {
+export function MatchCelebration({ names, title = "It’s a match", children }) {
   return (
     <div className="match">
       <div className="match__photos" role="img" aria-label={`Photos of ${names.join(" and ")} (placeholders)`}>

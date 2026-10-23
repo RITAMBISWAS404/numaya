@@ -67,20 +67,6 @@ export const INTERESTS = [
   "Natural wine", "Jazz", "Cooking", "Climbing", "Film photography", "Museums", "Running", "Board games", "Travel", "Poetry",
 ];
 
-/** Leading icon cue for each interest chip (Phosphor line glyph). */
-export const INTEREST_ICONS = {
-  "Natural wine": "wine",
-  Jazz: "music",
-  Cooking: "cooking",
-  Climbing: "hiking",
-  "Film photography": "camera",
-  Museums: "museum",
-  Running: "running",
-  "Board games": "games",
-  Travel: "plane",
-  Poetry: "pen",
-};
-
 export const REPORT_REASONS = [
   ["user", "Fake profile"],
   ["image", "Inappropriate photos or text"],

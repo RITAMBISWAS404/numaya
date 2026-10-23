@@ -50,4 +50,3 @@ export { Sheet, ActionSheet, Dialog, Toast, CoachMark, Banner } from "./componen
 export { MessageBubble, SystemMessage, Composer, ConversationRow, MatchQueue } from "./components/Chat.jsx";
 export { PlanPicker, ComparisonTable, LegalText } from "./components/Commerce.jsx";
 export { PermissionPrimer, MatchCelebration } from "./components/Patterns.jsx";
-export { Emphasis } from "./components/Expressive.jsx";

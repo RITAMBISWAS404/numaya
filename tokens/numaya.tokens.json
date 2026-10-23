@@ -5,20 +5,21 @@
     "$description": "Raw values. Never referenced directly by component CSS; use semantic or component tokens.",
     "color": {
       "purple": {
-        "50":  { "$type": "color", "$value": "#faf7fe", "$description": "Soft lavender (Meetup 'Sign up with email' sampled #F8F1FD, lifted slightly so purple text on it is 4.6:1)." },
-        "100": { "$type": "color", "$value": "#f0ecf9", "$description": "Meetup lavender wash (sampled #F0ECF9, Home header wash): brand surfaces and selected tints." },
-        "200": { "$type": "color", "$value": "#e2dcf7", "$description": "Lavender border and placeholder tint (derived between 100 and 300)." },
-        "300": { "$type": "color", "$value": "#9c85e6", "$description": "Meetup hero purple (sampled #9C85E6, sign-up hero): large decorative fills only (3.0:1 with white)." },
-        "600": { "$type": "color", "$value": "#7262c7", "$description": "Meetup primary purple (sampled #7262C7 on selected pills, interest chips, outgoing bubbles, progress, check FAB). White on it is 4.90:1." },
-        "800": { "$type": "color", "$value": "#4f4296", "$description": "Deep purple for text on lavender tints (derived; 7.1:1 on purple.100)." }
+        "50":  { "$type": "color", "$value": "#faf8ff", "$description": "Palest lavender: selected tints and soft brand buttons (purple text on it 4.7:1)." },
+        "100": { "$type": "color", "$value": "#f3f0fd", "$description": "Fresh lavender wash: guidance cards, brand screen washes, selected-row backgrounds (lighter and cooler than the sampled Meetup #F0ECF9)." },
+        "150": { "$type": "color", "$value": "#e9e4fb", "$description": "Stronger lavender tint: pressed tints, illustration framing, tracks under purple." },
+        "200": { "$type": "color", "$value": "#ddd6f7", "$description": "Lavender hairlines and tinted placeholders." },
+        "300": { "$type": "color", "$value": "#9c85e6", "$description": "Meetup hero purple (sampled #9C85E6): illustration details only (3.0:1 with white)." },
+        "600": { "$type": "color", "$value": "#7262c7", "$description": "Meetup primary purple (sampled #7262C7). White on it is 4.90:1." },
+        "700": { "$type": "color", "$value": "#5f50b3", "$description": "Hover and pressed purple (derived; white on it 6.4:1)." },
+        "800": { "$type": "color", "$value": "#4f4296", "$description": "Deep purple for text on lavender tints (derived; 7.4:1 on purple.100)." }
       },
       "periwinkle": {
         "100": { "$type": "color", "$value": "#d6dcfd", "$description": "Meetup promo card fill (sampled #D6DCFD, 'Start a new group')." }
       },
       "rose": {
         "100": { "$type": "color", "$value": "#fde8ee", "$description": "Rose tint (derived) for avatar and category framing." },
-        "500": { "$type": "color", "$value": "#ea698c", "$description": "Meetup accent rose (sampled #EA698C, organiser badge): badges and category marks, never text." },
-        "700": { "$type": "color", "$value": "#c1486a", "$description": "Meetup emphasis rose (sampled #C1486A, 'The people platform'): one emphasised headline word. 4.77:1 on white." }
+        "500": { "$type": "color", "$value": "#ea698c", "$description": "Meetup accent rose (sampled #EA698C, organiser badge): badges and category marks, never text." }
       },
       "yellow": { "100": { "$type": "color", "$value": "#fdf0d0", "$description": "Yellow tint (derived from #FCD284) for avatar framing." }, "200": { "$type": "color", "$value": "#fcd284", "$description": "Meetup illustration yellow (sampled #FCD284, empty-state blob): illustration and avatar framing." } },
       "orange": { "500": { "$type": "color", "$value": "#d58b50", "$description": "Meetup time/status orange (sampled #D58B50, 'In 2m'): icons and marks only (2.75:1 on white)." } },
@@ -113,10 +114,18 @@
     "color": {
       "brand": {
         "default": { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "Meetup primary purple: selected pills and chips, outgoing bubbles, progress, links, send and confirm actions, switches' focus. White text and glyphs on it are 4.90:1 (AA)." },
-        "tint":    { "$type": "color", "$value": "{primitive.color.purple.50}", "$description": "Light lavender surface for selected and highlighted states; purple text 4.6:1, brand-deep or ink text." },
+        "hover":   { "$type": "color", "$value": "{primitive.color.purple.700}", "$description": "Hover and pressed state of solid purple actions and controls." },
+        "tint":    { "$type": "color", "$value": "{primitive.color.purple.50}", "$description": "Palest lavender surface for selected states and soft buttons; purple text 4.7:1." },
+        "tint-strong": { "$type": "color", "$value": "{primitive.color.purple.150}", "$description": "Stronger lavender: pressed tints and illustration framing." },
         "subtle":  { "$type": "color", "$value": "{primitive.color.purple.200}", "$description": "Lavender borders and tinted placeholders." },
         "soft":    { "$type": "color", "$value": "{primitive.color.purple.50}", "$description": "Soft lavender secondary-button fill (Meetup 'Sign up with email')." },
         "hero":    { "$type": "color", "$value": "{primitive.color.purple.300}", "$description": "Large decorative purple (hero washes, illustration framing). Never behind small text." }
+      },
+      "control": {
+        "$description": "One selected-state system for radios, checkboxes, switches, sliders, segmented pills and selected chips.",
+        "selected":      { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "Checked radio, checkbox and switch track, slider interval, selected pill fill." },
+        "selected-text": { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Text, ticks and thumbs on a selected control (4.90:1)." },
+        "track-off":     { "$type": "color", "$value": "{primitive.color.neutral.300}", "$description": "Off switch track and empty slider rail (neutral)." }
       },
       "on-brand": { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Text and glyphs on a solid brand-purple fill: white, 4.90:1." },
       "accent": {
@@ -136,7 +145,6 @@
         "subtle":     { "$type": "color", "$value": "{primitive.color.neutral.400}", "$description": "Placeholders and disabled labels only (2.8:1, documented exception)." },
         "brand":      { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "Links and brand-context text on white (Meetup 'See all', legal links). 4.90:1." },
         "brand-deep": { "$type": "color", "$value": "{primitive.color.purple.800}", "$description": "Text on lavender tints (7.1:1)." },
-        "accent":     { "$type": "color", "$value": "{primitive.color.rose.700}", "$description": "One emphasised word in a hero headline (Meetup 'The people platform'). 4.77:1 on white." },
         "on-inverse": { "$type": "color", "$value": "{primitive.color.neutral.0}" }
       },
       "surface": {

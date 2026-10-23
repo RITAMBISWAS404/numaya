@@ -41,9 +41,10 @@ describe("token pipeline", () => {
   it("derives lavender tints by lightening the brand purple", () => {
     const l = (hex) => luminance(hexToRgb(hex));
     const brand = l(value("--color-brand"));
-    for (const t of ["--color-brand-tint", "--color-brand-soft", "--color-brand-subtle", "--color-surface-brand", "--color-brand-hero"]) expect(l(value(t))).toBeGreaterThan(brand);
+    for (const t of ["--color-brand-tint", "--color-brand-tint-strong", "--color-brand-soft", "--color-brand-subtle", "--color-surface-brand", "--color-brand-hero"]) expect(l(value(t))).toBeGreaterThan(brand);
+    expect(l(value("--color-brand-hover"))).toBeLessThan(brand);
     const purples = tokens.keys().toArray().filter((id) => id.startsWith("primitive.color.purple."));
-    expect(purples.map((id) => id.split(".").pop())).toEqual(["50", "100", "200", "300", "600", "800"]);
+    expect(purples.map((id) => id.split(".").pop())).toEqual(["50", "100", "150", "200", "300", "600", "700", "800"]);
   });
 
   it("puts white text and glyphs on solid brand purple at AA", () => {
@@ -90,7 +91,10 @@ describe("contrast requirements", () => {
     ["--color-warning", "--color-warning-tint"],
     ["--color-text-primary", "--color-brand-tint"],
     ["--color-on-brand", "--color-brand"],
-    ["--color-text-accent", "--color-surface"],
+    ["--color-control-selected-text", "--color-control-selected"],
+    ["--color-on-brand", "--color-brand-hover"],
+    ["--color-text-brand-deep", "--color-surface-brand"],
+    ["--color-text-brand", "--color-brand-tint"],
     ["--color-text-brand-deep", "--color-brand-soft"],
     ["--color-text-secondary", "--color-accent-promo"],
     ["--color-text-on-inverse", "--color-danger-badge"],
@@ -103,6 +107,13 @@ describe("contrast requirements", () => {
   it("control outlines and the focus indicator meet 3:1 non-text contrast", () => {
     expect(contrast(value("--color-border-control"), value("--color-surface"))).toBeGreaterThanOrEqual(3);
     expect(contrast(value("--color-focus-ring"), value("--color-surface"))).toBeGreaterThanOrEqual(3);
+  });
+
+  it("selected controls share one purple; off tracks stay neutral; no headline accent token exists", () => {
+    expect(value("--color-control-selected").toLowerCase()).toBe(value("--color-brand").toLowerCase());
+    const [r, g, b] = hexToRgb(value("--color-control-track-off"));
+    expect(Math.max(r, g, b) - Math.min(r, g, b)).toBeLessThan(8);
+    expect(() => value("--color-text-accent")).toThrow();
   });
 
   it("documents the only accepted exception", () => {

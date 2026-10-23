@@ -216,13 +216,14 @@ button.chip:active {
   color: var(--color-text-muted);
 }
 
-/* Selected (Meetup): a brand-purple pill with white text, icon and a minus-circle (white on purple
-   is 4.90:1). Same height and padding as unselected chips, so selecting never reflows the row; a
-   brief settle confirms the change, and the icon swap and aria-pressed carry the state. */
+/* Selected: a purple pill with white text and a plain "remove" glyph (white on purple is 4.90:1);
+   unselected pills show a plain "add" glyph. No circles around the glyphs. Same height and padding
+   in both states, so selecting never reflows the row; the glyph swap and aria-pressed carry the
+   state as well as colour. */
 .chip.is-selected {
-  background: var(--color-brand);
+  background: var(--color-control-selected);
   box-shadow: none;
-  color: var(--color-on-brand);
+  color: var(--color-control-selected-text);
   animation: chip-select var(--motion-duration-base) var(--motion-ease-out);
 }
 
@@ -339,8 +340,8 @@ button.chip:active {
   height: var(--switch-height);
   margin: 0;
   border-radius: var(--radius-pill);
-  /* Off: a plain neutral track with the white thumb, no outline (Meetup). */
-  background: var(--color-border-strong);
+  /* Off: a plain neutral track with the white thumb, no outline. */
+  background: var(--color-control-track-off);
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
@@ -360,10 +361,10 @@ button.chip:active {
   transition: transform var(--motion-duration-base) var(--motion-ease-out);
 }
 
-/* On: an ink track with the white thumb, as in Meetup's current settings; state is also carried
-   by the thumb position (right = on), so it never relies on colour alone. */
+/* On: the purple selected-control track with the white thumb (4.90:1); off stays neutral. State is
+   also carried by the thumb position (right = on), so it never relies on colour alone. */
 .switch:checked {
-  background: var(--color-surface-inverse);
+  background: var(--color-control-selected);
 }
 
 .switch:checked::after {
@@ -406,9 +407,11 @@ button.chip:active {
   background: var(--color-surface-soft);
 }
 
+/* Selected: a 2px purple outline on the palest lavender, with the filled radio or ticked box inside,
+   so the state reads by outline weight and indicator as well as colour. */
 .option-card.is-selected {
-  background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-focus) var(--color-surface-inverse);
+  background: var(--color-brand-tint);
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-control-selected);
 }
 
 .choice.is-disabled,
@@ -456,18 +459,19 @@ button.chip:active {
   border-radius: 50%;
 }
 
-/* Checked (Meetup): an ink box with a white tick, and an ink radio with a white gap around its dot.
-   The tick is a simple check path, inlined so the native input needs no extra markup. */
+/* Checked: a purple box with a white tick, and a purple radio with a white gap around its dot (the
+   shared selected-control colour). The tick is a simple check path, inlined so the native input
+   needs no extra markup. */
 .choice__input--checkbox:checked {
-  background: var(--color-surface-inverse)
+  background: var(--color-control-selected)
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E")
     center / 18px no-repeat;
   box-shadow: none;
 }
 
 .choice__input--radio:checked {
-  background: var(--color-surface-inverse);
-  box-shadow: inset 0 0 0 var(--border-focus) var(--color-surface-inverse), inset 0 0 0 6px var(--color-surface);
+  background: var(--color-control-selected);
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-control-selected), inset 0 0 0 6px var(--color-surface);
 }
 
 .choice__input:disabled {
@@ -516,8 +520,8 @@ button.chip:active {
 }
 
 .segmented__item.is-selected {
-  background: var(--color-brand);
-  color: var(--color-on-brand);
+  background: var(--color-control-selected);
+  color: var(--color-control-selected-text);
 }
 
 /* ------------------------------------------------------------------ */
@@ -561,10 +565,10 @@ button.chip:active {
   /* Neutral rail, brand-purple selected interval. */
   background: linear-gradient(
     90deg,
-    var(--color-border-strong) var(--from),
-    var(--color-brand) var(--from),
-    var(--color-brand) var(--to),
-    var(--color-border-strong) var(--to)
+    var(--color-control-track-off) var(--from),
+    var(--color-control-selected) var(--from),
+    var(--color-control-selected) var(--to),
+    var(--color-control-track-off) var(--to)
   );
 }
 

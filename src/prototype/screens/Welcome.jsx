@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Emphasis, IllustrationPlaceholder, Screen, Toast } from "../../design-system/index.js";
+import { Button, IllustrationPlaceholder, Screen, Toast } from "../../design-system/index.js";
 
 export function Welcome({ active, onCreate, onSignIn }) {
   const [notice, setNotice] = useState(null);
@@ -27,7 +27,7 @@ export function Welcome({ active, onCreate, onSignIn }) {
         <h1 id="welcome-title" className="welcome__title">
           Fewer swipes.
           <br />
-          <Emphasis className="welcome__emphasis">Better</Emphasis> first dates.
+          Better first dates.
         </h1>
         <p className="welcome__lede">
           Profiles built around conversation, so the right person knows what to say.

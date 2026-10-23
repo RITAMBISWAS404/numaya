@@ -1,9 +1,0 @@
-/* ------------------------------------------------------------------ */
-/* Expressive details: headline emphasis                              */
-/* ------------------------------------------------------------------ */
-
-/* Headline emphasis: the letters in the accent pink, nothing else (Meetup 'The people platform'). */
-.emphasis {
-  color: var(--color-text-accent);
-  font-style: inherit;
-}

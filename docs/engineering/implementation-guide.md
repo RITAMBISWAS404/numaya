@@ -35,8 +35,10 @@ npm run tokens                    # regenerate src/design-system/tokens.{css,js}
   [contrast table](../design-system/foundations.md#contrast).
 - Secondary Meetup colours (`--color-accent-*`) frame and mark (avatars, badges, guidance cards,
   status icons); never text and never a second UI accent.
-- Headline emphasis uses `Emphasis` (the word in `--color-text-accent`, `#C1486A`), only on hero
-  headlines (Welcome, You're verified, What are you into?, It's a match). No decorative ribbons.
+- Headings are one colour (`--color-text-primary`); never colour individual words. No decorative
+  ribbons.
+- Icons: `Icon` only (Material Symbols Rounded, filled by default). New symbols go in
+  `scripts/icons.mjs`, then `npm run icons`.
 - Fraunces for display, Inter for everything operational. No other fonts.
 
 ## Changing tokens

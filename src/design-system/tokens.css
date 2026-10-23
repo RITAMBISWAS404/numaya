@@ -2,16 +2,17 @@
 
 :root {
   /* Primitive: raw values. Not for direct use in component CSS. */
-  --p-color-purple-50: #faf7fe;
-  --p-color-purple-100: #f0ecf9;
-  --p-color-purple-200: #e2dcf7;
+  --p-color-purple-50: #faf8ff;
+  --p-color-purple-100: #f3f0fd;
+  --p-color-purple-150: #e9e4fb;
+  --p-color-purple-200: #ddd6f7;
   --p-color-purple-300: #9c85e6;
   --p-color-purple-600: #7262c7;
+  --p-color-purple-700: #5f50b3;
   --p-color-purple-800: #4f4296;
   --p-color-periwinkle-100: #d6dcfd;
   --p-color-rose-100: #fde8ee;
   --p-color-rose-500: #ea698c;
-  --p-color-rose-700: #c1486a;
   --p-color-yellow-100: #fdf0d0;
   --p-color-yellow-200: #fcd284;
   --p-color-orange-500: #d58b50;
@@ -90,10 +91,15 @@
 
   /* Semantic: the public API. */
   --color-brand: var(--p-color-purple-600);
+  --color-brand-hover: var(--p-color-purple-700);
   --color-brand-tint: var(--p-color-purple-50);
+  --color-brand-tint-strong: var(--p-color-purple-150);
   --color-brand-subtle: var(--p-color-purple-200);
   --color-brand-soft: var(--p-color-purple-50);
   --color-brand-hero: var(--p-color-purple-300);
+  --color-control-selected: var(--p-color-purple-600);
+  --color-control-selected-text: var(--p-color-neutral-0);
+  --color-control-track-off: var(--p-color-neutral-300);
   --color-on-brand: var(--p-color-neutral-0);
   --color-accent-promo: var(--p-color-periwinkle-100);
   --color-accent-rose: var(--p-color-rose-500);
@@ -108,7 +114,6 @@
   --color-text-subtle: var(--p-color-neutral-400);
   --color-text-brand: var(--p-color-purple-600);
   --color-text-brand-deep: var(--p-color-purple-800);
-  --color-text-accent: var(--p-color-rose-700);
   --color-text-on-inverse: var(--p-color-neutral-0);
   --color-surface: var(--p-color-neutral-0);
   --color-surface-soft: var(--p-color-neutral-100);

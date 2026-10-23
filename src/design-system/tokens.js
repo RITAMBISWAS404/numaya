@@ -5,27 +5,36 @@ export const tokens = [
     "name": "--p-color-purple-50",
     "layer": "primitive",
     "type": "color",
-    "value": "#faf7fe",
-    "resolved": "#faf7fe",
-    "description": "Soft lavender (Meetup 'Sign up with email' sampled #F8F1FD, lifted slightly so purple text on it is 4.6:1)."
+    "value": "#faf8ff",
+    "resolved": "#faf8ff",
+    "description": "Palest lavender: selected tints and soft brand buttons (purple text on it 4.7:1)."
   },
   {
     "id": "primitive.color.purple.100",
     "name": "--p-color-purple-100",
     "layer": "primitive",
     "type": "color",
-    "value": "#f0ecf9",
-    "resolved": "#f0ecf9",
-    "description": "Meetup lavender wash (sampled #F0ECF9, Home header wash): brand surfaces and selected tints."
+    "value": "#f3f0fd",
+    "resolved": "#f3f0fd",
+    "description": "Fresh lavender wash: guidance cards, brand screen washes, selected-row backgrounds (lighter and cooler than the sampled Meetup #F0ECF9)."
+  },
+  {
+    "id": "primitive.color.purple.150",
+    "name": "--p-color-purple-150",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#e9e4fb",
+    "resolved": "#e9e4fb",
+    "description": "Stronger lavender tint: pressed tints, illustration framing, tracks under purple."
   },
   {
     "id": "primitive.color.purple.200",
     "name": "--p-color-purple-200",
     "layer": "primitive",
     "type": "color",
-    "value": "#e2dcf7",
-    "resolved": "#e2dcf7",
-    "description": "Lavender border and placeholder tint (derived between 100 and 300)."
+    "value": "#ddd6f7",
+    "resolved": "#ddd6f7",
+    "description": "Lavender hairlines and tinted placeholders."
   },
   {
     "id": "primitive.color.purple.300",
@@ -34,7 +43,7 @@ export const tokens = [
     "type": "color",
     "value": "#9c85e6",
     "resolved": "#9c85e6",
-    "description": "Meetup hero purple (sampled #9C85E6, sign-up hero): large decorative fills only (3.0:1 with white)."
+    "description": "Meetup hero purple (sampled #9C85E6): illustration details only (3.0:1 with white)."
   },
   {
     "id": "primitive.color.purple.600",
@@ -43,7 +52,16 @@ export const tokens = [
     "type": "color",
     "value": "#7262c7",
     "resolved": "#7262c7",
-    "description": "Meetup primary purple (sampled #7262C7 on selected pills, interest chips, outgoing bubbles, progress, check FAB). White on it is 4.90:1."
+    "description": "Meetup primary purple (sampled #7262C7). White on it is 4.90:1."
+  },
+  {
+    "id": "primitive.color.purple.700",
+    "name": "--p-color-purple-700",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#5f50b3",
+    "resolved": "#5f50b3",
+    "description": "Hover and pressed purple (derived; white on it 6.4:1)."
   },
   {
     "id": "primitive.color.purple.800",
@@ -52,7 +70,7 @@ export const tokens = [
     "type": "color",
     "value": "#4f4296",
     "resolved": "#4f4296",
-    "description": "Deep purple for text on lavender tints (derived; 7.1:1 on purple.100)."
+    "description": "Deep purple for text on lavender tints (derived; 7.4:1 on purple.100)."
   },
   {
     "id": "primitive.color.periwinkle.100",
@@ -80,15 +98,6 @@ export const tokens = [
     "value": "#ea698c",
     "resolved": "#ea698c",
     "description": "Meetup accent rose (sampled #EA698C, organiser badge): badges and category marks, never text."
-  },
-  {
-    "id": "primitive.color.rose.700",
-    "name": "--p-color-rose-700",
-    "layer": "primitive",
-    "type": "color",
-    "value": "#c1486a",
-    "resolved": "#c1486a",
-    "description": "Meetup emphasis rose (sampled #C1486A, 'The people platform'): one emphasised headline word. 4.77:1 on white."
   },
   {
     "id": "primitive.color.yellow.100",
@@ -775,13 +784,31 @@ export const tokens = [
     "description": "Meetup primary purple: selected pills and chips, outgoing bubbles, progress, links, send and confirm actions, switches' focus. White text and glyphs on it are 4.90:1 (AA)."
   },
   {
+    "id": "semantic.color.brand.hover",
+    "name": "--color-brand-hover",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.purple.700}",
+    "resolved": "#5f50b3",
+    "description": "Hover and pressed state of solid purple actions and controls."
+  },
+  {
     "id": "semantic.color.brand.tint",
     "name": "--color-brand-tint",
     "layer": "semantic",
     "type": "color",
     "value": "{primitive.color.purple.50}",
-    "resolved": "#faf7fe",
-    "description": "Light lavender surface for selected and highlighted states; purple text 4.6:1, brand-deep or ink text."
+    "resolved": "#faf8ff",
+    "description": "Palest lavender surface for selected states and soft buttons; purple text 4.7:1."
+  },
+  {
+    "id": "semantic.color.brand.tint-strong",
+    "name": "--color-brand-tint-strong",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.purple.150}",
+    "resolved": "#e9e4fb",
+    "description": "Stronger lavender: pressed tints and illustration framing."
   },
   {
     "id": "semantic.color.brand.subtle",
@@ -789,7 +816,7 @@ export const tokens = [
     "layer": "semantic",
     "type": "color",
     "value": "{primitive.color.purple.200}",
-    "resolved": "#e2dcf7",
+    "resolved": "#ddd6f7",
     "description": "Lavender borders and tinted placeholders."
   },
   {
@@ -798,7 +825,7 @@ export const tokens = [
     "layer": "semantic",
     "type": "color",
     "value": "{primitive.color.purple.50}",
-    "resolved": "#faf7fe",
+    "resolved": "#faf8ff",
     "description": "Soft lavender secondary-button fill (Meetup 'Sign up with email')."
   },
   {
@@ -809,6 +836,33 @@ export const tokens = [
     "value": "{primitive.color.purple.300}",
     "resolved": "#9c85e6",
     "description": "Large decorative purple (hero washes, illustration framing). Never behind small text."
+  },
+  {
+    "id": "semantic.color.control.selected",
+    "name": "--color-control-selected",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.purple.600}",
+    "resolved": "#7262c7",
+    "description": "Checked radio, checkbox and switch track, slider interval, selected pill fill."
+  },
+  {
+    "id": "semantic.color.control.selected-text",
+    "name": "--color-control-selected-text",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.neutral.0}",
+    "resolved": "#ffffff",
+    "description": "Text, ticks and thumbs on a selected control (4.90:1)."
+  },
+  {
+    "id": "semantic.color.control.track-off",
+    "name": "--color-control-track-off",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.neutral.300}",
+    "resolved": "#dadadd",
+    "description": "Off switch track and empty slider rail (neutral)."
   },
   {
     "id": "semantic.color.on-brand",
@@ -937,15 +991,6 @@ export const tokens = [
     "description": "Text on lavender tints (7.1:1)."
   },
   {
-    "id": "semantic.color.text.accent",
-    "name": "--color-text-accent",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.rose.700}",
-    "resolved": "#c1486a",
-    "description": "One emphasised word in a hero headline (Meetup 'The people platform'). 4.77:1 on white."
-  },
-  {
     "id": "semantic.color.text.on-inverse",
     "name": "--color-text-on-inverse",
     "layer": "semantic",
@@ -1014,7 +1059,7 @@ export const tokens = [
     "layer": "semantic",
     "type": "color",
     "value": "{primitive.color.purple.100}",
-    "resolved": "#f0ecf9",
+    "resolved": "#f3f0fd",
     "description": "Lavender wash at the top of brand screens (Meetup Home header)."
   },
   {

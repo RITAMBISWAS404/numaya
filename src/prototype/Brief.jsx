@@ -73,7 +73,7 @@ export function Brief({ steps, current, verified, onJump, onRestart }) {
           ))}
         </ul>
         <p className="brief__hint brief__credit">
-          Icons: <a href="https://phosphoricons.com" target="_blank" rel="noreferrer">Phosphor</a>, MIT
+          Icons: <a href="https://fonts.google.com/icons" target="_blank" rel="noreferrer">Material Symbols</a> by Google, Apache 2.0
         </p>
       </footer>
     </aside>

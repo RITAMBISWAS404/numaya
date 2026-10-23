@@ -48,15 +48,12 @@ try {
     await wait(1500);
     await p.screenshot({ path: `${OUT}/prototype-welcome.png` });
 
-    const emphasis = await p.evaluate(() => {
-      const el = document.querySelector(".welcome__emphasis");
-      const after = [...document.querySelectorAll(".welcome__title *")].some(
-        (e) => !["none", "normal"].includes(getComputedStyle(e, "::after").content),
-      );
-      return { color: el && getComputedStyle(el).color, bg: el && getComputedStyle(el).backgroundImage, deco: el && getComputedStyle(el).textDecorationLine, after };
+    const heading = await p.evaluate(() => {
+      const t = document.querySelector(".welcome__title");
+      const parts = [t, ...t.querySelectorAll("*")].map((e) => getComputedStyle(e).color);
+      return { colours: [...new Set(parts)], em: t.querySelectorAll("em, .emphasis, [class*='emphasis']").length, text: t.textContent };
     });
-    check("headline emphasis is the word itself in the Meetup accent pink #C1486A (no marker, underline or background)", emphasis.color === "rgb(193, 72, 106)" && emphasis.bg === "none" && emphasis.deco === "none", `${emphasis.color} / ${emphasis.bg} / ${emphasis.deco}`);
-    check("headline has no decorative underline", !emphasis.after);
+    check("welcome: the headline is one colour (near-black), no coloured-word emphasis", heading.colours.length === 1 && heading.colours[0] === "rgb(20, 19, 22)" && heading.em === 0 && /Better first dates/.test(heading.text), JSON.stringify(heading));
 
     const hero = await p.evaluate(() => {
       const h = document.querySelector(".welcome__hero");
@@ -240,19 +237,19 @@ try {
     check("keyboard: Like has a visible focus ring and Enter opens the match", focusVisible && (await p.locator("#match").innerText()).includes("You and Maya liked each other"));
     await wait(600);
     const deco = await p.evaluate(() => {
-      const marker = document.querySelector("#match .emphasis");
+      const headings = [...document.querySelectorAll("h1, h2, .result__title, .match__title, .screen-header__title")];
       return {
+        accentWords: headings.filter((h) => [...h.querySelectorAll("*")].some((c) => /[a-z]{2}/i.test(c.textContent) && getComputedStyle(c).color !== getComputedStyle(h).color && !c.closest("svg, .count-badge, .sr-only, .visually-hidden"))).map((h) => h.textContent.slice(0, 30)),
         ribbons: document.querySelectorAll(".ribbon, [class*='ribbon__']").length,
         setup: (() => {
           const steps = [...document.querySelectorAll("#intro .setup-progress__step")];
-          return { states: steps.map((x) => x.className.match(/is-(\w+)/)?.[1]).join(), current: steps.findIndex((x) => x.getAttribute("aria-current") === "step"), icons: steps.every((x) => x.querySelector(".setup-progress__icon svg[data-weight='fill']")) };
+          return { states: steps.map((x) => x.className.match(/is-(\w+)/)?.[1]).join(), current: steps.findIndex((x) => x.getAttribute("aria-current") === "step"), icons: steps.every((x) => x.querySelector(".setup-progress__icon svg[data-fill='1']")) };
         })(),
-        marker: marker && { text: marker.textContent, color: getComputedStyle(marker).color },
       };
     });
     check("expressive: no decorative ribbons or threads anywhere in the flows", deco.ribbons === 0, String(deco.ribbons));
     check("setup progress: a fresh intro shows Basics next and Interests, Photos upcoming, with filled icons", deco.setup.states === "active,upcoming,upcoming" && deco.setup.current === 0 && deco.setup.icons, JSON.stringify(deco.setup));
-    check("expressive: the match title colours one word in the accent pink", deco.marker?.text === "match" && deco.marker.color === "rgb(193, 72, 106)", JSON.stringify(deco.marker));
+    check("headings: no flow heading colours individual words", deco.accentWords.length === 0, deco.accentWords.join(" | "));
     check("motion: no console errors with reduced motion", p.errors.length === 0, p.errors.join(" | "));
     await p.evaluate(() => localStorage.clear());
   }
@@ -295,7 +292,7 @@ try {
           badgeIcon: cs("#intro .result__badge").color,
           chipFg: cs("#interests .chip.is-selected").color,
           chipTick: cs("#interests .chip.is-selected .chip__affordance").color,
-          chipIcons: [...document.querySelectorAll("#interests .chip")].every((c) => c.querySelector("svg.chip__icon[data-icon][data-weight='regular']")),
+          chipIcons: [...document.querySelectorAll("#interests .chip")].map((c) => [c.querySelectorAll(".chip__icon").length, c.querySelector(".chip__affordance")?.dataset.icon, !!c.querySelector(".chip__affordance")?.closest("[class*='circle']")]),
           slotFilled: cs("#photos .photo-slot .image-placeholder").backgroundColor,
           slotEmpty: cs("#photos .photo-slot--empty").backgroundColor,
           slotEmptyEdge: cs("#photos .photo-slot--empty").boxShadow,
@@ -317,7 +314,7 @@ try {
       check("flows: like is an ink action (Meetup primary sheen) with a white glyph", states.likeBg.includes(INK) && states.likeFg === "rgb(255, 255, 255)", `${states.likeBg.slice(0, 60)} / ${states.likeFg}`);
       check("flows: SuperSwipe is the single brand-purple action, with a white star", states.superBg === BRAND && states.superFg === WHITE, `${states.superBg} / ${states.superFg}`);
       check("flows: selected interest is a brand-purple pill with white text and a white minus-circle (Meetup)", states.chipBg === BRAND && states.chipRing === "none" && states.chipFg === WHITE && states.chipTick === WHITE, `${states.chipBg} / ${states.chipFg} / ${states.chipTick}`);
-      check("flows: every interest chip leads with a Meetup-style line icon cue", states.chipIcons);
+      check("chips: interest pills are text-first with a plain add / remove glyph (no leading icon, no circle)", states.chipIcons.length > 0 && states.chipIcons.every(([lead, aff, circled]) => lead === 0 && (aff === "plus" || aff === "minus") && !circled), JSON.stringify(states.chipIcons.slice(0, 4)));
       check("flows: selecting a chip keeps its size (no reflow)", states.chipSizes[0] === states.chipSizes[1] && states.chipSizes[2] === states.chipSizes[3], states.chipSizes.join(" / "));
       check("flows: success badge is a purple cookie shape with a white check and no white disc", states.badgeShape === BRAND && states.badgeIcon === "rgb(255, 255, 255)" && states.badgeDisc === "none", `${states.badgeShape} / ${states.badgeIcon} / ${states.badgeDisc}`);
       check("photos: empty slots (white, hairline) are distinct from filled photo placeholders (grey)", states.slotEmpty === "rgb(255, 255, 255)" && /inset/.test(states.slotEmptyEdge) && states.slotFilled !== states.slotEmpty, `${states.slotFilled} vs ${states.slotEmpty}`);
@@ -350,13 +347,13 @@ try {
         };
       });
       check("brand: purple actions and marks are solid #7262C7 with white glyphs, no inset disc", pinkFg.discs.length >= 3 && pinkFg.discs.every((d) => d.inset === "none" && d.bg === BRAND && d.fg === WHITE), JSON.stringify(pinkFg.discs));
-      check("selection: a checked checkbox is ink with a white tick (Meetup)", pinkFg.checkbox === INK, pinkFg.checkbox);
+      check("selection: a checked checkbox is the purple selected control with a white tick", pinkFg.checkbox === BRAND, pinkFg.checkbox);
       check("fields: form fields are 16px rounded rectangles, not pills", pinkFg.phoneRadius === "16px", pinkFg.phoneRadius);
       check("info cards: photo guidance and blocking help use the shared information card", pinkFg.infoCards === 2, String(pinkFg.infoCards));
-      check("you both like: a white 24px card, a small purple mark, grey shared-interest pills with icons (Meetup)", pinkFg.shared?.bg === WHITE && pinkFg.shared.radius === "24px" && pinkFg.shared.mark === BRAND && pinkFg.shared.pills > 0 && pinkFg.shared.icons && pinkFg.shared.pillBg === "rgb(242, 242, 242)", JSON.stringify(pinkFg.shared));
+      check("you both like: a white 24px card, a small purple mark, grey text-only shared-interest pills", pinkFg.shared?.bg === WHITE && pinkFg.shared.radius === "24px" && pinkFg.shared.mark === BRAND && pinkFg.shared.pills > 0 && !pinkFg.shared.icons && pinkFg.shared.pillBg === "rgb(242, 242, 242)", JSON.stringify(pinkFg.shared));
       check("match queue: new matches are 60x80 vertical capsules with an unclipped purple ring", pinkFg.portrait?.w === 60 && pinkFg.portrait.h === 80 && pinkFg.portrait.radius === "999px" && pinkFg.portrait.ring.includes(BRAND) && pinkFg.portrait.clear, JSON.stringify(pinkFg.portrait));
       check("actions: Pass / Super / Like and the floating SuperSwipe are 72x56 pills; send is a circle (Meetup composer)", pinkFg.actions.length === 3 && pinkFg.actions.every((a) => a === "72x56/28px") && pinkFg.floating === "28px" && pinkFg.send === "50%", `${pinkFg.actions.join(" ")} / ${pinkFg.floating} / ${pinkFg.send}`);
-      check("flows: switch on is an ink track (Meetup); off is a plain grey track, no outline, white thumb", states.switchOn === INK && states.switchOff.bg === "rgb(218, 218, 221)" && states.switchOff.edge === "none" && states.switchOff.thumb === "rgb(255, 255, 255)", `${states.switchOn} / ${JSON.stringify(states.switchOff)}`);
+      check("flows: switch on is the purple selected track; off is a plain grey track, no outline, white thumb", states.switchOn === BRAND && states.switchOff.bg === "rgb(218, 218, 221)" && states.switchOff.edge === "none" && states.switchOff.thumb === "rgb(255, 255, 255)", `${states.switchOn} / ${JSON.stringify(states.switchOff)}`);
       check("flows: sliders have white thumbs on a brand-purple interval over a grey rail (no ink)", states.slider.thumb === WHITE && states.slider.track.includes(BRAND) && states.slider.track.includes("rgb(218, 218, 221)") && !states.slider.track.includes(INK), JSON.stringify(states.slider));
       check("navigation: idle tabs are ink line icons with an ink label (Meetup)", states.tabIdleIcon === "rgb(60, 59, 64)" && states.tabIdleLabel === "rgb(60, 59, 64)", `${states.tabIdleIcon} / ${states.tabIdleLabel}`);
       check("flows: active tab sits on a grey pill with a purple icon and a deep-purple label (Meetup)", states.tabActive === "rgb(233, 232, 235)" && states.tabActiveFg === "rgb(79, 66, 150)" && states.tabActiveIcon === BRAND, `${states.tabActive} / ${states.tabActiveFg} / ${states.tabActiveIcon}`);
@@ -393,9 +390,9 @@ try {
           actionsAfterSections: (() => { const secs = document.querySelectorAll("#discovery .fl-pf__section"); const bar = document.querySelector("#discovery .fl-pf > .action-bar"); return secs.length >= 2 && [...secs].every((s) => s.compareDocumentPosition(bar) & Node.DOCUMENT_POSITION_FOLLOWING); })(),
           tabItemMin: Math.min(...items.map((r) => Math.min(r.width, r.height))),
           tabCurrent: tab.querySelectorAll(".tab-bar__item[aria-current='page']").length,
-          icons: document.querySelectorAll("#discovery svg.icon[data-icon][viewBox='0 0 256 256']").length,
-          foreignIcons: document.querySelectorAll("svg[class*='solar'], svg[viewBox='0 0 24 24']:not(.result__shape):not([class*='ring'])").length,
-          tabWeights: [...document.querySelectorAll("#discovery .tab-bar__item")].map((t) => `${t.classList.contains("is-current") ? "on" : "off"}:${t.querySelector("svg").dataset.weight}`),
+          icons: document.querySelectorAll("#discovery svg.icon[data-icon][viewBox='0 -960 960 960']").length,
+          foreignIcons: document.querySelectorAll("svg[class*='solar'], svg[class*='phosphor'], svg.ph, svg[viewBox='0 0 24 24']:not(.result__shape):not([class*='ring']), svg[viewBox='0 0 256 256']").length,
+          tabWeights: [...document.querySelectorAll("#discovery .tab-bar__item")].map((t) => `${t.classList.contains("is-current") ? "on" : "off"}:${t.querySelector("svg").dataset.fill}`),
           lineGlyphs: [...document.querySelectorAll("#settings .top-bar svg, #chat .top-bar svg")].map((s) => s.dataset.icon).filter(Boolean),
           legacyStrokeIcons: document.querySelectorAll("#discovery svg[stroke-linecap='round'][viewBox='0 0 24 24']").length,
           icons24: [...document.querySelectorAll("svg[viewBox='0 0 24 24']")].map((s) => s.getAttribute("class")),
@@ -479,8 +476,8 @@ try {
       check("layout: profile photo strip keeps 4 columns; inbox rows are plain, not boxed (Bumble)", roll.stripCols === 4 && roll.inboxRows > 0 && !roll.inboxBoxed, `${roll.stripCols} cols / ${roll.inboxRows} rows / boxed ${roll.inboxBoxed}`);
       check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);
       check("navigation: exactly one current tab", geo.tabCurrent === 1);
-      check("icons: Phosphor glyphs render and no Solar or other icon family remains", geo.icons > 0 && geo.foreignIcons === 0 && geo.legacyStrokeIcons === 0, `${geo.icons} phosphor / ${geo.foreignIcons} other / ${geo.legacyStrokeIcons} legacy / ${geo.icons24.join(",")}`);
-      check("icons: the current tab uses the filled glyph, the others the line glyph (Meetup)", geo.tabWeights.every((w) => w === "on:fill" || w === "off:regular") && geo.tabWeights.filter((w) => w === "on:fill").length === 1, geo.tabWeights.join(" "));
+      check("icons: Material Symbols Rounded glyphs render and no other icon family remains", geo.icons > 0 && geo.foreignIcons === 0 && geo.legacyStrokeIcons === 0, `${geo.icons} material / ${geo.foreignIcons} other / ${geo.legacyStrokeIcons} legacy / ${geo.icons24.join(",")}`);
+      check("icons: the current tab uses the filled glyph, the others the line glyph (Meetup)", geo.tabWeights.every((w) => w === "on:1" || w === "off:0") && geo.tabWeights.filter((w) => w === "on:1").length === 1, geo.tabWeights.join(" "));
 
       await f("basics").getByLabel("First name").focus();
       await wait(500); // let the focus-ring transition finish before reading computed styles

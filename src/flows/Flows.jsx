@@ -101,7 +101,7 @@ function Gallery() {
         ))}
       </main>
       <footer className="fl-credits">
-        Icons: <a href="https://phosphoricons.com" target="_blank" rel="noreferrer">Phosphor</a>, MIT. Fonts: Fraunces and Inter, SIL OFL.
+        Icons: <a href="https://fonts.google.com/icons" target="_blank" rel="noreferrer">Material Symbols</a> by Google, Apache 2.0. Fonts: Fraunces and Inter, SIL OFL.
       </footer>
     </div>
     </StoreProvider>
