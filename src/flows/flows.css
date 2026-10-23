@@ -816,3 +816,88 @@ body {
 .fl-opener:active {
   background: var(--color-surface-soft);
 }
+
+/* Profile readiness: summary card on Profile and the dashboard header. */
+.fl-ready-card,
+.fl-readiness,
+.fl-status {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+}
+
+.fl-readiness {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+}
+
+.fl-ready-card__top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.fl-ready-card__title {
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: var(--type-title-size);
+  line-height: var(--type-title-line);
+  font-weight: var(--type-title-weight);
+}
+
+.fl-ready-card .readiness-meter__value-text {
+  font-size: 22px;
+}
+
+.fl-ready-card .readiness-meter__unit {
+  display: none;
+}
+
+.fl-status {
+  justify-items: start;
+  gap: var(--space-2);
+}
+
+.fl-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.fl-breakdown {
+  align-items: center;
+}
+
+.fl-breakdown__text {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.fl-breakdown__top {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.fl-breakdown__points {
+  color: var(--color-text-secondary);
+  font-size: var(--type-caption-size);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.fl-help-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0 0 var(--space-4) var(--space-5);
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 359px) {
+  .fl-metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

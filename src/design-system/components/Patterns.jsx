@@ -44,8 +44,12 @@ export function MatchCelebration({ names, title = "It’s a match", children }) 
         <span className={cx("match__photo", "match__photo--right")}>
           <Icon name="image" size={28} />
         </span>
+        {/* Two halves of a heart meet as the photos settle: the match moment, drawn as one mark. */}
         <span className="match__mark">
-          <Icon name="heart" size={20} />
+          <svg className="match__heart" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+            <path className="match__half match__half--left" d="M12 20.5C6.2 15.7 3 12.8 3 9.2 3 6.6 5 4.6 7.5 4.6c1.8 0 3.4 1 4.5 2.4z" />
+            <path className="match__half match__half--right" d="M12 20.5c5.8-4.8 9-7.7 9-11.3 0-2.6-2-4.6-4.5-4.6-1.8 0-3.4 1-4.5 2.4z" />
+          </svg>
         </span>
       </div>
       <h2 className="match__title">{title}</h2>

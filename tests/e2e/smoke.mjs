@@ -479,7 +479,7 @@ try {
           theirsFg: cs("#chat .message--them .message__bubble").color,
           chip: cs("#interests .chip:not(.is-selected)").boxShadow,
           lastVisible: last.bottom <= body.bottom + 0.5,
-          stripCols: cs("#profile .fl-photo-strip").gridTemplateColumns.split(" ").length,
+          profileReady: document.querySelectorAll("#profile .fl-ready-card [role='meter']").length,
           inboxRows: document.querySelectorAll("#chats .conversation").length,
           inboxBoxed: [...document.querySelectorAll("#chats .conversation, #chats .fl-list")].some((el) => getComputedStyle(el).boxShadow !== "none" || getComputedStyle(el).backgroundColor !== "rgba(0, 0, 0, 0)"),
         };
@@ -505,7 +505,7 @@ try {
       const empties = await p.evaluate(() => [...document.querySelectorAll(".empty-state")].map((e) => ({ scene: e.querySelector("svg.ill")?.dataset.scene, discs: [...e.querySelectorAll("*")].filter((c) => !c.closest("svg, .btn") && getComputedStyle(c).borderTopLeftRadius === "50%").length })));
       check("empty states: each leads with its own drawn scene or a plain glyph, never a disc", empties.length > 0 && empties.every((x) => x.discs === 0) && new Set(empties.map((x) => x.scene).filter(Boolean)).size === empties.filter((x) => x.scene).length, JSON.stringify(empties));
       check("illustrations: the onboarding next button stays on screen", art.fabVisible);
-      check("layout: profile photo strip keeps 4 columns; inbox rows are plain, not boxed (Bumble)", roll.stripCols === 4 && roll.inboxRows > 0 && !roll.inboxBoxed, `${roll.stripCols} cols / ${roll.inboxRows} rows / boxed ${roll.inboxBoxed}`);
+      check("layout: profile leads with one readiness summary; inbox rows are plain, not boxed (Bumble)", roll.profileReady === 1 && roll.inboxRows > 0 && !roll.inboxBoxed, `${roll.profileReady} meter / ${roll.inboxRows} rows / boxed ${roll.inboxBoxed}`);
       check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);
       check("navigation: exactly one current tab", geo.tabCurrent === 1);
       check("icons: Material Symbols Rounded glyphs render and no other icon family remains", geo.icons > 0 && geo.foreignIcons === 0 && geo.legacyStrokeIcons === 0, `${geo.icons} material / ${geo.foreignIcons} other / ${geo.legacyStrokeIcons} legacy / ${geo.icons24.join(",")}`);
@@ -670,7 +670,11 @@ try {
       check("edit: an empty name explains what to do", (await textOf("edit")).includes("Add your first name"));
       await f("edit").getByLabel("First name").fill("Jordan");
       await f("edit").getByRole("button", { name: "Climbing" }).click();
-      check("edit: interests edit in place and reach the profile", (await textOf("profile")).includes("Climbing"));
+      await f("edit").getByRole("tab", { name: "Preview" }).click();
+      await wait(300);
+      check("edit: interests edit in place and reach the profile preview", (await textOf("edit")).includes("Climbing"));
+      await f("edit").getByRole("tab", { name: "Edit" }).click();
+      await wait(300);
       // Photo options: make photo 2 the main one; removing stops at 2 photos.
       const firstId = await p.evaluate(() => JSON.parse(localStorage.getItem("numaya.preview.v1")).state.profile.photos.map((x) => x.id));
       await f("edit").getByRole("button", { name: "Photo 2: options" }).click();

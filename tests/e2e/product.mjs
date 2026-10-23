@@ -385,6 +385,104 @@ try {
     check("home: blocking moves on and hides that person", now !== first);
     check("home: no console errors", p.errors.length === 0, p.errors.join(" | "));
   }
+  /* 9 · Insights: breakdown and a recommendation into the right field */
+  {
+    const p = await phone();
+    await open(p, "profile");
+    const summary = await p.locator(".fl-ready-card").innerText();
+    check("profile: a compact readiness summary with the next step", summary.includes("73") && summary.includes("Write a bio"), summary.replace(/\s+/g, " "));
+    await tap(p, "See insights");
+    const t = await body(p);
+    const meter = await p.locator("[role='meter']").first().getAttribute("aria-valuenow");
+    check("insights: score and breakdown follow the documented rules", meter === "73" && t.includes("20 / 20") && t.includes("22.5 / 30") && t.includes("0 / 20") && t.includes("15 / 15"), meter);
+    check("insights: verification and account status are separate from the score", t.includes("never counted in the score") && t.includes("Account status") && t.includes("Active"));
+    check("insights: no attractiveness, response or visibility judgement", !/attractive|desirab|shadow|response rate|percentile/i.test(t));
+    await tap(p, /Write a bio/);
+    await wait(500);
+    const focus = await p.evaluate(() => ({ tag: document.activeElement?.tagName, label: document.activeElement?.closest(".field")?.querySelector("label")?.textContent }));
+    check("insights: a recommendation opens Edit profile focused on that field", screenId(p) === "edit" && focus.tag === "TEXTAREA" && focus.label === "Bio", JSON.stringify(focus));
+    await p.locator("textarea").fill("Cook, climber and occasional poet. Ask me about the best croissant in town.");
+    await p.goto(`${base}flows.html?screen=insights`);
+    await wait(700);
+    const after = await p.locator("[role='meter']").first().getAttribute("aria-valuenow");
+    check("insights: completing the bio raises the score by its 20 points", after === "93", after);
+    check("insights: no console errors", p.errors.length === 0, p.errors.join(" | "));
+  }
+
+  /* 10 · Settings persist; 11 · simulated integrations; premium; unblock; maintenance */
+  {
+    const p = await phone();
+    await open(p, "settings");
+    await p.getByRole("switch", { name: /Activity updates/ }).click();
+    await wait(1100);
+    await p.reload();
+    await wait(900);
+    check("settings: a toggle persists across reload", (await p.getByRole("switch", { name: /Activity updates/ }).isChecked()) === false);
+
+    await open(p, "connections");
+    await tap(p, "Connect");
+    const consent = await p.getByRole("dialog").innerText();
+    await p.getByRole("dialog").getByRole("button", { name: "Connect (simulated)" }).click();
+    await wait(500);
+    const connected = await body(p);
+    check("social: consent shows what would be shared, and the result is labelled simulated", consent.includes("what Numaya would show") && connected.includes("Connected (simulated)"));
+    await tap(p, "Disconnect");
+    await p.getByRole("alertdialog").getByRole("button", { name: "Disconnect" }).click();
+    await wait(500);
+    check("social: disconnecting restores the original state", ((await body(p)).match(/Not connected/g) ?? []).length === 2);
+
+    await open(p, "premium");
+    const prem = await body(p);
+    await tap(p, "See Plus");
+    const sheet = await p.getByRole("dialog").innerText();
+    check("premium: compares Free and Plus with no invented prices or charges", prem.includes("Free") && prem.includes("Plus") && !/[£$€]\s?\d/.test(prem) && sheet.includes("nothing is charged"));
+
+    await open(p, "chat");
+    await tap(p, "Conversation options");
+    await p.getByRole("button", { name: "Block", exact: true }).click();
+    await p.getByRole("dialog").getByRole("button", { name: "Block Priya" }).click();
+    await wait(500);
+    await p.goto(`${base}flows.html?screen=blocked`);
+    await wait(700);
+    const listed = (await body(p)).includes("Priya");
+    await tap(p, "Unblock");
+    await p.getByRole("alertdialog").getByRole("button", { name: "Unblock" }).click();
+    await wait(600);
+    await p.goto(`${base}flows.html?screen=chats`);
+    await wait(700);
+    check("blocked: listed, unblocked after confirming, and the match does not come back", listed && !(await body(p)).includes("Priya"));
+
+    await p.goto(`${base}flows.html?screen=settings`);
+    await wait(700);
+    await tap(p, "Preview the maintenance screen");
+    const m = await body(p);
+    await tap(p, "Try again");
+    await wait(900);
+    check("maintenance: reachable only from Prototype tools, explains itself and retries", m.includes("We’ll be right back") && screenId(p) === "discovery");
+    check("account: no console errors", p.errors.length === 0, p.errors.join(" | "));
+  }
+
+  /* Match animation respects reduced motion ------------------------ */
+  {
+    const motion = async (reducedMotion) => {
+      const ctx = await browser.newContext({ viewport: { width: 393, height: 852 }, reducedMotion });
+      const p = await ctx.newPage();
+      await p.goto(`${base}flows.html?screen=likes`);
+      await p.evaluate(() => localStorage.clear());
+      await p.goto(`${base}flows.html?screen=likes`);
+      await wait(700);
+      await p.getByRole("button", { name: /Maya, 29/ }).click();
+      await wait(400);
+      await p.getByRole("button", { name: "Like back" }).click();
+      await wait(100);
+      const r = await p.evaluate(() => [...document.querySelectorAll(".match__half")].map((e) => getComputedStyle(e).animationName).join(","));
+      await ctx.close();
+      return r;
+    };
+    const full = await motion("no-preference");
+    const reduced = await motion("reduce");
+    check("match: the two heart halves join, and stay still under reduced motion", full === "heart-half-left,heart-half-right" && reduced === "none,none", `${full} / ${reduced}`);
+  }
 } catch (err) {
   check("product journeys completed without an exception", false, err.message.split("\n")[0]);
 } finally {

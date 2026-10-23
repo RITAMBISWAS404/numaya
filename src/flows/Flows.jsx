@@ -5,6 +5,7 @@ import * as S from "./screens.jsx";
 import * as A from "./activity.jsx";
 import * as H from "./activity-host.jsx";
 import * as L from "./likes.jsx";
+import * as P from "./account.jsx";
 import { StoreProvider } from "./store.js";
 
 export const SCREENS = [
@@ -26,7 +27,13 @@ export const SCREENS = [
   { id: "profile", flow: "Profile", title: "My profile", Component: S.MyProfile },
   { id: "edit", flow: "Profile", title: "Edit profile and preview", Component: S.EditProfile },
   { id: "prompt", flow: "Profile", title: "Edit prompt", Component: S.PromptEditor },
+  { id: "insights", flow: "Profile", title: "Profile readiness", Component: P.Insights },
   { id: "settings", flow: "Settings", title: "Preferences and privacy", Component: S.Settings },
+  { id: "blocked", flow: "Settings", title: "Blocked people", Component: P.Blocked },
+  { id: "premium", flow: "Account", title: "Premium tiers (preview)", Component: P.Premium },
+  { id: "connections", flow: "Account", title: "Connected accounts (simulated)", Component: P.Connections },
+  { id: "help", flow: "Account", title: "Help and support", Component: P.Help },
+  { id: "maintenance", flow: "System state", title: "Service unavailable", Component: P.Maintenance },
 ];
 
 function PreviewFrame({ screen, active, go }) {

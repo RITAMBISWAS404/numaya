@@ -999,6 +999,34 @@ button.list-row__hit:hover {
   from { opacity: 0; transform: translateX(-50%) scale(0.6); }
 }
 
+.match__heart {
+  overflow: visible;
+}
+
+.match__half {
+  fill: currentColor;
+  transform-box: fill-box;
+  animation: var(--motion-duration-slow) var(--motion-ease-emphasized) 420ms both;
+}
+
+.match__half--left {
+  transform-origin: right bottom;
+  animation-name: heart-half-left;
+}
+
+.match__half--right {
+  transform-origin: left bottom;
+  animation-name: heart-half-right;
+}
+
+@keyframes heart-half-left {
+  from { transform: translate(-4px, 1px) rotate(-14deg); }
+}
+
+@keyframes heart-half-right {
+  from { transform: translate(4px, 1px) rotate(14deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .skeleton {
     animation: none;
@@ -1008,6 +1036,10 @@ button.list-row__hit:hover {
   .match__photo--right,
   .match__mark {
     animation-name: fade-in;
+  }
+
+  .match__half {
+    animation: none;
   }
 }
 

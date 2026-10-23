@@ -33,6 +33,7 @@ import {
   ProfileCard,
   ProfileSection,
   PromptCard,
+  ReadinessMeter,
   RangeSlider,
   ResultPanel,
   ScreenHeader,
@@ -55,7 +56,8 @@ import { INTERESTS, PEOPLE, PROMPT_QUESTIONS, REPORT_REASONS } from "./data.js";
 import { conversations, discoveryQueue, hiddenByFilters, newMatches, useStore } from "./store.js";
 import { Frame, useFlash } from "./frame.jsx";
 import { ReportSheet, ShareSheet } from "./activity.jsx";
-import { openersFor } from "./model.js";
+import { myActivities, openersFor, readiness } from "./model.js";
+import { accountStatus, useFixAction } from "./account.jsx";
 
 const ageOf = (year) => (year.length === 4 ? new Date().getFullYear() - Number(year) : null);
 
@@ -826,9 +828,14 @@ export function Chat({ go }) {
 /* 6 · Profile and settings -------------------------------------------------- */
 export function MyProfile({ go }) {
   const [state] = useStore();
-  const { name, year, interests, photos } = state.profile;
+  const { name, year } = state.profile;
   const age = ageOf(year);
-  const completion = Math.min(1, 0.4 + Math.min(photos.length, 4) * 0.1 + Math.min(interests.length, 5) * 0.04);
+  const { score, recommendations } = readiness(state.profile);
+  const fix = useFixAction(go);
+  const status = accountStatus(state);
+  const mine = myActivities(state);
+  const connected = Object.values(state.social).filter(Boolean).length;
+  const next = recommendations[0];
   return (
     <Frame
       tone="page"
@@ -837,12 +844,12 @@ export function MyProfile({ go }) {
       go={go}
     >
       <div className="fl-stack fl-gap-lg fl-sections">
-        {/* Bumble profile tab: avatar with completion ring and % pill, name, edit action. */}
+        {/* Overview: avatar with the readiness ring, name, edit action and account status. */}
         <div className="fl-me">
           <div className="fl-me__avatar">
-            <Avatar name={name || "You"} size="xl" ring={{ value: completion }} />
-            <span className="fl-me__pct" aria-label={`Profile ${Math.round(completion * 100)}% complete`}>
-              {Math.round(completion * 100)}%
+            <Avatar name={name || "You"} size="xl" ring={{ value: score / 100 }} />
+            <span className="fl-me__pct" aria-label={`Profile readiness ${score} out of 100`}>
+              {score}
             </span>
           </div>
           <div className="fl-me__text">
@@ -863,50 +870,43 @@ export function MyProfile({ go }) {
           </div>
         </div>
 
-        {/* Bumble edit profile: section title, grey helper, then the content to edit. */}
-        <Section
-          title="Photos"
-          description={`${photos.length} of 6 added. Pick some that show the true you.`}
-          action={
-            <button type="button" className="text-button" aria-label="Edit photos" onClick={() => go("edit")}>
-              Edit
-            </button>
-          }
-        >
-          <div className="fl-photo-strip">
-            {Array.from({ length: 4 }, (_, i) =>
-              photos[i] ? (
-                <ImagePlaceholder key={photos[i].id} ratio="3 / 4" className="fl-photo-strip__photo" label={`Photo ${i + 1} (placeholder)`} />
-              ) : (
-                <button key={`empty-${i}`} type="button" className="fl-photo-strip__empty" aria-label={`Add photo ${i + 1}`} onClick={() => go("edit")}>
-                  <Icon name="plus" size={20} />
-                </button>
-              ),
-            )}
+        {/* Compact readiness summary leading to the full dashboard. */}
+        <section className="card fl-ready-card" aria-labelledby="fl-ready-title">
+          <div className="fl-ready-card__top">
+            <ReadinessMeter value={score} size={72} />
+            <div className="fl-stack fl-gap-xs">
+              <h2 id="fl-ready-title" className="fl-ready-card__title">
+                Profile readiness
+              </h2>
+              <p className="fl-caption">{next ? `Next: ${next.action.toLowerCase()} (up to ${next.max - next.points} points)` : "Everything visible on your profile is filled in."}</p>
+            </div>
           </div>
-        </Section>
+          <div className="fl-row fl-row--tight">
+            {next && (
+              <Button size="sm" block={false} onClick={() => fix(next)}>
+                {next.action}
+              </Button>
+            )}
+            <Button variant="secondary" size="sm" block={false} onClick={() => go("insights")}>
+              See insights
+            </Button>
+          </div>
+        </section>
 
-        <Section title="Prompts" description="Let people know what it’s like to date you.">
+        <Section title="Prompt" description="Matches reply to this.">
           <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} onEdit={() => go("prompt")} />
         </Section>
 
-        <Section title="Interests" description="Get specific about the things you love.">
-          <button type="button" className="card fl-edit-card" aria-label={`Edit interests: ${interests.join(", ") || "none yet"}`} onClick={() => go("edit")}>
-            <span className="fl-chip-row">
-              {interests.length ? (
-                interests.map((i) => (
-                  <Chip key={i} kind="static">
-                    {i}
-                  </Chip>
-                ))
-              ) : (
-                <span className="fl-caption">Pick a few so people have something to ask about.</span>
-              )}
-            </span>
-            <Icon name="chevronRight" size={20} className="fl-edit-card__chevron" />
-          </button>
-        </Section>
-
+        <ListGroup title="Activity">
+          <ListRow icon="event" label="My activities" value={`${mine.upcoming.length + mine.hosting.length} upcoming`} kind="value" onPress={() => go("my-activities")} />
+        </ListGroup>
+        <ListGroup title="Account">
+          <ListRow icon="bell" label="Notifications" value={state.prefs.messages || state.prefs.likes || state.prefs.activity ? "On" : "Off"} kind="value" onPress={() => go("settings")} />
+          <ListRow icon="settings" label="Settings and privacy" value={status.label} kind="value" onPress={() => go("settings")} />
+          <ListRow icon="premium" label="Premium" value={state.plan === "plus" ? "Plus" : "Free"} kind="value" onPress={() => go("premium")} />
+          <ListRow icon="link" label="Connected accounts" value={connected ? `${connected} connected` : "None"} kind="value" onPress={() => go("connections")} />
+          <ListRow icon="help" label="Help and support" onPress={() => go("help")} />
+        </ListGroup>
         <ListGroup title="Trust">
           <ListRow icon="shield" label="Verification" kind="info" value="Phone verified" />
         </ListGroup>
@@ -921,6 +921,11 @@ function ProfilePreview({ profile }) {
   return (
     <div className="fl-pf fl-preview">
       <ProfileCard name={profile.name || "You"} age={age ?? "–"} details={[]} />
+      {profile.bio?.trim() && (
+        <ProfileSection title="About me">
+          <p className="fl-pf__body">{profile.bio}</p>
+        </ProfileSection>
+      )}
       <ProfileSection title={profile.prompt.q}>
         <p className="fl-pf__body">{profile.prompt.a}</p>
       </ProfileSection>
@@ -960,13 +965,28 @@ export function EditProfile({ go }) {
   const index = photos.findIndex((p) => p.id === photoId);
   const age = ageOf(profile.year);
   const add = () => photos.length < 6 && set({ photos: [...photos, { id: Date.now(), tone: photos.length % 4 }] });
+  const [orienting, setOrienting] = useState(false);
+  const formRef = useRef(null);
+  // A readiness recommendation opens Edit profile on its field: scroll to it and focus it once.
+  useEffect(() => {
+    const field = state.editFocus;
+    if (!field) return;
+    setView("edit");
+    const t = setTimeout(() => {
+      const el = formRef.current?.querySelector(`[data-focus="${field}"]`);
+      el?.scrollIntoView({ block: "center" });
+      (el?.matches("input, textarea, button") ? el : el?.querySelector("input, textarea, button"))?.focus({ preventScroll: true });
+      dispatch({ type: "editFocus", field: null });
+    }, 150);
+    return () => clearTimeout(t);
+  }, [state.editFocus, dispatch]);
   const remove = (id) => {
     if (photos.length <= 2) return flash("Keep at least 2 photos");
     set({ photos: photos.filter((p) => p.id !== id) });
   };
   return (
     <Frame tone="page" top={<TopBar onBack={() => go("profile")} title="Edit profile" />}>
-      <div className="fl-stack fl-gap-lg fl-sections">
+      <div className="fl-stack fl-gap-lg fl-sections" ref={formRef}>
         <SegmentedControl
           label="Profile view"
           value={view}
@@ -980,14 +1000,22 @@ export function EditProfile({ go }) {
           <ProfilePreview profile={profile} />
         ) : (
           <>
-            <Section title="Photos" description="Tap a photo to make it your main one. Keep at least 2.">
-              <PhotoGrid photos={photos} onAdd={add} onRemove={remove} onSelect={setPhotoId} hint="Your main photo leads your profile in Discover." />
-            </Section>
+            <div data-focus="photos">
+              <Section title="Photos" description="Tap a photo to make it your main one. Keep at least 2.">
+                <PhotoGrid photos={photos} onAdd={add} onRemove={remove} onSelect={setPhotoId} hint="Your main photo leads your profile in Home." />
+              </Section>
+            </div>
             <Section title="Prompt" description="Matches reply to this.">
               <PromptCard prompt={profile.prompt.q} answer={profile.prompt.a} onEdit={() => go("prompt")} />
             </Section>
-            <ChipGroup label="Interests" options={INTERESTS} value={profile.interests} onChange={(v) => set({ interests: v })} max={5} />
+            <div data-focus="bio">
+              <TextArea label="Bio" placeholder="A few lines about you: what you love, what you’re looking for." value={profile.bio ?? ""} maxLength={300} rows={4} onChange={(e) => set({ bio: e.target.value })} />
+            </div>
+            <div data-focus="interests">
+              <ChipGroup label="Interests" options={INTERESTS} value={profile.interests} onChange={(v) => set({ interests: v })} max={5} />
+            </div>
             <TextField
+              data-focus="name"
               label="First name"
               value={profile.name}
               onChange={(e) => set({ name: e.target.value })}
@@ -997,6 +1025,9 @@ export function EditProfile({ go }) {
             <ListGroup title="About you" footnote="Age and gender come from sign-up. Contact support to change your birth year.">
               <ListRow label="Age" kind="info" value={age ? String(age) : "Not set"} />
               <ListRow label="Gender" kind="info" value={GENDER_LABEL[profile.gender] ?? "Not set"} />
+            </ListGroup>
+            <ListGroup title="Sexual orientation (optional)" footnote="Optional and private: in this preview it isn’t shown on your profile or used to rank you.">
+              <ListRow label="Orientation" value={ORIENTATIONS.find((o) => o.value === (profile.orientation || ""))?.label} kind="value" onPress={() => setOrienting(true)} />
             </ListGroup>
           </>
         )}
@@ -1029,12 +1060,32 @@ export function EditProfile({ go }) {
           },
         ]}
       />
+      <Sheet open={orienting} onClose={() => setOrienting(false)} labelledBy="fl-orient-title">
+        <div className="sheet__header">
+          <h2 id="fl-orient-title" className="sheet__title">
+            Sexual orientation
+          </h2>
+          <IconButton icon="close" label="Close" variant="flat" size="sm" onClick={() => setOrienting(false)} />
+        </div>
+        <OptionCards legend="Orientation" value={profile.orientation || ""} onChange={(orientation) => { set({ orientation }); setOrienting(false); }} options={ORIENTATIONS} />
+      </Sheet>
       <Toast open={Boolean(toast)} placement="bottom" icon="check">
         {toast}
       </Toast>
     </Frame>
   );
 }
+
+const ORIENTATIONS = [
+  { value: "", label: "Prefer not to say" },
+  { value: "straight", label: "Straight" },
+  { value: "gay", label: "Gay" },
+  { value: "lesbian", label: "Lesbian" },
+  { value: "bisexual", label: "Bisexual" },
+  { value: "queer", label: "Queer" },
+  { value: "asexual", label: "Asexual" },
+  { value: "other", label: "Another orientation" },
+];
 
 const ANSWER_MAX = 150;
 
@@ -1082,11 +1133,15 @@ const FEEDBACK = {
   snooze: ["Snoozed. Discover is paused.", "Welcome back. Discover is on."],
   messages: ["New message alerts on", "New message alerts off"],
   likes: ["New like alerts on", "New like alerts off"],
+  activity: ["Activity updates on", "Activity updates off"],
+  simulateErrors: ["Network errors simulated", "Network errors off"],
 };
 const DESCRIBE = {
   snooze: (on) => (on ? "You’re hidden. Resume any time." : "Take a break without losing matches"),
   messages: (on) => (on ? "On" : "Off: you’ll still see them in Chats"),
   likes: (on) => (on ? "On" : "Off"),
+  activity: (on) => (on ? "On: requests, approvals and changes" : "Off: you’ll still see them in Activity"),
+  simulateErrors: (on) => (on ? "On: the Activity feed and joining fail" : "Off"),
 };
 
 export function Settings({ go }) {
@@ -1136,13 +1191,18 @@ export function Settings({ go }) {
         <ListGroup title="Notifications" footnote="In this preview, alerts are simulated. Your browser is never asked for permission.">
           {switchRow("messages", "New messages")}
           {switchRow("likes", "New likes")}
+          {switchRow("activity", "Activity updates")}
         </ListGroup>
         <ListGroup title="Privacy and safety">
-          <ListRow icon="shield" label="Blocked people" kind="info" value={String(blocked)} />
+          <ListRow icon="shield" label="Blocked people" kind="value" value={String(blocked)} onPress={() => go("blocked")} />
         </ListGroup>
         <InfoCard icon="flag" title="Blocking and reporting">
-          Open a conversation’s options menu to unmatch, report or block someone. Reports are anonymous.
+          Use the options menu on a conversation, profile or activity to unmatch, block or report. In this preview, reports stay on this device.
         </InfoCard>
+        <ListGroup title="Prototype tools" footnote="For trying failure states in this preview. Real Numaya has no such switches.">
+          {switchRow("simulateErrors", "Simulate network errors")}
+          <ListRow icon="maintenance" label="Preview the maintenance screen" onPress={() => go("maintenance")} />
+        </ListGroup>
         <ListGroup>
           <ListRow label="Log out" kind="action" onPress={() => go("intro")} />
         </ListGroup>
