@@ -29,6 +29,8 @@ import {
   VerifiedBadge,
 } from "../../src/design-system/index.js";
 import { DEFAULT_COUNTRY } from "../../src/data/countries.js";
+import { Wordmark } from "../../src/design-system/index.js";
+import { LOGO_SRC } from "../../src/design-system/components/Brand.jsx";
 
 describe("actions", () => {
   it("Button loading disables the control and announces busy", () => {
@@ -360,3 +362,24 @@ describe("icons and navigation", () => {
     expect(onChange).toHaveBeenCalledWith("chats");
   });
 });
+
+describe("brand and illustration slots", () => {
+  it("Wordmark renders the built-in mark until the supplied logo is set, then the asset unrecoloured", () => {
+    expect(LOGO_SRC).toBeNull(); // the supplied logo has not been added yet (see the UI map)
+    const { container, rerender } = render(<Wordmark />);
+    expect(container.querySelector("svg")).not.toBeNull();
+    rerender(<Wordmark src="/brand/numaya-logo.svg" size="sm" />);
+    const img = screen.getByRole("img", { name: "Numaya" });
+    expect(img).toHaveAttribute("src", "/brand/numaya-logo.svg");
+    expect(img.style.height).toBe("22px");
+    expect(img.style.width).toBe("auto");
+  });
+
+  it("empty and success slots can take the droplet framing; slots stay decorative", () => {
+    const { container } = render(<IllustrationPlaceholder id="match-empty" shape="droplet" ratio="5 / 4" />);
+    const el = container.querySelector("[data-illustration='match-empty']");
+    expect(el).toHaveClass("illustration--droplet");
+    expect(el).toHaveAttribute("aria-hidden", "true");
+  });
+});
+

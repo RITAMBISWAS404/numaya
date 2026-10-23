@@ -18,7 +18,17 @@ export function BrandMark({ size = 28, color = "var(--color-brand)", accent = "v
   );
 }
 
-export function Wordmark({ size = "md" }) {
+/**
+ * Supplied logo asset. The final Numaya logo was not attached when this was built, so the mark above
+ * stands in. To use the supplied file: place it at public/brand/numaya-logo.svg (or .png, transparent
+ * background) and set LOGO_SRC to "/brand/numaya-logo.svg". Wordmark then renders the asset at its
+ * native aspect ratio (height-driven), unrecoloured, with "Numaya" as its accessible name.
+ */
+export const LOGO_SRC = null;
+const LOGO_HEIGHT = { sm: 22, md: 30 };
+
+export function Wordmark({ size = "md", src = LOGO_SRC }) {
+  if (src) return <img className={`wordmark wordmark--${size} wordmark--asset`} src={src} alt="Numaya" style={{ height: LOGO_HEIGHT[size], width: "auto" }} />;
   return (
     <span className={`wordmark wordmark--${size}`}>
       <BrandMark size={size === "sm" ? 20 : 26} />

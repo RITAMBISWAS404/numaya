@@ -127,4 +127,4 @@ after any change.
 | 070 | QA 375: Conversation with long messages | Viewport · `flows.html?screen=chat` |  | [070-qa-chat-long-messages-375x667.png](screens/070-qa-chat-long-messages-375x667.png) |
 | 071 | QA 375: Settings | Viewport · `flows.html?screen=settings` |  | [071-qa-settings-375x667.png](screens/071-qa-settings-375x667.png) |
 
-71 captures: 66 viewport, 5 full page (7 MB of screenshots; all-screens sheet 931 KB).
+71 captures: 66 viewport, 5 full page (7 MB of screenshots; all-screens sheet 938 KB).

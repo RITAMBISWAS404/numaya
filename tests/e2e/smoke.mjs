@@ -403,7 +403,7 @@ try {
       });
       check("geometry: buttons are pills (Meetup)", geo.btnRadius >= 999, `${geo.btnRadius}px`);
       check("geometry: no squircle or superellipse corner-shape anywhere (plain border-radius only)", geo.shaped === 0, `${geo.shaped} shaped elements`);
-      check("shape: avatars are rounded rectangles, radius 30% of the image (36px → 10.8px; ringed 96px → 26.4px)", geo.avatarRadius[0] === "10.8px" && geo.avatarRadius[1] === "26.4px", geo.avatarRadius.join(" / "));
+      check("shape: avatars are circles, as in Meetup (plain and ringed)", geo.avatarRadius[0] === "50%" && geo.avatarRadius[1] === "50%", geo.avatarRadius.join(" / "));
       check("shape: the completion ring traces a rounded rectangle with round caps in brand purple", geo.ring.rounded && geo.ring.cap === "round" && geo.ring.stroke === BRAND && geo.ring.width === "4px" && geo.ring.inside, JSON.stringify(geo.ring));
       check("surfaces: prompt answers are flat grey quote cards (Meetup 'About me'), no shadow", geo.promptShadowAlpha === 0 && geo.promptBg === "rgb(242, 242, 242)", `alpha ${geo.promptShadowAlpha} / ${geo.promptBg}`);
       const m2 = await p.evaluate(() => {
@@ -473,6 +473,8 @@ try {
       });
       check("illustrations: planned slots are present and decorative", ["basics-spot", "interests-spot"].every((id) => art.ids.includes(id)) && art.hidden, art.ids.join(", "));
       check("illustrations: photo placeholders are never illustration slots", art.photoIsArt === 0);
+      const drops = await p.evaluate(() => [...document.querySelectorAll(".empty-state [data-illustration]")].map((e) => `${e.dataset.illustration}:${e.classList.contains("illustration--droplet")}:${getComputedStyle(e).borderTopLeftRadius}`));
+      check("illustrations: empty-state slots use Meetup's organic droplet framing (plain elliptical radii)", drops.length > 0 && drops.every((d) => d.includes(":true:") && /%/.test(d)), drops.join(" | "));
       check("illustrations: the onboarding next button stays on screen", art.fabVisible);
       check("layout: profile photo strip keeps 4 columns; inbox rows are plain, not boxed (Bumble)", roll.stripCols === 4 && roll.inboxRows > 0 && !roll.inboxBoxed, `${roll.stripCols} cols / ${roll.inboxRows} rows / boxed ${roll.inboxBoxed}`);
       check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);

@@ -9,8 +9,9 @@ import { IconButton } from "./Button.jsx";
 /* Avatar sizes in px (mirror --size-avatar-*; a unit test keeps them in sync). The completion ring
    is drawn in pixel space so its 4px band and round caps are the same at every size. */
 export const AVATAR_PX = { xs: 24, sm: 36, md: 48, lg: 64, xl: 96 };
-/* Avatars are rounded rectangles: corner radius = 30% of the image's side (mirrors content.css). */
-export const AVATAR_RADIUS = 0.3;
+/* Avatars are circles, as in Meetup (radius = half the image's side; mirrors content.css). The
+   deliberate shape exceptions live elsewhere: capsule match previews and the cookie success badge. */
+export const AVATAR_RADIUS = 0.5;
 const RING_BAND = 4;
 const ringPaths = {};
 
@@ -317,9 +318,11 @@ export function PromptCard({ prompt, answer, onEdit, onRemove, className }) {
  * until `src` is provided; decorative, so it is hidden from assistive tech either way. Distinct from
  * photo placeholders, which stand in for people's photos.
  */
-export function IllustrationPlaceholder({ id, src, ratio = "1 / 1", width, size = "md", reserved = false, className }) {
+/** shape="droplet": Meetup's organic framing (the blob behind empty-state art), for empty and success
+    slots. Plain elliptical border-radius, so it renders the same in every browser. */
+export function IllustrationPlaceholder({ id, src, ratio = "1 / 1", width, size = "md", shape, reserved = false, className }) {
   const props = {
-    className: cx("illustration", `illustration--${size}`, reserved && !src && "illustration--reserved", className),
+    className: cx("illustration", `illustration--${size}`, shape && `illustration--${shape}`, reserved && !src && "illustration--reserved", className),
     style: { aspectRatio: ratio, width },
     "data-illustration": id,
   };
@@ -501,7 +504,7 @@ export function EmptyState({ icon = "sparkle", art = false, artSrc, title, child
   return (
     <div className={cx("empty-state", tone === "error" && "empty-state--error")}>
       {art ? (
-        <IllustrationPlaceholder id={typeof art === "string" ? art : undefined} src={artSrc} ratio="5 / 4" width="160px" className="empty-state__art" />
+        <IllustrationPlaceholder id={typeof art === "string" ? art : undefined} src={artSrc} ratio="5 / 4" width="160px" shape="droplet" className="empty-state__art" />
       ) : (
         <span className="empty-state__icon" aria-hidden="true">
           <Icon name={icon} size={28} weight="duotone" />

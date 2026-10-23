@@ -21,8 +21,8 @@
   display: grid;
   place-items: center;
   overflow: hidden;
-  /* A rounded rectangle, radius 30% of the image's side (AVATAR_RADIUS in Content.jsx). */
-  border-radius: calc((var(--avatar-size) - 2 * var(--avatar-inset, 0px)) * 0.3);
+  /* A circle, as in Meetup (AVATAR_RADIUS in Content.jsx). */
+  border-radius: 50%;
   background: var(--color-surface-sunken);
   color: var(--color-text-primary);
   font-family: var(--font-display);
@@ -824,6 +824,14 @@ button.list-row__hit:hover {
 
 .illustration--sm {
   border-radius: var(--radius-lg);
+}
+
+/* Meetup's organic droplet framing (the soft blob behind empty-state art and the sign-up hero
+   photos), on the lavender wash. Empty and success slots only; spots and the Welcome hero keep
+   their own treatment. */
+.illustration--droplet {
+  border-radius: 66% 34% 60% 40% / 42% 62% 38% 58%;
+  background: var(--color-surface-brand);
 }
 
 .empty-state__art {

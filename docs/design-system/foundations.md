@@ -63,9 +63,11 @@ or brand colour. Numerals in inputs, codes and prices use `tabular-nums`.
   md 16 (buttons, fields, option cards) · lg 20 (cards, list groups, message bubbles, tab items) · xl 28
   (hero profile card, sheets, dialogs, the floating tab bar) · 2xl 32 (framed screens). Nested corners
   follow outer = inner + inset: the tab bar (xl 28) wraps items (lg 20) with an 8px inset. Form
-  fields are 16px rounded rectangles, text areas 20px, search a pill. Avatars are rounded rectangles
-  (radius 30% of the image side); the completion ring traces the same shape as a 4px round-capped
-  stroke. Circles stay for genuine indicators (the verified dot, the success badge).
+  fields are 16px rounded rectangles, text areas 20px, search a pill. Avatars are circles (Meetup);
+  the completion ring traces the same circle as a 4px round-capped stroke.
+- **Expressive shapes (the deliberate exceptions, nowhere else):** 60×80 capsule match previews,
+  the 9-sided cookie success badge, and Meetup's organic droplet framing on empty and success
+  illustration slots (plain elliptical `border-radius`). No squircles or `corner-shape`.
   `pill` is only for shapes whose meaning is a pill: progress bars, switches, slider tracks, count
   badges. Never for ordinary buttons, chips, tabs or badges.
 - **Borders:** hairline 1px, selected 1.5px, focus 2px.

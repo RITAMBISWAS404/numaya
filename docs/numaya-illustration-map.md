@@ -5,8 +5,11 @@ Reserved slots for artwork supplied separately. Each slot is an `IllustrationPla
 `EmptyState`) to drop the artwork in without any layout change. Slots are decorative (`aria-hidden`
 / empty `alt`): the surrounding text carries the meaning.
 
-Placeholders are a quiet `surface.sunken` block with the card corner (24px; 20px for spot slots), no
-border, shadow or accent colour. Profile **photo** placeholders (Discover card, photo grid, profile strip, match
+Spot slots (basics, interests) are a quiet `surface.sunken` block with a 20px corner. Empty-state and
+success slots (`discover-*`, `match-empty`, `chats-empty`, `verified-success`) sit in Meetup's organic
+**droplet** framing (`IllustrationPlaceholder shape="droplet"`: asymmetric elliptical radii on the
+lavender wash), like the blob behind Meetup's empty-state art; the artwork is drawn over it. The
+Welcome hero is reserved and stays empty by product decision. No border or shadow. Profile **photo** placeholders (Discover card, photo grid, profile strip, match
 photos) are a different thing and are never illustration slots.
 
 **Art direction for all slots:** the Meetup-derived palette: brand purple `#7262C7` as the lead
