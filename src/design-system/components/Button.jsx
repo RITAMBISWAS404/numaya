@@ -42,7 +42,7 @@ export function Button({
       aria-busy={loading || undefined}
       disabled={rest.disabled || loading}
     >
-      {icon && <Icon name={icon} size={20} stroke={2} className="btn__icon" />}
+      {icon && <Icon name={icon} size={20} className="btn__icon" />}
       <span className="btn__label">{children}</span>
       {loading && <Spinner />}
     </button>
@@ -60,7 +60,7 @@ export function Fab({ label = "Continue", icon = "arrowRight", loading = false, 
       disabled={disabled || loading}
       {...rest}
     >
-      {loading ? <Spinner /> : <Icon name={icon} size={22} stroke={2} />}
+      {loading ? <Spinner /> : <Icon name={icon} size={22} />}
     </button>
   );
 }
@@ -79,7 +79,7 @@ export function IconButton({ icon, label, variant = "floating", size = "md", pre
       aria-pressed={pressed}
       {...rest}
     >
-      <Icon name={icon} size={size === "sm" ? 18 : 22} stroke={2} />
+      <Icon name={icon} size={size === "sm" ? 18 : 22} />
     </button>
   );
 }

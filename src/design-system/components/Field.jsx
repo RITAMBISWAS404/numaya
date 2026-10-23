@@ -88,7 +88,7 @@ export const SearchField = forwardRef(function SearchField(
 ) {
   return (
     <label className={cx("search", className)}>
-      <Icon name="search" size={20} stroke={1.8} className="search__icon" />
+      <Icon name="search" size={20} className="search__icon" />
       <span className="visually-hidden">{label}</span>
       <input
         ref={ref}
@@ -102,7 +102,7 @@ export const SearchField = forwardRef(function SearchField(
       />
       {value && onClear && (
         <button type="button" className="search__clear" aria-label="Clear search" onClick={onClear}>
-          <Icon name="close" size={14} stroke={2.4} />
+          <Icon name="close" size={14} />
         </button>
       )}
     </label>

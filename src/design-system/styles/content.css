@@ -78,17 +78,21 @@
   stroke: var(--color-text-subtle);
 }
 
+/* Verified seal on an avatar: the one glyph, with a white outline painted under its fill so it
+   separates from the photo without a disc behind it. */
 .avatar__badge {
   position: absolute;
-  right: -1px;
-  bottom: -1px;
-  display: grid;
-  place-items: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--color-brand);
-  box-shadow: 0 0 0 2px var(--color-surface);
+  right: -3px;
+  bottom: -3px;
+  color: var(--color-brand);
+  overflow: visible;
+}
+
+.avatar__badge path {
+  stroke: var(--color-surface);
+  stroke-width: 110;
+  stroke-linejoin: round;
+  paint-order: stroke;
 }
 
 .verified {
@@ -100,25 +104,10 @@
   font-weight: var(--font-weight-semibold);
 }
 
+/* The verified seal is a purple glyph (4.90:1 on white), always beside a label or an accessible name. */
 .verified__mark {
-  display: grid;
-  place-items: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--color-brand);
-}
-
-.verified--compact .verified__mark {
-  width: 18px;
-  height: 18px;
-}
-
-/* Purple marks carry a white glyph (4.90:1). These glyphs are
-   bold or filled, never text, and every one has an accessible name or a text label beside it. */
-.avatar__badge,
-.verified__mark {
-  color: var(--color-on-brand);
+  flex: none;
+  color: var(--color-brand);
 }
 
 .badge {
@@ -820,14 +809,6 @@ button.list-row__hit:hover {
   border-radius: var(--radius-lg);
 }
 
-/* Meetup's organic droplet framing (the soft blob behind empty-state art and the sign-up hero
-   photos), on the lavender wash. Empty and success slots only; spots and the Welcome hero keep
-   their own treatment. */
-.illustration--droplet {
-  border-radius: 66% 34% 60% 40% / 42% 62% 38% 58%;
-  background: var(--color-surface-brand);
-}
-
 /* Original spot illustrations (Illustration.jsx): one composition per scene, coloured by role. */
 .ill {
   display: block;
@@ -863,25 +844,27 @@ button.list-row__hit:hover {
 .ill__brand { fill: var(--color-brand); }
 .ill__promo { fill: var(--color-accent-promo); }
 .ill__yellow { fill: var(--color-accent-yellow); }
+.ill__on-brand-fill { fill: var(--color-on-brand); }
+
+.ill__trail {
+  fill: none;
+  stroke: var(--color-border-control);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 2 6;
+}
 
 .empty-state__art {
   margin-bottom: var(--space-3);
 }
 
+/* Without art: a plain filled glyph, no disc or tile. */
 .empty-state__icon {
-  display: grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
   margin-bottom: var(--space-2);
-  border-radius: 50%;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-sm);
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
 }
 
 .empty-state--error .empty-state__icon {
-  background: var(--color-danger-tint);
   color: var(--color-danger);
 }
 
@@ -914,13 +897,7 @@ button.list-row__hit:hover {
 }
 
 .primer__icon {
-  display: grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  border-radius: var(--radius-lg);
-  background: var(--color-brand-tint);
-  color: var(--color-text-brand);
+  color: var(--color-brand);
 }
 
 .primer__title,

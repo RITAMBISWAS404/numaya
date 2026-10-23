@@ -100,7 +100,7 @@ export function Note({ icon = "lock", children, id }) {
   return (
     <p className="reassurance" id={id}>
       <span className="reassurance__icon">
-        <Icon name={icon} size={18} stroke={1.7} />
+        <Icon name={icon} size={18} />
       </span>
       <span>{children}</span>
     </p>

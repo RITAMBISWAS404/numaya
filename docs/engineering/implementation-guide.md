@@ -38,7 +38,12 @@ npm run tokens                    # regenerate src/design-system/tokens.{css,js}
 - Headings are one colour (`--color-text-primary`); never colour individual words. No decorative
   ribbons.
 - Icons: `Icon` only (Material Symbols Rounded, filled by default). New symbols go in
-  `scripts/icons.mjs`, then `npm run icons`.
+  `scripts/icons.mjs`, then `npm run icons`. No icon tiles or discs: a plain glyph, sized by role.
+- Illustrations: `Illustration` scenes only (via `ResultPanel art`, `EmptyState art`,
+  `ScreenHeader art`); add a scene in `Illustration.jsx` following the
+  [illustration map](../numaya-illustration-map.md). Never stack a badge on a shape.
+- Cards: profile and Discover sections use `ProfileSection`; guidance uses `InfoCard`; selected
+  controls use the `control.*` tokens (one state system for radios, checkboxes, switches, pills).
 - Fraunces for display, Inter for everything operational. No other fonts.
 
 ## Changing tokens

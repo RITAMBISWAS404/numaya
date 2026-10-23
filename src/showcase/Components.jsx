@@ -38,6 +38,8 @@ import {
   SharedInterests,
   ProfileSection,
   InfoCard,
+  Illustration,
+  ILLUSTRATION_SCENES,
   ProgressSegments,
   PromptCard,
   Radio,
@@ -598,6 +600,18 @@ function Feedback() {
           <ResultPanel tone="danger" title="We couldn’t verify you">
             <p>Check the number and try again.</p>
           </ResultPanel>
+        </Specimen>
+        <Specimen title="Illustration" note="Original SVG scenes, one composition each, coloured by token. Decorative (aria-hidden); the copy carries the meaning" wide>
+          <div className="sc-ill-grid">
+            {ILLUSTRATION_SCENES.map((scene) => (
+              <figure key={scene} className="sc-ill">
+                <Illustration scene={scene} width={["hello", "interests"].includes(scene) ? 72 : 128} />
+                <figcaption>
+                  <code>{scene}</code>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </Specimen>
         <Specimen title="InfoCard" note="Guidance card: icon + heading row, body below, light lavender wash, near-black heading">
           <InfoCard icon="lock" title="Your number stays private">

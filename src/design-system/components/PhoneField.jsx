@@ -29,7 +29,7 @@ export const PhoneField = forwardRef(function PhoneField(
         >
           <span className="input__code">{country.iso}</span>{" "}
           <span>{country.dial}</span>
-          <Icon name="chevronDown" size={18} stroke={1.8} className="input__chevron" />
+          <Icon name="chevronDown" size={18} className="input__chevron" />
         </button>
       </Field>
 
@@ -107,7 +107,7 @@ export function CountryPicker({ open, selected, onSelect, onClose, countries = C
                 <span className="country-row__code">{c.iso}</span>
                 <span className="country-row__name">{c.name}</span>
                 <span className="country-row__dial">{c.dial}</span>
-                <span className="country-row__check">{isSelected && <Icon name="check" size={20} stroke={2.2} />}</span>
+                <span className="country-row__check">{isSelected && <Icon name="check" size={20} />}</span>
               </button>
             </li>
           );

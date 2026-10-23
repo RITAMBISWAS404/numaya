@@ -327,7 +327,7 @@ try {
           tabActiveFg: cs("#discovery .tab-bar__item.is-current").color,
           tabActiveIcon: cs("#discovery .tab-bar__item.is-current .tab-bar__icon").color,
           progress: cs("#basics .progress__segment.is-done .progress__fill").backgroundColor,
-          verified: cs("#chats .avatar__badge, #discovery .verified__mark").backgroundColor,
+          verified: [...document.querySelectorAll("#chats .avatar__badge, #chat .verified__mark")].map((e) => ({ tag: e.tagName, icon: e.dataset.icon, fg: getComputedStyle(e).color, bg: getComputedStyle(e).backgroundColor })),
         };
       });
       check("flows: like is an ink action (Meetup primary sheen) with a white glyph", states.likeBg.includes(INK) && states.likeFg === "rgb(255, 255, 255)", `${states.likeBg.slice(0, 60)} / ${states.likeFg}`);
@@ -341,7 +341,7 @@ try {
         const disc = (sel) => { const e = document.querySelector(sel); return e && { inset: getComputedStyle(e, "::before").content, bg: getComputedStyle(e).backgroundColor, fg: getComputedStyle(e).color }; };
         const cb = document.querySelector("#basics .choice__input--checkbox:checked");
         return {
-          discs: [disc("#discovery .action-bar__btn--super"), disc("#chats .avatar__badge"), disc("#chat .verified__mark"), disc("#chat .composer__send:not(:disabled)")].filter(Boolean),
+          discs: [disc("#discovery .action-bar__btn--super"), disc("#chat .composer__send:not(:disabled)")].filter(Boolean),
           checkbox: cb && getComputedStyle(cb).backgroundColor,
           phoneRadius: getComputedStyle(document.querySelector("#basics .input")).borderTopLeftRadius,
           infoCards: document.querySelectorAll("#photos .info-card, #settings .info-card").length,
@@ -366,7 +366,8 @@ try {
           field: getComputedStyle(document.querySelector("#chat .composer__field")).borderTopLeftRadius,
         };
       });
-      check("brand: purple actions and marks are solid #7262C7 with white glyphs, no inset disc", pinkFg.discs.length >= 3 && pinkFg.discs.every((d) => d.inset === "none" && d.bg === BRAND && d.fg === WHITE), JSON.stringify(pinkFg.discs));
+      check("brand: purple actions and marks are solid #7262C7 with white glyphs, no inset disc", pinkFg.discs.length >= 1 && pinkFg.discs.every((d) => d.inset === "none" && d.bg === BRAND && d.fg === WHITE), JSON.stringify(pinkFg.discs));
+      check("verified: the mark is the single purple Material verified seal, never a check on a disc", states.verified.length >= 2 && states.verified.every((v) => v.tag === "svg" && v.icon === "verified" && v.fg === BRAND && v.bg === "rgba(0, 0, 0, 0)"), JSON.stringify(states.verified));
       check("selection: a checked checkbox is the purple selected control with a white tick", pinkFg.checkbox === BRAND, pinkFg.checkbox);
       check("fields: form fields are 16px rounded rectangles, not pills", pinkFg.phoneRadius === "16px", pinkFg.phoneRadius);
       check("info cards: photo guidance and blocking help use the shared information card", pinkFg.infoCards === 2, String(pinkFg.infoCards));
@@ -486,20 +487,21 @@ try {
       check("selection: unselected chips are white pills with a hairline (Meetup)", /inset/.test(roll.chip) && roll.chip.includes("1px"), roll.chip);
       check("chat: the last message sits above the composer", roll.lastVisible);
       const art = await p.evaluate(() => {
-        const slots = [...document.querySelectorAll("[data-illustration]")];
+        const slots = [...document.querySelectorAll("[data-illustration], svg.ill")];
         const fab = document.querySelector("#basics .fab").getBoundingClientRect();
         const screen = document.querySelector("#basics .fl-frame__screen").getBoundingClientRect();
         return {
-          ids: slots.map((el) => el.dataset.illustration).sort(),
+          ids: slots.map((el) => el.dataset.illustration ?? el.dataset.scene).sort(),
+          blank: [...document.querySelectorAll(".illustration:not(.illustration--reserved):not(img)")].length,
           hidden: slots.every((el) => el.getAttribute("aria-hidden") === "true" || el.getAttribute("alt") === ""),
-          photoIsArt: document.querySelectorAll(".profile-card__media [data-illustration], .photo-slot [data-illustration], .match__photos [data-illustration]").length,
+          photoIsArt: document.querySelectorAll(".profile-card__media .ill, .photo-slot .ill, .match__photos .ill, .profile-card__media [data-illustration], .photo-slot [data-illustration], .match__photos [data-illustration]").length,
           fabVisible: fab.bottom <= screen.bottom,
         };
       });
-      check("illustrations: planned slots are present and decorative", ["basics-spot", "interests-spot"].every((id) => art.ids.includes(id)) && art.hidden, art.ids.join(", "));
+      check("illustrations: the drawn scenes are present and decorative; no blank placeholder blocks remain", ["hello", "interests", "verified"].every((id) => art.ids.includes(id)) && art.hidden && art.blank === 0, art.ids.join(", "));
       check("illustrations: photo placeholders are never illustration slots", art.photoIsArt === 0);
-      const drops = await p.evaluate(() => [...document.querySelectorAll(".empty-state [data-illustration]")].map((e) => `${e.dataset.illustration}:${e.classList.contains("illustration--droplet")}:${getComputedStyle(e).borderTopLeftRadius}`));
-      check("illustrations: empty-state slots use Meetup's organic droplet framing (plain elliptical radii)", drops.length > 0 && drops.every((d) => d.includes(":true:") && /%/.test(d)), drops.join(" | "));
+      const empties = await p.evaluate(() => [...document.querySelectorAll(".empty-state")].map((e) => ({ scene: e.querySelector("svg.ill")?.dataset.scene, discs: [...e.querySelectorAll("*")].filter((c) => !c.closest("svg, .btn") && getComputedStyle(c).borderTopLeftRadius === "50%").length })));
+      check("empty states: each leads with its own drawn scene or a plain glyph, never a disc", empties.length > 0 && empties.every((x) => x.discs === 0) && new Set(empties.map((x) => x.scene).filter(Boolean)).size === empties.filter((x) => x.scene).length, JSON.stringify(empties));
       check("illustrations: the onboarding next button stays on screen", art.fabVisible);
       check("layout: profile photo strip keeps 4 columns; inbox rows are plain, not boxed (Bumble)", roll.stripCols === 4 && roll.inboxRows > 0 && !roll.inboxBoxed, `${roll.stripCols} cols / ${roll.inboxRows} rows / boxed ${roll.inboxBoxed}`);
       check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);

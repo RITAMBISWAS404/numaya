@@ -9,9 +9,7 @@ import { Icon } from "./Icon.jsx";
 export function PermissionPrimer({ icon, title, children, allowLabel = "Allow", deferLabel = "Not now", denied = false, onAllow, onDefer, onOpenSettings }) {
   return (
     <div className="primer">
-      <span className="primer__icon" aria-hidden="true">
-        <Icon name={icon} size={28} />
-      </span>
+      <Icon name={icon} size={40} className="primer__icon" />
       <h2 className="primer__title">{title}</h2>
       <div className="primer__body">{children}</div>
       <div className="primer__actions">
@@ -47,7 +45,7 @@ export function MatchCelebration({ names, title = "It’s a match", children }) 
           <Icon name="image" size={28} />
         </span>
         <span className="match__mark">
-          <Icon name="heart" size={20} weight="fill" />
+          <Icon name="heart" size={20} />
         </span>
       </div>
       <h2 className="match__title">{title}</h2>

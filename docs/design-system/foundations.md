@@ -41,10 +41,10 @@ Purple text on grey fills is 4.4:1, so text on grey uses `text-brand-deep`.
 
 | Role (`--type-*`) | Family | Size / line / weight |
 | --- | --- | --- |
-| `hero` | Fraunces | 34 / 38 / 440 |
-| `display` | Fraunces | 31 / 35 / 440 |
-| `headline` | Fraunces | 26 / 30 / 440 |
-| `title-sm`, `title` | Fraunces | 23 / 28, 20 / 25 / 450 |
+| `hero` | Fraunces | 34 / 38 / 520 |
+| `display` | Fraunces | 31 / 35 / 520 |
+| `headline` | Fraunces | 26 / 30 / 520 |
+| `title-sm`, `title` | Fraunces | 23 / 28, 20 / 25 / 520 |
 | `body`, `body-sm` | Inter | 15.5 / 23, 15 / 21 / 400 |
 | `input`, `button`, `label` | Inter | 18 / 24 / 500, 16 / 20 / 600, 13.5 / 18 / 500 |
 | `caption`, `micro`, `eyebrow` | Inter | 13 / 18, 12.5 / 17, 11 / 14 / 600 uppercase +0.12em |
@@ -88,6 +88,18 @@ Fraunces uses `--font-display-axes` (`SOFT 50, WONK 0`). Headings use one colour
 - **Layout:** single column, max `--layout-content-max` 430px; wider viewports centre it. Respect
   `--safe-top`, `--safe-bottom` and `--keyboard-inset` (runtime, see [README](README.md#runtime-variables)).
 
+## Responsive
+
+Single column, max `--layout-content-max` (430px), centred on wider screens; the showcase and
+flow previews lay frames out in a grid at desktop. QA viewports: 393 × 852 (reference), 375 × 667
+(small phone) and 1440 × 900, including long scroll positions (gallery groups 5 and 6).
+
+- Pills wrap their label inside the pill (`max-width: 100%`) rather than widening the screen.
+- The new-match rail scrolls horizontally; portraits keep 72 × 96.
+- The composer grows to 120px, then scrolls; the field is a 20px rounded rectangle at every height.
+- On phones 700px tall or less, the profile-setup screen drops the wordmark so the step cards stay
+  in view; the CTA stays pinned in the footer.
+
 ## Motion
 
 Durations `fast 140` · `base 220` · `slow 380` · `push 460` ms; easing `out` (enter, state change),
@@ -110,8 +122,13 @@ request. Licence: `src/design-system/icons/LICENSE-material-symbols.txt`, credit
   different state: inactive tabs beside the filled current tab.
 - **Sizes:** 18 inside pills, 20 compact rows and buttons, 24 standard and navigation, 26–28
   large actions and spot icons. Always square, `currentColor`, aligned by the container.
-- **No decorative containers:** plain glyphs; no circles around add / remove, no badge stacked on a
-  shape. Status tiles that need a backing shape use the component's own surface.
+- **No decorative containers:** plain glyphs; no circles around add / remove, no tiles behind
+  empty-state, primer or tip icons, no badge stacked on a shape. The verified mark is the single
+  filled `verified` seal (on avatars it gets a white outline painted under the fill, not a disc).
+  Kept on purpose: the match heart's white disc, which bridges two photos and needs it for
+  legibility; solid action buttons (send, SuperSwipe, Pass, Like), which are controls, not decoration.
+- **Illustrations** are separate from icons: original SVG scenes in `Illustration`
+  ([illustration map](../numaya-illustration-map.md)).
 - **Pills are text-first.** Interest pills carry no leading icon; their add / remove affordance is the
   plain `add` / `remove` glyph. Profile-fact chips keep a leading icon only where it names the
   category (looking for, lives in). **No emoji as UI icons;** emoji only when users type them as content.

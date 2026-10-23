@@ -14,7 +14,7 @@ export function MessageBubble({ from = "them", children, status, time, onRetry, 
       <div className="message__bubble">{children}</div>
       {mine && status === "failed" ? (
         <div className="message__failed" role="alert">
-          <Icon name="alert" size={14} stroke={2} />
+          <Icon name="alert" size={14} />
           <span>Not sent.</span>
           <button type="button" onClick={onRetry}>
             Retry
@@ -94,7 +94,7 @@ export const Composer = forwardRef(function Composer(
         />
       </label>
       <button type="submit" className="composer__send" aria-label="Send" disabled={!canSend}>
-        <Icon name="arrowUp" size={18} stroke={2.2} />
+        <Icon name="arrowUp" size={18} />
       </button>
     </form>
   );

@@ -288,10 +288,27 @@ describe("illustration slots", () => {
     expect(img.style.aspectRatio).toBe("5 / 4");
   });
 
-  it("EmptyState swaps its icon for a named illustration slot", () => {
-    const { container } = render(<EmptyState art="chats-empty" title="Connections start here" />);
-    expect(container.querySelector("[data-illustration='chats-empty']")).not.toBeNull();
+  it("EmptyState swaps its glyph for a drawn scene, or supplied artwork", () => {
+    const { container, rerender } = render(<EmptyState art="no-chats" title="Connections start here" />);
+    expect(container.querySelector("svg.ill[data-scene='no-chats']")).not.toBeNull();
     expect(container.querySelector(".empty-state__icon")).toBeNull();
+    rerender(<EmptyState art="no-chats" artSrc="/art/chats.svg" title="Connections start here" />);
+    expect(container.querySelector("img.empty-state__art")).toHaveAttribute("alt", "");
+    rerender(<EmptyState icon="filter" title="No one fits" />);
+    expect(container.querySelector("svg.empty-state__icon[data-icon='filter']")).not.toBeNull();
+  });
+
+  it("every Illustration scene renders as one decorative svg sized to its canvas", async () => {
+    const { Illustration, ILLUSTRATION_SCENES } = await import("../../src/design-system/index.js");
+    for (const scene of ILLUSTRATION_SCENES) {
+      const { container, unmount } = render(<Illustration scene={scene} />);
+      const svg = container.querySelector("svg.ill");
+      expect(svg).toHaveAttribute("aria-hidden", "true");
+      const [, , w, h] = svg.getAttribute("viewBox").split(" ").map(Number);
+      expect(Number(svg.getAttribute("height"))).toBeCloseTo((Number(svg.getAttribute("width")) * h) / w);
+      unmount();
+    }
+    expect(render(<Illustration scene="nope" />).container.firstChild).toBeNull();
   });
 });
 
@@ -370,11 +387,18 @@ describe("brand and illustration slots", () => {
     expect(img.style.width).toBe("auto");
   });
 
-  it("empty and success slots can take the droplet framing; slots stay decorative", () => {
-    const { container } = render(<IllustrationPlaceholder id="match-empty" shape="droplet" ratio="5 / 4" />);
-    const el = container.querySelector("[data-illustration='match-empty']");
-    expect(el).toHaveClass("illustration--droplet");
+  it("the reserved hero slot draws nothing and stays decorative", () => {
+    const { container } = render(<IllustrationPlaceholder id="welcome-hero" reserved />);
+    const el = container.querySelector("[data-illustration='welcome-hero']");
+    expect(el).toHaveClass("illustration--reserved");
     expect(el).toHaveAttribute("aria-hidden", "true");
+  });
+
+  it("the verified mark is one Material seal glyph, not a check on a disc", async () => {
+    const { VerifiedBadge, Avatar } = await import("../../src/design-system/index.js");
+    const { container } = render(<><VerifiedBadge /><Avatar name="Maya" verified /></>);
+    expect(container.querySelectorAll("svg[data-icon='verified']")).toHaveLength(2);
+    expect(container.querySelector("[data-icon='check']")).toBeNull();
   });
 });
 

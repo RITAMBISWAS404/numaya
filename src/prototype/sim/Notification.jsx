@@ -15,7 +15,7 @@ export function Notification({ open, app, time = "now", title, body, onSelect })
         onClick={onSelect}
       >
         <span className="notification__icon" aria-hidden="true">
-          <Icon name="message" size={22} weight="fill" />
+          <Icon name="message" size={22} />
         </span>
         <span className="notification__content">
           <span className="notification__meta">

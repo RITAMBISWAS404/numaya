@@ -11,7 +11,7 @@ import { Illustration } from "./Illustration.jsx";
    is drawn in pixel space so its 4px band and round caps are the same at every size. */
 export const AVATAR_PX = { xs: 24, sm: 36, md: 48, lg: 64, xl: 96 };
 /* Avatars are circles, as in Meetup (radius = half the image's side; mirrors content.css). The
-   remaining shape exception is the droplet framing on empty-state illustration slots. */
+   only drawn shapes are the Illustration scenes. */
 export const AVATAR_RADIUS = 0.5;
 const RING_BAND = 4;
 const ringPaths = {};
@@ -60,22 +60,17 @@ export function Avatar({ name, src, size = "md", ring, verified = false, decorat
       <span className="avatar__image" role={decorative ? undefined : "img"} aria-label={decorative ? undefined : name}>
         {src ? <img src={src} alt="" /> : initial}
       </span>
-      {verified && (
-        <span className="avatar__badge" aria-hidden="true">
-          <Icon name="check" size={12} strokeWidth={3.5} />
-        </span>
-      )}
+      {verified && <Icon name="verified" size={20} className="avatar__badge" />}
     </span>
   );
 }
 
-/** Verified mark: a white check on brand purple, always paired with a text label. */
+/** Verified mark: the filled Material "verified" seal in brand purple (one glyph, no disc behind a
+    check), always paired with a text label. */
 export function VerifiedBadge({ label = "Verified", compact = false }) {
   return (
     <span className={cx("verified", compact && "verified--compact")}>
-      <span className="verified__mark" aria-hidden="true">
-        <Icon name="check" size={compact ? 12 : 13} strokeWidth={3.5} />
-      </span>
+      <Icon name="verified" size={compact ? 18 : 20} className="verified__mark" />
       {compact ? <span className="visually-hidden">{label}</span> : <span>{label}</span>}
     </span>
   );
@@ -85,7 +80,7 @@ export function VerifiedBadge({ label = "Verified", compact = false }) {
 export function Badge({ tone = "neutral", icon, children }) {
   return (
     <span className={cx("badge", `badge--${tone}`)}>
-      {icon && <Icon name={icon} size={12} stroke={2.2} />}
+      {icon && <Icon name={icon} size={12} />}
       {children}
     </span>
   );
@@ -165,7 +160,7 @@ export function ListRow({ icon, label, value, description, kind = "nav", onPress
       {value && <span className="list-row__value">{value}</span>}
       {trailing}
       {kind === "locked" && <Icon name="lock" size={18} className="list-row__trail" />}
-      {(kind === "nav" || kind === "value") && <Icon name="chevronRight" size={18} stroke={2} className="list-row__trail" />}
+      {(kind === "nav" || kind === "value") && <Icon name="chevronRight" size={18} className="list-row__trail" />}
     </>
   );
   return (
@@ -190,7 +185,7 @@ export function TipCard({ icon = "sparkle", title, children, onPress }) {
         <span className="tip-card__title">{title}</span>
         {children && <span className="tip-card__body">{children}</span>}
       </span>
-      {onPress && <Icon name="chevronRight" size={18} stroke={2} className="tip-card__chevron" />}
+      {onPress && <Icon name="chevronRight" size={18} className="tip-card__chevron" />}
     </Tag>
   );
 }
@@ -324,11 +319,11 @@ export function PromptCard({ prompt, answer, onEdit, onRemove, className }) {
  * until `src` is provided; decorative, so it is hidden from assistive tech either way. Distinct from
  * photo placeholders, which stand in for people's photos.
  */
-/** shape="droplet": Meetup's organic framing (the blob behind empty-state art), for empty and success
-    slots. Plain elliptical border-radius, so it renders the same in every browser. */
-export function IllustrationPlaceholder({ id, src, ratio = "1 / 1", width, size = "md", shape, reserved = false, className }) {
+/** `reserved` holds the slot's space with nothing drawn (the Welcome hero). Drawn scenes use
+    `Illustration` instead. */
+export function IllustrationPlaceholder({ id, src, ratio = "1 / 1", width, size = "md", reserved = false, className }) {
   const props = {
-    className: cx("illustration", `illustration--${size}`, shape && `illustration--${shape}`, reserved && !src && "illustration--reserved", className),
+    className: cx("illustration", `illustration--${size}`, reserved && !src && "illustration--reserved", className),
     style: { aspectRatio: ratio, width },
     "data-illustration": id,
   };
@@ -346,7 +341,7 @@ export function ImagePlaceholder({ label, tone = 0, ratio = "4 / 5", className, 
       role={label ? "img" : undefined}
       aria-label={label}
     >
-      {children ?? <Icon name="image" size={28} stroke={1.5} className="image-placeholder__icon" />}
+      {children ?? <Icon name="image" size={28} className="image-placeholder__icon" />}
     </div>
   );
 }
@@ -356,7 +351,7 @@ export function PhotoSlot({ index, filled = false, tone = 0, main = false, uploa
   if (!filled) {
     return (
       <button type="button" className="photo-slot photo-slot--empty" aria-label={`Add photo ${index + 1}`} onClick={onAdd}>
-        <Icon name="plus" size={24} stroke={1.8} />
+        <Icon name="plus" size={24} />
       </button>
     );
   }
@@ -375,7 +370,7 @@ export function PhotoSlot({ index, filled = false, tone = 0, main = false, uploa
         </span>
       ) : (
         <button type="button" className="photo-slot__remove" aria-label={`Remove photo ${index + 1}`} onClick={onRemove}>
-          <Icon name="close" size={14} stroke={2.4} />
+          <Icon name="close" size={14} />
         </button>
       )}
     </div>
@@ -406,7 +401,7 @@ export function PhotoGrid({ photos, slots = 6, onAdd, onRemove, onSelect, hint =
       </div>
       {hint && (
         <p className="photo-grid__hint">
-          <Icon name="info" size={14} stroke={2} /> {hint}
+          <Icon name="info" size={14} /> {hint}
         </p>
       )}
     </div>
@@ -465,13 +460,13 @@ export function ActionBar({ onPass, onSuper, onLike, superDisabled = false }) {
   return (
     <div className="action-bar">
       <button type="button" className="action-bar__btn action-bar__btn--pass" aria-label="Pass" onClick={onPass}>
-        <Icon name="close" size={26} strokeWidth={2.5} />
+        <Icon name="close" size={26} />
       </button>
       <button type="button" className="action-bar__btn action-bar__btn--super" aria-label="Super like" onClick={onSuper} disabled={superDisabled}>
-        <Icon name="star" size={22} weight="fill" />
+        <Icon name="star" size={22} />
       </button>
       <button type="button" className="action-bar__btn action-bar__btn--like" aria-label="Like" onClick={onLike}>
-        <Icon name="heart" size={26} weight="fill" />
+        <Icon name="heart" size={26} />
       </button>
     </div>
   );
@@ -501,25 +496,25 @@ export function Skeleton({ width = "100%", height = 16, radius = "var(--radius-x
   );
 }
 
-/** One clear next step when there is nothing to show. */
 /**
- * Empty state. `art` reserves an illustration slot instead of the icon: pass the slot id from the
- * illustration map (or `true` for an unnamed slot); `artSrc` fills it once artwork exists.
+ * Empty state: one clear next step when there is nothing to show. `art` names an Illustration scene
+ * drawn above the title (`artSrc` swaps in supplied artwork at the same place); without art, a plain
+ * filled glyph stands in.
  */
-export function EmptyState({ icon = "sparkle", art = false, artSrc, title, children, action, onAction, tone = "neutral" }) {
+export function EmptyState({ icon = "sparkle", art, artSrc, title, children, action, onAction, tone = "neutral" }) {
   return (
     <div className={cx("empty-state", tone === "error" && "empty-state--error")}>
-      {art ? (
-        <IllustrationPlaceholder id={typeof art === "string" ? art : undefined} src={artSrc} ratio="5 / 4" width="160px" shape="droplet" className="empty-state__art" />
+      {artSrc ? (
+        <img className="illustration empty-state__art" src={artSrc} alt="" width="160" />
+      ) : art ? (
+        <Illustration scene={art} className="empty-state__art" />
       ) : (
-        <span className="empty-state__icon" aria-hidden="true">
-          <Icon name={icon} size={28} />
-        </span>
+        <Icon name={icon} size={40} className="empty-state__icon" />
       )}
       <h3 className="empty-state__title">{title}</h3>
       {children && <p className="empty-state__body">{children}</p>}
       {action && (
-        <button type="button" className={cx("btn btn--inline btn--sm", art ? "btn--primary" : "btn--secondary")} onClick={onAction}>
+        <button type="button" className={cx("btn btn--inline btn--sm", art || artSrc ? "btn--primary" : "btn--secondary")} onClick={onAction}>
           <span className="btn__label">{action}</span>
         </button>
       )}

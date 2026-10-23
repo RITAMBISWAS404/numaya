@@ -163,7 +163,7 @@ export function Toast({ open, busy = false, placement = "center", icon, children
             <span />
           </span>
         )}
-        {icon && !busy && <Icon name={icon} size={16} stroke={2.2} />}
+        {icon && !busy && <Icon name={icon} size={16} />}
         <span>{children}</span>
       </div>
     </Portal>
@@ -196,7 +196,7 @@ const BANNER_ICON = { info: "info", warning: "alert", error: "alert", success: "
 export function Banner({ tone = "info", title, children, action, onAction }) {
   return (
     <div className={cx("banner", `banner--${tone}`)} role={tone === "error" || tone === "offline" ? "alert" : "status"}>
-      <Icon name={BANNER_ICON[tone]} size={20} stroke={1.9} className="banner__icon" />
+      <Icon name={BANNER_ICON[tone]} size={20} className="banner__icon" />
       <div className="banner__content">
         {title && <p className="banner__title">{title}</p>}
         {children && <p className="banner__body">{children}</p>}

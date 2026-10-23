@@ -42,7 +42,7 @@ export function Brief({ steps, current, verified, onJump, onRestart }) {
                     onClick={() => onJump(step.id)}
                   >
                     <span className="brief-step__index">
-                      {state === "done" ? <Icon name="check" size={14} stroke={2.4} /> : `0${i + 1}`}
+                      {state === "done" ? <Icon name="check" size={14} /> : `0${i + 1}`}
                     </span>
                     <span className="brief-step__text">
                       <span className="brief-step__title">{step.title}</span>
@@ -67,7 +67,7 @@ export function Brief({ steps, current, verified, onJump, onRestart }) {
             <li key={ref.href}>
               <a href={ref.href} target="_blank" rel="noreferrer">
                 {ref.label}
-                <Icon name="arrowRight" size={14} stroke={2} />
+                <Icon name="arrowRight" size={14} />
               </a>
             </li>
           ))}

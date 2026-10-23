@@ -156,6 +156,8 @@ const SHOTS = [
   { group: 5, slug: "desktop-flow-previews", title: "Desktop: flow previews gallery", url: "flows.html", viewport: DESKTOP },
   { group: 5, slug: "desktop-edit-profile", title: "Desktop: flow previews, Profile → Edit profile → Edit prompt", url: "flows.html#profile", viewport: DESKTOP, scrollToFrame: "edit" },
   { group: 5, slug: "desktop-design-system", title: "Desktop: design-system showcase", url: "showcase.html", viewport: DESKTOP },
+  { group: 5, slug: "desktop-flow-previews-chats", title: "Desktop: flow previews scrolled to Chats and the conversation", url: "flows.html", viewport: DESKTOP, scrollToFrame: "chats" },
+  { group: 5, slug: "desktop-design-system-illustrations", title: "Desktop: design-system showcase scrolled to the illustrations and result panels", url: "showcase.html", viewport: DESKTOP, scrollToSelector: ".sc-ill-grid" },
 
   // 06 · Small-phone QA (375 × 667): the screens most at risk of crowding
   { group: 6, slug: "qa-welcome", title: "QA 375: Welcome", app: "proto", viewport: QA },
@@ -171,6 +173,10 @@ const SHOTS = [
   { group: 6, slug: "qa-chats", title: "QA 375: Chats", screen: "chats", viewport: QA },
   { group: 6, slug: "qa-chat-long-messages", title: "QA 375: Conversation with long messages", screen: "chat", viewport: QA, state: session({ threads: LONG_THREAD }) },
   { group: 6, slug: "qa-settings", title: "QA 375: Settings", screen: "settings", viewport: QA },
+  { group: 6, slug: "qa-verified-intro-bottom", title: "QA 375: profile setup scrolled to the last step card", screen: "intro", viewport: QA, scrollToSelector: "#root .setup-step:last-child" },
+  { group: 6, slug: "qa-chats-many-matches", title: "QA 375: Chats with several new matches (horizontal rail)", screen: "chats", viewport: QA, state: session({ matches: ["priya", "jo", "maya", "noor", "lea"] }) },
+  { group: 6, slug: "qa-chat-composer-multiline", title: "QA 375: composer at its maximum height", screen: "chat", viewport: QA, setup: (p) => p.locator("textarea").first().fill("Saturday works.\nRecord shop first,\nthen the bakery?\nI’ll bring the 50p crate list.\nAnd snacks.") },
+  { group: 6, slug: "qa-settings-bottom", title: "QA 375: Settings scrolled to the end", screen: "settings", viewport: QA, scrollToSelector: "#root .list-row--destructive" },
 ];
 
 const GROUPS = {
@@ -338,8 +344,9 @@ const lines = [
   "- States are reached by interaction, or by seeding the preview's saved session for states that take",
   "  many steps (see `state` in [manifest.json](manifest.json)). Captured with reduced motion so",
   "  animations show their settled frame; the demo verification code is fixed.",
-  "- Photo areas and illustration slots are neutral placeholders until licensed photography and",
-  "  artwork are supplied.",
+  "- Photo areas are neutral placeholders until licensed photography is supplied. Outcome, empty-state",
+  "  and spot illustrations are Numaya's own SVG scenes (`Illustration`); the Welcome hero stays a",
+  "  reserved, empty slot until its artwork is supplied.",
   "",
   "## Contact sheets",
   "",

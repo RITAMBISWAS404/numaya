@@ -27,7 +27,7 @@ export function PlanPicker({ label = "Choose a plan", plans, value, onChange }) 
           {p.unit && <span className="plan-card__unit">{p.unit}</span>}
           {p.note && <span className="plan-card__note">{p.note}</span>}
           <span className="plan-card__check" aria-hidden="true">
-            <Icon name="check" size={11} stroke={3} />
+            <Icon name="check" size={11} />
           </span>
         </label>
       ))}
@@ -62,7 +62,7 @@ export function ComparisonTable({ tiers, rows, caption = "Compare plans" }) {
               <td key={tiers[i]}>
                 {v === true ? (
                   <>
-                    <Icon name="check" size={18} stroke={2.2} className="comparison__yes" />
+                    <Icon name="check" size={18} className="comparison__yes" />
                     <span className="visually-hidden">Included</span>
                   </>
                 ) : v === false ? (

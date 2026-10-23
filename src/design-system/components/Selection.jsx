@@ -21,7 +21,7 @@ export function Chip({ kind = "toggle", selected = false, unavailable = false, i
       <span className={cx("chip", "is-selected", className)}>
         {children}
         <button type="button" className="chip__remove" aria-label={`Remove ${children}`} onClick={onRemove}>
-          <Icon name="close" size={14} stroke={2.2} />
+          <Icon name="close" size={14} />
         </button>
       </span>
     );

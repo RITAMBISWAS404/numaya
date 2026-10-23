@@ -81,7 +81,7 @@ export function Keypad() {
           onPointerDown={keepFocus}
           onClick={() => call("onDelete")}
         >
-          <Icon name="delete" size={26} stroke={1.6} />
+          <Icon name="delete" size={26} />
         </button>
       </div>
     </div>
