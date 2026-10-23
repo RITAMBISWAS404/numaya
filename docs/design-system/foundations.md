@@ -49,13 +49,16 @@ Purple text on grey fills is 4.4:1, so text on grey uses `text-brand-deep`.
 | `input`, `button`, `label` | Inter | 18 / 24 / 500, 16 / 20 / 600, 13.5 / 18 / 500 |
 | `caption`, `micro`, `eyebrow` | Inter | 13 / 18, 12.5 / 17, 11 / 14 / 600 uppercase +0.12em |
 
-Fraunces uses `--font-display-axes` (`SOFT 50, WONK 0`). Headings use one colour; hierarchy comes from size and weight, never from colouring individual words. Numerals in inputs, codes and prices use `tabular-nums`.
+All component text uses these roles; no raw pixel sizes except display numerals, avatar initials
+and the wordmark, which scale with their container. Fraunces uses `--font-display-axes` (`SOFT 50, WONK 0`). Headings use one colour; hierarchy comes from size and weight, never from colouring individual words. Numerals in inputs, codes and prices use `tabular-nums`.
 
 ## Space, size, shape
 
 - **Spacing:** 4-point scale `--space-1…12`. Gutter `--layout-gutter` 16px (edge-to-edge: 8px). Section
   gap 32px, stacked controls 12px.
-- **Sizes:** touch target ≥ `--size-touch-min` 44px; input 56px; button 54px (sm 40, quiet 48);
+- **Sizes:** touch target ≥ `--size-touch-min` 44px (compact controls drawn at 36–40px, such as
+  icon buttons, chips, segmented items, small buttons and photo remove, get an invisible 44px hit
+  area in `base.css`, so the visual size and the target are decoupled); input 56px; button 54px (sm 40, quiet 48);
   Fab 56; icon button 40 (sm 36); avatars 24/36/48/64/96.
 - **Radius** (plain `border-radius` only: no `corner-shape`, superellipse or squircle anywhere, enforced
   by a unit test): xs 8 (tags, badges) · sm 12 (chips, inner elements) ·

@@ -81,3 +81,23 @@ button:disabled {
 @keyframes rise-in { from { opacity: 0; transform: translate3d(0, 10px, 0); } }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+
+/* Compact controls keep their drawn size (36–40px) but get a 44px touch target: an invisible hit
+   area that grows only along an axis shorter than 44px. */
+.nav-button,
+.chip:is(button),
+.segmented__item,
+.btn--sm,
+.photo-slot__remove {
+  position: relative;
+}
+
+.nav-button::before,
+.chip:is(button)::before,
+.segmented__item::before,
+.btn--sm::before,
+.photo-slot__remove::before {
+  content: "";
+  position: absolute;
+  inset: min(0px, calc((100% - var(--size-touch-min)) / 2));
+}

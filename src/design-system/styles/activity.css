@@ -145,10 +145,6 @@
   gap: 6px;
 }
 
-.activity-media__badges .badge {
-  box-shadow: var(--shadow-xs);
-}
-
 .activity-card {
   border-radius: var(--radius-card);
   background: var(--color-surface);

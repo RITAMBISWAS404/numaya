@@ -64,7 +64,7 @@
 
 .message__meta {
   color: var(--color-text-muted);
-  font-size: 12px;
+  font-size: var(--type-micro-size);
 }
 
 .message__failed {
@@ -72,7 +72,7 @@
   align-items: center;
   gap: 6px;
   color: var(--color-danger);
-  font-size: 12.5px;
+  font-size: var(--type-micro-size);
   font-weight: var(--font-weight-medium);
 }
 
@@ -86,7 +86,7 @@
 .system-message {
   margin: var(--space-4) 0 var(--space-1);
   color: var(--color-text-muted);
-  font-size: 12px;
+  font-size: var(--type-micro-size);
   text-align: center;
 }
 
@@ -232,7 +232,7 @@
   border-radius: var(--radius-pill);
   background: var(--color-surface-sunken);
   color: var(--color-text-secondary);
-  font-size: 12.5px;
+  font-size: var(--type-micro-size);
   font-weight: var(--font-weight-semibold);
 }
 
@@ -259,7 +259,7 @@
 
 .conversation__time {
   color: var(--color-text-muted);
-  font-size: 12px;
+  font-size: var(--type-micro-size);
 }
 
 .conversation__preview {

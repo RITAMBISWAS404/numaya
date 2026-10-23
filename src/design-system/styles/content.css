@@ -117,7 +117,7 @@
   height: 24px;
   padding: 0 10px;
   border-radius: var(--radius-xs);
-  font-size: 12px;
+  font-size: var(--type-micro-size);
   font-weight: var(--font-weight-semibold);
   white-space: nowrap;
 }
@@ -663,7 +663,7 @@ button.list-row__hit:hover {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   color: var(--color-text-on-inverse);
-  font-size: 12.5px;
+  font-size: var(--type-micro-size);
   font-weight: var(--font-weight-semibold);
 }
 
