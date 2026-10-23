@@ -230,7 +230,7 @@ const LEAVE = {
 const durationText = (min) => (min >= 60 ? `${Math.floor(min / 60)} h${min % 60 ? ` ${min % 60} min` : ""}` : `${min} min`);
 
 /** Share sheet: honest about the preview (no link is created). */
-function ShareSheet({ open, onClose, title }) {
+export function ShareSheet({ open, onClose, title }) {
   return (
     <Sheet open={open} onClose={onClose} labelledBy="fl-share-title">
       <div className="sheet__header">

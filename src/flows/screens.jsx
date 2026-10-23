@@ -12,8 +12,10 @@ import {
   Composer,
   ConsequenceList,
   ConversationRow,
+  Dialog,
   EmptyState,
   Fab,
+  FilterChips,
   Icon,
   IconButton,
   Illustration,
@@ -34,6 +36,7 @@ import {
   RangeSlider,
   ResultPanel,
   ScreenHeader,
+  SearchField,
   Section,
   SegmentedControl,
   Sheet,
@@ -51,6 +54,8 @@ import {
 import { INTERESTS, PEOPLE, PROMPT_QUESTIONS, REPORT_REASONS } from "./data.js";
 import { conversations, discoveryQueue, hiddenByFilters, newMatches, useStore } from "./store.js";
 import { Frame, useFlash } from "./frame.jsx";
+import { ReportSheet, ShareSheet } from "./activity.jsx";
+import { openersFor } from "./model.js";
 
 const ageOf = (year) => (year.length === 4 ? new Date().getFullYear() - Number(year) : null);
 
@@ -237,19 +242,22 @@ function useSwipe(onDecide) {
 }
 
 /** Discover header (reference: centred wordmark, filter icon right, scroll-progress track below). */
-function DiscoverHeader({ age, distance, progress, onFilters, showFilters }) {
+function DiscoverHeader({ age, distance, progress, onFilters, showFilters, onUndo, undoName, onMore }) {
   return (
     <header className="fl-disc-head">
       <div className="fl-disc-head__bar">
-        <span className="fl-disc-head__side" aria-hidden="true" />
+        <span className="fl-disc-head__side">
+          {onUndo && <IconButton icon="undo" variant="floating" size="sm" label={`Undo: bring back ${undoName}`} onClick={onUndo} />}
+        </span>
         <h1 className="fl-disc-head__title">
           <Wordmark size="sm" />
-          <span className="visually-hidden">Discover</span>
+          <span className="visually-hidden">Home</span>
         </h1>
         <span className="fl-disc-head__side fl-disc-head__side--end">
           {showFilters && (
             <IconButton icon="filter" variant="floating" size="sm" label={`Filters: Ages ${age[0]}–${age[1]}, within ${distance} km. Change`} onClick={onFilters} />
           )}
+          {onMore && <IconButton icon="more" variant="floating" size="sm" label="Profile options" onClick={onMore} />}
         </span>
       </div>
       <div className="fl-disc-head__progress" aria-hidden="true">
@@ -281,6 +289,10 @@ export function Discovery({ go }) {
   const { dx, handlers } = useSwipe(decide);
   const snoozed = state.prefs.snooze;
   const [filtering, setFiltering] = useState(false);
+  const [options, setOptions] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const [reporting, setReporting] = useState(false);
+  const [blocking, setBlocking] = useState(false);
   // Pass and Like sit at the end of the profile: the next person starts at their photo, not mid-scroll.
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: 0 });
@@ -300,7 +312,18 @@ export function Discovery({ go }) {
     <Frame
       tone="page"
       kind="discover"
-      top={<DiscoverHeader age={age} distance={distance} progress={progress} showFilters={!snoozed} onFilters={() => setFiltering(true)} />}
+      top={
+        <DiscoverHeader
+          age={age}
+          distance={distance}
+          progress={progress}
+          showFilters={!snoozed}
+          onFilters={() => setFiltering(true)}
+          onUndo={!snoozed && state.lastPass ? () => dispatch({ type: "undo" }) : null}
+          undoName={state.lastPass && PEOPLE[state.lastPass]?.name}
+          onMore={!snoozed && person ? () => setOptions(true) : null}
+        />
+      }
       tab="home"
       go={go}
       onBodyScroll={onScroll}
@@ -389,6 +412,42 @@ export function Discovery({ go }) {
         {toast}
       </Toast>
       <FiltersSheet open={filtering} onClose={() => setFiltering(false)} />
+      {person && (
+        <>
+          <ActionSheet
+            open={options}
+            onClose={() => setOptions(false)}
+            actions={[
+              { label: `Share ${person.name}’s profile`, icon: "share", onSelect: () => { setOptions(false); setSharing(true); } },
+              { label: "Report", icon: "flag", tone: "destructive", onSelect: () => { setOptions(false); setReporting(true); } },
+              { label: `Block ${person.name}`, icon: "block", tone: "destructive", onSelect: () => { setOptions(false); setBlocking(true); } },
+            ]}
+          />
+          <ShareSheet open={sharing} onClose={() => setSharing(false)} title={`${person.name}’s profile`} />
+          <ReportSheet
+            open={reporting}
+            subject={person.name}
+            reasons={REPORT_REASONS.map(([, label]) => label)}
+            blockOption={person.name}
+            onClose={() => setReporting(false)}
+            onSubmit={({ reason, details, block }) => dispatch({ type: "report", target: "person", targetId: id, reason, details, block, at: new Date(2026, 9, 23, 12).toISOString() })}
+          />
+          <Dialog
+            open={blocking}
+            onClose={() => setBlocking(false)}
+            title={`Block ${person.name}?`}
+            confirmLabel="Block"
+            tone="destructive"
+            onConfirm={() => {
+              setBlocking(false);
+              dispatch({ type: "end", id, reason: "blocked" });
+              flash(`${person.name} is blocked`);
+            }}
+          >
+            They won’t see you, can’t message you, and aren’t told. Unblock any time in Settings › Blocked people.
+          </Dialog>
+        </>
+      )}
     </Frame>
   );
 }
@@ -502,48 +561,88 @@ export function Match({ go }) {
 }
 
 /* 5 · Messaging ------------------------------------------------------------- */
+const MESSAGE_FILTERS = [
+  { id: "all", label: "All" },
+  { id: "unread", label: "Unread" },
+  { id: "move", label: "Your move" },
+];
+
 export function Chats({ go }) {
   const [state, dispatch] = useStore();
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("all");
   const open = (id) => {
     dispatch({ type: "openChat", id });
     go("chat");
   };
-  const fresh = newMatches(state).map((id) => ({ id, name: PEOPLE[id].name }));
-  const rows = conversations(state);
+  const q = query.trim().toLowerCase();
+  // Search matches names and message text; the filter then narrows conversations.
+  const fresh = newMatches(state)
+    .map((id) => ({ id, name: PEOPLE[id].name }))
+    .filter((m) => !q || m.name.toLowerCase().includes(q));
+  const all = conversations(state).filter((c) => !q || c.name.toLowerCase().includes(q) || c.text.toLowerCase().includes(q));
+  const rows = all.filter((c) => filter === "all" || (filter === "unread" && c.unread > 0) || (filter === "move" && c.yourMove));
+  const counts = { all: all.length, unread: all.filter((c) => c.unread > 0).length, move: all.filter((c) => c.yourMove).length };
+  const nothingYet = !newMatches(state).length && !conversations(state).length;
   return (
-    <Frame tone="page" top={<TopBar largeTitle="Chats" />} tab="messages" go={go}>
+    <Frame tone="page" top={<TopBar largeTitle="Messages" />} tab="messages" go={go}>
       <div className="fl-stack fl-gap-lg fl-sections">
         {!state.prefs.messages && (
           <Banner tone="info" title="New message alerts are off" action="Turn on" onAction={() => dispatch({ type: "prefs", patch: { messages: true } })}>
             You’ll still see new messages here.
           </Banner>
         )}
-        {fresh.length > 0 && (
-          <section className="fl-stack">
-            <h2 className="fl-section-title">
-              Your matches <span className="fl-section-title__count">({fresh.length})</span>
-            </h2>
-            <MatchQueue matches={fresh} onSelect={open} />
-          </section>
-        )}
-        {rows.length ? (
-          <section className="fl-stack">
-            <h2 className="fl-section-title">Chats</h2>
-            <ul className="fl-list">
-              {rows.map((c) => (
-                <ConversationRow key={c.id} {...c} onPress={() => open(c.id)} />
-              ))}
-            </ul>
-          </section>
-        ) : (
+        {nothingYet ? (
           <EmptyState art="no-chats" title="Connections start here" action="Find your people" onAction={() => go("discovery")}>
             When you like each other, you’ll match. Here’s where you can chat.
           </EmptyState>
+        ) : (
+          <>
+            <SearchField label="Search messages" placeholder="Search names and messages" value={query} onChange={(e) => setQuery(e.target.value)} onClear={() => setQuery("")} />
+            {fresh.length > 0 && (
+              <section className="fl-stack">
+                <h2 className="fl-section-title">
+                  New matches <span className="fl-section-title__count">({fresh.length})</span>
+                </h2>
+                <MatchQueue matches={fresh} onSelect={open} />
+              </section>
+            )}
+            <section className="fl-stack" aria-labelledby="fl-convos-title">
+              <h2 id="fl-convos-title" className="fl-section-title">
+                Conversations
+              </h2>
+              <FilterChips label="Filter conversations" value={filter} onChange={setFilter} options={MESSAGE_FILTERS.map((f) => ({ ...f, count: counts[f.id] }))} />
+              {rows.length ? (
+                <ul className="fl-list">
+                  {rows.map((c) => (
+                    <ConversationRow key={c.id} {...c} onPress={() => open(c.id)} />
+                  ))}
+                </ul>
+              ) : (
+                /* Blame the search only when the search itself found nothing; otherwise the filter. */
+                <EmptyState
+                  icon={q && !all.length ? "search" : "message"}
+                  title={q && !all.length ? `Nothing matches “${query.trim()}”` : filter === "unread" ? "You’re all caught up" : filter === "move" ? "No one is waiting on you" : "No conversations yet"}
+                  action={q && !all.length ? "Search everything again" : filter !== "all" ? "Show all" : undefined}
+                  onAction={() => (q && !all.length ? setQuery("") : setFilter("all"))}
+                >
+                  {q && !all.length ? "Search looks at names and messages." : filter === "all" ? "Say hello to a new match to start one." : "Conversations show here when they need you."}
+                </EmptyState>
+              )}
+            </section>
+          </>
         )}
       </div>
     </Frame>
   );
 }
+
+/* Outcome copy per action. Each is honest about what the preview did; nothing is "reviewed". */
+const ENDED = {
+  unmatched: { art: "unmatched", title: (n) => `You’ve unmatched ${n}`, body: (n) => `The conversation is closed for both of you and ${n} won’t appear in Home.` },
+  blocked: { art: "blocked", title: (n) => `You’ve blocked ${n}`, body: (n) => `${n} isn’t told. You won’t see each other again, and they can’t message you. Unblock any time in Settings › Blocked people.` },
+  reported: { art: "blocked", title: (n) => `You’ve reported and blocked ${n}`, body: (n) => `${n} isn’t told. In this preview the report is kept on this device only; nothing is sent or reviewed.` },
+};
 
 export function Chat({ go }) {
   const [state, dispatch] = useStore();
@@ -555,7 +654,9 @@ export function Chat({ go }) {
   const [menu, setMenu] = useState(false);
   const [report, setReport] = useState(false);
   const [confirm, setConfirm] = useState(false);
-  const [reason, setReason] = useState(null);
+  const [blocking, setBlocking] = useState(false);
+  const [toast, flash] = useFlash(1800);
+  const composer = useRef(null);
 
   const send = (value) => {
     const msgId = Date.now();
@@ -565,20 +666,12 @@ export function Chat({ go }) {
   };
 
   if (ended) {
+    const e = ENDED[ended];
     return (
       <Frame tone="page" top={<TopBar onBack={() => go("chats")} />}>
         <div className="fl-center fl-fill">
-          <ResultPanel
-            tone="neutral"
-            art={ended === "blocked" ? "blocked" : "unmatched"}
-            title={ended === "blocked" ? `You’ve blocked and reported ${person.name}` : `You’ve unmatched ${person.name}`}
-            footer={<Button onClick={() => go("chats")}>Back to chats</Button>}
-          >
-            <p>
-              {ended === "blocked"
-                ? `${reason ? `Reason: ${reason}. ` : ""}${person.name} won’t be told. You won’t see each other again, and we’ll follow up in Help.`
-                : `The conversation is closed for both of you and ${person.name} won’t appear in Discover.`}
-            </p>
+          <ResultPanel tone="neutral" art={e.art} title={e.title(person.name)} footer={<Button onClick={() => go("chats")}>Back to messages</Button>}>
+            <p>{e.body(person.name)}</p>
           </ResultPanel>
         </div>
       </Frame>
@@ -590,7 +683,7 @@ export function Chat({ go }) {
       tone="page"
       top={
         <header className="fl-chat-head">
-          <IconButton icon="chevronLeft" label="Back to chats" variant="floating" size="sm" onClick={() => go("chats")} />
+          <IconButton icon="chevronLeft" label="Back to messages" variant="floating" size="sm" onClick={() => go("chats")} />
           <Avatar name={person.name} size="sm" decorative />
           <span className="fl-chat-head__name">
             {person.name}
@@ -599,16 +692,32 @@ export function Chat({ go }) {
           <IconButton icon="more" label="Conversation options" variant="floating" size="sm" onClick={() => setMenu(true)} />
         </header>
       }
-      footer={<Composer value={text} onChange={setText} onSend={send} placeholder={`Message ${person.name}`} />}
+      footer={<Composer ref={composer} value={text} onChange={setText} onSend={send} placeholder={`Message ${person.name}`} />}
     >
       {messages.length === 0 ? (
-        /* Bumble new-match conversation: the person is centred until the first message. */
+        /* Bumble new-match conversation: the person is centred until the first message, with openers. */
         <div className="fl-chat-intro">
           <Avatar name={person.name} size="xl" verified={person.verified} />
           <p className="fl-chat-intro__name">
             {person.name}, {person.age}
           </p>
           <p className="fl-caption">You matched. Say hello and make it personal.</p>
+          <div className="fl-openers" role="group" aria-label="Opening ideas">
+            <p className="fl-label">Need an opener? Tap one to edit it first.</p>
+            {openersFor(id).map((o) => (
+              <button
+                key={o}
+                type="button"
+                className="fl-opener"
+                onClick={() => {
+                  setText(o);
+                  composer.current?.focus();
+                }}
+              >
+                {o}
+              </button>
+            ))}
+          </div>
         </div>
       ) : (
         <div className="fl-messages">
@@ -631,31 +740,20 @@ export function Chat({ go }) {
         onClose={() => setMenu(false)}
         actions={[
           { label: "Unmatch", icon: "userMinus", onSelect: () => { setMenu(false); setConfirm(true); } },
-          { label: "Report or block", icon: "flag", tone: "destructive", onSelect: () => { setMenu(false); setReport(true); } },
+          { label: "Block", icon: "block", tone: "destructive", onSelect: () => { setMenu(false); setBlocking(true); } },
+          { label: "Report", icon: "flag", tone: "destructive", onSelect: () => { setMenu(false); setReport(true); } },
         ]}
       />
-      <Sheet open={report} onClose={() => setReport(false)} labelledBy="fl-report-title">
-        <div className="sheet__header">
-          <h2 id="fl-report-title" className="sheet__title">
-            What’s going on?
-          </h2>
-          <IconButton icon="close" label="Close" variant="flat" size="sm" onClick={() => setReport(false)} />
-        </div>
-        <p className="fl-caption fl-mb">Your report is anonymous. Reporting also blocks them.</p>
-        <ListGroup plain>
-          {REPORT_REASONS.map(([, label]) => (
-            <ListRow
-              key={label}
-              label={label}
-              onPress={() => {
-                setReport(false);
-                setReason(label);
-                dispatch({ type: "end", id, reason: "blocked" });
-              }}
-            />
-          ))}
-        </ListGroup>
-      </Sheet>
+      <ReportSheet
+        open={report}
+        subject={person.name}
+        reasons={REPORT_REASONS.map(([, label]) => label)}
+        blockOption={person.name}
+        onClose={() => setReport(false)}
+        onSubmit={({ reason, details, block }) => {
+          dispatch({ type: "report", target: "person", targetId: id, reason, details, block, at: new Date(2026, 9, 23, 12).toISOString() });
+        }}
+      />
       {/* Unmatch confirmation as a bottom sheet (Bumble "Unmatch {name}"). */}
       <Sheet open={confirm} onClose={() => setConfirm(false)} labelledBy="fl-unmatch-title">
         <div className="sheet__header">
@@ -682,7 +780,7 @@ export function Chat({ go }) {
             <Icon name="flag" size={20} />
             <span>
               <strong>Think they’ve broken our guidelines?</strong>
-              <span>Report them instead. Reporting also blocks them.</span>
+              <span>Report them instead. You can block them at the same time.</span>
             </span>
           </button>
           <Button
@@ -695,6 +793,32 @@ export function Chat({ go }) {
           </Button>
         </div>
       </Sheet>
+      <Sheet open={blocking} onClose={() => setBlocking(false)} labelledBy="fl-block-title">
+        <div className="sheet__header">
+          <h2 id="fl-block-title" className="sheet__title">
+            Block {person.name}?
+          </h2>
+          <IconButton icon="close" label="Close" variant="flat" size="sm" onClick={() => setBlocking(false)} />
+        </div>
+        <div className="fl-stack fl-sheet-body">
+          <ConsequenceList
+            items={[
+              { icon: "block", text: `${person.name} can’t message you or see you` },
+              { icon: "eyeOff", text: "You won’t see their profile or activities" },
+              { icon: "info", text: `${person.name} isn’t told` },
+            ]}
+          />
+          <Button variant="destructive-solid" onClick={() => { setBlocking(false); dispatch({ type: "end", id, reason: "blocked" }); }}>
+            Block {person.name}
+          </Button>
+          <Button variant="quiet" data-autofocus onClick={() => setBlocking(false)}>
+            Cancel
+          </Button>
+        </div>
+      </Sheet>
+      <Toast open={Boolean(toast)} placement="bottom" icon="check">
+        {toast}
+      </Toast>
     </Frame>
   );
 }
@@ -972,7 +1096,7 @@ export function Settings({ go }) {
   const [pending, setPending] = useState(null);
   const [deleting, setDeleting] = useState(false);
   const [toast, flash] = useFlash();
-  const blocked = Object.values(state.ended).filter((r) => r === "blocked").length;
+  const blocked = Object.values(state.ended).filter((r) => r === "blocked" || r === "reported").length;
   const toggle = (key, value) => {
     setPending(key);
     setTimeout(() => {

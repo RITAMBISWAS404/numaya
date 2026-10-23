@@ -278,6 +278,113 @@ try {
     check("likes: handled likes leave the list", !(await body(p)).includes("Maya"));
     check("likes: no console errors", p.errors.length === 0, p.errors.join(" | "));
   }
+  /* 6 · Search and open; 7 · opener, multiline, send -------------- */
+  {
+    const p = await phone();
+    await open(p, "chats");
+    const rows = () => p.locator(".conversation").allInnerTexts();
+    check("messages: conversations list with unread state", (await rows()).length === 2 && (await p.locator(".conversation__unread").count()) === 1);
+    await p.getByRole("searchbox", { name: "Search messages" }).fill("bakery");
+    await wait(300);
+    const byText = await rows();
+    await p.getByRole("searchbox", { name: "Search messages" }).fill("raf");
+    await wait(300);
+    const byName = await rows();
+    check("messages: search matches message text and names", byText.length === 1 && byText[0].includes("Priya") && byName.length === 1 && byName[0].includes("Rafa"));
+    await p.getByRole("button", { name: /^Unread/ }).click();
+    await wait(300);
+    check("messages: search and filter combine (Rafa has no unread)", (await rows()).length === 0 && (await body(p)).includes("You’re all caught up"));
+    await p.getByRole("button", { name: "Clear search" }).click();
+    await wait(300);
+    check("messages: clearing search keeps the filter", (await rows()).length === 1 && (await rows())[0].includes("Priya"));
+    await p.locator(".conversation", { hasText: "Priya" }).click();
+    await wait(600);
+    check("messages: a row opens the right conversation", screenId(p) === "chat" && (await body(p)).includes("That bakery was unreal"));
+    await tap(p, "Back to messages");
+    check("messages: opening a conversation marks it read", (await p.locator(".conversation__unread").count()) === 0 && (await p.locator(".tab-bar__item", { hasText: "Messages" }).locator(".count-badge").count()) === 0);
+    await p.getByRole("button", { name: /^All/ }).click();
+    await p.locator(".match-queue__item", { hasText: "Jo" }).click();
+    await wait(600);
+    const openers = await p.locator(".fl-opener").allInnerTexts();
+    await p.locator(".fl-opener").first().click();
+    const inserted = await p.locator("textarea").inputValue();
+    const focused = await p.evaluate(() => document.activeElement?.tagName);
+    check("chat: openers insert into the composer and focus it", openers.length === 3 && inserted === openers[0] && focused === "TEXTAREA", inserted);
+    await p.locator("textarea").press("End");
+    await p.locator("textarea").press("Shift+Enter");
+    await p.locator("textarea").type("Also, coffee this week?");
+    const h = await p.locator(".composer__field").evaluate((e) => e.getBoundingClientRect().height);
+    await p.locator("textarea").press("Enter");
+    await wait(1000);
+    const sent = await p.locator(".message--me .message__bubble").last().innerText();
+    check("chat: a multiline message sends whole and the composer empties", sent.includes(openers[0]) && sent.includes("coffee this week") && (await p.locator("textarea").inputValue()) === "" && h > 44, `${Math.round(h)}px`);
+    check("messages: no console errors", p.errors.length === 0, p.errors.join(" | "));
+  }
+
+  /* 8 · Unmatch, block and report keep their meaning --------------- */
+  {
+    const outcome = async (action, steps) => {
+      const p = await phone();
+      await open(p, "chat");
+      await tap(p, "Conversation options");
+      await p.getByRole("button", { name: action, exact: true }).click();
+      await wait(500);
+      await steps(p);
+      await wait(700);
+      const text = await body(p);
+      await p.goto(`${base}flows.html?screen=chats`);
+      await wait(700);
+      const inbox = await body(p);
+      await p.goto(`${base}flows.html?screen=settings`);
+      await wait(700);
+      const settings = await body(p);
+      const reports = await p.evaluate(() => JSON.parse(localStorage.getItem("numaya.preview.v1")).state.reports.length);
+      await p.context().close();
+      return { text, gone: !inbox.includes("Priya"), blockedCount: settings.match(/Blocked people (\d)/)?.[1], reports };
+    };
+    const u = await outcome("Unmatch", (p) => p.getByRole("dialog").getByRole("button", { name: "Unmatch" }).click());
+    check("unmatch: closes the conversation without blocking or reporting", u.text.includes("You’ve unmatched Priya") && u.gone && u.blockedCount === "0" && u.reports === 0, JSON.stringify(u).slice(0, 160));
+    const b = await outcome("Block", (p) => p.getByRole("dialog").getByRole("button", { name: "Block Priya" }).click());
+    check("block: blocks without filing a report", b.text.includes("You’ve blocked Priya") && b.gone && b.blockedCount === "1" && b.reports === 0, JSON.stringify(b).slice(0, 160));
+    const r = await outcome("Report", async (p) => {
+      await p.getByRole("dialog").getByText("Scam or selling something", { exact: true }).click();
+      await p.getByRole("dialog").getByRole("button", { name: "Send report" }).click();
+    });
+    check("report: records the report, blocks by default and says nothing was sent", r.text.includes("You’ve reported and blocked Priya") && r.text.includes("nothing is sent or reviewed") && r.blockedCount === "1" && r.reports === 1, JSON.stringify(r).slice(0, 160));
+    const keep = await outcome("Report", async (p) => {
+      await p.getByRole("dialog").getByText("Fake profile", { exact: true }).click();
+      await p.getByRole("dialog").getByText("Also block Priya").click();
+      await p.getByRole("dialog").getByRole("button", { name: "Send report" }).click();
+    });
+    check("report: without blocking, the conversation stays", !keep.gone && keep.reports === 1 && keep.blockedCount === "0", JSON.stringify(keep).slice(0, 160));
+  }
+
+  /* Home: undo, share, report, block -------------------------------- */
+  {
+    const p = await phone();
+    await open(p, "discovery");
+    const first = (await p.locator(".profile-card__name").first().innerText()).split(",")[0];
+    check("home: no undo before a pass", (await p.getByRole("button", { name: /^Undo/ }).count()) === 0);
+    await p.locator(".fl-screen__body").evaluate((e) => (e.scrollTop = e.scrollHeight));
+    await tap(p, "Pass");
+    await wait(400);
+    const second = (await p.locator(".profile-card__name").first().innerText()).split(",")[0];
+    await tap(p, new RegExp(`^Undo: bring back ${first}`));
+    const back = (await p.locator(".profile-card__name").first().innerText()).split(",")[0];
+    check("home: undo brings back the person just passed, once", first !== second && back === first && (await p.getByRole("button", { name: /^Undo/ }).count()) === 0, `${first} → ${second} → ${back}`);
+    await tap(p, "Profile options");
+    await tap(p, /Share/);
+    check("home: share says honestly that nothing is shared in the preview", (await p.getByRole("dialog").innerText()).includes("nothing is shared"));
+    await p.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).first().click();
+    await wait(400);
+    await tap(p, "Profile options");
+    await tap(p, new RegExp(`^Block ${first}`));
+    await p.getByRole("alertdialog").getByRole("button", { name: "Block" }).click();
+    await wait(600);
+    const now = (await p.locator(".profile-card__name").first().innerText()).split(",")[0];
+    check("home: blocking moves on and hides that person", now !== first);
+    check("home: no console errors", p.errors.length === 0, p.errors.join(" | "));
+  }
 } catch (err) {
   check("product journeys completed without an exception", false, err.message.split("\n")[0]);
 } finally {

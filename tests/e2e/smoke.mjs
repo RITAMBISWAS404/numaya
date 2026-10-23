@@ -577,11 +577,12 @@ try {
       check("chat: dismissing the unmatch sheet keeps the conversation", (await textOf("chat")).includes("Saturday works.") && (await p.getByRole("dialog").count()) === 0);
       await f("chat").getByRole("button", { name: "Conversation options" }).click();
       await wait(500);
-      await p.getByRole("button", { name: "Report or block" }).click();
+      await p.getByRole("button", { name: "Report", exact: true }).click();
       await wait(600);
-      await p.getByRole("button", { name: "Fake profile" }).click();
+      await p.getByRole("dialog").getByText("Fake profile", { exact: true }).click();
+      await p.getByRole("dialog").getByRole("button", { name: "Send report" }).click();
       await wait(600);
-      check("flows: report ends in a block confirmation", (await textOf("chat")).includes("You’ve blocked and reported Maya"));
+      check("flows: report (with block, the default) ends in an honest outcome", (await textOf("chat")).includes("You’ve reported and blocked Maya") && (await textOf("chat")).includes("kept on this device only"));
       const outcome = await p.evaluate(() => { const r = document.querySelector("#chat .result"); const art = r.querySelector(".result__art"); return { neutral: r.classList.contains("result--neutral"), scene: art?.dataset.scene, brand: art?.querySelectorAll(".ill__brand").length, checks: r.querySelectorAll("[data-icon='check'], [data-icon='verified'], .result__badge").length }; });
       check("flows: blocking ends on its own neutral illustration (shield and flag), no purple and no success check", outcome.neutral && outcome.scene === "blocked" && outcome.brand === 0 && outcome.checks === 0, JSON.stringify(outcome));
       check("flows: blocked person leaves the inbox", !(await textOf("chats")).includes("Maya"));
