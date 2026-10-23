@@ -32,6 +32,7 @@ export {
   TipCard,
   InfoCard,
   SharedInterests,
+  ProfileSection,
   SetupProgress,
   ConsequenceList,
   PromptCard,
@@ -47,6 +48,7 @@ export {
   ResultPanel,
 } from "./components/Content.jsx";
 export { Sheet, ActionSheet, Dialog, Toast, CoachMark, Banner } from "./components/Overlays.jsx";
+export { Illustration, ILLUSTRATION_SCENES } from "./components/Illustration.jsx";
 export { MessageBubble, SystemMessage, Composer, ConversationRow, MatchQueue } from "./components/Chat.jsx";
 export { PlanPicker, ComparisonTable, LegalText } from "./components/Commerce.jsx";
 export { PermissionPrimer, MatchCelebration } from "./components/Patterns.jsx";

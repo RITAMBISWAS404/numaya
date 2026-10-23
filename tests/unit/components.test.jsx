@@ -378,3 +378,84 @@ describe("brand and illustration slots", () => {
   });
 });
 
+
+describe("core screen components", () => {
+  it("ResultPanel draws one illustration scene and never stacks a badge on a shape", async () => {
+    const { ResultPanel, ILLUSTRATION_SCENES } = await import("../../src/design-system/index.js");
+    expect(ILLUSTRATION_SCENES).toEqual(expect.arrayContaining(["verified", "unmatched", "blocked"]));
+    const { container } = render(<ResultPanel art="verified" title="You’re verified" />);
+    const art = container.querySelectorAll("svg.result__art");
+    expect(art).toHaveLength(1);
+    expect(art[0]).toHaveAttribute("data-scene", "verified");
+    expect(art[0]).toHaveAttribute("aria-hidden", "true");
+    expect(container.querySelector(".result__badge, .result__shape, [data-icon]")).toBeNull();
+  });
+
+  it("neutral outcomes carry no success check or brand fill", async () => {
+    const { ResultPanel } = await import("../../src/design-system/index.js");
+    for (const art of ["unmatched", "blocked", undefined]) {
+      const { container, unmount } = render(<ResultPanel tone="neutral" art={art} title="Done" />);
+      expect(container.querySelector("[data-icon='check'], [data-icon='verified'], .ill__brand")).toBeNull();
+      unmount();
+    }
+  });
+
+  it("SetupProgress renders one horizontal card per step with Step N of M and a written status", async () => {
+    const { SetupProgress } = await import("../../src/design-system/index.js");
+    const { container } = render(
+      <SetupProgress
+        title="Your profile"
+        steps={[
+          { label: "The basics", icon: "user", status: "done" },
+          { label: "Interests", icon: "interests", status: "active" },
+          { label: "Photos", icon: "camera", status: "upcoming" },
+        ]}
+      />,
+    );
+    const steps = container.querySelectorAll("li.setup-step");
+    expect(steps).toHaveLength(3);
+    expect([...steps].map((s) => s.querySelector(".setup-step__eyebrow").textContent)).toEqual(["Step 1 of 3", "Step 2 of 3", "Step 3 of 3"]);
+    expect(steps[0]).toHaveTextContent("Done");
+    expect(steps[1]).toHaveAttribute("aria-current", "step");
+    expect(steps[1]).toHaveTextContent("Up next");
+    expect(steps[2]).toHaveTextContent("Not started");
+    expect([...steps].every((s) => s.querySelectorAll(".setup-step__icon").length === 1)).toBe(true);
+    expect(screen.getByText("1 of 3 done")).toBeInTheDocument();
+  });
+
+  it("SharedInterests is a ProfileSection with text-only pills and no heart", async () => {
+    const { SharedInterests } = await import("../../src/design-system/index.js");
+    const { container } = render(<SharedInterests items={[{ label: "Jazz" }, { label: "A very long shared interest label" }]} />);
+    const card = container.querySelector("section");
+    expect(card).toHaveClass("profile-section", "shared-interests");
+    expect(card.querySelector("svg")).toBeNull();
+    expect(screen.getByRole("heading", { name: "You both like" })).toBeInTheDocument();
+  });
+
+  it("InfoCard puts the icon beside the heading and the body below", async () => {
+    const { InfoCard } = await import("../../src/design-system/index.js");
+    const { container } = render(<InfoCard icon="lock" title="Private">Body copy</InfoCard>);
+    const head = container.querySelector(".info-card__head");
+    expect(head.querySelector("svg[data-icon='lock']")).not.toBeNull();
+    expect(head).toHaveTextContent("Private");
+    expect(head.nextElementSibling).toHaveClass("info-card__body");
+  });
+
+  it("Composer keeps Enter-to-send, Shift+Enter newline and a disabled state", async () => {
+    const { Composer } = await import("../../src/design-system/index.js");
+    const onSend = vi.fn();
+    function Harness({ disabled }) {
+      const [v, setV] = useState("");
+      return <Composer value={v} onChange={setV} onSend={onSend} disabled={disabled} />;
+    }
+    const { container, rerender } = render(<Harness />);
+    const box = screen.getByRole("textbox", { name: "Message" });
+    await userEvent.type(box, "Hi{Shift>}{Enter}{/Shift}there");
+    expect(box.value).toBe("Hi\nthere");
+    await userEvent.type(box, "{Enter}");
+    expect(onSend).toHaveBeenCalledWith("Hi\nthere");
+    rerender(<Harness disabled />);
+    expect(container.querySelector(".composer")).toHaveClass("is-disabled");
+    expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
+  });
+});

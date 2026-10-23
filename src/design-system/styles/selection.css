@@ -191,8 +191,10 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: var(--chip-height);
-  padding: 0 var(--space-3) 0 14px;
+  /* Long labels wrap inside the pill instead of widening the screen. */
+  min-height: var(--chip-height);
+  max-width: 100%;
+  padding: 5px var(--space-3) 5px 14px;
   /* Meetup interest pills: white with a hairline and an add-circle; selected turns purple. */
   border-radius: var(--radius-pill);
   background: var(--color-surface);
@@ -200,7 +202,9 @@
   color: var(--color-text-primary);
   font-size: 14.5px;
   font-weight: var(--font-weight-medium);
-  white-space: nowrap;
+  line-height: 20px;
+  text-align: left;
+  overflow-wrap: anywhere;
   transition:
     background-color var(--motion-duration-base) var(--motion-ease-out),
     box-shadow var(--motion-duration-base) var(--motion-ease-out),

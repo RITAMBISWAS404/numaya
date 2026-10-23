@@ -29,6 +29,7 @@ import {
   OptionCards,
   PhotoGrid,
   ProfileCard,
+  ProfileSection,
   PromptCard,
   RangeSlider,
   ResultPanel,
@@ -112,9 +113,9 @@ function useFlash() {
 /* Profile setup steps, in order. A step is done once its next button has been pressed; the first
    step not done is the current one. */
 const SETUP_STEPS = [
-  { id: "basics", label: "The basics", icon: "user", screen: "basics" },
-  { id: "interests", label: "Interests and prompt", icon: "interests", screen: "interests" },
-  { id: "photos", label: "Photos", icon: "camera", screen: "photos" },
+  { id: "basics", label: "The basics", detail: "Name, age and who you’d like to meet", icon: "user", screen: "basics" },
+  { id: "interests", label: "Interests and prompt", detail: "Three interests and one answer", icon: "interests", screen: "interests" },
+  { id: "photos", label: "Photos", detail: "At least two, ideally four", icon: "camera", screen: "photos" },
 ];
 
 export function SetupIntro({ go }) {
@@ -134,7 +135,7 @@ export function SetupIntro({ go }) {
     >
       <div className="fl-center fl-intro">
         <Wordmark />
-        <ResultPanel title="You’re verified">
+        <ResultPanel art="verified" compact title="You’re verified">
           <p>+1 (415) 555-0132 is confirmed. Now let’s make a profile people actually want to reply to.</p>
         </ResultPanel>
         <SetupProgress title="Your profile" steps={steps} />
@@ -386,14 +387,12 @@ export function Discovery({ go }) {
             {intent && <span className={`fl-swipe__stamp fl-swipe__stamp--${intent}`}>{intent === "like" ? "Like" : "Pass"}</span>}
           </div>
 
-          <section className="card fl-pf__section">
-            <h2 className="fl-pf__title">{person.prompt.q}</h2>
+          <ProfileSection title={person.prompt.q}>
             <p className="fl-pf__body">{person.prompt.a}</p>
-          </section>
+          </ProfileSection>
 
           {lookingFor && (
-            <section className="card fl-pf__section">
-              <h2 className="fl-pf__title">About me</h2>
+            <ProfileSection title="About me">
               <div className="fl-chip-row">
                 {[lookingFor, ...otherFacts].map((f) => (
                   <span key={f.label} className="chip chip--static" title={f.label}>
@@ -401,7 +400,7 @@ export function Discovery({ go }) {
                   </span>
                 ))}
               </div>
-            </section>
+            </ProfileSection>
           )}
 
           {photo(1)}
@@ -410,8 +409,7 @@ export function Discovery({ go }) {
 
           {photo(2)}
 
-          <section className="card fl-pf__section">
-            <h2 className="fl-pf__title">My location</h2>
+          <ProfileSection title="My location">
             <p className="fl-pf__meta">
               <Icon name="location" size={20} /> ~{person.distanceKm} km away
             </p>
@@ -422,7 +420,7 @@ export function Discovery({ go }) {
                 </span>
               </div>
             )}
-          </section>
+          </ProfileSection>
 
           {Array.from({ length: Math.max(0, photoCount - 3) }, (_, i) => photo(i + 3))}
 
@@ -626,6 +624,7 @@ export function Chat({ go }) {
         <div className="fl-center fl-fill">
           <ResultPanel
             tone="neutral"
+            art={ended === "blocked" ? "blocked" : "unmatched"}
             title={ended === "blocked" ? `You’ve blocked and reported ${person.name}` : `You’ve unmatched ${person.name}`}
             footer={<Button onClick={() => go("chats")}>Back to chats</Button>}
           >
@@ -852,13 +851,11 @@ function ProfilePreview({ profile }) {
   return (
     <div className="fl-pf fl-preview">
       <ProfileCard name={profile.name || "You"} age={age ?? "–"} details={[]} />
-      <section className="card fl-pf__section">
-        <h2 className="fl-pf__title">{profile.prompt.q}</h2>
+      <ProfileSection title={profile.prompt.q}>
         <p className="fl-pf__body">{profile.prompt.a}</p>
-      </section>
+      </ProfileSection>
       {profile.interests.length > 0 && (
-        <section className="card fl-pf__section">
-          <h2 className="fl-pf__title">Interests</h2>
+        <ProfileSection title="Interests">
           <div className="fl-chip-row">
             {profile.interests.map((s) => (
               <Chip key={s} kind="static">
@@ -866,7 +863,7 @@ function ProfilePreview({ profile }) {
               </Chip>
             ))}
           </div>
-        </section>
+        </ProfileSection>
       )}
       {profile.photos.slice(1, 3).map((p, i) => (
         <ImagePlaceholder key={p.id} tone={0} ratio="4 / 5" className="fl-pf__photo" label={`Your photo ${i + 2} (placeholder)`} />

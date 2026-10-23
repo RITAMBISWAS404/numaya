@@ -6,56 +6,34 @@
   text-align: center;
 }
 
-/* Success badge: a 9-sided "cookie" in brand purple with a white check, on a lavender tint
-   halo of the same shape. The shape is reserved for success, so it never reads like the round
-   neutral or danger outcomes. Drawn as SVG (Content.jsx) so the halo follows the scallops. */
-.result__badge {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 76px;
-  height: 76px;
-  color: var(--color-on-brand);
+/* Lead visual: an Illustration scene, or a plain filled glyph in the tone's colour (no disc, halo or
+   stacked badge). */
+.result__art,
+.result__icon {
   animation: badge-in 560ms var(--motion-ease-out) 140ms both;
 }
 
-.result__shape {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+.result__icon {
+  display: grid;
+  color: var(--color-brand);
 }
 
-.result__shape-halo {
-  fill: var(--color-brand-tint);
+.result--neutral .result__icon {
+  color: var(--color-text-secondary);
 }
 
-.result__shape-fill {
-  fill: var(--color-brand);
-}
-
-.result__badge > .icon,
-.result__badge > svg:not(.result__shape) {
-  position: relative;
-}
-
-/* Neutral and danger outcomes stay round. */
-.result--neutral .result__badge,
-.result--danger .result__badge {
-  width: var(--size-avatar-lg);
-  height: var(--size-avatar-lg);
-  border-radius: 50%;
+.result--danger .result__icon {
+  color: var(--color-danger);
 }
 
 @keyframes badge-in {
-  from { opacity: 0; transform: scale(0.6); }
+  from { opacity: 0; transform: scale(0.92); }
 }
 
 .result__title {
   font-family: var(--font-display);
   font-variation-settings: var(--font-display-axes);
-  margin-top: var(--space-6);
+  margin-top: var(--space-5);
   font-size: var(--type-headline-size);
   line-height: var(--type-headline-line);
   font-weight: var(--type-display-weight);
@@ -67,6 +45,10 @@
   margin-top: 10px;
   color: var(--color-text-muted);
   text-wrap: pretty;
+}
+
+.result--compact .result__title {
+  margin-top: var(--space-3);
 }
 
 .result__caption {
@@ -81,7 +63,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .result__badge {
+  .result__art,
+  .result__icon {
     animation-name: fade-in;
   }
 }
@@ -90,20 +73,6 @@
   justify-self: stretch;
   display: grid;
   justify-items: center;
-}
-
-.result--danger .result__badge {
-  color: var(--color-text-on-inverse);
-  background: var(--color-danger);
-  box-shadow: 0 0 0 8px var(--color-danger-tint);
-}
-
-/* Safety outcomes (unmatched, blocked): the same badge construction in quiet neutrals, so ending a
-   conversation is confirmed without the brand celebration of verification. */
-.result--neutral .result__badge {
-  color: var(--color-text-primary);
-  background: var(--color-border-strong);
-  box-shadow: 0 0 0 8px var(--color-surface-soft);
 }
 
 /* ------------------------------------------------------------------ */

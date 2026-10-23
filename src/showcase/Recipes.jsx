@@ -200,12 +200,12 @@ function Verification() {
             </div>
           )}
           {step === "approved" && (
-            <ResultPanel title="You’re verified" footer={<Button onClick={() => setStep("primer")}>Done</Button>}>
+            <ResultPanel art="verified" title="You’re verified" footer={<Button onClick={() => setStep("primer")}>Done</Button>}>
               <p>Your profile now shows the verified badge.</p>
             </ResultPanel>
           )}
           {step === "rejected" && (
-            <ResultPanel tone="danger" icon="close" title="We couldn’t verify you" footer={<Button onClick={() => setStep("pending")}>Try again</Button>}>
+            <ResultPanel tone="danger" title="We couldn’t verify you" footer={<Button onClick={() => setStep("pending")}>Try again</Button>}>
               <p>Make sure your face is well lit and you copy the pose exactly.</p>
             </ResultPanel>
           )}
@@ -226,7 +226,7 @@ function Permission() {
       <div className="sc-screen">
         <div className="sc-screen__body sc-center">
           {state === "granted" ? (
-            <ResultPanel title="Location on" footer={<Button variant="secondary" onClick={() => setState("not determined")}>Reset demo</Button>}>
+            <ResultPanel icon="location" title="Location on" footer={<Button variant="secondary" onClick={() => setState("not determined")}>Reset demo</Button>}>
               <p>We’ll show people near you.</p>
             </ResultPanel>
           ) : (
@@ -271,7 +271,7 @@ function Safety() {
         <TopBar onBack={() => {}} title="Maya" />
         <div className="sc-screen__body sc-center">
           {reported ? (
-            <ResultPanel tone="neutral" title="You’ve blocked and reported Maya" footer={<Button onClick={() => setReported(null)}>Done</Button>}>
+            <ResultPanel tone="neutral" art="blocked" title="You’ve blocked and reported Maya" footer={<Button onClick={() => setReported(null)}>Done</Button>}>
               <p>Reason: {reported}. We’ll update you in Help. Maya won’t be told.</p>
             </ResultPanel>
           ) : (

@@ -72,7 +72,7 @@ expect ±3 per channel on flat fills; text and thin strokes were not sampled):
 | `purple.50` → `brand.tint`, `brand.soft` | `#FAF7FE` | Derived from sampled `#F8F1FD`, lifted for 4.6:1 purple text | "Sign up with email" | Soft brand button, "Next" pill, selected tints |
 | `purple.200` → `brand.subtle` | `#E2DCF7` | Derived | — | Lavender hairlines and tinted placeholders |
 | `purple.800` → `text.brand-deep` | `#4F4296` | Derived | — | Purple text on grey or lavender (active tab label, eyebrows) |
-| `periwinkle.100` → `accent.promo` | `#D6DCFD` | Confirmed | "Start a new group" card | `InfoCard` guidance cards |
+| `periwinkle.100` → `accent.promo` | `#D6DCFD` | Confirmed | "Start a new group" card | Avatar pastels, illustration accents (guidance cards moved to the lavender wash) |
 | `neutral.800` | `#2D2C2F` | Confirmed | "Next" CTA | Primary ink buttons (with a soft sheen) |
 | `neutral.900` → `text.primary`, `surface.inverse` | `#141316` | Confirmed | Switch on, checkbox | Text, switches, checkboxes, radios, selected option outline |
 | `neutral.100` → `surface.soft` | `#F2F2F2` | Confirmed | Search, fields, "Joined", incoming bubbles, "About me" card | Fields, secondary buttons, incoming bubbles, prompt cards, shared-interest pills |
@@ -130,9 +130,9 @@ Mobbin as screenshots:
 | Dividers | Hairlines inside cards, inset | Kept |
 | Corner hierarchy | Large photos softest, cards next, controls tighter | `radius.photo` 32 (Discover card, profile photos, match photos) ≥ sheets `xl` 28 > `radius.card` 24 (section cards, grouped rows, prompt cards, options menu, illustration areas) > `lg` 20 (bubbles, banners) > `md` 16 (inputs, option cards, photo slots) > code cells 12; pills and circles unchanged |
 | Icons | Thin rounded line icons; active tab filled purple | Material Symbols Rounded, filled by default; inactive tabs use the unfilled drawing |
-| Success badge | Accent ring around a light centre | Result badge (success): a 9-sided "cookie" in brand purple with a white check on a lavender halo of the same shape (Material shape set). Reserved for success; safety outcomes stay round and neutral |
+| Outcome visuals | Accent ring around a light centre | `ResultPanel art`: one original illustration per meaning (verified: phone with a purple message; unmatched: two conversations drifting apart; blocked: shield with a report flag). Safety outcomes are neutral, with no check or purple. The earlier cookie badge and droplet-plus-tick stack are retired |
 | Motion and press feedback | Quick, quiet feedback; content never waits on animation | Every pressable has a press state (scale for buttons, circles and tiles; a background tint for rows and cards). Entrances: a new Discover profile rises in, the match photos settle into their tilt and the mark lands, a selected chip settles. Exits use the motion tokens. Under reduced motion everything becomes a fade or an instant change |
-| Identity shape | Circular avatars throughout; organic blob framing behind empty-state art and hero photos | **Circular avatars** (Meetup), pastel-framed initials. Deliberate Numaya shape exceptions only: 60×80 capsule match previews, the 9-sided cookie success badge (from the team's shape chart) and droplet framing on empty and success illustration slots. Plain `border-radius` throughout; no squircle |
+| Identity shape | Circular avatars throughout; organic blob framing behind empty-state art and hero photos | **Circular avatars** (Meetup), pastel-framed initials. The one deliberate shape exception: droplet framing on empty-state illustration slots. Match previews are 72×96 portraits with the card corner. Plain `border-radius` throughout; no squircle |
 | Headline emphasis | Meetup colours one headline word | Not used: Numaya headings are one colour |
 | Brand purple treatment | Purple fills are flat; only floating purple actions have a soft drop | `shadow.brand` (soft purple drop) on SuperSwipe and the match mark; chips, bubbles, progress and send stay flat. The old pink sheen and glow are retired |
 | Glyphs on brand purple | White glyphs and text on purple | White on `#7262C7` is 4.90:1 (AA), so text and glyphs may sit on purple |
@@ -144,7 +144,7 @@ Mobbin as screenshots:
 | --- | --- | --- | --- | --- | --- |
 | Photo card (`ProfileCard`) | Discover | Photo-led profile card, identity bottom-left, SuperSwipe bottom-right | E1 photo cards | 24px corners, dark legibility gradient, translucent pills on photo | Photo is a neutral grey placeholder until licensed photos are supplied |
 | Section card (`.card`) | Discover profile scroll, Profile | Profile sections | E2/E3 bordered cards, G group cards | White, hairline, faint shadow, 20px | — |
-| Shared interests (`SharedInterests`) | "You both like" on Discover | Highlight what's shared | G "About our members" | White card (hairline + soft shadow, 24px), a small pink heart beside the title, neutral pills with leading icons | No pink fill: the highlight is the mark and the icons |
+| Shared interests (`SharedInterests`) | "You both like" on Discover | Highlight what's shared | G "About our members" | The shared `ProfileSection` card (white, hairline, 24px), plain Fraunces title with no heart or mark, grey text-only pills | Built from the same primitive as every profile section |
 | Actions (`ActionBar`) | End of Discover profile | Pass / SuperSwipe / Like | E4 ink "Ticket" button, E1 "Map" accent pill | Ink gradient pills (72×56, radius 28), accent SuperSwipe pill with a white star | Pills instead of circles, chosen from a rendered comparison: larger targets that echo the pill fields and chips. Bumble positions kept |
 | Buttons (`Button`) | All screens | Primary, secondary, quiet, destructive | O, H, E4 | Ink pill, grey pill, text | — |
 | Icon buttons (`IconButton`) | Headers, sheets | Back, close, filters | O back circle, G header | White circle + soft shadow | — |
@@ -154,9 +154,9 @@ Mobbin as screenshots:
 | Switch | Settings | Preferences | S1/S2 | Pink when on, grey when off, white thumb, no outline | Pink instead of Meetup's black |
 | Tab bar (`TabBar`) | Discover, Chats, Profile | Bumble destinations | E1/H | Frosted floating capsule, grey active pill | Pink active icon, ink label (pink text fails contrast) |
 | Header | Discover | Centred wordmark, filter right, progress | O/G headers | Faint top wash, white-circle icon buttons | Wordmark is Numaya's |
-| Avatars | Chats, Chat, Match, Profile | Identity | Member avatars, Messages inbox | Circles (Meetup) with a pastel framing chosen from the name; the match queue uses 60×80 capsules (a deliberate exception); the completion ring follows the circle | — |
+| Avatars | Chats, Chat, Match, Profile | Identity | Member avatars, Messages inbox | Circles (Meetup) with a pastel framing chosen from the name; the match queue uses 72×96 portraits with the 20px corner; the completion ring follows the circle | — |
 | Message bubbles | Chat | Mine right, theirs left (Bumble) | M1 | Mine = soft brand tint (`brand-subtle`) with ink text, theirs = light grey (chosen over saturated pink, a paler tint and ink bubbles); ≈ 20px with a small tail corner; status under the last | Ink text on pink (contrast) |
-| Composer | Chat, Match | Pill input + send | M1 | White pill, hairline + faint shadow, circular send (grey disabled, pink enabled) | — |
+| Composer | Chat, Match | Pill input + send | M1 | White 20px rounded rectangle (near-pill on one line, never a stretched pill), hairline + faint shadow, grows to 120px then scrolls; circular send (grey disabled, purple enabled) | — |
 | Inbox rows | Chats | Avatar, name, preview, time, "Your move" (Bumble) | M2 | Plain rows, no dividers or cards; bold name, grey preview; grey "Your move" pill | — |
 | Chat header | Chat | Back, avatar, name, options (Bumble) | M1 | White-circle back and options buttons | — |
 | Options menu | Chat | Unmatch / Report (Bumble) | — | Floating white card, centred rows, strongest overlay shadow | Separate Cancel card |

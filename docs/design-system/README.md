@@ -60,7 +60,7 @@ or the real page):
 1. **Semantic first.** Screens use semantic tokens and library components, never raw values.
 2. **Meetup system, Numaya identity.** Meetup's purple `#7262C7` marks meaning (selected, verified,
    progress, links, the one floating action) with white on it; ink carries primary actions and
-   controls; Meetup's secondary colours only frame (avatars, badges, guidance cards).
+   controls; Meetup's secondary colours only frame (avatars, badges, illustrations).
 3. **Expression vs operation.** Fraunces expresses (headlines, names, prompt answers); Inter
    operates (everything you read to act).
 4. **States are part of the component.** Loading, error, disabled, pending and empty are

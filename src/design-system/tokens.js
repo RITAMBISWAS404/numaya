@@ -880,7 +880,7 @@ export const tokens = [
     "type": "color",
     "value": "{primitive.color.periwinkle.100}",
     "resolved": "#d6dcfd",
-    "description": "Promotional and guidance cards (Meetup 'Start a new group')."
+    "description": "Periwinkle framing: avatar pastels and illustration accents (Meetup secondary palette). Never text."
   },
   {
     "id": "semantic.color.accent.rose",

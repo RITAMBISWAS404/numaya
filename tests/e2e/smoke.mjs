@@ -106,13 +106,11 @@ try {
     check("OTP: six softly rounded 18px cells of equal width; the active cell has a purple stroke and halo, no ink", otp.n === 6 && otp.radius === "18px" && new Set(otp.w).size === 1 && otp.ring?.includes("114, 98, 199") && !otp.ring.includes("20, 19, 22"), JSON.stringify(otp));
     await p.locator(".keypad__suggestion").click({ timeout: 5000 });
     await wait(3200);
-    const badge = await p.evaluate(() => {
-      const el = document.querySelector(".result__badge");
-      const fill = el?.querySelector(".result__shape-fill");
-      return el && { bg: fill && getComputedStyle(fill).fill, fg: getComputedStyle(el).color };
+    const verified = await p.evaluate(() => {
+      const art = document.querySelector(".sheet .result__art[data-scene='verified']");
+      return { art: !!art, hidden: art?.getAttribute("aria-hidden"), brand: art && getComputedStyle(art.querySelector(".ill__brand")).fill, stack: document.querySelectorAll(".result__badge, .result__shape, [data-illustration='verified-success']").length };
     });
-    check("verified badge fill is the brand purple #7262C7", badge?.bg === "rgb(114, 98, 199)", badge?.bg);
-    check("verified badge check is white on purple", badge?.fg === "rgb(255, 255, 255)", badge?.fg);
+    check("verified sheet: one illustration (phone with a purple message) and no badge stacked on a shape", verified.art && verified.hidden === "true" && verified.brand === "rgb(114, 98, 199)" && verified.stack === 0, JSON.stringify(verified));
     await p.screenshot({ path: `${OUT}/prototype-verified.png` });
 
     await p.getByRole("button", { name: "Start over" }).first().click();
@@ -242,13 +240,23 @@ try {
         accentWords: headings.filter((h) => [...h.querySelectorAll("*")].some((c) => /[a-z]{2}/i.test(c.textContent) && getComputedStyle(c).color !== getComputedStyle(h).color && !c.closest("svg, .count-badge, .sr-only, .visually-hidden"))).map((h) => h.textContent.slice(0, 30)),
         ribbons: document.querySelectorAll(".ribbon, [class*='ribbon__']").length,
         setup: (() => {
-          const steps = [...document.querySelectorAll("#intro .setup-progress__step")];
-          return { states: steps.map((x) => x.className.match(/is-(\w+)/)?.[1]).join(), current: steps.findIndex((x) => x.getAttribute("aria-current") === "step"), icons: steps.every((x) => x.querySelector(".setup-progress__icon svg[data-fill='1']")) };
+          const steps = [...document.querySelectorAll("#intro .setup-step")];
+          const box = steps.map((x) => x.getBoundingClientRect());
+          return {
+            states: steps.map((x) => x.className.match(/is-(\w+)/)?.[1]).join(),
+            current: steps.findIndex((x) => x.getAttribute("aria-current") === "step"),
+            icons: steps.every((x) => x.querySelectorAll("svg.setup-step__icon[data-fill='1']").length === 1),
+            eyebrows: steps.map((x) => x.querySelector(".setup-step__eyebrow").textContent).join(),
+            stacked: box.every((b, i) => !i || b.top >= box[i - 1].bottom) && box.every((b) => b.width > b.height),
+            bars: document.querySelectorAll("#intro .progress, #intro [role='progressbar'], #intro .setup-progress").length,
+            active: getComputedStyle(steps[0]).boxShadow,
+          };
         })(),
       };
     });
     check("expressive: no decorative ribbons or threads anywhere in the flows", deco.ribbons === 0, String(deco.ribbons));
     check("setup progress: a fresh intro shows Basics next and Interests, Photos upcoming, with filled icons", deco.setup.states === "active,upcoming,upcoming" && deco.setup.current === 0 && deco.setup.icons, JSON.stringify(deco.setup));
+    check("setup: three stacked horizontal step cards (Step N of 3), no progress bar, the next step outlined in purple", deco.setup.eyebrows === "Step 1 of 3,Step 2 of 3,Step 3 of 3" && deco.setup.stacked && deco.setup.bars === 0 && deco.setup.active.includes("114, 98, 199"), JSON.stringify(deco.setup));
     check("headings: no flow heading colours individual words", deco.accentWords.length === 0, deco.accentWords.join(" | "));
     check("motion: no console errors with reduced motion", p.errors.length === 0, p.errors.join(" | "));
     await p.evaluate(() => localStorage.clear());
@@ -267,6 +275,18 @@ try {
     check(`flows ${name}: 12 preview screens render`, (await p.locator(".fl-frame").count()) === 12);
     const overflow = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     check(`flows ${name}: no horizontal overflow`, overflow <= 0, `${overflow}px`);
+    if (name === "375") {
+      const long = await p.evaluate(() => {
+        const chip = document.querySelector("#interests .chip");
+        const frame = chip.closest(".fl-frame").getBoundingClientRect();
+        chip.firstChild.textContent = "Experimental electronic music festivals and late-night record fairs";
+        const r = chip.getBoundingClientRect();
+        const fit = r.right <= frame.right + 0.5 && document.documentElement.scrollWidth <= innerWidth;
+        chip.firstChild.textContent = "Natural wine";
+        return { fit, h: Math.round(r.height) };
+      });
+      check("chips 375: a very long interest label wraps inside its pill without widening the screen", long.fit && long.h > 40, JSON.stringify(long));
+    }
     if (name === "desktop") {
       const f = (id) => p.locator(`#${id}`);
       const textOf = async (id) => (await f(id).innerText()).replace(/\s+/g, " ");
@@ -287,9 +307,8 @@ try {
           chipBg: cs("#interests .chip.is-selected").backgroundColor,
           chipRing: cs("#interests .chip.is-selected").boxShadow,
           chipSizes: (() => { const sel = document.querySelector("#interests .chip.is-selected"), un = document.querySelector("#interests .chip:not(.is-selected)"); const a = getComputedStyle(sel), b = getComputedStyle(un); return [sel.getBoundingClientRect().height, un.getBoundingClientRect().height, a.paddingLeft, b.paddingLeft]; })(),
-          badgeShape: cs("#intro .result__shape-fill")?.fill,
-          badgeDisc: cs("#intro .result__badge", "::before").content,
-          badgeIcon: cs("#intro .result__badge").color,
+          introArt: !!document.querySelector("#intro .result__art[data-scene='verified']"),
+          introStack: document.querySelectorAll("#intro .result__badge, #intro .result__shape").length,
           chipFg: cs("#interests .chip.is-selected").color,
           chipTick: cs("#interests .chip.is-selected .chip__affordance").color,
           chipIcons: [...document.querySelectorAll("#interests .chip")].map((c) => [c.querySelectorAll(".chip__icon").length, c.querySelector(".chip__affordance")?.dataset.icon, !!c.querySelector(".chip__affordance")?.closest("[class*='circle']")]),
@@ -316,7 +335,7 @@ try {
       check("flows: selected interest is a brand-purple pill with white text and a white minus-circle (Meetup)", states.chipBg === BRAND && states.chipRing === "none" && states.chipFg === WHITE && states.chipTick === WHITE, `${states.chipBg} / ${states.chipFg} / ${states.chipTick}`);
       check("chips: interest pills are text-first with a plain add / remove glyph (no leading icon, no circle)", states.chipIcons.length > 0 && states.chipIcons.every(([lead, aff, circled]) => lead === 0 && (aff === "plus" || aff === "minus") && !circled), JSON.stringify(states.chipIcons.slice(0, 4)));
       check("flows: selecting a chip keeps its size (no reflow)", states.chipSizes[0] === states.chipSizes[1] && states.chipSizes[2] === states.chipSizes[3], states.chipSizes.join(" / "));
-      check("flows: success badge is a purple cookie shape with a white check and no white disc", states.badgeShape === BRAND && states.badgeIcon === "rgb(255, 255, 255)" && states.badgeDisc === "none", `${states.badgeShape} / ${states.badgeIcon} / ${states.badgeDisc}`);
+      check("flows: the verified intro leads with the shared illustration, no badge-on-shape stack", states.introArt && states.introStack === 0, `${states.introArt} / ${states.introStack}`);
       check("photos: empty slots (white, hairline) are distinct from filled photo placeholders (grey)", states.slotEmpty === "rgb(255, 255, 255)" && /inset/.test(states.slotEmptyEdge) && states.slotFilled !== states.slotEmpty, `${states.slotFilled} vs ${states.slotEmpty}`);
       const pinkFg = await p.evaluate(() => {
         const disc = (sel) => { const e = document.querySelector(sel); return e && { inset: getComputedStyle(e, "::before").content, bg: getComputedStyle(e).backgroundColor, fg: getComputedStyle(e).color }; };
@@ -331,7 +350,7 @@ try {
             if (!c) return null;
             const st = getComputedStyle(c);
             const pills = [...c.querySelectorAll(".shared-interests__pill")];
-            return { bg: st.backgroundColor, radius: st.borderTopLeftRadius, mark: getComputedStyle(c.querySelector(".shared-interests__mark")).color, pills: pills.length, icons: pills.every((x) => x.querySelector(".chip__icon")), pillBg: pills[0] && getComputedStyle(pills[0]).backgroundColor };
+            return { bg: st.backgroundColor, radius: st.borderTopLeftRadius, mark: c.querySelectorAll(".profile-section__title svg, .shared-interests__mark").length, section: c.classList.contains("profile-section"), pills: pills.length, icons: pills.every((x) => x.querySelector(".chip__icon")), pillBg: pills[0] && getComputedStyle(pills[0]).backgroundColor };
           })(),
           portrait: (() => {
             const e = document.querySelector("#chats .match-queue__image");
@@ -344,15 +363,24 @@ try {
           actions: [...document.querySelectorAll("#discovery .action-bar .action-bar__btn")].map((b) => { const r = b.getBoundingClientRect(); return `${Math.round(r.width)}x${Math.round(r.height)}/${getComputedStyle(b).borderTopLeftRadius}`; }),
           floating: getComputedStyle(document.querySelector("#discovery .profile-card .action-bar__btn--super")).borderTopLeftRadius,
           send: getComputedStyle(document.querySelector("#chat .composer__send")).borderTopLeftRadius,
+          field: getComputedStyle(document.querySelector("#chat .composer__field")).borderTopLeftRadius,
         };
       });
       check("brand: purple actions and marks are solid #7262C7 with white glyphs, no inset disc", pinkFg.discs.length >= 3 && pinkFg.discs.every((d) => d.inset === "none" && d.bg === BRAND && d.fg === WHITE), JSON.stringify(pinkFg.discs));
       check("selection: a checked checkbox is the purple selected control with a white tick", pinkFg.checkbox === BRAND, pinkFg.checkbox);
       check("fields: form fields are 16px rounded rectangles, not pills", pinkFg.phoneRadius === "16px", pinkFg.phoneRadius);
       check("info cards: photo guidance and blocking help use the shared information card", pinkFg.infoCards === 2, String(pinkFg.infoCards));
-      check("you both like: a white 24px card, a small purple mark, grey text-only shared-interest pills", pinkFg.shared?.bg === WHITE && pinkFg.shared.radius === "24px" && pinkFg.shared.mark === BRAND && pinkFg.shared.pills > 0 && !pinkFg.shared.icons && pinkFg.shared.pillBg === "rgb(242, 242, 242)", JSON.stringify(pinkFg.shared));
-      check("match queue: new matches are 60x80 vertical capsules with an unclipped purple ring", pinkFg.portrait?.w === 60 && pinkFg.portrait.h === 80 && pinkFg.portrait.radius === "999px" && pinkFg.portrait.ring.includes(BRAND) && pinkFg.portrait.clear, JSON.stringify(pinkFg.portrait));
+      check("you both like: the shared white 24px profile section, no heart or mark, grey text-only pills", pinkFg.shared?.bg === WHITE && pinkFg.shared.radius === "24px" && pinkFg.shared.mark === 0 && pinkFg.shared.section && pinkFg.shared.pills > 0 && !pinkFg.shared.icons && pinkFg.shared.pillBg === "rgb(242, 242, 242)", JSON.stringify(pinkFg.shared));
+      check("match queue: new matches are 72x96 portrait previews (20px corner) with an unclipped purple ring", pinkFg.portrait?.w === 72 && pinkFg.portrait.h === 96 && pinkFg.portrait.radius === "20px" && pinkFg.portrait.ring.includes(BRAND) && pinkFg.portrait.clear, JSON.stringify(pinkFg.portrait));
       check("actions: Pass / Super / Like and the floating SuperSwipe are 72x56 pills; send is a circle (Meetup composer)", pinkFg.actions.length === 3 && pinkFg.actions.every((a) => a === "72x56/28px") && pinkFg.floating === "28px" && pinkFg.send === "50%", `${pinkFg.actions.join(" ")} / ${pinkFg.floating} / ${pinkFg.send}`);
+      check("composer: the field is a 20px rounded rectangle, never a pill", pinkFg.field === "20px", pinkFg.field);
+      const grow = [];
+      for (const text of ["One line", "Two\nlines", "Six\nlines\nof\ntext\nin\ntotal", "https://example.com/" + "a".repeat(120)]) {
+        await p.locator("#chat textarea").fill(text);
+        grow.push(await p.evaluate(() => { const t = document.querySelector("#chat textarea"); return { h: Math.round(t.getBoundingClientRect().height), scroll: t.scrollWidth <= t.clientWidth }; }));
+      }
+      await p.locator("#chat textarea").fill("");
+      check("composer: grows from one line to two, caps at 120px for longer text, and wraps long URLs", grow[0].h === 44 && grow[1].h > grow[0].h && grow[2].h === 120 && grow.every((g) => g.scroll), JSON.stringify(grow));
       check("flows: switch on is the purple selected track; off is a plain grey track, no outline, white thumb", states.switchOn === BRAND && states.switchOff.bg === "rgb(218, 218, 221)" && states.switchOff.edge === "none" && states.switchOff.thumb === "rgb(255, 255, 255)", `${states.switchOn} / ${JSON.stringify(states.switchOff)}`);
       check("flows: sliders have white thumbs on a brand-purple interval over a grey rail (no ink)", states.slider.thumb === WHITE && states.slider.track.includes(BRAND) && states.slider.track.includes("rgb(218, 218, 221)") && !states.slider.track.includes(INK), JSON.stringify(states.slider));
       check("navigation: idle tabs are ink line icons with an ink label (Meetup)", states.tabIdleIcon === "rgb(60, 59, 64)" && states.tabIdleLabel === "rgb(60, 59, 64)", `${states.tabIdleIcon} / ${states.tabIdleLabel}`);
@@ -387,7 +415,7 @@ try {
           cardBorder: getComputedStyle(document.querySelector("#discovery .profile-card")).borderTopWidth,
           pageBg: getComputedStyle(document.querySelector("#discovery .fl-screen")).backgroundColor,
           superTop: document.querySelector("#discovery .profile-card .action-bar__btn--super").getBoundingClientRect().bottom <= tab.getBoundingClientRect().top,
-          actionsAfterSections: (() => { const secs = document.querySelectorAll("#discovery .fl-pf__section"); const bar = document.querySelector("#discovery .fl-pf > .action-bar"); return secs.length >= 2 && [...secs].every((s) => s.compareDocumentPosition(bar) & Node.DOCUMENT_POSITION_FOLLOWING); })(),
+          actionsAfterSections: (() => { const secs = document.querySelectorAll("#discovery .profile-section"); const bar = document.querySelector("#discovery .fl-pf > .action-bar"); return secs.length >= 2 && [...secs].every((s) => s.compareDocumentPosition(bar) & Node.DOCUMENT_POSITION_FOLLOWING); })(),
           tabItemMin: Math.min(...items.map((r) => Math.min(r.width, r.height))),
           tabCurrent: tab.querySelectorAll(".tab-bar__item[aria-current='page']").length,
           icons: document.querySelectorAll("#discovery svg.icon[data-icon][viewBox='0 -960 960 960']").length,
@@ -418,20 +446,20 @@ try {
       check("selection: the segmented control uses Meetup filter pills (purple selected, white text)", m2.segSel?.[0] === BRAND && m2.segSel[1] === WHITE && m2.segSel[2] === "999px", JSON.stringify(m2.segSel));
       check("spacing: sections separate at 28px, wider than the 20px between form fields", m2.sectionGap === 28 && m2.fieldGap === 20, `${m2.sectionGap} / ${m2.fieldGap}`);
       check("identity: initial avatars carry more than one Meetup pastel framing", m2.tones >= 2, String(m2.tones));
-      check("surfaces: information cards use the periwinkle guidance surface (Meetup promo card)", m2.info === "rgb(214, 220, 253)", m2.info);
+      check("surfaces: guidance cards use the light lavender wash", m2.info === "rgb(243, 240, 253)", m2.info);
       const tabAlpha = Math.max(0, ...[...geo.tabShadow.matchAll(/rgba\(\d+, \d+, \d+, ([0-9.]+)\)/g)].map((m) => parseFloat(m[1])));
       check("navigation: floating capsule inset from the edges with a soft shadow (Meetup)", geo.tabInset >= 8 && geo.tabRadius >= 999 && tabAlpha > 0 && tabAlpha <= 0.14, `inset ${geo.tabInset} / radius ${geo.tabRadius} / alpha ${tabAlpha}`);
       check("navigation: bar sits below the scrolling content, never over it", geo.tabBelowBody);
       check("discover: SuperSwipe sits on the photo, above the tab bar, without scrolling", geo.superTop);
       check("discover: Pass and Like follow the profile, after its sections (reference)", geo.actionsAfterSections);
       check("discover: the photo dominates the screen (≥ 90% width, ≥ 55% height)", geo.photoShare.w >= 0.9 && geo.photoShare.h >= 0.55, `${geo.photoShare.w.toFixed(2)} × ${geo.photoShare.h.toFixed(2)}`);
-      const cardEdge = await p.evaluate(() => getComputedStyle(document.querySelector("#discovery .fl-pf__section")).boxShadow);
+      const cardEdge = await p.evaluate(() => getComputedStyle(document.querySelector("#discovery .profile-section")).boxShadow);
       check("surfaces: white page; section cards separate with a hairline, not a heavy shadow (Meetup)", geo.pageBg === "rgb(255, 255, 255)" && geo.cardBorder === "0px" && /inset/.test(cardEdge), `${geo.pageBg} / ${cardEdge.slice(0, 60)}`);
       const imagery = await p.evaluate(() => {
         const media = document.querySelector("#discovery .profile-card__media");
         const s = getComputedStyle(media);
         const r = (sel) => parseFloat(getComputedStyle(document.querySelector(sel)).borderTopLeftRadius);
-        return { radius: parseFloat(s.borderTopLeftRadius), card: r("#discovery .fl-pf__section"), input: r("#basics .input"), textarea: r("#prompt .textarea__input"), bg: s.backgroundColor, ext: [...document.querySelectorAll("#discovery img")].filter((i) => /^https?:\/\/(?!localhost)/.test(i.src)).length, placeholders: document.querySelectorAll("#discovery .fl-pf__photo").length };
+        return { radius: parseFloat(s.borderTopLeftRadius), card: r("#discovery .profile-section"), input: r("#basics .input"), textarea: r("#prompt .textarea__input"), bg: s.backgroundColor, ext: [...document.querySelectorAll("#discovery img")].filter((i) => /^https?:\/\/(?!localhost)/.test(i.src)).length, placeholders: document.querySelectorAll("#discovery .fl-pf__photo").length };
       });
       check("discover: photo areas are neutral grey placeholders and no images are hotlinked", imagery.bg === "rgb(218, 218, 221)" && imagery.ext === 0 && imagery.placeholders >= 1, JSON.stringify(imagery));
       check("geometry: corner hierarchy photo 32 > card 24 > text area 20 > form field 16", imagery.radius === 32 && imagery.card === 24 && imagery.textarea === 20 && imagery.input === 16, `${imagery.radius} / ${imagery.card} / ${imagery.textarea} / ${imagery.input}`);
@@ -550,8 +578,8 @@ try {
       await p.getByRole("button", { name: "Fake profile" }).click();
       await wait(600);
       check("flows: report ends in a block confirmation", (await textOf("chat")).includes("You’ve blocked and reported Maya"));
-      const outcome = await p.evaluate(() => { const b = document.querySelector("#chat .result__badge"); const st = getComputedStyle(b); return { neutral: b.closest(".result").classList.contains("result--neutral"), bg: st.backgroundImage + " " + st.backgroundColor, shadow: st.boxShadow, round: st.borderTopLeftRadius, cookie: !!b.querySelector(".result__shape") }; });
-      check("flows: safety outcomes use the round neutral badge (no brand purple, glow or success cookie)", outcome.neutral && !outcome.bg.includes(BRAND) && !outcome.shadow.includes("114, 98, 199") && outcome.round === "50%" && !outcome.cookie, JSON.stringify(outcome));
+      const outcome = await p.evaluate(() => { const r = document.querySelector("#chat .result"); const art = r.querySelector(".result__art"); return { neutral: r.classList.contains("result--neutral"), scene: art?.dataset.scene, brand: art?.querySelectorAll(".ill__brand").length, checks: r.querySelectorAll("[data-icon='check'], [data-icon='verified'], .result__badge").length }; });
+      check("flows: blocking ends on its own neutral illustration (shield and flag), no purple and no success check", outcome.neutral && outcome.scene === "blocked" && outcome.brand === 0 && outcome.checks === 0, JSON.stringify(outcome));
       check("flows: blocked person leaves the inbox", !(await textOf("chats")).includes("Maya"));
       check("flows: settings counts the blocked person", /Blocked people 1/.test(await textOf("settings")));
       await f("chats").getByRole("button", { name: /Jo/ }).first().click();

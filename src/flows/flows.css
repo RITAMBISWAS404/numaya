@@ -549,22 +549,6 @@ body {
   gap: var(--space-4);
 }
 
-.fl-pf__section {
-  display: grid;
-  gap: var(--space-3);
-  padding: var(--space-5);
-}
-
-/* Section titles in Fraunces (Numaya type), sized like Meetup section headings. */
-.fl-pf__title {
-  font-family: var(--font-display);
-  font-variation-settings: var(--font-display-axes);
-  font-size: var(--type-title-size);
-  line-height: var(--type-title-line);
-  font-weight: var(--type-title-weight);
-  letter-spacing: var(--type-title-tracking);
-}
-
 .fl-pf__body {
   font-size: 17px;
   line-height: 24px;

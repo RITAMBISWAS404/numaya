@@ -11,7 +11,7 @@ Meetup-derived palette (sampled values and references in the [UI map](../numaya-
 | --- | --- | --- |
 | Brand | `--color-brand` (Meetup purple `#7262C7`), `-tint`, `-soft`, `-subtle`, `-hero` | Selected chips and pills, outgoing bubbles, SuperSwipe, send, progress, verified marks, links, focus |
 | On brand | `--color-on-brand` (white) | Text and glyphs on a solid purple fill: 4.90:1 |
-| Accents | `--color-accent-promo`, `-pink`, `-pink-tint`, `-yellow`, `-orange`, `-green` | Meetup's secondary palette, by role only: guidance cards (periwinkle), badges and category marks, avatar and illustration framing, status icons. Never text, never a second UI accent |
+| Accents | `--color-accent-promo`, `-pink`, `-pink-tint`, `-yellow`, `-orange`, `-green` | Meetup's secondary palette, by role only: badges and category marks, avatar and illustration framing, status icons. Never text, never a second UI accent |
 | Headings | `--color-text-primary` | One colour per heading. No coloured-word emphasis (removed, with the `Emphasis` component and its token) |
 | Controls | `--color-control-selected` (purple), `-selected-text` (white), `-track-off` (neutral) | One selected-state system: checked radios and checkboxes, switch tracks, slider intervals, selected pills and segmented options. Off states stay neutral |
 | Brand-context text | `--color-text-brand` (purple, on white), `-brand-deep` (on grey or lavender) | Links (underlined where they sit inside a sentence), eyebrows, the active tab label |
@@ -31,7 +31,7 @@ All pairs below are enforced by `tests/unit/tokens.test.js`.
 | White on brand purple (`on-brand`), purple text on white | 4.90 | AA |
 | Purple text on `brand.tint` | 4.62 | AA |
 | Deep purple on lavender / grey | 7.1+ | AA |
-| Secondary text on the periwinkle guidance card | 9+ | AA |
+| Secondary text on the lavender guidance card | 10+ | AA |
 | Focus ring (purple) on white | 4.90 | Non-text AA |
 | `text-subtle` on white | 2.8 | Exception: placeholders and disabled labels only |
 
@@ -64,9 +64,10 @@ Fraunces uses `--font-display-axes` (`SOFT 50, WONK 0`). Headings use one colour
   follow outer = inner + inset: the tab bar (xl 28) wraps items (lg 20) with an 8px inset. Form
   fields are 16px rounded rectangles, text areas 20px, search a pill. Avatars are circles (Meetup);
   the completion ring traces the same circle as a 4px round-capped stroke.
-- **Expressive shapes (the deliberate exceptions, nowhere else):** 60×80 capsule match previews,
-  the 9-sided cookie success badge, and Meetup's organic droplet framing on empty and success
-  illustration slots (plain elliptical `border-radius`). No squircles or `corner-shape`.
+- **Expressive shapes (the deliberate exception, nowhere else):** Meetup's organic droplet framing
+  on empty-state illustration slots (plain elliptical `border-radius`). Match previews are 72×96
+  portraits with the 20px corner; success, unmatch and block outcomes use drawn illustrations
+  (`Illustration`), never a badge on a shape. No squircles or `corner-shape`.
   `pill` is only for shapes whose meaning is a pill: progress bars, switches, slider tracks, count
   badges. Never for ordinary buttons, chips, tabs or badges.
 - **Borders:** hairline 1px, selected 1.5px, focus 2px.
@@ -78,7 +79,7 @@ Fraunces uses `--font-display-axes` (`SOFT 50, WONK 0`). Headings use one colour
   progress, links and focus. Switches, checkboxes, radios and primary CTAs are ink (Meetup).
 - **Surfaces (Meetup):** white pages; section cards and list groups are white with a hairline and a
   faint shadow, inset dividers between rows; quote-like content (prompt answers) sits on flat grey;
-  guidance cards are periwinkle. Interest chips are white pills with a hairline (selected: purple).
+  guidance cards (`InfoCard`) are a flat light-lavender wash with the icon and heading on one row and the body below. Interest chips are white pills with a hairline (selected: purple).
   In chat, incoming bubbles are grey with ink text and outgoing are purple with white text.
 - **Elevation** (neutral ink, very low opacity; flat controls and fields use none): `--shadow-xs` tiny
   moving parts · `sm` cards, list groups and floating icon buttons (no ring) · `float` persistent

@@ -4,7 +4,6 @@ import {
   CodeInput,
   Fab,
   Field,
-  IllustrationPlaceholder,
   ResultPanel,
   Screen,
   ScreenBody,
@@ -219,8 +218,8 @@ export function VerifyCode({
           </Toast>
           <Toast open={resent}>New code sent</Toast>
           <Sheet open={done} labelledBy="done-title">
-            <IllustrationPlaceholder id="verified-success" ratio="5 / 3" width="200px" shape="droplet" className="verify-art" />
             <ResultPanel
+              art="verified"
               title={<span id="done-title">{intent === "signin" ? "You’re signed in" : "You’re verified"}</span>}
               footer={
                 <>

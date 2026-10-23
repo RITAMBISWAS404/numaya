@@ -108,13 +108,15 @@
   color: var(--color-text-secondary);
 }
 
-/* Composer field (Meetup): white pill with a hairline and a faint shadow. */
+/* Composer field: a white rounded rectangle (20px) with a hairline and a faint shadow. One line reads
+   close to Meetup's pill; as it grows it stays a rectangle with even corners, never a stretched pill. */
 .composer__field {
   flex: 1;
+  min-width: 0;
   display: flex;
   min-height: var(--size-touch-min);
   padding: 0 var(--space-4);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
   box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle), var(--shadow-xs);
   transition: background-color var(--motion-duration-base), box-shadow var(--motion-duration-base);
@@ -137,7 +139,20 @@
   font: inherit;
   font-size: var(--type-body-size);
   line-height: 22px;
+  overflow-wrap: anywhere;
+  overflow-y: auto;
+  scrollbar-width: thin;
   field-sizing: content;
+}
+
+.composer.is-disabled .composer__field {
+  background: var(--color-surface-sunken);
+  box-shadow: none;
+}
+
+.composer.is-disabled textarea {
+  color: var(--color-text-subtle);
+  cursor: not-allowed;
 }
 
 .composer__field textarea::placeholder {
@@ -278,7 +293,7 @@
 
 .match-queue {
   display: flex;
-  gap: var(--space-4);
+  gap: var(--space-2);
   /* The portraits' 4px ring band plus this 2px padding give the 5px new-match ring room, so the
      horizontal scroller never clips it; the negative margin aligns the first portrait with the text. */
   margin: -2px -6px 0;
@@ -291,11 +306,12 @@
 .match-queue__item {
   display: grid;
   justify-items: center;
-  gap: 8px;
-  width: 68px;
+  gap: 6px;
+  width: 80px;
 }
 
-/* Portrait preview: a 60 x 80 vertical capsule (fully rounded ends), chosen over 56 x 76. */
+/* Portrait preview: 72 x 96 (3:4) with the 20px card corner, so a real photo crops like the
+   Discover card. */
 .match-queue__portrait {
   position: relative;
   display: grid;
@@ -310,14 +326,14 @@
   display: grid;
   place-items: center;
   overflow: hidden;
-  width: 60px;
-  height: 80px;
-  border-radius: var(--radius-pill);
+  width: 72px;
+  height: 96px;
+  border-radius: var(--radius-lg);
   background: var(--color-surface-sunken);
   color: var(--color-text-primary);
   font-family: var(--font-display);
   font-variation-settings: var(--font-display-axes);
-  font-size: 26px;
+  font-size: 30px;
   font-weight: 560;
 }
 
@@ -336,7 +352,7 @@
 .match-queue__name {
   overflow: hidden;
   max-width: 100%;
-  font-size: 12.5px;
+  font-size: var(--type-caption-size);
   font-weight: var(--font-weight-medium);
   text-overflow: ellipsis;
   white-space: nowrap;

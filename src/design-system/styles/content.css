@@ -360,33 +360,33 @@ button.list-row__hit:hover {
   color: var(--color-danger);
 }
 
-/* Information card: Meetup's periwinkle guidance card ("Start a new group"): flat, 20px corners, a
-   purple filled icon, an ink title and a secondary-ink body (9:1 on the periwinkle). */
+/* Guidance card (InfoCard): icon + heading on the top row, body below at full width. A flat,
+   lightly saturated lavender wash (Meetup's guidance card, toned down), near-black heading,
+   secondary-ink body. */
 .info-card {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-3);
+  display: grid;
+  gap: var(--space-1);
   width: 100%;
   padding: var(--space-4);
   border-radius: var(--radius-lg);
-  background: var(--color-accent-promo);
+  background: var(--color-surface-brand);
   text-align: left;
+}
+
+.info-card__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .info-card__icon {
   flex: none;
-  display: grid;
-  margin-top: 1px;
   color: var(--color-brand);
-}
-
-.info-card__text {
-  display: grid;
-  gap: 2px;
 }
 
 .info-card__title {
   font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-line);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
 }
@@ -418,14 +418,8 @@ button.list-row__hit:hover {
 }
 
 .tip-card__icon {
-  display: grid;
-  place-items: center;
   flex: none;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-sm);
-  background: var(--color-brand-tint);
-  color: var(--color-text-brand);
+  color: var(--color-brand);
 }
 
 .tip-card__text {
@@ -834,6 +828,42 @@ button.list-row__hit:hover {
   background: var(--color-surface-brand);
 }
 
+/* Original spot illustrations (Illustration.jsx): one composition per scene, coloured by role. */
+.ill {
+  display: block;
+  flex: none;
+  max-width: 100%;
+  height: auto;
+}
+
+.ill__ink {
+  stroke: var(--color-text-primary);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ill__open {
+  fill: none;
+}
+
+.ill__on-brand {
+  stroke: var(--color-on-brand);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ill__paper { fill: var(--color-surface); }
+.ill__wash { fill: var(--color-surface-brand); }
+.ill__ground { fill: var(--color-surface-soft); }
+.ill__soft { fill: var(--color-surface-sunken); }
+.ill__muted { fill: var(--color-border-strong); }
+.ill__strong { fill: var(--color-border-control); }
+.ill__brand { fill: var(--color-brand); }
+.ill__promo { fill: var(--color-accent-promo); }
+.ill__yellow { fill: var(--color-accent-yellow); }
+
 .empty-state__art {
   margin-bottom: var(--space-3);
 }
@@ -1004,18 +1034,15 @@ button.list-row__hit:hover {
   }
 }
 
-/* Shared interests ("You both like"): Meetup's "Get to know …" card: white with a hairline like every
-   profile section, a small purple mark beside the title, and grey shared-interest pills. */
-.shared-interests {
+/* Profile section (ProfileSection): every profile and Discover card. White with a hairline like
+   Meetup's profile sections, a Fraunces title, content below. */
+.profile-section {
   display: grid;
   gap: var(--space-3);
   padding: var(--space-5);
 }
 
-.shared-interests__title {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
+.profile-section__title {
   font-family: var(--font-display);
   font-variation-settings: var(--font-display-axes);
   font-size: var(--type-title-size);
@@ -1024,11 +1051,7 @@ button.list-row__hit:hover {
   letter-spacing: var(--type-title-tracking);
 }
 
-.shared-interests__mark {
-  display: grid;
-  color: var(--color-brand);
-}
-
+/* Shared interests ("You both like"): a profile section of grey text pills. */
 .shared-interests__list {
   display: flex;
   flex-wrap: wrap;
@@ -1043,131 +1066,127 @@ button.list-row__hit:hover {
   box-shadow: none;
 }
 
-/* Profile setup progress: a white card (24px, hairline + soft shadow) like the other cards. Steps
-   are rows with a 36px round tile and a 2px connector to the next tile; no nested cards. Done: purple
-   tile with a white check. Active: ink tile, semibold label and a "Next" pill. Upcoming: muted. */
-.setup-progress {
+/* Profile setup: three stacked horizontal step cards (no connectors or progress bar). Done is flat
+   grey with a "Done" check; the active step is the one white card with a purple outline, a soft
+   shadow and an "Up next" pill; upcoming steps are white with a hairline and muted text. */
+.setup-steps {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-3);
   width: 100%;
-  padding: var(--space-4) var(--space-5);
-  border-radius: var(--radius-card);
-  background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle), var(--shadow-xs);
   text-align: left;
 }
 
-.setup-progress__head {
+.setup-steps__head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-3);
 }
 
-.setup-progress__title {
+.setup-steps__title {
   font-family: var(--font-display);
   font-variation-settings: var(--font-display-axes);
   font-size: var(--type-title-sm-size);
   line-height: var(--type-title-sm-line);
+  font-weight: var(--type-title-sm-weight);
 }
 
-.setup-progress__count {
+.setup-steps__count {
   color: var(--color-text-muted);
   font-size: var(--type-caption-size);
   font-variant-numeric: tabular-nums;
 }
 
-.setup-progress__list {
+.setup-steps__list {
   display: grid;
+  gap: var(--space-2);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.setup-progress__step {
-  position: relative;
+.setup-step {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2) 0;
+  gap: var(--space-4);
+  min-height: 76px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle);
   color: var(--color-text-muted);
 }
 
-/* Connector from this tile down to the next one. */
-.setup-progress__step:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  left: 17px;
-  top: calc(50% + 20px);
-  bottom: calc(-50% + 20px);
-  width: 2px;
-  border-radius: 1px;
-  background: var(--color-border-subtle);
-}
-
-.setup-progress__step.is-done:not(:last-child)::after {
-  background: var(--color-brand);
-}
-
-.setup-progress__icon {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--color-surface-sunken);
+.setup-step__icon {
   color: var(--color-text-subtle);
 }
 
-.setup-progress__text {
+.setup-step__text {
   flex: 1;
   min-width: 0;
   display: grid;
   gap: 1px;
 }
 
-.setup-progress__label {
-  font-weight: var(--font-weight-medium);
+.setup-step__eyebrow {
+  font-size: var(--type-micro-size);
+  line-height: var(--type-micro-line);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
 }
 
-.setup-progress__detail {
+.setup-step__label {
+  font-weight: var(--font-weight-semibold);
+}
+
+.setup-step__detail {
   font-size: var(--type-caption-size);
   line-height: var(--type-caption-line);
   color: var(--color-text-muted);
 }
 
-.setup-progress__status {
+.setup-step__status {
   flex: none;
-  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: var(--type-caption-size);
   font-weight: var(--font-weight-semibold);
 }
 
-.setup-progress__step.is-done {
+.setup-step.is-done {
+  background: var(--color-surface-soft);
+  box-shadow: none;
   color: var(--color-text-secondary);
 }
 
-.setup-progress__step.is-done .setup-progress__icon {
-  background: var(--color-brand);
-  color: var(--color-on-brand);
+.setup-step.is-done .setup-step__icon {
+  color: var(--color-text-secondary);
 }
 
-.setup-progress__step.is-active {
+.setup-step.is-done .setup-step__status {
+  color: var(--color-text-secondary);
+}
+
+.setup-step.is-active {
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-control-selected), var(--shadow-sm);
   color: var(--color-text-primary);
 }
 
-.setup-progress__step.is-active .setup-progress__label {
-  font-weight: var(--font-weight-semibold);
+.setup-step.is-active .setup-step__icon {
+  color: var(--color-brand);
 }
 
-.setup-progress__step.is-active .setup-progress__icon {
-  background: var(--color-surface-inverse);
-  color: var(--color-text-on-inverse);
+.setup-step.is-active .setup-step__eyebrow {
+  color: var(--color-text-brand);
 }
 
-.setup-progress__step.is-active .setup-progress__status {
-  padding: 3px 10px;
+.setup-step.is-active .setup-step__detail {
+  color: var(--color-text-secondary);
+}
+
+.setup-step.is-active .setup-step__status {
+  padding: 4px 10px;
   border-radius: var(--radius-pill);
   background: var(--color-brand-tint);
   color: var(--color-text-brand-deep);

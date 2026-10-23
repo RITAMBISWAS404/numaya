@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Avatar, ICON_NAMES, Icon, Wordmark } from "../design-system/index.js";
+import { Avatar, ICON_NAMES, Icon, InfoCard, Wordmark } from "../design-system/index.js";
 import { tokens, tokenByName } from "../design-system/tokens.js";
 import { contrast } from "../lib/contrast.js";
 import { Grid, Section, Specimen } from "./ui.jsx";
@@ -55,7 +55,7 @@ export function Foundations() {
       <Section
         id="brand"
         title="Brand"
-        intro="Numaya keeps its name, wordmark, Fraunces and Inter; the visual system, icons included, follows Meetup. The brand colour is Meetup's purple #7262C7 (sampled from the current iOS app): selected chips and pills, outgoing bubbles, SuperSwipe, send, progress, links and focus. White on it is 4.90:1. Primary actions, switches and checkboxes are ink. Meetup's secondary colours frame avatars, badges and guidance cards, never text."
+        intro="Numaya keeps its name, wordmark, Fraunces and Inter; the visual system, icons included, follows Meetup. The brand colour is Meetup's purple #7262C7 (sampled from the current iOS app): selected chips and pills, outgoing bubbles, SuperSwipe, send, progress, links and focus. White on it is 4.90:1. Primary actions, switches and checkboxes are ink. Meetup's secondary colours frame avatars, badges and illustrations, never text."
       >
         <Grid min={240}>
           <Specimen title="Wordmark" note="The Numaya mark in brand purple with an accent-rose dot">
@@ -71,10 +71,10 @@ export function Foundations() {
               See all
             </p>
           </Specimen>
-          <Specimen title="Guidance card" note="Periwinkle accent.promo (Meetup promo card) with a purple icon">
-            <span className="sc-pill-demo" style={{ background: "var(--color-accent-promo)", color: "var(--color-text-primary)", borderRadius: 20, padding: "12px 16px" }}>
-              <Icon name="lock" size={20} style={{ color: "var(--color-brand)" }} /> Your number stays private
-            </span>
+          <Specimen title="Guidance card" note="The production InfoCard: light lavender wash (surface.brand), purple icon beside a near-black heading, body below">
+            <InfoCard icon="lock" title="Your number stays private">
+              We never share it, and it won’t be on your profile.
+            </InfoCard>
           </Specimen>
           <Specimen title="Avatar framing" note="Initial avatars take a Meetup pastel by name">
             <span style={{ display: "flex", gap: 8 }}>

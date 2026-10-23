@@ -130,7 +130,7 @@
       "on-brand": { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Text and glyphs on a solid brand-purple fill: white, 4.90:1." },
       "accent": {
         "$description": "Meetup secondary palette, used by role only (badges, category and avatar framing, status marks), never as a second UI accent.",
-        "promo":  { "$type": "color", "$value": "{primitive.color.periwinkle.100}", "$description": "Promotional and guidance cards (Meetup 'Start a new group')." },
+        "promo":  { "$type": "color", "$value": "{primitive.color.periwinkle.100}", "$description": "Periwinkle framing: avatar pastels and illustration accents (Meetup secondary palette). Never text." },
         "rose":   { "$type": "color", "$value": "{primitive.color.rose.500}", "$description": "Badges, category marks and the wordmark dot (Meetup accent rose)." },
         "rose-tint": { "$type": "color", "$value": "{primitive.color.rose.100}" },
         "yellow": { "$type": "color", "$value": "{primitive.color.yellow.200}", "$description": "Illustration framing." },

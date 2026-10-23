@@ -33,7 +33,7 @@ npm run tokens                    # regenerate src/design-system/tokens.{css,js}
 - Foreground on solid purple is white (`--color-on-brand`, 4.90:1). Purple text (`--color-text-brand`)
   is for links on white; on grey or lavender use `--color-text-brand-deep`. See the
   [contrast table](../design-system/foundations.md#contrast).
-- Secondary Meetup colours (`--color-accent-*`) frame and mark (avatars, badges, guidance cards,
+- Secondary Meetup colours (`--color-accent-*`) frame and mark (avatars, badges, illustrations,
   status icons); never text and never a second UI accent.
 - Headings are one colour (`--color-text-primary`); never colour individual words. No decorative
   ribbons.

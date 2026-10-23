@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useImperativeHandle, useLayoutEffect, useRef } from "react";
 import { cx } from "../../lib/cx.js";
 import { Avatar, avatarTone, ringRectPath } from "./Content.jsx";
 import { Icon } from "./Icon.jsx";
@@ -41,15 +41,27 @@ export function SystemMessage({ children }) {
   return <p className="system-message">{children}</p>;
 }
 
+/* Composer field growth: one line at 44px, then up to five lines (120px), then it scrolls. */
+const COMPOSER_MAX = 120;
+
 /**
  * Message composer. Send is enabled only with non-whitespace text; Enter sends,
- * Shift+Enter adds a line. Attachment actions are optional.
+ * Shift+Enter adds a line. Attachment actions are optional. The field is a rounded rectangle
+ * that grows with its text up to COMPOSER_MAX (CSS field-sizing where supported, measured otherwise).
  */
 export const Composer = forwardRef(function Composer(
   { value, onChange, onSend, placeholder = "Message", onAttach, disabled = false, maxLength = 1000 },
   ref,
 ) {
   const canSend = value.trim().length > 0 && !disabled;
+  const field = useRef(null);
+  useImperativeHandle(ref, () => field.current, []);
+  useLayoutEffect(() => {
+    const el = field.current;
+    if (!el || globalThis.CSS?.supports?.("field-sizing", "content")) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, COMPOSER_MAX)}px`;
+  }, [value]);
   return (
     <form
       className={cx("composer", disabled && "is-disabled")}
@@ -66,7 +78,7 @@ export const Composer = forwardRef(function Composer(
       <label className="composer__field">
         <span className="visually-hidden">Message</span>
         <textarea
-          ref={ref}
+          ref={field}
           rows={1}
           value={value}
           maxLength={maxLength}
@@ -115,13 +127,14 @@ export function ConversationRow({ name, preview, time, unread = 0, yourMove = fa
 }
 
 /** Horizontal queue of new matches. ring.value = time remaining (0–1) when timers apply. */
-/* Match-queue portraits: vertical capsules (fully rounded ends); the countdown ring sits 4px outside
-   and follows the capsule. Sizes mirror chat.css. */
-const PORTRAIT = { w: 60, h: 80, r: 30, band: 4 };
+/* Match-queue portraits: 72 x 96 portrait rectangles with the 20px card corner; the countdown ring
+   sits 4px outside and follows the corner. Sizes mirror chat.css. */
+const PORTRAIT = { w: 72, h: 96, r: 20, band: 4 };
 const PORTRAIT_RING = ringRectPath(PORTRAIT.w + 2 * PORTRAIT.band, PORTRAIT.h + 2 * PORTRAIT.band, PORTRAIT.r + PORTRAIT.band / 2);
 
 /**
- * New matches as capsule portrait previews (Bumble match queue). Unopened matches carry a brand ring; a
+ * New matches as portrait previews (Bumble match queue): the photo when there is one, otherwise the
+ * initial on the person's pastel. A horizontal rail that scrolls when the matches outgrow the width. Unopened matches carry a brand ring; a
  * `remaining` value (0–1) draws the time left as a ring instead (muted when under 20%).
  */
 export function MatchQueue({ matches, onSelect }) {

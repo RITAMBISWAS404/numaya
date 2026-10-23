@@ -36,6 +36,8 @@ import {
   PlanPicker,
   ProfileCard,
   SharedInterests,
+  ProfileSection,
+  InfoCard,
   ProgressSegments,
   PromptCard,
   Radio,
@@ -451,7 +453,12 @@ function Profile() {
             <ActionBar onPass={() => {}} onSuper={() => {}} onLike={() => {}} />
           </div>
         </Specimen>
-        <Specimen title="SharedInterests" note="“You both like”: white card, small purple mark, grey pills with icons (Meetup “Shared interests”)">
+        <Specimen title="ProfileSection" note="The one card every profile and Discover section is built from: white, hairline, Fraunces title, no mark">
+          <ProfileSection title="My location">
+            <p className="sc-caption">~4 km away</p>
+          </ProfileSection>
+        </Specimen>
+        <Specimen title="SharedInterests" note="“You both like”: a ProfileSection of grey text-only pills; no heart or mark">
           <SharedInterests
             items={[
               { label: "Jazz" },
@@ -572,12 +579,32 @@ function Feedback() {
             </EmptyState>
           </div>
         </Specimen>
-        <Specimen title="ResultPanel" note="Tones: success (brand ring, verification), neutral (safety outcomes), danger. White inset disc, ink check">
-          <ResultPanel tone="neutral" title="You’ve blocked and reported Jo" footer={<Button>Done</Button>}>
-            <p>Thanks for helping keep Numaya safe. We’ll update you in Help.</p>
+        <Specimen title="ResultPanel · verified" note="art=&quot;verified&quot;: one illustration (phone, purple message), never a badge stacked on a shape">
+          <ResultPanel art="verified" title="You’re verified">
+            <p>+1 (415) 555-0132 is confirmed.</p>
           </ResultPanel>
         </Specimen>
-        <Specimen title="SetupProgress" note="White card · done (purple tile, white check) · next (ink tile) · upcoming (muted)">
+        <Specimen title="ResultPanel · unmatched" note="Neutral tone, its own scene (conversations drifting apart); no check or purple">
+          <ResultPanel tone="neutral" art="unmatched" title="You’ve unmatched Jo" footer={<Button>Back to chats</Button>}>
+            <p>The conversation is closed for both of you.</p>
+          </ResultPanel>
+        </Specimen>
+        <Specimen title="ResultPanel · blocked" note="Neutral tone, shield with a report flag; no success signal">
+          <ResultPanel tone="neutral" art="blocked" title="You’ve blocked and reported Jo" footer={<Button>Back to chats</Button>}>
+            <p>Jo won’t be told. We’ll follow up in Help.</p>
+          </ResultPanel>
+        </Specimen>
+        <Specimen title="ResultPanel · danger" note="Without art: a plain filled glyph in the tone colour, no disc">
+          <ResultPanel tone="danger" title="We couldn’t verify you">
+            <p>Check the number and try again.</p>
+          </ResultPanel>
+        </Specimen>
+        <Specimen title="InfoCard" note="Guidance card: icon + heading row, body below, light lavender wash, near-black heading">
+          <InfoCard icon="lock" title="Your number stays private">
+            We never share it, and it won’t be on your profile.
+          </InfoCard>
+        </Specimen>
+        <Specimen title="SetupProgress" note="Three stacked step cards · done (flat grey, “Done” check) · next (purple outline, “Up next”: most prominent) · upcoming (hairline, muted)">
           <SetupProgress
             title="Your profile"
             steps={[
