@@ -2,6 +2,9 @@ import { useState } from "react";
 import { OverlayRootProvider, Wordmark } from "../design-system/index.js";
 import { cx } from "../lib/cx.js";
 import * as S from "./screens.jsx";
+import * as A from "./activity.jsx";
+import * as H from "./activity-host.jsx";
+import * as L from "./likes.jsx";
 import { StoreProvider } from "./store.js";
 
 export const SCREENS = [
@@ -9,10 +12,17 @@ export const SCREENS = [
   { id: "basics", flow: "Profile creation", title: "The basics", Component: S.Basics },
   { id: "interests", flow: "Profile creation", title: "Interests and prompts", Component: S.InterestsPrompts },
   { id: "photos", flow: "Profile creation", title: "Photos", Component: S.Photos },
-  { id: "discovery", flow: "Discovery", title: "Profile card, like / pass", Component: S.Discovery },
+  { id: "discovery", flow: "Home", title: "Profile card, like / pass", Component: S.Discovery },
   { id: "match", flow: "Matching", title: "It’s a match", Component: S.Match },
-  { id: "chats", flow: "Messaging", title: "Conversations", Component: S.Chats },
-  { id: "chat", flow: "Messaging + safety", title: "Chat, report and block", Component: S.Chat },
+  { id: "activity", flow: "Activity", title: "Explore activities", Component: A.ActivityExplore },
+  { id: "activity-detail", flow: "Activity", title: "Activity details", Component: A.ActivityDetail },
+  { id: "activity-people", flow: "Activity", title: "Guests and requests", Component: A.ActivityPeople },
+  { id: "activity-form", flow: "Activity", title: "Create or edit an activity", Component: H.ActivityForm },
+  { id: "my-activities", flow: "Activity", title: "My activities", Component: H.MyActivities },
+  { id: "likes", flow: "Likes", title: "People who liked you", Component: L.Likes },
+  { id: "like-profile", flow: "Likes", title: "Like back or pass", Component: L.LikeProfile },
+  { id: "chats", flow: "Messages", title: "Conversations", Component: S.Chats },
+  { id: "chat", flow: "Messages + safety", title: "Chat, report and block", Component: S.Chat },
   { id: "profile", flow: "Profile", title: "My profile", Component: S.MyProfile },
   { id: "edit", flow: "Profile", title: "Edit profile and preview", Component: S.EditProfile },
   { id: "prompt", flow: "Profile", title: "Edit prompt", Component: S.PromptEditor },

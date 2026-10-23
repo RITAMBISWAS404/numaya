@@ -16,6 +16,7 @@ export {
   SegmentedControl,
   Slider,
   RangeSlider,
+  FilterChips,
 } from "./components/Selection.jsx";
 export { Screen, ScreenBody, ScreenHeader, ScreenFooter, TopBar, ProgressSegments, Note, TabBar } from "./components/Layout.jsx";
 export {
@@ -48,6 +49,9 @@ export {
   ResultPanel,
 } from "./components/Content.jsx";
 export { Sheet, ActionSheet, Dialog, Toast, CoachMark, Banner } from "./components/Overlays.jsx";
+export { ActivityCard, ActivityMedia, ActivityStatus, AttendeeStack, IdentityRow, MetaRow } from "./components/Activity.jsx";
+export { MetricCard, ProgressBar, ReadinessMeter } from "./components/Insights.jsx";
+export { PersonTile } from "./components/People.jsx";
 export { Illustration, ILLUSTRATION_SCENES } from "./components/Illustration.jsx";
 export { MessageBubble, SystemMessage, Composer, ConversationRow, MatchQueue } from "./components/Chat.jsx";
 export { PlanPicker, ComparisonTable, LegalText } from "./components/Commerce.jsx";

@@ -654,3 +654,133 @@ body {
     animation-name: fade-in;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Product expansion: shared layout helpers                            */
+/* ------------------------------------------------------------------ */
+.fl-stack.fl-gap-md { gap: var(--space-4); }
+.fl-stack.fl-gap-sm { gap: var(--space-2); }
+.fl-stack.fl-gap-xs { gap: var(--space-1); }
+
+.fl-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.fl-row > .btn {
+  flex: 1;
+}
+
+.fl-screen__footer > .fl-row {
+  flex: 1;
+}
+
+.fl-row--between {
+  justify-content: space-between;
+}
+
+.fl-row--tight {
+  gap: var(--space-2);
+}
+
+.fl-row--tight > .btn {
+  flex: none;
+}
+
+.fl-card-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fl-skeleton-card {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-2) var(--space-4);
+}
+
+/* Area and filter triggers: quiet text buttons with a 44px target. */
+.fl-area,
+.fl-filter-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--size-touch-min);
+  padding: 0 var(--space-3);
+  margin-inline: calc(-1 * var(--space-3));
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+.fl-area {
+  min-width: 0;
+}
+
+.fl-area > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fl-filter-button {
+  flex: none;
+  color: var(--color-text-secondary);
+}
+
+.fl-area:active,
+.fl-filter-button:active {
+  background: var(--color-surface-soft);
+}
+
+.fl-activity-tabs {
+  width: 100%;
+}
+
+.fl-activity__title {
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: var(--type-headline-size);
+  line-height: var(--type-headline-line);
+  font-weight: var(--type-headline-weight);
+  overflow-wrap: anywhere;
+}
+
+.fl-activity__description {
+  white-space: pre-line;
+  color: var(--color-text-secondary);
+}
+
+.fl-activity {
+  padding-bottom: var(--space-4);
+}
+
+.fl-form-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+.fl-form-error {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-danger-tint);
+  color: var(--color-danger);
+  font-size: var(--type-body-sm-size);
+  font-weight: var(--font-weight-medium);
+}
+
+.fl-card-note {
+  padding: var(--space-1) var(--space-4) 0;
+}
+
+.fl-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4) var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

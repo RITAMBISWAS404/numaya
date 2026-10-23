@@ -1,0 +1,397 @@
+/* ------------------------------------------------------------------ */
+/* Filter chips: a single-select rail that scrolls horizontally        */
+/* ------------------------------------------------------------------ */
+.filter-chips {
+  display: flex;
+  gap: var(--space-2);
+  margin-inline: calc(-1 * var(--layout-gutter));
+  padding: 2px var(--layout-gutter);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.filter-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip--filter {
+  flex: none;
+  white-space: nowrap;
+  padding-inline: 14px;
+}
+
+.chip--filter.is-selected .chip__affordance {
+  margin-left: -2px;
+}
+
+.chip__count {
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.chip.is-selected .chip__count {
+  color: var(--color-control-selected-text);
+}
+
+/* ------------------------------------------------------------------ */
+/* Metadata, identity and attendees                                    */
+/* ------------------------------------------------------------------ */
+.meta-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  color: var(--color-text-secondary);
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-line);
+}
+
+.meta-row__icon {
+  flex: none;
+  margin-top: 1px;
+  color: var(--color-text-muted);
+}
+
+.meta-row__text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.identity-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.identity-row__text {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+.identity-row__name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.identity-row__caption {
+  color: var(--color-text-muted);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+}
+
+.attendee-stack {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+.attendee-stack__avatar + .attendee-stack__avatar {
+  margin-left: -6px;
+}
+
+.attendee-stack__avatar .avatar__image {
+  box-shadow: 0 0 0 2px var(--color-surface);
+}
+
+.attendee-stack__count {
+  margin-left: var(--space-2);
+  color: var(--color-text-secondary);
+  font-size: var(--type-caption-size);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ */
+/* Activity media and card                                             */
+/* ------------------------------------------------------------------ */
+.activity-media {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.activity-media .image-placeholder {
+  border-radius: 0;
+}
+
+.activity-media__img {
+  display: block;
+  width: 100%;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+/* No photo and no tone: the category glyph on the lavender wash, clearly not a photograph. */
+.activity-media__fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  background: var(--color-surface-brand);
+  color: var(--color-brand);
+}
+
+.activity-media__badges {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  right: var(--space-3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.activity-media__badges .badge {
+  box-shadow: var(--shadow-xs);
+}
+
+.activity-card {
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle), var(--shadow-xs);
+}
+
+.activity-card__hit {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2) var(--space-2) var(--space-4);
+  border-radius: inherit;
+  text-align: left;
+  transition: background-color var(--motion-duration-fast), transform var(--motion-duration-fast) var(--motion-ease-out);
+}
+
+.activity-card__hit:active {
+  transform: scale(0.99);
+}
+
+.activity-card__media {
+  border-radius: calc(var(--radius-card) - var(--space-2));
+}
+
+.activity-card__body {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  padding-inline: var(--space-2);
+}
+
+.activity-card__category {
+  color: var(--color-text-brand);
+  font-size: var(--type-caption-size);
+  font-weight: var(--font-weight-semibold);
+}
+
+.activity-card__title {
+  display: -webkit-box;
+  overflow: hidden;
+  margin-bottom: var(--space-1);
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: var(--type-title-size);
+  line-height: var(--type-title-line);
+  font-weight: var(--type-title-weight);
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.activity-card__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.activity-card__host {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--type-caption-size);
+}
+
+/* Compact (My activities): image left, text right. */
+.activity-card--compact .activity-card__hit {
+  grid-template-columns: 88px minmax(0, 1fr);
+  align-items: start;
+  padding: var(--space-2);
+}
+
+.activity-card--compact .activity-card__body {
+  padding: var(--space-1) var(--space-1) var(--space-1) 0;
+}
+
+.activity-card--compact .activity-card__title {
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line);
+}
+
+.activity-card--compact .activity-media__badges {
+  display: none;
+}
+
+.activity-card--compact .activity-card__foot {
+  margin-top: var(--space-1);
+}
+
+/* ------------------------------------------------------------------ */
+/* Insights: readiness meter, metric cards, progress bars              */
+/* ------------------------------------------------------------------ */
+.readiness-meter {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.readiness-meter svg {
+  position: absolute;
+  inset: 0;
+}
+
+.readiness-meter__track,
+.readiness-meter__value {
+  fill: none;
+  stroke-width: 8;
+}
+
+.readiness-meter__track {
+  stroke: var(--color-surface-sunken);
+}
+
+.readiness-meter__value {
+  stroke: var(--color-brand);
+  stroke-linecap: round;
+  transition: stroke-dasharray var(--motion-duration-slow) var(--motion-ease-out);
+}
+
+.readiness-meter__label {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  line-height: 1;
+}
+
+.readiness-meter__value-text {
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: 32px;
+  font-weight: var(--type-display-weight);
+  font-variant-numeric: tabular-nums;
+}
+
+.readiness-meter__unit {
+  margin-top: 4px;
+  color: var(--color-text-muted);
+  font-size: var(--type-micro-size);
+}
+
+.progress-bar {
+  display: block;
+  height: 6px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-sunken);
+}
+
+.progress-bar__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-brand);
+}
+
+.metric-card {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle);
+}
+
+.metric-card__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-secondary);
+  font-size: var(--type-caption-size);
+  font-weight: var(--font-weight-semibold);
+}
+
+.metric-card__icon {
+  color: var(--color-text-muted);
+}
+
+.metric-card__value {
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: var(--type-title-sm-size);
+  line-height: var(--type-title-sm-line);
+  font-weight: var(--type-title-sm-weight);
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-card__detail {
+  color: var(--color-text-muted);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+}
+
+/* ------------------------------------------------------------------ */
+/* Person tile (Likes grid)                                            */
+/* ------------------------------------------------------------------ */
+.person-tile {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  min-width: 0;
+  text-align: left;
+  border-radius: var(--radius-lg);
+  transition: transform var(--motion-duration-fast) var(--motion-ease-out);
+}
+
+.person-tile:active {
+  transform: scale(0.98);
+}
+
+.person-tile__photo {
+  position: relative;
+  margin-bottom: 4px;
+  border-radius: var(--radius-lg);
+}
+
+.person-tile__photo .image-placeholder__icon {
+  display: none;
+}
+
+.person-tile__badge {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+}
+
+.person-tile__name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.person-tile__caption {
+  color: var(--color-text-muted);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+  overflow-wrap: anywhere;
+}

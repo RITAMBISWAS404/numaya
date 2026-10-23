@@ -50,64 +50,9 @@ import {
 } from "../design-system/index.js";
 import { INTERESTS, PEOPLE, PROMPT_QUESTIONS, REPORT_REASONS } from "./data.js";
 import { conversations, discoveryQueue, hiddenByFilters, newMatches, useStore } from "./store.js";
+import { Frame, useFlash } from "./frame.jsx";
 
-// Order follows the reference tab bar: Profile first, then browsing, then chats.
-const TABS = [
-  { id: "profile", label: "Profile", icon: "user" },
-  { id: "discover", label: "Discover", icon: "cards" },
-  { id: "chats", label: "Chats", icon: "message" },
-];
-const TAB_TARGET = { discover: "discovery", chats: "chats", profile: "profile" };
 const ageOf = (year) => (year.length === 4 ? new Date().getFullYear() - Number(year) : null);
-
-const FOCUSABLE = "a[href], button, input, select, textarea, [tabindex]:not([tabindex='-1'])";
-
-/** A body that scrolls but holds nothing focusable (e.g. the setup intro on a small phone) becomes a
-    tab stop itself, so keyboard users can still scroll it. */
-function useScrollableFocus(ref) {
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || typeof ResizeObserver === "undefined") return;
-    const update = () => {
-      const needs = el.scrollHeight > el.clientHeight + 1 && !el.querySelector(FOCUSABLE);
-      if (needs) el.setAttribute("tabindex", "0");
-      else el.removeAttribute("tabindex");
-    };
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    if (el.firstElementChild) ro.observe(el.firstElementChild);
-    update();
-    return () => ro.disconnect();
-  }, [ref]);
-}
-
-/** Shared screen scaffold inside a preview frame. */
-function Frame({ top, footer, tab, go, children, tone, kind, onBodyScroll, bodyRef }) {
-  const ownRef = useRef(null);
-  const ref = bodyRef ?? ownRef;
-  useScrollableFocus(ref);
-  return (
-    <div className={`fl-screen${tone ? ` fl-screen--${tone}` : ""}${kind ? ` fl-screen--${kind}` : ""}`}>
-      {top}
-      <div className="fl-screen__body" onScroll={onBodyScroll} ref={ref}>
-        {children}
-      </div>
-      {footer && <div className="fl-screen__footer">{footer}</div>}
-      {tab && <TabBar items={TABS} current={tab} onChange={(id) => go(TAB_TARGET[id])} />}
-    </div>
-  );
-}
-
-/** Short-lived toast message. */
-function useFlash() {
-  const [msg, setMsg] = useState(null);
-  useEffect(() => {
-    if (!msg) return;
-    const id = setTimeout(() => setMsg(null), 1400);
-    return () => clearTimeout(id);
-  }, [msg]);
-  return [msg, setMsg];
-}
 
 /* 1 · Onboarding → profile setup -------------------------------------------- */
 /* Profile setup steps, in order. A step is done once its next button has been pressed; the first
@@ -356,7 +301,7 @@ export function Discovery({ go }) {
       tone="page"
       kind="discover"
       top={<DiscoverHeader age={age} distance={distance} progress={progress} showFilters={!snoozed} onFilters={() => setFiltering(true)} />}
-      tab="discover"
+      tab="home"
       go={go}
       onBodyScroll={onScroll}
       bodyRef={bodyRef}
@@ -548,7 +493,8 @@ export function Match({ go }) {
     >
       <div className="fl-center fl-fill fl-match">
         <MatchCelebration names={[state.profile.name || "You", person.name]}>
-          You and {person.name} liked each other. They answered “{person.prompt.q}”. Start there.
+          You and {person.name} liked each other.{" "}
+          {person.prompt ? `They answered “${person.prompt.q}”. Start there.` : person.shared?.length ? `You both like ${person.shared[0].toLowerCase()}. Start there.` : "Say hello and make it personal."}
         </MatchCelebration>
       </div>
     </Frame>
@@ -565,7 +511,7 @@ export function Chats({ go }) {
   const fresh = newMatches(state).map((id) => ({ id, name: PEOPLE[id].name }));
   const rows = conversations(state);
   return (
-    <Frame tone="page" top={<TopBar largeTitle="Chats" />} tab="chats" go={go}>
+    <Frame tone="page" top={<TopBar largeTitle="Chats" />} tab="messages" go={go}>
       <div className="fl-stack fl-gap-lg fl-sections">
         {!state.prefs.messages && (
           <Banner tone="info" title="New message alerts are off" action="Turn on" onAction={() => dispatch({ type: "prefs", patch: { messages: true } })}>

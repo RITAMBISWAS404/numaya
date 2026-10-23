@@ -274,3 +274,25 @@ export function RangeSlider({ label, min, max, step = 1, value: [lo, hi], onChan
     </div>
   );
 }
+
+/**
+ * Single-select filter row (Likes, Messages, Activity). A horizontal rail of pills that scrolls
+ * when it outgrows the width; the selected pill is purple with a leading check, so the state does
+ * not rely on colour. options: [{ id, label, count? }].
+ */
+export function FilterChips({ label, options, value, onChange, className }) {
+  return (
+    <div className={cx("filter-chips", className)} role="group" aria-label={label}>
+      {options.map((o) => {
+        const on = o.id === value;
+        return (
+          <button key={o.id} type="button" className={cx("chip", "chip--filter", on && "is-selected")} aria-pressed={on} onClick={() => onChange(o.id)}>
+            {on && <Icon name="check" size={18} className="chip__affordance" />}
+            {o.label}
+            {o.count != null && <span className="chip__count">{o.count}</span>}
+          </button>
+        );
+      })}
+    </div>
+  );
+}

@@ -272,7 +272,9 @@ try {
     const p = await page(vp);
     await p.goto(`${base}flows.html`);
     await wait(1200);
-    check(`flows ${name}: 12 preview screens render`, (await p.locator(".fl-frame").count()) === 12);
+    const frames = await p.locator(".fl-frame").count();
+    const listed = (await p.locator(".fl-nav__link").count()) - 2; // minus the prototype and design-system links
+    check(`flows ${name}: every listed preview screen renders (${frames})`, frames === listed && frames >= 19, `${frames} of ${listed}`);
     const overflow = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     check(`flows ${name}: no horizontal overflow`, overflow <= 0, `${overflow}px`);
     if (name === "375") {
