@@ -107,7 +107,8 @@ export function Note({ icon = "lock", children, id }) {
   );
 }
 
-/** Bottom tab bar. items: [{ id, label, icon, badge? }]. */
+/** Bottom tab bar, icon-only. items: [{ id, label, icon, badge? }]. The label is the accessible
+    name ("Likes, 5 new") and the pointer tooltip; it is not drawn. */
 export function TabBar({ items, current, onChange }) {
   return (
     <nav className="tab-bar" aria-label="Main">
@@ -117,13 +118,14 @@ export function TabBar({ items, current, onChange }) {
           type="button"
           className={cx("tab-bar__item", item.id === current && "is-current")}
           aria-current={item.id === current ? "page" : undefined}
+          title={item.label}
+          aria-label={item.badge ? `${item.label}, ${item.badge} new` : item.label}
           onClick={() => onChange(item.id)}
         >
           <span className="tab-bar__icon">
             <Icon name={item.icon} size={24} weight={item.id === current ? "fill" : "outline"} />
             {item.badge ? <CountBadge count={item.badge} label={`${item.badge} new in ${item.label}`} /> : null}
           </span>
-          <span className="tab-bar__label">{item.label}</span>
         </button>
       ))}
     </nav>

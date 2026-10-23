@@ -136,10 +136,12 @@ request. Licence: `src/design-system/icons/LICENSE-material-symbols.txt`, credit
 
 ## Navigation
 
-Bumble destinations and order (Profile, Discover, Chats) with Meetup styling
-([UI map](../numaya-meetup-ui-map.md)): a frosted capsule floating above the bottom edge, icon over
-label. The active item sits on a light-grey pill with a filled purple icon and a deep-purple label. The bar
-stays in the layout flow under the scrolling content, so it never covers content or composers.
+Five sections in the PRD's order (Home, Activity, Likes, Messages, Profile) with Meetup styling
+([UI map](../numaya-meetup-ui-map.md)): a frosted capsule floating above the bottom edge, **icons
+only**. The active item sits on a light-grey pill with a filled purple icon; inactive items use the
+outline glyph in ink. Labels are not drawn: each item's label is its accessible name ("Likes, 5 new")
+and its pointer tooltip. Items are at least 64 × 52 at 375px. The bar stays in the layout flow under
+the scrolling content, so it never covers content or composers.
 
 ## Interaction states
 

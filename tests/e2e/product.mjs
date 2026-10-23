@@ -53,17 +53,34 @@ try {
   {
     const p = await phone();
     await open(p, "discovery");
-    const tabs = await p.locator(".tab-bar__item").allInnerTexts();
-    check("nav: five sections in PRD order", tabs.map((t) => t.replace(/\d+/g, "").trim()).join(",") === "Home,Activity,Likes,Messages,Profile", tabs.join(","));
+    const tabs = await p.locator(".tab-bar__item").evaluateAll((els) => els.map((e) => e.title));
+    check("nav: five sections in PRD order", tabs.join(",") === "Home,Activity,Likes,Messages,Profile", tabs.join(","));
     const reached = [];
     for (const [label, id] of [["Activity", "activity"], ["Likes", "likes"], ["Messages", "chats"], ["Profile", "profile"], ["Home", "discovery"]]) {
-      await p.locator(".tab-bar__item", { hasText: label }).click();
+      await p.locator(`.tab-bar__item[title="${label}"]`).click();
       await wait(700);
-      reached.push(screenId(p) === id && (await p.locator(".tab-bar__item.is-current", { hasText: label }).count()) === 1);
+      reached.push(screenId(p) === id && (await p.locator(`.tab-bar__item.is-current[title="${label}"]`).count()) === 1);
     }
     check("nav: every tab opens its own screen and marks itself current", reached.every(Boolean), reached.join(","));
     const sizes = await p.locator(".tab-bar__item").evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().width)));
     check("nav: tab targets stay at least 44px wide at 393", sizes.every((w) => w >= 44), sizes.join(","));
+    const iconOnly = await p.evaluate(() => [...document.querySelectorAll(".tab-bar__item")].map((b) => {
+      return { visible: b.innerText.replace(/\d+/g, "").trim().length > 0, title: b.title, icons: b.querySelectorAll("svg.icon").length };
+    }));
+    const named = await Promise.all(["Home", "Activity", "Likes, 5 new", "Messages, 1 new", "Profile"].map((n) => p.locator(".tab-bar").getByRole("button", { name: n, exact: true }).count()));
+    check("nav: icon-only (no visible labels), one icon per item, a tooltip and a clean accessible name each (badge included)", iconOnly.every((i) => !i.visible && i.icons === 1 && i.title) && named.every((n) => n === 1), JSON.stringify(iconOnly.map((i) => i.title)));
+    await p.locator(".tab-bar__item").first().focus();
+    await p.keyboard.press("Tab");
+    const focus = await p.evaluate(() => ({ title: document.activeElement?.title, ring: getComputedStyle(document.activeElement).outlineStyle }));
+    check("nav: keyboard moves along the items with a visible focus ring", focus.title === "Activity" && focus.ring !== "none", JSON.stringify(focus));
+    await p.goto(`${base}flows.html?screen=chats`);
+    await wait(700);
+    const covered = await p.evaluate(() => {
+      const bar = document.querySelector(".tab-bar").getBoundingClientRect();
+      const body = document.querySelector(".fl-screen__body").getBoundingClientRect();
+      return body.bottom <= bar.top + 1;
+    });
+    check("nav: the bar sits below the scrolling content, never over it", covered);
     check("nav: no console errors", p.errors.length === 0, p.errors.join(" | "));
   }
   {
@@ -301,7 +318,7 @@ try {
     await wait(600);
     check("messages: a row opens the right conversation", screenId(p) === "chat" && (await body(p)).includes("That bakery was unreal"));
     await tap(p, "Back to messages");
-    check("messages: opening a conversation marks it read", (await p.locator(".conversation__unread").count()) === 0 && (await p.locator(".tab-bar__item", { hasText: "Messages" }).locator(".count-badge").count()) === 0);
+    check("messages: opening a conversation marks it read", (await p.locator(".conversation__unread").count()) === 0 && (await p.locator(".tab-bar__item[title=\"Messages\"]").locator(".count-badge").count()) === 0);
     await p.getByRole("button", { name: /^All/ }).click();
     await p.locator(".match-queue__item", { hasText: "Jo" }).click();
     await wait(600);
