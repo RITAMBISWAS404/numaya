@@ -626,14 +626,14 @@ try {
       // Snooze pauses Discover, survives reload, and Resume restores it.
       await f("settings").getByRole("switch", { name: /Snooze/ }).check();
       await wait(1000);
-      check("flows: snooze gives feedback", (await textOf("settings")).includes("Snoozed. Discover is paused."));
-      check("flows: snooze pauses Discover", (await textOf("discovery")).includes("Discover is paused") && (await textOf("profile")).includes("Snoozed"));
+      check("flows: snooze gives feedback", (await textOf("settings")).includes("Snoozed. Home is paused."));
+      check("flows: snooze pauses Discover", (await textOf("discovery")).includes("Home is paused") && (await textOf("profile")).includes("Snoozed"));
       await p.reload();
       await wait(1200);
-      check("flows: snooze persists across reload", (await textOf("discovery")).includes("Discover is paused"));
+      check("flows: snooze persists across reload", (await textOf("discovery")).includes("Home is paused"));
       await f("discovery").getByRole("button", { name: "Resume" }).click();
       await wait(300);
-      check("flows: Resume restores Discover", (await f("discovery").getByRole("button", { name: /^Filters:/ }).count()) === 1 && !(await textOf("discovery")).includes("Discover is paused") && !(await textOf("profile")).includes("Snoozed"));
+      check("flows: Resume restores Discover", (await f("discovery").getByRole("button", { name: /^Filters:/ }).count()) === 1 && !(await textOf("discovery")).includes("Home is paused") && !(await textOf("profile")).includes("Snoozed"));
 
       // Message alerts: off shows feedback and a Chats banner; the banner turns them back on.
       await f("settings").getByRole("switch", { name: /New messages/ }).uncheck();

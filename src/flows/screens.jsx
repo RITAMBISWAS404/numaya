@@ -80,7 +80,7 @@ export function SetupIntro({ go }) {
       tone="page"
       footer={
         <div className="fl-stack fl-stack--full">
-          <Button onClick={() => go(next ? next.screen : "discovery")}>{!done.length ? "Build my profile" : next ? "Continue my profile" : "Go to Discover"}</Button>
+          <Button onClick={() => go(next ? next.screen : "discovery")}>{!done.length ? "Build my profile" : next ? "Continue my profile" : "Go to Home"}</Button>
           <p className="fl-caption fl-center">{next ? "About two minutes. You can finish later." : "Your profile is ready."}</p>
         </div>
       }
@@ -333,7 +333,7 @@ export function Discovery({ go }) {
     >
       {snoozed ? (
         <div className="fl-center fl-fill">
-          <EmptyState art="paused" title="Discover is paused" action="Resume" onAction={() => dispatch({ type: "prefs", patch: { snooze: false } })}>
+          <EmptyState art="paused" title="Home is paused" action="Resume" onAction={() => dispatch({ type: "prefs", patch: { snooze: false } })}>
             You’re snoozed, so you won’t see new people and they won’t see you. Your matches and chats are still here.
           </EmptyState>
         </div>
@@ -521,9 +521,9 @@ export function Match({ go }) {
 
   if (!person || state.ended[id]) {
     return (
-      <Frame tone="page" top={<CloseHeader label="Back to Discover" onClose={() => go("discovery")} />}>
+      <Frame tone="page" top={<CloseHeader label="Back to Home" onClose={() => go("discovery")} />}>
         <div className="fl-center fl-fill">
-          <EmptyState art="no-match" title="No new match yet" action="Go to Discover" onAction={() => go("discovery")}>
+          <EmptyState art="no-match" title="No new match yet" action="Go to Home" onAction={() => go("discovery")}>
             Like someone who has already liked you and you’ll see it here.
           </EmptyState>
         </div>
@@ -542,7 +542,7 @@ export function Match({ go }) {
   return (
     <Frame
       tone="page"
-      top={<CloseHeader label="Back to Discover" onClose={() => go("discovery")} />}
+      top={<CloseHeader label="Back to Home" onClose={() => go("discovery")} />}
       footer={
         <div className="fl-stack fl-stack--full">
           <Composer value={text} onChange={setText} placeholder={person.opener ?? "Send a message…"} onSend={send} />
@@ -943,7 +943,7 @@ function ProfilePreview({ profile }) {
       {profile.photos.slice(1, 3).map((p, i) => (
         <ImagePlaceholder key={p.id} tone={0} ratio="4 / 5" className="fl-pf__photo" label={`Your photo ${i + 2} (placeholder)`} />
       ))}
-      <p className="fl-caption fl-center">This is how people see you in Discover. Changes save as you make them.</p>
+      <p className="fl-caption fl-center">This is how people see you in Home. Changes save as you make them.</p>
     </div>
   );
 }
@@ -1130,7 +1130,7 @@ export function PromptEditor({ go }) {
 }
 
 const FEEDBACK = {
-  snooze: ["Snoozed. Discover is paused.", "Welcome back. Discover is on."],
+  snooze: ["Snoozed. Home is paused.", "Welcome back. Home is on."],
   messages: ["New message alerts on", "New message alerts off"],
   likes: ["New like alerts on", "New like alerts off"],
   activity: ["Activity updates on", "Activity updates off"],
@@ -1185,7 +1185,7 @@ export function Settings({ go }) {
             </div>
           </li>
         </ListGroup>
-        <ListGroup title="Visibility" footnote="Snooze hides your profile and pauses Discover. Matches and chats stay.">
+        <ListGroup title="Visibility" footnote="Snooze hides your profile and pauses Home. Matches and chats stay.">
           {switchRow("snooze", "Snooze")}
         </ListGroup>
         <ListGroup title="Notifications" footnote="In this preview, alerts are simulated. Your browser is never asked for permission.">

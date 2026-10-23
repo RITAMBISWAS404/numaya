@@ -262,8 +262,8 @@
     },
     {
       "id": "019",
-      "name": "Discover profile card",
-      "group": "Discover, profile and filters",
+      "name": "Home: profile card",
+      "group": "Home: profiles and filters",
       "route": "flows.html?screen=discovery",
       "state": "initial",
       "viewport": {
@@ -276,8 +276,8 @@
     },
     {
       "id": "020",
-      "name": "Discover: the full profile scroll",
-      "group": "Discover, profile and filters",
+      "name": "Home: the full profile scroll",
+      "group": "Home: profiles and filters",
       "route": "flows.html?screen=discovery",
       "state": "initial",
       "viewport": {
@@ -290,8 +290,8 @@
     },
     {
       "id": "021",
-      "name": "Discover: “You both like” card",
-      "group": "Discover, profile and filters",
+      "name": "Home: “You both like” card",
+      "group": "Home: profiles and filters",
       "route": "flows.html?screen=discovery",
       "state": "initial",
       "viewport": {
@@ -304,8 +304,8 @@
     },
     {
       "id": "022",
-      "name": "Discover: Pass / SuperSwipe / Like at the end of the profile",
-      "group": "Discover, profile and filters",
+      "name": "Home: Pass / SuperSwipe / Like at the end of the profile",
+      "group": "Home: profiles and filters",
       "route": "flows.html?screen=discovery",
       "state": "initial",
       "viewport": {
@@ -318,8 +318,8 @@
     },
     {
       "id": "023",
-      "name": "Discover filters sheet",
-      "group": "Discover, profile and filters",
+      "name": "Home: filters sheet",
+      "group": "Home: profiles and filters",
       "route": "flows.html?screen=discovery",
       "state": "reached by interaction",
       "viewport": {
@@ -332,8 +332,8 @@
     },
     {
       "id": "024",
-      "name": "Discover: no one fits the filters",
-      "group": "Discover, profile and filters",
+      "name": "Home: no one fits the filters",
+      "group": "Home: profiles and filters",
       "route": "flows.html?screen=discovery",
       "state": "seeded session",
       "viewport": {
@@ -347,8 +347,8 @@
     },
     {
       "id": "025",
-      "name": "Discover: seen everyone",
-      "group": "Discover, profile and filters",
+      "name": "Home: seen everyone",
+      "group": "Home: profiles and filters",
       "route": "flows.html?screen=discovery",
       "state": "seeded session",
       "viewport": {
@@ -362,8 +362,8 @@
     },
     {
       "id": "026",
-      "name": "Discover paused (snoozed)",
-      "group": "Discover, profile and filters",
+      "name": "Home: Undo after a pass (top left)",
+      "group": "Home: profiles and filters",
       "route": "flows.html?screen=discovery",
       "state": "seeded session",
       "viewport": {
@@ -372,28 +372,71 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/026-discover-paused-393x852.png",
-      "notes": "Seeded with Snooze on."
+      "image": "screens/026-home-undo-393x852.png",
+      "notes": "Seeded: Sam was just passed."
     },
     {
       "id": "027",
-      "name": "It’s a match",
-      "group": "Matches and messaging",
-      "route": "flows.html?screen=match",
-      "state": "seeded session",
+      "name": "Home: profile options (share, report, block)",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery",
+      "state": "reached by interaction",
       "viewport": {
         "width": 393,
         "height": 852,
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/027-match-393x852.png",
-      "notes": "Seeded as right after liking Maya, who liked you."
+      "image": "screens/027-home-profile-options-393x852.png"
     },
     {
       "id": "028",
+      "name": "Home: share sheet (honest: nothing is shared in the preview)",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/028-home-share-sheet-393x852.png"
+    },
+    {
+      "id": "029",
+      "name": "Home: paused (snoozed)",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/029-discover-paused-393x852.png",
+      "notes": "Seeded with Snooze on."
+    },
+    {
+      "id": "030",
+      "name": "It’s a match",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=match",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/030-match-393x852.png",
+      "notes": "Seeded as right after liking Maya, who liked you."
+    },
+    {
+      "id": "031",
       "name": "No new match yet",
-      "group": "Matches and messaging",
+      "group": "Likes, matches and messages",
       "route": "flows.html?screen=match",
       "state": "initial",
       "viewport": {
@@ -402,56 +445,26 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/028-match-empty-393x852.png"
-    },
-    {
-      "id": "029",
-      "name": "Chats: new matches and conversations",
-      "group": "Matches and messaging",
-      "route": "flows.html?screen=chats",
-      "state": "initial",
-      "viewport": {
-        "width": 393,
-        "height": 852,
-        "deviceScaleFactor": 2
-      },
-      "capture": "viewport",
-      "image": "screens/029-chats-393x852.png"
-    },
-    {
-      "id": "030",
-      "name": "Chats: several new matches (portrait previews, horizontal rail)",
-      "group": "Matches and messaging",
-      "route": "flows.html?screen=chats",
-      "state": "seeded session",
-      "viewport": {
-        "width": 393,
-        "height": 852,
-        "deviceScaleFactor": 2
-      },
-      "capture": "viewport",
-      "image": "screens/030-chats-many-matches-393x852.png",
-      "notes": "Seeded with four unopened matches."
-    },
-    {
-      "id": "031",
-      "name": "Chats: message alerts off banner",
-      "group": "Matches and messaging",
-      "route": "flows.html?screen=chats",
-      "state": "seeded session",
-      "viewport": {
-        "width": 393,
-        "height": 852,
-        "deviceScaleFactor": 2
-      },
-      "capture": "viewport",
-      "image": "screens/031-chats-alerts-off-393x852.png",
-      "notes": "Seeded with new-message alerts off."
+      "image": "screens/031-match-empty-393x852.png"
     },
     {
       "id": "032",
-      "name": "Chats: empty",
-      "group": "Matches and messaging",
+      "name": "Messages: search, new matches, filters and conversations",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chats",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/032-chats-393x852.png"
+    },
+    {
+      "id": "033",
+      "name": "Messages: several new matches (portrait previews, horizontal rail)",
+      "group": "Likes, matches and messages",
       "route": "flows.html?screen=chats",
       "state": "seeded session",
       "viewport": {
@@ -460,99 +473,85 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/032-chats-empty-393x852.png",
-      "notes": "Seeded with no matches."
-    },
-    {
-      "id": "033",
-      "name": "Conversation",
-      "group": "Matches and messaging",
-      "route": "flows.html?screen=chat",
-      "state": "initial",
-      "viewport": {
-        "width": 393,
-        "height": 852,
-        "deviceScaleFactor": 2
-      },
-      "capture": "viewport",
-      "image": "screens/033-chat-conversation-393x852.png"
+      "image": "screens/033-chats-many-matches-393x852.png",
+      "notes": "Seeded with four unopened matches."
     },
     {
       "id": "034",
-      "name": "Conversation: typing (send pill active)",
-      "group": "Matches and messaging",
-      "route": "flows.html?screen=chat",
-      "state": "reached by interaction",
+      "name": "Messages: message alerts off banner",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chats",
+      "state": "seeded session",
       "viewport": {
         "width": 393,
         "height": 852,
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/034-chat-typing-393x852.png"
+      "image": "screens/034-chats-alerts-off-393x852.png",
+      "notes": "Seeded with new-message alerts off."
     },
     {
       "id": "035",
-      "name": "Conversation: composer with four lines (grows to its maximum, then scrolls)",
-      "group": "Matches and messaging",
-      "route": "flows.html?screen=chat",
-      "state": "reached by interaction",
+      "name": "Messages: empty",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chats",
+      "state": "seeded session",
       "viewport": {
         "width": 393,
         "height": 852,
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/035-chat-composer-multiline-393x852.png"
+      "image": "screens/035-chats-empty-393x852.png",
+      "notes": "Seeded with no matches."
     },
     {
       "id": "036",
-      "name": "Conversation: composer with a long URL (wraps inside the field)",
-      "group": "Matches and messaging",
+      "name": "Conversation",
+      "group": "Likes, matches and messages",
       "route": "flows.html?screen=chat",
-      "state": "reached by interaction",
+      "state": "initial",
       "viewport": {
         "width": 393,
         "height": 852,
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/036-chat-composer-url-393x852.png"
+      "image": "screens/036-chat-conversation-393x852.png"
     },
     {
       "id": "037",
-      "name": "Conversation: new match intro",
-      "group": "Matches and messaging",
+      "name": "Conversation: typing (send pill active)",
+      "group": "Likes, matches and messages",
       "route": "flows.html?screen=chat",
-      "state": "seeded session",
+      "state": "reached by interaction",
       "viewport": {
         "width": 393,
         "height": 852,
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/037-chat-new-match-393x852.png",
-      "notes": "Seeded with Jo (no messages yet) as the open chat."
+      "image": "screens/037-chat-typing-393x852.png"
     },
     {
       "id": "038",
-      "name": "Conversation: long messages (edge case)",
-      "group": "Matches and messaging",
+      "name": "Conversation: composer with four lines (grows to its maximum, then scrolls)",
+      "group": "Likes, matches and messages",
       "route": "flows.html?screen=chat",
-      "state": "seeded session",
+      "state": "reached by interaction",
       "viewport": {
         "width": 393,
         "height": 852,
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/038-chat-long-messages-393x852.png",
-      "notes": "Edge case: seeded thread with long messages."
+      "image": "screens/038-chat-composer-multiline-393x852.png"
     },
     {
       "id": "039",
-      "name": "Conversation options menu",
-      "group": "Matches and messaging",
+      "name": "Conversation: composer with a long URL (wraps inside the field)",
+      "group": "Likes, matches and messages",
       "route": "flows.html?screen=chat",
       "state": "reached by interaction",
       "viewport": {
@@ -561,55 +560,98 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/039-chat-options-menu-393x852.png"
+      "image": "screens/039-chat-composer-url-393x852.png"
     },
     {
       "id": "040",
-      "name": "Unmatch confirmation sheet",
-      "group": "Matches and messaging",
+      "name": "Conversation: new match intro with opening prompts",
+      "group": "Likes, matches and messages",
       "route": "flows.html?screen=chat",
-      "state": "reached by interaction",
+      "state": "seeded session",
       "viewport": {
         "width": 393,
         "height": 852,
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/040-chat-unmatch-sheet-393x852.png"
+      "image": "screens/040-chat-new-match-393x852.png",
+      "notes": "Seeded with Jo (no messages yet) as the open chat."
     },
     {
       "id": "041",
-      "name": "Report or block sheet",
-      "group": "Matches and messaging",
+      "name": "Conversation: long messages (edge case)",
+      "group": "Likes, matches and messages",
       "route": "flows.html?screen=chat",
-      "state": "reached by interaction",
+      "state": "seeded session",
       "viewport": {
         "width": 393,
         "height": 852,
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/041-chat-report-sheet-393x852.png"
+      "image": "screens/041-chat-long-messages-393x852.png",
+      "notes": "Edge case: seeded thread with long messages."
     },
     {
       "id": "042",
-      "name": "Ended: unmatched",
-      "group": "Matches and messaging",
+      "name": "Conversation options menu",
+      "group": "Likes, matches and messages",
       "route": "flows.html?screen=chat",
-      "state": "seeded session",
+      "state": "reached by interaction",
       "viewport": {
         "width": 393,
         "height": 852,
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/042-chat-unmatched-393x852.png",
-      "notes": "Seeded: Priya unmatched."
+      "image": "screens/042-chat-options-menu-393x852.png"
     },
     {
       "id": "043",
-      "name": "Ended: blocked and reported",
-      "group": "Matches and messaging",
+      "name": "Unmatch confirmation sheet",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/043-chat-unmatch-sheet-393x852.png"
+    },
+    {
+      "id": "044",
+      "name": "Block confirmation sheet",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/044-chat-block-sheet-393x852.png"
+    },
+    {
+      "id": "045",
+      "name": "Report: reason, optional details, also block",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/045-chat-report-sheet-393x852.png"
+    },
+    {
+      "id": "046",
+      "name": "Ended: unmatched",
+      "group": "Likes, matches and messages",
       "route": "flows.html?screen=chat",
       "state": "seeded session",
       "viewport": {
@@ -618,13 +660,722 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/043-chat-blocked-393x852.png",
-      "notes": "Seeded: Priya blocked and reported."
+      "image": "screens/046-chat-unmatched-393x852.png",
+      "notes": "Seeded: Priya unmatched."
     },
     {
-      "id": "044",
+      "id": "047",
+      "name": "Ended: blocked",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/047-chat-blocked-393x852.png",
+      "notes": "Seeded: Priya blocked."
+    },
+    {
+      "id": "048",
+      "name": "Ended: reported and blocked (report kept on this device)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/048-chat-reported-393x852.png",
+      "notes": "Seeded: Priya reported."
+    },
+    {
+      "id": "049",
+      "name": "Messages: search by message text",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chats",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/049-chats-search-393x852.png"
+    },
+    {
+      "id": "050",
+      "name": "Messages: search + Unread filter with nothing to show",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chats",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/050-chats-filter-empty-393x852.png"
+    },
+    {
+      "id": "051",
+      "name": "Conversation: an opener inserted into the composer",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/051-chat-opener-inserted-393x852.png"
+    },
+    {
+      "id": "052",
+      "name": "Likes: all",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=likes",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/052-likes-393x852.png"
+    },
+    {
+      "id": "053",
+      "name": "Likes: Activity filter",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=likes",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/053-likes-activity-393x852.png"
+    },
+    {
+      "id": "054",
+      "name": "Likes: New filter",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=likes",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/054-likes-new-393x852.png"
+    },
+    {
+      "id": "055",
+      "name": "Likes: Nearby filter (within 5 km)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=likes",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/055-likes-nearby-393x852.png"
+    },
+    {
+      "id": "056",
+      "name": "Likes: empty (every like handled)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=likes",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/056-likes-empty-393x852.png",
+      "notes": "Seeded with every like handled."
+    },
+    {
+      "id": "057",
+      "name": "Likes: a person who liked you (like back or pass)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=like-profile",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/057-like-profile-393x852.png"
+    },
+    {
+      "id": "058",
+      "name": "Likes: an already-matched like (handled)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=like-profile",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/058-like-profile-matched-393x852.png"
+    },
+    {
+      "id": "059",
+      "name": "Activity: Explore",
+      "group": "Activity",
+      "route": "flows.html?screen=activity",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/059-activity-393x852.png"
+    },
+    {
+      "id": "060",
+      "name": "Activity: Explore (full page)",
+      "group": "Activity",
+      "route": "flows.html?screen=activity",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 2841,
+        "deviceScaleFactor": 2
+      },
+      "capture": "full-page",
+      "image": "screens/060-activity-fullpage-393w.png"
+    },
+    {
+      "id": "061",
+      "name": "Activity: Music category",
+      "group": "Activity",
+      "route": "flows.html?screen=activity",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/061-activity-category-393x852.png"
+    },
+    {
+      "id": "062",
+      "name": "Activity: date and distance filters",
+      "group": "Activity",
+      "route": "flows.html?screen=activity",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/062-activity-filters-sheet-393x852.png"
+    },
+    {
+      "id": "063",
+      "name": "Activity: nothing matches the filters",
+      "group": "Activity",
+      "route": "flows.html?screen=activity",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/063-activity-filtered-empty-393x852.png"
+    },
+    {
+      "id": "064",
+      "name": "Activity: choose an area (no device location)",
+      "group": "Activity",
+      "route": "flows.html?screen=activity",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/064-activity-area-sheet-393x852.png"
+    },
+    {
+      "id": "065",
+      "name": "Activity: no area chosen (distances hidden)",
+      "group": "Activity",
+      "route": "flows.html?screen=activity",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/065-activity-no-area-393x852.png",
+      "notes": "Seeded with no area."
+    },
+    {
+      "id": "066",
+      "name": "Activity: feed failed to load (retry)",
+      "group": "Activity",
+      "route": "flows.html?screen=activity",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/066-activity-error-393x852.png",
+      "notes": "Seeded with Prototype tools › Simulate network errors on."
+    },
+    {
+      "id": "067",
+      "name": "Activity details: open to join",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/067-activity-detail-393x852.png"
+    },
+    {
+      "id": "068",
+      "name": "Activity details (full page)",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 1007,
+        "deviceScaleFactor": 2
+      },
+      "capture": "full-page",
+      "image": "screens/068-activity-detail-fullpage-393w.png"
+    },
+    {
+      "id": "069",
+      "name": "Activity details: joined",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/069-activity-joined-393x852.png",
+      "notes": "Seeded: joined."
+    },
+    {
+      "id": "070",
+      "name": "Activity details: host approves requests",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/070-activity-request-393x852.png"
+    },
+    {
+      "id": "071",
+      "name": "Activity details: request pending",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/071-activity-requested-393x852.png",
+      "notes": "Seeded: request sent."
+    },
+    {
+      "id": "072",
+      "name": "Activity details: full, waitlist offered",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/072-activity-full-393x852.png"
+    },
+    {
+      "id": "073",
+      "name": "Activity details: on the waitlist",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/073-activity-waitlisted-393x852.png",
+      "notes": "Seeded: waitlisted."
+    },
+    {
+      "id": "074",
+      "name": "Activity details: live now, joined",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/074-activity-live-393x852.png"
+    },
+    {
+      "id": "075",
+      "name": "Activity details: long title, multi-paragraph description, no image (edge case)",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/075-activity-long-title-393x852.png"
+    },
+    {
+      "id": "076",
+      "name": "Activity details: large group, no limit (edge case)",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/076-activity-large-group-393x852.png"
+    },
+    {
+      "id": "077",
+      "name": "Activity details: cancelled by the host",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/077-activity-cancelled-393x852.png"
+    },
+    {
+      "id": "078",
+      "name": "Activity details: ended",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/078-activity-past-393x852.png"
+    },
+    {
+      "id": "079",
+      "name": "Activity details: host view",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/079-activity-host-393x852.png"
+    },
+    {
+      "id": "080",
+      "name": "Activity details: options (share, report, block host)",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/080-activity-options-393x852.png"
+    },
+    {
+      "id": "081",
+      "name": "Activity: report sheet",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/081-activity-report-393x852.png"
+    },
+    {
+      "id": "082",
+      "name": "Activity: leave confirmation",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-detail",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/082-activity-leave-393x852.png"
+    },
+    {
+      "id": "083",
+      "name": "Guests: host view with requests",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-people",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/083-activity-people-host-393x852.png"
+    },
+    {
+      "id": "084",
+      "name": "Guests: first names only, the rest a count",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-people",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/084-activity-people-393x852.png"
+    },
+    {
+      "id": "085",
+      "name": "Create activity: empty form",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-form",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/085-activity-form-393x852.png"
+    },
+    {
+      "id": "086",
+      "name": "Create activity (full page)",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-form",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 1569,
+        "deviceScaleFactor": 2
+      },
+      "capture": "full-page",
+      "image": "screens/086-activity-form-fullpage-393w.png"
+    },
+    {
+      "id": "087",
+      "name": "Create activity: required-field errors",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-form",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/087-activity-form-errors-393x852.png"
+    },
+    {
+      "id": "088",
+      "name": "Create activity: category picker (entered text is kept)",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-form",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/088-activity-form-category-393x852.png"
+    },
+    {
+      "id": "089",
+      "name": "Create activity: a past date is rejected",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-form",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/089-activity-form-past-393x852.png"
+    },
+    {
+      "id": "090",
+      "name": "Edit activity: existing values",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-form",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/090-activity-form-edit-393x852.png"
+    },
+    {
+      "id": "091",
+      "name": "Create activity: published",
+      "group": "Activity",
+      "route": "flows.html?screen=activity-form",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/091-activity-published-393x852.png"
+    },
+    {
+      "id": "092",
+      "name": "My activities: Upcoming",
+      "group": "Activity",
+      "route": "flows.html?screen=my-activities",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/092-my-activities-393x852.png"
+    },
+    {
+      "id": "093",
+      "name": "My activities: Hosting (with a draft)",
+      "group": "Activity",
+      "route": "flows.html?screen=my-activities",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/093-my-activities-hosting-393x852.png"
+    },
+    {
+      "id": "094",
+      "name": "My activities: Requests",
+      "group": "Activity",
+      "route": "flows.html?screen=my-activities",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/094-my-activities-requests-393x852.png"
+    },
+    {
+      "id": "095",
+      "name": "My activities: Past",
+      "group": "Activity",
+      "route": "flows.html?screen=my-activities",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/095-my-activities-past-393x852.png"
+    },
+    {
+      "id": "096",
+      "name": "My activities: nothing upcoming",
+      "group": "Activity",
+      "route": "flows.html?screen=my-activities",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/096-my-activities-empty-393x852.png",
+      "notes": "Seeded with no joins."
+    },
+    {
+      "id": "097",
       "name": "My profile",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=profile",
       "state": "initial",
       "viewport": {
@@ -633,26 +1384,26 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/044-profile-393x852.png"
+      "image": "screens/097-profile-393x852.png"
     },
     {
-      "id": "045",
+      "id": "098",
       "name": "My profile (full page)",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=profile",
       "state": "initial",
       "viewport": {
         "width": 393,
-        "height": 988,
+        "height": 1229,
         "deviceScaleFactor": 2
       },
       "capture": "full-page",
-      "image": "screens/045-profile-fullpage-393w.png"
+      "image": "screens/098-profile-fullpage-393w.png"
     },
     {
-      "id": "046",
+      "id": "099",
       "name": "My profile: long name (edge case)",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=profile",
       "state": "seeded session",
       "viewport": {
@@ -661,13 +1412,13 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/046-profile-long-name-393x852.png",
+      "image": "screens/099-profile-long-name-393x852.png",
       "notes": "Edge case: seeded 21-character name."
     },
     {
-      "id": "047",
+      "id": "100",
       "name": "Edit profile",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=edit",
       "state": "initial",
       "viewport": {
@@ -676,26 +1427,26 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/047-edit-profile-393x852.png"
+      "image": "screens/100-edit-profile-393x852.png"
     },
     {
-      "id": "048",
+      "id": "101",
       "name": "Edit profile (full page)",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=edit",
       "state": "initial",
       "viewport": {
         "width": 393,
-        "height": 1365,
+        "height": 1714,
         "deviceScaleFactor": 2
       },
       "capture": "full-page",
-      "image": "screens/048-edit-profile-fullpage-393w.png"
+      "image": "screens/101-edit-profile-fullpage-393w.png"
     },
     {
-      "id": "049",
+      "id": "102",
       "name": "Edit profile: photo options sheet",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=edit",
       "state": "reached by interaction",
       "viewport": {
@@ -704,12 +1455,12 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/049-edit-photo-options-393x852.png"
+      "image": "screens/102-edit-photo-options-393x852.png"
     },
     {
-      "id": "050",
+      "id": "103",
       "name": "Edit profile: empty name error",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=edit",
       "state": "reached by interaction",
       "viewport": {
@@ -718,12 +1469,12 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/050-edit-name-error-393x852.png"
+      "image": "screens/103-edit-name-error-393x852.png"
     },
     {
-      "id": "051",
+      "id": "104",
       "name": "Edit profile: Preview",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=edit",
       "state": "reached by interaction",
       "viewport": {
@@ -732,12 +1483,12 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/051-edit-preview-393x852.png"
+      "image": "screens/104-edit-preview-393x852.png"
     },
     {
-      "id": "052",
+      "id": "105",
       "name": "Edit profile: Preview (full page)",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=edit",
       "state": "reached by interaction",
       "viewport": {
@@ -746,12 +1497,12 @@
         "deviceScaleFactor": 2
       },
       "capture": "full-page",
-      "image": "screens/052-edit-preview-fullpage-393w.png"
+      "image": "screens/105-edit-preview-fullpage-393w.png"
     },
     {
-      "id": "053",
+      "id": "106",
       "name": "Edit prompt",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=prompt",
       "state": "initial",
       "viewport": {
@@ -760,12 +1511,12 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/053-prompt-editor-393x852.png"
+      "image": "screens/106-prompt-editor-393x852.png"
     },
     {
-      "id": "054",
+      "id": "107",
       "name": "Edit prompt: answer field focused",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=prompt",
       "state": "reached by interaction",
       "viewport": {
@@ -774,12 +1525,12 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/054-prompt-editor-focused-393x852.png"
+      "image": "screens/107-prompt-editor-focused-393x852.png"
     },
     {
-      "id": "055",
+      "id": "108",
       "name": "Edit prompt: new question and answer, ready to save",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=prompt",
       "state": "reached by interaction",
       "viewport": {
@@ -788,12 +1539,12 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/055-prompt-editor-changed-393x852.png"
+      "image": "screens/108-prompt-editor-changed-393x852.png"
     },
     {
-      "id": "056",
+      "id": "109",
       "name": "Settings",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=settings",
       "state": "initial",
       "viewport": {
@@ -802,26 +1553,26 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/056-settings-393x852.png"
+      "image": "screens/109-settings-393x852.png"
     },
     {
-      "id": "057",
+      "id": "110",
       "name": "Settings (full page)",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=settings",
       "state": "initial",
       "viewport": {
         "width": 393,
-        "height": 1204,
+        "height": 1513,
         "deviceScaleFactor": 2
       },
       "capture": "full-page",
-      "image": "screens/057-settings-fullpage-393w.png"
+      "image": "screens/110-settings-fullpage-393w.png"
     },
     {
-      "id": "058",
+      "id": "111",
       "name": "Settings: Snooze on",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=settings",
       "state": "seeded session",
       "viewport": {
@@ -830,13 +1581,238 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/058-settings-snooze-on-393x852.png",
+      "image": "screens/111-settings-snooze-on-393x852.png",
       "notes": "Seeded with Snooze on."
     },
     {
-      "id": "059",
+      "id": "112",
+      "name": "Profile readiness dashboard",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=insights",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/112-insights-393x852.png"
+    },
+    {
+      "id": "113",
+      "name": "Profile readiness dashboard (full page)",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=insights",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 1742,
+        "deviceScaleFactor": 2
+      },
+      "capture": "full-page",
+      "image": "screens/113-insights-fullpage-393w.png"
+    },
+    {
+      "id": "114",
+      "name": "Profile readiness: complete profile",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=insights",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/114-insights-complete-393x852.png",
+      "notes": "Seeded with a bio and four photos."
+    },
+    {
+      "id": "115",
+      "name": "Profile readiness: account status Paused (Snooze on)",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=insights",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/115-insights-paused-393x852.png"
+    },
+    {
+      "id": "116",
+      "name": "Edit profile: opened from a recommendation, bio focused",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=edit",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/116-edit-focus-bio-393x852.png"
+    },
+    {
+      "id": "117",
+      "name": "Settings: blocked people and prototype tools",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=settings",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/117-settings-prototype-tools-393x852.png"
+    },
+    {
+      "id": "118",
+      "name": "Blocked people",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=blocked",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/118-blocked-393x852.png"
+    },
+    {
+      "id": "119",
+      "name": "Blocked people: empty",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=blocked",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/119-blocked-empty-393x852.png"
+    },
+    {
+      "id": "120",
+      "name": "Premium: Free and Plus (no prices, no billing)",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=premium",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/120-premium-393x852.png"
+    },
+    {
+      "id": "121",
+      "name": "Premium: Plus isn’t on sale in this preview",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=premium",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/121-premium-sheet-393x852.png"
+    },
+    {
+      "id": "122",
+      "name": "Connected accounts: none",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=connections",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/122-connections-393x852.png"
+    },
+    {
+      "id": "123",
+      "name": "Connected accounts: consent before connecting (simulated)",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=connections",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/123-connections-consent-393x852.png"
+    },
+    {
+      "id": "124",
+      "name": "Connected accounts: Spotify connected (simulated)",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=connections",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/124-connections-connected-393x852.png"
+    },
+    {
+      "id": "125",
+      "name": "Help and support",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=help",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/125-help-393x852.png"
+    },
+    {
+      "id": "126",
+      "name": "Help: a guide",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=help",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/126-help-topic-393x852.png"
+    },
+    {
+      "id": "127",
+      "name": "System state: service unavailable",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=maintenance",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/127-maintenance-393x852.png"
+    },
+    {
+      "id": "128",
       "name": "Delete account sheet",
-      "group": "Profile, editing and settings",
+      "group": "Profile, readiness, settings and account",
       "route": "flows.html?screen=settings",
       "state": "reached by interaction",
       "viewport": {
@@ -845,10 +1821,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/059-settings-delete-sheet-393x852.png"
+      "image": "screens/128-settings-delete-sheet-393x852.png"
     },
     {
-      "id": "060",
+      "id": "129",
       "name": "Desktop: onboarding prototype with brief",
       "group": "Desktop context",
       "route": "index.html (onboarding prototype)",
@@ -859,10 +1835,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/060-desktop-prototype-1440x900.png"
+      "image": "screens/129-desktop-prototype-1440x900.png"
     },
     {
-      "id": "061",
+      "id": "130",
       "name": "Desktop: flow previews gallery",
       "group": "Desktop context",
       "route": "flows.html",
@@ -873,10 +1849,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/061-desktop-flow-previews-1440x900.png"
+      "image": "screens/130-desktop-flow-previews-1440x900.png"
     },
     {
-      "id": "062",
+      "id": "131",
       "name": "Desktop: flow previews, Profile → Edit profile → Edit prompt",
       "group": "Desktop context",
       "route": "flows.html#profile",
@@ -887,10 +1863,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/062-desktop-edit-profile-1440x900.png"
+      "image": "screens/131-desktop-edit-profile-1440x900.png"
     },
     {
-      "id": "063",
+      "id": "132",
       "name": "Desktop: design-system showcase",
       "group": "Desktop context",
       "route": "showcase.html",
@@ -901,10 +1877,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/063-desktop-design-system-1440x900.png"
+      "image": "screens/132-desktop-design-system-1440x900.png"
     },
     {
-      "id": "064",
+      "id": "133",
       "name": "Desktop: flow previews scrolled to Chats and the conversation",
       "group": "Desktop context",
       "route": "flows.html",
@@ -915,10 +1891,52 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/064-desktop-flow-previews-chats-1440x900.png"
+      "image": "screens/133-desktop-flow-previews-chats-1440x900.png"
     },
     {
-      "id": "065",
+      "id": "134",
+      "name": "Desktop: flow previews scrolled to Activity",
+      "group": "Desktop context",
+      "route": "flows.html",
+      "state": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/134-desktop-flow-previews-activity-1440x900.png"
+    },
+    {
+      "id": "135",
+      "name": "Desktop: flow previews scrolled to Likes and Messages",
+      "group": "Desktop context",
+      "route": "flows.html",
+      "state": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/135-desktop-flow-previews-likes-1440x900.png"
+    },
+    {
+      "id": "136",
+      "name": "Desktop: flow previews scrolled to Profile readiness and account",
+      "group": "Desktop context",
+      "route": "flows.html",
+      "state": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/136-desktop-flow-previews-account-1440x900.png"
+    },
+    {
+      "id": "137",
       "name": "Desktop: design-system showcase scrolled to the illustrations and result panels",
       "group": "Desktop context",
       "route": "showcase.html",
@@ -929,10 +1947,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/065-desktop-design-system-illustrations-1440x900.png"
+      "image": "screens/137-desktop-design-system-illustrations-1440x900.png"
     },
     {
-      "id": "066",
+      "id": "138",
       "name": "QA 375: Welcome",
       "group": "Small-phone QA (375 × 667)",
       "route": "index.html (onboarding prototype)",
@@ -943,10 +1961,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/066-qa-welcome-375x667.png"
+      "image": "screens/138-qa-welcome-375x667.png"
     },
     {
-      "id": "067",
+      "id": "139",
       "name": "QA 375: Phone number with keypad",
       "group": "Small-phone QA (375 × 667)",
       "route": "index.html (onboarding prototype)",
@@ -957,10 +1975,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/067-qa-phone-entry-375x667.png"
+      "image": "screens/139-qa-phone-entry-375x667.png"
     },
     {
-      "id": "068",
+      "id": "140",
       "name": "QA 375: Verify code",
       "group": "Small-phone QA (375 × 667)",
       "route": "index.html (onboarding prototype)",
@@ -971,10 +1989,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/068-qa-verify-code-375x667.png"
+      "image": "screens/140-qa-verify-code-375x667.png"
     },
     {
-      "id": "069",
+      "id": "141",
       "name": "QA 375: You’re verified → profile setup",
       "group": "Small-phone QA (375 × 667)",
       "route": "flows.html?screen=intro",
@@ -985,11 +2003,11 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/069-qa-verified-intro-375x667.png",
+      "image": "screens/141-qa-verified-intro-375x667.png",
       "notes": "Scrolls slightly at this height; the body becomes a tab stop."
     },
     {
-      "id": "070",
+      "id": "142",
       "name": "QA 375: Interests and prompt",
       "group": "Small-phone QA (375 × 667)",
       "route": "flows.html?screen=interests",
@@ -1000,11 +2018,11 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/070-qa-interests-375x667.png"
+      "image": "screens/142-qa-interests-375x667.png"
     },
     {
-      "id": "071",
-      "name": "QA 375: Discover profile card",
+      "id": "143",
+      "name": "QA 375: Home profile card",
       "group": "Small-phone QA (375 × 667)",
       "route": "flows.html?screen=discovery",
       "state": "initial",
@@ -1014,10 +2032,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/071-qa-discover-375x667.png"
+      "image": "screens/143-qa-discover-375x667.png"
     },
     {
-      "id": "072",
+      "id": "144",
       "name": "QA 375: It’s a match",
       "group": "Small-phone QA (375 × 667)",
       "route": "flows.html?screen=match",
@@ -1028,10 +2046,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/072-qa-match-375x667.png"
+      "image": "screens/144-qa-match-375x667.png"
     },
     {
-      "id": "073",
+      "id": "145",
       "name": "QA 375: Chats",
       "group": "Small-phone QA (375 × 667)",
       "route": "flows.html?screen=chats",
@@ -1042,10 +2060,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/073-qa-chats-375x667.png"
+      "image": "screens/145-qa-chats-375x667.png"
     },
     {
-      "id": "074",
+      "id": "146",
       "name": "QA 375: Conversation with long messages",
       "group": "Small-phone QA (375 × 667)",
       "route": "flows.html?screen=chat",
@@ -1056,10 +2074,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/074-qa-chat-long-messages-375x667.png"
+      "image": "screens/146-qa-chat-long-messages-375x667.png"
     },
     {
-      "id": "075",
+      "id": "147",
       "name": "QA 375: Settings",
       "group": "Small-phone QA (375 × 667)",
       "route": "flows.html?screen=settings",
@@ -1070,10 +2088,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/075-qa-settings-375x667.png"
+      "image": "screens/147-qa-settings-375x667.png"
     },
     {
-      "id": "076",
+      "id": "148",
       "name": "QA 375: profile setup scrolled to the last step card",
       "group": "Small-phone QA (375 × 667)",
       "route": "flows.html?screen=intro",
@@ -1084,10 +2102,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/076-qa-verified-intro-bottom-375x667.png"
+      "image": "screens/148-qa-verified-intro-bottom-375x667.png"
     },
     {
-      "id": "077",
+      "id": "149",
       "name": "QA 375: Chats with several new matches (horizontal rail)",
       "group": "Small-phone QA (375 × 667)",
       "route": "flows.html?screen=chats",
@@ -1098,10 +2116,10 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/077-qa-chats-many-matches-375x667.png"
+      "image": "screens/149-qa-chats-many-matches-375x667.png"
     },
     {
-      "id": "078",
+      "id": "150",
       "name": "QA 375: composer at its maximum height",
       "group": "Small-phone QA (375 × 667)",
       "route": "flows.html?screen=chat",
@@ -1112,10 +2130,122 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/078-qa-chat-composer-multiline-375x667.png"
+      "image": "screens/150-qa-chat-composer-multiline-375x667.png"
     },
     {
-      "id": "079",
+      "id": "151",
+      "name": "QA 375: Activity Explore",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=activity",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/151-qa-activity-375x667.png"
+    },
+    {
+      "id": "152",
+      "name": "QA 375: activity with a long title",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=activity-detail",
+      "state": "seeded session",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/152-qa-activity-long-title-375x667.png"
+    },
+    {
+      "id": "153",
+      "name": "QA 375: create activity with errors",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=activity-form",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/153-qa-activity-form-errors-375x667.png"
+    },
+    {
+      "id": "154",
+      "name": "QA 375: My activities",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=my-activities",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/154-qa-my-activities-375x667.png"
+    },
+    {
+      "id": "155",
+      "name": "QA 375: Likes",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=likes",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/155-qa-likes-375x667.png"
+    },
+    {
+      "id": "156",
+      "name": "QA 375: Profile home",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=profile",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/156-qa-profile-375x667.png"
+    },
+    {
+      "id": "157",
+      "name": "QA 375: readiness dashboard",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=insights",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/157-qa-insights-375x667.png"
+    },
+    {
+      "id": "158",
+      "name": "QA 375: readiness metrics and status",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=insights",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/158-qa-insights-metrics-375x667.png"
+    },
+    {
+      "id": "159",
       "name": "QA 375: Settings scrolled to the end",
       "group": "Small-phone QA (375 × 667)",
       "route": "flows.html?screen=settings",
@@ -1126,7 +2256,7 @@
         "deviceScaleFactor": 2
       },
       "capture": "viewport",
-      "image": "screens/079-qa-settings-bottom-375x667.png"
+      "image": "screens/159-qa-settings-bottom-375x667.png"
     }
   ]
 }

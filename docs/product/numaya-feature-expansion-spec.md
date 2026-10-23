@@ -209,3 +209,27 @@ the meet-up; profiles can surface upcoming plans.
    persist; premium, social and maintenance never imply a backend.
 5. **QA:** E2E covers the twelve flows in the brief; screenshots at 393, 375 and 1440; gallery,
    docs and tests updated.
+
+## 10. Verification
+
+Automated in `tests/e2e/product.mjs` (single-screen mode, 393 × 852 and 375 × 667) and
+`tests/unit/model.test.js`; screenshots in `artifacts/ui-gallery/` (groups 2–7).
+
+| Brief flow | Covered by |
+| --- | --- |
+| 1 Five sections | nav: PRD order, every tab opens its screen, 44px targets at 393 and 375 |
+| 2 Discover, open, join / request | activity: join, request, withdraw, waitlist; counts and card state |
+| 3 Create, validate, publish, find | create: required fields, kept input across the picker, past date, publish, Hosting |
+| 4 Edit or cancel own activity | edit: save changes; cancel with confirmation; hidden from Explore; host approvals |
+| 5 Filters change content | filters (category, date, distance, no area); likes (All, Activity, New, Nearby) |
+| 6 Search and open a conversation | messages: text and name search, combined with filters, read state |
+| 7 Opener, multiline, send | chat: opener inserts and focuses, Shift+Enter, send |
+| 8 Unmatch, block, report | three separate outcomes; report count, block count, conversation kept when not blocking |
+| 9 Insights | score 73 from the rules, breakdown, recommendation focuses Bio, score rises to 93 |
+| 10 Settings persist | toggle survives reload |
+| 11 Social connect / disconnect | consent, "simulated" label, disconnect |
+| 12 Empty, invalid, cancel, narrow, disabled | empty states per filter, form errors, discard sheet, 375 checks, disabled Send report |
+
+Also covered: drafts, activity report and host block, simulated network failure on load and join,
+Home undo / share / block, premium without prices or charges, unblock, maintenance retry, the
+match animation under reduced motion.
