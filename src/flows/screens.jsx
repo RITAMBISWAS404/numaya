@@ -522,7 +522,7 @@ export function Match({ go }) {
 
   if (!person || state.ended[id]) {
     return (
-      <Frame tone="page" top={<CloseHeader label="Back to Home" onClose={() => go("discovery")} />}>
+      <Frame tone="page" top={<CloseHeader label="Back to Home" align="end" onClose={() => go("discovery")} />}>
         <div className="fl-center fl-fill">
           <EmptyState art="empty-likes" title="No new match yet" action="Go to Home" onAction={() => go("discovery")}>
             Like someone who has already liked you and you’ll see it here.

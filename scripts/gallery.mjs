@@ -113,6 +113,8 @@ const SHOTS = [
 
   // 03 · Matches and messaging
   { group: 3, slug: "match", title: "It’s a match", notes: "Seeded as right after liking Maya, who liked you.", screen: "match", state: session({ matches: ["priya", "jo", "maya"], seen: ["maya"], lastMatch: "maya" }) },
+  { group: 3, slug: "match", title: "It’s a match (full page)", notes: "Seeded right after liking Maya back.", screen: "match", full: true, state: session({ matches: ["rafa", "priya", "jo", "maya"], seen: ["maya"], lastMatch: "maya" }) },
+  { group: 3, slug: "match-typing", title: "It’s a match: first message typed", screen: "match", state: session({ matches: ["rafa", "priya", "jo", "maya"], seen: ["maya"], lastMatch: "maya" }), setup: (p) => p.locator("textarea").first().fill("Hi Maya! Which record shop?") },
   { group: 3, slug: "match-empty", title: "No new match yet", screen: "match" },
   { group: 3, slug: "chats", title: "Messages: search, new matches, filters and conversations", screen: "chats" },
   { group: 3, slug: "chats-many-matches", title: "Messages: several new matches (portrait previews, horizontal rail)", notes: "Seeded with four unopened matches.", screen: "chats", state: session({ matches: ["priya", "jo", "maya", "noor", "lea"] }) },
@@ -258,6 +260,7 @@ const SHOTS = [
   { group: 7, slug: "qa-profile", title: "QA 375: Profile home", screen: "profile", viewport: QA },
   { group: 7, slug: "qa-insights", title: "QA 375: readiness dashboard", screen: "insights", viewport: QA },
   { group: 7, slug: "qa-insights-metrics", title: "QA 375: readiness metrics and status", screen: "insights", viewport: QA, scrollToSelector: "#root .fl-metrics" },
+  { group: 7, slug: "qa-match-kemi", title: "QA 375: It’s a match with a person who has no prompt", screen: "match", viewport: QA, state: session({ matches: ["rafa", "priya", "jo", "kemi"], lastMatch: "kemi" }) },
   { group: 7, slug: "qa-settings-bottom", title: "QA 375: Settings scrolled to the end", screen: "settings", viewport: QA, scrollToSelector: "#root .list-row--destructive" },
 ];
 

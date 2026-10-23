@@ -40,6 +40,8 @@ import {
   InfoCard,
   Illustration,
   ILLUSTRATION_SCENES,
+  IllustrationSlot,
+  ILLUSTRATIONS,
   ProgressSegments,
   PromptCard,
   Radio,
@@ -608,6 +610,20 @@ function Feedback() {
                 <Illustration scene={scene} width={["hello", "interests"].includes(scene) ? 72 : 128} />
                 <figcaption>
                   <code>{scene}</code>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </Specimen>
+        <Specimen title="IllustrationSlot registry" note="Every illustration slot in the product, its future PNG and today's fallback. Catalog: docs/illustrations/index.html" wide>
+          <div className="sc-ill-grid">
+            {Object.entries(ILLUSTRATIONS).map(([id, e]) => (
+              <figure key={id} className="sc-ill">
+                <IllustrationSlot id={id} width={e.fallback.startsWith("icon:") ? undefined : id === "match-hands-heart" ? "128px" : e.ratio === "1 / 1" ? "72px" : "112px"} />
+                <figcaption>
+                  <code>{id}</code>
+                  <br />
+                  {e.file} · {e.priority}
                 </figcaption>
               </figure>
             ))}
