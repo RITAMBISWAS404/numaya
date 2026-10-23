@@ -1,26 +1,21 @@
 # Third-party notices
 
-## Solar Icon Set (icon artwork)
+## Phosphor Icons (icon artwork and React wrapper)
 
-- **Creator:** 480 Design
-- **Source:** [Solar Icons Set on Figma Community](https://www.figma.com/community/file/1166831539721848736)
-- **Licence:** [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)
+- **Authors:** Phosphor Icons (Tobias Fried, Helena Zhang) — [phosphoricons.com](https://phosphoricons.com),
+  [github.com/phosphor-icons/react](https://github.com/phosphor-icons/react)
+- **Package:** `@phosphor-icons/react` 2.1.10 (pinned)
+- **Licence:** MIT (artwork and code). Copyright (c) 2020 Phosphor Icons.
 - **Use in Numaya:** the interface icons, rendered through the shared `Icon` component
-  (`src/design-system/components/Icon.jsx`). The tick inside checked checkboxes
-  (`src/design-system/styles/selection.css`) inlines Solar's `check` path.
-- **Changes:** stroke width set per state (1.5 / 2, 2.5 for the Pass action), colour set by the
-  surrounding component. Glyph drawings are otherwise unmodified.
+  (`src/design-system/components/Icon.jsx`), imported per icon. Chosen in October 2026 as the
+  closest open match to the current Meetup iOS iconography; it is not Meetup's own icon set.
+- **Changes:** none to the drawings; weight (regular, bold, fill, duotone) and colour are set by
+  the surrounding component.
 - **Visible credit:** the flow previews footer, the prototype brief and the design-system Icons
-  section name Solar, 480 Design and the licence.
+  section name Phosphor and its licence.
 
-## @solar-icons/react (React wrapper)
-
-- **Author:** Hakim Saoudi — [github.com/saoudi-h/solar-icons](https://github.com/saoudi-h/solar-icons)
-- **Version:** 2.3.2 (pinned)
-- **Licence:** MIT. The wrapper's MIT licence covers its code only; the icon artwork it ships stays
-  under CC BY 4.0 (above).
-- Not to be confused with the separate `solar-icon-set` npm package (GPL-3.0), which Numaya does
-  not use.
+The earlier Solar icon set (480 Design, CC BY 4.0) and its `@solar-icons/react` wrapper were removed
+in the same pass; no Solar artwork ships any more.
 
 ## Fonts
 

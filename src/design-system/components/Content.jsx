@@ -203,7 +203,7 @@ export function InfoCard({ icon = "info", title, children, id, className }) {
   return (
     <div className={cx("info-card", className)} id={id}>
       <span className="info-card__icon" aria-hidden="true">
-        <Icon name={icon} size={20} />
+        <Icon name={icon} size={22} weight="duotone" />
       </span>
       <span className="info-card__text">
         <span className="info-card__title">{title}</span>
@@ -237,7 +237,7 @@ export function SetupProgress({ title, steps, className }) {
         {steps.map((step) => (
           <li key={step.label} className={cx("setup-progress__step", `is-${step.status}`)} aria-current={step.status === "active" ? "step" : undefined}>
             <span className="setup-progress__icon" aria-hidden="true">
-              <Icon name={step.status === "done" ? "check" : step.icon} size={20} stroke={step.status === "done" ? 2.6 : undefined} />
+              <Icon name={step.status === "done" ? "check" : step.icon} size={20} weight={step.status === "done" ? "bold" : "fill"} />
             </span>
             <span className="setup-progress__text">
               <span className="setup-progress__label">{step.label}</span>
@@ -262,7 +262,7 @@ export function SharedInterests({ title = "You both like", items, className }) {
     <section className={cx("card", "shared-interests", className)}>
       <h2 className="shared-interests__title">
         <span className="shared-interests__mark" aria-hidden="true">
-          <Icon name="heart" size={20} />
+          <Icon name="heart" size={20} weight="fill" />
         </span>
         {title}
       </h2>
@@ -504,7 +504,7 @@ export function EmptyState({ icon = "sparkle", art = false, artSrc, title, child
         <IllustrationPlaceholder id={typeof art === "string" ? art : undefined} src={artSrc} ratio="5 / 4" width="160px" className="empty-state__art" />
       ) : (
         <span className="empty-state__icon" aria-hidden="true">
-          <Icon name={icon} size={28} />
+          <Icon name={icon} size={28} weight="duotone" />
         </span>
       )}
       <h3 className="empty-state__title">{title}</h3>

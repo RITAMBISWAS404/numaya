@@ -1265,8 +1265,8 @@ export const tokens = [
     "name": "--type-hero-weight",
     "layer": "semantic",
     "type": "fontWeight",
-    "value": "440",
-    "resolved": "440",
+    "value": "520",
+    "resolved": "520",
     "description": null
   },
   {
@@ -1301,8 +1301,8 @@ export const tokens = [
     "name": "--type-display-weight",
     "layer": "semantic",
     "type": "fontWeight",
-    "value": "440",
-    "resolved": "440",
+    "value": "520",
+    "resolved": "520",
     "description": null
   },
   {
@@ -1337,8 +1337,8 @@ export const tokens = [
     "name": "--type-headline-weight",
     "layer": "semantic",
     "type": "fontWeight",
-    "value": "440",
-    "resolved": "440",
+    "value": "520",
+    "resolved": "520",
     "description": null
   },
   {
@@ -1373,8 +1373,8 @@ export const tokens = [
     "name": "--type-title-weight",
     "layer": "semantic",
     "type": "fontWeight",
-    "value": "450",
-    "resolved": "450",
+    "value": "520",
+    "resolved": "520",
     "description": null
   },
   {
@@ -1409,8 +1409,8 @@ export const tokens = [
     "name": "--type-title-sm-weight",
     "layer": "semantic",
     "type": "fontWeight",
-    "value": "450",
-    "resolved": "450",
+    "value": "520",
+    "resolved": "520",
     "description": null
   },
   {

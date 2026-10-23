@@ -116,8 +116,8 @@
   text-align: center;
 }
 
-/* Bumble options menu: a floating white card of centred actions over the scrim; Cancel is a second
-   card below (Meetup elevation: the only overlay tier with a visible shadow). */
+/* Bumble options sheet with Meetup's menu styling: a floating white card of left-aligned rows, each
+   with a line icon (Meetup "View profile / Archive / Block / Report"); Cancel is a second card below. */
 .sheet--actions .sheet__panel {
   padding: 0 var(--space-3) calc(var(--safe-bottom) + var(--space-2));
   background: transparent;
@@ -146,9 +146,10 @@
 .action-sheet__item {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
+  justify-content: flex-start;
+  gap: var(--space-3);
   min-height: 54px;
+  padding: 0 var(--space-5);
   font-size: var(--type-body-size);
   font-weight: var(--font-weight-medium);
   transition: background-color var(--motion-duration-fast);

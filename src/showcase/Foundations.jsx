@@ -55,7 +55,7 @@ export function Foundations() {
       <Section
         id="brand"
         title="Brand"
-        intro="Numaya keeps its name, wordmark, Fraunces, Inter and Solar icons; the visual system follows Meetup. The brand colour is Meetup's purple #7262C7 (sampled from the current iOS app): selected chips and pills, outgoing bubbles, SuperSwipe, send, progress, links and focus. White on it is 4.90:1. Primary actions, switches and checkboxes are ink. Meetup's secondary colours frame avatars, badges and guidance cards, never text."
+        intro="Numaya keeps its name, wordmark, Fraunces and Inter; the visual system, icons included, follows Meetup. The brand colour is Meetup's purple #7262C7 (sampled from the current iOS app): selected chips and pills, outgoing bubbles, SuperSwipe, send, progress, links and focus. White on it is 4.90:1. Primary actions, switches and checkboxes are ink. Meetup's secondary colours frame avatars, badges and guidance cards, never text."
       >
         <Grid min={240}>
           <Specimen title="Wordmark" note="The Numaya mark in brand purple with an accent-rose dot">
@@ -222,7 +222,7 @@ export function Foundations() {
         </div>
       </Section>
 
-      <Section id="icons" title="Icons" intro="Solar icons (by 480 Design, CC BY 4.0), one family. Linear at a 1.5 stroke for inactive and secondary icons, a 2 stroke inside filled controls and at small sizes, Solar Bold (the filled drawing of the same symbol) for active states such as the current tab or a liked heart. Icon-only controls always carry an accessible label.">
+      <Section id="icons" title="Icons" intro="Phosphor Icons (MIT), one family, chosen as the closest open match to Meetup's iconography (Meetup's own set is proprietary). Regular line glyphs by default, the fill weight for active and emphasised states (current tab, Like, verified), bold inside small marks, duotone for spot icons on guidance cards and empty states. Icon-only controls always carry an accessible label.">
         <div className="sc-icons">
           {ICON_NAMES.map((n) => (
             <div key={n} className="sc-icons__item">
@@ -230,6 +230,16 @@ export function Foundations() {
               <code>{n}</code>
             </div>
           ))}
+        </div>
+        <div className="sc-icons">
+          {["fill", "duotone"].map((w) =>
+            ["heart", "message", "bell", "user", "lock", "camera"].map((n) => (
+              <div key={w + n} className="sc-icons__item">
+                <Icon name={n} weight={w} />
+                <code>{n} · {w}</code>
+              </div>
+            )),
+          )}
         </div>
       </Section>
     </>

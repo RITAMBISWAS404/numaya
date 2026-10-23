@@ -295,7 +295,7 @@ try {
           badgeIcon: cs("#intro .result__badge").color,
           chipFg: cs("#interests .chip.is-selected").color,
           chipTick: cs("#interests .chip.is-selected .chip__affordance").color,
-          chipIcons: [...document.querySelectorAll("#interests .chip")].every((c) => c.querySelector(".chip__icon[class*='-bold']")),
+          chipIcons: [...document.querySelectorAll("#interests .chip")].every((c) => c.querySelector("svg.chip__icon[data-icon][data-weight='regular']")),
           slotFilled: cs("#photos .photo-slot .image-placeholder").backgroundColor,
           slotEmpty: cs("#photos .photo-slot--empty").backgroundColor,
           slotEmptyEdge: cs("#photos .photo-slot--empty").boxShadow,
@@ -317,7 +317,7 @@ try {
       check("flows: like is an ink action (Meetup primary sheen) with a white glyph", states.likeBg.includes(INK) && states.likeFg === "rgb(255, 255, 255)", `${states.likeBg.slice(0, 60)} / ${states.likeFg}`);
       check("flows: SuperSwipe is the single brand-purple action, with a white star", states.superBg === BRAND && states.superFg === WHITE, `${states.superBg} / ${states.superFg}`);
       check("flows: selected interest is a brand-purple pill with white text and a white minus-circle (Meetup)", states.chipBg === BRAND && states.chipRing === "none" && states.chipFg === WHITE && states.chipTick === WHITE, `${states.chipBg} / ${states.chipFg} / ${states.chipTick}`);
-      check("flows: every interest chip leads with a filled Solar cue", states.chipIcons);
+      check("flows: every interest chip leads with a Meetup-style line icon cue", states.chipIcons);
       check("flows: selecting a chip keeps its size (no reflow)", states.chipSizes[0] === states.chipSizes[1] && states.chipSizes[2] === states.chipSizes[3], states.chipSizes.join(" / "));
       check("flows: success badge is a purple cookie shape with a white check and no white disc", states.badgeShape === BRAND && states.badgeIcon === "rgb(255, 255, 255)" && states.badgeDisc === "none", `${states.badgeShape} / ${states.badgeIcon} / ${states.badgeDisc}`);
       check("photos: empty slots (white, hairline) are distinct from filled photo placeholders (grey)", states.slotEmpty === "rgb(255, 255, 255)" && /inset/.test(states.slotEmptyEdge) && states.slotFilled !== states.slotEmpty, `${states.slotFilled} vs ${states.slotEmpty}`);
@@ -393,11 +393,12 @@ try {
           actionsAfterSections: (() => { const secs = document.querySelectorAll("#discovery .fl-pf__section"); const bar = document.querySelector("#discovery .fl-pf > .action-bar"); return secs.length >= 2 && [...secs].every((s) => s.compareDocumentPosition(bar) & Node.DOCUMENT_POSITION_FOLLOWING); })(),
           tabItemMin: Math.min(...items.map((r) => Math.min(r.width, r.height))),
           tabCurrent: tab.querySelectorAll(".tab-bar__item[aria-current='page']").length,
-          icons: document.querySelectorAll("#discovery svg.solar").length,
-          foreignIcons: document.querySelectorAll("svg.ph, [class*='phosphor'], svg[viewBox='0 0 256 256']").length,
+          icons: document.querySelectorAll("#discovery svg.icon[data-icon][viewBox='0 0 256 256']").length,
+          foreignIcons: document.querySelectorAll("svg[class*='solar'], svg[viewBox='0 0 24 24']:not(.result__shape):not([class*='ring'])").length,
           tabWeights: [...document.querySelectorAll("#discovery .tab-bar__item")].map((t) => `${t.classList.contains("is-current") ? "on" : "off"}:${t.querySelector("svg").dataset.weight}`),
-          lineGlyphs: [...document.querySelectorAll("#settings .top-bar svg, #chat .top-bar svg")].map((s) => s.getAttribute("class").match(/solar-([\w-]+)/)?.[1]).filter(Boolean),
+          lineGlyphs: [...document.querySelectorAll("#settings .top-bar svg, #chat .top-bar svg")].map((s) => s.dataset.icon).filter(Boolean),
           legacyStrokeIcons: document.querySelectorAll("#discovery svg[stroke-linecap='round'][viewBox='0 0 24 24']").length,
+          icons24: [...document.querySelectorAll("svg[viewBox='0 0 24 24']")].map((s) => s.getAttribute("class")),
         };
       });
       check("geometry: buttons are pills (Meetup)", geo.btnRadius >= 999, `${geo.btnRadius}px`);
@@ -476,8 +477,8 @@ try {
       check("layout: profile photo strip keeps 4 columns; inbox rows are plain, not boxed (Bumble)", roll.stripCols === 4 && roll.inboxRows > 0 && !roll.inboxBoxed, `${roll.stripCols} cols / ${roll.inboxRows} rows / boxed ${roll.inboxBoxed}`);
       check("navigation: tab targets are at least 44px", geo.tabItemMin >= 44, `${Math.round(geo.tabItemMin)}px`);
       check("navigation: exactly one current tab", geo.tabCurrent === 1);
-      check("icons: Solar glyphs render and no other icon family or legacy stroke icons remain", geo.icons > 0 && geo.foreignIcons === 0 && geo.legacyStrokeIcons === 0, `${geo.icons} solar / ${geo.foreignIcons} other / ${geo.legacyStrokeIcons} legacy`);
-      check("icons: the current tab uses the filled Solar glyph, the others the line glyph (Meetup)", geo.tabWeights.every((w) => w === "on:fill" || w === "off:regular") && geo.tabWeights.filter((w) => w === "on:fill").length === 1, geo.tabWeights.join(" "));
+      check("icons: Phosphor glyphs render and no Solar or other icon family remains", geo.icons > 0 && geo.foreignIcons === 0 && geo.legacyStrokeIcons === 0, `${geo.icons} phosphor / ${geo.foreignIcons} other / ${geo.legacyStrokeIcons} legacy / ${geo.icons24.join(",")}`);
+      check("icons: the current tab uses the filled glyph, the others the line glyph (Meetup)", geo.tabWeights.every((w) => w === "on:fill" || w === "off:regular") && geo.tabWeights.filter((w) => w === "on:fill").length === 1, geo.tabWeights.join(" "));
 
       await f("basics").getByLabel("First name").focus();
       await wait(500); // let the focus-ring transition finish before reading computed styles

@@ -11,7 +11,7 @@ export function PermissionPrimer({ icon, title, children, allowLabel = "Allow", 
   return (
     <div className="primer">
       <span className="primer__icon" aria-hidden="true">
-        <Icon name={icon} size={28} stroke={1.9} />
+        <Icon name={icon} size={28} weight="duotone" />
       </span>
       <h2 className="primer__title">{title}</h2>
       <div className="primer__body">{children}</div>
@@ -48,7 +48,7 @@ export function MatchCelebration({ names, title = <>It’s a <Emphasis>match</Em
           <Icon name="image" size={28} />
         </span>
         <span className="match__mark">
-          <Icon name="heart" size={18} />
+          <Icon name="heart" size={20} weight="fill" />
         </span>
       </div>
       <h2 className="match__title">{title}</h2>

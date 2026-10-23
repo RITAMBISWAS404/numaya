@@ -67,14 +67,14 @@ export const INTERESTS = [
   "Natural wine", "Jazz", "Cooking", "Climbing", "Film photography", "Museums", "Running", "Board games", "Travel", "Poetry",
 ];
 
-/** Leading Solar Bold cue for each interest chip. */
+/** Leading icon cue for each interest chip (Phosphor line glyph). */
 export const INTEREST_ICONS = {
   "Natural wine": "wine",
   Jazz: "music",
   Cooking: "cooking",
   Climbing: "hiking",
   "Film photography": "camera",
-  Museums: "art",
+  Museums: "museum",
   Running: "running",
   "Board games": "games",
   Travel: "plane",

@@ -94,18 +94,23 @@ collapse (1ms / 120ms / 160ms) and movement becomes fades. Spinners keep rotatin
 
 ## Icons
 
-[Solar](https://www.figma.com/community/file/1166831539721848736) by 480 Design (CC BY 4.0) via
-`@solar-icons/react` (MIT, pinned), imported per icon through the shared `Icon` wrapper (no other
-icon family, no emoji icons; credits in [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)).
-**Filled by default:** every icon with a recognisable filled drawing renders as Solar Bold (`fill`).
-Line glyphs without a meaningful fill (chevrons, arrows, check, plus, close, search, closed eye, undo)
-render as Solar Linear: `regular` (1.5 stroke) or `bold` (2 stroke, inside filled controls and at
-small sizes). `regular` on a fillable icon is used only where an outline carries meaning (the
-unliked heart of a like toggle). Tabs follow Meetup: line glyphs in ink when idle, the filled glyph in
-brand purple with a deep-purple label when current. The
-ellipsis ("more") always uses Solar's solid dots; the Pass X uses a 2.5 stroke to hold its own in
-the ink circle. Duotone and Broken styles are not used. Sizes 16 / 20 / 24 (tab bar 24). Icon-only controls always have an
-accessible label; the icons themselves are `aria-hidden`.
+[Phosphor Icons](https://phosphoricons.com) (MIT) via `@phosphor-icons/react` 2.1.10 (pinned),
+imported per icon through the shared `Icon` wrapper. Chosen as the closest open match to the
+current Meetup iOS iconography (thin rounded line glyphs; the same glyph filled in purple when
+active; lavender-filled spot icons). Meetup's own set is proprietary and unpublished, so this is a
+stylistic match, not Meetup's assets. No other icon family ships (credits in
+[THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)).
+
+- **regular** (default): line glyphs everywhere: tabs, menus, list rows, chips, fields, top bars.
+- **fill**: the current tab, Like and SuperSwipe, the match heart, the "You both like" mark,
+  verified seals, setup-progress tiles.
+- **bold**: line glyphs inside small marks (badge checks) or beside heavy neighbours (the Pass X).
+- **duotone**: spot icons on guidance cards, empty states and permission primers (Meetup's
+  lavender-filled spot icons).
+
+Sizes 16 / 20 / 24 (tab bar 24, spot icons 22–28). Icon-only controls always have an accessible
+label; the icons themselves are `aria-hidden`. Action-sheet rows carry a line icon before the label,
+left-aligned, as in Meetup's options menu.
 
 ## Navigation
 

@@ -387,13 +387,18 @@ button.chip:active {
   cursor: pointer;
 }
 
-/* Meetup choice rows: white with a hairline; the selected row takes a 2px ink outline. */
+/* Meetup choice rows: full pills, white with a hairline; the selected row takes a 2px ink outline.
+   A row that carries a description keeps the 20px card corner (a two-line pill reads poorly). */
 .option-card {
-  padding: 14px var(--space-4);
-  border-radius: var(--radius-lg);
+  padding: 14px var(--space-5);
+  border-radius: var(--radius-pill);
   background: var(--color-surface);
   box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-strong);
   transition: background-color var(--motion-duration-base), box-shadow var(--motion-duration-base);
+}
+
+.option-card:has(.choice__description) {
+  border-radius: var(--radius-lg);
 }
 
 .option-card:active,
@@ -452,7 +457,7 @@ button.chip:active {
 }
 
 /* Checked (Meetup): an ink box with a white tick, and an ink radio with a white gap around its dot.
-   The tick is Solar's check path, inlined so the native input needs no extra markup. */
+   The tick is a simple check path, inlined so the native input needs no extra markup. */
 .choice__input--checkbox:checked {
   background: var(--color-surface-inverse)
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E")

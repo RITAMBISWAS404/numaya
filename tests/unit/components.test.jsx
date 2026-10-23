@@ -312,21 +312,33 @@ describe("expressive details", () => {
 });
 
 describe("icons and navigation", () => {
-  it("Icon renders decorative Solar glyphs, matched filled variants, and ignores unknown names", () => {
+  it("Icon renders decorative Phosphor glyphs in the requested weight, and ignores unknown names", () => {
     const { container } = render(
       <>
         <Icon name="heart" weight="fill" />
         <Icon name="check" stroke={2.4} />
+        <Icon name="message" />
+        <Icon name="lock" weight="duotone" />
+        <Icon name="verified" />
         <Icon name="doesNotExist" />
       </>,
     );
-    const svgs = container.querySelectorAll("svg");
-    expect(svgs).toHaveLength(2);
+    const svgs = [...container.querySelectorAll("svg")];
+    expect(svgs).toHaveLength(5);
     svgs.forEach((s) => expect(s).toHaveAttribute("aria-hidden", "true"));
-    svgs.forEach((s) => expect(s.getAttribute("class")).toMatch(/\bsolar\b/));
-    expect(svgs[0].getAttribute("class")).toContain("solar-heart-bold");
-    expect(svgs[1].getAttribute("class")).toContain("solar-check-linear");
-    expect(svgs[1].style.strokeWidth).toBe("2");
+    svgs.forEach((s) => expect(s.getAttribute("class")).toMatch(/\bicon\b/));
+    expect(svgs.map((s) => `${s.dataset.icon}:${s.dataset.weight}`)).toEqual(["heart:fill", "check:bold", "message:regular", "lock:duotone", "verified:fill"]);
+    // Phosphor draws every weight on a 256 grid; Solar (24) is gone.
+    svgs.forEach((s) => expect(s.getAttribute("viewBox")).toBe("0 0 256 256"));
+    // Duotone carries the lavender-ready translucent layer.
+    expect(svgs[3].querySelector("[opacity]")).not.toBeNull();
+  });
+
+  it("no Solar icon package is installed or imported", async () => {
+    const { readFileSync, readdirSync } = await import("node:fs");
+    expect(JSON.parse(readFileSync("package.json", "utf8")).dependencies["@solar-icons/react"]).toBeUndefined();
+    const src = readdirSync("src", { recursive: true }).filter((f) => /\.(jsx?|css)$/.test(f));
+    for (const f of src) expect(readFileSync(`src/${f}`, "utf8"), f).not.toMatch(/@solar-icons/);
   });
 
   it("TabBar marks the current tab, reports changes and labels badges", async () => {

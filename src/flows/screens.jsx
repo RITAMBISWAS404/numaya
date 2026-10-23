@@ -686,8 +686,8 @@ export function Chat({ go }) {
         open={menu}
         onClose={() => setMenu(false)}
         actions={[
-          { label: "Unmatch", onSelect: () => { setMenu(false); setConfirm(true); } },
-          { label: "Report or block", tone: "destructive", onSelect: () => { setMenu(false); setReport(true); } },
+          { label: "Unmatch", icon: "userMinus", onSelect: () => { setMenu(false); setConfirm(true); } },
+          { label: "Report or block", icon: "flag", tone: "destructive", onSelect: () => { setMenu(false); setReport(true); } },
         ]}
       />
       <Sheet open={report} onClose={() => setReport(false)} labelledBy="fl-report-title">
@@ -943,6 +943,7 @@ export function EditProfile({ go }) {
             ? [
                 {
                   label: "Make main photo",
+                  icon: "star",
                   onSelect: () => {
                     set({ photos: [photos[index], ...photos.filter((p) => p.id !== photoId)] });
                     setPhotoId(null);
@@ -953,6 +954,7 @@ export function EditProfile({ go }) {
             : []),
           {
             label: "Remove photo",
+            icon: "trash",
             tone: "destructive",
             onSelect: () => {
               remove(photoId);

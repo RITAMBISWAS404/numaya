@@ -2,7 +2,7 @@
 
 **Bumble for UX and layout** ([reference map](bumble-reference-map.md)), **Meetup for the whole UI
 system** (palette, surfaces, components, spacing), **Numaya for identity** (name, wordmark, Fraunces
-headings, Inter text, Solar icons). Since the October 2026 migration the old pink `#F770E3` is retired:
+headings, Inter text). Since the October 2026 migration the old pink `#F770E3` is retired:
 the brand colour is Meetup's sampled purple. This map fixes one visual decision per component family.
 
 ## Meetup visual-system migration (October 2026)
@@ -14,9 +14,11 @@ the brand colour is Meetup's sampled purple. This map fixes one visual decision 
 | Palette | Unchanged from the sampled table below: purple `#7262C7` leads; Meetup neutrals, lavender, periwinkle; rose, yellow, orange and green by role only | Migration samples (Mobbin previews) |
 | Legacy pink | Removed from every production source, including the favicon and the `theme-color` meta that page-level checks could not see. `tests/unit/legacy-colour.test.js` fails on any value in the old hue family (hex, short hex, rgb/rgba, hsl) in `src/`, `public/` and the HTML entry points, and on the retired token names. No exceptions | Source scan |
 | Accent naming | The Meetup accent primitive is `rose` (`#EA698C`, `#C1486A`), so no token is named after the retired pink | — |
-| Icons | Meetup's glyphs are thin rounded line icons that switch to a filled purple glyph when active, with lavender-filled duotone spot icons. Meetup's own icon set is proprietary and not published, so the closest open family is used (see Icons) | Tab bars, options menu, composer and spot icon crops of the screens below |
+| Icons | **Phosphor Icons** (MIT) replace Solar: regular line glyphs by default, fill for active and emphasised states, bold in small marks, duotone for spot icons. Meetup's own icon set is proprietary and not published, so Phosphor is the closest open match, not Meetup's assets | Tab bars, options menu, composer and spot icon crops of the screens below |
+| Option rows | Single-line choice rows are full pills (Meetup radio rows); rows with a description keep 20px | Radio-row screens |
+| Options menu | Action-sheet rows are left-aligned with a line icon (Meetup options menu); the sheet itself stays Bumble's bottom sheet | Options menu screen |
 | Logo | **Not integrated: no logo file was attached to the session.** The current Numaya mark (purple rounded square with a rose dot) stays as a placeholder. Replacement point: drop the supplied file at `public/brand/numaya-logo.svg` (or `.png`) and set `LOGO_SRC` in `src/design-system/components/Brand.jsx`; `Wordmark` then renders the asset at its native aspect ratio and the favicon can be regenerated from it | — |
-| Typography | Fraunces and Inter kept (Numaya exception) | Product decision |
+| Typography | Fraunces and Inter kept (Numaya exception). Display, headline and title weights raised from 440 to 520 so headings carry Meetup's firmer hierarchy | Product decision; rendered 440 / 520 / 600 comparison |
 
 ### References opened for the migration
 
@@ -125,7 +127,7 @@ Mobbin as screenshots:
 | Section headings | Bold, ≈ 20px, count in grey, "See all" link right | Fraunces 20 (Numaya type); counts grey |
 | Dividers | Hairlines inside cards, inset | Kept |
 | Corner hierarchy | Large photos softest, cards next, controls tighter | `radius.photo` 32 (Discover card, profile photos, match photos) ≥ sheets `xl` 28 > `radius.card` 24 (section cards, grouped rows, prompt cards, options menu, illustration areas) > `lg` 20 (bubbles, banners) > `md` 16 (inputs, option cards, photo slots) > code cells 12; pills and circles unchanged |
-| Icons | Outlined, ≈ 1.5px strokes, filled for active states | **Solar** (480 Design, CC BY 4.0) throughout, replacing Phosphor by product decision. **Filled (Solar Bold) by default** wherever a recognisable filled drawing exists; line glyphs (chevrons, arrows, check, plus, close, search) stay Linear because their Bold forms read as triangles or blobs. Tabs are all filled: soft grey when idle, brand pink when current. Earlier objections were resolved in context: Discover uses Solar `Copy` (two stacked rounded cards) instead of the device-like carousel glyph, and the Pass X takes a 2.5 stroke. Credits in the flows footer, the prototype brief and the showcase |
+| Icons | Thin rounded line icons (house, user-plus, magnifier, bell, chat circle, archive, circled X, flag, pin); the active tab is the same glyph filled in purple; spot icons are lavender-filled with an ink outline | **Phosphor** regular / fill / duotone through the shared `Icon` (see foundations) |
 | Success badge | Accent ring around a light centre | Result badge (success): a 9-sided "cookie" in brand purple with a white check on a lavender halo of the same shape (Material shape set). Reserved for success; safety outcomes stay round and neutral |
 | Motion and press feedback | Quick, quiet feedback; content never waits on animation | Every pressable has a press state (scale for buttons, circles and tiles; a background tint for rows and cards). Entrances: a new Discover profile rises in, the match photos settle into their tilt and the mark lands, a selected chip settles. Exits use the motion tokens. Under reduced motion everything becomes a fade or an instant change |
 | Identity shape | Circular avatars throughout | **Rounded-rectangle avatars** (radius 30% of the side; plain `border-radius`, no squircle), with the completion ring tracing the same shape. The earlier `corner-shape` squircle was removed everywhere by product decision |
@@ -144,7 +146,7 @@ Mobbin as screenshots:
 | Actions (`ActionBar`) | End of Discover profile | Pass / SuperSwipe / Like | E4 ink "Ticket" button, E1 "Map" accent pill | Ink gradient pills (72×56, radius 28), accent SuperSwipe pill with a white star | Pills instead of circles, chosen from a rendered comparison: larger targets that echo the pill fields and chips. Bumble positions kept |
 | Buttons (`Button`) | All screens | Primary, secondary, quiet, destructive | O, H, E4 | Ink pill, grey pill, text | — |
 | Icon buttons (`IconButton`) | Headers, sheets | Back, close, filters | O back circle, G header | White circle + soft shadow | — |
-| Chips (`ChipGroup`, static chips) | Interests, Edit profile, Discover | Interests, facts | E2 filter pills, G "looking to" pills | Pills; interests carry a leading filled Solar cue (wine, music note, chef hat, hiking, camera, palette, running, gamepad, plane, pen); selected = ink with a pink tick | Solar has no climbing, museum or dice glyph: hiking, palette and a gamepad are the nearest cues. Selected treatment re-compared (A solid pink + white, B ink + pink tick, C pale tint) with long labels: B kept, because A puts white text on pink (2.51:1) and C's pink tick fades on the tint |
+| Chips (`ChipGroup`, static chips) | Interests, Edit profile, Discover | Interests, facts | Interest pills, filter pills | Meetup pills: white + hairline with a plus-circle; selected brand purple with white text and a minus-circle; each interest leads with a Phosphor line cue (wine, music notes, cooking pot, mountains, camera, museum, running, dice, airplane, feather) | Same height selected and unselected, so selecting never reflows |
 | Sliders (`Slider`, `RangeSlider`) | Filters (Settings, Discover filters sheet) | Age, distance | — (gap) | White thumbs with a soft shadow, brand-pink selected interval on a 6px grey rail, in a bordered group | No Meetup slider found; pink interval by product preference |
 | List groups (`ListGroup`, `ListRow`) | Filters, Settings, Profile, report sheet | Grouped rows | S1/S2 | Hairline-bordered 16px groups, grey heading above, grey footnote below, inset dividers | — |
 | Switch | Settings | Preferences | S1/S2 | Pink when on, grey when off, white thumb, no outline | Pink instead of Meetup's black |

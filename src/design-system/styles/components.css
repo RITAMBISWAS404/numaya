@@ -794,7 +794,7 @@
   color: var(--color-brand);
 }
 
-/* Inactive tabs use the Solar line glyph in ink (Meetup); the current one the filled glyph in purple. */
+/* Inactive tabs use the line glyph in ink (Meetup); the current one the filled glyph in purple. */
 .tab-bar__icon {
   position: relative;
   display: grid;
