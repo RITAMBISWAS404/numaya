@@ -206,7 +206,7 @@ export function ActivityExplore({ go }) {
             </ul>
           </>
         ) : (
-          <EmptyState icon="filter" title={filtered ? "Nothing matches these filters" : "No activities nearby yet"} action={filtered ? "Clear filters" : "Choose another area"} onAction={() => (filtered ? setFilters(NO_FILTERS) : setAreaOpen(true))}>
+          <EmptyState art={filtered ? undefined : "empty-activities"} icon="filter" title={filtered ? "Nothing matches these filters" : "No activities nearby yet"} action={filtered ? "Clear filters" : "Choose another area"} onAction={() => (filtered ? setFilters(NO_FILTERS) : setAreaOpen(true))}>
             {filtered ? "Try another day, a wider distance or a different category." : "Try another area, or host one yourself."}
           </EmptyState>
         )}
@@ -270,7 +270,7 @@ export function ReportSheet({ open, onClose, subject, reasons, onSubmit, blockOp
       {done ? (
         <ResultPanel
           tone="neutral"
-          art="blocked"
+          art="safety-confirmation"
           compact
           title={<span id="fl-report2-title">Report saved</span>}
           footer={<Button onClick={() => onClose(true)}>Done</Button>}

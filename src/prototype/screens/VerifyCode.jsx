@@ -219,7 +219,7 @@ export function VerifyCode({
           <Toast open={resent}>New code sent</Toast>
           <Sheet open={done} labelledBy="done-title">
             <ResultPanel
-              art="verified"
+              art="verification-success"
               title={<span id="done-title">{intent === "signin" ? "You’re signed in" : "You’re verified"}</span>}
               footer={
                 <>

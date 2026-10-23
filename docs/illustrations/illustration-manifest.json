@@ -1,0 +1,692 @@
+{
+  "name": "Numaya illustration catalog",
+  "version": 1,
+  "assetFolder": "src/assets/illustrations/",
+  "registry": "src/design-system/illustrations/registry.js",
+  "notIllustrations": [
+    "Profile photos (dynamic content: the Match portrait, cards, avatars)",
+    "Navigation and utility icons (Material Symbols Rounded)",
+    "Profile readiness meter and progress bars (data components)",
+    "Activity and Home photo placeholders (photography, not illustration)"
+  ],
+  "illustrations": [
+    {
+      "id": "match-hands-heart",
+      "file": "numaya-match-hands-heart.png",
+      "priority": "P0",
+      "requirement": "required",
+      "status": "fallback: joining purple heart (MatchHeart)",
+      "placements": [
+        {
+          "screen": "It’s a match",
+          "route": "flows.html?screen=match",
+          "region": "Below the supporting copy, above the message composer; centred, full content width up to 320px",
+          "rendered": [
+            320,
+            128
+          ],
+          "capture": "match",
+          "screenshot": "screenshots/01-match-hands-heart.png",
+          "crop": "screenshots/01-match-hands-heart-crop.png"
+        }
+      ],
+      "purpose": "The match moment itself: two people meeting halfway and making something together.",
+      "art": "Two hands entering from the left and right edges, meeting in the centre to form a heart with fingers and thumbs. Friendly, slightly stylised (not photoreal), one hand wearing a couple of rings, the other a bracelet or watch. The heart shape should read at 120px tall. Arms may bleed off the left and right edges of the canvas.",
+      "palette": "White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks. Skin tones: a warm and a cool tone so the hands read as two different people.",
+      "ratio": "5:2 (wide)",
+      "export": {
+        "1x": [
+          320,
+          128
+        ],
+        "2x": [
+          640,
+          256
+        ],
+        "3x": [
+          960,
+          384
+        ]
+      },
+      "safeMargin": "Heart centred with 12% clear space above and below; arms may touch the left and right edges.",
+      "transparency": "Transparent PNG (sits on white).",
+      "shadows": "None in the artwork; the UI adds none either.",
+      "animation": "Planned: hands slide in from the edges and meet to form the heart (separate layers for each hand and accessory in the source file).",
+      "text": "No embedded text.",
+      "code": "IllustrationSlot id=\"match-hands-heart\""
+    },
+    {
+      "id": "welcome-hero",
+      "file": "numaya-welcome-hero.png",
+      "priority": "P1",
+      "requirement": "recommended",
+      "status": "reserved: space held, nothing drawn",
+      "placements": [
+        {
+          "screen": "Welcome (onboarding prototype)",
+          "route": "index.html",
+          "region": "The whole lavender hero above the headline panel; square, centred, up to 320px",
+          "rendered": [
+            320,
+            320
+          ],
+          "capture": "welcome",
+          "screenshot": "screenshots/02-welcome-hero.png",
+          "crop": "screenshots/02-welcome-hero-crop.png"
+        }
+      ],
+      "purpose": "First impression: Numaya is about conversation and first dates, not endless swiping.",
+      "art": "A multi-element composition: two abstract people meeting over a shared conversation (a prompt card or speech bubble between them), with a couple of small date-night props (coffee cups, a record). Inclusive, ungendered, faces simplified.",
+      "palette": "White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.",
+      "ratio": "1:1 (square)",
+      "export": {
+        "1x": [
+          320,
+          320
+        ],
+        "2x": [
+          640,
+          640
+        ],
+        "3x": [
+          960,
+          960
+        ]
+      },
+      "safeMargin": "8% clear on every side; the composition shrinks with the hero's free height, so keep the focal point central.",
+      "transparency": "Transparent PNG over the lavender wash.",
+      "shadows": "Soft ground shadow allowed inside the artwork.",
+      "animation": "Optional: gentle float or staggered reveal of elements.",
+      "text": "No embedded text.",
+      "code": "IllustrationSlot id=\"welcome-hero\""
+    },
+    {
+      "id": "verification-success",
+      "file": "numaya-verification-success.png",
+      "priority": "P1",
+      "requirement": "recommended",
+      "status": "fallback: original SVG scene \"verified\"",
+      "placements": [
+        {
+          "screen": "Verify code › success sheet",
+          "route": "index.html (after entering the code)",
+          "region": "Top of the success sheet, above \"You’re verified\"",
+          "rendered": [
+            160,
+            120
+          ],
+          "capture": "verified-sheet",
+          "screenshot": "screenshots/03-verification-success-1.png",
+          "crop": "screenshots/03-verification-success-1-crop.png"
+        },
+        {
+          "screen": "Verified → profile setup",
+          "route": "flows.html?screen=intro",
+          "region": "Top of the screen, above \"You’re verified\" (compact, 128px wide)",
+          "rendered": [
+            128,
+            96
+          ],
+          "capture": "intro",
+          "screenshot": "screenshots/03-verification-success-2.png",
+          "crop": "screenshots/03-verification-success-2-crop.png"
+        }
+      ],
+      "purpose": "Confirms the phone number is verified and the person is ready to build a profile.",
+      "art": "A phone showing a just-arrived message with a check, or a hand holding a phone with a small burst of confirmation. Calm, confident, a little celebratory.",
+      "palette": "White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.",
+      "ratio": "4:3",
+      "export": {
+        "1x": [
+          160,
+          120
+        ],
+        "2x": [
+          320,
+          240
+        ],
+        "3x": [
+          480,
+          360
+        ]
+      },
+      "safeMargin": "10% clear on every side.",
+      "transparency": "Transparent PNG.",
+      "shadows": "Flat ground shadow allowed.",
+      "animation": "None needed.",
+      "text": "No embedded text.",
+      "code": "ResultPanel art=\"verification-success\""
+    },
+    {
+      "id": "empty-conversations",
+      "file": "numaya-empty-conversations.png",
+      "priority": "P1",
+      "requirement": "recommended",
+      "status": "fallback: original SVG scene \"no-chats\"",
+      "placements": [
+        {
+          "screen": "Messages: empty",
+          "route": "flows.html?screen=chats (no matches)",
+          "region": "Above \"Connections start here\"",
+          "rendered": [
+            160,
+            120
+          ],
+          "capture": "chats-empty",
+          "screenshot": "screenshots/04-empty-conversations.png",
+          "crop": "screenshots/04-empty-conversations-crop.png"
+        }
+      ],
+      "purpose": "No conversations yet: matches lead here, and this is where chatting starts.",
+      "art": "A speech bubble with typing dots waiting for a reply, or two benches facing each other with a path between them.",
+      "palette": "White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.",
+      "ratio": "4:3",
+      "export": {
+        "1x": [
+          160,
+          120
+        ],
+        "2x": [
+          320,
+          240
+        ],
+        "3x": [
+          480,
+          360
+        ]
+      },
+      "safeMargin": "10% clear on every side.",
+      "transparency": "Transparent PNG.",
+      "shadows": "Flat ground shadow allowed.",
+      "animation": "None needed.",
+      "text": "No embedded text.",
+      "code": "EmptyState art=\"empty-conversations\""
+    },
+    {
+      "id": "empty-likes",
+      "file": "numaya-empty-likes.png",
+      "priority": "P1",
+      "requirement": "recommended",
+      "status": "fallback: original SVG scene \"no-match\"",
+      "placements": [
+        {
+          "screen": "Likes: empty",
+          "route": "flows.html?screen=likes (every like handled)",
+          "region": "Above \"No new likes right now\"",
+          "rendered": [
+            160,
+            120
+          ],
+          "capture": "likes-empty",
+          "screenshot": "screenshots/05-empty-likes-1.png",
+          "crop": "screenshots/05-empty-likes-1-crop.png"
+        },
+        {
+          "screen": "It’s a match: no new match yet",
+          "route": "flows.html?screen=match (no recent match)",
+          "region": "Above \"No new match yet\"",
+          "rendered": [
+            160,
+            120
+          ],
+          "capture": "match-empty",
+          "screenshot": "screenshots/05-empty-likes-2.png",
+          "crop": "screenshots/05-empty-likes-2-crop.png"
+        }
+      ],
+      "purpose": "Interest is on its way: nothing yet, but connections are coming. One asset serves both empty states.",
+      "art": "Two paper planes (or two small hearts) on curving paths heading towards each other, not yet met.",
+      "palette": "White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.",
+      "ratio": "4:3",
+      "export": {
+        "1x": [
+          160,
+          120
+        ],
+        "2x": [
+          320,
+          240
+        ],
+        "3x": [
+          480,
+          360
+        ]
+      },
+      "safeMargin": "10% clear on every side; paths may run close to the edges.",
+      "transparency": "Transparent PNG.",
+      "shadows": "None.",
+      "animation": "Optional: planes drift along their paths.",
+      "text": "No embedded text.",
+      "code": "EmptyState art=\"empty-likes\""
+    },
+    {
+      "id": "empty-activities",
+      "file": "numaya-empty-activities.png",
+      "priority": "P1",
+      "requirement": "recommended",
+      "status": "placeholder: plain event glyph (new illustration needed)",
+      "placements": [
+        {
+          "screen": "My activities: nothing upcoming",
+          "route": "flows.html?screen=my-activities (no joins)",
+          "region": "Above \"Nothing coming up\" (also Hosting, Requests and Past empty sections)",
+          "rendered": [
+            160,
+            120
+          ],
+          "capture": "my-activities-empty",
+          "screenshot": "screenshots/06-empty-activities-1.png",
+          "crop": "screenshots/06-empty-activities-1-crop.png"
+        },
+        {
+          "screen": "Activity Explore: none nearby",
+          "route": "flows.html?screen=activity (no activities in the area)",
+          "region": "Above \"No activities nearby yet\" (not the filtered-empty state, which keeps its filter icon)",
+          "rendered": [
+            160,
+            120
+          ],
+          "capture": "explore-empty",
+          "screenshot": "screenshots/06-empty-activities-2.png",
+          "crop": "screenshots/06-empty-activities-2-crop.png"
+        }
+      ],
+      "purpose": "No activities yet: invite people to join one or host their own.",
+      "art": "A small calendar page or event ticket with a few friendly objects around it (a coffee cup, walking shoes, a record), suggesting plans waiting to happen.",
+      "palette": "White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.",
+      "ratio": "4:3",
+      "export": {
+        "1x": [
+          160,
+          120
+        ],
+        "2x": [
+          320,
+          240
+        ],
+        "3x": [
+          480,
+          360
+        ]
+      },
+      "safeMargin": "10% clear on every side.",
+      "transparency": "Transparent PNG.",
+      "shadows": "Flat ground shadow allowed.",
+      "animation": "None needed.",
+      "text": "No embedded text (no dates or numbers on the calendar).",
+      "code": "EmptyState art=\"empty-activities\""
+    },
+    {
+      "id": "home-caught-up",
+      "file": "numaya-home-caught-up.png",
+      "priority": "P1",
+      "requirement": "recommended",
+      "status": "fallback: original SVG scene \"seen-everyone\"",
+      "placements": [
+        {
+          "screen": "Home: seen everyone",
+          "route": "flows.html?screen=discovery (every profile decided)",
+          "region": "Above \"You’ve seen everyone for now\"",
+          "rendered": [
+            160,
+            120
+          ],
+          "capture": "home-caught-up",
+          "screenshot": "screenshots/07-home-caught-up.png",
+          "crop": "screenshots/07-home-caught-up-crop.png"
+        }
+      ],
+      "purpose": "You’re caught up: new people arrive every day, no pressure.",
+      "art": "A small fanned stack of profile cards with the front one face-down or blank, or an open door with soft light: more to come tomorrow.",
+      "palette": "White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.",
+      "ratio": "4:3",
+      "export": {
+        "1x": [
+          160,
+          120
+        ],
+        "2x": [
+          320,
+          240
+        ],
+        "3x": [
+          480,
+          360
+        ]
+      },
+      "safeMargin": "10% clear on every side.",
+      "transparency": "Transparent PNG.",
+      "shadows": "Flat ground shadow allowed.",
+      "animation": "None needed.",
+      "text": "No embedded text.",
+      "code": "EmptyState art=\"home-caught-up\""
+    },
+    {
+      "id": "unmatch-outcome",
+      "file": "numaya-unmatch-outcome.png",
+      "priority": "P1",
+      "requirement": "recommended",
+      "status": "fallback: original SVG scene \"unmatched\"",
+      "placements": [
+        {
+          "screen": "Conversation ended: unmatched",
+          "route": "flows.html?screen=chat (after Unmatch)",
+          "region": "Above \"You’ve unmatched …\"",
+          "rendered": [
+            160,
+            120
+          ],
+          "capture": "unmatched",
+          "screenshot": "screenshots/08-unmatch-outcome.png",
+          "crop": "screenshots/08-unmatch-outcome-crop.png"
+        }
+      ],
+      "purpose": "A conversation has ended. Neutral and calm: no blame, no celebration.",
+      "art": "Two speech bubbles drifting apart, or a closed notebook. Quiet, simple, respectful.",
+      "palette": "Neutrals only (#141316 ink, greys #E9E8EB–#8A8A90) with at most a faint lavender wash; no purple accent, no sparkles: this is a safety outcome, not a celebration.",
+      "ratio": "4:3",
+      "export": {
+        "1x": [
+          160,
+          120
+        ],
+        "2x": [
+          320,
+          240
+        ],
+        "3x": [
+          480,
+          360
+        ]
+      },
+      "safeMargin": "10% clear on every side.",
+      "transparency": "Transparent PNG.",
+      "shadows": "None.",
+      "animation": "None.",
+      "text": "No embedded text.",
+      "code": "ResultPanel art=\"unmatch-outcome\""
+    },
+    {
+      "id": "safety-confirmation",
+      "file": "numaya-safety-confirmation.png",
+      "priority": "P1",
+      "requirement": "recommended",
+      "status": "fallback: original SVG scene \"blocked\"",
+      "placements": [
+        {
+          "screen": "Conversation ended: blocked / reported and blocked",
+          "route": "flows.html?screen=chat (after Block or Report)",
+          "region": "Above \"You’ve blocked …\" / \"You’ve reported and blocked …\"",
+          "rendered": [
+            160,
+            120
+          ],
+          "capture": "blocked",
+          "screenshot": "screenshots/09-safety-confirmation-1.png",
+          "crop": "screenshots/09-safety-confirmation-1-crop.png"
+        },
+        {
+          "screen": "Report sheet: report saved",
+          "route": "Activity details › options › Report activity (after sending)",
+          "region": "Top of the sheet's outcome (compact, 128px wide)",
+          "rendered": [
+            128,
+            96
+          ],
+          "capture": "report-saved",
+          "screenshot": "screenshots/09-safety-confirmation-2.png",
+          "crop": "screenshots/09-safety-confirmation-2-crop.png"
+        }
+      ],
+      "purpose": "You’re safe: the person or activity is blocked, and the report is recorded. Reassuring, never alarming.",
+      "art": "A shield or a closed gate with a small flag; steady and protective. Never show the other person.",
+      "palette": "Neutrals only (#141316 ink, greys #E9E8EB–#8A8A90) with at most a faint lavender wash; no purple accent, no sparkles: this is a safety outcome, not a celebration.",
+      "ratio": "4:3",
+      "export": {
+        "1x": [
+          160,
+          120
+        ],
+        "2x": [
+          320,
+          240
+        ],
+        "3x": [
+          480,
+          360
+        ]
+      },
+      "safeMargin": "10% clear on every side.",
+      "transparency": "Transparent PNG.",
+      "shadows": "None.",
+      "animation": "None.",
+      "text": "No embedded text.",
+      "code": "ResultPanel art=\"safety-confirmation\""
+    },
+    {
+      "id": "home-paused",
+      "file": "numaya-home-paused.png",
+      "priority": "P2",
+      "requirement": "optional",
+      "status": "fallback: original SVG scene \"paused\"",
+      "placements": [
+        {
+          "screen": "Home: paused (Snooze on)",
+          "route": "flows.html?screen=discovery (Snooze on)",
+          "region": "Above \"Home is paused\"",
+          "rendered": [
+            160,
+            120
+          ],
+          "capture": "home-paused",
+          "screenshot": "screenshots/10-home-paused.png",
+          "crop": "screenshots/10-home-paused-crop.png"
+        }
+      ],
+      "purpose": "A guilt-free break: you’re hidden, matches and chats stay.",
+      "art": "A crescent moon with a quiet \"z\" (as a shape, not text), or a figure resting in a hammock.",
+      "palette": "White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.",
+      "ratio": "4:3",
+      "export": {
+        "1x": [
+          160,
+          120
+        ],
+        "2x": [
+          320,
+          240
+        ],
+        "3x": [
+          480,
+          360
+        ]
+      },
+      "safeMargin": "10% clear on every side.",
+      "transparency": "Transparent PNG.",
+      "shadows": "None.",
+      "animation": "None.",
+      "text": "No letters; any \"z\" is drawn as a shape.",
+      "code": "EmptyState art=\"home-paused\""
+    },
+    {
+      "id": "activity-published",
+      "file": "numaya-activity-published.png",
+      "priority": "P2",
+      "requirement": "optional",
+      "status": "placeholder: plain event glyph (new illustration needed)",
+      "placements": [
+        {
+          "screen": "Create activity: published",
+          "route": "flows.html?screen=activity-form (after Publish)",
+          "region": "Above \"Your activity is published\"",
+          "rendered": [
+            160,
+            120
+          ],
+          "capture": "activity-published",
+          "screenshot": "screenshots/11-activity-published.png",
+          "crop": "screenshots/11-activity-published-crop.png"
+        }
+      ],
+      "purpose": "Your activity is live in Explore: people nearby can join.",
+      "art": "A pinned event card or ticket with a small group of abstract figures gathering around it.",
+      "palette": "White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.",
+      "ratio": "4:3",
+      "export": {
+        "1x": [
+          160,
+          120
+        ],
+        "2x": [
+          320,
+          240
+        ],
+        "3x": [
+          480,
+          360
+        ]
+      },
+      "safeMargin": "10% clear on every side.",
+      "transparency": "Transparent PNG.",
+      "shadows": "Flat ground shadow allowed.",
+      "animation": "None needed.",
+      "text": "No embedded text.",
+      "code": "ResultPanel art=\"activity-published\""
+    },
+    {
+      "id": "maintenance",
+      "file": "numaya-maintenance.png",
+      "priority": "P2",
+      "requirement": "optional",
+      "status": "placeholder: plain maintenance glyph (new illustration needed)",
+      "placements": [
+        {
+          "screen": "System state: service unavailable",
+          "route": "flows.html?screen=maintenance (Settings › Prototype tools)",
+          "region": "Above \"We’ll be right back\"",
+          "rendered": [
+            160,
+            120
+          ],
+          "capture": "maintenance",
+          "screenshot": "screenshots/12-maintenance.png",
+          "crop": "screenshots/12-maintenance-crop.png"
+        }
+      ],
+      "purpose": "Temporary downtime: everything is safe, try again soon.",
+      "art": "A friendly toolbox or a small figure tightening a bolt on a heart-shaped machine. Light, not technical.",
+      "palette": "White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.",
+      "ratio": "4:3",
+      "export": {
+        "1x": [
+          160,
+          120
+        ],
+        "2x": [
+          320,
+          240
+        ],
+        "3x": [
+          480,
+          360
+        ]
+      },
+      "safeMargin": "10% clear on every side.",
+      "transparency": "Transparent PNG.",
+      "shadows": "None.",
+      "animation": "None.",
+      "text": "No embedded text.",
+      "code": "ResultPanel art=\"maintenance\""
+    },
+    {
+      "id": "spot-basics",
+      "file": "numaya-spot-basics.png",
+      "priority": "P2",
+      "requirement": "optional",
+      "status": "fallback: original SVG scene \"hello\"",
+      "placements": [
+        {
+          "screen": "Profile creation: the basics",
+          "route": "flows.html?screen=basics",
+          "region": "Right of the two-line title, top-aligned (72 × 72)",
+          "rendered": [
+            72,
+            72
+          ],
+          "capture": "basics",
+          "screenshot": "screenshots/13-spot-basics.png",
+          "crop": "screenshots/13-spot-basics-crop.png"
+        }
+      ],
+      "purpose": "A light touch on a form step: introducing yourself.",
+      "art": "A \"hello\" name tag (drawn, no letters) or a waving hand.",
+      "palette": "White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.",
+      "ratio": "1:1 (square spot)",
+      "export": {
+        "1x": [
+          72,
+          72
+        ],
+        "2x": [
+          144,
+          144
+        ],
+        "3x": [
+          216,
+          216
+        ]
+      },
+      "safeMargin": "6% clear on every side; must read at 72px.",
+      "transparency": "Transparent PNG.",
+      "shadows": "None.",
+      "animation": "None.",
+      "text": "No embedded text.",
+      "code": "IllustrationSlot id=\"spot-basics\""
+    },
+    {
+      "id": "spot-interests",
+      "file": "numaya-spot-interests.png",
+      "priority": "P2",
+      "requirement": "optional",
+      "status": "fallback: original SVG scene \"interests\"",
+      "placements": [
+        {
+          "screen": "Profile creation: interests and prompts",
+          "route": "flows.html?screen=interests",
+          "region": "Right of the two-line title, top-aligned (72 × 72)",
+          "rendered": [
+            72,
+            72
+          ],
+          "capture": "interests",
+          "screenshot": "screenshots/14-spot-interests.png",
+          "crop": "screenshots/14-spot-interests-crop.png"
+        }
+      ],
+      "purpose": "Interests as conversation starters.",
+      "art": "A small cluster of loved things bumping together: a record, a climbing hold, a coffee cup.",
+      "palette": "White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.",
+      "ratio": "1:1 (square spot)",
+      "export": {
+        "1x": [
+          72,
+          72
+        ],
+        "2x": [
+          144,
+          144
+        ],
+        "3x": [
+          216,
+          216
+        ]
+      },
+      "safeMargin": "6% clear on every side; must read at 72px.",
+      "transparency": "Transparent PNG.",
+      "shadows": "None.",
+      "animation": "None.",
+      "text": "No embedded text.",
+      "code": "IllustrationSlot id=\"spot-interests\""
+    }
+  ]
+}

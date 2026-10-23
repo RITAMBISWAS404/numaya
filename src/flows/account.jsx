@@ -400,7 +400,7 @@ export function Maintenance({ go }) {
       <div className="fl-center fl-fill">
         <ResultPanel
           tone="neutral"
-          icon="maintenance"
+          art="maintenance"
           title="We’ll be right back"
           footer={
             <div className="fl-stack fl-stack--full">

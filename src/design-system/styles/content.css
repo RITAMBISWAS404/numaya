@@ -1032,6 +1032,20 @@ button.list-row__hit:hover {
   height: 100%;
 }
 
+/* Icon fallback: a plain glyph sized like the empty-state and result icons it stands in for. */
+.illustration-slot--icon {
+  display: grid;
+  color: var(--color-text-secondary);
+}
+
+.result--success .illustration-slot--icon {
+  color: var(--color-brand);
+}
+
+.welcome__art.illustration-slot--fallback {
+  visibility: hidden;
+}
+
 /* Fallback for the hands artwork: two heart halves join in purple. */
 .match-heart {
   overflow: visible;

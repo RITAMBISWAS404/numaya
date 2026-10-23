@@ -5,6 +5,12 @@ rendered by one component: `Illustration` (`src/design-system/components/Illustr
 Components take them optionally: `ResultPanel art`, `EmptyState art` and `ScreenHeader art`.
 Every scene is decorative (`aria-hidden`); the title and copy beside it carry the meaning.
 
+> **Asset catalog:** every illustration slot, its future PNG and its exact placement on annotated
+> screenshots lives in [`illustrations/index.html`](illustrations/index.html) (manifest:
+> [`illustrations/illustration-manifest.json`](illustrations/illustration-manifest.json)). Screens
+> use slots by id through `IllustrationSlot` (`src/design-system/illustrations/registry.js`); the SVG
+> scenes below are the slots' fallbacks until the PNGs are supplied.
+
 ## Style
 
 - **One composition per scene.** Never a badge or tick stacked on a blob; a check, when there is

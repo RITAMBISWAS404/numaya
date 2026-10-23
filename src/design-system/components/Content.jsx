@@ -2,6 +2,8 @@ import { cx } from "../../lib/cx.js";
 import { Icon } from "./Icon.jsx";
 import { IconButton } from "./Button.jsx";
 import { Illustration } from "./Illustration.jsx";
+import { IllustrationSlot } from "./IllustrationSlot.jsx";
+import { ILLUSTRATIONS } from "../illustrations/registry.js";
 
 /* -------------------------------------------------------------------------- */
 /* Identity                                                                    */
@@ -507,7 +509,7 @@ export function EmptyState({ icon = "sparkle", art, artSrc, title, children, act
       {artSrc ? (
         <img className="illustration empty-state__art" src={artSrc} alt="" width="160" />
       ) : art ? (
-        <Illustration scene={art} className="empty-state__art" />
+        ILLUSTRATIONS[art] ? <IllustrationSlot id={art} width={ILLUSTRATIONS[art].fallback.startsWith("icon:") ? undefined : "160px"} className="empty-state__art" /> : <Illustration scene={art} className="empty-state__art" />
       ) : (
         <Icon name={icon} size={40} className="empty-state__icon" />
       )}
@@ -534,7 +536,11 @@ export function ResultPanel({ tone = "success", art, icon, title, children, foot
   return (
     <div className={cx("result", `result--${tone}`, compact && "result--compact")}>
       {art ? (
-        <Illustration scene={art} width={compact ? 128 : 160} className="result__art" />
+        ILLUSTRATIONS[art] ? (
+          <IllustrationSlot id={art} width={ILLUSTRATIONS[art].fallback.startsWith("icon:") ? undefined : `${compact ? 128 : 160}px`} className="result__art" />
+        ) : (
+          <Illustration scene={art} width={compact ? 128 : 160} className="result__art" />
+        )
       ) : (
         <span className="result__icon" aria-hidden="true">
           <Icon name={icon ?? RESULT_ICON[tone]} size={44} />

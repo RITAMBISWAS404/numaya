@@ -107,7 +107,7 @@ try {
     await p.locator(".keypad__suggestion").click({ timeout: 5000 });
     await wait(3200);
     const verified = await p.evaluate(() => {
-      const art = document.querySelector(".sheet .result__art[data-scene='verified']");
+      const art = document.querySelector(".sheet .result__art[data-illustration='verification-success'] [data-scene='verified']");
       return { art: !!art, hidden: art?.getAttribute("aria-hidden"), brand: art && getComputedStyle(art.querySelector(".ill__brand")).fill, stack: document.querySelectorAll(".result__badge, .result__shape, [data-illustration='verified-success']").length };
     });
     check("verified sheet: one illustration (phone with a purple message) and no badge stacked on a shape", verified.art && verified.hidden === "true" && verified.brand === "rgb(114, 98, 199)" && verified.stack === 0, JSON.stringify(verified));
@@ -309,7 +309,7 @@ try {
           chipBg: cs("#interests .chip.is-selected").backgroundColor,
           chipRing: cs("#interests .chip.is-selected").boxShadow,
           chipSizes: (() => { const sel = document.querySelector("#interests .chip.is-selected"), un = document.querySelector("#interests .chip:not(.is-selected)"); const a = getComputedStyle(sel), b = getComputedStyle(un); return [sel.getBoundingClientRect().height, un.getBoundingClientRect().height, a.paddingLeft, b.paddingLeft]; })(),
-          introArt: !!document.querySelector("#intro .result__art[data-scene='verified']"),
+          introArt: !!document.querySelector("#intro .result__art[data-illustration='verification-success'] [data-scene='verified']"),
           introStack: document.querySelectorAll("#intro .result__badge, #intro .result__shape").length,
           chipFg: cs("#interests .chip.is-selected").color,
           chipTick: cs("#interests .chip.is-selected .chip__affordance").color,
@@ -583,8 +583,8 @@ try {
       await p.getByRole("dialog").getByRole("button", { name: "Send report" }).click();
       await wait(600);
       check("flows: report (with block, the default) ends in an honest outcome", (await textOf("chat")).includes("You’ve reported and blocked Maya") && (await textOf("chat")).includes("kept on this device only"));
-      const outcome = await p.evaluate(() => { const r = document.querySelector("#chat .result"); const art = r.querySelector(".result__art"); return { neutral: r.classList.contains("result--neutral"), scene: art?.dataset.scene, brand: art?.querySelectorAll(".ill__brand").length, checks: r.querySelectorAll("[data-icon='check'], [data-icon='verified'], .result__badge").length }; });
-      check("flows: blocking ends on its own neutral illustration (shield and flag), no purple and no success check", outcome.neutral && outcome.scene === "blocked" && outcome.brand === 0 && outcome.checks === 0, JSON.stringify(outcome));
+      const outcome = await p.evaluate(() => { const r = document.querySelector("#chat .result"); const art = r.querySelector(".result__art [data-scene]"); return { neutral: r.classList.contains("result--neutral"), slot: r.querySelector(".result__art")?.dataset.illustration, scene: art?.dataset.scene, brand: art?.querySelectorAll(".ill__brand").length, checks: r.querySelectorAll("[data-icon='check'], [data-icon='verified'], .result__badge").length }; });
+      check("flows: blocking ends on its own neutral illustration (shield and flag), no purple and no success check", outcome.neutral && outcome.slot === "safety-confirmation" && outcome.scene === "blocked" && outcome.brand === 0 && outcome.checks === 0, JSON.stringify(outcome));
       check("flows: blocked person leaves the inbox", !(await textOf("chats")).includes("Maya"));
       check("flows: settings counts the blocked person", /Blocked people 1/.test(await textOf("settings")));
       await f("chats").getByRole("button", { name: /Jo/ }).first().click();

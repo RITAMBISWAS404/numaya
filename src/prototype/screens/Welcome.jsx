@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, IllustrationPlaceholder, Screen, Toast } from "../../design-system/index.js";
+import { Button, IllustrationSlot, Screen, Toast } from "../../design-system/index.js";
 
 export function Welcome({ active, onCreate, onSignIn }) {
   const [notice, setNotice] = useState(null);
@@ -20,7 +20,7 @@ export function Welcome({ active, onCreate, onSignIn }) {
       {/* Reserved for the multi-illustration hero composition (docs/numaya-illustration-map.md):
           the space is held, but nothing is drawn until the artwork is supplied. */}
       <div className="welcome__hero">
-        <IllustrationPlaceholder id="welcome-hero" ratio="1 / 1" reserved className="welcome__art" />
+        <IllustrationSlot id="welcome-hero" className="welcome__art" />
       </div>
 
       <div className="welcome__panel">

@@ -515,3 +515,21 @@ describe("match screen and illustration slots", () => {
     expect(files.every((f) => /^numaya-[a-z0-9]+(-[a-z0-9]+)*\.png$/.test(f))).toBe(true);
   });
 });
+
+describe("illustration catalog", () => {
+  it("the manifest and the registry list the same slots, files and priorities", async () => {
+    const { readFileSync, existsSync } = await import("node:fs");
+    const { ILLUSTRATIONS } = await import("../../src/design-system/index.js");
+    const manifest = JSON.parse(readFileSync("docs/illustrations/illustration-manifest.json", "utf8"));
+    const fromManifest = Object.fromEntries(manifest.illustrations.map((e) => [e.id, [e.file, e.priority]]));
+    const fromCode = Object.fromEntries(Object.entries(ILLUSTRATIONS).map(([id, e]) => [id, [e.file, e.priority]]));
+    expect(fromManifest).toEqual(fromCode);
+    for (const e of manifest.illustrations) {
+      expect(e.placements.length).toBeGreaterThan(0);
+      for (const pl of e.placements) {
+        expect(existsSync(`docs/illustrations/${pl.screenshot}`)).toBe(true);
+        expect(existsSync(`docs/illustrations/${pl.crop}`)).toBe(true);
+      }
+    }
+  });
+});

@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numaya illustration catalog</title>
+<style>
+  :root { --ink:#141316; --muted:#66656b; --line:#e9e8eb; --soft:#f7f7f8; --brand:#7262c7; --tint:#f3f0fd; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: var(--ink); font: 15px/1.5 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+  h1 { margin: 0 0 8px; font: 600 34px/1.15 Georgia, "Times New Roman", serif; }
+  h2 { margin: 0; font-size: 17px; }
+  code { font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--soft); padding: 1px 5px; border-radius: 6px; }
+  .lede { max-width: 760px; color: var(--muted); }
+  .summary { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0; padding: 0; list-style: none; }
+  .summary li { padding: 12px 16px; border-radius: 14px; background: var(--soft); }
+  .summary strong { display: block; font-size: 22px; }
+  nav ol { columns: 2 280px; padding-left: 20px; }
+  .entry { margin-top: 40px; padding: 24px; border: 1px solid var(--line); border-radius: 20px; }
+  .entry__head { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
+  .num { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--brand); color: #fff; font-weight: 600; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+  .prio { padding: 1px 8px; border-radius: 999px; font-weight: 600; background: var(--soft); }
+  .prio--P0 { background: var(--brand); color: #fff; }
+  .prio--P1 { background: var(--tint); color: #4f4296; }
+  .entry__body { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px; }
+  .shots { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; align-content: start; }
+  figure { margin: 0; }
+  figure img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 14px; }
+  figcaption { margin-top: 6px; color: var(--muted); font-size: 12.5px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; align-self: start; }
+  th, td { padding: 8px 0; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  th { width: 128px; padding-right: 12px; color: var(--muted); font-weight: 600; }
+  .note { padding: 16px 20px; border-radius: 16px; background: var(--tint); }
+  @media (max-width: 820px) { .entry__body { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Numaya illustration catalog</h1>
+  <p class="lede">Every place a Numaya illustration belongs, shown on the real screens with the area outlined. Make each PNG with the exact file name, put it in <code>src/assets/illustrations/</code>, and it replaces the slot's fallback on the next build. Details: <a href="README.md">README</a> · <a href="asset-guidelines.md">asset guidelines</a> · <a href="illustration-manifest.json">manifest</a>.</p>
+  <ul class="summary">
+    <li><strong>14</strong>PNG assets</li>
+    <li><strong>18</strong>placements</li>
+    <li><strong>1</strong>P0 essential</li>
+    <li><strong>8</strong>P1 high value</li>
+    <li><strong>5</strong>P2 optional</li>
+  </ul>
+  <p class="note"><strong>Not illustrations</strong> (not listed here): Profile photos (dynamic content: the Match portrait, cards, avatars); Navigation and utility icons (Material Symbols Rounded); Profile readiness meter and progress bars (data components); Activity and Home photo placeholders (photography, not illustration).</p>
+  <nav aria-label="Assets"><ol><li><a href="#match-hands-heart"><code>numaya-match-hands-heart.png</code></a> · P0</li><li><a href="#welcome-hero"><code>numaya-welcome-hero.png</code></a> · P1</li><li><a href="#verification-success"><code>numaya-verification-success.png</code></a> · P1</li><li><a href="#empty-conversations"><code>numaya-empty-conversations.png</code></a> · P1</li><li><a href="#empty-likes"><code>numaya-empty-likes.png</code></a> · P1</li><li><a href="#empty-activities"><code>numaya-empty-activities.png</code></a> · P1</li><li><a href="#home-caught-up"><code>numaya-home-caught-up.png</code></a> · P1</li><li><a href="#unmatch-outcome"><code>numaya-unmatch-outcome.png</code></a> · P1</li><li><a href="#safety-confirmation"><code>numaya-safety-confirmation.png</code></a> · P1</li><li><a href="#home-paused"><code>numaya-home-paused.png</code></a> · P2</li><li><a href="#activity-published"><code>numaya-activity-published.png</code></a> · P2</li><li><a href="#maintenance"><code>numaya-maintenance.png</code></a> · P2</li><li><a href="#spot-basics"><code>numaya-spot-basics.png</code></a> · P2</li><li><a href="#spot-interests"><code>numaya-spot-interests.png</code></a> · P2</li></ol></nav>
+  
+<article class="entry" id="match-hands-heart">
+  <header class="entry__head">
+    <span class="num">1</span>
+    <div>
+      <h2><code>numaya-match-hands-heart.png</code></h2>
+      <p class="meta"><span class="prio prio--P0">P0 · required</span> <span>ID <code>match-hands-heart</code></span> <span>Code <code>IllustrationSlot id="match-hands-heart"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/01-match-hands-heart.png"><img src="screenshots/01-match-hands-heart.png" alt="It’s a match with the numaya-match-hands-heart.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>It’s a match</strong><br><code>flows.html?screen=match</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/01-match-hands-heart-crop.png" alt="Close-up of the numaya-match-hands-heart.png area">
+        <figcaption>Below the supporting copy, above the message composer; centred, full content width up to 320px<br>Rendered at 320 × 128 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>The match moment itself: two people meeting halfway and making something together.</td></tr>
+      <tr><th scope="row">Art direction</th><td>Two hands entering from the left and right edges, meeting in the centre to form a heart with fingers and thumbs. Friendly, slightly stylised (not photoreal), one hand wearing a couple of rings, the other a bracelet or watch. The heart shape should read at 120px tall. Arms may bleed off the left and right edges of the canvas.</td></tr>
+      <tr><th scope="row">Palette</th><td>White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks. Skin tones: a warm and a cool tone so the hands read as two different people.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>5:2 (wide)</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 320 × 128 · @2x 640 × 256 · <strong>@3x 960 × 384 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>Heart centred with 12% clear space above and below; arms may touch the left and right edges.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG (sits on white).</td></tr>
+      <tr><th scope="row">Shadows</th><td>None in the artwork; the UI adds none either.</td></tr>
+      <tr><th scope="row">Text</th><td>No embedded text.</td></tr>
+      <tr><th scope="row">Animation</th><td>Planned: hands slide in from the edges and meet to form the heart (separate layers for each hand and accessory in the source file).</td></tr>
+      <tr><th scope="row">Status today</th><td>fallback: joining purple heart (MatchHeart)</td></tr>
+    </table>
+  </div>
+</article>
+<article class="entry" id="welcome-hero">
+  <header class="entry__head">
+    <span class="num">2</span>
+    <div>
+      <h2><code>numaya-welcome-hero.png</code></h2>
+      <p class="meta"><span class="prio prio--P1">P1 · recommended</span> <span>ID <code>welcome-hero</code></span> <span>Code <code>IllustrationSlot id="welcome-hero"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/02-welcome-hero.png"><img src="screenshots/02-welcome-hero.png" alt="Welcome (onboarding prototype) with the numaya-welcome-hero.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Welcome (onboarding prototype)</strong><br><code>index.html</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/02-welcome-hero-crop.png" alt="Close-up of the numaya-welcome-hero.png area">
+        <figcaption>The whole lavender hero above the headline panel; square, centred, up to 320px<br>Rendered at 320 × 320 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>First impression: Numaya is about conversation and first dates, not endless swiping.</td></tr>
+      <tr><th scope="row">Art direction</th><td>A multi-element composition: two abstract people meeting over a shared conversation (a prompt card or speech bubble between them), with a couple of small date-night props (coffee cups, a record). Inclusive, ungendered, faces simplified.</td></tr>
+      <tr><th scope="row">Palette</th><td>White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>1:1 (square)</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 320 × 320 · @2x 640 × 640 · <strong>@3x 960 × 960 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>8% clear on every side; the composition shrinks with the hero's free height, so keep the focal point central.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG over the lavender wash.</td></tr>
+      <tr><th scope="row">Shadows</th><td>Soft ground shadow allowed inside the artwork.</td></tr>
+      <tr><th scope="row">Text</th><td>No embedded text.</td></tr>
+      <tr><th scope="row">Animation</th><td>Optional: gentle float or staggered reveal of elements.</td></tr>
+      <tr><th scope="row">Status today</th><td>reserved: space held, nothing drawn</td></tr>
+    </table>
+  </div>
+</article>
+<article class="entry" id="verification-success">
+  <header class="entry__head">
+    <span class="num">3</span>
+    <div>
+      <h2><code>numaya-verification-success.png</code></h2>
+      <p class="meta"><span class="prio prio--P1">P1 · recommended</span> <span>ID <code>verification-success</code></span> <span>Code <code>ResultPanel art="verification-success"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/03-verification-success-1.png"><img src="screenshots/03-verification-success-1.png" alt="Verify code › success sheet with the numaya-verification-success.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Verify code › success sheet</strong><br><code>index.html (after entering the code)</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/03-verification-success-1-crop.png" alt="Close-up of the numaya-verification-success.png area">
+        <figcaption>Top of the success sheet, above "You’re verified"<br>Rendered at 160 × 120 px</figcaption>
+      </figure>
+      <figure>
+        <a href="screenshots/03-verification-success-2.png"><img src="screenshots/03-verification-success-2.png" alt="Verified → profile setup with the numaya-verification-success.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Verified → profile setup</strong><br><code>flows.html?screen=intro</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/03-verification-success-2-crop.png" alt="Close-up of the numaya-verification-success.png area">
+        <figcaption>Top of the screen, above "You’re verified" (compact, 128px wide)<br>Rendered at 128 × 96 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>Confirms the phone number is verified and the person is ready to build a profile.</td></tr>
+      <tr><th scope="row">Art direction</th><td>A phone showing a just-arrived message with a check, or a hand holding a phone with a small burst of confirmation. Calm, confident, a little celebratory.</td></tr>
+      <tr><th scope="row">Palette</th><td>White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>4:3</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 160 × 120 · @2x 320 × 240 · <strong>@3x 480 × 360 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>10% clear on every side.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG.</td></tr>
+      <tr><th scope="row">Shadows</th><td>Flat ground shadow allowed.</td></tr>
+      <tr><th scope="row">Text</th><td>No embedded text.</td></tr>
+      <tr><th scope="row">Animation</th><td>None needed.</td></tr>
+      <tr><th scope="row">Status today</th><td>fallback: original SVG scene "verified"</td></tr>
+    </table>
+  </div>
+</article>
+<article class="entry" id="empty-conversations">
+  <header class="entry__head">
+    <span class="num">4</span>
+    <div>
+      <h2><code>numaya-empty-conversations.png</code></h2>
+      <p class="meta"><span class="prio prio--P1">P1 · recommended</span> <span>ID <code>empty-conversations</code></span> <span>Code <code>EmptyState art="empty-conversations"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/04-empty-conversations.png"><img src="screenshots/04-empty-conversations.png" alt="Messages: empty with the numaya-empty-conversations.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Messages: empty</strong><br><code>flows.html?screen=chats (no matches)</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/04-empty-conversations-crop.png" alt="Close-up of the numaya-empty-conversations.png area">
+        <figcaption>Above "Connections start here"<br>Rendered at 160 × 120 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>No conversations yet: matches lead here, and this is where chatting starts.</td></tr>
+      <tr><th scope="row">Art direction</th><td>A speech bubble with typing dots waiting for a reply, or two benches facing each other with a path between them.</td></tr>
+      <tr><th scope="row">Palette</th><td>White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>4:3</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 160 × 120 · @2x 320 × 240 · <strong>@3x 480 × 360 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>10% clear on every side.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG.</td></tr>
+      <tr><th scope="row">Shadows</th><td>Flat ground shadow allowed.</td></tr>
+      <tr><th scope="row">Text</th><td>No embedded text.</td></tr>
+      <tr><th scope="row">Animation</th><td>None needed.</td></tr>
+      <tr><th scope="row">Status today</th><td>fallback: original SVG scene "no-chats"</td></tr>
+    </table>
+  </div>
+</article>
+<article class="entry" id="empty-likes">
+  <header class="entry__head">
+    <span class="num">5</span>
+    <div>
+      <h2><code>numaya-empty-likes.png</code></h2>
+      <p class="meta"><span class="prio prio--P1">P1 · recommended</span> <span>ID <code>empty-likes</code></span> <span>Code <code>EmptyState art="empty-likes"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/05-empty-likes-1.png"><img src="screenshots/05-empty-likes-1.png" alt="Likes: empty with the numaya-empty-likes.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Likes: empty</strong><br><code>flows.html?screen=likes (every like handled)</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/05-empty-likes-1-crop.png" alt="Close-up of the numaya-empty-likes.png area">
+        <figcaption>Above "No new likes right now"<br>Rendered at 160 × 120 px</figcaption>
+      </figure>
+      <figure>
+        <a href="screenshots/05-empty-likes-2.png"><img src="screenshots/05-empty-likes-2.png" alt="It’s a match: no new match yet with the numaya-empty-likes.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>It’s a match: no new match yet</strong><br><code>flows.html?screen=match (no recent match)</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/05-empty-likes-2-crop.png" alt="Close-up of the numaya-empty-likes.png area">
+        <figcaption>Above "No new match yet"<br>Rendered at 160 × 120 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>Interest is on its way: nothing yet, but connections are coming. One asset serves both empty states.</td></tr>
+      <tr><th scope="row">Art direction</th><td>Two paper planes (or two small hearts) on curving paths heading towards each other, not yet met.</td></tr>
+      <tr><th scope="row">Palette</th><td>White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>4:3</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 160 × 120 · @2x 320 × 240 · <strong>@3x 480 × 360 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>10% clear on every side; paths may run close to the edges.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG.</td></tr>
+      <tr><th scope="row">Shadows</th><td>None.</td></tr>
+      <tr><th scope="row">Text</th><td>No embedded text.</td></tr>
+      <tr><th scope="row">Animation</th><td>Optional: planes drift along their paths.</td></tr>
+      <tr><th scope="row">Status today</th><td>fallback: original SVG scene "no-match"</td></tr>
+    </table>
+  </div>
+</article>
+<article class="entry" id="empty-activities">
+  <header class="entry__head">
+    <span class="num">6</span>
+    <div>
+      <h2><code>numaya-empty-activities.png</code></h2>
+      <p class="meta"><span class="prio prio--P1">P1 · recommended</span> <span>ID <code>empty-activities</code></span> <span>Code <code>EmptyState art="empty-activities"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/06-empty-activities-1.png"><img src="screenshots/06-empty-activities-1.png" alt="My activities: nothing upcoming with the numaya-empty-activities.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>My activities: nothing upcoming</strong><br><code>flows.html?screen=my-activities (no joins)</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/06-empty-activities-1-crop.png" alt="Close-up of the numaya-empty-activities.png area">
+        <figcaption>Above "Nothing coming up" (also Hosting, Requests and Past empty sections)<br>Rendered at 160 × 120 px</figcaption>
+      </figure>
+      <figure>
+        <a href="screenshots/06-empty-activities-2.png"><img src="screenshots/06-empty-activities-2.png" alt="Activity Explore: none nearby with the numaya-empty-activities.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Activity Explore: none nearby</strong><br><code>flows.html?screen=activity (no activities in the area)</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/06-empty-activities-2-crop.png" alt="Close-up of the numaya-empty-activities.png area">
+        <figcaption>Above "No activities nearby yet" (not the filtered-empty state, which keeps its filter icon)<br>Rendered at 160 × 120 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>No activities yet: invite people to join one or host their own.</td></tr>
+      <tr><th scope="row">Art direction</th><td>A small calendar page or event ticket with a few friendly objects around it (a coffee cup, walking shoes, a record), suggesting plans waiting to happen.</td></tr>
+      <tr><th scope="row">Palette</th><td>White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>4:3</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 160 × 120 · @2x 320 × 240 · <strong>@3x 480 × 360 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>10% clear on every side.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG.</td></tr>
+      <tr><th scope="row">Shadows</th><td>Flat ground shadow allowed.</td></tr>
+      <tr><th scope="row">Text</th><td>No embedded text (no dates or numbers on the calendar).</td></tr>
+      <tr><th scope="row">Animation</th><td>None needed.</td></tr>
+      <tr><th scope="row">Status today</th><td>placeholder: plain event glyph (new illustration needed)</td></tr>
+    </table>
+  </div>
+</article>
+<article class="entry" id="home-caught-up">
+  <header class="entry__head">
+    <span class="num">7</span>
+    <div>
+      <h2><code>numaya-home-caught-up.png</code></h2>
+      <p class="meta"><span class="prio prio--P1">P1 · recommended</span> <span>ID <code>home-caught-up</code></span> <span>Code <code>EmptyState art="home-caught-up"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/07-home-caught-up.png"><img src="screenshots/07-home-caught-up.png" alt="Home: seen everyone with the numaya-home-caught-up.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Home: seen everyone</strong><br><code>flows.html?screen=discovery (every profile decided)</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/07-home-caught-up-crop.png" alt="Close-up of the numaya-home-caught-up.png area">
+        <figcaption>Above "You’ve seen everyone for now"<br>Rendered at 160 × 120 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>You’re caught up: new people arrive every day, no pressure.</td></tr>
+      <tr><th scope="row">Art direction</th><td>A small fanned stack of profile cards with the front one face-down or blank, or an open door with soft light: more to come tomorrow.</td></tr>
+      <tr><th scope="row">Palette</th><td>White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>4:3</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 160 × 120 · @2x 320 × 240 · <strong>@3x 480 × 360 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>10% clear on every side.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG.</td></tr>
+      <tr><th scope="row">Shadows</th><td>Flat ground shadow allowed.</td></tr>
+      <tr><th scope="row">Text</th><td>No embedded text.</td></tr>
+      <tr><th scope="row">Animation</th><td>None needed.</td></tr>
+      <tr><th scope="row">Status today</th><td>fallback: original SVG scene "seen-everyone"</td></tr>
+    </table>
+  </div>
+</article>
+<article class="entry" id="unmatch-outcome">
+  <header class="entry__head">
+    <span class="num">8</span>
+    <div>
+      <h2><code>numaya-unmatch-outcome.png</code></h2>
+      <p class="meta"><span class="prio prio--P1">P1 · recommended</span> <span>ID <code>unmatch-outcome</code></span> <span>Code <code>ResultPanel art="unmatch-outcome"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/08-unmatch-outcome.png"><img src="screenshots/08-unmatch-outcome.png" alt="Conversation ended: unmatched with the numaya-unmatch-outcome.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Conversation ended: unmatched</strong><br><code>flows.html?screen=chat (after Unmatch)</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/08-unmatch-outcome-crop.png" alt="Close-up of the numaya-unmatch-outcome.png area">
+        <figcaption>Above "You’ve unmatched …"<br>Rendered at 160 × 120 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>A conversation has ended. Neutral and calm: no blame, no celebration.</td></tr>
+      <tr><th scope="row">Art direction</th><td>Two speech bubbles drifting apart, or a closed notebook. Quiet, simple, respectful.</td></tr>
+      <tr><th scope="row">Palette</th><td>Neutrals only (#141316 ink, greys #E9E8EB–#8A8A90) with at most a faint lavender wash; no purple accent, no sparkles: this is a safety outcome, not a celebration.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>4:3</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 160 × 120 · @2x 320 × 240 · <strong>@3x 480 × 360 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>10% clear on every side.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG.</td></tr>
+      <tr><th scope="row">Shadows</th><td>None.</td></tr>
+      <tr><th scope="row">Text</th><td>No embedded text.</td></tr>
+      <tr><th scope="row">Animation</th><td>None.</td></tr>
+      <tr><th scope="row">Status today</th><td>fallback: original SVG scene "unmatched"</td></tr>
+    </table>
+  </div>
+</article>
+<article class="entry" id="safety-confirmation">
+  <header class="entry__head">
+    <span class="num">9</span>
+    <div>
+      <h2><code>numaya-safety-confirmation.png</code></h2>
+      <p class="meta"><span class="prio prio--P1">P1 · recommended</span> <span>ID <code>safety-confirmation</code></span> <span>Code <code>ResultPanel art="safety-confirmation"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/09-safety-confirmation-1.png"><img src="screenshots/09-safety-confirmation-1.png" alt="Conversation ended: blocked / reported and blocked with the numaya-safety-confirmation.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Conversation ended: blocked / reported and blocked</strong><br><code>flows.html?screen=chat (after Block or Report)</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/09-safety-confirmation-1-crop.png" alt="Close-up of the numaya-safety-confirmation.png area">
+        <figcaption>Above "You’ve blocked …" / "You’ve reported and blocked …"<br>Rendered at 160 × 120 px</figcaption>
+      </figure>
+      <figure>
+        <a href="screenshots/09-safety-confirmation-2.png"><img src="screenshots/09-safety-confirmation-2.png" alt="Report sheet: report saved with the numaya-safety-confirmation.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Report sheet: report saved</strong><br><code>Activity details › options › Report activity (after sending)</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/09-safety-confirmation-2-crop.png" alt="Close-up of the numaya-safety-confirmation.png area">
+        <figcaption>Top of the sheet's outcome (compact, 128px wide)<br>Rendered at 128 × 96 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>You’re safe: the person or activity is blocked, and the report is recorded. Reassuring, never alarming.</td></tr>
+      <tr><th scope="row">Art direction</th><td>A shield or a closed gate with a small flag; steady and protective. Never show the other person.</td></tr>
+      <tr><th scope="row">Palette</th><td>Neutrals only (#141316 ink, greys #E9E8EB–#8A8A90) with at most a faint lavender wash; no purple accent, no sparkles: this is a safety outcome, not a celebration.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>4:3</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 160 × 120 · @2x 320 × 240 · <strong>@3x 480 × 360 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>10% clear on every side.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG.</td></tr>
+      <tr><th scope="row">Shadows</th><td>None.</td></tr>
+      <tr><th scope="row">Text</th><td>No embedded text.</td></tr>
+      <tr><th scope="row">Animation</th><td>None.</td></tr>
+      <tr><th scope="row">Status today</th><td>fallback: original SVG scene "blocked"</td></tr>
+    </table>
+  </div>
+</article>
+<article class="entry" id="home-paused">
+  <header class="entry__head">
+    <span class="num">10</span>
+    <div>
+      <h2><code>numaya-home-paused.png</code></h2>
+      <p class="meta"><span class="prio prio--P2">P2 · optional</span> <span>ID <code>home-paused</code></span> <span>Code <code>EmptyState art="home-paused"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/10-home-paused.png"><img src="screenshots/10-home-paused.png" alt="Home: paused (Snooze on) with the numaya-home-paused.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Home: paused (Snooze on)</strong><br><code>flows.html?screen=discovery (Snooze on)</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/10-home-paused-crop.png" alt="Close-up of the numaya-home-paused.png area">
+        <figcaption>Above "Home is paused"<br>Rendered at 160 × 120 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>A guilt-free break: you’re hidden, matches and chats stay.</td></tr>
+      <tr><th scope="row">Art direction</th><td>A crescent moon with a quiet "z" (as a shape, not text), or a figure resting in a hammock.</td></tr>
+      <tr><th scope="row">Palette</th><td>White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>4:3</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 160 × 120 · @2x 320 × 240 · <strong>@3x 480 × 360 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>10% clear on every side.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG.</td></tr>
+      <tr><th scope="row">Shadows</th><td>None.</td></tr>
+      <tr><th scope="row">Text</th><td>No letters; any "z" is drawn as a shape.</td></tr>
+      <tr><th scope="row">Animation</th><td>None.</td></tr>
+      <tr><th scope="row">Status today</th><td>fallback: original SVG scene "paused"</td></tr>
+    </table>
+  </div>
+</article>
+<article class="entry" id="activity-published">
+  <header class="entry__head">
+    <span class="num">11</span>
+    <div>
+      <h2><code>numaya-activity-published.png</code></h2>
+      <p class="meta"><span class="prio prio--P2">P2 · optional</span> <span>ID <code>activity-published</code></span> <span>Code <code>ResultPanel art="activity-published"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/11-activity-published.png"><img src="screenshots/11-activity-published.png" alt="Create activity: published with the numaya-activity-published.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Create activity: published</strong><br><code>flows.html?screen=activity-form (after Publish)</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/11-activity-published-crop.png" alt="Close-up of the numaya-activity-published.png area">
+        <figcaption>Above "Your activity is published"<br>Rendered at 160 × 120 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>Your activity is live in Explore: people nearby can join.</td></tr>
+      <tr><th scope="row">Art direction</th><td>A pinned event card or ticket with a small group of abstract figures gathering around it.</td></tr>
+      <tr><th scope="row">Palette</th><td>White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>4:3</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 160 × 120 · @2x 320 × 240 · <strong>@3x 480 × 360 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>10% clear on every side.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG.</td></tr>
+      <tr><th scope="row">Shadows</th><td>Flat ground shadow allowed.</td></tr>
+      <tr><th scope="row">Text</th><td>No embedded text.</td></tr>
+      <tr><th scope="row">Animation</th><td>None needed.</td></tr>
+      <tr><th scope="row">Status today</th><td>placeholder: plain event glyph (new illustration needed)</td></tr>
+    </table>
+  </div>
+</article>
+<article class="entry" id="maintenance">
+  <header class="entry__head">
+    <span class="num">12</span>
+    <div>
+      <h2><code>numaya-maintenance.png</code></h2>
+      <p class="meta"><span class="prio prio--P2">P2 · optional</span> <span>ID <code>maintenance</code></span> <span>Code <code>ResultPanel art="maintenance"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/12-maintenance.png"><img src="screenshots/12-maintenance.png" alt="System state: service unavailable with the numaya-maintenance.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>System state: service unavailable</strong><br><code>flows.html?screen=maintenance (Settings › Prototype tools)</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/12-maintenance-crop.png" alt="Close-up of the numaya-maintenance.png area">
+        <figcaption>Above "We’ll be right back"<br>Rendered at 160 × 120 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>Temporary downtime: everything is safe, try again soon.</td></tr>
+      <tr><th scope="row">Art direction</th><td>A friendly toolbox or a small figure tightening a bolt on a heart-shaped machine. Light, not technical.</td></tr>
+      <tr><th scope="row">Palette</th><td>White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>4:3</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 160 × 120 · @2x 320 × 240 · <strong>@3x 480 × 360 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>10% clear on every side.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG.</td></tr>
+      <tr><th scope="row">Shadows</th><td>None.</td></tr>
+      <tr><th scope="row">Text</th><td>No embedded text.</td></tr>
+      <tr><th scope="row">Animation</th><td>None.</td></tr>
+      <tr><th scope="row">Status today</th><td>placeholder: plain maintenance glyph (new illustration needed)</td></tr>
+    </table>
+  </div>
+</article>
+<article class="entry" id="spot-basics">
+  <header class="entry__head">
+    <span class="num">13</span>
+    <div>
+      <h2><code>numaya-spot-basics.png</code></h2>
+      <p class="meta"><span class="prio prio--P2">P2 · optional</span> <span>ID <code>spot-basics</code></span> <span>Code <code>IllustrationSlot id="spot-basics"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/13-spot-basics.png"><img src="screenshots/13-spot-basics.png" alt="Profile creation: the basics with the numaya-spot-basics.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Profile creation: the basics</strong><br><code>flows.html?screen=basics</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/13-spot-basics-crop.png" alt="Close-up of the numaya-spot-basics.png area">
+        <figcaption>Right of the two-line title, top-aligned (72 × 72)<br>Rendered at 72 × 72 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>A light touch on a form step: introducing yourself.</td></tr>
+      <tr><th scope="row">Art direction</th><td>A "hello" name tag (drawn, no letters) or a waving hand.</td></tr>
+      <tr><th scope="row">Palette</th><td>White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>1:1 (square spot)</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 72 × 72 · @2x 144 × 144 · <strong>@3x 216 × 216 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>6% clear on every side; must read at 72px.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG.</td></tr>
+      <tr><th scope="row">Shadows</th><td>None.</td></tr>
+      <tr><th scope="row">Text</th><td>No embedded text.</td></tr>
+      <tr><th scope="row">Animation</th><td>None.</td></tr>
+      <tr><th scope="row">Status today</th><td>fallback: original SVG scene "hello"</td></tr>
+    </table>
+  </div>
+</article>
+<article class="entry" id="spot-interests">
+  <header class="entry__head">
+    <span class="num">14</span>
+    <div>
+      <h2><code>numaya-spot-interests.png</code></h2>
+      <p class="meta"><span class="prio prio--P2">P2 · optional</span> <span>ID <code>spot-interests</code></span> <span>Code <code>IllustrationSlot id="spot-interests"</code></span></p>
+    </div>
+  </header>
+  <div class="entry__body">
+    <div class="shots">
+      
+      <figure>
+        <a href="screenshots/14-spot-interests.png"><img src="screenshots/14-spot-interests.png" alt="Profile creation: interests and prompts with the numaya-spot-interests.png area outlined" width="393" height="852"></a>
+        <figcaption><strong>Profile creation: interests and prompts</strong><br><code>flows.html?screen=interests</code></figcaption>
+      </figure>
+      <figure class="crop">
+        <img src="screenshots/14-spot-interests-crop.png" alt="Close-up of the numaya-spot-interests.png area">
+        <figcaption>Right of the two-line title, top-aligned (72 × 72)<br>Rendered at 72 × 72 px</figcaption>
+      </figure>
+    </div>
+    <table>
+      <tr><th scope="row">Purpose</th><td>Interests as conversation starters.</td></tr>
+      <tr><th scope="row">Art direction</th><td>A small cluster of loved things bumping together: a record, a climbing hold, a coffee cup.</td></tr>
+      <tr><th scope="row">Palette</th><td>White or transparent ground; near-black (#141316) outlines; brand purple #7262C7 as the one strong accent; lavender #F3F0FD / #E9E4FB for soft fills; Meetup periwinkle, yellow and rose only as small marks.</td></tr>
+      <tr><th scope="row">Aspect ratio</th><td>1:1 (square spot)</td></tr>
+      <tr><th scope="row">Export size</th><td>@1x 72 × 72 · @2x 144 × 144 · <strong>@3x 216 × 216 (deliver this)</strong></td></tr>
+      <tr><th scope="row">Safe margins</th><td>6% clear on every side; must read at 72px.</td></tr>
+      <tr><th scope="row">Background</th><td>Transparent PNG.</td></tr>
+      <tr><th scope="row">Shadows</th><td>None.</td></tr>
+      <tr><th scope="row">Text</th><td>No embedded text.</td></tr>
+      <tr><th scope="row">Animation</th><td>None.</td></tr>
+      <tr><th scope="row">Status today</th><td>fallback: original SVG scene "interests"</td></tr>
+    </table>
+  </div>
+</article>
+</main>
+</body>
+</html>

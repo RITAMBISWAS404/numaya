@@ -64,7 +64,7 @@ export function Likes({ go }) {
             })}
           </ul>
         ) : (
-          <EmptyState icon={filter === "nearby" ? "nearby" : filter === "activity" ? "event" : "heart"} title={title} action={action} onAction={() => (filter === "all" ? go("discovery") : filter === "activity" ? go("activity") : setFilter("all"))}>
+          <EmptyState art={filter === "all" ? "empty-likes" : undefined} icon={filter === "nearby" ? "nearby" : filter === "activity" ? "event" : "heart"} title={title} action={action} onAction={() => (filter === "all" ? go("discovery") : filter === "activity" ? go("activity") : setFilter("all"))}>
             {body}
           </EmptyState>
         )}

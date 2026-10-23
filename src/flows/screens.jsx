@@ -88,7 +88,7 @@ export function SetupIntro({ go }) {
     >
       <div className="fl-center fl-intro">
         <Wordmark />
-        <ResultPanel art="verified" compact title="You’re verified">
+        <ResultPanel art="verification-success" compact title="You’re verified">
           <p>+1 (415) 555-0132 is confirmed. Now let’s make a profile people actually want to reply to.</p>
         </ResultPanel>
         <SetupProgress title="Your profile" steps={steps} />
@@ -115,7 +115,7 @@ export function Basics({ go }) {
         </>
       }
     >
-      <ScreenHeader title="Let’s start with the basics" art={<Illustration scene="hello" width={72} />} />
+      <ScreenHeader title="Let’s start with the basics" art={<IllustrationSlot id="spot-basics" width="72px" />} />
       <div className="fl-stack fl-gap-lg">
         <TextField label="First name" value={name} onChange={(e) => set({ name: e.target.value })} autoComplete="given-name" />
         <TextField
@@ -170,7 +170,7 @@ export function InterestsPrompts({ go }) {
       <ScreenHeader
         title="What are you into?"
         lede="Pick 3 to 5. They start conversations and help us find people like you."
-        art={<Illustration scene="interests" width={72} />}
+        art={<IllustrationSlot id="spot-interests" width="72px" />}
       />
       <div className="fl-stack fl-gap-lg fl-sections">
         <ChipGroup label="Interests" options={INTERESTS} value={interests} onChange={(v) => dispatch({ type: "profile", patch: { interests: v } })} max={5} />
@@ -334,7 +334,7 @@ export function Discovery({ go }) {
     >
       {snoozed ? (
         <div className="fl-center fl-fill">
-          <EmptyState art="paused" title="Home is paused" action="Resume" onAction={() => dispatch({ type: "prefs", patch: { snooze: false } })}>
+          <EmptyState art="home-paused" title="Home is paused" action="Resume" onAction={() => dispatch({ type: "prefs", patch: { snooze: false } })}>
             You’re snoozed, so you won’t see new people and they won’t see you. Your matches and chats are still here.
           </EmptyState>
         </div>
@@ -405,7 +405,7 @@ export function Discovery({ go }) {
               {hidden} {hidden === 1 ? "person is" : "people are"} just outside ages {age[0]}–{age[1]} or {distance} km.
             </EmptyState>
           ) : (
-            <EmptyState art="seen-everyone" title="You’ve seen everyone for now" action="Show them again" onAction={() => dispatch({ type: "resetDiscovery" })}>
+            <EmptyState art="home-caught-up" title="You’ve seen everyone for now" action="Show them again" onAction={() => dispatch({ type: "resetDiscovery" })}>
               New people join every day. People you passed on can come back around.
             </EmptyState>
           )}
@@ -524,7 +524,7 @@ export function Match({ go }) {
     return (
       <Frame tone="page" top={<CloseHeader label="Back to Home" onClose={() => go("discovery")} />}>
         <div className="fl-center fl-fill">
-          <EmptyState art="no-match" title="No new match yet" action="Go to Home" onAction={() => go("discovery")}>
+          <EmptyState art="empty-likes" title="No new match yet" action="Go to Home" onAction={() => go("discovery")}>
             Like someone who has already liked you and you’ll see it here.
           </EmptyState>
         </div>
@@ -596,7 +596,7 @@ export function Chats({ go }) {
           </Banner>
         )}
         {nothingYet ? (
-          <EmptyState art="no-chats" title="Connections start here" action="Find your people" onAction={() => go("discovery")}>
+          <EmptyState art="empty-conversations" title="Connections start here" action="Find your people" onAction={() => go("discovery")}>
             When you like each other, you’ll match. Here’s where you can chat.
           </EmptyState>
         ) : (
@@ -642,9 +642,9 @@ export function Chats({ go }) {
 
 /* Outcome copy per action. Each is honest about what the preview did; nothing is "reviewed". */
 const ENDED = {
-  unmatched: { art: "unmatched", title: (n) => `You’ve unmatched ${n}`, body: (n) => `The conversation is closed for both of you and ${n} won’t appear in Home.` },
-  blocked: { art: "blocked", title: (n) => `You’ve blocked ${n}`, body: (n) => `${n} isn’t told. You won’t see each other again, and they can’t message you. Unblock any time in Settings › Blocked people.` },
-  reported: { art: "blocked", title: (n) => `You’ve reported and blocked ${n}`, body: (n) => `${n} isn’t told. In this preview the report is kept on this device only; nothing is sent or reviewed.` },
+  unmatched: { art: "unmatch-outcome", title: (n) => `You’ve unmatched ${n}`, body: (n) => `The conversation is closed for both of you and ${n} won’t appear in Home.` },
+  blocked: { art: "safety-confirmation", title: (n) => `You’ve blocked ${n}`, body: (n) => `${n} isn’t told. You won’t see each other again, and they can’t message you. Unblock any time in Settings › Blocked people.` },
+  reported: { art: "safety-confirmation", title: (n) => `You’ve reported and blocked ${n}`, body: (n) => `${n} isn’t told. In this preview the report is kept on this device only; nothing is sent or reviewed.` },
 };
 
 export function Chat({ go }) {

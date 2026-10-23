@@ -98,7 +98,8 @@ export function ActivityForm({ go }) {
         <div className="fl-center fl-fill">
           <ResultPanel
             tone="success"
-            icon={done.status === "draft" ? "draft" : "event"}
+            icon={done.status === "draft" ? "draft" : undefined}
+            art={done.status === "draft" ? undefined : "activity-published"}
             title={done.status === "draft" ? "Draft saved" : wasPublished ? "Changes saved" : "Your activity is published"}
             footer={
               <div className="fl-stack fl-stack--full">
@@ -268,7 +269,7 @@ export function MyActivities({ go }) {
             ))}
           </ul>
         ) : (
-          <EmptyState icon="event" title={meta.empty[0]} action={meta.empty[2]} onAction={() => (section === "hosting" ? create() : go("activity"))}>
+          <EmptyState art="empty-activities" title={meta.empty[0]} action={meta.empty[2]} onAction={() => (section === "hosting" ? create() : go("activity"))}>
             {meta.empty[1]}
           </EmptyState>
         )}

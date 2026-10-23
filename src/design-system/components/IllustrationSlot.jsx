@@ -1,6 +1,7 @@
 import { cx } from "../../lib/cx.js";
 import { ILLUSTRATIONS, illustrationSrc } from "../illustrations/registry.js";
 import { Illustration } from "./Illustration.jsx";
+import { Icon } from "./Icon.jsx";
 
 /** Two halves of a heart that join: the Match screen's fallback until the hands artwork arrives. */
 export function MatchHeart({ size = 56 }) {
@@ -21,6 +22,14 @@ export function IllustrationSlot({ id, width, className }) {
   const entry = ILLUSTRATIONS[id];
   if (!entry) return null;
   const src = illustrationSrc(id);
+  // Icon fallbacks keep today's compact layout; the slot takes its ratio once the PNG exists.
+  if (!src && entry.fallback.startsWith("icon:")) {
+    return (
+      <span className={cx("illustration-slot", "illustration-slot--icon", className)} data-illustration={id} data-asset={entry.file} data-status="fallback" aria-hidden="true">
+        <Icon name={entry.fallback.slice(5)} size={40} />
+      </span>
+    );
+  }
   return (
     <div
       className={cx("illustration-slot", !src && "illustration-slot--fallback", className)}
