@@ -55,4 +55,6 @@ export { PersonTile } from "./components/People.jsx";
 export { Illustration, ILLUSTRATION_SCENES } from "./components/Illustration.jsx";
 export { MessageBubble, SystemMessage, Composer, ConversationRow, MatchQueue } from "./components/Chat.jsx";
 export { PlanPicker, ComparisonTable, LegalText } from "./components/Commerce.jsx";
-export { PermissionPrimer, MatchCelebration } from "./components/Patterns.jsx";
+export { PermissionPrimer, MatchCelebration, OrganicPortrait } from "./components/Patterns.jsx";
+export { IllustrationSlot, MatchHeart } from "./components/IllustrationSlot.jsx";
+export { ILLUSTRATIONS, illustrationSrc } from "./illustrations/registry.js";

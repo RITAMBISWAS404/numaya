@@ -901,3 +901,12 @@ body {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.fl-close-head--end {
+  justify-content: flex-end;
+}
+
+/* Match: content centred in the space above the actions; it scrolls rather than squeezing. */
+.fl-match {
+  padding-block: 0 var(--space-4);
+}

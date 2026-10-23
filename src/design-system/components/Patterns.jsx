@@ -1,6 +1,7 @@
 import { cx } from "../../lib/cx.js";
 import { Button } from "./Button.jsx";
 import { Icon } from "./Icon.jsx";
+import { avatarTone } from "./Content.jsx";
 
 /**
  * Explains a device permission before the OS prompt. Primary asks; secondary defers.
@@ -34,26 +35,54 @@ export function PermissionPrimer({ icon, title, children, allowLabel = "Allow", 
  * Two tilted photos with a centre brand mark, title and supporting line (Bumble "What a match!").
  * Photo areas are neutral placeholders until profile photography is supplied. Composer sits below.
  */
-export function MatchCelebration({ names, title = "It’s a match", children }) {
+/* Organic photo frame: a ten-lobed scallop (the sketch's "fun shape"), drawn once as a path and
+   used both as the photo mask and as the slowly turning lavender backdrop behind it. */
+function scallop(lobes, radius, depth, steps = 160) {
+  const pts = Array.from({ length: steps }, (_, i) => {
+    const t = (2 * Math.PI * i) / steps;
+    const r = radius + depth * Math.cos(lobes * t);
+    return `${(50 + r * Math.cos(t)).toFixed(2)} ${(50 + r * Math.sin(t)).toFixed(2)}`;
+  });
+  return `M${pts.join("L")}Z`;
+}
+const FRAME = scallop(10, 46.5, 3);
+const FRAME_MASK = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='${FRAME}'/></svg>`)}")`;
+
+/**
+ * A person's photo inside the organic frame. `src` is their real profile photo; without one, the
+ * shared avatar fallback (their initial on their pastel) fills the frame. Never an invented portrait.
+ */
+export function OrganicPortrait({ name, src, className }) {
+  return (
+    <div className={cx("organic-portrait", className)} role="img" aria-label={src ? `Photo of ${name}` : `${name} has not added a photo yet`}>
+      <svg className="organic-portrait__backdrop" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <path d={FRAME} />
+      </svg>
+      <div className="organic-portrait__photo" style={{ WebkitMaskImage: FRAME_MASK, maskImage: FRAME_MASK }}>
+        {src ? (
+          <img src={src} alt="" />
+        ) : (
+          <span className={cx("organic-portrait__fallback", `avatar--tone-${avatarTone(name)}`)} aria-hidden="true">
+            {name?.trim()?.[0]?.toUpperCase()}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The match moment (reference: the Numaya sketch): heading, the matched person's photo in the
+ * organic frame, one line of copy and the illustration slot. White page; purple stays in the frame
+ * backdrop and the artwork. Actions (message, keep browsing) belong to the screen's footer.
+ */
+export function MatchCelebration({ name, src, title = "It’s a match!", illustration, children }) {
   return (
     <div className="match">
-      <div className="match__photos" role="img" aria-label={`Photos of ${names.join(" and ")} (placeholders)`}>
-        <span className={cx("match__photo", "match__photo--left")}>
-          <Icon name="image" size={28} />
-        </span>
-        <span className={cx("match__photo", "match__photo--right")}>
-          <Icon name="image" size={28} />
-        </span>
-        {/* Two halves of a heart meet as the photos settle: the match moment, drawn as one mark. */}
-        <span className="match__mark">
-          <svg className="match__heart" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
-            <path className="match__half match__half--left" d="M12 20.5C6.2 15.7 3 12.8 3 9.2 3 6.6 5 4.6 7.5 4.6c1.8 0 3.4 1 4.5 2.4z" />
-            <path className="match__half match__half--right" d="M12 20.5c5.8-4.8 9-7.7 9-11.3 0-2.6-2-4.6-4.5-4.6-1.8 0-3.4 1-4.5 2.4z" />
-          </svg>
-        </span>
-      </div>
-      <h2 className="match__title">{title}</h2>
+      <h1 className="match__title">{title}</h1>
+      <OrganicPortrait name={name} src={src} className="match__portrait" />
       {children && <p className="match__body">{children}</p>}
+      {illustration && <div className="match__art">{illustration}</div>}
     </div>
   );
 }

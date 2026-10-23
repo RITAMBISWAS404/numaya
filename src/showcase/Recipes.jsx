@@ -11,6 +11,7 @@ import {
   ListGroup,
   ListRow,
   MatchCelebration,
+  IllustrationSlot,
   PageDots,
   PermissionPrimer,
   PlanPicker,
@@ -152,7 +153,9 @@ function Match() {
       <div className="sc-screen">
         <TopBar onBack={() => {}} />
         <div className="sc-screen__body sc-center">
-          <MatchCelebration names={["You", "Maya"]}>You both liked each other. Say something about her prompt.</MatchCelebration>
+          <MatchCelebration name="Maya" illustration={<IllustrationSlot id="match-hands-heart" />}>
+            You and Maya liked each other. Now say hello.
+          </MatchCelebration>
         </div>
         <div className="sc-screen__footer sc-screen__footer--stack">
           <Composer

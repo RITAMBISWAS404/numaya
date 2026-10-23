@@ -483,3 +483,35 @@ describe("core screen components", () => {
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled();
   });
 });
+
+describe("match screen and illustration slots", () => {
+  it("OrganicPortrait uses the real photo when there is one, else the avatar fallback", async () => {
+    const { OrganicPortrait } = await import("../../src/design-system/index.js");
+    const { container, rerender } = render(<OrganicPortrait name="Maya" src="/photos/maya.jpg" />);
+    expect(screen.getByRole("img", { name: "Photo of Maya" })).toBeInTheDocument();
+    expect(container.querySelector("img")).toHaveAttribute("src", "/photos/maya.jpg");
+    rerender(<OrganicPortrait name="Maya" />);
+    expect(container.querySelector("img")).toBeNull();
+    expect(screen.getByRole("img", { name: "Maya has not added a photo yet" })).toHaveTextContent("M");
+  });
+
+  it("IllustrationSlot keeps its ratio and shows the registered fallback until the PNG exists", async () => {
+    const { IllustrationSlot, ILLUSTRATIONS, illustrationSrc } = await import("../../src/design-system/index.js");
+    expect(illustrationSrc("match-hands-heart")).toBeNull();
+    const { container } = render(<IllustrationSlot id="match-hands-heart" />);
+    const slot = container.querySelector("[data-illustration='match-hands-heart']");
+    expect(slot).toHaveAttribute("data-asset", "numaya-match-hands-heart.png");
+    expect(slot).toHaveAttribute("data-status", "fallback");
+    expect(slot).toHaveAttribute("aria-hidden", "true");
+    expect(slot.style.aspectRatio).toBe(ILLUSTRATIONS["match-hands-heart"].ratio);
+    expect(slot.querySelector("img")).toBeNull();
+    expect(render(<IllustrationSlot id="does-not-exist" />).container.firstChild).toBeNull();
+  });
+
+  it("every registered asset has one canonical numaya-*.png name", async () => {
+    const { ILLUSTRATIONS } = await import("../../src/design-system/index.js");
+    const files = Object.values(ILLUSTRATIONS).map((e) => e.file);
+    expect(new Set(files).size).toBe(files.length);
+    expect(files.every((f) => /^numaya-[a-z0-9]+(-[a-z0-9]+)*\.png$/.test(f))).toBe(true);
+  });
+});

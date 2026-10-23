@@ -496,7 +496,7 @@ try {
           ids: slots.map((el) => el.dataset.illustration ?? el.dataset.scene).sort(),
           blank: [...document.querySelectorAll(".illustration:not(.illustration--reserved):not(img)")].length,
           hidden: slots.every((el) => el.getAttribute("aria-hidden") === "true" || el.getAttribute("alt") === ""),
-          photoIsArt: document.querySelectorAll(".profile-card__media .ill, .photo-slot .ill, .match__photos .ill, .profile-card__media [data-illustration], .photo-slot [data-illustration], .match__photos [data-illustration]").length,
+          photoIsArt: document.querySelectorAll(".profile-card__media .ill, .photo-slot .ill, .organic-portrait .ill, .profile-card__media [data-illustration], .photo-slot [data-illustration], .organic-portrait [data-illustration]").length,
           fabVisible: fab.bottom <= screen.bottom,
         };
       });

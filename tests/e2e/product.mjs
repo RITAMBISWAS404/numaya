@@ -475,13 +475,65 @@ try {
       await wait(400);
       await p.getByRole("button", { name: "Like back" }).click();
       await wait(100);
-      const r = await p.evaluate(() => [...document.querySelectorAll(".match__half")].map((e) => getComputedStyle(e).animationName).join(","));
+      const r = await p.evaluate(() => [...document.querySelectorAll(".match-heart__half")].map((e) => getComputedStyle(e).animationName).join(","));
       await ctx.close();
       return r;
     };
     const full = await motion("no-preference");
     const reduced = await motion("reduce");
     check("match: the two heart halves join, and stay still under reduced motion", full === "heart-half-left,heart-half-right" && reduced === "none,none", `${full} / ${reduced}`);
+  }
+  /* Match screen (sketch): white page, framed photo, illustration slot, working actions */
+  {
+    const p = await phone();
+    await open(p, "likes");
+    await p.getByRole("button", { name: /Maya, 29/ }).click();
+    await wait(400);
+    await p.getByRole("button", { name: "Like back" }).click();
+    await wait(900);
+    const m = await p.evaluate(() => {
+      const screen = document.querySelector(".fl-screen");
+      const h = document.querySelector(".match__title");
+      const frame = document.querySelector(".organic-portrait");
+      const photo = frame?.querySelector(".organic-portrait__photo");
+      const slot = document.querySelector("[data-illustration='match-hands-heart']");
+      const r = (e) => e.getBoundingClientRect();
+      return {
+        bg: getComputedStyle(screen).backgroundColor,
+        heading: h?.tagName + ":" + h?.textContent,
+        headingColour: getComputedStyle(h).color,
+        frame: frame?.getAttribute("aria-label"),
+        masked: getComputedStyle(photo).webkitMaskImage.startsWith("url("),
+        size: Math.round(r(frame).width),
+        slot: slot?.dataset.asset + ":" + slot?.dataset.status,
+        broken: [...document.images].filter((i) => !i.complete || !i.naturalWidth).length,
+        order: [h, frame, document.querySelector(".match__body"), slot, document.querySelector(".composer")].every((e, i, a) => !i || r(a[i - 1]).bottom <= r(e).top + 1),
+      };
+    });
+    check("match: white page, near-black heading, then photo, copy, illustration slot and composer in order", m.bg === "rgb(255, 255, 255)" && m.heading === "H1:It’s a match!" && m.headingColour === "rgb(20, 19, 22)" && m.order, JSON.stringify(m));
+    check("match: the matched person's photo sits in the organic mask, with the avatar fallback when there is no photo", m.masked && m.frame === "Maya has not added a photo yet" && m.size >= 220, `${m.frame} ${m.size}px`);
+    check("match: the hands slot names its future PNG and shows a fallback, never a broken image", m.slot === "numaya-match-hands-heart.png:fallback" && m.broken === 0, m.slot);
+    await p.locator(".composer textarea").fill("Hello Maya!");
+    await p.locator(".composer textarea").press("Enter");
+    await wait(900);
+    const chat = await body(p);
+    check("match: sending opens that person's conversation with the message", screenId(p) === "chat" && chat.includes("Maya") && chat.includes("Hello Maya!"));
+    const p2 = await phone(375, 667);
+    await open(p2, "likes");
+    await p2.getByRole("button", { name: /Kemi, 27/ }).click();
+    await wait(400);
+    await p2.getByRole("button", { name: "Like back" }).click();
+    await wait(900);
+    const fit = await p2.evaluate(() => {
+      const b = document.querySelector(".fl-screen__body");
+      const f = document.querySelector(".fl-screen__footer").getBoundingClientRect();
+      return { overflowX: b.scrollWidth - b.clientWidth, footerOnScreen: f.bottom <= innerHeight + 1, page: document.documentElement.scrollWidth - innerWidth };
+    });
+    check("match 375: no sideways overflow and the actions stay on screen", fit.overflowX <= 0 && fit.page <= 0 && fit.footerOnScreen, JSON.stringify(fit));
+    await p2.getByRole("button", { name: "Close and keep browsing" }).click();
+    await wait(700);
+    check("match: close returns to Home", screenId(p2) === "discovery");
+    check("match: no console errors", p.errors.length === 0 && p2.errors.length === 0, [...p.errors, ...p2.errors].join(" | "));
   }
 } catch (err) {
   check("product journeys completed without an exception", false, err.message.split("\n")[0]);

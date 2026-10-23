@@ -927,104 +927,139 @@ button.list-row__hit:hover {
   margin-top: var(--space-6);
 }
 
-.match__photos {
+/* Match moment (the sketch): a white page, the heading, the photo in its organic frame on a
+   slowly turning lavender scallop, one line of copy and the illustration slot. */
+.match__title {
+  margin-top: 0;
+  font-size: var(--type-display-size);
+  line-height: var(--type-display-line);
+}
+
+.organic-portrait {
   position: relative;
-  width: 300px;
-  height: 236px;
+  flex: none;
+  width: min(248px, 64vw, 34svh);
+  aspect-ratio: 1;
 }
 
-.match__photo {
+.match__portrait {
+  margin-top: var(--space-6);
+}
+
+.organic-portrait__backdrop {
   position: absolute;
-  top: 8px;
+  inset: -7%;
+  width: 114%;
+  height: 114%;
+  fill: var(--color-surface-brand);
+  animation: portrait-turn 60s linear infinite;
+}
+
+.organic-portrait__photo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: portrait-in var(--motion-duration-push) var(--motion-ease-emphasized) both;
+}
+
+.organic-portrait__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+.organic-portrait__fallback {
   display: grid;
   place-items: center;
-  width: 156px;
-  height: 204px;
-  border-radius: var(--radius-photo);
-  /* Photo placeholder (neutral grey) with a white edge so the overlap reads. */
-  background: var(--color-surface-photo);
-  color: var(--color-text-secondary);
-  box-shadow: 0 0 0 3px var(--color-surface), var(--shadow-sm);
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-display);
+  font-variation-settings: var(--font-display-axes);
+  font-size: 88px;
+  font-weight: var(--type-display-weight);
+  color: var(--color-text-primary);
 }
 
-.match__photo--left {
-  left: 4px;
-  transform: rotate(-8deg);
+.organic-portrait__fallback.avatar--tone-0 { background: var(--color-accent-rose-tint); }
+.organic-portrait__fallback.avatar--tone-1 { background: var(--color-accent-promo); }
+.organic-portrait__fallback.avatar--tone-2 { background: var(--color-brand-tint-strong); }
+.organic-portrait__fallback.avatar--tone-3 { background: var(--color-accent-yellow-tint); }
+
+.match .match__body {
+  margin-top: var(--space-5);
+  text-wrap: balance;
 }
 
-.match__photo--right {
-  right: 4px;
-  top: 0;
-  transform: rotate(7deg);
+.match__art {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  margin-top: var(--space-4);
 }
 
-.match__mark {
-  position: absolute;
-  left: 50%;
-  bottom: -6px;
+.match__art .illustration-slot {
+  width: min(100%, 320px, 42svh);
+  animation: fade-in var(--motion-duration-slow) var(--motion-ease-out) 300ms both;
+}
+
+@keyframes portrait-in {
+  from { opacity: 0; transform: scale(0.94); }
+}
+
+@keyframes portrait-turn {
+  to { transform: rotate(360deg); }
+}
+
+/* Illustration slots (IllustrationSlot): fixed aspect ratio, artwork or fallback centred. */
+.illustration-slot {
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--color-brand);
-  color: var(--color-on-brand);
-  box-shadow: 0 0 0 4px var(--color-surface), var(--shadow-brand);
-  transform: translateX(-50%);
-  z-index: var(--z-raised);
+  max-width: 100%;
 }
 
-/* Match moment: the photos settle into their tilt and the mark lands just after. */
-.match__photo--left {
-  animation: match-left var(--motion-duration-push) var(--motion-ease-emphasized) both;
+.illustration-slot__img {
+  width: 100%;
+  height: 100%;
 }
 
-.match__photo--right {
-  animation: match-right var(--motion-duration-push) var(--motion-ease-emphasized) both;
+.illustration-slot__scene {
+  width: 100%;
+  height: 100%;
 }
 
-.match__mark {
-  animation: match-mark var(--motion-duration-slow) var(--motion-ease-out) 160ms both;
-}
-
-@keyframes match-left {
-  from { opacity: 0; transform: translateX(24px) rotate(0deg); }
-}
-
-@keyframes match-right {
-  from { opacity: 0; transform: translateX(-24px) rotate(0deg); }
-}
-
-@keyframes match-mark {
-  from { opacity: 0; transform: translateX(-50%) scale(0.6); }
-}
-
-.match__heart {
+/* Fallback for the hands artwork: two heart halves join in purple. */
+.match-heart {
   overflow: visible;
+  color: var(--color-brand);
 }
 
-.match__half {
+.match-heart__half {
   fill: currentColor;
   transform-box: fill-box;
-  animation: var(--motion-duration-slow) var(--motion-ease-emphasized) 420ms both;
+  animation: var(--motion-duration-slow) var(--motion-ease-emphasized) 520ms both;
 }
 
-.match__half--left {
+.match-heart__half--left {
   transform-origin: right bottom;
   animation-name: heart-half-left;
 }
 
-.match__half--right {
+.match-heart__half--right {
   transform-origin: left bottom;
   animation-name: heart-half-right;
 }
 
 @keyframes heart-half-left {
-  from { transform: translate(-4px, 1px) rotate(-14deg); }
+  from { transform: translate(-6px, 2px) rotate(-16deg); }
 }
 
 @keyframes heart-half-right {
-  from { transform: translate(4px, 1px) rotate(14deg); }
+  from { transform: translate(6px, 2px) rotate(16deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1032,13 +1067,12 @@ button.list-row__hit:hover {
     animation: none;
   }
 
-  .match__photo--left,
-  .match__photo--right,
-  .match__mark {
+  .organic-portrait__photo {
     animation-name: fade-in;
   }
 
-  .match__half {
+  .organic-portrait__backdrop,
+  .match-heart__half {
     animation: none;
   }
 }

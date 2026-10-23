@@ -19,6 +19,7 @@ import {
   Icon,
   IconButton,
   Illustration,
+  IllustrationSlot,
   ImagePlaceholder,
   InfoCard,
   SetupProgress,
@@ -505,9 +506,9 @@ function FiltersSheet({ open, onClose }) {
 
 /* 4 · Matching -------------------------------------------------------------- */
 /** Close-only header (Bumble match screen: X top-left). */
-function CloseHeader({ onClose, label = "Close" }) {
+function CloseHeader({ onClose, label = "Close", align }) {
   return (
-    <header className="fl-close-head">
+    <header className={`fl-close-head${align === "end" ? " fl-close-head--end" : ""}`}>
       <IconButton icon="close" label={label} variant="floating" onClick={onClose} />
     </header>
   );
@@ -542,10 +543,11 @@ export function Match({ go }) {
   return (
     <Frame
       tone="page"
-      top={<CloseHeader label="Back to Home" onClose={() => go("discovery")} />}
+      kind="match"
+      top={<CloseHeader label="Close and keep browsing" align="end" onClose={() => go("discovery")} />}
       footer={
-        <div className="fl-stack fl-stack--full">
-          <Composer value={text} onChange={setText} placeholder={person.opener ?? "Send a message…"} onSend={send} />
+        <div className="fl-stack fl-stack--full fl-match__actions">
+          <Composer value={text} onChange={setText} placeholder={person.opener ?? `Say hello to ${person.name}`} onSend={send} />
           <Button variant="quiet" onClick={() => go("discovery")}>
             Keep browsing
           </Button>
@@ -553,9 +555,8 @@ export function Match({ go }) {
       }
     >
       <div className="fl-center fl-fill fl-match">
-        <MatchCelebration names={[state.profile.name || "You", person.name]}>
-          You and {person.name} liked each other.{" "}
-          {person.prompt ? `They answered “${person.prompt.q}”. Start there.` : person.shared?.length ? `You both like ${person.shared[0].toLowerCase()}. Start there.` : "Say hello and make it personal."}
+        <MatchCelebration name={person.name} src={person.src} illustration={<IllustrationSlot id="match-hands-heart" />}>
+          You and {person.name} liked each other. Now say hello.
         </MatchCelebration>
       </div>
     </Frame>
