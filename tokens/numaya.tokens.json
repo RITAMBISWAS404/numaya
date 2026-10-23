@@ -15,10 +15,10 @@
       "periwinkle": {
         "100": { "$type": "color", "$value": "#d6dcfd", "$description": "Meetup promo card fill (sampled #D6DCFD, 'Start a new group')." }
       },
-      "pink": {
-        "100": { "$type": "color", "$value": "#fde8ee", "$description": "Pink tint (derived) for avatar and category framing." },
-        "500": { "$type": "color", "$value": "#ea698c", "$description": "Meetup accent pink (sampled #EA698C, organiser badge): badges and category marks, never text." },
-        "700": { "$type": "color", "$value": "#c1486a", "$description": "Meetup emphasis pink (sampled #C1486A, 'The people platform'): one emphasised headline word. 4.77:1 on white." }
+      "rose": {
+        "100": { "$type": "color", "$value": "#fde8ee", "$description": "Rose tint (derived) for avatar and category framing." },
+        "500": { "$type": "color", "$value": "#ea698c", "$description": "Meetup accent rose (sampled #EA698C, organiser badge): badges and category marks, never text." },
+        "700": { "$type": "color", "$value": "#c1486a", "$description": "Meetup emphasis rose (sampled #C1486A, 'The people platform'): one emphasised headline word. 4.77:1 on white." }
       },
       "yellow": { "100": { "$type": "color", "$value": "#fdf0d0", "$description": "Yellow tint (derived from #FCD284) for avatar framing." }, "200": { "$type": "color", "$value": "#fcd284", "$description": "Meetup illustration yellow (sampled #FCD284, empty-state blob): illustration and avatar framing." } },
       "orange": { "500": { "$type": "color", "$value": "#d58b50", "$description": "Meetup time/status orange (sampled #D58B50, 'In 2m'): icons and marks only (2.75:1 on white)." } },
@@ -122,8 +122,8 @@
       "accent": {
         "$description": "Meetup secondary palette, used by role only (badges, category and avatar framing, status marks), never as a second UI accent.",
         "promo":  { "$type": "color", "$value": "{primitive.color.periwinkle.100}", "$description": "Promotional and guidance cards (Meetup 'Start a new group')." },
-        "pink":   { "$type": "color", "$value": "{primitive.color.pink.500}", "$description": "Badges and category marks." },
-        "pink-tint": { "$type": "color", "$value": "{primitive.color.pink.100}" },
+        "rose":   { "$type": "color", "$value": "{primitive.color.rose.500}", "$description": "Badges, category marks and the wordmark dot (Meetup accent rose)." },
+        "rose-tint": { "$type": "color", "$value": "{primitive.color.rose.100}" },
         "yellow": { "$type": "color", "$value": "{primitive.color.yellow.200}", "$description": "Illustration framing." },
         "yellow-tint": { "$type": "color", "$value": "{primitive.color.yellow.100}", "$description": "Avatar framing." },
         "orange": { "$type": "color", "$value": "{primitive.color.orange.500}", "$description": "Time and status icons." },
@@ -136,7 +136,7 @@
         "subtle":     { "$type": "color", "$value": "{primitive.color.neutral.400}", "$description": "Placeholders and disabled labels only (2.8:1, documented exception)." },
         "brand":      { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "Links and brand-context text on white (Meetup 'See all', legal links). 4.90:1." },
         "brand-deep": { "$type": "color", "$value": "{primitive.color.purple.800}", "$description": "Text on lavender tints (7.1:1)." },
-        "accent":     { "$type": "color", "$value": "{primitive.color.pink.700}", "$description": "One emphasised word in a hero headline (Meetup 'The people platform'). 4.77:1 on white." },
+        "accent":     { "$type": "color", "$value": "{primitive.color.rose.700}", "$description": "One emphasised word in a hero headline (Meetup 'The people platform'). 4.77:1 on white." },
         "on-inverse": { "$type": "color", "$value": "{primitive.color.neutral.0}" }
       },
       "surface": {

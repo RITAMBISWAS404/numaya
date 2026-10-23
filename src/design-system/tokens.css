@@ -9,9 +9,9 @@
   --p-color-purple-600: #7262c7;
   --p-color-purple-800: #4f4296;
   --p-color-periwinkle-100: #d6dcfd;
-  --p-color-pink-100: #fde8ee;
-  --p-color-pink-500: #ea698c;
-  --p-color-pink-700: #c1486a;
+  --p-color-rose-100: #fde8ee;
+  --p-color-rose-500: #ea698c;
+  --p-color-rose-700: #c1486a;
   --p-color-yellow-100: #fdf0d0;
   --p-color-yellow-200: #fcd284;
   --p-color-orange-500: #d58b50;
@@ -96,8 +96,8 @@
   --color-brand-hero: var(--p-color-purple-300);
   --color-on-brand: var(--p-color-neutral-0);
   --color-accent-promo: var(--p-color-periwinkle-100);
-  --color-accent-pink: var(--p-color-pink-500);
-  --color-accent-pink-tint: var(--p-color-pink-100);
+  --color-accent-rose: var(--p-color-rose-500);
+  --color-accent-rose-tint: var(--p-color-rose-100);
   --color-accent-yellow: var(--p-color-yellow-200);
   --color-accent-yellow-tint: var(--p-color-yellow-100);
   --color-accent-orange: var(--p-color-orange-500);
@@ -108,7 +108,7 @@
   --color-text-subtle: var(--p-color-neutral-400);
   --color-text-brand: var(--p-color-purple-600);
   --color-text-brand-deep: var(--p-color-purple-800);
-  --color-text-accent: var(--p-color-pink-700);
+  --color-text-accent: var(--p-color-rose-700);
   --color-text-on-inverse: var(--p-color-neutral-0);
   --color-surface: var(--p-color-neutral-0);
   --color-surface-soft: var(--p-color-neutral-100);

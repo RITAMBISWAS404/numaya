@@ -21,7 +21,7 @@ npm run gallery                   # numbered screenshot gallery of every screen 
   with mock data. Buttons jump between connected screens.
 - **Docs:** see [CLAUDE.md](CLAUDE.md) and [docs/](docs/).
 
-Fonts: Fraunces and Inter (SIL OFL), self-hosted. Icons: Solar by 480 Design (CC BY 4.0) via `@solar-icons/react` (MIT); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Brand pink: `#F770E3`.
+Fonts: Fraunces and Inter (SIL OFL), self-hosted. Icons: Solar by 480 Design (CC BY 4.0) via `@solar-icons/react` (MIT); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Brand colour: Meetup-derived purple `#7262C7` (the old pink `#F770E3` is retired; see [docs/numaya-meetup-ui-map.md](docs/numaya-meetup-ui-map.md)).
 
 **Screen gallery:** [artifacts/ui-gallery/](artifacts/ui-gallery/README.md) holds every screen and
 state in user-flow order at 393 × 852, with contact sheets. Any flow screen can also be opened on its

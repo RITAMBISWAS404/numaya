@@ -1,8 +1,8 @@
 import { useId } from "react";
 
-/** A soft square in brand purple with a bite taken out of the corner, and a small accent-pink dot
+/** A soft square in brand purple with a bite taken out of the corner, and a small accent-rose dot
     sitting in the bite (the Numaya mark, reconciled with the Meetup-derived palette). */
-export function BrandMark({ size = 28, color = "var(--color-brand)", accent = "var(--color-accent-pink)" }) {
+export function BrandMark({ size = 28, color = "var(--color-brand)", accent = "var(--color-accent-rose)" }) {
   const maskId = useId();
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">

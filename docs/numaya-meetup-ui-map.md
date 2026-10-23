@@ -7,6 +7,17 @@ the brand colour is Meetup's sampled purple. This map fixes one visual decision 
 
 ## Meetup visual-system migration (October 2026)
 
+### Final design decision record (convergence pass)
+
+| Area | Decision | Evidence |
+| --- | --- | --- |
+| Palette | Unchanged from the sampled table below: purple `#7262C7` leads; Meetup neutrals, lavender, periwinkle; rose, yellow, orange and green by role only | Migration samples (Mobbin previews) |
+| Legacy pink | Removed from every production source, including the favicon and the `theme-color` meta that page-level checks could not see. `tests/unit/legacy-colour.test.js` fails on any value in the old hue family (hex, short hex, rgb/rgba, hsl) in `src/`, `public/` and the HTML entry points, and on the retired token names. No exceptions | Source scan |
+| Accent naming | The Meetup accent primitive is `rose` (`#EA698C`, `#C1486A`), so no token is named after the retired pink | — |
+| Icons | Meetup's glyphs are thin rounded line icons that switch to a filled purple glyph when active, with lavender-filled duotone spot icons. Meetup's own icon set is proprietary and not published, so the closest open family is used (see Icons) | Tab bars, options menu, composer and spot icon crops of the screens below |
+| Logo | **Not integrated: no logo file was attached to the session.** The current Numaya mark (purple rounded square with a rose dot) stays as a placeholder. Replacement point: drop the supplied file at `public/brand/numaya-logo.svg` (or `.png`) and set `LOGO_SRC` in `src/design-system/components/Brand.jsx`; `Wordmark` then renders the asset at its native aspect ratio and the favicon can be regenerated from it | — |
+| Typography | Fraunces and Inter kept (Numaya exception) | Product decision |
+
 ### References opened for the migration
 
 All Meetup iOS, current generation, opened on Mobbin as screenshots (previews; the full-resolution

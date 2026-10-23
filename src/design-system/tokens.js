@@ -64,31 +64,31 @@ export const tokens = [
     "description": "Meetup promo card fill (sampled #D6DCFD, 'Start a new group')."
   },
   {
-    "id": "primitive.color.pink.100",
-    "name": "--p-color-pink-100",
+    "id": "primitive.color.rose.100",
+    "name": "--p-color-rose-100",
     "layer": "primitive",
     "type": "color",
     "value": "#fde8ee",
     "resolved": "#fde8ee",
-    "description": "Pink tint (derived) for avatar and category framing."
+    "description": "Rose tint (derived) for avatar and category framing."
   },
   {
-    "id": "primitive.color.pink.500",
-    "name": "--p-color-pink-500",
+    "id": "primitive.color.rose.500",
+    "name": "--p-color-rose-500",
     "layer": "primitive",
     "type": "color",
     "value": "#ea698c",
     "resolved": "#ea698c",
-    "description": "Meetup accent pink (sampled #EA698C, organiser badge): badges and category marks, never text."
+    "description": "Meetup accent rose (sampled #EA698C, organiser badge): badges and category marks, never text."
   },
   {
-    "id": "primitive.color.pink.700",
-    "name": "--p-color-pink-700",
+    "id": "primitive.color.rose.700",
+    "name": "--p-color-rose-700",
     "layer": "primitive",
     "type": "color",
     "value": "#c1486a",
     "resolved": "#c1486a",
-    "description": "Meetup emphasis pink (sampled #C1486A, 'The people platform'): one emphasised headline word. 4.77:1 on white."
+    "description": "Meetup emphasis rose (sampled #C1486A, 'The people platform'): one emphasised headline word. 4.77:1 on white."
   },
   {
     "id": "primitive.color.yellow.100",
@@ -829,20 +829,20 @@ export const tokens = [
     "description": "Promotional and guidance cards (Meetup 'Start a new group')."
   },
   {
-    "id": "semantic.color.accent.pink",
-    "name": "--color-accent-pink",
+    "id": "semantic.color.accent.rose",
+    "name": "--color-accent-rose",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.pink.500}",
+    "value": "{primitive.color.rose.500}",
     "resolved": "#ea698c",
-    "description": "Badges and category marks."
+    "description": "Badges, category marks and the wordmark dot (Meetup accent rose)."
   },
   {
-    "id": "semantic.color.accent.pink-tint",
-    "name": "--color-accent-pink-tint",
+    "id": "semantic.color.accent.rose-tint",
+    "name": "--color-accent-rose-tint",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.pink.100}",
+    "value": "{primitive.color.rose.100}",
     "resolved": "#fde8ee",
     "description": null
   },
@@ -941,7 +941,7 @@ export const tokens = [
     "name": "--color-text-accent",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.pink.700}",
+    "value": "{primitive.color.rose.700}",
     "resolved": "#c1486a",
     "description": "One emphasised word in a hero headline (Meetup 'The people platform'). 4.77:1 on white."
   },

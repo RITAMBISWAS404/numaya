@@ -53,7 +53,7 @@ describe("token pipeline", () => {
 
   it("keeps the secondary Meetup palette to its roles (marks and framing, never text)", () => {
     const accents = [...tokens.values()].filter((t) => t.path[1] === "color" && t.path[2] === "accent").map((t) => cssVarName(t.path));
-    expect(accents.sort()).toEqual(["--color-accent-green", "--color-accent-orange", "--color-accent-pink", "--color-accent-pink-tint", "--color-accent-promo", "--color-accent-yellow", "--color-accent-yellow-tint"]);
+    expect(accents.sort()).toEqual(["--color-accent-green", "--color-accent-orange", "--color-accent-promo", "--color-accent-rose", "--color-accent-rose-tint", "--color-accent-yellow", "--color-accent-yellow-tint"]);
     const productCss = readdirSync("src", { recursive: true })
       .filter((f) => f.endsWith(".css") && !f.endsWith("tokens.css"))
       .map((f) => readFileSync(`src/${f}`, "utf8"))

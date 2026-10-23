@@ -58,7 +58,7 @@ export function Foundations() {
         intro="Numaya keeps its name, wordmark, Fraunces, Inter and Solar icons; the visual system follows Meetup. The brand colour is Meetup's purple #7262C7 (sampled from the current iOS app): selected chips and pills, outgoing bubbles, SuperSwipe, send, progress, links and focus. White on it is 4.90:1. Primary actions, switches and checkboxes are ink. Meetup's secondary colours frame avatars, badges and guidance cards, never text."
       >
         <Grid min={240}>
-          <Specimen title="Wordmark" note="The Numaya mark in brand purple with an accent-pink dot">
+          <Specimen title="Wordmark" note="The Numaya mark in brand purple with an accent-rose dot">
             <Wordmark />
           </Specimen>
           <Specimen title="Brand fill + white text" note={`#7262C7 · white ${ratio(WHITE, brandHex)}`}>
