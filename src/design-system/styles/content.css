@@ -653,9 +653,9 @@ button.list-row__hit:hover {
   background: linear-gradient(
     180deg,
     transparent 0%,
-    color-mix(in srgb, var(--color-overlay-photo) 8%, transparent) 22%,
-    color-mix(in srgb, var(--color-overlay-photo) 26%, transparent) 46%,
-    color-mix(in srgb, var(--color-overlay-photo) 58%, transparent) 70%,
+    color-mix(in srgb, var(--color-overlay-photo) 10%, transparent) 20%,
+    color-mix(in srgb, var(--color-overlay-photo) 38%, transparent) 42%,
+    color-mix(in srgb, var(--color-overlay-photo) 80%, transparent) 62%,
     var(--color-overlay-photo) 100%
   );
   color: var(--color-text-on-inverse);
@@ -702,6 +702,24 @@ button.list-row__hit:hover {
   gap: 6px;
   font-size: var(--type-body-sm-size);
   font-weight: var(--font-weight-semibold);
+}
+
+/* Conversation cue: the third line, one step quieter than the headline (smaller, regular weight,
+   still white on the scrim's darkest band). */
+.profile-card__cue {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: var(--type-label-size);
+  line-height: var(--type-label-line);
+  font-weight: var(--font-weight-regular);
+  text-wrap: balance;
+}
+
+.profile-card__cue .icon {
+  flex: none;
+  margin-top: 1px;
 }
 
 .profile-card__actions {
@@ -1024,6 +1042,44 @@ button.list-row__hit:hover {
 .match__body strong {
   color: var(--color-text-primary);
   font-weight: var(--font-weight-semibold);
+}
+
+/* What the two people share: the conversation the composer below invites. Same grey pills as the
+   profile's "You both like", so the cue reads as profile data, not decoration. */
+.match__shared {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  margin-top: clamp(var(--space-4), 2.6svh, var(--space-6));
+}
+
+.match__shared-label {
+  color: var(--color-text-muted);
+  font-size: var(--type-label-size);
+  line-height: var(--type-label-line);
+  font-weight: var(--font-weight-semibold);
+}
+
+.match__shared-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Short phones (≤ 700px tall): the portrait gives up a little height so title, portrait, copy,
+   shared interests and the illustration slot all stay above the composer. */
+@media (max-height: 700px) {
+  .match .organic-portrait {
+    width: min(264px, 66vw, 25svh);
+  }
+
+  .match__shared {
+    margin-top: var(--space-3);
+  }
 }
 
 /* The slot keeps its 5:2 contract; at 240px wide the fallback heart sits one beat under the copy

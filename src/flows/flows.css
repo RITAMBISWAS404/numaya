@@ -857,23 +857,30 @@ body {
 
 .fl-ready-card__top {
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  justify-content: space-between;
   gap: var(--space-4);
+}
+
+.fl-ready-card__score {
+  font-size: var(--type-body-size);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.fl-ready-card__score span {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-regular);
+}
+
+.fl-ready-card .readiness-meter--bar {
+  height: 8px;
 }
 
 .fl-ready-card__title {
   font-size: var(--type-body-size);
   line-height: var(--type-body-line);
   font-weight: var(--font-weight-semibold);
-}
-
-.fl-ready-card .readiness-meter__value-text {
-  font-size: 17px;
-  font-weight: var(--font-weight-semibold);
-}
-
-.fl-ready-card .readiness-meter__unit {
-  display: none;
 }
 
 .fl-status {

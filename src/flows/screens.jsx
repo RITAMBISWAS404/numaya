@@ -215,6 +215,9 @@ export function Photos({ go }) {
 }
 
 /* 3 · Discovery ------------------------------------------------------------- */
+/** "Jazz", "Jazz and Natural wine", "Jazz, Running and Natural wine". */
+const listOf = (items) => (items.length < 2 ? items.join("") : `${items.slice(0, -1).join(", ")} and ${items.at(-1)}`);
+
 const SWIPE_THRESHOLD = 96;
 
 /** Horizontal drag on the card: past the threshold, right likes and left passes. Buttons remain the accessible path. */
@@ -350,6 +353,7 @@ export function Discovery({ go }) {
           >
             <ProfileCard
               {...person}
+              cue={person.shared?.length ? `You both like ${listOf(person.shared)}` : null}
               actions={
                 <button type="button" className="action-bar__btn action-bar__btn--super" aria-label="SuperSwipe" onClick={() => decide(true)}>
                   <Icon name="star" size={22} />
@@ -554,7 +558,7 @@ export function Match({ go }) {
       }
     >
       <div className="fl-center fl-fill fl-match">
-        <MatchCelebration name={person.name} src={person.src} illustration={<IllustrationSlot id="match-hands-heart" />}>
+        <MatchCelebration name={person.name} src={person.src} shared={person.shared} illustration={<IllustrationSlot id="match-hands-heart" />}>
           You and <strong>{person.name}</strong> liked each other. Now say hello.
         </MatchCelebration>
       </div>
@@ -882,14 +886,18 @@ export function MyProfile({ go }) {
 
         {/* Compact readiness summary leading to the full dashboard. */}
         <section className="card fl-ready-card" aria-labelledby="fl-ready-title">
-          <div className="fl-ready-card__top">
-            <ReadinessMeter value={score} size={56} />
-            <div className="fl-stack fl-gap-xs">
+          {/* Bar, not a second ring: the avatar above already draws the score as a ring (B-23). */}
+          <div className="fl-stack fl-gap-sm">
+            <div className="fl-ready-card__top">
               <h2 id="fl-ready-title" className="fl-ready-card__title">
                 Profile readiness
               </h2>
-              <p className="fl-caption">{next ? `Next: ${next.action.toLowerCase()} (up to ${next.max - next.points} points)` : "Everything visible on your profile is filled in."}</p>
+              <span className="fl-ready-card__score" aria-hidden="true">
+                {score} <span>of 100</span>
+              </span>
             </div>
+            <ReadinessMeter value={score} shape="bar" />
+            <p className="fl-caption">{next ? `Next: ${next.action.toLowerCase()} (up to ${next.max - next.points} points)` : "Everything visible on your profile is filled in."}</p>
           </div>
           <div className="fl-row fl-row--tight">
             {next && (

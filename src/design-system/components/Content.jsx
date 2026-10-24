@@ -427,10 +427,11 @@ export function PhotoGrid({ photos, slots = 6, onAdd, onRemove, onSelect, hint =
 /**
  * Discovery card (reference: Bumble profile card). The photo fills the card; status pills, name, age
  * and the headline detail sit bottom-left over a legibility scrim; `actions` (e.g. a SuperSwipe
- * button) sits bottom-right on the photo. Without a photo, a neutral stand-in with a silhouette is
+ * button) sits bottom-right on the photo. `cue` is an optional third line, a conversation starter
+ * from real profile data (e.g. what you both like), quieter than the headline. Without a photo, a neutral stand-in with a silhouette is
  * shown; it never pretends to be a photograph.
  */
-export function ProfileCard({ name, age, verified, details = [], isNew = false, src, photoAlt, actions }) {
+export function ProfileCard({ name, age, verified, details = [], isNew = false, src, photoAlt, cue, actions }) {
   const [headline] = details;
   return (
     <article className="profile-card" aria-label={`${name}, ${age}`}>
@@ -459,6 +460,11 @@ export function ProfileCard({ name, age, verified, details = [], isNew = false, 
           {headline && (
             <p className="profile-card__detail">
               <Icon name={headline.icon} size={16} /> {headline.text}
+            </p>
+          )}
+          {cue && (
+            <p className="profile-card__cue">
+              <Icon name="interests" size={16} /> {cue}
             </p>
           )}
         </div>

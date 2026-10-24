@@ -5,7 +5,16 @@ import { Icon } from "./Icon.jsx";
  * Profile readiness: one restrained radial indicator with the score in the centre. `value` 0–100.
  * The ring is a progress meter (role="meter"), so assistive tech reads the score and its range.
  */
-export function ReadinessMeter({ value, label = "Profile readiness", size = 112 }) {
+export function ReadinessMeter({ value, label = "Profile readiness", size = 112, shape = "ring" }) {
+  // Bar: a linear meter for a summary that sits near another ring showing the same value (the
+  // Profile tab's avatar), so the score is not drawn as two identical rings.
+  if (shape === "bar") {
+    return (
+      <span className="readiness-meter--bar progress-bar" role="meter" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={value} aria-valuetext={`${value} out of 100`}>
+        <span className="progress-bar__fill" style={{ width: `${Math.min(100, Math.max(0, value))}%` }} />
+      </span>
+    );
+  }
   const r = 44;
   const c = 2 * Math.PI * r;
   return (

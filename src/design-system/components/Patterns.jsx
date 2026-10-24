@@ -73,15 +73,30 @@ export function OrganicPortrait({ name, src, className }) {
 
 /**
  * The match moment (reference: the Numaya sketch): heading, the matched person's photo in the
- * organic frame, one line of copy and the illustration slot. White page; purple stays in the frame
+ * organic frame, one line of copy, what the two people really share (`shared`, optional) and the
+ * illustration slot. White page; purple stays in the frame
  * backdrop and the artwork. Actions (message, keep browsing) belong to the screen's footer.
  */
-export function MatchCelebration({ name, src, title = "It’s a match!", illustration, children }) {
+export function MatchCelebration({ name, src, title = "It’s a match!", shared, illustration, children }) {
   return (
     <div className="match">
       <h1 className="match__title">{title}</h1>
       <OrganicPortrait name={name} src={src} className="match__portrait" />
       {children && <p className="match__body">{children}</p>}
+      {shared?.length > 0 && (
+        <div className="match__shared">
+          <p className="match__shared-label" id="match-shared-label">
+            You both like
+          </p>
+          <ul className="match__shared-list" aria-labelledby="match-shared-label">
+            {shared.map((s) => (
+              <li key={s} className="chip chip--static shared-interests__pill">
+                {s}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       {illustration && <div className="match__art">{illustration}</div>}
     </div>
   );
