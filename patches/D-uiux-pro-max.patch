@@ -1,0 +1,263 @@
+diff --git a/src/design-system/components/Content.jsx b/src/design-system/components/Content.jsx
+index becc927..8336c99 100644
+--- a/src/design-system/components/Content.jsx
++++ b/src/design-system/components/Content.jsx
+@@ -121,7 +121,7 @@ export function Section({ title, description, action, children }) {
+       {(title || description) && (
+         <header className="section__header">
+           <div>
+-            {title && <h3 className="section__title">{title}</h3>}
++            {title && <h2 className="section__title">{title}</h2>}
+             {description && <p className="section__description">{description}</p>}
+           </div>
+           {action}
+@@ -453,9 +453,9 @@ export function ProfileCard({ name, age, verified, details = [], isNew = false,
+               {isNew && <span className="profile-card__pill">New here</span>}
+             </div>
+           )}
+-          <h3 className="profile-card__name">
++          <h2 className="profile-card__name">
+             {name}, {age}
+-          </h3>
++          </h2>
+           {headline && (
+             <p className="profile-card__detail">
+               <Icon name={headline.icon} size={16} /> {headline.text}
+diff --git a/src/design-system/styles/content.css b/src/design-system/styles/content.css
+index 2c16f25..dadc585 100644
+--- a/src/design-system/styles/content.css
++++ b/src/design-system/styles/content.css
+@@ -654,8 +654,8 @@ button.list-row__hit:hover {
+     180deg,
+     transparent 0%,
+     color-mix(in srgb, var(--color-overlay-photo) 8%, transparent) 22%,
+-    color-mix(in srgb, var(--color-overlay-photo) 26%, transparent) 46%,
+-    color-mix(in srgb, var(--color-overlay-photo) 58%, transparent) 70%,
++    color-mix(in srgb, var(--color-overlay-photo) 40%, transparent) 46%,
++    color-mix(in srgb, var(--color-overlay-photo) 84%, transparent) 70%,
+     var(--color-overlay-photo) 100%
+   );
+   color: var(--color-text-on-inverse);
+@@ -725,7 +725,7 @@ button.list-row__hit:hover {
+   height: 60px;
+   /* Meetup primary treatment (Chat, Add friend, Ticket): ink with a soft sheen. */
+   border-radius: 50%;
+-  background: linear-gradient(180deg, var(--button-primary-bg-top) 0%, var(--button-primary-bg-bottom) 100%);
++  background: linear-gradient(180deg, var(--button-ink-bg-top) 0%, var(--button-ink-bg-bottom) 100%);
+   color: var(--color-text-on-inverse);
+   box-shadow: var(--shadow-button);
+   transition: transform var(--motion-duration-fast) var(--motion-ease-out);
+@@ -747,10 +747,12 @@ button.list-row__hit:hover {
+ 
+ /* SuperSwipe: the single purple action, like Meetup's floating "Map" pill: flat brand purple with a
+    white star and a soft purple drop. */
++/* UI/UX Pro Max accent role: SuperSwipe is the one "extra" action, so it takes the warm reward
++   accent with an ink star (9.6:1), apart from purple (primary actions) and ink (Pass, Like). */
+ .action-bar__btn--super {
+-  background: var(--color-brand);
+-  color: var(--color-on-brand);
+-  box-shadow: var(--shadow-brand);
++  background: var(--color-accent-reward);
++  color: var(--color-text-primary);
++  box-shadow: var(--shadow-xs);
+ }
+ 
+ .action-bar__btn--super:active {
+diff --git a/src/design-system/tokens.css b/src/design-system/tokens.css
+index dabe3da..cdc526a 100644
+--- a/src/design-system/tokens.css
++++ b/src/design-system/tokens.css
+@@ -13,6 +13,7 @@
+   --p-color-periwinkle-100: #d6dcfd;
+   --p-color-rose-100: #fde8ee;
+   --p-color-rose-500: #ea698c;
++  --p-color-gold-400: #f5a524;
+   --p-color-yellow-100: #fdf0d0;
+   --p-color-yellow-200: #fcd284;
+   --p-color-orange-500: #d58b50;
+@@ -105,6 +106,7 @@
+   --color-accent-rose: var(--p-color-rose-500);
+   --color-accent-rose-tint: var(--p-color-rose-100);
+   --color-accent-yellow: var(--p-color-yellow-200);
++  --color-accent-reward: var(--p-color-gold-400);
+   --color-accent-yellow-tint: var(--p-color-yellow-100);
+   --color-accent-orange: var(--p-color-orange-500);
+   --color-accent-green: var(--p-color-green-500);
+@@ -266,10 +268,12 @@
+   --button-height: var(--p-dimension-54);
+   --button-height-sm: var(--p-dimension-40);
+   --button-height-quiet: var(--p-dimension-48);
+-  --button-primary-bg-top: var(--p-color-neutral-800);
+-  --button-primary-bg-bottom: var(--color-surface-inverse);
+-  --button-primary-bg-hover-top: var(--p-color-neutral-750);
+-  --button-primary-bg-hover-bottom: var(--p-color-neutral-850);
++  --button-primary-bg-top: var(--color-brand);
++  --button-primary-bg-bottom: var(--color-brand);
++  --button-primary-bg-hover-top: var(--color-brand-hover);
++  --button-primary-bg-hover-bottom: var(--color-brand-hover);
++  --button-ink-bg-top: var(--p-color-neutral-800);
++  --button-ink-bg-bottom: var(--color-surface-inverse);
+   --fab-size: var(--p-dimension-56);
+   --icon-button-size: var(--p-dimension-40);
+   --icon-button-size-sm: var(--p-dimension-36);
+diff --git a/src/design-system/tokens.js b/src/design-system/tokens.js
+index 72c0bec..75488d2 100644
+--- a/src/design-system/tokens.js
++++ b/src/design-system/tokens.js
+@@ -99,6 +99,15 @@ export const tokens = [
+     "resolved": "#ea698c",
+     "description": "Meetup accent rose (sampled #EA698C, organiser badge): badges and category marks, never text."
+   },
++  {
++    "id": "primitive.color.gold.400",
++    "name": "--p-color-gold-400",
++    "layer": "primitive",
++    "type": "color",
++    "value": "#f5a524",
++    "resolved": "#f5a524",
++    "description": "UI/UX Pro Max accent role (purple-led profile: amber accent, ink on it): the reward action. Ink on it 9.6:1."
++  },
+   {
+     "id": "primitive.color.yellow.100",
+     "name": "--p-color-yellow-100",
+@@ -909,6 +918,15 @@ export const tokens = [
+     "resolved": "#fcd284",
+     "description": "Illustration framing."
+   },
++  {
++    "id": "semantic.color.accent.reward",
++    "name": "--color-accent-reward",
++    "layer": "semantic",
++    "type": "color",
++    "value": "{primitive.color.gold.400}",
++    "resolved": "#f5a524",
++    "description": "UI/UX Pro Max accent/CTA role: the one 'extra' action (SuperSwipe), with ink on it."
++  },
+   {
+     "id": "semantic.color.accent.yellow-tint",
+     "name": "--color-accent-yellow-tint",
+@@ -2349,8 +2367,8 @@ export const tokens = [
+     "name": "--button-primary-bg-top",
+     "layer": "component",
+     "type": "color",
+-    "value": "{primitive.color.neutral.800}",
+-    "resolved": "#2d2c2f",
++    "value": "{semantic.color.brand.default}",
++    "resolved": "#7262c7",
+     "description": null
+   },
+   {
+@@ -2358,8 +2376,8 @@ export const tokens = [
+     "name": "--button-primary-bg-bottom",
+     "layer": "component",
+     "type": "color",
+-    "value": "{semantic.color.surface.inverse}",
+-    "resolved": "#141316",
++    "value": "{semantic.color.brand.default}",
++    "resolved": "#7262c7",
+     "description": null
+   },
+   {
+@@ -2367,8 +2385,8 @@ export const tokens = [
+     "name": "--button-primary-bg-hover-top",
+     "layer": "component",
+     "type": "color",
+-    "value": "{primitive.color.neutral.750}",
+-    "resolved": "#353438",
++    "value": "{semantic.color.brand.hover}",
++    "resolved": "#5f50b3",
+     "description": null
+   },
+   {
+@@ -2376,8 +2394,26 @@ export const tokens = [
+     "name": "--button-primary-bg-hover-bottom",
+     "layer": "component",
+     "type": "color",
+-    "value": "{primitive.color.neutral.850}",
+-    "resolved": "#1f1e21",
++    "value": "{semantic.color.brand.hover}",
++    "resolved": "#5f50b3",
++    "description": null
++  },
++  {
++    "id": "component.button.ink.bg-top",
++    "name": "--button-ink-bg-top",
++    "layer": "component",
++    "type": "color",
++    "value": "{primitive.color.neutral.800}",
++    "resolved": "#2d2c2f",
++    "description": null
++  },
++  {
++    "id": "component.button.ink.bg-bottom",
++    "name": "--button-ink-bg-bottom",
++    "layer": "component",
++    "type": "color",
++    "value": "{semantic.color.surface.inverse}",
++    "resolved": "#141316",
+     "description": null
+   },
+   {
+diff --git a/src/flows/flows.css b/src/flows/flows.css
+index 7648a29..937a93a 100644
+--- a/src/flows/flows.css
++++ b/src/flows/flows.css
+@@ -357,6 +357,17 @@ body {
+   background: var(--color-surface-page);
+ }
+ 
++/* UI/UX Pro Max palette roles (Background vs Card): tab screens sit on a faint lavender page so the
++   white cards read as blocks, with lavender instead of grey hairlines. Match and onboarding keep
++   the white page. */
++.fl-screen--page:has(> .tab-bar) {
++  background: var(--color-brand-tint);
++}
++
++.fl-screen--page:has(> .tab-bar) .card {
++  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-brand-subtle), var(--shadow-xs);
++}
++
+ /* Messaging (Bumble layout, Meetup styling) ------------------------------- */
+ .fl-close-head {
+   flex: none;
+diff --git a/tokens/numaya.tokens.json b/tokens/numaya.tokens.json
+index fac3a17..7ffe49b 100644
+--- a/tokens/numaya.tokens.json
++++ b/tokens/numaya.tokens.json
+@@ -21,6 +21,7 @@
+         "100": { "$type": "color", "$value": "#fde8ee", "$description": "Rose tint (derived) for avatar and category framing." },
+         "500": { "$type": "color", "$value": "#ea698c", "$description": "Meetup accent rose (sampled #EA698C, organiser badge): badges and category marks, never text." }
+       },
++      "gold": { "400": { "$type": "color", "$value": "#f5a524", "$description": "UI/UX Pro Max accent role (purple-led profile: amber accent, ink on it): the reward action. Ink on it 9.6:1." } },
+       "yellow": { "100": { "$type": "color", "$value": "#fdf0d0", "$description": "Yellow tint (derived from #FCD284) for avatar framing." }, "200": { "$type": "color", "$value": "#fcd284", "$description": "Meetup illustration yellow (sampled #FCD284, empty-state blob): illustration and avatar framing." } },
+       "orange": { "500": { "$type": "color", "$value": "#d58b50", "$description": "Meetup time/status orange (sampled #D58B50, 'In 2m'): icons and marks only (2.75:1 on white)." } },
+       "neutral": {
+@@ -134,6 +135,7 @@
+         "rose":   { "$type": "color", "$value": "{primitive.color.rose.500}", "$description": "Badges, category marks and the wordmark dot (Meetup accent rose)." },
+         "rose-tint": { "$type": "color", "$value": "{primitive.color.rose.100}" },
+         "yellow": { "$type": "color", "$value": "{primitive.color.yellow.200}", "$description": "Illustration framing." },
++        "reward": { "$type": "color", "$value": "{primitive.color.gold.400}", "$description": "UI/UX Pro Max accent/CTA role: the one 'extra' action (SuperSwipe), with ink on it." },
+         "yellow-tint": { "$type": "color", "$value": "{primitive.color.yellow.100}", "$description": "Avatar framing." },
+         "orange": { "$type": "color", "$value": "{primitive.color.orange.500}", "$description": "Time and status icons." },
+         "green":  { "$type": "color", "$value": "{primitive.color.green.500}", "$description": "Confirmation marks." }
+@@ -305,10 +307,16 @@
+       "height-sm":    { "$type": "dimension", "$value": "{primitive.dimension.40}" },
+       "height-quiet": { "$type": "dimension", "$value": "{primitive.dimension.48}" },
+       "primary": {
+-        "bg-top":          { "$type": "color", "$value": "{primitive.color.neutral.800}" },
+-        "bg-bottom":       { "$type": "color", "$value": "{semantic.color.surface.inverse}" },
+-        "bg-hover-top":    { "$type": "color", "$value": "{primitive.color.neutral.750}" },
+-        "bg-hover-bottom": { "$type": "color", "$value": "{primitive.color.neutral.850}" }
++        "$description": "UI/UX Pro Max palette roles: Primary is the CTA colour, so primary actions are flat brand purple (white 4.90:1).",
++        "bg-top":          { "$type": "color", "$value": "{semantic.color.brand.default}" },
++        "bg-bottom":       { "$type": "color", "$value": "{semantic.color.brand.default}" },
++        "bg-hover-top":    { "$type": "color", "$value": "{semantic.color.brand.hover}" },
++        "bg-hover-bottom": { "$type": "color", "$value": "{semantic.color.brand.hover}" }
++      },
++      "ink": {
++        "$description": "Pass and Like on the action bar stay ink.",
++        "bg-top":    { "$type": "color", "$value": "{primitive.color.neutral.800}" },
++        "bg-bottom": { "$type": "color", "$value": "{semantic.color.surface.inverse}" }
+       }
+     },
+     "fab":         { "size": { "$type": "dimension", "$value": "{primitive.dimension.56}" } },

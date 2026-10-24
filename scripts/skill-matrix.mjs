@@ -4,6 +4,7 @@
  * the comparison sheets.
  *
  *   node scripts/skill-matrix.mjs capture <ID> --root <checkout> [screen]
+ *   node scripts/skill-matrix.mjs capture <ID> --root <checkout> discover-scrolled   (glass evidence)
  *   node scripts/skill-matrix.mjs sheets
  *
  * Capture: Vite dev server on the given checkout, Chromium via Playwright, 2× DPR, reduced motion,
@@ -25,6 +26,9 @@ export const VARIANTS = {
   F: { label: "impeccable-uipro", title: "F · Impeccable + UI/UX Pro Max" },
   G: { label: "uipro-glass", title: "G · UI/UX Pro Max + Liquid Glass" },
   H: { label: "full-stack", title: "H · Full stack" },
+  // H's intermediate states, captured under the same conditions but kept out of the eight-column sheets.
+  H1: { label: "full-stack-checkpoint1-impeccable", title: "H · checkpoint 1 (Impeccable)", checkpoint: true },
+  H2: { label: "full-stack-checkpoint2-uipro", title: "H · checkpoint 2 (+ UI/UX Pro Max)", checkpoint: true },
 };
 const SCREENS = [
   { slug: "welcome", title: "Welcome", url: "", desktop: true },
@@ -32,6 +36,8 @@ const SCREENS = [
   { slug: "match", title: "Match", url: "flows.html?screen=match", state: { matches: ["priya", "jo", "maya"], seen: ["maya"], lastMatch: "maya" } },
   { slug: "profile", title: "Profile", url: "flows.html?screen=profile" },
   { slug: "interests", title: "Interests", url: "flows.html?screen=interests", state: { profile: { interests: ["Natural wine", "Jazz"] } } },
+  // Evidence only (glass legibility): Discover scrolled so the prompt text sits under the tab bar. 393 only, not in the sheets.
+  { slug: "discover-scrolled", title: "Discover, scrolled", url: "flows.html?screen=discovery", scrollBy: 520, extra: true },
 ];
 const MOBILE = [
   { width: 393, height: 852 },
@@ -41,6 +47,7 @@ const DESKTOP = { width: 1440, height: 900 };
 const HERE = resolve(import.meta.dirname, "..");
 const OUT = resolve(HERE, "artifacts/skill-combination-matrix");
 const SHOTS = resolve(OUT, "screens");
+const CHECKPOINTS = resolve(OUT, "checkpoints");
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const file = (slug, id, size) => `${slug}-${id}-${VARIANTS[id].label}-${size}.png`;
 const [mode, ...rest] = process.argv.slice(2);
@@ -54,7 +61,8 @@ if (mode === "capture") {
   const only = rest.find((a, i) => i > 0 && i !== rootIdx && i !== rootIdx + 1);
   const { initialState, STORAGE_KEY } = await import(pathToFileURL(resolve(ROOT, "src/flows/store.js")).href);
   const session = (patch = {}) => ({ ...initialState, ...patch, prefs: { ...initialState.prefs, ...patch.prefs }, profile: { ...initialState.profile, ...patch.profile } });
-  mkdirSync(SHOTS, { recursive: true });
+  const DIR = VARIANTS[id].checkpoint ? CHECKPOINTS : SHOTS;
+  mkdirSync(DIR, { recursive: true });
   const server = await createServer({ root: ROOT, configFile: resolve(ROOT, "vite.config.js"), server: { port: 0, host: "127.0.0.1", fs: { allow: [ROOT, HERE, "/home/user/numaya/node_modules"] } }, logLevel: "error" });
   await server.listen();
   const base = server.resolvedUrls.local[0];
@@ -62,8 +70,8 @@ if (mode === "capture") {
   const problems = [];
   try {
     for (const shot of SCREENS) {
-      if (only && shot.slug !== only) continue;
-      for (const vp of shot.desktop ? [...MOBILE, DESKTOP] : MOBILE) {
+      if (only ? shot.slug !== only : shot.extra) continue;
+      for (const vp of shot.desktop ? [...MOBILE, DESKTOP] : shot.extra ? MOBILE.slice(0, 1) : MOBILE) {
         const mobile = vp.width < 600;
         const ctx = await browser.newContext({ viewport: vp, deviceScaleFactor: 2, reducedMotion: "reduce", ...(mobile ? { isMobile: true, hasTouch: true } : {}) });
         await ctx.addInitScript(
@@ -86,13 +94,17 @@ if (mode === "capture") {
         const fonts = await p.evaluate(() => [...document.fonts].filter((f) => f.status === "loaded").map((f) => f.family).join(","));
         if (!/Fraunces/.test(fonts) || !/Inter/.test(fonts)) problems.push(`${tag}: fonts not loaded (${fonts})`);
         await wait(1200);
+        if (shot.scrollBy) {
+          await p.evaluate((dy) => (document.querySelector(".fl-screen__body") ?? document.scrollingElement).scrollBy(0, dy), shot.scrollBy);
+          await wait(400);
+        }
         const name = file(shot.slug, id, `${vp.width}x${vp.height}`);
-        await p.screenshot({ path: resolve(SHOTS, name) });
+        await p.screenshot({ path: resolve(DIR, name) });
         const overflow = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
         if (overflow > 0) problems.push(`${tag}: ${overflow}px horizontal overflow`);
         const broken = await p.evaluate(() => [...document.images].filter((i) => i.complete && !i.naturalWidth).length);
         if (broken) problems.push(`${tag}: ${broken} broken image(s)`);
-        console.log(`screens/${name}`);
+        console.log(`${VARIANTS[id].checkpoint ? "checkpoints" : "screens"}/${name}`);
         await ctx.close();
       }
     }
@@ -127,14 +139,14 @@ if (mode === "capture") {
     img{display:block;width:100%;border-radius:8px;box-shadow:0 1px 3px rgb(20 23 31/.14)}figcaption{margin-top:6px}
     table{border-spacing:10px 8px}th{text-align:left;font-size:13px}td img{width:${w}px}`;
   const src = (slug, id, size) => pathToFileURL(resolve(SHOTS, file(slug, id, size))).href;
-  const ids = Object.keys(VARIANTS);
+  const ids = Object.keys(VARIANTS).filter((id) => !VARIANTS[id].checkpoint);
   const have = (slug, id, size) => existsSync(resolve(SHOTS, file(slug, id, size)));
   // 1. Overview: five screens (rows) × eight variants (columns), 393 × 852, small thumbnails.
   const thumb = 150;
-  const rows = SCREENS.map((s) => `<tr><th>${s.title}</th>${ids.map((id) => `<td>${have(s.slug, id, "393x852") ? `<img src="${src(s.slug, id, "393x852")}">` : "missing"}</td>`).join("")}</tr>`).join("");
+  const rows = SCREENS.filter((s) => !s.extra).map((s) => `<tr><th>${s.title}</th>${ids.map((id) => `<td>${have(s.slug, id, "393x852") ? `<img src="${src(s.slug, id, "393x852")}">` : "missing"}</td>`).join("")}</tr>`).join("");
   await render("overview-393x852.png", `<!doctype html><meta charset="utf-8"><style>${css(thumb)}</style><h1>Numaya skill-combination matrix · 393 × 852</h1><table><tr><th></th>${ids.map((id) => `<th>${VARIANTS[id].title}</th>`).join("")}</tr>${rows}</table>`, 120 + (thumb + 10) * 8 + 60, 2);
   // 2. Per-screen sheets: A–D and E–H, at both mobile sizes; desktop Welcome A–H.
-  for (const s of SCREENS) {
+  for (const s of SCREENS.filter((x) => !x.extra)) {
     for (const size of ["393x852", "375x667"]) {
       for (const [group, gids] of [["A-D", ["A", "B", "C", "D"]], ["E-H", ["E", "F", "G", "H"]]]) {
         const list = gids.filter((id) => have(s.slug, id, size));

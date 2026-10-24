@@ -1,0 +1,429 @@
+diff --git a/src/design-system/components/Content.jsx b/src/design-system/components/Content.jsx
+index becc927..8336c99 100644
+--- a/src/design-system/components/Content.jsx
++++ b/src/design-system/components/Content.jsx
+@@ -121,7 +121,7 @@ export function Section({ title, description, action, children }) {
+       {(title || description) && (
+         <header className="section__header">
+           <div>
+-            {title && <h3 className="section__title">{title}</h3>}
++            {title && <h2 className="section__title">{title}</h2>}
+             {description && <p className="section__description">{description}</p>}
+           </div>
+           {action}
+@@ -453,9 +453,9 @@ export function ProfileCard({ name, age, verified, details = [], isNew = false,
+               {isNew && <span className="profile-card__pill">New here</span>}
+             </div>
+           )}
+-          <h3 className="profile-card__name">
++          <h2 className="profile-card__name">
+             {name}, {age}
+-          </h3>
++          </h2>
+           {headline && (
+             <p className="profile-card__detail">
+               <Icon name={headline.icon} size={16} /> {headline.text}
+diff --git a/src/design-system/components/Patterns.jsx b/src/design-system/components/Patterns.jsx
+index de15bb5..e5c909d 100644
+--- a/src/design-system/components/Patterns.jsx
++++ b/src/design-system/components/Patterns.jsx
+@@ -1,7 +1,7 @@
+ import { cx } from "../../lib/cx.js";
+ import { Button } from "./Button.jsx";
+ import { Icon } from "./Icon.jsx";
+-import { avatarTone } from "./Content.jsx";
++import { Avatar, avatarTone } from "./Content.jsx";
+ 
+ /**
+  * Explains a device permission before the OS prompt. Primary asks; secondary defers.
+@@ -73,15 +73,35 @@ export function OrganicPortrait({ name, src, className }) {
+ 
+ /**
+  * The match moment (reference: the Numaya sketch): heading, the matched person's photo in the
+- * organic frame, one line of copy and the illustration slot. White page; purple stays in the frame
+- * backdrop and the artwork. Actions (message, keep browsing) belong to the screen's footer.
++ * organic frame (with `you` overlapping its edge, so the moment shows the pair), one line of copy,
++ * what the two of you really share (`shared`, optional) and the illustration slot. White page;
++ * purple stays in the frame backdrop, the shared pills and the artwork. Actions (message, keep
++ * browsing) belong to the screen's footer.
+  */
+-export function MatchCelebration({ name, src, title = "It’s a match!", illustration, children }) {
++export function MatchCelebration({ name, src, you, shared, title = "It’s a match!", illustration, children }) {
+   return (
+     <div className="match">
+       <h1 className="match__title">{title}</h1>
+-      <OrganicPortrait name={name} src={src} className="match__portrait" />
++      {/* The pair: the matched person in the organic frame, you overlapping its edge. */}
++      <div className="match__pair">
++        <OrganicPortrait name={name} src={src} className="match__portrait" />
++        {you && <Avatar name={you.name} src={you.src} size="lg" className="match__you" />}
++      </div>
+       {children && <p className="match__body">{children}</p>}
++      {shared?.length > 0 && (
++        <div className="match__shared">
++          <span className="match__shared-label" id="match-shared-label">
++            You both like
++          </span>
++          <ul className="match__shared-list" aria-labelledby="match-shared-label">
++            {shared.map((s) => (
++              <li key={s} className="chip chip--static match__shared-chip">
++                {s}
++              </li>
++            ))}
++          </ul>
++        </div>
++      )}
+       {illustration && <div className="match__art">{illustration}</div>}
+     </div>
+   );
+diff --git a/src/design-system/styles/base.css b/src/design-system/styles/base.css
+index 8db6bfb..d81a99a 100644
+--- a/src/design-system/styles/base.css
++++ b/src/design-system/styles/base.css
+@@ -11,6 +11,18 @@
+   box-sizing: border-box;
+ }
+ 
++/* Browser surfaces carry the brand too (Impeccable craft floor): selected text sits on a lavender
++   wash in ink (14:1), and the text caret is brand purple. */
++::selection {
++  background: var(--color-brand-tint-strong);
++  color: var(--color-text-primary);
++}
++
++input,
++textarea {
++  caret-color: var(--color-brand);
++}
++
+ html,
+ body,
+ #root {
+diff --git a/src/design-system/styles/chat.css b/src/design-system/styles/chat.css
+index 8ed87ee..2a20330 100644
+--- a/src/design-system/styles/chat.css
++++ b/src/design-system/styles/chat.css
+@@ -155,8 +155,11 @@
+   cursor: not-allowed;
+ }
+ 
++/* Impeccable polish: the placeholder here is a suggested opener ("Ask about the record shop…"),
++   content the person is meant to read, so it uses muted text (5.8:1) rather than the 2.8:1
++   placeholder grey. */
+ .composer__field textarea::placeholder {
+-  color: var(--color-text-subtle);
++  color: var(--color-text-muted);
+ }
+ 
+ /* Send: brand purple with a white arrow once there is text; empty, it is the quiet grey circle of
+diff --git a/src/design-system/styles/content.css b/src/design-system/styles/content.css
+index 2c16f25..e86f6cd 100644
+--- a/src/design-system/styles/content.css
++++ b/src/design-system/styles/content.css
+@@ -451,15 +451,41 @@ button.list-row__hit:hover {
+ /* Profile content                                                     */
+ /* ------------------------------------------------------------------ */
+ /* Prompt answers: Meetup's flat grey quote card ("About me"), no border or shadow. */
+-.prompt {
++/* The prompt is Numaya's signature object (Impeccable bolder): the same lavender surface, deep-purple
++   question and Fraunces answer wherever someone's own words appear (Discover, Profile, Interests,
++   Edit). A large closing quotation mark sits in the corner: these are a person's words, not form
++   data. It is decorative and hidden from assistive tech. */
++.prompt,
++.profile-section--prompt {
+   position: relative;
+-  padding: var(--space-5);
++  overflow: hidden;
++  isolation: isolate;
++  background: var(--color-surface-brand);
++}
++
++.prompt::after,
++.profile-section--prompt::after {
++  content: "\201D" / "";
++  position: absolute;
++  right: var(--space-4);
++  bottom: -0.66em;
++  z-index: -1;
++  color: var(--color-brand-subtle);
++  font-family: var(--font-display);
++  font-variation-settings: var(--font-display-axes);
++  font-size: 112px;
++  line-height: 1;
++  font-weight: var(--type-display-weight);
++  pointer-events: none;
++}
++
++.prompt {
++  padding: var(--space-5) var(--space-5) var(--space-6);
+   border-radius: var(--radius-lg);
+-  background: var(--color-surface-soft);
+ }
+ 
+ .prompt__label {
+-  color: var(--color-text-muted);
++  color: var(--color-text-brand-deep);
+   font-size: var(--type-label-size);
+   line-height: var(--type-label-line);
+   font-weight: var(--font-weight-semibold);
+@@ -648,14 +674,15 @@ button.list-row__hit:hover {
+   gap: 2px;
+   padding: 136px 104px var(--space-5) var(--space-5);
+   /* Eased scrim: an even ramp shows a visible band edge; these stops follow an ease-in curve so
+-     the darkening has no start line. It ends at the same ink as before, so white text keeps its
+-     contrast on a real photo. */
++     the darkening has no start line. Impeccable polish: the middle stops are deep enough that the
++     name and detail lines meet 3:1 / 4.5:1 even on the light placeholder (measured, see the
++     experiment README); the end ink is unchanged. */
+   background: linear-gradient(
+     180deg,
+     transparent 0%,
+     color-mix(in srgb, var(--color-overlay-photo) 8%, transparent) 22%,
+-    color-mix(in srgb, var(--color-overlay-photo) 26%, transparent) 46%,
+-    color-mix(in srgb, var(--color-overlay-photo) 58%, transparent) 70%,
++    color-mix(in srgb, var(--color-overlay-photo) 40%, transparent) 46%,
++    color-mix(in srgb, var(--color-overlay-photo) 84%, transparent) 70%,
+     var(--color-overlay-photo) 100%
+   );
+   color: var(--color-text-on-inverse);
+@@ -725,7 +752,7 @@ button.list-row__hit:hover {
+   height: 60px;
+   /* Meetup primary treatment (Chat, Add friend, Ticket): ink with a soft sheen. */
+   border-radius: 50%;
+-  background: linear-gradient(180deg, var(--button-primary-bg-top) 0%, var(--button-primary-bg-bottom) 100%);
++  background: linear-gradient(180deg, var(--button-ink-bg-top) 0%, var(--button-ink-bg-bottom) 100%);
+   color: var(--color-text-on-inverse);
+   box-shadow: var(--shadow-button);
+   transition: transform var(--motion-duration-fast) var(--motion-ease-out);
+@@ -964,10 +991,60 @@ button.list-row__hit:hover {
+ 
+ /* Vertical rhythm scales with the screen's height so the whole moment (title to illustration)
+    fits above the composer on a small phone without crowding a tall one. */
+-.match__portrait {
++/* The pair (Impeccable delight): the matched person in the organic frame, you overlapping its lower
++   edge on a white ring with a soft offset shadow, because it genuinely sits on top. */
++.match__pair {
++  position: relative;
+   margin-top: clamp(var(--space-5), 3.8svh, var(--space-8));
+ }
+ 
++.match__you {
++  position: absolute;
++  left: -9%;
++  bottom: -3%;
++  border-radius: 50%;
++  box-shadow: 0 0 0 4px var(--color-surface), var(--shadow-lg);
++}
++
++/* What the two of you share: lavender pills in the conversation colour of the prompt object. */
++.match__shared {
++  display: flex;
++  flex-wrap: wrap;
++  align-items: center;
++  justify-content: center;
++  gap: var(--space-2);
++  margin-top: clamp(var(--space-3), 2.4svh, var(--space-5));
++}
++
++.match__shared-label {
++  color: var(--color-text-muted);
++  font-size: var(--type-label-size);
++  line-height: var(--type-label-line);
++  font-weight: var(--font-weight-semibold);
++}
++
++.match__shared-list {
++  display: contents;
++  margin: 0;
++  padding: 0;
++  list-style: none;
++}
++
++.match__shared-chip {
++  background: var(--color-surface-brand);
++  box-shadow: none;
++  color: var(--color-text-brand-deep);
++  font-weight: var(--font-weight-semibold);
++}
++
++/* Short phones (≤ 700px tall): the frame gives up a little height so the whole moment fits above
++   the composer. */
++@media (max-height: 700px) {
++  .match .organic-portrait {
++    width: min(264px, 66vw, 25svh);
++  }
++}
++
+ /* A thin, even lavender halo: enough to frame the photo, not a second shape competing with it. */
+ .organic-portrait__backdrop {
+   position: absolute;
+@@ -1140,10 +1217,16 @@ button.list-row__hit:hover {
+   font-weight: var(--font-weight-semibold);
+ }
+ 
+-/* Prompt: the answer is the largest text after the name, set tight like a pull quote. */
++/* Prompt: the answer is the largest text after the name, set tight like a pull quote. On the
++   lavender surface it drops the card hairline and the question takes the deep brand purple. */
+ .profile-section--prompt {
+   gap: var(--space-2);
+   padding-block: var(--space-5) var(--space-6);
++  box-shadow: none;
++}
++
++.profile-section--prompt .profile-section__title {
++  color: var(--color-text-brand-deep);
+ }
+ 
+ .profile-section__answer {
+diff --git a/src/design-system/tokens.css b/src/design-system/tokens.css
+index dabe3da..0f56a28 100644
+--- a/src/design-system/tokens.css
++++ b/src/design-system/tokens.css
+@@ -266,10 +266,12 @@
+   --button-height: var(--p-dimension-54);
+   --button-height-sm: var(--p-dimension-40);
+   --button-height-quiet: var(--p-dimension-48);
+-  --button-primary-bg-top: var(--p-color-neutral-800);
+-  --button-primary-bg-bottom: var(--color-surface-inverse);
+-  --button-primary-bg-hover-top: var(--p-color-neutral-750);
+-  --button-primary-bg-hover-bottom: var(--p-color-neutral-850);
++  --button-primary-bg-top: var(--color-brand);
++  --button-primary-bg-bottom: var(--color-brand);
++  --button-primary-bg-hover-top: var(--color-brand-hover);
++  --button-primary-bg-hover-bottom: var(--color-brand-hover);
++  --button-ink-bg-top: var(--p-color-neutral-800);
++  --button-ink-bg-bottom: var(--color-surface-inverse);
+   --fab-size: var(--p-dimension-56);
+   --icon-button-size: var(--p-dimension-40);
+   --icon-button-size-sm: var(--p-dimension-36);
+diff --git a/src/design-system/tokens.js b/src/design-system/tokens.js
+index 72c0bec..0b60bce 100644
+--- a/src/design-system/tokens.js
++++ b/src/design-system/tokens.js
+@@ -2349,8 +2349,8 @@ export const tokens = [
+     "name": "--button-primary-bg-top",
+     "layer": "component",
+     "type": "color",
+-    "value": "{primitive.color.neutral.800}",
+-    "resolved": "#2d2c2f",
++    "value": "{semantic.color.brand.default}",
++    "resolved": "#7262c7",
+     "description": null
+   },
+   {
+@@ -2358,8 +2358,8 @@ export const tokens = [
+     "name": "--button-primary-bg-bottom",
+     "layer": "component",
+     "type": "color",
+-    "value": "{semantic.color.surface.inverse}",
+-    "resolved": "#141316",
++    "value": "{semantic.color.brand.default}",
++    "resolved": "#7262c7",
+     "description": null
+   },
+   {
+@@ -2367,8 +2367,8 @@ export const tokens = [
+     "name": "--button-primary-bg-hover-top",
+     "layer": "component",
+     "type": "color",
+-    "value": "{primitive.color.neutral.750}",
+-    "resolved": "#353438",
++    "value": "{semantic.color.brand.hover}",
++    "resolved": "#5f50b3",
+     "description": null
+   },
+   {
+@@ -2376,8 +2376,26 @@ export const tokens = [
+     "name": "--button-primary-bg-hover-bottom",
+     "layer": "component",
+     "type": "color",
+-    "value": "{primitive.color.neutral.850}",
+-    "resolved": "#1f1e21",
++    "value": "{semantic.color.brand.hover}",
++    "resolved": "#5f50b3",
++    "description": null
++  },
++  {
++    "id": "component.button.ink.bg-top",
++    "name": "--button-ink-bg-top",
++    "layer": "component",
++    "type": "color",
++    "value": "{primitive.color.neutral.800}",
++    "resolved": "#2d2c2f",
++    "description": null
++  },
++  {
++    "id": "component.button.ink.bg-bottom",
++    "name": "--button-ink-bg-bottom",
++    "layer": "component",
++    "type": "color",
++    "value": "{semantic.color.surface.inverse}",
++    "resolved": "#141316",
+     "description": null
+   },
+   {
+diff --git a/src/flows/screens.jsx b/src/flows/screens.jsx
+index b1770ae..b54b3bc 100644
+--- a/src/flows/screens.jsx
++++ b/src/flows/screens.jsx
+@@ -554,7 +554,7 @@ export function Match({ go }) {
+       }
+     >
+       <div className="fl-center fl-fill fl-match">
+-        <MatchCelebration name={person.name} src={person.src} illustration={<IllustrationSlot id="match-hands-heart" />}>
++        <MatchCelebration name={person.name} src={person.src} you={{ name: state.profile.name || "You" }} shared={person.shared} illustration={<IllustrationSlot id="match-hands-heart" />}>
+           You and <strong>{person.name}</strong> liked each other. Now say hello.
+         </MatchCelebration>
+       </div>
+@@ -880,6 +880,13 @@ export function MyProfile({ go }) {
+           </div>
+         </div>
+ 
++        {/* Impeccable layout: the person's own words come before the score. */}
++        <div className="list-group">
++          <p className="list-group__title">Your prompt</p>
++          <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} onEdit={() => go("prompt")} />
++          <p className="list-group__footnote">Matches reply to this.</p>
++        </div>
++
+         {/* Compact readiness summary leading to the full dashboard. */}
+         <section className="card fl-ready-card" aria-labelledby="fl-ready-title">
+           <div className="fl-ready-card__top">
+@@ -903,12 +910,6 @@ export function MyProfile({ go }) {
+           </div>
+         </section>
+ 
+-        <div className="list-group">
+-          <p className="list-group__title">Your prompt</p>
+-          <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} onEdit={() => go("prompt")} />
+-          <p className="list-group__footnote">Matches reply to this.</p>
+-        </div>
+-
+         <ListGroup title="Activity">
+           <ListRow icon="event" label="My activities" value={`${mine.upcoming.length + mine.hosting.length} upcoming`} kind="value" onPress={() => go("my-activities")} />
+         </ListGroup>
+diff --git a/tokens/numaya.tokens.json b/tokens/numaya.tokens.json
+index fac3a17..f426ed4 100644
+--- a/tokens/numaya.tokens.json
++++ b/tokens/numaya.tokens.json
+@@ -305,10 +305,16 @@
+       "height-sm":    { "$type": "dimension", "$value": "{primitive.dimension.40}" },
+       "height-quiet": { "$type": "dimension", "$value": "{primitive.dimension.48}" },
+       "primary": {
+-        "bg-top":          { "$type": "color", "$value": "{primitive.color.neutral.800}" },
+-        "bg-bottom":       { "$type": "color", "$value": "{semantic.color.surface.inverse}" },
+-        "bg-hover-top":    { "$type": "color", "$value": "{primitive.color.neutral.750}" },
+-        "bg-hover-bottom": { "$type": "color", "$value": "{primitive.color.neutral.850}" }
++        "$description": "Impeccable colorize: the primary action is flat brand purple (white 4.90:1), the same flat purple fill the system already uses for selection and SuperSwipe. Purple means 'move toward a conversation'.",
++        "bg-top":          { "$type": "color", "$value": "{semantic.color.brand.default}" },
++        "bg-bottom":       { "$type": "color", "$value": "{semantic.color.brand.default}" },
++        "bg-hover-top":    { "$type": "color", "$value": "{semantic.color.brand.hover}" },
++        "bg-hover-bottom": { "$type": "color", "$value": "{semantic.color.brand.hover}" }
++      },
++      "ink": {
++        "$description": "Pass and Like on the action bar stay ink, so SuperSwipe remains the single purple choice in that row.",
++        "bg-top":    { "$type": "color", "$value": "{primitive.color.neutral.800}" },
++        "bg-bottom": { "$type": "color", "$value": "{semantic.color.surface.inverse}" }
+       }
+     },
+     "fab":         { "size": { "$type": "dimension", "$value": "{primitive.dimension.56}" } },

@@ -1,0 +1,72 @@
+{"variant":"A","label":"SuperSwipe star on photo","fg":"rgb(255 255 255)","median":4.9,"medianBg":"rgb(114 98 199)","worst2pct":4.9,"worstBg":"rgb(114 98 199)"}
+{"variant":"A","label":"Name over photo scrim","fg":"rgb(255 255 255)","median":3.87,"medianBg":"rgb(130 129 132)","worst2pct":3.57,"worstBg":"rgb(136 135 138)"}
+{"variant":"A","label":"Tab icon, inactive (rest)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.1,"worstBg":"rgb(255 255 255)"}
+{"variant":"A","label":"Tab icon, inactive (scrolled over prompt)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.1,"worstBg":"rgb(255 255 255)"}
+{"variant":"A","label":"Tab icon, inactive (scrolled)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.1,"worstBg":"rgb(255 255 255)"}
+{"variant":"A","label":"Prompt question on card","absent":true}
+{"variant":"A","label":"Primary button text","fg":"rgb(255 255 255)","median":16.21,"medianBg":"rgb(33 32 35)","worst2pct":14.85,"worstBg":"rgb(40 39 42)"}
+{"variant":"A","label":"Shared-interest chip","absent":true}
+{"variant":"A","label":"Welcome primary button text","fg":"rgb(255 255 255)","median":16.4,"medianBg":"rgb(32 31 34)","worst2pct":14.85,"worstBg":"rgb(40 39 42)"}
+{"variant":"B","label":"SuperSwipe star on photo","fg":"rgb(255 255 255)","median":4.9,"medianBg":"rgb(114 98 199)","worst2pct":4.9,"worstBg":"rgb(114 98 199)"}
+{"variant":"B","label":"Name over photo scrim","fg":"rgb(255 255 255)","median":3.39,"medianBg":"rgb(140 139 142)","worst2pct":3.06,"worstBg":"rgb(147 147 150)"}
+{"variant":"B","label":"Tab icon, inactive (rest)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.1,"worstBg":"rgb(255 255 255)"}
+{"variant":"B","label":"Tab icon, inactive (scrolled over prompt)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.1,"worstBg":"rgb(255 255 255)"}
+{"variant":"B","label":"Tab icon, inactive (scrolled)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.1,"worstBg":"rgb(255 255 255)"}
+{"variant":"B","label":"Prompt question on card","fg":"rgb(102 101 107)","median":5.77,"medianBg":"rgb(255 255 255)","worst2pct":5.77,"worstBg":"rgb(255 255 255)"}
+{"variant":"B","label":"Primary button text","fg":"rgb(255 255 255)","median":16.4,"medianBg":"rgb(32 31 34)","worst2pct":14.85,"worstBg":"rgb(40 39 42)"}
+{"variant":"B","label":"Shared-interest chip","absent":true}
+{"variant":"B","label":"Welcome primary button text","fg":"rgb(255 255 255)","median":16.4,"medianBg":"rgb(32 31 34)","worst2pct":14.85,"worstBg":"rgb(40 39 42)"}
+{"variant":"C","label":"SuperSwipe star on photo","fg":"rgb(255 255 255)","median":4.9,"medianBg":"rgb(114 98 199)","worst2pct":4.9,"worstBg":"rgb(114 98 199)"}
+{"variant":"C","label":"Name over photo scrim","fg":"rgb(255 255 255)","median":4.94,"medianBg":"rgb(112 112 115)","worst2pct":4.66,"worstBg":"rgb(116 116 119)"}
+{"variant":"C","label":"Tab icon, inactive (rest)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.1,"worstBg":"rgb(255 255 255)"}
+{"variant":"C","label":"Tab icon, inactive (scrolled over prompt)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.1,"worstBg":"rgb(255 255 255)"}
+{"variant":"C","label":"Tab icon, inactive (scrolled)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.1,"worstBg":"rgb(255 255 255)"}
+{"variant":"C","label":"Prompt question on card","fg":"rgb(79 66 150)","median":7.32,"medianBg":"rgb(243 240 253)","worst2pct":7.32,"worstBg":"rgb(243 240 253)"}
+{"variant":"C","label":"Primary button text","fg":"rgb(255 255 255)","median":4.9,"medianBg":"rgb(114 98 199)","worst2pct":4.9,"worstBg":"rgb(114 98 199)"}
+{"variant":"C","label":"Shared-interest chip","fg":"rgb(79 66 150)","median":7.32,"medianBg":"rgb(243 240 253)","worst2pct":7.32,"worstBg":"rgb(243 240 253)"}
+{"variant":"C","label":"Welcome primary button text","fg":"rgb(255 255 255)","median":4.9,"medianBg":"rgb(114 98 199)","worst2pct":4.9,"worstBg":"rgb(114 98 199)"}
+{"variant":"D","label":"SuperSwipe star on photo","fg":"rgb(20 19 22)","median":9.07,"medianBg":"rgb(245 165 36)","worst2pct":9.07,"worstBg":"rgb(245 165 36)"}
+{"variant":"D","label":"Name over photo scrim","fg":"rgb(255 255 255)","median":4.94,"medianBg":"rgb(112 112 115)","worst2pct":4.66,"worstBg":"rgb(116 116 119)"}
+{"variant":"D","label":"Tab icon, inactive (rest)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.03,"worstBg":"rgb(255 254 255)"}
+{"variant":"D","label":"Tab icon, inactive (scrolled over prompt)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.03,"worstBg":"rgb(255 254 255)"}
+{"variant":"D","label":"Tab icon, inactive (scrolled)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.03,"worstBg":"rgb(255 254 255)"}
+{"variant":"D","label":"Prompt question on card","fg":"rgb(102 101 107)","median":5.77,"medianBg":"rgb(255 255 255)","worst2pct":5.77,"worstBg":"rgb(255 255 255)"}
+{"variant":"D","label":"Primary button text","fg":"rgb(255 255 255)","median":4.9,"medianBg":"rgb(114 98 199)","worst2pct":4.9,"worstBg":"rgb(114 98 199)"}
+{"variant":"D","label":"Shared-interest chip","absent":true}
+{"variant":"D","label":"Welcome primary button text","fg":"rgb(255 255 255)","median":4.9,"medianBg":"rgb(114 98 199)","worst2pct":4.9,"worstBg":"rgb(114 98 199)"}
+{"variant":"E","label":"SuperSwipe star on photo","fg":"rgb(255 255 255)","median":4.73,"medianBg":"rgb(117 104 185)","worst2pct":4.6,"worstBg":"rgb(119 106 187)"}
+{"variant":"E","label":"Name over photo scrim","fg":"rgb(255 255 255)","median":3.39,"medianBg":"rgb(140 139 142)","worst2pct":3.06,"worstBg":"rgb(147 147 150)"}
+{"variant":"E","label":"Tab icon, inactive (rest)","fg":"rgb(60 59 64)","median":11.01,"medianBg":"rgb(254 254 254)","worst2pct":8.18,"worstBg":"rgb(221 221 222)"}
+{"variant":"E","label":"Tab icon, inactive (scrolled over prompt)","fg":"rgb(60 59 64)","median":10.55,"medianBg":"rgb(249 249 250)","worst2pct":10.48,"worstBg":"rgb(249 248 249)"}
+{"variant":"E","label":"Tab icon, inactive (scrolled)","fg":"rgb(60 59 64)","median":11.01,"medianBg":"rgb(254 254 254)","worst2pct":7.72,"worstBg":"rgb(215 215 216)"}
+{"variant":"E","label":"Prompt question on card","fg":"rgb(102 101 107)","median":5.77,"medianBg":"rgb(255 255 255)","worst2pct":5.77,"worstBg":"rgb(255 255 255)"}
+{"variant":"E","label":"Primary button text","fg":"rgb(255 255 255)","median":16.4,"medianBg":"rgb(32 31 34)","worst2pct":14.85,"worstBg":"rgb(40 39 42)"}
+{"variant":"E","label":"Shared-interest chip","absent":true}
+{"variant":"E","label":"Welcome primary button text","fg":"rgb(255 255 255)","median":16.4,"medianBg":"rgb(32 31 34)","worst2pct":14.85,"worstBg":"rgb(40 39 42)"}
+{"variant":"F","label":"SuperSwipe star on photo","fg":"rgb(20 19 22)","median":9.07,"medianBg":"rgb(245 165 36)","worst2pct":9.07,"worstBg":"rgb(245 165 36)"}
+{"variant":"F","label":"Name over photo scrim","fg":"rgb(255 255 255)","median":4.94,"medianBg":"rgb(112 112 115)","worst2pct":4.66,"worstBg":"rgb(116 116 119)"}
+{"variant":"F","label":"Tab icon, inactive (rest)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.1,"worstBg":"rgb(255 255 255)"}
+{"variant":"F","label":"Tab icon, inactive (scrolled over prompt)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.1,"worstBg":"rgb(255 255 255)"}
+{"variant":"F","label":"Tab icon, inactive (scrolled)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":11.1,"worstBg":"rgb(255 255 255)"}
+{"variant":"F","label":"Prompt question on card","fg":"rgb(79 66 150)","median":7.32,"medianBg":"rgb(243 240 253)","worst2pct":7.32,"worstBg":"rgb(243 240 253)"}
+{"variant":"F","label":"Primary button text","fg":"rgb(255 255 255)","median":4.9,"medianBg":"rgb(114 98 199)","worst2pct":4.9,"worstBg":"rgb(114 98 199)"}
+{"variant":"F","label":"Shared-interest chip","fg":"rgb(79 66 150)","median":7.32,"medianBg":"rgb(243 240 253)","worst2pct":7.32,"worstBg":"rgb(243 240 253)"}
+{"variant":"F","label":"Welcome primary button text","fg":"rgb(255 255 255)","median":4.9,"medianBg":"rgb(114 98 199)","worst2pct":4.9,"worstBg":"rgb(114 98 199)"}
+{"variant":"G","label":"SuperSwipe star on photo","fg":"rgb(20 19 22)","median":7.88,"medianBg":"rgb(223 156 48)","worst2pct":7.56,"worstBg":"rgb(218 153 49)"}
+{"variant":"G","label":"Name over photo scrim","fg":"rgb(255 255 255)","median":4.94,"medianBg":"rgb(112 112 115)","worst2pct":4.66,"worstBg":"rgb(116 116 119)"}
+{"variant":"G","label":"Tab icon, inactive (rest)","fg":"rgb(60 59 64)","median":11.01,"medianBg":"rgb(254 254 254)","worst2pct":8.18,"worstBg":"rgb(221 221 222)"}
+{"variant":"G","label":"Tab icon, inactive (scrolled over prompt)","fg":"rgb(60 59 64)","median":10.55,"medianBg":"rgb(249 249 250)","worst2pct":10.48,"worstBg":"rgb(249 248 249)"}
+{"variant":"G","label":"Tab icon, inactive (scrolled)","fg":"rgb(60 59 64)","median":11.01,"medianBg":"rgb(254 254 254)","worst2pct":7.72,"worstBg":"rgb(215 215 216)"}
+{"variant":"G","label":"Prompt question on card","fg":"rgb(102 101 107)","median":5.77,"medianBg":"rgb(255 255 255)","worst2pct":5.77,"worstBg":"rgb(255 255 255)"}
+{"variant":"G","label":"Primary button text","fg":"rgb(255 255 255)","median":4.9,"medianBg":"rgb(114 98 199)","worst2pct":4.9,"worstBg":"rgb(114 98 199)"}
+{"variant":"G","label":"Shared-interest chip","absent":true}
+{"variant":"G","label":"Welcome primary button text","fg":"rgb(255 255 255)","median":4.9,"medianBg":"rgb(114 98 199)","worst2pct":4.9,"worstBg":"rgb(114 98 199)"}
+{"variant":"H","label":"SuperSwipe star on photo","fg":"rgb(20 19 22)","median":7.88,"medianBg":"rgb(223 156 48)","worst2pct":7.56,"worstBg":"rgb(218 153 49)"}
+{"variant":"H","label":"Name over photo scrim","fg":"rgb(255 255 255)","median":4.94,"medianBg":"rgb(112 112 115)","worst2pct":4.66,"worstBg":"rgb(116 116 119)"}
+{"variant":"H","label":"Tab icon, inactive (rest)","fg":"rgb(60 59 64)","median":10.6,"medianBg":"rgb(250 249 254)","worst2pct":7.73,"worstBg":"rgb(216 213 233)"}
+{"variant":"H","label":"Tab icon, inactive (scrolled over prompt)","fg":"rgb(60 59 64)","median":10.55,"medianBg":"rgb(249 249 250)","worst2pct":10.48,"worstBg":"rgb(249 248 249)"}
+{"variant":"H","label":"Tab icon, inactive (scrolled)","fg":"rgb(60 59 64)","median":11.1,"medianBg":"rgb(255 255 255)","worst2pct":8.17,"worstBg":"rgb(221 221 221)"}
+{"variant":"H","label":"Prompt question on card","fg":"rgb(79 66 150)","median":7.32,"medianBg":"rgb(243 240 253)","worst2pct":7.32,"worstBg":"rgb(243 240 253)"}
+{"variant":"H","label":"Primary button text","fg":"rgb(255 255 255)","median":4.9,"medianBg":"rgb(114 98 199)","worst2pct":4.9,"worstBg":"rgb(114 98 199)"}
+{"variant":"H","label":"Shared-interest chip","fg":"rgb(79 66 150)","median":7.32,"medianBg":"rgb(243 240 253)","worst2pct":7.32,"worstBg":"rgb(243 240 253)"}
+{"variant":"H","label":"Welcome primary button text","fg":"rgb(255 255 255)","median":4.9,"medianBg":"rgb(114 98 199)","worst2pct":4.9,"worstBg":"rgb(114 98 199)"}

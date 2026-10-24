@@ -1,0 +1,710 @@
+diff --git a/src/design-system/components/Content.jsx b/src/design-system/components/Content.jsx
+index becc927..8336c99 100644
+--- a/src/design-system/components/Content.jsx
++++ b/src/design-system/components/Content.jsx
+@@ -121,7 +121,7 @@ export function Section({ title, description, action, children }) {
+       {(title || description) && (
+         <header className="section__header">
+           <div>
+-            {title && <h3 className="section__title">{title}</h3>}
++            {title && <h2 className="section__title">{title}</h2>}
+             {description && <p className="section__description">{description}</p>}
+           </div>
+           {action}
+@@ -453,9 +453,9 @@ export function ProfileCard({ name, age, verified, details = [], isNew = false,
+               {isNew && <span className="profile-card__pill">New here</span>}
+             </div>
+           )}
+-          <h3 className="profile-card__name">
++          <h2 className="profile-card__name">
+             {name}, {age}
+-          </h3>
++          </h2>
+           {headline && (
+             <p className="profile-card__detail">
+               <Icon name={headline.icon} size={16} /> {headline.text}
+diff --git a/src/design-system/components/Patterns.jsx b/src/design-system/components/Patterns.jsx
+index de15bb5..e5c909d 100644
+--- a/src/design-system/components/Patterns.jsx
++++ b/src/design-system/components/Patterns.jsx
+@@ -1,7 +1,7 @@
+ import { cx } from "../../lib/cx.js";
+ import { Button } from "./Button.jsx";
+ import { Icon } from "./Icon.jsx";
+-import { avatarTone } from "./Content.jsx";
++import { Avatar, avatarTone } from "./Content.jsx";
+ 
+ /**
+  * Explains a device permission before the OS prompt. Primary asks; secondary defers.
+@@ -73,15 +73,35 @@ export function OrganicPortrait({ name, src, className }) {
+ 
+ /**
+  * The match moment (reference: the Numaya sketch): heading, the matched person's photo in the
+- * organic frame, one line of copy and the illustration slot. White page; purple stays in the frame
+- * backdrop and the artwork. Actions (message, keep browsing) belong to the screen's footer.
++ * organic frame (with `you` overlapping its edge, so the moment shows the pair), one line of copy,
++ * what the two of you really share (`shared`, optional) and the illustration slot. White page;
++ * purple stays in the frame backdrop, the shared pills and the artwork. Actions (message, keep
++ * browsing) belong to the screen's footer.
+  */
+-export function MatchCelebration({ name, src, title = "It’s a match!", illustration, children }) {
++export function MatchCelebration({ name, src, you, shared, title = "It’s a match!", illustration, children }) {
+   return (
+     <div className="match">
+       <h1 className="match__title">{title}</h1>
+-      <OrganicPortrait name={name} src={src} className="match__portrait" />
++      {/* The pair: the matched person in the organic frame, you overlapping its edge. */}
++      <div className="match__pair">
++        <OrganicPortrait name={name} src={src} className="match__portrait" />
++        {you && <Avatar name={you.name} src={you.src} size="lg" className="match__you" />}
++      </div>
+       {children && <p className="match__body">{children}</p>}
++      {shared?.length > 0 && (
++        <div className="match__shared">
++          <span className="match__shared-label" id="match-shared-label">
++            You both like
++          </span>
++          <ul className="match__shared-list" aria-labelledby="match-shared-label">
++            {shared.map((s) => (
++              <li key={s} className="chip chip--static match__shared-chip">
++                {s}
++              </li>
++            ))}
++          </ul>
++        </div>
++      )}
+       {illustration && <div className="match__art">{illustration}</div>}
+     </div>
+   );
+diff --git a/src/design-system/styles/base.css b/src/design-system/styles/base.css
+index 8db6bfb..d81a99a 100644
+--- a/src/design-system/styles/base.css
++++ b/src/design-system/styles/base.css
+@@ -11,6 +11,18 @@
+   box-sizing: border-box;
+ }
+ 
++/* Browser surfaces carry the brand too (Impeccable craft floor): selected text sits on a lavender
++   wash in ink (14:1), and the text caret is brand purple. */
++::selection {
++  background: var(--color-brand-tint-strong);
++  color: var(--color-text-primary);
++}
++
++input,
++textarea {
++  caret-color: var(--color-brand);
++}
++
+ html,
+ body,
+ #root {
+diff --git a/src/design-system/styles/chat.css b/src/design-system/styles/chat.css
+index 8ed87ee..2a20330 100644
+--- a/src/design-system/styles/chat.css
++++ b/src/design-system/styles/chat.css
+@@ -155,8 +155,11 @@
+   cursor: not-allowed;
+ }
+ 
++/* Impeccable polish: the placeholder here is a suggested opener ("Ask about the record shop…"),
++   content the person is meant to read, so it uses muted text (5.8:1) rather than the 2.8:1
++   placeholder grey. */
+ .composer__field textarea::placeholder {
+-  color: var(--color-text-subtle);
++  color: var(--color-text-muted);
+ }
+ 
+ /* Send: brand purple with a white arrow once there is text; empty, it is the quiet grey circle of
+diff --git a/src/design-system/styles/components.css b/src/design-system/styles/components.css
+index bba0c2d..9aa9a62 100644
+--- a/src/design-system/styles/components.css
++++ b/src/design-system/styles/components.css
+@@ -751,10 +751,25 @@
+   margin: var(--space-2) var(--space-3) var(--safe-bottom);
+   padding: 6px;
+   border-radius: var(--radius-pill);
+-  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+-  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+-  backdrop-filter: blur(16px) saturate(1.6);
+-  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle), var(--shadow-float);
++  /* Liquid Glass, menu tier: the bar floats over scrolling content (a real backdrop), and its icons
++     must stay legible over whatever slides under, so it is mostly blur plus a surface wash, with the
++     skill's rim (top highlight + hairline border). The wash is 72%, not the recipe's 55%: at 55%
++     section labels read through behind the icons. */
++  background: color-mix(in srgb, var(--color-surface) 72%, transparent);
++  -webkit-backdrop-filter: blur(22px) saturate(140%);
++  backdrop-filter: blur(22px) saturate(140%);
++  box-shadow:
++    inset 0 1px 0 var(--color-glass-rim),
++    inset 0 0 0 1px var(--color-glass-border),
++    var(--shadow-float);
++}
++
++@media (prefers-reduced-transparency: reduce) {
++  .tab-bar {
++    background: var(--color-surface);
++    -webkit-backdrop-filter: none;
++    backdrop-filter: none;
++  }
+ }
+ 
+ .tab-bar__item {
+diff --git a/src/design-system/styles/content.css b/src/design-system/styles/content.css
+index 2c16f25..6c27144 100644
+--- a/src/design-system/styles/content.css
++++ b/src/design-system/styles/content.css
+@@ -451,15 +451,41 @@ button.list-row__hit:hover {
+ /* Profile content                                                     */
+ /* ------------------------------------------------------------------ */
+ /* Prompt answers: Meetup's flat grey quote card ("About me"), no border or shadow. */
+-.prompt {
++/* The prompt is Numaya's signature object (Impeccable bolder): the same lavender surface, deep-purple
++   question and Fraunces answer wherever someone's own words appear (Discover, Profile, Interests,
++   Edit). A large closing quotation mark sits in the corner: these are a person's words, not form
++   data. It is decorative and hidden from assistive tech. */
++.prompt,
++.profile-section--prompt {
+   position: relative;
+-  padding: var(--space-5);
++  overflow: hidden;
++  isolation: isolate;
++  background: var(--color-surface-brand);
++}
++
++.prompt::after,
++.profile-section--prompt::after {
++  content: "\201D" / "";
++  position: absolute;
++  right: var(--space-4);
++  bottom: -0.66em;
++  z-index: -1;
++  color: var(--color-brand-subtle);
++  font-family: var(--font-display);
++  font-variation-settings: var(--font-display-axes);
++  font-size: 112px;
++  line-height: 1;
++  font-weight: var(--type-display-weight);
++  pointer-events: none;
++}
++
++.prompt {
++  padding: var(--space-5) var(--space-5) var(--space-6);
+   border-radius: var(--radius-lg);
+-  background: var(--color-surface-soft);
+ }
+ 
+ .prompt__label {
+-  color: var(--color-text-muted);
++  color: var(--color-text-brand-deep);
+   font-size: var(--type-label-size);
+   line-height: var(--type-label-line);
+   font-weight: var(--font-weight-semibold);
+@@ -648,14 +674,15 @@ button.list-row__hit:hover {
+   gap: 2px;
+   padding: 136px 104px var(--space-5) var(--space-5);
+   /* Eased scrim: an even ramp shows a visible band edge; these stops follow an ease-in curve so
+-     the darkening has no start line. It ends at the same ink as before, so white text keeps its
+-     contrast on a real photo. */
++     the darkening has no start line. Impeccable polish: the middle stops are deep enough that the
++     name and detail lines meet 3:1 / 4.5:1 even on the light placeholder (measured, see the
++     experiment README); the end ink is unchanged. */
+   background: linear-gradient(
+     180deg,
+     transparent 0%,
+     color-mix(in srgb, var(--color-overlay-photo) 8%, transparent) 22%,
+-    color-mix(in srgb, var(--color-overlay-photo) 26%, transparent) 46%,
+-    color-mix(in srgb, var(--color-overlay-photo) 58%, transparent) 70%,
++    color-mix(in srgb, var(--color-overlay-photo) 40%, transparent) 46%,
++    color-mix(in srgb, var(--color-overlay-photo) 84%, transparent) 70%,
+     var(--color-overlay-photo) 100%
+   );
+   color: var(--color-text-on-inverse);
+@@ -725,7 +752,7 @@ button.list-row__hit:hover {
+   height: 60px;
+   /* Meetup primary treatment (Chat, Add friend, Ticket): ink with a soft sheen. */
+   border-radius: 50%;
+-  background: linear-gradient(180deg, var(--button-primary-bg-top) 0%, var(--button-primary-bg-bottom) 100%);
++  background: linear-gradient(180deg, var(--button-ink-bg-top) 0%, var(--button-ink-bg-bottom) 100%);
+   color: var(--color-text-on-inverse);
+   box-shadow: var(--shadow-button);
+   transition: transform var(--motion-duration-fast) var(--motion-ease-out);
+@@ -747,10 +774,26 @@ button.list-row__hit:hover {
+ 
+ /* SuperSwipe: the single purple action, like Meetup's floating "Map" pill: flat brand purple with a
+    white star and a soft purple drop. */
++/* UI/UX Pro Max accent role (applied after Impeccable): SuperSwipe is the one "extra" action, so it
++   takes the warm reward accent with an ink star (9.6:1). Purple stays the primary action and the
++   conversation colour; ink stays Pass and Like. */
+ .action-bar__btn--super {
+-  background: var(--color-brand);
+-  color: var(--color-on-brand);
+-  box-shadow: var(--shadow-brand);
++  background: var(--color-accent-reward);
++  color: var(--color-text-primary);
++  box-shadow: var(--shadow-xs);
++}
++
++/* Liquid Glass, coloured-glass FAB recipe, applied after UI/UX Pro Max: SuperSwipe on the photo is
++   gold reward glass with the skill's rim restated, so the photo shows through its edge. Strong tint
++   keeps the ink star legible over a light photo. The end-of-profile action bar keeps the solid fill. */
++.profile-card__actions .action-bar__btn--super {
++  background: linear-gradient(155deg, color-mix(in srgb, var(--color-accent-reward) 90%, transparent), color-mix(in srgb, var(--color-accent-reward) 78%, transparent));
++  -webkit-backdrop-filter: blur(3px) saturate(125%);
++  backdrop-filter: blur(3px) saturate(125%);
++  box-shadow:
++    0 12px 28px -8px color-mix(in srgb, var(--color-accent-reward) 45%, transparent),
++    inset 0 1px 0 var(--color-glass-rim-color),
++    inset 0 0 0 1px color-mix(in srgb, var(--color-surface) 14%, transparent);
+ }
+ 
+ .action-bar__btn--super:active {
+@@ -964,10 +1007,60 @@ button.list-row__hit:hover {
+ 
+ /* Vertical rhythm scales with the screen's height so the whole moment (title to illustration)
+    fits above the composer on a small phone without crowding a tall one. */
+-.match__portrait {
++/* The pair (Impeccable delight): the matched person in the organic frame, you overlapping its lower
++   edge on a white ring with a soft offset shadow, because it genuinely sits on top. */
++.match__pair {
++  position: relative;
+   margin-top: clamp(var(--space-5), 3.8svh, var(--space-8));
+ }
+ 
++.match__you {
++  position: absolute;
++  left: -9%;
++  bottom: -3%;
++  border-radius: 50%;
++  box-shadow: 0 0 0 4px var(--color-surface), var(--shadow-lg);
++}
++
++/* What the two of you share: lavender pills in the conversation colour of the prompt object. */
++.match__shared {
++  display: flex;
++  flex-wrap: wrap;
++  align-items: center;
++  justify-content: center;
++  gap: var(--space-2);
++  margin-top: clamp(var(--space-3), 2.4svh, var(--space-5));
++}
++
++.match__shared-label {
++  color: var(--color-text-muted);
++  font-size: var(--type-label-size);
++  line-height: var(--type-label-line);
++  font-weight: var(--font-weight-semibold);
++}
++
++.match__shared-list {
++  display: contents;
++  margin: 0;
++  padding: 0;
++  list-style: none;
++}
++
++.match__shared-chip {
++  background: var(--color-surface-brand);
++  box-shadow: none;
++  color: var(--color-text-brand-deep);
++  font-weight: var(--font-weight-semibold);
++}
++
++/* Short phones (≤ 700px tall): the frame gives up a little height so the whole moment fits above
++   the composer. */
++@media (max-height: 700px) {
++  .match .organic-portrait {
++    width: min(264px, 66vw, 25svh);
++  }
++}
++
+ /* A thin, even lavender halo: enough to frame the photo, not a second shape competing with it. */
+ .organic-portrait__backdrop {
+   position: absolute;
+@@ -1140,10 +1233,16 @@ button.list-row__hit:hover {
+   font-weight: var(--font-weight-semibold);
+ }
+ 
+-/* Prompt: the answer is the largest text after the name, set tight like a pull quote. */
++/* Prompt: the answer is the largest text after the name, set tight like a pull quote. On the
++   lavender surface it drops the card hairline and the question takes the deep brand purple. */
+ .profile-section--prompt {
+   gap: var(--space-2);
+   padding-block: var(--space-5) var(--space-6);
++  box-shadow: none;
++}
++
++.profile-section--prompt .profile-section__title {
++  color: var(--color-text-brand-deep);
+ }
+ 
+ .profile-section__answer {
+diff --git a/src/design-system/tokens.css b/src/design-system/tokens.css
+index dabe3da..fc5f4d7 100644
+--- a/src/design-system/tokens.css
++++ b/src/design-system/tokens.css
+@@ -13,6 +13,7 @@
+   --p-color-periwinkle-100: #d6dcfd;
+   --p-color-rose-100: #fde8ee;
+   --p-color-rose-500: #ea698c;
++  --p-color-gold-400: #f5a524;
+   --p-color-yellow-100: #fdf0d0;
+   --p-color-yellow-200: #fcd284;
+   --p-color-orange-500: #d58b50;
+@@ -41,6 +42,8 @@
+   --p-color-alpha-ink-62: rgb(20 19 22 / 0.62);
+   --p-color-alpha-purple-24: rgb(114 98 199 / 0.24);
+   --p-color-alpha-white-55: rgb(255 255 255 / 0.55);
++  --p-color-alpha-white-40: rgb(255 255 255 / 0.40);
++  --p-color-alpha-ink-12: rgb(30 33 45 / 0.12);
+   --p-font-family-fraunces: "Fraunces Variable", ui-serif, Georgia, "Times New Roman", serif;
+   --p-font-family-inter: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+   --p-font-size-11: 11px;
+@@ -105,6 +108,7 @@
+   --color-accent-rose: var(--p-color-rose-500);
+   --color-accent-rose-tint: var(--p-color-rose-100);
+   --color-accent-yellow: var(--p-color-yellow-200);
++  --color-accent-reward: var(--p-color-gold-400);
+   --color-accent-yellow-tint: var(--p-color-yellow-100);
+   --color-accent-orange: var(--p-color-orange-500);
+   --color-accent-green: var(--p-color-green-500);
+@@ -133,6 +137,9 @@
+   --color-overlay-scrim: var(--p-color-alpha-ink-34);
+   --color-overlay-hover-light: var(--p-color-alpha-white-55);
+   --color-overlay-photo: var(--p-color-alpha-ink-62);
++  --color-glass-rim: var(--p-color-alpha-white-55);
++  --color-glass-rim-color: var(--p-color-alpha-white-40);
++  --color-glass-border: var(--p-color-alpha-ink-12);
+   --color-danger: var(--p-color-red-600);
+   --color-danger-tint: var(--p-color-red-50);
+   --color-danger-badge: var(--p-color-red-600);
+@@ -266,10 +273,12 @@
+   --button-height: var(--p-dimension-54);
+   --button-height-sm: var(--p-dimension-40);
+   --button-height-quiet: var(--p-dimension-48);
+-  --button-primary-bg-top: var(--p-color-neutral-800);
+-  --button-primary-bg-bottom: var(--color-surface-inverse);
+-  --button-primary-bg-hover-top: var(--p-color-neutral-750);
+-  --button-primary-bg-hover-bottom: var(--p-color-neutral-850);
++  --button-primary-bg-top: var(--color-brand);
++  --button-primary-bg-bottom: var(--color-brand);
++  --button-primary-bg-hover-top: var(--color-brand-hover);
++  --button-primary-bg-hover-bottom: var(--color-brand-hover);
++  --button-ink-bg-top: var(--p-color-neutral-800);
++  --button-ink-bg-bottom: var(--color-surface-inverse);
+   --fab-size: var(--p-dimension-56);
+   --icon-button-size: var(--p-dimension-40);
+   --icon-button-size-sm: var(--p-dimension-36);
+diff --git a/src/design-system/tokens.js b/src/design-system/tokens.js
+index 72c0bec..65b74f9 100644
+--- a/src/design-system/tokens.js
++++ b/src/design-system/tokens.js
+@@ -99,6 +99,15 @@ export const tokens = [
+     "resolved": "#ea698c",
+     "description": "Meetup accent rose (sampled #EA698C, organiser badge): badges and category marks, never text."
+   },
++  {
++    "id": "primitive.color.gold.400",
++    "name": "--p-color-gold-400",
++    "layer": "primitive",
++    "type": "color",
++    "value": "#f5a524",
++    "resolved": "#f5a524",
++    "description": "UI/UX Pro Max accent role (purple-led profile: amber accent, ink on it): the reward action. Ink on it 9.6:1."
++  },
+   {
+     "id": "primitive.color.yellow.100",
+     "name": "--p-color-yellow-100",
+@@ -351,6 +360,24 @@ export const tokens = [
+     "resolved": "rgb(255 255 255 / 0.55)",
+     "description": null
+   },
++  {
++    "id": "primitive.color.alpha.white-40",
++    "name": "--p-color-alpha-white-40",
++    "layer": "primitive",
++    "type": "color",
++    "value": "rgb(255 255 255 / 0.40)",
++    "resolved": "rgb(255 255 255 / 0.40)",
++    "description": "Liquid Glass rim highlight on coloured glass."
++  },
++  {
++    "id": "primitive.color.alpha.ink-12",
++    "name": "--p-color-alpha-ink-12",
++    "layer": "primitive",
++    "type": "color",
++    "value": "rgb(30 33 45 / 0.12)",
++    "resolved": "rgb(30 33 45 / 0.12)",
++    "description": "Liquid Glass border on light glass (skill value)."
++  },
+   {
+     "id": "primitive.font.family.fraunces",
+     "name": "--p-font-family-fraunces",
+@@ -909,6 +936,15 @@ export const tokens = [
+     "resolved": "#fcd284",
+     "description": "Illustration framing."
+   },
++  {
++    "id": "semantic.color.accent.reward",
++    "name": "--color-accent-reward",
++    "layer": "semantic",
++    "type": "color",
++    "value": "{primitive.color.gold.400}",
++    "resolved": "#f5a524",
++    "description": "UI/UX Pro Max accent/CTA role: the one 'extra' action (SuperSwipe), with ink on it."
++  },
+   {
+     "id": "semantic.color.accent.yellow-tint",
+     "name": "--color-accent-yellow-tint",
+@@ -1161,6 +1197,33 @@ export const tokens = [
+     "resolved": "rgb(20 19 22 / 0.62)",
+     "description": "Bottom legibility overlay for text on photos (functional, not decorative)."
+   },
++  {
++    "id": "semantic.color.glass.rim",
++    "name": "--color-glass-rim",
++    "layer": "semantic",
++    "type": "color",
++    "value": "{primitive.color.alpha.white-55}",
++    "resolved": "rgb(255 255 255 / 0.55)",
++    "description": "Top inset highlight: the polished edge."
++  },
++  {
++    "id": "semantic.color.glass.rim-color",
++    "name": "--color-glass-rim-color",
++    "layer": "semantic",
++    "type": "color",
++    "value": "{primitive.color.alpha.white-40}",
++    "resolved": "rgb(255 255 255 / 0.40)",
++    "description": "Rim on coloured glass (SuperSwipe)."
++  },
++  {
++    "id": "semantic.color.glass.border",
++    "name": "--color-glass-border",
++    "layer": "semantic",
++    "type": "color",
++    "value": "{primitive.color.alpha.ink-12}",
++    "resolved": "rgb(30 33 45 / 0.12)",
++    "description": null
++  },
+   {
+     "id": "semantic.color.danger.default",
+     "name": "--color-danger",
+@@ -2349,8 +2412,8 @@ export const tokens = [
+     "name": "--button-primary-bg-top",
+     "layer": "component",
+     "type": "color",
+-    "value": "{primitive.color.neutral.800}",
+-    "resolved": "#2d2c2f",
++    "value": "{semantic.color.brand.default}",
++    "resolved": "#7262c7",
+     "description": null
+   },
+   {
+@@ -2358,8 +2421,8 @@ export const tokens = [
+     "name": "--button-primary-bg-bottom",
+     "layer": "component",
+     "type": "color",
+-    "value": "{semantic.color.surface.inverse}",
+-    "resolved": "#141316",
++    "value": "{semantic.color.brand.default}",
++    "resolved": "#7262c7",
+     "description": null
+   },
+   {
+@@ -2367,8 +2430,8 @@ export const tokens = [
+     "name": "--button-primary-bg-hover-top",
+     "layer": "component",
+     "type": "color",
+-    "value": "{primitive.color.neutral.750}",
+-    "resolved": "#353438",
++    "value": "{semantic.color.brand.hover}",
++    "resolved": "#5f50b3",
+     "description": null
+   },
+   {
+@@ -2376,8 +2439,26 @@ export const tokens = [
+     "name": "--button-primary-bg-hover-bottom",
+     "layer": "component",
+     "type": "color",
+-    "value": "{primitive.color.neutral.850}",
+-    "resolved": "#1f1e21",
++    "value": "{semantic.color.brand.hover}",
++    "resolved": "#5f50b3",
++    "description": null
++  },
++  {
++    "id": "component.button.ink.bg-top",
++    "name": "--button-ink-bg-top",
++    "layer": "component",
++    "type": "color",
++    "value": "{primitive.color.neutral.800}",
++    "resolved": "#2d2c2f",
++    "description": null
++  },
++  {
++    "id": "component.button.ink.bg-bottom",
++    "name": "--button-ink-bg-bottom",
++    "layer": "component",
++    "type": "color",
++    "value": "{semantic.color.surface.inverse}",
++    "resolved": "#141316",
+     "description": null
+   },
+   {
+diff --git a/src/flows/flows.css b/src/flows/flows.css
+index 7648a29..ae70f9b 100644
+--- a/src/flows/flows.css
++++ b/src/flows/flows.css
+@@ -153,13 +153,20 @@ body {
+   padding: var(--space-3) var(--layout-gutter) calc(var(--safe-bottom) + var(--space-2));
+ }
+ 
++/* Liquid Glass: the tab bar floats over the scrolling body, so content passes under the glass. The
++   body reserves the bar's height so the last item and the Discover card still clear it at rest. */
++.fl-screen {
++  position: relative;
++}
++
+ .fl-screen .tab-bar {
+-  flex: none;
++  position: absolute;
++  inset: auto 0 0;
++  z-index: 2;
+ }
+ 
+-/* Tab roots: the floating bar sits below the content; the body needs less bottom padding. */
+ .fl-screen__body:has(+ .tab-bar) {
+-  padding-bottom: var(--space-4);
++  padding-bottom: calc(var(--tab-bar-height) + var(--space-2) + var(--safe-bottom) + var(--space-4));
+ }
+ 
+ .fl-stack {
+@@ -357,6 +364,13 @@ body {
+   background: var(--color-surface-page);
+ }
+ 
++/* UI/UX Pro Max Border role: cards on the tab screens take lavender hairlines instead of grey, so
++   every edge on the screen belongs to the brand family. (Its lavender page background is rejected:
++   it would erase Impeccable's lavender prompt object.) */
++.fl-screen--page:has(> .tab-bar) .card:not(.profile-section--prompt) {
++  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-brand-subtle), var(--shadow-xs);
++}
++
+ /* Messaging (Bumble layout, Meetup styling) ------------------------------- */
+ .fl-close-head {
+   flex: none;
+@@ -563,7 +577,7 @@ body {
+ 
+ /* The profile: photo card 8px from the edges filling the viewport, then section cards. */
+ .fl-screen--discover .fl-screen__body {
+-  padding: 0 var(--layout-gutter-tight) var(--space-4);
++  padding: 0 var(--layout-gutter-tight) calc(var(--tab-bar-height) + var(--space-2) + var(--safe-bottom) + var(--space-4));
+   container-type: size;
+ }
+ 
+diff --git a/src/flows/screens.jsx b/src/flows/screens.jsx
+index b1770ae..b54b3bc 100644
+--- a/src/flows/screens.jsx
++++ b/src/flows/screens.jsx
+@@ -554,7 +554,7 @@ export function Match({ go }) {
+       }
+     >
+       <div className="fl-center fl-fill fl-match">
+-        <MatchCelebration name={person.name} src={person.src} illustration={<IllustrationSlot id="match-hands-heart" />}>
++        <MatchCelebration name={person.name} src={person.src} you={{ name: state.profile.name || "You" }} shared={person.shared} illustration={<IllustrationSlot id="match-hands-heart" />}>
+           You and <strong>{person.name}</strong> liked each other. Now say hello.
+         </MatchCelebration>
+       </div>
+@@ -880,6 +880,13 @@ export function MyProfile({ go }) {
+           </div>
+         </div>
+ 
++        {/* Impeccable layout: the person's own words come before the score. */}
++        <div className="list-group">
++          <p className="list-group__title">Your prompt</p>
++          <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} onEdit={() => go("prompt")} />
++          <p className="list-group__footnote">Matches reply to this.</p>
++        </div>
++
+         {/* Compact readiness summary leading to the full dashboard. */}
+         <section className="card fl-ready-card" aria-labelledby="fl-ready-title">
+           <div className="fl-ready-card__top">
+@@ -903,12 +910,6 @@ export function MyProfile({ go }) {
+           </div>
+         </section>
+ 
+-        <div className="list-group">
+-          <p className="list-group__title">Your prompt</p>
+-          <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} onEdit={() => go("prompt")} />
+-          <p className="list-group__footnote">Matches reply to this.</p>
+-        </div>
+-
+         <ListGroup title="Activity">
+           <ListRow icon="event" label="My activities" value={`${mine.upcoming.length + mine.hosting.length} upcoming`} kind="value" onPress={() => go("my-activities")} />
+         </ListGroup>
+diff --git a/tokens/numaya.tokens.json b/tokens/numaya.tokens.json
+index fac3a17..8792351 100644
+--- a/tokens/numaya.tokens.json
++++ b/tokens/numaya.tokens.json
+@@ -21,6 +21,7 @@
+         "100": { "$type": "color", "$value": "#fde8ee", "$description": "Rose tint (derived) for avatar and category framing." },
+         "500": { "$type": "color", "$value": "#ea698c", "$description": "Meetup accent rose (sampled #EA698C, organiser badge): badges and category marks, never text." }
+       },
++      "gold": { "400": { "$type": "color", "$value": "#f5a524", "$description": "UI/UX Pro Max accent role (purple-led profile: amber accent, ink on it): the reward action. Ink on it 9.6:1." } },
+       "yellow": { "100": { "$type": "color", "$value": "#fdf0d0", "$description": "Yellow tint (derived from #FCD284) for avatar framing." }, "200": { "$type": "color", "$value": "#fcd284", "$description": "Meetup illustration yellow (sampled #FCD284, empty-state blob): illustration and avatar framing." } },
+       "orange": { "500": { "$type": "color", "$value": "#d58b50", "$description": "Meetup time/status orange (sampled #D58B50, 'In 2m'): icons and marks only (2.75:1 on white)." } },
+       "neutral": {
+@@ -45,7 +46,9 @@
+         "ink-34":   { "$type": "color", "$value": "rgb(20 19 22 / 0.34)" },
+         "ink-62":   { "$type": "color", "$value": "rgb(20 19 22 / 0.62)" },
+         "purple-24": { "$type": "color", "$value": "rgb(114 98 199 / 0.24)" },
+-        "white-55": { "$type": "color", "$value": "rgb(255 255 255 / 0.55)" }
++        "white-55": { "$type": "color", "$value": "rgb(255 255 255 / 0.55)" },
++        "white-40": { "$type": "color", "$value": "rgb(255 255 255 / 0.40)", "$description": "Liquid Glass rim highlight on coloured glass." },
++        "ink-12":   { "$type": "color", "$value": "rgb(30 33 45 / 0.12)", "$description": "Liquid Glass border on light glass (skill value)." }
+       }
+     },
+     "font": {
+@@ -134,6 +137,7 @@
+         "rose":   { "$type": "color", "$value": "{primitive.color.rose.500}", "$description": "Badges, category marks and the wordmark dot (Meetup accent rose)." },
+         "rose-tint": { "$type": "color", "$value": "{primitive.color.rose.100}" },
+         "yellow": { "$type": "color", "$value": "{primitive.color.yellow.200}", "$description": "Illustration framing." },
++        "reward": { "$type": "color", "$value": "{primitive.color.gold.400}", "$description": "UI/UX Pro Max accent/CTA role: the one 'extra' action (SuperSwipe), with ink on it." },
+         "yellow-tint": { "$type": "color", "$value": "{primitive.color.yellow.100}", "$description": "Avatar framing." },
+         "orange": { "$type": "color", "$value": "{primitive.color.orange.500}", "$description": "Time and status icons." },
+         "green":  { "$type": "color", "$value": "{primitive.color.green.500}", "$description": "Confirmation marks." }
+@@ -173,6 +177,12 @@
+         "hover-light": { "$type": "color", "$value": "{primitive.color.alpha.white-55}" },
+         "photo": { "$type": "color", "$value": "{primitive.color.alpha.ink-62}", "$description": "Bottom legibility overlay for text on photos (functional, not decorative)." }
+       },
++      "glass": {
++        "$description": "Liquid Glass CSS layer, ported to tokens (refraction directive not ported: Angular-only, Chromium-only).",
++        "rim":       { "$type": "color", "$value": "{primitive.color.alpha.white-55}", "$description": "Top inset highlight: the polished edge." },
++        "rim-color": { "$type": "color", "$value": "{primitive.color.alpha.white-40}", "$description": "Rim on coloured glass (SuperSwipe)." },
++        "border":    { "$type": "color", "$value": "{primitive.color.alpha.ink-12}" }
++      },
+       "danger":  { "default": { "$type": "color", "$value": "{primitive.color.red.600}" },   "tint": { "$type": "color", "$value": "{primitive.color.red.50}" }, "badge": { "$type": "color", "$value": "{primitive.color.red.600}", "$description": "Unread and notification count badges (Meetup red), white numerals 4.9:1." } },
+       "success": { "default": { "$type": "color", "$value": "{primitive.color.green.700}" }, "tint": { "$type": "color", "$value": "{primitive.color.green.50}" } },
+       "warning": { "default": { "$type": "color", "$value": "{primitive.color.amber.700}" }, "tint": { "$type": "color", "$value": "{primitive.color.amber.50}" } }
+@@ -305,10 +315,16 @@
+       "height-sm":    { "$type": "dimension", "$value": "{primitive.dimension.40}" },
+       "height-quiet": { "$type": "dimension", "$value": "{primitive.dimension.48}" },
+       "primary": {
+-        "bg-top":          { "$type": "color", "$value": "{primitive.color.neutral.800}" },
+-        "bg-bottom":       { "$type": "color", "$value": "{semantic.color.surface.inverse}" },
+-        "bg-hover-top":    { "$type": "color", "$value": "{primitive.color.neutral.750}" },
+-        "bg-hover-bottom": { "$type": "color", "$value": "{primitive.color.neutral.850}" }
++        "$description": "Impeccable colorize: the primary action is flat brand purple (white 4.90:1), the same flat purple fill the system already uses for selection and SuperSwipe. Purple means 'move toward a conversation'.",
++        "bg-top":          { "$type": "color", "$value": "{semantic.color.brand.default}" },
++        "bg-bottom":       { "$type": "color", "$value": "{semantic.color.brand.default}" },
++        "bg-hover-top":    { "$type": "color", "$value": "{semantic.color.brand.hover}" },
++        "bg-hover-bottom": { "$type": "color", "$value": "{semantic.color.brand.hover}" }
++      },
++      "ink": {
++        "$description": "Pass and Like on the action bar stay ink, so SuperSwipe remains the single purple choice in that row.",
++        "bg-top":    { "$type": "color", "$value": "{primitive.color.neutral.800}" },
++        "bg-bottom": { "$type": "color", "$value": "{semantic.color.surface.inverse}" }
+       }
+     },
+     "fab":         { "size": { "$type": "dimension", "$value": "{primitive.dimension.56}" } },
