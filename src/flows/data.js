@@ -69,6 +69,13 @@ export const INTERESTS = [
   "Natural wine", "Jazz", "Cooking", "Climbing", "Film photography", "Museums", "Running", "Board games", "Travel", "Poetry",
 ];
 
+/** The same interests in three small sets, so the picker reads as a few short rows, not a wall. */
+export const INTEREST_GROUPS = [
+  { label: "Food and nights in", options: ["Natural wine", "Cooking", "Board games"] },
+  { label: "Culture", options: ["Jazz", "Museums", "Poetry", "Film photography"] },
+  { label: "Out and about", options: ["Climbing", "Running", "Travel"] },
+];
+
 export const REPORT_REASONS = [
   ["user", "Fake profile"],
   ["image", "Inappropriate photos or text"],

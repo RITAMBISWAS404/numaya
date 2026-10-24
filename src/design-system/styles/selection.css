@@ -246,10 +246,16 @@ button.chip:active {
   }
 }
 
+/* Locked at the maximum: still a pill (a quiet hairline), so the set keeps its shape and reads as
+   "full", not as loose words. Text stays above 3:1 against white. */
 .chip.is-unavailable {
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle);
   color: var(--color-text-subtle);
-  box-shadow: none;
   cursor: not-allowed;
+}
+
+.chip.is-unavailable .chip__affordance {
+  color: var(--color-border-strong);
 }
 
 /* Display chips (profile interests, facts): the same white hairline pill, without the affordance. */
@@ -295,6 +301,26 @@ button.chip:active {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
+}
+
+/* Labelled sets: a small caption over each short row, sets spaced further apart than chips. */
+.chip-group--sets {
+  gap: var(--space-5);
+}
+
+.chip-group--sets > .chip-group__label {
+  margin-bottom: calc(-1 * var(--space-2));
+}
+
+.chip-group__set {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.chip-group__set-label {
+  color: var(--color-text-muted);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
 }
 
 /* ------------------------------------------------------------------ */

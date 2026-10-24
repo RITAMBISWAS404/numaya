@@ -44,16 +44,34 @@ export function Chip({ kind = "toggle", selected = false, unavailable = false, i
   );
 }
 
-/** Multi- or single-select chips with an optional maximum. */
-export function ChipGroup({ label, options, value, onChange, max, single = false, icons }) {
+/**
+ * Multi- or single-select chips with an optional maximum. `groups` ([{ label, options }]) splits
+ * the options into labelled sets; the maximum and the count still apply to the whole group.
+ */
+export function ChipGroup({ label, options, groups, value, onChange, max, single = false, icons }) {
   const labelId = useId();
   const atMax = max != null && value.length >= max;
   const toggle = (opt, next) => {
     if (single) return onChange(next ? [opt] : []);
     onChange(next ? [...value, opt] : value.filter((v) => v !== opt));
   };
+  const chips = (list) => (
+    <div className="chip-group__items">
+      {list.map((opt) => (
+        <Chip
+          key={opt}
+          icon={icons?.[opt]}
+          selected={value.includes(opt)}
+          unavailable={!single && atMax}
+          onToggle={(next) => toggle(opt, next)}
+        >
+          {opt}
+        </Chip>
+      ))}
+    </div>
+  );
   return (
-    <div className="chip-group" role="group" aria-labelledby={label ? labelId : undefined}>
+    <div className={cx("chip-group", groups && "chip-group--sets")} role="group" aria-labelledby={label ? labelId : undefined}>
       {label && (
         <p id={labelId} className="chip-group__label">
           {label}
@@ -64,19 +82,14 @@ export function ChipGroup({ label, options, value, onChange, max, single = false
           )}
         </p>
       )}
-      <div className="chip-group__items">
-        {options.map((opt) => (
-          <Chip
-            key={opt}
-            icon={icons?.[opt]}
-            selected={value.includes(opt)}
-            unavailable={!single && atMax}
-            onToggle={(next) => toggle(opt, next)}
-          >
-            {opt}
-          </Chip>
-        ))}
-      </div>
+      {groups
+        ? groups.map((g) => (
+            <div key={g.label} className="chip-group__set">
+              <p className="chip-group__set-label">{g.label}</p>
+              {chips(g.options)}
+            </div>
+          ))
+        : chips(options)}
     </div>
   );
 }

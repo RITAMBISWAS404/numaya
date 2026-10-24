@@ -32,6 +32,7 @@ import {
   OptionCards,
   PhotoGrid,
   ProfileCard,
+  ProfilePrompt,
   ProfileSection,
   PromptCard,
   ReadinessMeter,
@@ -53,7 +54,7 @@ import {
   VerifiedBadge,
   Wordmark,
 } from "../design-system/index.js";
-import { INTERESTS, PEOPLE, PROMPT_QUESTIONS, REPORT_REASONS } from "./data.js";
+import { INTEREST_GROUPS, INTERESTS, PEOPLE, PROMPT_QUESTIONS, REPORT_REASONS } from "./data.js";
 import { conversations, discoveryQueue, hiddenByFilters, newMatches, useStore } from "./store.js";
 import { Frame, useFlash } from "./frame.jsx";
 import { ReportSheet, ShareSheet } from "./activity.jsx";
@@ -173,7 +174,7 @@ export function InterestsPrompts({ go }) {
         art={<IllustrationSlot id="spot-interests" width="72px" />}
       />
       <div className="fl-stack fl-gap-lg fl-sections">
-        <ChipGroup label="Interests" options={INTERESTS} value={interests} onChange={(v) => dispatch({ type: "profile", patch: { interests: v } })} max={5} />
+        <ChipGroup label="Interests" options={INTERESTS} groups={INTEREST_GROUPS} value={interests} onChange={(v) => dispatch({ type: "profile", patch: { interests: v } })} max={5} />
         <Section title="Your prompt" description="Matches reply to this. You can change it any time from your profile.">
           <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} />
         </Section>
@@ -358,16 +359,14 @@ export function Discovery({ go }) {
             {intent && <span className={`fl-swipe__stamp fl-swipe__stamp--${intent}`}>{intent === "like" ? "Like" : "Pass"}</span>}
           </div>
 
-          <ProfileSection title={person.prompt.q}>
-            <p className="fl-pf__body">{person.prompt.a}</p>
-          </ProfileSection>
+          <ProfilePrompt prompt={person.prompt.q} answer={person.prompt.a} />
 
           {lookingFor && (
             <ProfileSection title="About me">
               <div className="fl-chip-row">
                 {[lookingFor, ...otherFacts].map((f) => (
                   <span key={f.label} className="chip chip--static" title={f.label}>
-                    <Icon name={f.icon} size={16} /> {f.value}
+                    <Icon name={f.icon} size={16} className="chip__icon" /> {f.value}
                   </span>
                 ))}
               </div>
@@ -556,7 +555,7 @@ export function Match({ go }) {
     >
       <div className="fl-center fl-fill fl-match">
         <MatchCelebration name={person.name} src={person.src} illustration={<IllustrationSlot id="match-hands-heart" />}>
-          You and {person.name} liked each other. Now say hello.
+          You and <strong>{person.name}</strong> liked each other. Now say hello.
         </MatchCelebration>
       </div>
     </Frame>
@@ -829,8 +828,9 @@ export function Chat({ go }) {
 /* 6 · Profile and settings -------------------------------------------------- */
 export function MyProfile({ go }) {
   const [state] = useStore();
-  const { name, year } = state.profile;
+  const { name, year, gender, looking, interests } = state.profile;
   const age = ageOf(year);
+  const facts = [GENDER_LABEL[gender], looking?.length ? LOOKING_LABEL[looking[0]] : null].filter(Boolean);
   const { score, recommendations } = readiness(state.profile);
   const fix = useFixAction(go);
   const status = accountStatus(state);
@@ -845,7 +845,8 @@ export function MyProfile({ go }) {
       go={go}
     >
       <div className="fl-stack fl-gap-lg fl-sections">
-        {/* Overview: avatar with the readiness ring, name, edit action and account status. */}
+        {/* Identity: the avatar with its readiness ring, then the person (name, what they are looking
+            for, their interests), then the one edit action. Centred: this block is about one person. */}
         <div className="fl-me">
           <div className="fl-me__avatar">
             <Avatar name={name || "You"} size="xl" ring={{ value: score / 100 }} />
@@ -853,28 +854,36 @@ export function MyProfile({ go }) {
               {score}
             </span>
           </div>
-          <div className="fl-me__text">
-            <p className="fl-me__name">
-              {name || "You"}
-              {age ? `, ${age}` : ""}
-            </p>
-            <div className="fl-badges">
-              <Button variant="secondary" size="sm" block={false} icon="user" onClick={() => go("edit")}>
-                Edit profile
-              </Button>
-              {state.prefs.snooze && (
-                <Badge tone="warning" icon="eyeOff">
-                  Snoozed
-                </Badge>
-              )}
-            </div>
+          <p className="fl-me__name">
+            {name || "You"}
+            {age ? `, ${age}` : ""}
+          </p>
+          {facts.length > 0 && <p className="fl-me__facts">{facts.join(" · ")}</p>}
+          {interests.length > 0 && (
+            <ul className="fl-me__interests" aria-label="Your interests">
+              {interests.map((s) => (
+                <li key={s} className="chip chip--static">
+                  {s}
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="fl-badges fl-me__actions">
+            <Button variant="secondary" size="sm" block={false} icon="edit" onClick={() => go("edit")}>
+              Edit profile
+            </Button>
+            {state.prefs.snooze && (
+              <Badge tone="warning" icon="eyeOff">
+                Snoozed
+              </Badge>
+            )}
           </div>
         </div>
 
         {/* Compact readiness summary leading to the full dashboard. */}
         <section className="card fl-ready-card" aria-labelledby="fl-ready-title">
           <div className="fl-ready-card__top">
-            <ReadinessMeter value={score} size={72} />
+            <ReadinessMeter value={score} size={56} />
             <div className="fl-stack fl-gap-xs">
               <h2 id="fl-ready-title" className="fl-ready-card__title">
                 Profile readiness
@@ -888,15 +897,17 @@ export function MyProfile({ go }) {
                 {next.action}
               </Button>
             )}
-            <Button variant="secondary" size="sm" block={false} onClick={() => go("insights")}>
+            <Button variant="quiet" size="sm" block={false} onClick={() => go("insights")}>
               See insights
             </Button>
           </div>
         </section>
 
-        <Section title="Prompt" description="Matches reply to this.">
+        <div className="list-group">
+          <p className="list-group__title">Your prompt</p>
           <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} onEdit={() => go("prompt")} />
-        </Section>
+          <p className="list-group__footnote">Matches reply to this.</p>
+        </div>
 
         <ListGroup title="Activity">
           <ListRow icon="event" label="My activities" value={`${mine.upcoming.length + mine.hosting.length} upcoming`} kind="value" onPress={() => go("my-activities")} />
@@ -927,9 +938,7 @@ function ProfilePreview({ profile }) {
           <p className="fl-pf__body">{profile.bio}</p>
         </ProfileSection>
       )}
-      <ProfileSection title={profile.prompt.q}>
-        <p className="fl-pf__body">{profile.prompt.a}</p>
-      </ProfileSection>
+      <ProfilePrompt prompt={profile.prompt.q} answer={profile.prompt.a} />
       {profile.interests.length > 0 && (
         <ProfileSection title="Interests">
           <div className="fl-chip-row">
@@ -950,6 +959,7 @@ function ProfilePreview({ profile }) {
 }
 
 const GENDER_LABEL = { woman: "Woman", man: "Man", nonbinary: "Nonbinary" };
+const LOOKING_LABEL = { "long-term": "Looking for long-term", open: "Seeing where it goes", casual: "Something casual" };
 
 /**
  * Edit profile (reference: Bumble edit profile): photos with options, the prompt, interests and
@@ -1013,7 +1023,7 @@ export function EditProfile({ go }) {
               <TextArea label="Bio" placeholder="A few lines about you: what you love, what you’re looking for." value={profile.bio ?? ""} maxLength={300} rows={4} onChange={(e) => set({ bio: e.target.value })} />
             </div>
             <div data-focus="interests">
-              <ChipGroup label="Interests" options={INTERESTS} value={profile.interests} onChange={(v) => set({ interests: v })} max={5} />
+              <ChipGroup label="Interests" options={INTERESTS} groups={INTEREST_GROUPS} value={profile.interests} onChange={(v) => set({ interests: v })} max={5} />
             </div>
             <TextField
               data-focus="name"

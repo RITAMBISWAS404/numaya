@@ -5,6 +5,12 @@
   padding-bottom: 0;
 }
 
+/* The wash is the hero's own light: lavender at the top, settled into white before the copy, so
+   the copy sits on the page itself rather than on a sheet with nothing behind it. */
+.welcome.screen--wash {
+  background: linear-gradient(180deg, var(--color-surface-brand) 0%, var(--color-brand-tint) 48%, var(--color-surface) 72%);
+}
+
 .welcome__hero {
   position: relative;
   isolation: isolate;
@@ -13,12 +19,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--space-3) var(--layout-gutter) var(--space-6);
+  padding: var(--space-3) var(--layout-gutter);
   container-type: size;
 }
 
+/* Wordmark top-left, outside the reserved hero: the first thing on the first screen is the brand,
+   and it sets the left axis the headline, lede and actions share. */
+.welcome__brand {
+  flex: none;
+  padding: var(--space-4) var(--layout-gutter) 0;
+  animation: fade-in 640ms var(--motion-ease-out) both;
+}
+
 /* Reserved hero illustration (docs/numaya-illustration-map.md: welcome-hero). An invisible square
-   slot that takes the hero's free height, so the panel with the CTA never leaves the screen. */
+   slot that takes the hero's free height, so the copy and CTA never leave the screen. */
 .welcome__art {
   flex: none;
   width: min(320px, 84cqw, calc(100cqh - 32px));
@@ -30,13 +44,11 @@
   .welcome__art { display: none; }
 }
 
+/* Copy block: left-aligned on the wordmark's axis. No sheet edge or shadow (nothing sits behind
+   it); the hierarchy comes from the headline's size and the space around it. */
 .welcome__panel {
   flex: none;
-  padding: var(--space-8) var(--layout-gutter) calc(var(--safe-bottom) + var(--space-2));
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-md);
-  text-align: center;
+  padding: var(--space-4) var(--layout-gutter) calc(var(--safe-bottom) + var(--space-2));
 }
 
 .welcome__panel > * {
@@ -46,26 +58,31 @@
 .welcome__panel > :nth-child(3) { animation-delay: 120ms; }
 .welcome__panel > :nth-child(4) { animation-delay: 180ms; }
 
+/* Display size for the one headline in the product that is a statement, not a label: larger than
+   the 34px screen titles, with tighter leading and tracking as it grows. Plain ink throughout. */
 .welcome__title {
   font-family: var(--font-display);
   font-variation-settings: var(--font-display-axes);
-  font-size: var(--type-hero-size);
-  line-height: var(--type-hero-line);
+  font-size: clamp(36px, 10.4vw, 42px);
+  line-height: 1.04;
   font-weight: var(--type-display-weight);
-  letter-spacing: -0.022em;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 .welcome__lede {
-  max-width: 300px;
-  margin: var(--space-3) auto 0;
+  max-width: 31ch;
+  margin-top: var(--space-4);
   color: var(--color-text-muted);
+  font-size: var(--type-input-size);
+  line-height: var(--type-input-line);
   text-wrap: pretty;
 }
 
 .welcome__actions {
   display: grid;
   gap: 6px;
-  margin-top: var(--space-7);
+  margin-top: var(--space-8);
 }
 
 .legal {
@@ -91,7 +108,13 @@
   text-decoration-color: currentColor;
 }
 
+/* Legal stays a quiet centred footnote under the centred button labels. */
+.welcome .legal {
+  text-align: center;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .welcome__brand,
   .welcome__art,
   .welcome__panel > * {
     animation-name: fade-in;

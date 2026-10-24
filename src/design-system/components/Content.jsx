@@ -255,13 +255,27 @@ export function SetupProgress({ title, steps, className }) {
 /**
  * Profile section: the one card primitive every profile and Discover section is built from (prompt
  * answer, about me, shared interests, location). A white card with a hairline and soft shadow, a
- * Fraunces title and its content below. No icon or mark beside the title.
+ * quiet label title (the display serif is kept for the person's name and answers) and its content
+ * below. No icon or mark beside the title.
  */
 export function ProfileSection({ title, children, className, ...rest }) {
   return (
     <section className={cx("card", "profile-section", className)} {...rest}>
       <h2 className="profile-section__title">{title}</h2>
       {children}
+    </section>
+  );
+}
+
+/**
+ * A prompt on someone's profile: the question is a quiet label and the answer, in the person's own
+ * words, is the display serif. Same section shell as every other profile section.
+ */
+export function ProfilePrompt({ prompt, answer, className }) {
+  return (
+    <section className={cx("card", "profile-section", "profile-section--prompt", className)}>
+      <h2 className="profile-section__title">{prompt}</h2>
+      <p className="profile-section__answer">{answer}</p>
     </section>
   );
 }

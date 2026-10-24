@@ -246,19 +246,47 @@ body {
   background: var(--color-brand-tint);
 }
 
+/* Profile identity: one centred column (avatar, name, facts, interests, edit) so the top of the tab
+   is about the person; the readiness card and the account list below are the tools. */
 .fl-me {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
+  display: grid;
+  justify-items: center;
+  padding-top: var(--space-2);
+  text-align: center;
 }
 
 .fl-me__name {
-  margin-bottom: var(--space-2);
+  max-width: 100%;
+  margin-top: var(--space-5);
   overflow-wrap: anywhere;
   font-family: var(--font-display);
   font-variation-settings: var(--font-display-axes);
-  font-size: var(--type-headline-size);
-  line-height: var(--type-headline-line);
+  font-size: var(--type-hero-size);
+  line-height: var(--type-hero-line);
+  font-weight: var(--type-hero-weight);
+  letter-spacing: var(--type-hero-tracking);
+}
+
+.fl-me__facts {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--type-body-sm-size);
+  line-height: var(--type-body-sm-line);
+}
+
+.fl-me__interests {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fl-me__actions {
+  justify-content: center;
+  margin-top: var(--space-5);
 }
 
 .fl-slider-row {
@@ -457,10 +485,6 @@ body {
   font-size: var(--type-micro-size);
   font-weight: var(--font-weight-bold);
   font-variant-numeric: tabular-nums;
-}
-
-.fl-me__text {
-  min-width: 0;
 }
 
 /* Tappable edit card (Bumble edit profile: content + chevron). */
@@ -838,15 +862,14 @@ body {
 }
 
 .fl-ready-card__title {
-  font-family: var(--font-display);
-  font-variation-settings: var(--font-display-axes);
-  font-size: var(--type-title-size);
-  line-height: var(--type-title-line);
-  font-weight: var(--type-title-weight);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line);
+  font-weight: var(--font-weight-semibold);
 }
 
 .fl-ready-card .readiness-meter__value-text {
-  font-size: 22px;
+  font-size: 17px;
+  font-weight: var(--font-weight-semibold);
 }
 
 .fl-ready-card .readiness-meter__unit {

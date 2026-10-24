@@ -613,6 +613,12 @@ button.list-row__hit:hover {
   background: var(--color-surface-photo);
 }
 
+/* Without a photo the stand-in is lit from above (soft to photo grey), so the card reads as a
+   surface waiting for a picture rather than a flat grey slab. Still neutral: no invented imagery. */
+.profile-card__media:not(:has(.profile-card__img)) {
+  background-image: linear-gradient(180deg, var(--color-surface-sunken) 0%, var(--color-surface-photo) 70%);
+}
+
 .profile-card__img {
   position: absolute;
   inset: 0;
@@ -629,8 +635,8 @@ button.list-row__hit:hover {
   display: grid;
   place-items: center;
   padding-bottom: 30%;
-  /* Muted: the filled placeholder glyph is decorative and should not compete with the name. */
-  color: var(--color-text-muted);
+  /* Subtle: the filled placeholder glyph is decorative and should not compete with the name. */
+  color: var(--color-text-subtle);
 }
 
 /* Functional legibility overlay so white text always sits on a dark region. */
@@ -640,8 +646,18 @@ button.list-row__hit:hover {
   display: grid;
   justify-items: start;
   gap: 2px;
-  padding: 112px 88px var(--space-5) var(--space-5);
-  background: linear-gradient(180deg, transparent 0%, var(--color-overlay-photo) 100%);
+  padding: 136px 104px var(--space-5) var(--space-5);
+  /* Eased scrim: an even ramp shows a visible band edge; these stops follow an ease-in curve so
+     the darkening has no start line. It ends at the same ink as before, so white text keeps its
+     contrast on a real photo. */
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--color-overlay-photo) 8%, transparent) 22%,
+    color-mix(in srgb, var(--color-overlay-photo) 26%, transparent) 46%,
+    color-mix(in srgb, var(--color-overlay-photo) 58%, transparent) 70%,
+    var(--color-overlay-photo) 100%
+  );
   color: var(--color-text-on-inverse);
 }
 
@@ -667,15 +683,17 @@ button.list-row__hit:hover {
   font-weight: var(--font-weight-semibold);
 }
 
-/* Prominent name in Fraunces (Numaya type). */
+/* Prominent name in Fraunces (Numaya type), scaled to the card: the photo is the hero, the name is
+   its caption and the one thing to read first. Tighter tracking as it grows. */
 .profile-card__name {
+  margin-top: 2px;
   overflow-wrap: anywhere;
   font-family: var(--font-display);
   font-variation-settings: var(--font-display-axes);
-  font-size: var(--type-display-size);
-  line-height: var(--type-display-line);
+  font-size: clamp(var(--type-display-size), 10vw, 40px);
+  line-height: 1.05;
   font-weight: var(--type-display-weight);
-  letter-spacing: var(--type-display-tracking);
+  letter-spacing: -0.028em;
 }
 
 .profile-card__detail {
@@ -929,28 +947,33 @@ button.list-row__hit:hover {
 
 /* Match moment (the sketch): a white page, the heading, the photo in its organic frame on a
    slowly turning lavender scallop, one line of copy and the illustration slot. */
+/* The product's biggest moment gets its biggest type: display size, tight leading and tracking. */
 .match__title {
   margin-top: 0;
-  font-size: var(--type-display-size);
-  line-height: var(--type-display-line);
+  font-size: clamp(36px, 10.4vw, 42px);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
 }
 
 .organic-portrait {
   position: relative;
   flex: none;
-  width: min(248px, 64vw, 34svh);
+  width: min(264px, 66vw, 32svh);
   aspect-ratio: 1;
 }
 
+/* Vertical rhythm scales with the screen's height so the whole moment (title to illustration)
+   fits above the composer on a small phone without crowding a tall one. */
 .match__portrait {
-  margin-top: var(--space-6);
+  margin-top: clamp(var(--space-5), 3.8svh, var(--space-8));
 }
 
+/* A thin, even lavender halo: enough to frame the photo, not a second shape competing with it. */
 .organic-portrait__backdrop {
   position: absolute;
-  inset: -7%;
-  width: 114%;
-  height: 114%;
+  inset: -5%;
+  width: 110%;
+  height: 110%;
   fill: var(--color-surface-brand);
   animation: portrait-turn 60s linear infinite;
 }
@@ -991,19 +1014,29 @@ button.list-row__hit:hover {
 .organic-portrait__fallback.avatar--tone-3 { background: var(--color-accent-yellow-tint); }
 
 .match .match__body {
-  margin-top: var(--space-5);
+  margin-top: clamp(var(--space-4), 3.2svh, var(--space-7));
+  font-size: var(--type-input-size);
+  line-height: var(--type-input-line);
   text-wrap: balance;
 }
 
+/* The other person's name in ink: the sentence is about them. */
+.match__body strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* The slot keeps its 5:2 contract; at 240px wide the fallback heart sits one beat under the copy
+   instead of floating in a tall empty band. */
 .match__art {
   display: grid;
   justify-items: center;
   width: 100%;
-  margin-top: var(--space-4);
+  margin-top: var(--space-1);
 }
 
 .match__art .illustration-slot {
-  width: min(100%, 320px, 42svh);
+  width: min(100%, 240px, 32svh);
   animation: fade-in var(--motion-duration-slow) var(--motion-ease-out) 300ms both;
 }
 
@@ -1092,7 +1125,8 @@ button.list-row__hit:hover {
 }
 
 /* Profile section (ProfileSection): every profile and Discover card. White with a hairline like
-   Meetup's profile sections, a Fraunces title, content below. */
+   Meetup's profile sections. The title is a quiet label: on a profile, the display serif belongs to
+   the person (their name, their answers), and the section names are structure. */
 .profile-section {
   display: grid;
   gap: var(--space-3);
@@ -1100,12 +1134,26 @@ button.list-row__hit:hover {
 }
 
 .profile-section__title {
+  color: var(--color-text-muted);
+  font-size: var(--type-label-size);
+  line-height: var(--type-label-line);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Prompt: the answer is the largest text after the name, set tight like a pull quote. */
+.profile-section--prompt {
+  gap: var(--space-2);
+  padding-block: var(--space-5) var(--space-6);
+}
+
+.profile-section__answer {
   font-family: var(--font-display);
   font-variation-settings: var(--font-display-axes);
-  font-size: var(--type-title-size);
-  line-height: var(--type-title-line);
-  font-weight: var(--type-title-weight);
-  letter-spacing: var(--type-title-tracking);
+  font-size: var(--type-headline-size);
+  line-height: var(--type-headline-line);
+  font-weight: var(--type-headline-weight);
+  letter-spacing: var(--type-headline-tracking);
+  text-wrap: pretty;
 }
 
 /* Shared interests ("You both like"): a profile section of grey text pills. */

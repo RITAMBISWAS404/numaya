@@ -9,6 +9,7 @@ import {
   InfoCard,
   PersonTile,
   ProfileCard,
+  ProfilePrompt,
   ProfileSection,
   SharedInterests,
   Toast,
@@ -129,9 +130,7 @@ export function LikeProfile({ go }) {
         )}
         <ProfileCard name={person.name} age={person.age} verified={person.verified} details={person.details ?? []} />
         {person.prompt && (
-          <ProfileSection title={person.prompt.q}>
-            <p className="fl-pf__body">{person.prompt.a}</p>
-          </ProfileSection>
+          <ProfilePrompt prompt={person.prompt.q} answer={person.prompt.a} />
         )}
         <SharedInterests items={person.shared?.map((label) => ({ label }))} />
         {person.distanceKm != null && (

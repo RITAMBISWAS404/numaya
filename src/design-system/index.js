@@ -34,6 +34,7 @@ export {
   InfoCard,
   SharedInterests,
   ProfileSection,
+  ProfilePrompt,
   SetupProgress,
   ConsequenceList,
   PromptCard,

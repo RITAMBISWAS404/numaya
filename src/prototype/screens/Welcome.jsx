@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, IllustrationSlot, Screen, Toast } from "../../design-system/index.js";
+import { Button, IllustrationSlot, Screen, Toast, Wordmark } from "../../design-system/index.js";
 
 export function Welcome({ active, onCreate, onSignIn }) {
   const [notice, setNotice] = useState(null);
@@ -17,6 +17,11 @@ export function Welcome({ active, onCreate, onSignIn }) {
 
   return (
     <Screen tone="brand" className="welcome" aria-labelledby="welcome-title">
+      {/* Brand header: sets the left axis the headline, lede and actions share. */}
+      <header className="welcome__brand">
+        <Wordmark />
+      </header>
+
       {/* Reserved for the multi-illustration hero composition (docs/numaya-illustration-map.md):
           the space is held, but nothing is drawn until the artwork is supplied. */}
       <div className="welcome__hero">
