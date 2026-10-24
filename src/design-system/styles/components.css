@@ -784,8 +784,9 @@
   outline-offset: -2px;
 }
 
+/* Variant D: the current tab sits on a lavender pill, so navigation carries the brand too. */
 .tab-bar__item.is-current {
-  background: var(--color-surface-sunken);
+  background: var(--color-brand-tint-strong);
   color: var(--color-text-brand-deep);
   font-weight: var(--font-weight-semibold);
 }

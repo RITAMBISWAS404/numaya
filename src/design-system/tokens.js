@@ -73,6 +73,15 @@ export const tokens = [
     "description": "Deep purple for text on lavender tints (derived; 7.4:1 on purple.100)."
   },
   {
+    "id": "primitive.color.periwinkle.50",
+    "name": "--p-color-periwinkle-50",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#eef1fe",
+    "resolved": "#eef1fe",
+    "description": "Variant D: palest periwinkle, the Culture interest surface."
+  },
+  {
     "id": "primitive.color.periwinkle.100",
     "name": "--p-color-periwinkle-100",
     "layer": "primitive",
@@ -80,6 +89,24 @@ export const tokens = [
     "value": "#d6dcfd",
     "resolved": "#d6dcfd",
     "description": "Meetup promo card fill (sampled #D6DCFD, 'Start a new group')."
+  },
+  {
+    "id": "primitive.color.periwinkle.400",
+    "name": "--p-color-periwinkle-400",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#7f8fe8",
+    "resolved": "#7f8fe8",
+    "description": "Variant D: periwinkle mark (category dot); never text (3.0:1)."
+  },
+  {
+    "id": "primitive.color.periwinkle.800",
+    "name": "--p-color-periwinkle-800",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#34449a",
+    "resolved": "#34449a",
+    "description": "Variant D: periwinkle text on its tints (6.4:1 on periwinkle.100)."
   },
   {
     "id": "primitive.color.rose.100",
@@ -98,6 +125,15 @@ export const tokens = [
     "value": "#ea698c",
     "resolved": "#ea698c",
     "description": "Meetup accent rose (sampled #EA698C, organiser badge): badges and category marks, never text."
+  },
+  {
+    "id": "primitive.color.rose.700",
+    "name": "--p-color-rose-700",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#a8324f",
+    "resolved": "#a8324f",
+    "description": "Variant D: deep coral text on rose.100 (5.5:1)."
   },
   {
     "id": "primitive.color.yellow.100",
@@ -125,6 +161,78 @@ export const tokens = [
     "value": "#d58b50",
     "resolved": "#d58b50",
     "description": "Meetup time/status orange (sampled #D58B50, 'In 2m'): icons and marks only (2.75:1 on white)."
+  },
+  {
+    "id": "primitive.color.apricot.50",
+    "name": "--p-color-apricot-50",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#fff1e4",
+    "resolved": "#fff1e4",
+    "description": "Variant D: apricot surface (Food and nights in)."
+  },
+  {
+    "id": "primitive.color.apricot.100",
+    "name": "--p-color-apricot-100",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#ffe2c7",
+    "resolved": "#ffe2c7",
+    "description": "Variant D: apricot hairline and warm wash."
+  },
+  {
+    "id": "primitive.color.apricot.400",
+    "name": "--p-color-apricot-400",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#f2a65e",
+    "resolved": "#f2a65e",
+    "description": "Variant D: apricot mark and glow; never text (2.0:1)."
+  },
+  {
+    "id": "primitive.color.apricot.800",
+    "name": "--p-color-apricot-800",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#8a4512",
+    "resolved": "#8a4512",
+    "description": "Variant D: apricot text on its tints (5.8:1 on apricot.100)."
+  },
+  {
+    "id": "primitive.color.mint.50",
+    "name": "--p-color-mint-50",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#e9f7f1",
+    "resolved": "#e9f7f1",
+    "description": "Variant D: mint surface (Out and about)."
+  },
+  {
+    "id": "primitive.color.mint.100",
+    "name": "--p-color-mint-100",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#cdeedf",
+    "resolved": "#cdeedf",
+    "description": "Variant D: mint hairline."
+  },
+  {
+    "id": "primitive.color.mint.500",
+    "name": "--p-color-mint-500",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#3fae86",
+    "resolved": "#3fae86",
+    "description": "Variant D: mint mark; never text (2.8:1)."
+  },
+  {
+    "id": "primitive.color.mint.800",
+    "name": "--p-color-mint-800",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#1d6a4f",
+    "resolved": "#1d6a4f",
+    "description": "Variant D: mint text on its tints (5.2:1 on mint.100)."
   },
   {
     "id": "primitive.color.neutral.0",
@@ -935,6 +1043,141 @@ export const tokens = [
     "value": "{primitive.color.green.500}",
     "resolved": "#5d946a",
     "description": "Confirmation marks."
+  },
+  {
+    "id": "semantic.color.accent.coral.surface",
+    "name": "--color-accent-coral-surface",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.rose.100}",
+    "resolved": "#fde8ee",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.coral.text",
+    "name": "--color-accent-coral-text",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.rose.700}",
+    "resolved": "#a8324f",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.coral.mark",
+    "name": "--color-accent-coral-mark",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.rose.500}",
+    "resolved": "#ea698c",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.apricot.surface",
+    "name": "--color-accent-apricot-surface",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.apricot.50}",
+    "resolved": "#fff1e4",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.apricot.edge",
+    "name": "--color-accent-apricot-edge",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.apricot.100}",
+    "resolved": "#ffe2c7",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.apricot.text",
+    "name": "--color-accent-apricot-text",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.apricot.800}",
+    "resolved": "#8a4512",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.apricot.mark",
+    "name": "--color-accent-apricot-mark",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.apricot.400}",
+    "resolved": "#f2a65e",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.periwinkle.surface",
+    "name": "--color-accent-periwinkle-surface",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.periwinkle.50}",
+    "resolved": "#eef1fe",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.periwinkle.edge",
+    "name": "--color-accent-periwinkle-edge",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.periwinkle.100}",
+    "resolved": "#d6dcfd",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.periwinkle.text",
+    "name": "--color-accent-periwinkle-text",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.periwinkle.800}",
+    "resolved": "#34449a",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.periwinkle.mark",
+    "name": "--color-accent-periwinkle-mark",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.periwinkle.400}",
+    "resolved": "#7f8fe8",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.mint.surface",
+    "name": "--color-accent-mint-surface",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.mint.50}",
+    "resolved": "#e9f7f1",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.mint.edge",
+    "name": "--color-accent-mint-edge",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.mint.100}",
+    "resolved": "#cdeedf",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.mint.text",
+    "name": "--color-accent-mint-text",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.mint.800}",
+    "resolved": "#1d6a4f",
+    "description": null
+  },
+  {
+    "id": "semantic.color.accent.mint.mark",
+    "name": "--color-accent-mint-mark",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.mint.500}",
+    "resolved": "#3fae86",
+    "description": null
   },
   {
     "id": "semantic.color.text.primary",
@@ -2349,8 +2592,8 @@ export const tokens = [
     "name": "--button-primary-bg-top",
     "layer": "component",
     "type": "color",
-    "value": "{primitive.color.neutral.800}",
-    "resolved": "#2d2c2f",
+    "value": "{primitive.color.purple.600}",
+    "resolved": "#7262c7",
     "description": null
   },
   {
@@ -2358,8 +2601,8 @@ export const tokens = [
     "name": "--button-primary-bg-bottom",
     "layer": "component",
     "type": "color",
-    "value": "{semantic.color.surface.inverse}",
-    "resolved": "#141316",
+    "value": "{primitive.color.purple.700}",
+    "resolved": "#5f50b3",
     "description": null
   },
   {
@@ -2367,8 +2610,8 @@ export const tokens = [
     "name": "--button-primary-bg-hover-top",
     "layer": "component",
     "type": "color",
-    "value": "{primitive.color.neutral.750}",
-    "resolved": "#353438",
+    "value": "{primitive.color.purple.700}",
+    "resolved": "#5f50b3",
     "description": null
   },
   {
@@ -2376,8 +2619,26 @@ export const tokens = [
     "name": "--button-primary-bg-hover-bottom",
     "layer": "component",
     "type": "color",
-    "value": "{primitive.color.neutral.850}",
-    "resolved": "#1f1e21",
+    "value": "{primitive.color.purple.800}",
+    "resolved": "#4f4296",
+    "description": null
+  },
+  {
+    "id": "component.button.ink.bg-top",
+    "name": "--button-ink-bg-top",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.neutral.800}",
+    "resolved": "#2d2c2f",
+    "description": null
+  },
+  {
+    "id": "component.button.ink.bg-bottom",
+    "name": "--button-ink-bg-bottom",
+    "layer": "component",
+    "type": "color",
+    "value": "{semantic.color.surface.inverse}",
+    "resolved": "#141316",
     "description": null
   },
   {

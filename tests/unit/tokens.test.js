@@ -54,13 +54,27 @@ describe("token pipeline", () => {
 
   it("keeps the secondary Meetup palette to its roles (marks and framing, never text)", () => {
     const accents = [...tokens.values()].filter((t) => t.path[1] === "color" && t.path[2] === "accent").map((t) => cssVarName(t.path));
-    expect(accents.sort()).toEqual(["--color-accent-green", "--color-accent-orange", "--color-accent-promo", "--color-accent-rose", "--color-accent-rose-tint", "--color-accent-yellow", "--color-accent-yellow-tint"]);
+    // Meetup secondary accents, plus the Variant D supporting families (coral, apricot, periwinkle,
+    // mint), each with role tokens: surface, edge, text and mark.
+    const families = ["coral", "apricot", "periwinkle", "mint"];
+    const meetup = ["--color-accent-green", "--color-accent-orange", "--color-accent-promo", "--color-accent-rose", "--color-accent-rose-tint", "--color-accent-yellow", "--color-accent-yellow-tint"];
+    expect(accents.filter((a) => !families.some((f) => a.startsWith(`--color-accent-${f}-`))).sort()).toEqual(meetup);
+    for (const f of families) expect(accents.filter((a) => a.startsWith(`--color-accent-${f}-`)).map((a) => a.split("-").pop()).sort()).toEqual(f === "coral" ? ["mark", "surface", "text"] : ["edge", "mark", "surface", "text"]);
     const productCss = readdirSync("src", { recursive: true })
       .filter((f) => f.endsWith(".css") && !f.endsWith("tokens.css"))
       .map((f) => readFileSync(`src/${f}`, "utf8"))
       .join("\n");
-    // No accent colour is ever used as a text colour.
-    expect(productCss).not.toMatch(/(?<![-\w])color:\s*var\(--color-accent-/);
+    // An accent colour is text only through a family's `-text` role (checked for AA below).
+    expect(productCss).not.toMatch(/(?<![-\w])color:\s*var\(--color-accent-(?![a-z]+-text\))/);
+  });
+
+  it("Variant D accent text roles read at AA on their own surfaces and edges", () => {
+    for (const f of ["coral", "apricot", "periwinkle", "mint"]) {
+      const text = value(`--color-accent-${f}-text`);
+      expect(contrast(text, value(`--color-accent-${f}-surface`)), f).toBeGreaterThanOrEqual(4.5);
+      if (f !== "coral") expect(contrast(text, value(`--color-accent-${f}-edge`)), f).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(value("--color-text-primary"), value(`--color-accent-${f}-surface`)), f).toBeGreaterThanOrEqual(7);
+    }
   });
 
   it("purple fills are flat (no sheen token) and the floating shadow is a soft purple", () => {

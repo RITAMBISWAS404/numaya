@@ -11,6 +11,20 @@
   background: linear-gradient(180deg, var(--color-surface-brand) 0%, var(--color-brand-tint) 48%, var(--color-surface) 72%);
 }
 
+/* Variant D: the same wash, lit warmly from the top right (apricot, then a breath of coral), so the
+   first screen holds Numaya's purple and its warmth together. One light source, no shapes: the
+   reserved hero stays empty until its artwork exists. */
+.welcome.screen--wash {
+  background:
+    radial-gradient(90% 46% at 100% 0%, var(--color-accent-apricot-edge) 0%, color-mix(in srgb, var(--color-accent-coral-surface) 70%, transparent) 38%, transparent 72%),
+    linear-gradient(180deg, var(--color-brand-tint-strong) 0%, var(--color-surface-brand) 34%, var(--color-brand-tint) 56%, var(--color-surface) 76%);
+}
+
+/* The secondary action speaks in the brand's deep purple; the primary is solid purple. */
+.welcome .btn--quiet {
+  color: var(--color-text-brand-deep);
+}
+
 .welcome__hero {
   position: relative;
   isolation: isolate;

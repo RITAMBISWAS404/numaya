@@ -683,6 +683,13 @@ button.list-row__hit:hover {
   font-weight: var(--font-weight-semibold);
 }
 
+/* Variant D: Verified is a brand promise, so it is solid brand purple (white 4.90:1), not grey glass. */
+.profile-card__pill--verified {
+  background: var(--color-brand);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
 /* Prominent name in Fraunces (Numaya type), scaled to the card: the photo is the hero, the name is
    its caption and the one thing to read first. Tighter tracking as it grows. */
 .profile-card__name {
@@ -741,9 +748,10 @@ button.list-row__hit:hover {
   place-items: center;
   width: 60px;
   height: 60px;
-  /* Meetup primary treatment (Chat, Add friend, Ticket): ink with a soft sheen. */
+  /* Ink with a soft sheen (Variant D: own ink tokens, so primary buttons can be purple while Pass
+     and Like stay neutral and SuperSwipe remains the one purple action). */
   border-radius: 50%;
-  background: linear-gradient(180deg, var(--button-primary-bg-top) 0%, var(--button-primary-bg-bottom) 100%);
+  background: linear-gradient(180deg, var(--button-ink-bg-top) 0%, var(--button-ink-bg-bottom) 100%);
   color: var(--color-text-on-inverse);
   box-shadow: var(--shadow-button);
   transition: transform var(--motion-duration-fast) var(--motion-ease-out);
@@ -986,6 +994,28 @@ button.list-row__hit:hover {
   margin-top: clamp(var(--space-5), 3.8svh, var(--space-8));
 }
 
+/* Variant D: a warm light behind the person (apricot into coral, fading to the white page) and a
+   stronger lavender halo: purple frames the person, warmth carries the feeling. */
+.match__portrait {
+  isolation: isolate;
+}
+
+/* The light belongs to the portrait: an ellipse that fades to nothing inside its own box
+   (closest-side), so it never shows an edge and never reaches the text above or below. */
+.match__portrait::before {
+  content: "";
+  position: absolute;
+  /* Wide, not tall: the light spreads sideways and stops short of the title and the copy. */
+  inset: -4% -34%;
+  z-index: -1;
+  background: radial-gradient(closest-side, var(--color-accent-apricot-edge) 0%, var(--color-accent-coral-surface) 52%, color-mix(in srgb, var(--color-accent-coral-surface) 0%, transparent) 100%);
+  pointer-events: none;
+}
+
+.match .organic-portrait__backdrop {
+  fill: var(--color-brand-tint-strong);
+}
+
 /* A thin, even lavender halo: enough to frame the photo, not a second shape competing with it. */
 .organic-portrait__backdrop {
   position: absolute;
@@ -1222,9 +1252,12 @@ button.list-row__hit:hover {
   list-style: none;
 }
 
+/* Variant D: what two people share is coral, the affection hue (deep coral text 5.5:1 on its tint).
+   Used on the profile section and the match moment only. */
 .shared-interests__pill {
-  background: var(--color-surface-soft);
+  background: var(--color-accent-coral-surface);
   box-shadow: none;
+  color: var(--color-accent-coral-text);
 }
 
 /* Profile setup: three stacked horizontal step cards (no connectors or progress bar). Done is flat

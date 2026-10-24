@@ -7,10 +7,11 @@ import { Spinner } from "./Button.jsx";
  * Chip. kind: "toggle" (aria-pressed), "remove" (removable value), "static" (display).
  * `unavailable` = quota reached; still focusable, announced, not toggleable.
  */
-export function Chip({ kind = "toggle", selected = false, unavailable = false, icon, onToggle, onRemove, children, className }) {
+export function Chip({ kind = "toggle", selected = false, unavailable = false, icon, tone, onToggle, onRemove, children, className }) {
+  const toneClass = tone && `chip--tone-${tone}`;
   if (kind === "static") {
     return (
-      <span className={cx("chip", "chip--static", className)}>
+      <span className={cx("chip", "chip--static", toneClass, className)}>
         {icon && <Icon name={icon} size={16} className="chip__icon" />}
         {children}
       </span>
@@ -29,7 +30,7 @@ export function Chip({ kind = "toggle", selected = false, unavailable = false, i
   return (
     <button
       type="button"
-      className={cx("chip", selected && "is-selected", unavailable && !selected && "is-unavailable", className)}
+      className={cx("chip", toneClass, selected && "is-selected", unavailable && !selected && "is-unavailable", className)}
       aria-pressed={selected}
       aria-disabled={unavailable && !selected ? true : undefined}
       onClick={() => {
@@ -46,7 +47,8 @@ export function Chip({ kind = "toggle", selected = false, unavailable = false, i
 
 /**
  * Multi- or single-select chips with an optional maximum. `groups` ([{ label, options }]) splits
- * the options into labelled sets; the maximum and the count still apply to the whole group.
+ * the options into labelled sets; the maximum and the count still apply to the whole group. A set's
+ * optional `tone` (apricot, periwinkle, mint) tints its unselected chips and marks its label.
  */
 export function ChipGroup({ label, options, groups, value, onChange, max, single = false, icons }) {
   const labelId = useId();
@@ -55,11 +57,12 @@ export function ChipGroup({ label, options, groups, value, onChange, max, single
     if (single) return onChange(next ? [opt] : []);
     onChange(next ? [...value, opt] : value.filter((v) => v !== opt));
   };
-  const chips = (list) => (
+  const chips = (list, tone) => (
     <div className="chip-group__items">
       {list.map((opt) => (
         <Chip
           key={opt}
+          tone={tone}
           icon={icons?.[opt]}
           selected={value.includes(opt)}
           unavailable={!single && atMax}
@@ -84,9 +87,9 @@ export function ChipGroup({ label, options, groups, value, onChange, max, single
       )}
       {groups
         ? groups.map((g) => (
-            <div key={g.label} className="chip-group__set">
+            <div key={g.label} className={cx("chip-group__set", g.tone && `chip-group__set--${g.tone}`)}>
               <p className="chip-group__set-label">{g.label}</p>
-              {chips(g.options)}
+              {chips(g.options, g.tone)}
             </div>
           ))
         : chips(options)}

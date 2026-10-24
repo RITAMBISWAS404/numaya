@@ -69,12 +69,18 @@ export const INTERESTS = [
   "Natural wine", "Jazz", "Cooking", "Climbing", "Film photography", "Museums", "Running", "Board games", "Travel", "Poetry",
 ];
 
-/** The same interests in three small sets, so the picker reads as a few short rows, not a wall. */
+/**
+ * The same interests in three small sets, so the picker reads as a few short rows, not a wall.
+ * Variant D: each set has one supporting hue (`tone`), the same wherever an interest appears.
+ */
 export const INTEREST_GROUPS = [
-  { label: "Food and nights in", options: ["Natural wine", "Cooking", "Board games"] },
-  { label: "Culture", options: ["Jazz", "Museums", "Poetry", "Film photography"] },
-  { label: "Out and about", options: ["Climbing", "Running", "Travel"] },
+  { label: "Food and nights in", tone: "apricot", options: ["Natural wine", "Cooking", "Board games"] },
+  { label: "Culture", tone: "periwinkle", options: ["Jazz", "Museums", "Poetry", "Film photography"] },
+  { label: "Out and about", tone: "mint", options: ["Climbing", "Running", "Travel"] },
 ];
+
+/** Interest → its set's hue (Profile shows the person's interests in the same colours). */
+export const INTEREST_TONE = Object.fromEntries(INTEREST_GROUPS.flatMap((g) => g.options.map((o) => [o, g.tone])));
 
 export const REPORT_REASONS = [
   ["user", "Fake profile"],

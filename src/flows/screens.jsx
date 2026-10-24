@@ -54,7 +54,7 @@ import {
   VerifiedBadge,
   Wordmark,
 } from "../design-system/index.js";
-import { INTEREST_GROUPS, INTERESTS, PEOPLE, PROMPT_QUESTIONS, REPORT_REASONS } from "./data.js";
+import { INTEREST_GROUPS, INTEREST_TONE, INTERESTS, PEOPLE, PROMPT_QUESTIONS, REPORT_REASONS } from "./data.js";
 import { conversations, discoveryQueue, hiddenByFilters, newMatches, useStore } from "./store.js";
 import { Frame, useFlash } from "./frame.jsx";
 import { ReportSheet, ShareSheet } from "./activity.jsx";
@@ -866,14 +866,14 @@ export function MyProfile({ go }) {
           {interests.length > 0 && (
             <ul className="fl-me__interests" aria-label="Your interests">
               {interests.map((s) => (
-                <li key={s} className="chip chip--static">
+                <li key={s} className={`chip chip--static${INTEREST_TONE[s] ? ` chip--tone-${INTEREST_TONE[s]}` : ""}`}>
                   {s}
                 </li>
               ))}
             </ul>
           )}
           <div className="fl-badges fl-me__actions">
-            <Button variant="secondary" size="sm" block={false} icon="edit" onClick={() => go("edit")}>
+            <Button variant="brand" size="sm" block={false} icon="edit" onClick={() => go("edit")}>
               Edit profile
             </Button>
             {state.prefs.snooze && (

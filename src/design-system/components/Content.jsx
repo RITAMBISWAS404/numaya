@@ -447,7 +447,7 @@ export function ProfileCard({ name, age, verified, details = [], isNew = false, 
           {(verified || isNew) && (
             <div className="profile-card__pills">
               {verified && (
-                <span className="profile-card__pill">
+                <span className="profile-card__pill profile-card__pill--verified">
                   <Icon name="verified" size={14} /> Verified
                 </span>
               )}

@@ -480,8 +480,9 @@ body {
   bottom: -8px;
   padding: 2px 8px;
   border-radius: var(--radius-pill);
-  background: var(--color-surface-inverse);
-  color: var(--color-text-on-inverse);
+  /* Variant D: the readiness score is a brand indicator, solid purple like the ring it sits on. */
+  background: var(--color-brand);
+  color: var(--color-on-brand);
   font-size: var(--type-micro-size);
   font-weight: var(--font-weight-bold);
   font-variant-numeric: tabular-nums;
@@ -875,6 +876,14 @@ body {
 
 .fl-ready-card .readiness-meter--bar {
   height: 8px;
+  background: var(--color-surface);
+}
+
+/* Variant D: the readiness card is the one lavender surface on Profile (the brand's "next step"),
+   with a lavender hairline; the white sections below stay neutral. */
+.fl-ready-card {
+  background: var(--color-brand-tint);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-brand-subtle);
 }
 
 .fl-ready-card__title {

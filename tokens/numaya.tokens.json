@@ -15,14 +15,30 @@
         "800": { "$type": "color", "$value": "#4f4296", "$description": "Deep purple for text on lavender tints (derived; 7.4:1 on purple.100)." }
       },
       "periwinkle": {
-        "100": { "$type": "color", "$value": "#d6dcfd", "$description": "Meetup promo card fill (sampled #D6DCFD, 'Start a new group')." }
+        "50":  { "$type": "color", "$value": "#eef1fe", "$description": "Variant D: palest periwinkle, the Culture interest surface." },
+        "100": { "$type": "color", "$value": "#d6dcfd", "$description": "Meetup promo card fill (sampled #D6DCFD, 'Start a new group')." },
+        "400": { "$type": "color", "$value": "#7f8fe8", "$description": "Variant D: periwinkle mark (category dot); never text (3.0:1)." },
+        "800": { "$type": "color", "$value": "#34449a", "$description": "Variant D: periwinkle text on its tints (6.4:1 on periwinkle.100)." }
       },
       "rose": {
         "100": { "$type": "color", "$value": "#fde8ee", "$description": "Rose tint (derived) for avatar and category framing." },
-        "500": { "$type": "color", "$value": "#ea698c", "$description": "Meetup accent rose (sampled #EA698C, organiser badge): badges and category marks, never text." }
+        "500": { "$type": "color", "$value": "#ea698c", "$description": "Meetup accent rose (sampled #EA698C, organiser badge): badges and category marks, never text." },
+        "700": { "$type": "color", "$value": "#a8324f", "$description": "Variant D: deep coral text on rose.100 (5.5:1)." }
       },
       "yellow": { "100": { "$type": "color", "$value": "#fdf0d0", "$description": "Yellow tint (derived from #FCD284) for avatar framing." }, "200": { "$type": "color", "$value": "#fcd284", "$description": "Meetup illustration yellow (sampled #FCD284, empty-state blob): illustration and avatar framing." } },
       "orange": { "500": { "$type": "color", "$value": "#d58b50", "$description": "Meetup time/status orange (sampled #D58B50, 'In 2m'): icons and marks only (2.75:1 on white)." } },
+      "apricot": {
+        "50":  { "$type": "color", "$value": "#fff1e4", "$description": "Variant D: apricot surface (Food and nights in)." },
+        "100": { "$type": "color", "$value": "#ffe2c7", "$description": "Variant D: apricot hairline and warm wash." },
+        "400": { "$type": "color", "$value": "#f2a65e", "$description": "Variant D: apricot mark and glow; never text (2.0:1)." },
+        "800": { "$type": "color", "$value": "#8a4512", "$description": "Variant D: apricot text on its tints (5.8:1 on apricot.100)." }
+      },
+      "mint": {
+        "50":  { "$type": "color", "$value": "#e9f7f1", "$description": "Variant D: mint surface (Out and about)." },
+        "100": { "$type": "color", "$value": "#cdeedf", "$description": "Variant D: mint hairline." },
+        "500": { "$type": "color", "$value": "#3fae86", "$description": "Variant D: mint mark; never text (2.8:1)." },
+        "800": { "$type": "color", "$value": "#1d6a4f", "$description": "Variant D: mint text on its tints (5.2:1 on mint.100)." }
+      },
       "neutral": {
         "0":   { "$type": "color", "$value": "#ffffff" },
         "50":  { "$type": "color", "$value": "#f7f7f8" },
@@ -136,7 +152,34 @@
         "yellow": { "$type": "color", "$value": "{primitive.color.yellow.200}", "$description": "Illustration framing." },
         "yellow-tint": { "$type": "color", "$value": "{primitive.color.yellow.100}", "$description": "Avatar framing." },
         "orange": { "$type": "color", "$value": "{primitive.color.orange.500}", "$description": "Time and status icons." },
-        "green":  { "$type": "color", "$value": "{primitive.color.green.500}", "$description": "Confirmation marks." }
+        "green":  { "$type": "color", "$value": "{primitive.color.green.500}", "$description": "Confirmation marks." },
+        "coral": {
+          "$description": "Variant D supporting hue for affection: what two people share (Discover, Match). Never a control state.",
+          "surface": { "$type": "color", "$value": "{primitive.color.rose.100}" },
+          "text":    { "$type": "color", "$value": "{primitive.color.rose.700}" },
+          "mark":    { "$type": "color", "$value": "{primitive.color.rose.500}" }
+        },
+        "apricot": {
+          "$description": "Variant D category hue: Food and nights in; also the warm half of the Welcome and Match light.",
+          "surface": { "$type": "color", "$value": "{primitive.color.apricot.50}" },
+          "edge":    { "$type": "color", "$value": "{primitive.color.apricot.100}" },
+          "text":    { "$type": "color", "$value": "{primitive.color.apricot.800}" },
+          "mark":    { "$type": "color", "$value": "{primitive.color.apricot.400}" }
+        },
+        "periwinkle": {
+          "$description": "Variant D category hue: Culture.",
+          "surface": { "$type": "color", "$value": "{primitive.color.periwinkle.50}" },
+          "edge":    { "$type": "color", "$value": "{primitive.color.periwinkle.100}" },
+          "text":    { "$type": "color", "$value": "{primitive.color.periwinkle.800}" },
+          "mark":    { "$type": "color", "$value": "{primitive.color.periwinkle.400}" }
+        },
+        "mint": {
+          "$description": "Variant D category hue: Out and about.",
+          "surface": { "$type": "color", "$value": "{primitive.color.mint.50}" },
+          "edge":    { "$type": "color", "$value": "{primitive.color.mint.100}" },
+          "text":    { "$type": "color", "$value": "{primitive.color.mint.800}" },
+          "mark":    { "$type": "color", "$value": "{primitive.color.mint.500}" }
+        }
       },
       "text": {
         "primary":    { "$type": "color", "$value": "{primitive.color.neutral.900}" },
@@ -305,10 +348,16 @@
       "height-sm":    { "$type": "dimension", "$value": "{primitive.dimension.40}" },
       "height-quiet": { "$type": "dimension", "$value": "{primitive.dimension.48}" },
       "primary": {
-        "bg-top":          { "$type": "color", "$value": "{primitive.color.neutral.800}" },
-        "bg-bottom":       { "$type": "color", "$value": "{semantic.color.surface.inverse}" },
-        "bg-hover-top":    { "$type": "color", "$value": "{primitive.color.neutral.750}" },
-        "bg-hover-bottom": { "$type": "color", "$value": "{primitive.color.neutral.850}" }
+        "$description": "Variant D: primary actions are brand purple (white is 4.90:1 at the lightest stop).",
+        "bg-top":          { "$type": "color", "$value": "{primitive.color.purple.600}" },
+        "bg-bottom":       { "$type": "color", "$value": "{primitive.color.purple.700}" },
+        "bg-hover-top":    { "$type": "color", "$value": "{primitive.color.purple.700}" },
+        "bg-hover-bottom": { "$type": "color", "$value": "{primitive.color.purple.800}" }
+      },
+      "ink": {
+        "$description": "Variant D: Pass and Like stay ink, so SuperSwipe remains the one purple choice in the action row.",
+        "bg-top":    { "$type": "color", "$value": "{primitive.color.neutral.800}" },
+        "bg-bottom": { "$type": "color", "$value": "{semantic.color.surface.inverse}" }
       }
     },
     "fab":         { "size": { "$type": "dimension", "$value": "{primitive.dimension.56}" } },

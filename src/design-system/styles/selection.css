@@ -258,6 +258,54 @@ button.chip:active {
   color: var(--color-border-strong);
 }
 
+/* Variant D category hues. An interest's set gives its unselected and display chips a pale tint, a
+   tinted hairline and a deep glyph of the same hue; the label stays ink (13:1+ on every tint).
+   Selected stays solid brand purple, and locked chips drop the tint, so state never rides on the
+   category hue. */
+.chip--tone-apricot {
+  --chip-tone-surface: var(--color-accent-apricot-surface);
+  --chip-tone-edge: var(--color-accent-apricot-edge);
+  --chip-tone-text: var(--color-accent-apricot-text);
+  --chip-tone-mark: var(--color-accent-apricot-mark);
+}
+
+.chip--tone-periwinkle {
+  --chip-tone-surface: var(--color-accent-periwinkle-surface);
+  --chip-tone-edge: var(--color-accent-periwinkle-edge);
+  --chip-tone-text: var(--color-accent-periwinkle-text);
+  --chip-tone-mark: var(--color-accent-periwinkle-mark);
+}
+
+.chip--tone-mint {
+  --chip-tone-surface: var(--color-accent-mint-surface);
+  --chip-tone-edge: var(--color-accent-mint-edge);
+  --chip-tone-text: var(--color-accent-mint-text);
+  --chip-tone-mark: var(--color-accent-mint-mark);
+}
+
+.chip[class*="chip--tone-"]:not(.is-selected):not(.is-unavailable) {
+  background: var(--chip-tone-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--chip-tone-edge);
+}
+
+.chip[class*="chip--tone-"]:not(.is-selected):not(.is-unavailable) .chip__affordance {
+  color: var(--chip-tone-text);
+}
+
+.chip-group__set--apricot { --chip-tone-mark: var(--color-accent-apricot-mark); }
+.chip-group__set--periwinkle { --chip-tone-mark: var(--color-accent-periwinkle-mark); }
+.chip-group__set--mint { --chip-tone-mark: var(--color-accent-mint-mark); }
+
+/* The set's hue as a small mark before its name: it ties the label to its chips. */
+.chip-group__set[class*="chip-group__set--"] .chip-group__set-label::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--chip-tone-mark);
+}
+
 /* Display chips (profile interests, facts): the same white hairline pill, without the affordance. */
 .chip--static {
   padding: 0 var(--space-3);
@@ -318,6 +366,9 @@ button.chip:active {
 }
 
 .chip-group__set-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   color: var(--color-text-muted);
   font-size: var(--type-caption-size);
   line-height: var(--type-caption-line);

@@ -373,7 +373,8 @@ try {
       check("selection: a checked checkbox is the purple selected control with a white tick", pinkFg.checkbox === BRAND, pinkFg.checkbox);
       check("fields: form fields are 16px rounded rectangles, not pills", pinkFg.phoneRadius === "16px", pinkFg.phoneRadius);
       check("info cards: photo guidance and blocking help use the shared information card", pinkFg.infoCards === 2, String(pinkFg.infoCards));
-      check("you both like: the shared white 24px profile section, no heart or mark, grey text-only pills", pinkFg.shared?.bg === WHITE && pinkFg.shared.radius === "24px" && pinkFg.shared.mark === 0 && pinkFg.shared.section && pinkFg.shared.pills > 0 && !pinkFg.shared.icons && pinkFg.shared.pillBg === "rgb(242, 242, 242)", JSON.stringify(pinkFg.shared));
+      // Variant D: shared interests are coral, the affection hue (rose.100 fill, deep-coral text 5.5:1).
+      check("you both like: the shared white 24px profile section, no heart or mark, coral text-only pills", pinkFg.shared?.bg === WHITE && pinkFg.shared.radius === "24px" && pinkFg.shared.mark === 0 && pinkFg.shared.section && pinkFg.shared.pills > 0 && !pinkFg.shared.icons && pinkFg.shared.pillBg === "rgb(253, 232, 238)", JSON.stringify(pinkFg.shared));
       check("match queue: new matches are 72x96 portrait previews (20px corner) with an unclipped purple ring", pinkFg.portrait?.w === 72 && pinkFg.portrait.h === 96 && pinkFg.portrait.radius === "20px" && pinkFg.portrait.ring.includes(BRAND) && pinkFg.portrait.clear, JSON.stringify(pinkFg.portrait));
       check("actions: Pass / Super / Like and the floating SuperSwipe are 72x56 pills; send is a circle (Meetup composer)", pinkFg.actions.length === 3 && pinkFg.actions.every((a) => a === "72x56/28px") && pinkFg.floating === "28px" && pinkFg.send === "50%", `${pinkFg.actions.join(" ")} / ${pinkFg.floating} / ${pinkFg.send}`);
       check("composer: the field is a 20px rounded rectangle, never a pill", pinkFg.field === "20px", pinkFg.field);
@@ -387,7 +388,8 @@ try {
       check("flows: switch on is the purple selected track; off is a plain grey track, no outline, white thumb", states.switchOn === BRAND && states.switchOff.bg === "rgb(218, 218, 221)" && states.switchOff.edge === "none" && states.switchOff.thumb === "rgb(255, 255, 255)", `${states.switchOn} / ${JSON.stringify(states.switchOff)}`);
       check("flows: sliders have white thumbs on a brand-purple interval over a grey rail (no ink)", states.slider.thumb === WHITE && states.slider.track.includes(BRAND) && states.slider.track.includes("rgb(218, 218, 221)") && !states.slider.track.includes(INK), JSON.stringify(states.slider));
       check("navigation: idle tabs are ink line icons with an ink label (Meetup)", states.tabIdleIcon === "rgb(60, 59, 64)" && states.tabIdleLabel === "rgb(60, 59, 64)", `${states.tabIdleIcon} / ${states.tabIdleLabel}`);
-      check("flows: active tab sits on a grey pill with a purple icon and a deep-purple label (Meetup)", states.tabActive === "rgb(233, 232, 235)" && states.tabActiveFg === "rgb(79, 66, 150)" && states.tabActiveIcon === BRAND, `${states.tabActive} / ${states.tabActiveFg} / ${states.tabActiveIcon}`);
+      // Variant D: the current tab sits on a lavender pill (brand.tint-strong; deep-purple label 6.6:1).
+      check("flows: active tab sits on a lavender pill with a purple icon and a deep-purple label", states.tabActive === "rgb(233, 228, 251)" && states.tabActiveFg === "rgb(79, 66, 150)" && states.tabActiveIcon === BRAND, `${states.tabActive} / ${states.tabActiveFg} / ${states.tabActiveIcon}`);
       check("flows: progress fill uses brand purple", states.progress === BRAND, states.progress);
       // Geometry, elevation, icons and bottom navigation.
       const geo = await p.evaluate(() => {
