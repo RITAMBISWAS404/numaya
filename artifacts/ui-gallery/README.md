@@ -225,4 +225,4 @@ after any change.
 | 161 | QA 375: It’s a match with a person who has no prompt | Viewport · `flows.html?screen=match` |  | [161-qa-match-kemi-375x667.png](screens/161-qa-match-kemi-375x667.png) |
 | 162 | QA 375: Settings scrolled to the end | Viewport · `flows.html?screen=settings` |  | [162-qa-settings-bottom-375x667.png](screens/162-qa-settings-bottom-375x667.png) |
 
-162 captures: 152 viewport, 10 full page (18 MB of screenshots; all-screens sheet 2346 KB).
+162 captures: 152 viewport, 10 full page (18 MB of screenshots; all-screens sheet 2359 KB).

@@ -15,7 +15,7 @@
  * manifest.json, README.md}.
  */
 import { mkdirSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { chromium } from "playwright";
 import { createServer } from "vite";
@@ -459,4 +459,4 @@ if (errors.length) {
   console.error(`\n${errors.length} problem(s):\n${errors.join("\n")}`);
   process.exit(1);
 }
-console.log(`\n${manifest.length} captures written to ${OUT.slice(ROOT.length + 1)}/`);
+console.log(`\n${manifest.length} captures written to ${relative(ROOT, OUT)}/`);

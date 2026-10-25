@@ -282,7 +282,7 @@
       "state": "initial",
       "viewport": {
         "width": 393,
-        "height": 3025,
+        "height": 3009,
         "deviceScaleFactor": 2
       },
       "capture": "full-page",
@@ -1423,7 +1423,7 @@
       "state": "initial",
       "viewport": {
         "width": 393,
-        "height": 1229,
+        "height": 1413,
         "deviceScaleFactor": 2
       },
       "capture": "full-page",
@@ -1466,7 +1466,7 @@
       "state": "initial",
       "viewport": {
         "width": 393,
-        "height": 1714,
+        "height": 1864,
         "deviceScaleFactor": 2
       },
       "capture": "full-page",
@@ -1522,7 +1522,7 @@
       "state": "reached by interaction",
       "viewport": {
         "width": 393,
-        "height": 1914,
+        "height": 1912,
         "deviceScaleFactor": 2
       },
       "capture": "full-page",
