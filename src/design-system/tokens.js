@@ -406,6 +406,15 @@ export const tokens = [
     "description": null
   },
   {
+    "id": "primitive.color.alpha.black-72",
+    "name": "--p-color-alpha-black-72",
+    "layer": "primitive",
+    "type": "color",
+    "value": "rgb(0 0 0 / 0.72)",
+    "resolved": "rgb(0 0 0 / 0.72)",
+    "description": null
+  },
+  {
     "id": "primitive.color.alpha.purple-24",
     "name": "--p-color-alpha-purple-24",
     "layer": "primitive",
@@ -1394,6 +1403,15 @@ export const tokens = [
     "value": "{primitive.color.sky.700}",
     "resolved": "#33509a",
     "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.photo-fade",
+    "name": "--color-tiimo-photo-fade",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.alpha.black-72}",
+    "resolved": "rgb(0 0 0 / 0.72)",
+    "description": "The theme's only gradient: the end colour of the bottom-to-top black fade on profile photographs that carry text (Discover, Like back). Never on surfaces, cards, controls or decoration."
   },
   {
     "id": "semantic.font.display",
@@ -2693,6 +2711,24 @@ export const tokens = [
     "type": "dimension",
     "value": "{primitive.dimension.16}",
     "resolved": "16px",
+    "description": null
+  },
+  {
+    "id": "component.tiimo.radius-control",
+    "name": "--tiimo-radius-control",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.12}",
+    "resolved": "12px",
+    "description": null
+  },
+  {
+    "id": "component.tiimo.radius-tag",
+    "name": "--tiimo-radius-tag",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.8}",
+    "resolved": "8px",
     "description": null
   },
   {

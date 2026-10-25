@@ -48,6 +48,7 @@
       "alpha": {
         "ink-34":   { "$type": "color", "$value": "rgb(20 19 22 / 0.34)" },
         "ink-62":   { "$type": "color", "$value": "rgb(20 19 22 / 0.62)" },
+        "black-72": { "$type": "color", "$value": "rgb(0 0 0 / 0.72)" },
         "purple-24": { "$type": "color", "$value": "rgb(114 98 199 / 0.24)" },
         "white-55": { "$type": "color", "$value": "rgb(255 255 255 / 0.55)" }
       }
@@ -192,7 +193,8 @@
         "mint-tint":  { "$type": "color", "$value": "{primitive.color.mint.100}" },
         "mint-ink":   { "$type": "color", "$value": "{primitive.color.mint.700}" },
         "sky-tint":   { "$type": "color", "$value": "{primitive.color.sky.100}" },
-        "sky-ink":    { "$type": "color", "$value": "{primitive.color.sky.700}" }
+        "sky-ink":    { "$type": "color", "$value": "{primitive.color.sky.700}" },
+        "photo-fade": { "$type": "color", "$value": "{primitive.color.alpha.black-72}", "$description": "The theme's only gradient: the end colour of the bottom-to-top black fade on profile photographs that carry text (Discover, Like back). Never on surfaces, cards, controls or decoration." }
       }
     },
 
@@ -345,8 +347,10 @@
     "switch":      { "width": { "$type": "dimension", "$value": "51px" }, "height": { "$type": "dimension", "$value": "31px" } },
     "tab-bar":     { "height": { "$type": "dimension", "$value": "{primitive.dimension.64}" } },
     "tiimo":       {
-      "$description": "Tiimo-inspired experiment geometry: item cards, feature cards and emoji holders.",
+      "$description": "Tiimo-inspired experiment geometry. Content: item cards 16, feature cards 24. Controls (V3): compact rounded rectangles instead of capsules: buttons 16 (radius-item), chips and small controls 12, tags, badges and icon holders 8. Circles stay for avatars and icon buttons; pills only for progress, switches, sliders and count badges.",
       "radius-item":    { "$type": "dimension", "$value": "{primitive.dimension.16}" },
+      "radius-control": { "$type": "dimension", "$value": "{primitive.dimension.12}" },
+      "radius-tag":     { "$type": "dimension", "$value": "{primitive.dimension.8}" },
       "radius-feature": { "$type": "dimension", "$value": "{primitive.dimension.24}" },
       "emoji-size":     { "$type": "dimension", "$value": "{primitive.dimension.32}" },
       "emoji-radius":   { "$type": "dimension", "$value": "10px" }

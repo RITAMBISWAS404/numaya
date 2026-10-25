@@ -1,6 +1,6 @@
 /*
  * Tiimo-inspired visual experiment (artifacts/tiimo-inspired-experiment/), refined in
- * artifacts/tiimo-white-surface-refinement/.
+ * artifacts/tiimo-white-surface-refinement/ (V2) and artifacts/tiimo-inspired-v3/ (V3).
  *
  * Opt-in: a screen renders inside `.theme-tiimo` only with `?theme=tiimo` and only if it takes part
  * in the experiment, so the approved design is untouched everywhere else. Every rule below is scoped
@@ -8,8 +8,13 @@
  *
  * The rules, from the reference analysis:
  * - A pure white canvas; white cards separate by spacing and a restrained shadow, not a hairline.
- * - No gradients anywhere: every surface, scrim and decoration is a solid colour (see the end).
- * - Two card sizes: item 16px, feature 24px. Pills for buttons, chips and tags only.
+ * - One gradient only: the black fade at the bottom of a profile photograph that carries text.
+ *   Every surface, control and decoration is a solid colour (see "Gradients" at the end).
+ * - Two card sizes: item 16px, feature 24px. Controls are compact rounded rectangles, not capsules:
+ *   buttons 16, chips 12, tags 8. Circles for avatars and icon buttons; pills only for progress,
+ *   switches, sliders and count badges.
+ * - Headings are neutral ink; colour marks a category (a tinted holder or chip) or a state, never
+ *   a heading on its own.
  * - One pastel per category (peach, lilac, mint, sky, butter), always paired with its ink for text.
  * - Emoji mark content (interests, activity categories), never utility controls.
  * - Fields and quiet controls keep the light neutral grey; purple keeps actions and selection,
@@ -93,21 +98,27 @@
 }
 
 /* Chips ------------------------------------------------------------------- */
-/* Interest sets: a tinted capsule header with its emoji and an uppercase tracked micro label. */
+/* Interest sets: a neutral ink heading; the category colour lives only in the small tinted holder
+   behind its emoji, so the label reads as a heading and the colour still says which category. */
 .theme-tiimo .chip-group__set-label[data-tone] {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-2);
   justify-self: start;
-  padding: 4px 10px;
-  border-radius: var(--radius-pill);
+  color: var(--color-text-primary);
+  font-size: var(--type-label-size);
+  line-height: var(--type-label-line);
+  font-weight: var(--font-weight-semibold);
+}
+
+.theme-tiimo .chip-group__set-label[data-tone]::after {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--tiimo-radius-tag);
   background: var(--tone-tint);
-  color: var(--tone-ink);
-  font-size: var(--type-eyebrow-size);
-  line-height: var(--type-eyebrow-line);
-  font-weight: var(--type-eyebrow-weight);
-  letter-spacing: var(--type-eyebrow-tracking);
-  text-transform: uppercase;
+  font-size: 13px;
 }
 
 /* Selected interest: its category tint and ink, a 1.5px ink ring and the minus glyph, so the state
@@ -138,7 +149,7 @@
   gap: 4px;
   justify-self: start;
   padding: 2px 8px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--tiimo-radius-tag);
   background: var(--tone-tint);
   color: var(--tone-ink);
   font-weight: var(--font-weight-semibold);
@@ -173,9 +184,9 @@
   background: var(--color-tiimo-lilac-tint);
 }
 
-/* Tags: sentence-case tinted pills. "New" is butter, the reference's highlight tint. */
+/* Tags: sentence-case tinted tags (8px corners). "New" is butter, the reference's highlight tint. */
 .theme-tiimo .person-tile__badge .badge {
-  border-radius: var(--radius-pill);
+  border-radius: var(--tiimo-radius-tag);
   background: var(--color-tiimo-butter-tint);
   color: var(--color-tiimo-butter-ink);
 }
@@ -205,49 +216,40 @@
 /* Bubbles are the approved ones: yours solid brand purple with white text (4.90:1), theirs the
    light neutral grey with ink text, each with its tail corner on the sender's side. */
 
-/* The match moment: a static scatter of solid dots in the margins around the heading (the
-   reference's completion confetti). One 10px dot and its solid copies via box-shadow (zero blur,
-   spread for size): no gradient. The centre band stays clear of the heading. */
-.theme-tiimo .match {
-  position: relative;
-  isolation: isolate;
+/* The match moment: two people, not a badge. Their photo is a clean circle, the dominant image; yours
+   is a smaller circle overlapping its lower-left edge, so the two portraits carry the moment. No
+   confetti, no lavender halo or outline. The organic frame's mask is an inline style on the shared
+   component; its narrowest radius is 43.5%, so a 43% circular clip gives an exact circle without
+   touching the component. Your avatar keeps its white ring: it separates the two faces where they
+   overlap, and is not decoration. */
+.theme-tiimo .organic-portrait__backdrop {
+  display: none;
 }
 
-.theme-tiimo .match::before,
-.theme-tiimo .match::after {
-  content: "";
-  position: absolute;
-  top: 40px;
-  z-index: -1;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  pointer-events: none;
+.theme-tiimo .match .organic-portrait {
+  clip-path: circle(43% at 50% 50%);
 }
 
-/* Left margin column. */
-.theme-tiimo .match::before {
-  left: 0;
-  background: var(--color-brand-subtle);
-  box-shadow:
-    10px 96px 0 4px var(--color-tiimo-butter-tint),
-    2px 210px 0 -2px var(--color-tiimo-mint-tint),
-    18px -26px 0 -3px var(--color-tiimo-butter-tint);
+/* Your avatar's centre sits on their circle's lower-left edge (45 degrees), just inside it (95% of
+   the 43% radius, so 50% - 0.95 x 43% x 0.707 = 21% from each side): a clear overlap that stays away
+   from the centre of their photo, where a face would be, at every size. */
+.theme-tiimo .match__you {
+  --avatar-size: min(var(--size-avatar-lg), 9.6svh);
+  left: calc(21% - var(--avatar-size) / 2);
+  bottom: calc(21% - var(--avatar-size) / 2);
 }
 
-/* Right margin column. */
-.theme-tiimo .match::after {
-  right: 0;
-  background: var(--color-tiimo-butter-tint);
-  box-shadow:
-    -14px 70px 0 -2px var(--color-brand-subtle),
-    -4px 150px 0 3px var(--color-tiimo-butter-tint),
-    -12px 236px 0 0 var(--color-brand-subtle),
-    0 300px 0 -3px var(--color-tiimo-mint-tint);
+/* Your avatar scales with their portrait (about 30% of its frame), so on a short phone it still
+   overlaps the edge instead of covering their photo. Mirrors the portrait's own short-phone rule. */
+@media (max-height: 700px) {
+  .theme-tiimo .match__you {
+    --avatar-size: min(var(--size-avatar-lg), 7.5svh);
+  }
 }
 
-/* No gradients --------------------------------------------------------------- */
-/* Every gradient the approved components draw is replaced by a solid colour inside the theme. */
+/* Gradients ------------------------------------------------------------------- */
+/* Every gradient the approved components draw is replaced by a solid colour inside the theme,
+   except one: the black fade on profile photographs that carry text (below). */
 
 /* Page washes (Welcome, the Home header): solid white. */
 .theme-tiimo.screen--wash,
@@ -276,9 +278,25 @@
   background-color: var(--color-surface-photo);
 }
 
-/* Name scrim: a solid translucent ink band that hugs the name block, instead of a long ramp. White
-   text on it stays above 4.5:1 over any photo (worst case pure white). */
-.theme-tiimo .profile-card__overlay {
+/* Text on a profile photo. The one permitted gradient: when a real photograph is present, a black
+   fade inside the photo container, clear over the upper photo (where the face is) and darkest
+   behind the name, age and badges. It belongs to the overlay that holds that text, so it sizes with
+   it and is clipped by the photo's own corners; it never reaches surfaces, controls or decoration.
+   Pure black at increasing opacity keeps the photo's colour (no ink or purple cast). */
+.theme-tiimo .profile-card__media:has(.profile-card__img) .profile-card__overlay {
+  background: linear-gradient(
+    to top,
+    var(--color-tiimo-photo-fade) 0%,
+    color-mix(in srgb, var(--color-tiimo-photo-fade) 82%, transparent) 30%,
+    color-mix(in srgb, var(--color-tiimo-photo-fade) 45%, transparent) 58%,
+    color-mix(in srgb, var(--color-tiimo-photo-fade) 14%, transparent) 82%,
+    transparent 100%
+  );
+}
+
+/* No photo yet (the grey placeholder): no gradient. The name block sits on a solid translucent ink
+   band that hugs it, so white text stays readable on the light placeholder. */
+.theme-tiimo .profile-card__media:not(:has(.profile-card__img)) .profile-card__overlay {
   padding-top: var(--space-5);
   background: var(--color-overlay-photo);
 }
@@ -309,4 +327,50 @@
 
 .theme-tiimo .slider__track input {
   z-index: 1;
+}
+
+/* Geometry: compact rounded rectangles ------------------------------------------- */
+/* Controls lose the capsule: one corner per size class so related controls match. Large buttons
+   take the item radius (16), chips and small controls 12, tags and badges 8. Icon buttons, the
+   FAB, avatars and the photo frames keep their own shapes. */
+.theme-tiimo .btn {
+  border-radius: var(--tiimo-radius-item);
+}
+
+.theme-tiimo .btn--sm,
+.theme-tiimo .chip,
+.theme-tiimo .segmented__item {
+  border-radius: var(--tiimo-radius-control);
+}
+
+.theme-tiimo .search {
+  border-radius: var(--tiimo-radius-item);
+}
+
+/* Pass, SuperSwipe and Like (72 x 56) are wide action buttons, not circles: the button corner. */
+.theme-tiimo .action-bar .action-bar__btn,
+.theme-tiimo .profile-card__actions .action-bar__btn {
+  border-radius: var(--tiimo-radius-item);
+}
+
+.theme-tiimo .profile-card__pill,
+.theme-tiimo .conversation__move {
+  border-radius: var(--tiimo-radius-tag);
+}
+
+/* The floating tab bar: a soft rounded rectangle; its items nest inside the 6px inset. */
+.theme-tiimo .tab-bar {
+  border-radius: var(--tiimo-radius-feature);
+}
+
+.theme-tiimo .tab-bar__item {
+  border-radius: var(--tiimo-radius-item);
+}
+
+/* Headings ------------------------------------------------------------------------ */
+/* The prompt's question is a section heading, so it takes the neutral heading colour of the
+   other sections; the lavender tile and its quote mark still say "prompt". */
+.theme-tiimo .profile-section--prompt .profile-section__title,
+.theme-tiimo .prompt__label {
+  color: var(--color-text-secondary);
 }

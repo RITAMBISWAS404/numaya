@@ -1,16 +1,18 @@
 #!/usr/bin/env node
 /**
  * The opt-in Tiimo-inspired experiment (`?theme=tiimo`, artifacts/tiimo-inspired-experiment/, refined
- * in artifacts/tiimo-white-surface-refinement/).
+ * in artifacts/tiimo-white-surface-refinement/ and artifacts/tiimo-inspired-v3/).
  * Its own contract, kept apart from the approved design's checks in smoke.mjs and product.mjs:
  * scoping (only the 12 selected screens, only with the flag), the visual rules that carry meaning
- * (white canvas, no computed gradient, neutral fields, solid purple for your messages, category tones
- * with readable inks, decorative emoji), and that the screens still work,
+ * (white canvas, gradients only as the black fade on profile photos, compact rounded controls,
+ * neutral headings, a match without decoration, neutral fields, solid purple for your messages,
+ * category tones with readable inks, decorative emoji), and that the screens still work,
  * fit 393 and 375 px wide and log no errors. Run by `npm run test:e2e`.
  */
 import { resolve } from "node:path";
 import { chromium } from "playwright";
 import { createServer } from "vite";
+import { initialState, STORAGE_KEY } from "../../src/flows/store.js";
 
 const ROOT = resolve(import.meta.dirname, "../..");
 const FLOW_SCREENS = ["basics", "photos", "interests", "discovery", "like-profile", "likes", "match", "chats", "chat", "prompt", "activity"];
@@ -53,6 +55,14 @@ async function open(p, path) {
   await p.goto(`${base}${path}`);
   await wait(700);
 }
+// Opens a flow screen with a seeded session (as the gallery does), e.g. the match right after liking Maya.
+async function openSeeded(p, path, patch) {
+  await open(p, path);
+  await p.evaluate(([key, value]) => localStorage.setItem(key, value), [STORAGE_KEY, JSON.stringify({ version: 1, state: { ...initialState, ...patch } })]);
+  await p.reload();
+  await wait(700);
+}
+const MATCHED = { matches: ["priya", "jo", "maya"], seen: ["maya"], lastMatch: "maya" };
 const themed = (p) => p.evaluate(() => document.querySelectorAll(".theme-tiimo").length > 0);
 
 try {
@@ -83,23 +93,31 @@ try {
   }
   check("scoping: screens outside the experiment keep the approved design even with the flag", leaked.length === 0, leaked.join(", "));
 
-  // 2. Visual contract on Interests: canvas, tinted category capsules, decorative emoji.
+  // 2. Visual contract on Interests: canvas, neutral set headings with a tinted emoji holder,
+  // decorative emoji.
   await open(p, "flows.html?screen=interests&theme=tiimo");
   const look = await p.evaluate(() => {
     const cs = (el) => getComputedStyle(el);
     const screen = document.querySelector(".fl-screen");
-    const labels = [...document.querySelectorAll(".chip-group__set-label[data-tone]")].map((el) => ({ tone: el.dataset.tone, fg: cs(el).color, bg: cs(el).backgroundColor }));
+    const labels = [...document.querySelectorAll(".chip-group__set-label[data-tone]")].map((el) => ({ tone: el.dataset.tone, fg: cs(el).color, bg: cs(el).backgroundColor, holder: getComputedStyle(el, "::after").backgroundColor }));
+    const prompt = document.querySelector(".prompt__label");
     const chip = [...document.querySelectorAll(".chip")].find((c) => c.textContent.includes("Natural wine"));
     return {
       canvas: cs(screen).backgroundColor,
       labels,
+      prompt: prompt && cs(prompt).color,
       chip: { pressed: chip.getAttribute("aria-pressed"), tone: chip.dataset.tone, bg: cs(chip).backgroundColor, fg: cs(chip).color, emoji: getComputedStyle(chip, "::after").content },
     };
   });
   check("look: themed screens sit on a pure white canvas", look.canvas === "rgb(255, 255, 255)", look.canvas);
-  check("look: interest sets are tinted capsules (peach, lilac, mint)", look.labels.map((l) => l.tone).join() === "peach,lilac,mint", look.labels.map((l) => l.tone).join());
-  const worstLabel = Math.min(...look.labels.map((l) => ratio(l.fg, l.bg)));
-  check("contrast: capsule ink on its tint is at least 4.5:1", worstLabel >= 4.5, worstLabel.toFixed(2));
+  // Neutral = no visible hue (the ink is a near-black with a 3-point cool cast).
+  const neutral = (c) => { const [r, g, b] = c.match(/\d+/g).map(Number); return Math.max(r, g, b) - Math.min(r, g, b) <= 6; };
+  check("look: interest sets keep their categories (peach, lilac, mint)", look.labels.map((l) => l.tone).join() === "peach,lilac,mint", look.labels.map((l) => l.tone).join());
+  check("look: interest set headings are neutral ink, on no coloured fill", look.labels.every((l) => neutral(l.fg) && l.bg === "rgba(0, 0, 0, 0)"), look.labels.map((l) => `${l.fg} on ${l.bg}`).join(", "));
+  check("look: each set's category colour sits in its tinted emoji holder", look.labels.every((l) => l.holder !== "rgba(0, 0, 0, 0)" && !neutral(l.holder)), look.labels.map((l) => l.holder).join(", "));
+  const worstLabel = Math.min(...look.labels.map((l) => ratio(l.fg, "rgb(255, 255, 255)")));
+  check("contrast: set headings on the white canvas are at least 4.5:1", worstLabel >= 4.5, worstLabel.toFixed(2));
+  check("look: the prompt question is a neutral heading, not accent text", look.prompt && neutral(look.prompt), look.prompt);
   check("look: a selected interest takes its category tint and ink", look.chip.pressed === "true" && look.chip.tone === "peach" && look.chip.bg === "rgb(253, 232, 220)", `${look.chip.tone} ${look.chip.bg}`);
   check("contrast: selected interest text on its tint is at least 4.5:1", ratio(look.chip.fg, look.chip.bg) >= 4.5, ratio(look.chip.fg, look.chip.bg).toFixed(2));
   check("a11y: interest emoji are decorative (alt text empty), the name stays the label", /🍷/.test(look.chip.emoji) && /\/\s*""/.test(look.chip.emoji), look.chip.emoji);
@@ -137,28 +155,151 @@ try {
   const [fr, fg, fb] = field.match(/\d+/g).map(Number);
   check("look: text fields are a light neutral (no warm or sandy fill)", fr === fg && fg === fb && fr >= 240, field);
 
-  // 4c. No gradients: no element or pseudo-element inside the theme computes a gradient, on every
-  // themed screen. Real photographs are images, not gradients, so they never match.
+  // 4c. Gradients: the only one allowed is the black fade over a real profile photograph that carries
+  // text (.profile-card__overlay inside a photo container that holds an <img>). Every other element
+  // and ::before/::after, on every themed screen, computes no gradient; the sample profiles only have
+  // grey placeholders, which take no gradient. Photographs are images, not gradients, so never match.
   const gradients = [];
-  for (const path of ["?theme=tiimo", ...FLOW_SCREENS.map((s) => `flows.html?screen=${s}&theme=tiimo`)]) {
-    await open(p, path);
+  const overlays = [];
+  for (const path of ["?theme=tiimo", ...FLOW_SCREENS.map((s) => `flows.html?screen=${s}&theme=tiimo`), "matched"]) {
+    if (path === "matched") await openSeeded(p, "flows.html?screen=match&theme=tiimo", MATCHED);
+    else await open(p, path);
     const found = await p.evaluate(() => {
       const hits = [];
+      const allowed = [];
       for (const root of document.querySelectorAll(".theme-tiimo")) {
         for (const el of [root, ...root.querySelectorAll("*")]) {
           for (const pseudo of [null, "::before", "::after"]) {
             const cs = getComputedStyle(el, pseudo);
-            if (/gradient/.test(cs.backgroundImage) || /gradient/.test(cs.borderImageSource) || /gradient/.test(cs.maskImage)) {
-              hits.push(`${el.tagName.toLowerCase()}.${[...el.classList].join(".")}${pseudo ?? ""}`);
-            }
+            if (!(/gradient/.test(cs.backgroundImage) || /gradient/.test(cs.borderImageSource) || /gradient/.test(cs.maskImage))) continue;
+            const onPhoto = !pseudo && el.classList.contains("profile-card__overlay") && el.closest(".profile-card__media")?.querySelector(".profile-card__img");
+            if (onPhoto) allowed.push(cs.backgroundImage);
+            else hits.push(`${el.tagName.toLowerCase()}.${[...el.classList].join(".")}${pseudo ?? ""}`);
           }
         }
       }
-      return [...new Set(hits)];
+      return { hits: [...new Set(hits)], allowed };
     });
-    if (found.length) gradients.push(`${path}: ${found.slice(0, 3).join(", ")}`);
+    if (found.hits.length) gradients.push(`${path}: ${found.hits.slice(0, 3).join(", ")}`);
+    overlays.push(...found.allowed);
   }
-  check("look: no computed gradient on the 12 themed screens (elements and ::before/::after)", gradients.length === 0, gradients.join(" | "));
+  check("look: no gradient on the 12 themed screens and the match moment, placeholders included (elements and ::before/::after)", gradients.length === 0 && overlays.length === 0, [...gradients, ...overlays].join(" | "));
+
+  // 4d. With a real photograph the card gets the fade. The repo has no photography, so a test image
+  // is put into the card: pure white, the worst case for white text.
+  const withPhoto = async (screen) => {
+    await open(p, `flows.html?screen=${screen}&theme=tiimo`);
+    return p.evaluate(() => {
+      const media = document.querySelector(".profile-card__media");
+      const c = Object.assign(document.createElement("canvas"), { width: 300, height: 400 });
+      const x = c.getContext("2d");
+      x.fillStyle = "#ffffff";
+      x.fillRect(0, 0, 300, 400);
+      media.querySelector(".profile-card__stand-in")?.remove();
+      media.prepend(Object.assign(document.createElement("img"), { className: "profile-card__img", alt: "", src: c.toDataURL() }));
+      const ov = media.querySelector(".profile-card__overlay");
+      const g = getComputedStyle(ov).backgroundImage;
+      const stops = [...g.matchAll(/(rgba?\([^)]*\)|color\(srgb [^)]*\)) ([\d.]+)%/g)].map((m) => [Number(m[2]) / 100, Number(m[1].match(/[,/] ([\d.]+)\)$/)?.[1] ?? 1)]);
+      const box = ov.getBoundingClientRect();
+      const mediaBox = media.getBoundingClientRect();
+      // Opacity of the fade at a height: 0 at the overlay's bottom edge, 1 at its top edge.
+      const alphaAt = (y) => {
+        const t = (box.bottom - y) / box.height;
+        for (let i = 1; i < stops.length; i++) if (t <= stops[i][0]) {
+          const [t0, a0] = stops[i - 1]; const [t1, a1] = stops[i];
+          return a0 + ((t - t0) / (t1 - t0)) * (a1 - a0);
+        }
+        return 0;
+      };
+      // Each text line at its lightest point: its top edge.
+      const line = (sel) => alphaAt(document.querySelector(sel).getBoundingClientRect().top);
+      return {
+        gradient: g,
+        name: line(".profile-card__name"),
+        detail: document.querySelector(".profile-card__detail") ? line(".profile-card__detail") : null,
+        clear: (box.top - mediaBox.top) / mediaBox.height, // share of the photo above the fade
+        clipped: getComputedStyle(media).overflow === "hidden" && parseFloat(getComputedStyle(media).borderTopLeftRadius) > 0,
+      };
+    });
+  };
+  for (const screen of ["discovery", "like-profile"]) overlays.push({ screen, ...(await withPhoto(screen)) });
+  // Stops compute as rgba(…) or, for color-mix, color(srgb r g b / a).
+  const colours = (g) => [...g.matchAll(/rgba?\([^)]*\)|color\(srgb [^)]*\)/g)].map((m) => m[0]);
+  const isBlack = (c) => /^rgba?\(0, 0, 0(, [\d.]+)?\)$/.test(c) || /^color\(srgb 0 0 0( \/ [\d.]+)?\)$/.test(c);
+  const alphaOf = (c) => Number(c.match(/[,/] ([\d.]+)\)$/)?.[1] ?? 1);
+  const blackOnly = overlays.length === 2 && overlays.every((o) => /gradient/.test(o.gradient) && colours(o.gradient).every(isBlack));
+  check("look: with a photo, Discover and Like back get a black fade (no purple or ink tint)", blackOnly, overlays.map((o) => `${o.screen}: ${o.gradient.slice(0, 60)}`).join(" | "));
+  const fades = overlays.every((o) => {
+    const a = colours(o.gradient).map(alphaOf);
+    return /to top/.test(o.gradient) && a[0] > 0.5 && a.at(-1) === 0 && a.every((v, i) => i === 0 || v <= a[i - 1]);
+  });
+  check("look: the fade is darkest at the bottom and clear at the top", fades);
+  check("look: the fade stays in the photo's lower part and is clipped by its corners", overlays.every((o) => o.clear >= 0.4 && o.clipped), overlays.map((o) => `${o.screen}: ${(o.clear * 100).toFixed(0)}% of the photo clear`).join(", "));
+
+  // Text stays readable over a pure white photo: the fade's opacity at each line composited over white.
+  const overWhite = (a) => { const v = Math.round(255 * (1 - a)); return `rgb(${v}, ${v}, ${v})`; };
+  for (const o of overlays) {
+    const nameRatio = ratio("rgb(255, 255, 255)", overWhite(o.name));
+    check(`contrast (${o.screen}): the name (large text) over a white photo is at least 3:1`, nameRatio >= 3, `${nameRatio.toFixed(2)} at ${(o.name * 100).toFixed(0)}% black`);
+    if (o.detail !== null) {
+      const detailRatio = ratio("rgb(255, 255, 255)", overWhite(o.detail));
+      check(`contrast (${o.screen}): the detail line over a white photo is at least 4.5:1`, detailRatio >= 4.5, `${detailRatio.toFixed(2)} at ${(o.detail * 100).toFixed(0)}% black`);
+    }
+  }
+
+  // 4e. Controls are compact rounded rectangles, not capsules, on the eight refined screens. Pills
+  // stay only where the shape means something: progress, switches, sliders, count badges.
+  const PILL_OK = /progress|switch|slider|count-badge|page-dots|fl-disc-head|fl-me__pct/;
+  const capsules = [];
+  for (const s of ["basics", "interests", "discovery", "like-profile", "match", "chat", "chats", "activity"]) {
+    if (s === "match") await openSeeded(p, "flows.html?screen=match&theme=tiimo", MATCHED);
+    else await open(p, `flows.html?screen=${s}&theme=tiimo`);
+    const found = await p.evaluate((ok) => {
+      const re = new RegExp(ok);
+      const hits = [];
+      for (const el of document.querySelectorAll(".theme-tiimo *")) {
+        if (el.closest("svg")) continue;
+        const r = el.getBoundingClientRect();
+        if (!r.height || r.width < r.height * 1.3) continue;
+        const rad = parseFloat(getComputedStyle(el).borderTopLeftRadius);
+        if (rad < r.height / 2 - 1) continue;
+        const name = `${el.className} ${el.parentElement?.className ?? ""}`;
+        if (!re.test(name)) hits.push(`${el.tagName.toLowerCase()}.${[...el.classList].join(".")}`);
+      }
+      return [...new Set(hits)];
+    }, PILL_OK.source);
+    if (found.length) capsules.push(`${s}: ${found.join(", ")}`);
+  }
+  check("geometry: no capsule-shaped controls on the eight refined screens", capsules.length === 0, capsules.join(" | "));
+
+  // 4f. The match moment: two circular portraits, theirs dominant and yours on its edge, no decoration.
+  await openSeeded(p, "flows.html?screen=match&theme=tiimo", MATCHED);
+  const match = await p.evaluate(() => {
+    const m = document.querySelector(".match");
+    const halo = document.querySelector(".organic-portrait__backdrop");
+    const you = document.querySelector(".match__you");
+    const portrait = document.querySelector(".match .organic-portrait");
+    const f = portrait.getBoundingClientRect();
+    const y = you.getBoundingClientRect();
+    const clip = getComputedStyle(portrait).clipPath;
+    const R = (parseFloat(clip.match(/circle\(([\d.]+)%/)?.[1] ?? 50) / 100) * f.width; // the visible circle
+    const r = y.width / 2;
+    const d = Math.hypot(y.left + r - (f.left + f.width / 2), y.top + r - (f.top + f.height / 2));
+    return {
+      confetti: [getComputedStyle(m, "::before").content, getComputedStyle(m, "::after").content],
+      halo: halo ? getComputedStyle(halo).display : "none",
+      clip,
+      youRound: getComputedStyle(you.querySelector(".avatar__image")).borderRadius === "50%",
+      // On the edge: overlapping their circle (d < R + r) without sitting over its centre (d > R - r).
+      edge: d < R + r && d > R - r,
+      dominant: 2 * R > 2.5 * y.width,
+      detail: `circle ${Math.round(2 * R)}px, yours ${Math.round(y.width)}px, centres ${Math.round(d)}px apart`,
+    };
+  });
+  check("match: no confetti or particles around the photos", match.confetti.every((c) => c === "none" || c === "normal"), match.confetti.join(" "));
+  check("match: no lavender halo or outline around the main photo", match.halo === "none", match.halo);
+  check("match: their photo is a clean circular crop", /^circle\(/.test(match.clip) && match.youRound, match.clip);
+  check("match: your smaller circular photo overlaps the edge of theirs, clear of its centre", match.edge && match.dominant, match.detail);
 
   // 5. Welcome stickers are decoration only.
   await open(p, "?theme=tiimo");
