@@ -22,7 +22,8 @@ import { createServer } from "vite";
 import { initialState, STORAGE_KEY } from "../src/flows/store.js";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = resolve(ROOT, "artifacts/ui-gallery");
+// GALLERY_OUT writes the gallery elsewhere (for example a review folder); default is the canonical gallery.
+const OUT = resolve(ROOT, process.env.GALLERY_OUT ?? "artifacts/ui-gallery");
 const SCREENS = resolve(OUT, "screens");
 const SHEETS = resolve(OUT, "contact-sheets");
 const MOBILE = { width: 393, height: 852 };
@@ -458,4 +459,4 @@ if (errors.length) {
   console.error(`\n${errors.length} problem(s):\n${errors.join("\n")}`);
   process.exit(1);
 }
-console.log(`\n${manifest.length} captures written to artifacts/ui-gallery/`);
+console.log(`\n${manifest.length} captures written to ${OUT.slice(ROOT.length + 1)}/`);
