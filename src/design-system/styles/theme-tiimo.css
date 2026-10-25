@@ -1,34 +1,24 @@
 /*
- * Tiimo-inspired visual experiment (artifacts/tiimo-inspired-experiment/).
+ * Tiimo-inspired visual experiment (artifacts/tiimo-inspired-experiment/), refined in
+ * artifacts/tiimo-white-surface-refinement/.
  *
  * Opt-in: a screen renders inside `.theme-tiimo` only with `?theme=tiimo` and only if it takes part
  * in the experiment, so the approved design is untouched everywhere else. Every rule below is scoped
  * to `.theme-tiimo`; the component markup and contracts are the same in both designs.
  *
  * The rules, from the reference analysis:
- * - A lilac-white canvas; white cards read by a soft diffuse shadow instead of a hairline.
+ * - A pure white canvas; white cards separate by spacing and a restrained shadow, not a hairline.
+ * - No gradients anywhere: every surface, scrim and decoration is a solid colour (see the end).
  * - Two card sizes: item 16px, feature 24px. Pills for buttons, chips and tags only.
  * - One pastel per category (peach, lilac, mint, sky, butter), always paired with its ink for text.
  * - Emoji mark content (interests, activity categories), never utility controls.
- * - Warm stone fills for fields and quiet controls; purple keeps actions and selection.
+ * - Fields and quiet controls keep the light neutral grey; purple keeps actions and selection,
+ *   and your own messages.
  */
 
 /* Surfaces ---------------------------------------------------------------- */
 .theme-tiimo {
   --color-surface-page: var(--color-tiimo-canvas);
-  --color-surface-soft: var(--color-tiimo-field);
-}
-
-/* Photo placeholders stay neutral (the same light grey as the approved design), so a grid of them
-   still reads as one set; only fields and quiet controls take the warm stone. */
-.theme-tiimo .image-placeholder--stone,
-.theme-tiimo .image-placeholder--sand {
-  background: var(--color-surface-canvas);
-}
-
-/* Photo slots keep their own single photo grey, as in the approved design. */
-.theme-tiimo .photo-slot .image-placeholder {
-  background: var(--color-surface-photo);
 }
 
 /* Category tones: one pastel and its ink, set by `data-tone` (see lib/theme.js markAttrs). */
@@ -75,7 +65,7 @@
   box-shadow: inset 0 0 0 var(--border-focus) var(--color-control-selected), var(--shadow-tiimo-card);
 }
 
-/* Fields: warm stone fill (via --color-surface-soft), no border, softer corners. */
+/* Fields: the light neutral grey fill (no warm tint), no border, softer corners. */
 .theme-tiimo .input {
   border-radius: var(--tiimo-radius-item);
 }
@@ -120,11 +110,6 @@
   text-transform: uppercase;
 }
 
-/* Interest chips: white pills on the canvas with a soft lift; the emoji leads. */
-.theme-tiimo .chip:not(.chip--filter):not(.chip--static) {
-  box-shadow: var(--shadow-tiimo-card);
-}
-
 /* Selected interest: its category tint and ink, a 1.5px ink ring and the minus glyph, so the state
    never relies on colour alone. */
 .theme-tiimo .chip.is-selected[data-tone] {
@@ -159,8 +144,7 @@
   font-weight: var(--font-weight-semibold);
 }
 
-/* Sheets: a lilac-white panel so the white groups inside it read as cards (the reference's Add
-   task sheet), instead of white cards on a white sheet. */
+/* Sheets: the canvas colour (white); the white groups inside separate by their restrained shadow. */
 .theme-tiimo .sheet__panel {
   background: var(--color-surface-page);
 }
@@ -218,39 +202,111 @@
   box-shadow: var(--shadow-tiimo-card);
 }
 
-/* Bubbles: yours in the lilac tile with deep-purple text, theirs white and lifted off the canvas. */
-.theme-tiimo .message--me .message__bubble {
-  background: var(--color-tiimo-lilac-tint);
-  color: var(--color-tiimo-lilac-ink);
-}
+/* Bubbles are the approved ones: yours solid brand purple with white text (4.90:1), theirs the
+   light neutral grey with ink text, each with its tail corner on the sender's side. */
 
-.theme-tiimo .message--them .message__bubble {
-  background: var(--color-surface);
-  box-shadow: var(--shadow-tiimo-card);
-}
-
-/* The match moment: a static scatter of lilac, butter and mint dots in the margins around the
-   heading, the reference's completion confetti without motion or copied artwork. The centre band
-   stays clear so no dot crosses the heading. */
+/* The match moment: a static scatter of solid dots in the margins around the heading (the
+   reference's completion confetti). One 10px dot and its solid copies via box-shadow (zero blur,
+   spread for size): no gradient. The centre band stays clear of the heading. */
 .theme-tiimo .match {
   position: relative;
   isolation: isolate;
 }
 
-.theme-tiimo .match::before {
+.theme-tiimo .match::before,
+.theme-tiimo .match::after {
   content: "";
   position: absolute;
-  inset: -12px 0 auto;
+  top: 40px;
   z-index: -1;
-  height: 200px;
-  background:
-    radial-gradient(circle at 6% 22%, var(--color-brand-subtle) 0 7px, transparent 8px),
-    radial-gradient(circle at 14% 62%, var(--color-tiimo-butter-tint) 0 9px, transparent 10px),
-    radial-gradient(circle at 9% 92%, var(--color-tiimo-mint-tint) 0 6px, transparent 7px),
-    radial-gradient(circle at 22% 8%, var(--color-tiimo-butter-tint) 0 5px, transparent 6px),
-    radial-gradient(circle at 80% 6%, var(--color-brand-subtle) 0 5px, transparent 6px),
-    radial-gradient(circle at 92% 30%, var(--color-tiimo-butter-tint) 0 9px, transparent 10px),
-    radial-gradient(circle at 86% 70%, var(--color-brand-subtle) 0 7px, transparent 8px),
-    radial-gradient(circle at 95% 96%, var(--color-tiimo-mint-tint) 0 5px, transparent 6px);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
   pointer-events: none;
+}
+
+/* Left margin column. */
+.theme-tiimo .match::before {
+  left: 0;
+  background: var(--color-brand-subtle);
+  box-shadow:
+    10px 96px 0 4px var(--color-tiimo-butter-tint),
+    2px 210px 0 -2px var(--color-tiimo-mint-tint),
+    18px -26px 0 -3px var(--color-tiimo-butter-tint);
+}
+
+/* Right margin column. */
+.theme-tiimo .match::after {
+  right: 0;
+  background: var(--color-tiimo-butter-tint);
+  box-shadow:
+    -14px 70px 0 -2px var(--color-brand-subtle),
+    -4px 150px 0 3px var(--color-tiimo-butter-tint),
+    -12px 236px 0 0 var(--color-brand-subtle),
+    0 300px 0 -3px var(--color-tiimo-mint-tint);
+}
+
+/* No gradients --------------------------------------------------------------- */
+/* Every gradient the approved components draw is replaced by a solid colour inside the theme. */
+
+/* Page washes (Welcome, the Home header): solid white. */
+.theme-tiimo.screen--wash,
+.theme-tiimo .screen--wash {
+  background: var(--color-surface-page);
+}
+
+/* Primary buttons and the step FAB: the flat brand fill they already look like, as a solid colour. */
+.theme-tiimo .btn--primary,
+.theme-tiimo .fab {
+  background: var(--button-primary-bg-top);
+}
+
+.theme-tiimo .btn--primary:hover:not(:disabled) {
+  background: var(--button-primary-bg-hover-top);
+}
+
+/* Pass and Like: solid ink instead of the soft sheen. SuperSwipe keeps its solid purple. */
+.theme-tiimo .action-bar__btn:not(.action-bar__btn--super) {
+  background: var(--button-ink-bg-bottom);
+}
+
+/* Photo placeholder: one solid photo grey instead of "lit from above". */
+.theme-tiimo .profile-card__media:not(:has(.profile-card__img)) {
+  background-image: none;
+  background-color: var(--color-surface-photo);
+}
+
+/* Name scrim: a solid translucent ink band that hugs the name block, instead of a long ramp. White
+   text on it stays above 4.5:1 over any photo (worst case pure white). */
+.theme-tiimo .profile-card__overlay {
+  padding-top: var(--space-5);
+  background: var(--color-overlay-photo);
+}
+
+/* Loading skeletons: solid, without the shimmer sweep. */
+.theme-tiimo .skeleton {
+  background: var(--color-surface-sunken);
+  animation: none;
+}
+
+/* Slider: a solid rail (::before) and a solid selected interval (::after) instead of a hard-stop
+   gradient; the native input stays on top so its thumbs remain visible and draggable. */
+.theme-tiimo .slider__track::before {
+  background: var(--color-control-track-off);
+}
+
+.theme-tiimo .slider__track::after {
+  content: "";
+  position: absolute;
+  top: 11px;
+  left: var(--from);
+  right: calc(100% - var(--to));
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-control-selected);
+  pointer-events: none;
+}
+
+.theme-tiimo .slider__track input {
+  z-index: 1;
 }

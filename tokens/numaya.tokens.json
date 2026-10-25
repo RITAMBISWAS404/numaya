@@ -41,8 +41,6 @@
       "red":   { "50": { "$type": "color", "$value": "#fcefee" }, "500": { "$type": "color", "$value": "#dd544f", "$description": "Meetup notification red (sampled #DD544F)." }, "600": { "$type": "color", "$value": "#b93a36", "$description": "Danger text and badge fill (sampled Meetup red #DD544F, deepened to 5.6:1 with white and 5.0:1 on its tint)." } },
       "green": { "50": { "$type": "color", "$value": "#ebf4ee" }, "500": { "$type": "color", "$value": "#5d946a", "$description": "Meetup check green (sampled #5D946A): status marks." }, "700": { "$type": "color", "$value": "#336e48", "$description": "Success text (sampled Meetup green #5D946A deepened to 6.1:1 on white, 5.5:1 on its tint)." } },
       "amber": { "50": { "$type": "color", "$value": "#fff6e5" }, "700": { "$type": "color", "$value": "#9a5b00" } },
-      "lilac": { "25": { "$type": "color", "$value": "#faf8fc", "$description": "Tiimo-inspired experiment: a lilac-white page canvas, so white cards read without borders." } },
-      "stone": { "100": { "$type": "color", "$value": "#f2efeb", "$description": "Tiimo-inspired experiment: warm field fill." } },
       "peach": { "100": { "$type": "color", "$value": "#fde8dc" }, "700": { "$type": "color", "$value": "#94461f" } },
       "butter": { "100": { "$type": "color", "$value": "#fbf0c9" }, "800": { "$type": "color", "$value": "#6e5200" } },
       "mint": { "100": { "$type": "color", "$value": "#ddf1e5" }, "700": { "$type": "color", "$value": "#2b6646" } },
@@ -184,8 +182,7 @@
       "warning": { "default": { "$type": "color", "$value": "{primitive.color.amber.700}" }, "tint": { "$type": "color", "$value": "{primitive.color.amber.50}" } },
       "tiimo": {
         "$description": "Tiimo-inspired visual experiment (opt-in with ?theme=tiimo, scoped to .theme-tiimo). Each pastel 'tint' codes one category and is paired with an 'ink' for text on it (≥ 4.5:1). Pastels are never text colours.",
-        "canvas":     { "$type": "color", "$value": "{primitive.color.lilac.25}" },
-        "field":      { "$type": "color", "$value": "{primitive.color.stone.100}" },
+        "canvas":     { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Pure white: white cards separate by spacing and restrained shadow, never by a tinted canvas or a gradient." },
         "lilac-tint": { "$type": "color", "$value": "{primitive.color.purple.150}" },
         "lilac-ink":  { "$type": "color", "$value": "{primitive.color.purple.800}" },
         "peach-tint": { "$type": "color", "$value": "{primitive.color.peach.100}" },

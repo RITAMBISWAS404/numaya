@@ -2,7 +2,13 @@
    the component layer). Scoped to `.theme-tiimo`, which only the experiment's screens carry, and
    only with ?theme=tiimo. */
 
-/* Every themed screen sits on the lilac-white canvas, so white cards read without borders. */
+/* Every themed screen sits on the white canvas; white cards separate by spacing and a restrained
+   shadow. */
 .theme-tiimo .fl-screen {
+  background: var(--color-surface-page);
+}
+
+/* The Home header's lavender wash becomes solid white (no gradients in the theme). */
+.theme-tiimo .fl-disc-head {
   background: var(--color-surface-page);
 }

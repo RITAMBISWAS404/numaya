@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 /**
- * The opt-in Tiimo-inspired experiment (`?theme=tiimo`, artifacts/tiimo-inspired-experiment/).
+ * The opt-in Tiimo-inspired experiment (`?theme=tiimo`, artifacts/tiimo-inspired-experiment/, refined
+ * in artifacts/tiimo-white-surface-refinement/).
  * Its own contract, kept apart from the approved design's checks in smoke.mjs and product.mjs:
  * scoping (only the 12 selected screens, only with the flag), the visual rules that carry meaning
- * (canvas, category tones with readable inks, decorative emoji), and that the screens still work,
+ * (white canvas, no computed gradient, neutral fields, solid purple for your messages, category tones
+ * with readable inks, decorative emoji), and that the screens still work,
  * fit 393 and 375 px wide and log no errors. Run by `npm run test:e2e`.
  */
 import { resolve } from "node:path";
@@ -94,7 +96,7 @@ try {
       chip: { pressed: chip.getAttribute("aria-pressed"), tone: chip.dataset.tone, bg: cs(chip).backgroundColor, fg: cs(chip).color, emoji: getComputedStyle(chip, "::after").content },
     };
   });
-  check("look: themed screens sit on the lilac-white canvas", look.canvas === "rgb(250, 248, 252)", look.canvas);
+  check("look: themed screens sit on a pure white canvas", look.canvas === "rgb(255, 255, 255)", look.canvas);
   check("look: interest sets are tinted capsules (peach, lilac, mint)", look.labels.map((l) => l.tone).join() === "peach,lilac,mint", look.labels.map((l) => l.tone).join());
   const worstLabel = Math.min(...look.labels.map((l) => ratio(l.fg, l.bg)));
   check("contrast: capsule ink on its tint is at least 4.5:1", worstLabel >= 4.5, worstLabel.toFixed(2));
@@ -115,13 +117,48 @@ try {
   check("navigation: moving to another tab keeps ?theme=tiimo", url.searchParams.get("screen") === "likes" && url.searchParams.get("theme") === "tiimo", url.search);
   check("navigation: the next screen renders themed", await themed(p));
 
-  // 4. Messages stay readable: your bubble's text on the lilac tile.
+  // 4. Messages: yours solid brand purple with white text, theirs a distinct light neutral.
   await open(p, "flows.html?screen=chat&theme=tiimo");
-  const bubble = await p.evaluate(() => {
-    const b = document.querySelector(".message--me .message__bubble");
-    return { fg: getComputedStyle(b).color, bg: getComputedStyle(b).backgroundColor };
+  const bubbles = await p.evaluate(() => {
+    const style = (sel) => {
+      const cs = getComputedStyle(document.querySelector(sel));
+      return { fg: cs.color, bg: cs.backgroundColor, image: cs.backgroundImage };
+    };
+    return { me: style(".message--me .message__bubble"), them: style(".message--them .message__bubble") };
   });
-  check("contrast: your message text on the lilac tile is at least 4.5:1", ratio(bubble.fg, bubble.bg) >= 4.5, ratio(bubble.fg, bubble.bg).toFixed(2));
+  check("look: your messages are solid brand purple with white text", bubbles.me.bg === "rgb(114, 98, 199)" && bubbles.me.fg === "rgb(255, 255, 255)" && bubbles.me.image === "none", `${bubbles.me.bg} / ${bubbles.me.fg} / ${bubbles.me.image}`);
+  check("contrast: your message text on purple is at least 4.5:1", ratio(bubbles.me.fg, bubbles.me.bg) >= 4.5, ratio(bubbles.me.fg, bubbles.me.bg).toFixed(2));
+  check("look: their messages are a light neutral, distinct from yours and from the canvas", bubbles.them.bg !== bubbles.me.bg && bubbles.them.bg !== "rgb(255, 255, 255)" && lum(bubbles.them.bg) > 0.8, bubbles.them.bg);
+  check("contrast: their message text is at least 4.5:1", ratio(bubbles.them.fg, bubbles.them.bg) >= 4.5, ratio(bubbles.them.fg, bubbles.them.bg).toFixed(2));
+
+  // 4b. Fields are white or a light neutral grey, never a warm tint (equal R, G and B).
+  await open(p, "flows.html?screen=basics&theme=tiimo");
+  const field = await p.evaluate(() => getComputedStyle(document.querySelector(".input")).backgroundColor);
+  const [fr, fg, fb] = field.match(/\d+/g).map(Number);
+  check("look: text fields are a light neutral (no warm or sandy fill)", fr === fg && fg === fb && fr >= 240, field);
+
+  // 4c. No gradients: no element or pseudo-element inside the theme computes a gradient, on every
+  // themed screen. Real photographs are images, not gradients, so they never match.
+  const gradients = [];
+  for (const path of ["?theme=tiimo", ...FLOW_SCREENS.map((s) => `flows.html?screen=${s}&theme=tiimo`)]) {
+    await open(p, path);
+    const found = await p.evaluate(() => {
+      const hits = [];
+      for (const root of document.querySelectorAll(".theme-tiimo")) {
+        for (const el of [root, ...root.querySelectorAll("*")]) {
+          for (const pseudo of [null, "::before", "::after"]) {
+            const cs = getComputedStyle(el, pseudo);
+            if (/gradient/.test(cs.backgroundImage) || /gradient/.test(cs.borderImageSource) || /gradient/.test(cs.maskImage)) {
+              hits.push(`${el.tagName.toLowerCase()}.${[...el.classList].join(".")}${pseudo ?? ""}`);
+            }
+          }
+        }
+      }
+      return [...new Set(hits)];
+    });
+    if (found.length) gradients.push(`${path}: ${found.slice(0, 3).join(", ")}`);
+  }
+  check("look: no computed gradient on the 12 themed screens (elements and ::before/::after)", gradients.length === 0, gradients.join(" | "));
 
   // 5. Welcome stickers are decoration only.
   await open(p, "?theme=tiimo");

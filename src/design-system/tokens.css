@@ -37,8 +37,6 @@
   --p-color-green-700: #336e48;
   --p-color-amber-50: #fff6e5;
   --p-color-amber-700: #9a5b00;
-  --p-color-lilac-25: #faf8fc;
-  --p-color-stone-100: #f2efeb;
   --p-color-peach-100: #fde8dc;
   --p-color-peach-700: #94461f;
   --p-color-butter-100: #fbf0c9;
@@ -150,8 +148,7 @@
   --color-success-tint: var(--p-color-green-50);
   --color-warning: var(--p-color-amber-700);
   --color-warning-tint: var(--p-color-amber-50);
-  --color-tiimo-canvas: var(--p-color-lilac-25);
-  --color-tiimo-field: var(--p-color-stone-100);
+  --color-tiimo-canvas: var(--p-color-neutral-0);
   --color-tiimo-lilac-tint: var(--p-color-purple-150);
   --color-tiimo-lilac-ink: var(--p-color-purple-800);
   --color-tiimo-peach-tint: var(--p-color-peach-100);

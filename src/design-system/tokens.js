@@ -316,24 +316,6 @@ export const tokens = [
     "description": null
   },
   {
-    "id": "primitive.color.lilac.25",
-    "name": "--p-color-lilac-25",
-    "layer": "primitive",
-    "type": "color",
-    "value": "#faf8fc",
-    "resolved": "#faf8fc",
-    "description": "Tiimo-inspired experiment: a lilac-white page canvas, so white cards read without borders."
-  },
-  {
-    "id": "primitive.color.stone.100",
-    "name": "--p-color-stone-100",
-    "layer": "primitive",
-    "type": "color",
-    "value": "#f2efeb",
-    "resolved": "#f2efeb",
-    "description": "Tiimo-inspired experiment: warm field fill."
-  },
-  {
     "id": "primitive.color.peach.100",
     "name": "--p-color-peach-100",
     "layer": "primitive",
@@ -1319,18 +1301,9 @@ export const tokens = [
     "name": "--color-tiimo-canvas",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.lilac.25}",
-    "resolved": "#faf8fc",
-    "description": null
-  },
-  {
-    "id": "semantic.color.tiimo.field",
-    "name": "--color-tiimo-field",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.stone.100}",
-    "resolved": "#f2efeb",
-    "description": null
+    "value": "{primitive.color.neutral.0}",
+    "resolved": "#ffffff",
+    "description": "Pure white: white cards separate by spacing and restrained shadow, never by a tinted canvas or a gradient."
   },
   {
     "id": "semantic.color.tiimo.lilac-tint",
