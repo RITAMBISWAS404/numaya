@@ -30,6 +30,9 @@ const EXCLUDE = [];
 const TARGETS = [
   { name: "prototype welcome", url: "" },
   { name: "flow previews", url: "flows.html" },
+  // The opt-in Tiimo-inspired experiment: the gallery themes all 11 of its flow screens at once.
+  { name: "tiimo experiment: welcome", url: "?theme=tiimo" },
+  { name: "tiimo experiment: flow previews", url: "flows.html?theme=tiimo" },
   {
     name: "chat options menu",
     url: "flows.html",

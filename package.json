@@ -11,7 +11,7 @@
     "tokens:check": "node scripts/tokens.mjs --check",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "node tests/e2e/smoke.mjs && node tests/e2e/product.mjs",
+    "test:e2e": "node tests/e2e/smoke.mjs && node tests/e2e/product.mjs && node tests/e2e/experiment-tiimo.mjs",
     "check": "npm run tokens:check && npm run icons:check && npm test && vite build",
     "test:a11y": "node tests/e2e/a11y.mjs",
     "gallery": "node scripts/gallery.mjs",

@@ -9,7 +9,6 @@ const STICKERS = [
   { emoji: "🎷", tone: "lilac" },
   { emoji: "📷", tone: "sky" },
   { emoji: "🧗", tone: "mint" },
-  { emoji: "📖", tone: "butter" },
 ];
 
 export function Welcome({ active, onCreate, onSignIn }) {

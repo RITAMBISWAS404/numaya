@@ -19,6 +19,13 @@
   --color-surface-soft: var(--color-tiimo-field);
 }
 
+/* Photo placeholders stay neutral (the same light grey as the approved design), so a grid of them
+   still reads as one set; only fields and quiet controls take the warm stone. */
+.theme-tiimo .image-placeholder--stone,
+.theme-tiimo .image-placeholder--sand {
+  background: var(--color-surface-canvas);
+}
+
 /* Category tones: one pastel and its ink, set by `data-tone` (see lib/theme.js markAttrs). */
 .theme-tiimo [data-tone="peach"] { --tone-tint: var(--color-tiimo-peach-tint); --tone-ink: var(--color-tiimo-peach-ink); }
 .theme-tiimo [data-tone="lilac"] { --tone-tint: var(--color-tiimo-lilac-tint); --tone-ink: var(--color-tiimo-lilac-ink); }
@@ -147,6 +154,12 @@
   font-weight: var(--font-weight-semibold);
 }
 
+/* Sheets: a lilac-white panel so the white groups inside it read as cards (the reference's Add
+   task sheet), instead of white cards on a white sheet. */
+.theme-tiimo .sheet__panel {
+  background: var(--color-surface-page);
+}
+
 /* Buttons and chrome ------------------------------------------------------- */
 /* Secondary: a white pill that floats on the canvas instead of a grey fill. */
 .theme-tiimo .btn--secondary {
@@ -191,6 +204,7 @@
 /* Messaging ---------------------------------------------------------------- */
 /* Inbox rows: separate white item cards with a small gap, like the reference's task rows. */
 .theme-tiimo .conversation__hit {
+  width: 100%;
   margin-inline: 0;
   margin-bottom: var(--space-2);
   padding: var(--space-3);
