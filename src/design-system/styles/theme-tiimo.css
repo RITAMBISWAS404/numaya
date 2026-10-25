@@ -26,6 +26,11 @@
   background: var(--color-surface-canvas);
 }
 
+/* Photo slots keep their own single photo grey, as in the approved design. */
+.theme-tiimo .photo-slot .image-placeholder {
+  background: var(--color-surface-photo);
+}
+
 /* Category tones: one pastel and its ink, set by `data-tone` (see lib/theme.js markAttrs). */
 .theme-tiimo [data-tone="peach"] { --tone-tint: var(--color-tiimo-peach-tint); --tone-ink: var(--color-tiimo-peach-ink); }
 .theme-tiimo [data-tone="lilac"] { --tone-tint: var(--color-tiimo-lilac-tint); --tone-ink: var(--color-tiimo-lilac-ink); }
