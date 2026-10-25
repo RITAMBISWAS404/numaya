@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { OverlayRootProvider, Wordmark } from "../design-system/index.js";
 import { cx } from "../lib/cx.js";
+import { experimentTheme } from "../lib/theme.js";
 import * as S from "./screens.jsx";
 import * as A from "./activity.jsx";
 import * as H from "./activity-host.jsx";
@@ -36,16 +37,21 @@ export const SCREENS = [
   { id: "maintenance", flow: "System state", title: "Service unavailable", Component: P.Maintenance },
 ];
 
+/* Screens that take part in the Tiimo-inspired experiment (artifacts/tiimo-inspired-experiment/).
+   With ?theme=tiimo they render inside `.theme-tiimo`; every other screen keeps the approved design. */
+const TIIMO_SCREENS = new Set(["basics", "photos", "interests", "discovery", "like-profile", "likes", "match", "chats", "chat", "prompt", "activity"]);
+
 function PreviewFrame({ screen, active, go }) {
   const [root, setRoot] = useState(null);
   const { Component } = screen;
+  const themed = experimentTheme() === "tiimo" && TIIMO_SCREENS.has(screen.id);
   return (
     <figure id={screen.id} className={cx("fl-frame", active && "is-active")}>
       <figcaption className="fl-frame__caption">
         <span className="fl-frame__flow">{screen.flow}</span>
         <span className="fl-frame__title">{screen.title}</span>
       </figcaption>
-      <div className="fl-frame__screen">
+      <div className={cx("fl-frame__screen", themed && "theme-tiimo")}>
         <OverlayRootProvider root={root}>
           <Component go={go} />
         </OverlayRootProvider>
@@ -70,7 +76,10 @@ function SingleScreen({ initial }) {
   const [id, setId] = useState(initial);
   const go = (next) => {
     setId(next);
-    window.history.replaceState(null, "", `?screen=${next}`);
+    // Keep other parameters (an opt-in ?theme=…) while the screen changes.
+    const params = new URLSearchParams(window.location.search);
+    params.set("screen", next);
+    window.history.replaceState(null, "", `?${params}`);
   };
   const screen = SCREENS.find((s) => s.id === id);
   return (

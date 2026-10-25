@@ -41,6 +41,12 @@
       "red":   { "50": { "$type": "color", "$value": "#fcefee" }, "500": { "$type": "color", "$value": "#dd544f", "$description": "Meetup notification red (sampled #DD544F)." }, "600": { "$type": "color", "$value": "#b93a36", "$description": "Danger text and badge fill (sampled Meetup red #DD544F, deepened to 5.6:1 with white and 5.0:1 on its tint)." } },
       "green": { "50": { "$type": "color", "$value": "#ebf4ee" }, "500": { "$type": "color", "$value": "#5d946a", "$description": "Meetup check green (sampled #5D946A): status marks." }, "700": { "$type": "color", "$value": "#336e48", "$description": "Success text (sampled Meetup green #5D946A deepened to 6.1:1 on white, 5.5:1 on its tint)." } },
       "amber": { "50": { "$type": "color", "$value": "#fff6e5" }, "700": { "$type": "color", "$value": "#9a5b00" } },
+      "lilac": { "25": { "$type": "color", "$value": "#faf8fc", "$description": "Tiimo-inspired experiment: a lilac-white page canvas, so white cards read without borders." } },
+      "stone": { "100": { "$type": "color", "$value": "#f2efeb", "$description": "Tiimo-inspired experiment: warm field fill." } },
+      "peach": { "100": { "$type": "color", "$value": "#fde8dc" }, "700": { "$type": "color", "$value": "#94461f" } },
+      "butter": { "100": { "$type": "color", "$value": "#fbf0c9" }, "800": { "$type": "color", "$value": "#6e5200" } },
+      "mint": { "100": { "$type": "color", "$value": "#ddf1e5" }, "700": { "$type": "color", "$value": "#2b6646" } },
+      "sky": { "100": { "$type": "color", "$value": "#e1e9fb" }, "700": { "$type": "color", "$value": "#33509a" } },
       "alpha": {
         "ink-34":   { "$type": "color", "$value": "rgb(20 19 22 / 0.34)" },
         "ink-62":   { "$type": "color", "$value": "rgb(20 19 22 / 0.62)" },
@@ -175,7 +181,22 @@
       },
       "danger":  { "default": { "$type": "color", "$value": "{primitive.color.red.600}" },   "tint": { "$type": "color", "$value": "{primitive.color.red.50}" }, "badge": { "$type": "color", "$value": "{primitive.color.red.600}", "$description": "Unread and notification count badges (Meetup red), white numerals 4.9:1." } },
       "success": { "default": { "$type": "color", "$value": "{primitive.color.green.700}" }, "tint": { "$type": "color", "$value": "{primitive.color.green.50}" } },
-      "warning": { "default": { "$type": "color", "$value": "{primitive.color.amber.700}" }, "tint": { "$type": "color", "$value": "{primitive.color.amber.50}" } }
+      "warning": { "default": { "$type": "color", "$value": "{primitive.color.amber.700}" }, "tint": { "$type": "color", "$value": "{primitive.color.amber.50}" } },
+      "tiimo": {
+        "$description": "Tiimo-inspired visual experiment (opt-in with ?theme=tiimo, scoped to .theme-tiimo). Each pastel 'tint' codes one category and is paired with an 'ink' for text on it (≥ 4.5:1). Pastels are never text colours.",
+        "canvas":     { "$type": "color", "$value": "{primitive.color.lilac.25}" },
+        "field":      { "$type": "color", "$value": "{primitive.color.stone.100}" },
+        "lilac-tint": { "$type": "color", "$value": "{primitive.color.purple.150}" },
+        "lilac-ink":  { "$type": "color", "$value": "{primitive.color.purple.800}" },
+        "peach-tint": { "$type": "color", "$value": "{primitive.color.peach.100}" },
+        "peach-ink":  { "$type": "color", "$value": "{primitive.color.peach.700}" },
+        "butter-tint": { "$type": "color", "$value": "{primitive.color.butter.100}" },
+        "butter-ink": { "$type": "color", "$value": "{primitive.color.butter.800}" },
+        "mint-tint":  { "$type": "color", "$value": "{primitive.color.mint.100}" },
+        "mint-ink":   { "$type": "color", "$value": "{primitive.color.mint.700}" },
+        "sky-tint":   { "$type": "color", "$value": "{primitive.color.sky.100}" },
+        "sky-ink":    { "$type": "color", "$value": "{primitive.color.sky.700}" }
+      }
     },
 
     "font": {
@@ -271,7 +292,9 @@
       "float":  { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.05), 0 12px 32px -12px rgb(20 19 22 / 0.14)", "$description": "Persistent chrome that floats over the page: the bottom tab bar and the hero profile card." },
       "lg":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.06), 0 10px 28px -8px rgb(20 19 22 / 0.20)", "$description": "Dialogs, toasts and popovers: the only tier that must clearly read as layered." },
       "button": { "$type": "shadow", "$value": "inset 0 1px 0 rgb(255 255 255 / 0.10), 0 1px 2px rgb(20 19 22 / 0.14)", "$description": "Primary ink buttons: a faint top highlight and a contact shadow." },
-      "brand":  { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.08), 0 6px 16px -6px rgb(114 98 199 / 0.40)", "$description": "Floating purple actions (Meetup 'Map' pill, confirm FAB): a contact shadow and a soft purple drop. Flat purple pills inside content use none." }
+      "brand":  { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.08), 0 6px 16px -6px rgb(114 98 199 / 0.40)", "$description": "Floating purple actions (Meetup 'Map' pill, confirm FAB): a contact shadow and a soft purple drop. Flat purple pills inside content use none." },
+      "tiimo-card":  { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.03), 0 4px 18px -6px rgb(20 19 22 / 0.09)", "$description": "Tiimo-inspired experiment: a diffuse, borderless lift for white cards on the lilac canvas." },
+      "tiimo-float": { "$type": "shadow", "$value": "0 2px 4px rgb(20 19 22 / 0.04), 0 10px 28px -10px rgb(20 19 22 / 0.18)", "$description": "Tiimo-inspired experiment: floating chrome (corner buttons, tab bar, white secondary pills)." }
     },
     "opacity": {
       "disabled": { "$type": "number", "$value": "0.45" },
@@ -323,6 +346,13 @@
     "progress":    { "segment-width": { "$type": "dimension", "$value": "{primitive.dimension.18}" }, "segment-height": { "$type": "dimension", "$value": "{primitive.dimension.8}" } },
     "code-cell":   { "height": { "$type": "dimension", "$value": "{primitive.dimension.60}" }, "radius": { "$type": "dimension", "$value": "18px", "$description": "Six separate soft cells (chosen over one segmented group, whose empty positions disappeared): about a third of the 52px cell width, softer than fields' old 16px but not a capsule." } },
     "switch":      { "width": { "$type": "dimension", "$value": "51px" }, "height": { "$type": "dimension", "$value": "31px" } },
-    "tab-bar":     { "height": { "$type": "dimension", "$value": "{primitive.dimension.64}" } }
+    "tab-bar":     { "height": { "$type": "dimension", "$value": "{primitive.dimension.64}" } },
+    "tiimo":       {
+      "$description": "Tiimo-inspired experiment geometry: item cards, feature cards and emoji holders.",
+      "radius-item":    { "$type": "dimension", "$value": "{primitive.dimension.16}" },
+      "radius-feature": { "$type": "dimension", "$value": "{primitive.dimension.24}" },
+      "emoji-size":     { "$type": "dimension", "$value": "{primitive.dimension.32}" },
+      "emoji-radius":   { "$type": "dimension", "$value": "10px" }
+    }
   }
 }

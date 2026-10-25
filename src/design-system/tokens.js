@@ -316,6 +316,96 @@ export const tokens = [
     "description": null
   },
   {
+    "id": "primitive.color.lilac.25",
+    "name": "--p-color-lilac-25",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#faf8fc",
+    "resolved": "#faf8fc",
+    "description": "Tiimo-inspired experiment: a lilac-white page canvas, so white cards read without borders."
+  },
+  {
+    "id": "primitive.color.stone.100",
+    "name": "--p-color-stone-100",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#f2efeb",
+    "resolved": "#f2efeb",
+    "description": "Tiimo-inspired experiment: warm field fill."
+  },
+  {
+    "id": "primitive.color.peach.100",
+    "name": "--p-color-peach-100",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#fde8dc",
+    "resolved": "#fde8dc",
+    "description": null
+  },
+  {
+    "id": "primitive.color.peach.700",
+    "name": "--p-color-peach-700",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#94461f",
+    "resolved": "#94461f",
+    "description": null
+  },
+  {
+    "id": "primitive.color.butter.100",
+    "name": "--p-color-butter-100",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#fbf0c9",
+    "resolved": "#fbf0c9",
+    "description": null
+  },
+  {
+    "id": "primitive.color.butter.800",
+    "name": "--p-color-butter-800",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#6e5200",
+    "resolved": "#6e5200",
+    "description": null
+  },
+  {
+    "id": "primitive.color.mint.100",
+    "name": "--p-color-mint-100",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#ddf1e5",
+    "resolved": "#ddf1e5",
+    "description": null
+  },
+  {
+    "id": "primitive.color.mint.700",
+    "name": "--p-color-mint-700",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#2b6646",
+    "resolved": "#2b6646",
+    "description": null
+  },
+  {
+    "id": "primitive.color.sky.100",
+    "name": "--p-color-sky-100",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#e1e9fb",
+    "resolved": "#e1e9fb",
+    "description": null
+  },
+  {
+    "id": "primitive.color.sky.700",
+    "name": "--p-color-sky-700",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#33509a",
+    "resolved": "#33509a",
+    "description": null
+  },
+  {
     "id": "primitive.color.alpha.ink-34",
     "name": "--p-color-alpha-ink-34",
     "layer": "primitive",
@@ -1222,6 +1312,114 @@ export const tokens = [
     "type": "color",
     "value": "{primitive.color.amber.50}",
     "resolved": "#fff6e5",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.canvas",
+    "name": "--color-tiimo-canvas",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.lilac.25}",
+    "resolved": "#faf8fc",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.field",
+    "name": "--color-tiimo-field",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.stone.100}",
+    "resolved": "#f2efeb",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.lilac-tint",
+    "name": "--color-tiimo-lilac-tint",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.purple.150}",
+    "resolved": "#e9e4fb",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.lilac-ink",
+    "name": "--color-tiimo-lilac-ink",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.purple.800}",
+    "resolved": "#4f4296",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.peach-tint",
+    "name": "--color-tiimo-peach-tint",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.peach.100}",
+    "resolved": "#fde8dc",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.peach-ink",
+    "name": "--color-tiimo-peach-ink",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.peach.700}",
+    "resolved": "#94461f",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.butter-tint",
+    "name": "--color-tiimo-butter-tint",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.butter.100}",
+    "resolved": "#fbf0c9",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.butter-ink",
+    "name": "--color-tiimo-butter-ink",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.butter.800}",
+    "resolved": "#6e5200",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.mint-tint",
+    "name": "--color-tiimo-mint-tint",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.mint.100}",
+    "resolved": "#ddf1e5",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.mint-ink",
+    "name": "--color-tiimo-mint-ink",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.mint.700}",
+    "resolved": "#2b6646",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.sky-tint",
+    "name": "--color-tiimo-sky-tint",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.sky.100}",
+    "resolved": "#e1e9fb",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.sky-ink",
+    "name": "--color-tiimo-sky-ink",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.sky.700}",
+    "resolved": "#33509a",
     "description": null
   },
   {
@@ -2197,6 +2395,24 @@ export const tokens = [
     "description": "Floating purple actions (Meetup 'Map' pill, confirm FAB): a contact shadow and a soft purple drop. Flat purple pills inside content use none."
   },
   {
+    "id": "semantic.shadow.tiimo-card",
+    "name": "--shadow-tiimo-card",
+    "layer": "semantic",
+    "type": "shadow",
+    "value": "0 1px 2px rgb(20 19 22 / 0.03), 0 4px 18px -6px rgb(20 19 22 / 0.09)",
+    "resolved": "0 1px 2px rgb(20 19 22 / 0.03), 0 4px 18px -6px rgb(20 19 22 / 0.09)",
+    "description": "Tiimo-inspired experiment: a diffuse, borderless lift for white cards on the lilac canvas."
+  },
+  {
+    "id": "semantic.shadow.tiimo-float",
+    "name": "--shadow-tiimo-float",
+    "layer": "semantic",
+    "type": "shadow",
+    "value": "0 2px 4px rgb(20 19 22 / 0.04), 0 10px 28px -10px rgb(20 19 22 / 0.18)",
+    "resolved": "0 2px 4px rgb(20 19 22 / 0.04), 0 10px 28px -10px rgb(20 19 22 / 0.18)",
+    "description": "Tiimo-inspired experiment: floating chrome (corner buttons, tab bar, white secondary pills)."
+  },
+  {
     "id": "semantic.opacity.disabled",
     "name": "--opacity-disabled",
     "layer": "semantic",
@@ -2495,6 +2711,42 @@ export const tokens = [
     "type": "dimension",
     "value": "{primitive.dimension.64}",
     "resolved": "64px",
+    "description": null
+  },
+  {
+    "id": "component.tiimo.radius-item",
+    "name": "--tiimo-radius-item",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.16}",
+    "resolved": "16px",
+    "description": null
+  },
+  {
+    "id": "component.tiimo.radius-feature",
+    "name": "--tiimo-radius-feature",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.24}",
+    "resolved": "24px",
+    "description": null
+  },
+  {
+    "id": "component.tiimo.emoji-size",
+    "name": "--tiimo-emoji-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.32}",
+    "resolved": "32px",
+    "description": null
+  },
+  {
+    "id": "component.tiimo.emoji-radius",
+    "name": "--tiimo-emoji-radius",
+    "layer": "component",
+    "type": "dimension",
+    "value": "10px",
+    "resolved": "10px",
     "description": null
   }
 ];

@@ -1,0 +1,237 @@
+/*
+ * Tiimo-inspired visual experiment (artifacts/tiimo-inspired-experiment/).
+ *
+ * Opt-in: a screen renders inside `.theme-tiimo` only with `?theme=tiimo` and only if it takes part
+ * in the experiment, so the approved design is untouched everywhere else. Every rule below is scoped
+ * to `.theme-tiimo`; the component markup and contracts are the same in both designs.
+ *
+ * The rules, from the reference analysis:
+ * - A lilac-white canvas; white cards read by a soft diffuse shadow instead of a hairline.
+ * - Two card sizes: item 16px, feature 24px. Pills for buttons, chips and tags only.
+ * - One pastel per category (peach, lilac, mint, sky, butter), always paired with its ink for text.
+ * - Emoji mark content (interests, activity categories), never utility controls.
+ * - Warm stone fills for fields and quiet controls; purple keeps actions and selection.
+ */
+
+/* Surfaces ---------------------------------------------------------------- */
+.theme-tiimo {
+  --color-surface-page: var(--color-tiimo-canvas);
+  --color-surface-soft: var(--color-tiimo-field);
+}
+
+/* Category tones: one pastel and its ink, set by `data-tone` (see lib/theme.js markAttrs). */
+.theme-tiimo [data-tone="peach"] { --tone-tint: var(--color-tiimo-peach-tint); --tone-ink: var(--color-tiimo-peach-ink); }
+.theme-tiimo [data-tone="lilac"] { --tone-tint: var(--color-tiimo-lilac-tint); --tone-ink: var(--color-tiimo-lilac-ink); }
+.theme-tiimo [data-tone="mint"] { --tone-tint: var(--color-tiimo-mint-tint); --tone-ink: var(--color-tiimo-mint-ink); }
+.theme-tiimo [data-tone="sky"] { --tone-tint: var(--color-tiimo-sky-tint); --tone-ink: var(--color-tiimo-sky-ink); }
+.theme-tiimo [data-tone="butter"] { --tone-tint: var(--color-tiimo-butter-tint); --tone-ink: var(--color-tiimo-butter-ink); }
+
+/* Emoji marks: decorative (empty alt text), the label stays the accessible name. Drawn with ::after
+   and moved first in the flex row, because ::before already carries the enlarged touch target on
+   buttons. Every marked element is a flex row. */
+.theme-tiimo [data-emoji]::after {
+  content: attr(data-emoji) / "";
+  order: -1;
+  font-size: 1.05em;
+  line-height: 1;
+}
+
+/* Cards ------------------------------------------------------------------- */
+.theme-tiimo .card,
+.theme-tiimo .activity-card,
+.theme-tiimo .list-group__items {
+  border-radius: var(--tiimo-radius-feature);
+  box-shadow: var(--shadow-tiimo-card);
+}
+
+/* The prompt object keeps its lavender fill and stays flat: a tinted tile, not a raised card. */
+.theme-tiimo .profile-section--prompt {
+  box-shadow: none;
+}
+
+/* Choice rows (radios, checkboxes): borderless white item cards; selected keeps the purple ring. */
+.theme-tiimo .option-card {
+  border-radius: var(--tiimo-radius-item);
+  box-shadow: var(--shadow-tiimo-card);
+}
+
+.theme-tiimo .option-card:has(.choice__description) {
+  border-radius: var(--tiimo-radius-item);
+}
+
+.theme-tiimo .option-card.is-selected {
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-control-selected), var(--shadow-tiimo-card);
+}
+
+/* Fields: warm stone fill (via --color-surface-soft), no border, softer corners. */
+.theme-tiimo .input {
+  border-radius: var(--tiimo-radius-item);
+}
+
+/* Photos: filled slots take the feature radius; empty slots are dashed "add" placeholders with
+   the plus in a small white disc, like the reference's empty task slots. */
+.theme-tiimo .photo-slot,
+.theme-tiimo .photo-slot__select {
+  border-radius: var(--tiimo-radius-item);
+}
+
+.theme-tiimo .photo-slot--empty {
+  background: transparent;
+  box-shadow: none;
+  outline: 1.5px dashed var(--color-border-strong);
+  outline-offset: -1.5px;
+}
+
+.theme-tiimo .photo-slot--empty svg {
+  box-sizing: content-box;
+  padding: var(--space-2);
+  border-radius: 50%;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-tiimo-float);
+}
+
+/* Chips ------------------------------------------------------------------- */
+/* Interest sets: a tinted capsule header with its emoji and an uppercase tracked micro label. */
+.theme-tiimo .chip-group__set-label[data-tone] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-self: start;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--tone-tint);
+  color: var(--tone-ink);
+  font-size: var(--type-eyebrow-size);
+  line-height: var(--type-eyebrow-line);
+  font-weight: var(--type-eyebrow-weight);
+  letter-spacing: var(--type-eyebrow-tracking);
+  text-transform: uppercase;
+}
+
+/* Interest chips: white pills on the canvas with a soft lift; the emoji leads. */
+.theme-tiimo .chip:not(.chip--filter):not(.chip--static) {
+  box-shadow: var(--shadow-tiimo-card);
+}
+
+/* Selected interest: its category tint and ink, a 1.5px ink ring and the minus glyph, so the state
+   never relies on colour alone. */
+.theme-tiimo .chip.is-selected[data-tone] {
+  background: var(--tone-tint);
+  box-shadow: inset 0 0 0 var(--border-selected) var(--tone-ink);
+  color: var(--tone-ink);
+  font-weight: var(--font-weight-semibold);
+}
+
+.theme-tiimo .chip.is-selected[data-tone] .chip__affordance {
+  color: var(--tone-ink);
+}
+
+/* Shared interests ("You both like", Discover, Like back, Match): tinted tiles by category. */
+.theme-tiimo .shared-interests__pill[data-tone],
+.theme-tiimo .match__shared-chip[data-tone] {
+  gap: 6px;
+  background: var(--tone-tint);
+  color: var(--tone-ink);
+}
+
+/* Activity category: a sentence-case tinted tag with its emoji, under the title. */
+.theme-tiimo .activity-card__category[data-tone] {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  justify-self: start;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--tone-tint);
+  color: var(--tone-ink);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Buttons and chrome ------------------------------------------------------- */
+/* Secondary: a white pill that floats on the canvas instead of a grey fill. */
+.theme-tiimo .btn--secondary {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-tiimo-float);
+}
+
+.theme-tiimo .btn--secondary:hover:not(:disabled) {
+  background: var(--color-surface);
+}
+
+.theme-tiimo .nav-button--floating {
+  box-shadow: var(--shadow-tiimo-float);
+}
+
+.theme-tiimo .tab-bar {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-tiimo-float);
+}
+
+.theme-tiimo .tab-bar__item.is-current {
+  background: var(--color-tiimo-lilac-tint);
+}
+
+/* Tags: sentence-case tinted pills. "New" is butter, the reference's highlight tint. */
+.theme-tiimo .person-tile__badge .badge {
+  border-radius: var(--radius-pill);
+  background: var(--color-tiimo-butter-tint);
+  color: var(--color-tiimo-butter-ink);
+}
+
+.theme-tiimo .conversation__move {
+  background: var(--color-tiimo-butter-tint);
+  color: var(--color-tiimo-butter-ink);
+}
+
+/* Likes: portrait tiles take the feature radius. */
+.theme-tiimo .person-tile__photo {
+  border-radius: var(--tiimo-radius-feature);
+}
+
+/* Messaging ---------------------------------------------------------------- */
+/* Inbox rows: separate white item cards with a small gap, like the reference's task rows. */
+.theme-tiimo .conversation__hit {
+  margin-inline: 0;
+  margin-bottom: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--tiimo-radius-item);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-tiimo-card);
+}
+
+/* Bubbles: yours in the lilac tile with deep-purple text, theirs white and lifted off the canvas. */
+.theme-tiimo .message--me .message__bubble {
+  background: var(--color-tiimo-lilac-tint);
+  color: var(--color-tiimo-lilac-ink);
+}
+
+.theme-tiimo .message--them .message__bubble {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-tiimo-card);
+}
+
+/* The match moment: a static scatter of lilac, butter and mint dots in the margins around the
+   heading, the reference's completion confetti without motion or copied artwork. The centre band
+   stays clear so no dot crosses the heading. */
+.theme-tiimo .match {
+  position: relative;
+  isolation: isolate;
+}
+
+.theme-tiimo .match::before {
+  content: "";
+  position: absolute;
+  inset: -12px 0 auto;
+  z-index: -1;
+  height: 200px;
+  background:
+    radial-gradient(circle at 6% 22%, var(--color-brand-subtle) 0 7px, transparent 8px),
+    radial-gradient(circle at 14% 62%, var(--color-tiimo-butter-tint) 0 9px, transparent 10px),
+    radial-gradient(circle at 9% 92%, var(--color-tiimo-mint-tint) 0 6px, transparent 7px),
+    radial-gradient(circle at 22% 8%, var(--color-tiimo-butter-tint) 0 5px, transparent 6px),
+    radial-gradient(circle at 80% 6%, var(--color-brand-subtle) 0 5px, transparent 6px),
+    radial-gradient(circle at 92% 30%, var(--color-tiimo-butter-tint) 0 9px, transparent 10px),
+    radial-gradient(circle at 86% 70%, var(--color-brand-subtle) 0 7px, transparent 8px),
+    radial-gradient(circle at 95% 96%, var(--color-tiimo-mint-tint) 0 5px, transparent 6px);
+  pointer-events: none;
+}

@@ -1,4 +1,5 @@
 import { cx } from "../../lib/cx.js";
+import { markAttrs } from "../../lib/theme.js";
 import { Icon } from "./Icon.jsx";
 import { IconButton } from "./Button.jsx";
 import { Illustration } from "./Illustration.jsx";
@@ -287,7 +288,7 @@ export function SharedInterests({ title = "You both like", items, className }) {
     <ProfileSection title={title} className={cx("shared-interests", className)}>
       <ul className="shared-interests__list">
         {items.map((item) => (
-          <li key={item.label} className="chip chip--static shared-interests__pill">
+          <li key={item.label} className="chip chip--static shared-interests__pill" {...markAttrs(item.mark)}>
             {item.label}
           </li>
         ))}

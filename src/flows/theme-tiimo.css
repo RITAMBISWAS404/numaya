@@ -1,0 +1,8 @@
+/* Tiimo-inspired experiment: flow-screen rules (see src/design-system/styles/theme-tiimo.css for
+   the component layer). Scoped to `.theme-tiimo`, which only the experiment's screens carry, and
+   only with ?theme=tiimo. */
+
+/* Every themed screen sits on the lilac-white canvas, so white cards read without borders. */
+.theme-tiimo .fl-screen {
+  background: var(--color-surface-page);
+}

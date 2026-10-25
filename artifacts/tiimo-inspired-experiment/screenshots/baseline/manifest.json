@@ -1,0 +1,559 @@
+{
+  "generatedBy": "npm run gallery",
+  "screens": [
+    {
+      "id": "001",
+      "name": "Welcome",
+      "group": "Onboarding",
+      "route": "index.html (onboarding prototype)",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/001-welcome-393x852.png"
+    },
+    {
+      "id": "013",
+      "name": "The basics",
+      "group": "Onboarding",
+      "route": "flows.html?screen=basics",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/013-basics-393x852.png"
+    },
+    {
+      "id": "015",
+      "name": "The basics: under-18 error",
+      "group": "Onboarding",
+      "route": "flows.html?screen=basics",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/015-basics-underage-error-393x852.png",
+      "notes": "Birth year 2012 typed."
+    },
+    {
+      "id": "016",
+      "name": "Interests and prompt",
+      "group": "Onboarding",
+      "route": "flows.html?screen=interests",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/016-interests-prompt-393x852.png"
+    },
+    {
+      "id": "017",
+      "name": "Interests: five chosen, the rest locked",
+      "group": "Onboarding",
+      "route": "flows.html?screen=interests",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/017-interests-max-393x852.png",
+      "notes": "Seeded with five interests; unselected chips are disabled at the maximum."
+    },
+    {
+      "id": "018",
+      "name": "Add photos",
+      "group": "Onboarding",
+      "route": "flows.html?screen=photos",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/018-photos-393x852.png"
+    },
+    {
+      "id": "019",
+      "name": "Home: profile card",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/019-discover-393x852.png"
+    },
+    {
+      "id": "020",
+      "name": "Home: the full profile scroll",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 3009,
+        "deviceScaleFactor": 2
+      },
+      "capture": "full-page",
+      "image": "screens/020-discover-fullpage-393w.png"
+    },
+    {
+      "id": "021",
+      "name": "Home: “You both like” card",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/021-discover-you-both-like-393x852.png"
+    },
+    {
+      "id": "022",
+      "name": "Home: Pass / SuperSwipe / Like at the end of the profile",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/022-discover-actions-393x852.png"
+    },
+    {
+      "id": "023",
+      "name": "Home: filters sheet",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/023-discover-filters-sheet-393x852.png"
+    },
+    {
+      "id": "030",
+      "name": "It’s a match",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=match",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/030-match-393x852.png",
+      "notes": "Seeded as right after liking Maya, who liked you."
+    },
+    {
+      "id": "031",
+      "name": "It’s a match (full page)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=match",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "full-page",
+      "image": "screens/031-match-fullpage-393w.png",
+      "notes": "Seeded right after liking Maya back."
+    },
+    {
+      "id": "032",
+      "name": "It’s a match: first message typed",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=match",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/032-match-typing-393x852.png"
+    },
+    {
+      "id": "034",
+      "name": "Messages: search, new matches, filters and conversations",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chats",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/034-chats-393x852.png"
+    },
+    {
+      "id": "035",
+      "name": "Messages: several new matches (portrait previews, horizontal rail)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chats",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/035-chats-many-matches-393x852.png",
+      "notes": "Seeded with four unopened matches."
+    },
+    {
+      "id": "037",
+      "name": "Messages: empty",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chats",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/037-chats-empty-393x852.png",
+      "notes": "Seeded with no matches."
+    },
+    {
+      "id": "038",
+      "name": "Conversation",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/038-chat-conversation-393x852.png"
+    },
+    {
+      "id": "039",
+      "name": "Conversation: typing (send pill active)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/039-chat-typing-393x852.png"
+    },
+    {
+      "id": "042",
+      "name": "Conversation: new match intro with opening prompts",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/042-chat-new-match-393x852.png",
+      "notes": "Seeded with Jo (no messages yet) as the open chat."
+    },
+    {
+      "id": "045",
+      "name": "Unmatch confirmation sheet",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/045-chat-unmatch-sheet-393x852.png"
+    },
+    {
+      "id": "054",
+      "name": "Likes: all",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=likes",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/054-likes-393x852.png"
+    },
+    {
+      "id": "058",
+      "name": "Likes: empty (every like handled)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=likes",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/058-likes-empty-393x852.png",
+      "notes": "Seeded with every like handled."
+    },
+    {
+      "id": "059",
+      "name": "Likes: a person who liked you (like back or pass)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=like-profile",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/059-like-profile-393x852.png"
+    },
+    {
+      "id": "060",
+      "name": "Likes: an already-matched like (handled)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=like-profile",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/060-like-profile-matched-393x852.png"
+    },
+    {
+      "id": "061",
+      "name": "Activity: Explore",
+      "group": "Activity",
+      "route": "flows.html?screen=activity",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/061-activity-393x852.png"
+    },
+    {
+      "id": "062",
+      "name": "Activity: Explore (full page)",
+      "group": "Activity",
+      "route": "flows.html?screen=activity",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 2841,
+        "deviceScaleFactor": 2
+      },
+      "capture": "full-page",
+      "image": "screens/062-activity-fullpage-393w.png"
+    },
+    {
+      "id": "064",
+      "name": "Activity: date and distance filters",
+      "group": "Activity",
+      "route": "flows.html?screen=activity",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/064-activity-filters-sheet-393x852.png"
+    },
+    {
+      "id": "108",
+      "name": "Edit prompt",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=prompt",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/108-prompt-editor-393x852.png"
+    },
+    {
+      "id": "109",
+      "name": "Edit prompt: answer field focused",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=prompt",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/109-prompt-editor-focused-393x852.png"
+    },
+    {
+      "id": "110",
+      "name": "Edit prompt: new question and answer, ready to save",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=prompt",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/110-prompt-editor-changed-393x852.png"
+    },
+    {
+      "id": "140",
+      "name": "QA 375: Welcome",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "index.html (onboarding prototype)",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/140-qa-welcome-375x667.png"
+    },
+    {
+      "id": "144",
+      "name": "QA 375: Interests and prompt",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=interests",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/144-qa-interests-375x667.png"
+    },
+    {
+      "id": "145",
+      "name": "QA 375: Home profile card",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=discovery",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/145-qa-discover-375x667.png"
+    },
+    {
+      "id": "146",
+      "name": "QA 375: It’s a match",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=match",
+      "state": "seeded session",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/146-qa-match-375x667.png"
+    },
+    {
+      "id": "147",
+      "name": "QA 375: Chats",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=chats",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/147-qa-chats-375x667.png"
+    },
+    {
+      "id": "148",
+      "name": "QA 375: Conversation with long messages",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=chat",
+      "state": "seeded session",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/148-qa-chat-long-messages-375x667.png"
+    },
+    {
+      "id": "153",
+      "name": "QA 375: Activity Explore",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=activity",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/153-qa-activity-375x667.png"
+    },
+    {
+      "id": "157",
+      "name": "QA 375: Likes",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=likes",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/157-qa-likes-375x667.png"
+    }
+  ]
+}

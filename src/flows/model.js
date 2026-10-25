@@ -209,6 +209,7 @@ export function readiness(profile) {
 /* Presentation mapping shared by cards, details and lists ------------- */
 
 export const categoryIcon = (id) => ACTIVITY_CATEGORIES.find((c) => c.id === id)?.icon ?? "event";
+export const categoryMark = (id) => ACTIVITY_CATEGORIES.find((c) => c.id === id)?.mark;
 
 /** Display name and trust flag for an activity host. */
 export function hostOf(a) {
@@ -238,6 +239,7 @@ export function cardProps(state, a) {
     title: a.title,
     category: categoryLabel(a.category),
     categoryIcon: categoryIcon(a.category),
+    categoryMark: categoryMark(a.category),
     host: hostOf(a),
     when: whenLabel(a),
     place: placeLabel(state, a),

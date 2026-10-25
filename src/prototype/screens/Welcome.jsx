@@ -1,5 +1,16 @@
 import { useEffect, useState } from "react";
 import { Button, IllustrationSlot, Screen, Toast, Wordmark } from "../../design-system/index.js";
+import { experimentTheme } from "../../lib/theme.js";
+
+/* Tiimo-inspired experiment only: interests as tinted emoji stickers in the reserved hero (the
+   artwork slot itself stays empty). Decorative. */
+const STICKERS = [
+  { emoji: "🍷", tone: "peach" },
+  { emoji: "🎷", tone: "lilac" },
+  { emoji: "📷", tone: "sky" },
+  { emoji: "🧗", tone: "mint" },
+  { emoji: "📖", tone: "butter" },
+];
 
 export function Welcome({ active, onCreate, onSignIn }) {
   const [notice, setNotice] = useState(null);
@@ -15,8 +26,9 @@ export function Welcome({ active, onCreate, onSignIn }) {
     setNotice(`${name} opens in your browser`);
   };
 
+  const tiimo = experimentTheme() === "tiimo";
   return (
-    <Screen tone="brand" className="welcome" aria-labelledby="welcome-title">
+    <Screen tone="brand" className={tiimo ? "welcome theme-tiimo" : "welcome"} aria-labelledby="welcome-title">
       {/* Brand header: sets the left axis the headline, lede and actions share. */}
       <header className="welcome__brand">
         <Wordmark />
@@ -26,6 +38,15 @@ export function Welcome({ active, onCreate, onSignIn }) {
           the space is held, but nothing is drawn until the artwork is supplied. */}
       <div className="welcome__hero">
         <IllustrationSlot id="welcome-hero" className="welcome__art" />
+        {tiimo && (
+          <ul className="welcome__stickers" aria-hidden="true">
+            {STICKERS.map((s) => (
+              <li key={s.emoji} className="welcome__sticker" data-tone={s.tone}>
+                {s.emoji}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className="welcome__panel">

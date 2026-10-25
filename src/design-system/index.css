@@ -10,3 +10,5 @@
 @import "./styles/chat.css";
 @import "./styles/commerce.css";
 @import "./styles/activity.css";
+/* Opt-in visual experiment, scoped to .theme-tiimo (?theme=tiimo). */
+@import "./styles/theme-tiimo.css";

@@ -151,3 +151,36 @@
   font-variant-numeric: tabular-nums;
 }
 
+
+/* Tiimo-inspired experiment (?theme=tiimo): the welcome sits on the lilac-white canvas and the
+   reserved hero holds five tinted emoji stickers, interests as the first brand moment. */
+.welcome.theme-tiimo.screen--wash {
+  background: var(--color-surface-page);
+}
+
+.welcome__stickers {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.welcome__sticker {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: var(--tiimo-radius-feature);
+  background: var(--tone-tint);
+  box-shadow: var(--shadow-tiimo-card);
+  font-size: 34px;
+  line-height: 1;
+}
+
+.welcome__sticker:nth-child(1) { left: 14%; top: 22%; transform: rotate(-8deg); }
+.welcome__sticker:nth-child(2) { left: 52%; top: 12%; transform: rotate(6deg); }
+.welcome__sticker:nth-child(3) { left: 66%; top: 46%; transform: rotate(-4deg); }
+.welcome__sticker:nth-child(4) { left: 26%; top: 58%; transform: rotate(5deg); }
+.welcome__sticker:nth-child(5) { left: 4%; top: 86%; width: 56px; height: 56px; font-size: 26px; transform: rotate(-10deg); }

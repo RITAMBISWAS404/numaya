@@ -1,4 +1,5 @@
 import { cx } from "../../lib/cx.js";
+import { markAttrs } from "../../lib/theme.js";
 import { Button } from "./Button.jsx";
 import { Icon } from "./Icon.jsx";
 import { Avatar, avatarTone } from "./Content.jsx";
@@ -78,7 +79,7 @@ export function OrganicPortrait({ name, src, className }) {
  * purple stays in the frame backdrop, the shared pills and the artwork. Actions (message, keep
  * browsing) belong to the screen's footer.
  */
-export function MatchCelebration({ name, src, you, shared, title = "It’s a match!", illustration, children }) {
+export function MatchCelebration({ name, src, you, shared, marks, title = "It’s a match!", illustration, children }) {
   return (
     <div className="match">
       <h1 className="match__title">{title}</h1>
@@ -95,7 +96,7 @@ export function MatchCelebration({ name, src, you, shared, title = "It’s a mat
           </span>
           <ul className="match__shared-list" aria-labelledby="match-shared-label">
             {shared.map((s) => (
-              <li key={s} className="chip chip--static match__shared-chip">
+              <li key={s} className="chip chip--static match__shared-chip" {...markAttrs(marks?.[s])}>
                 {s}
               </li>
             ))}

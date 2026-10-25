@@ -71,10 +71,22 @@ export const INTERESTS = [
 
 /** The same interests in three small sets, so the picker reads as a few short rows, not a wall. */
 export const INTEREST_GROUPS = [
-  { label: "Food and nights in", options: ["Natural wine", "Cooking", "Board games"] },
-  { label: "Culture", options: ["Jazz", "Museums", "Poetry", "Film photography"] },
-  { label: "Out and about", options: ["Climbing", "Running", "Travel"] },
+  { label: "Food and nights in", options: ["Natural wine", "Cooking", "Board games"], mark: { emoji: "🍝", tone: "peach" } },
+  { label: "Culture", options: ["Jazz", "Museums", "Poetry", "Film photography"], mark: { emoji: "🎭", tone: "lilac" } },
+  { label: "Out and about", options: ["Climbing", "Running", "Travel"], mark: { emoji: "🌿", tone: "mint" } },
 ];
+
+/**
+ * Emoji and category tone per interest. Only the Tiimo-inspired experiment (?theme=tiimo) shows
+ * them; the tone follows the interest's set above. Decorative: the interest name stays the label.
+ */
+const INTEREST_EMOJI = {
+  "Natural wine": "🍷", Cooking: "🍳", "Board games": "🎲", Jazz: "🎷", Museums: "🏛️", Poetry: "📖",
+  "Film photography": "📷", Climbing: "🧗", Running: "🏃", Travel: "✈️",
+};
+export const INTEREST_MARKS = Object.fromEntries(
+  INTEREST_GROUPS.flatMap((g) => g.options.map((o) => [o, { emoji: INTEREST_EMOJI[o], tone: g.mark.tone }])),
+);
 
 export const REPORT_REASONS = [
   ["user", "Fake profile"],
@@ -112,12 +124,12 @@ export const AREAS = [
 ];
 
 export const ACTIVITY_CATEGORIES = [
-  { id: "music", label: "Music", icon: "music" },
-  { id: "food", label: "Food and drink", icon: "food" },
-  { id: "outdoors", label: "Outdoors", icon: "park" },
-  { id: "sport", label: "Sport", icon: "run" },
-  { id: "arts", label: "Arts", icon: "palette" },
-  { id: "games", label: "Games", icon: "games" },
+  { id: "music", label: "Music", icon: "music", mark: { emoji: "🎵", tone: "lilac" } },
+  { id: "food", label: "Food and drink", icon: "food", mark: { emoji: "🍝", tone: "peach" } },
+  { id: "outdoors", label: "Outdoors", icon: "park", mark: { emoji: "🌿", tone: "mint" } },
+  { id: "sport", label: "Sport", icon: "run", mark: { emoji: "🏃", tone: "sky" } },
+  { id: "arts", label: "Arts", icon: "palette", mark: { emoji: "🎨", tone: "butter" } },
+  { id: "games", label: "Games", icon: "games", mark: { emoji: "🎲", tone: "peach" } },
 ];
 
 /**

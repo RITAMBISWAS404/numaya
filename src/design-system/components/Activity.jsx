@@ -1,4 +1,5 @@
 import { cx } from "../../lib/cx.js";
+import { markAttrs } from "../../lib/theme.js";
 import { Avatar, Badge, ImagePlaceholder, VerifiedBadge } from "./Content.jsx";
 import { Icon } from "./Icon.jsx";
 
@@ -100,7 +101,7 @@ export function ActivityMedia({ src, tone, icon = "event", label, ratio = "16 / 
  * Activity card for feeds and lists. The whole card opens the details; the status and
  * participation badges sit on the image. Only the general place is shown, never a precise location.
  */
-export function ActivityCard({ id, title, category, categoryIcon, host, when, place, going, capacity, attendees, status, participation, tone, src, onOpen, compact = false }) {
+export function ActivityCard({ id, title, category, categoryIcon, categoryMark, host, when, place, going, capacity, attendees, status, participation, tone, src, onOpen, compact = false }) {
   const capacityText = capacity ? ` of ${capacity}` : "";
   return (
     <article className={cx("activity-card", compact && "activity-card--compact")} data-activity={id}>
@@ -115,7 +116,7 @@ export function ActivityCard({ id, title, category, categoryIcon, host, when, pl
         </ActivityMedia>
         <span className="activity-card__body">
           <span className="activity-card__title">{title}</span>
-          <span className="activity-card__category">{category}</span>
+          <span className="activity-card__category" {...markAttrs(categoryMark)}>{category}</span>
           <MetaRow icon="calendar">{when}</MetaRow>
           <MetaRow icon="location">{place}</MetaRow>
           <span className="activity-card__foot">

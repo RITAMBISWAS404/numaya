@@ -169,7 +169,7 @@ export function ActivityExplore({ go }) {
           label="Category"
           value={filters.category}
           onChange={(category) => setFilters({ ...filters, category })}
-          options={[{ id: "all", label: "All" }, ...ACTIVITY_CATEGORIES.map((c) => ({ id: c.id, label: c.label }))]}
+          options={[{ id: "all", label: "All" }, ...ACTIVITY_CATEGORIES.map((c) => ({ id: c.id, label: c.label, mark: c.mark }))]}
         />
         {!area && (
           <InfoCard icon="nearby" title="No area chosen">

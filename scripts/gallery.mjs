@@ -24,6 +24,10 @@ import { initialState, STORAGE_KEY } from "../src/flows/store.js";
 const ROOT = resolve(import.meta.dirname, "..");
 // GALLERY_OUT writes the gallery elsewhere (for example a review folder); default is the canonical gallery.
 const OUT = resolve(ROOT, process.env.GALLERY_OUT ?? "artifacts/ui-gallery");
+// GALLERY_THEME=<name> opens every capture with `?theme=<name>` (an opt-in visual experiment);
+// GALLERY_ONLY=001,005,… captures only those gallery numbers, keeping the canonical numbering.
+const THEME = process.env.GALLERY_THEME;
+const ONLY = process.env.GALLERY_ONLY ? new Set(process.env.GALLERY_ONLY.split(",").map((n) => n.trim().padStart(3, "0"))) : null;
 const SCREENS = resolve(OUT, "screens");
 const SHEETS = resolve(OUT, "contact-sheets");
 const MOBILE = { width: 393, height: 852 };
@@ -309,6 +313,7 @@ const errors = [];
 try {
   for (const [i, shot] of SHOTS.entries()) {
     const id = String(i + 1).padStart(3, "0");
+    if (ONLY && !ONLY.has(id)) continue;
     const vp = shot.viewport ?? MOBILE;
     const mobile = vp.width < 600;
     const ctx = await browser.newContext({ viewport: vp, deviceScaleFactor: 2, reducedMotion: "reduce", ...(mobile ? { isMobile: true, hasTouch: true } : {}) });
@@ -327,7 +332,8 @@ try {
     const p = await ctx.newPage();
     p.on("pageerror", (e) => errors.push(`${id}: ${e.message}`));
     p.on("console", (m) => m.type() === "error" && errors.push(`${id}: ${m.text()}`));
-    const url = shot.app === "proto" ? "" : shot.url ?? `flows.html?screen=${shot.screen}`;
+    const path = shot.app === "proto" ? "" : shot.url ?? `flows.html?screen=${shot.screen}`;
+    const url = THEME ? `${path}${path.includes("?") ? "&" : "?"}theme=${THEME}` : path;
     await p.goto(base + url);
     await p.evaluate(() => document.fonts.ready);
     await wait(1200);
@@ -403,6 +409,7 @@ try {
   };
   for (const [g, { file, title }] of Object.entries(GROUPS)) {
     const items = manifest.filter((m) => m.group === title);
+    if (!items.length) continue;
     await sheet(`Numaya · ${title}`, items, `contact-sheets/${file}.png`, g === "6" ? 480 : 220);
   }
   await sheet("Numaya · every screen and state", manifest, "contact-sheet-all.png", 140);
@@ -438,10 +445,11 @@ const lines = [
   "## Contact sheets",
   "",
   `- [All screens](contact-sheet-all.png)`,
-  ...Object.values(GROUPS).map((g) => `- [${g.title}](contact-sheets/${g.file}.png)`),
+  ...Object.values(GROUPS).filter((g) => manifest.some((m) => m.group === g.title)).map((g) => `- [${g.title}](contact-sheets/${g.file}.png)`),
   "",
 ];
 for (const g of Object.values(GROUPS)) {
+  if (!manifest.some((m) => m.group === g.title)) continue;
   lines.push(`## ${g.title}`, "", "| # | Screen or state | Capture | Notes | Image |", "| --- | --- | --- | --- | --- |");
   for (const m of manifest.filter((x) => x.group === g.title)) {
     lines.push(`| ${m.id} | ${m.name} | ${m.capture === "full-page" ? "Full page" : "Viewport"} · \`${m.route}\` | ${m.notes ?? ""} | [${m.image.replace("screens/", "")}](${m.image}) |`);

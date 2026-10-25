@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { cx } from "../../lib/cx.js";
+import { markAttrs } from "../../lib/theme.js";
 import { Icon } from "./Icon.jsx";
 import { Spinner } from "./Button.jsx";
 
@@ -7,10 +8,10 @@ import { Spinner } from "./Button.jsx";
  * Chip. kind: "toggle" (aria-pressed), "remove" (removable value), "static" (display).
  * `unavailable` = quota reached; still focusable, announced, not toggleable.
  */
-export function Chip({ kind = "toggle", selected = false, unavailable = false, icon, onToggle, onRemove, children, className }) {
+export function Chip({ kind = "toggle", selected = false, unavailable = false, icon, mark, onToggle, onRemove, children, className }) {
   if (kind === "static") {
     return (
-      <span className={cx("chip", "chip--static", className)}>
+      <span className={cx("chip", "chip--static", className)} {...markAttrs(mark)}>
         {icon && <Icon name={icon} size={16} className="chip__icon" />}
         {children}
       </span>
@@ -32,6 +33,7 @@ export function Chip({ kind = "toggle", selected = false, unavailable = false, i
       className={cx("chip", selected && "is-selected", unavailable && !selected && "is-unavailable", className)}
       aria-pressed={selected}
       aria-disabled={unavailable && !selected ? true : undefined}
+      {...markAttrs(mark)}
       onClick={() => {
         if (unavailable && !selected) return;
         onToggle?.(!selected);
@@ -48,7 +50,7 @@ export function Chip({ kind = "toggle", selected = false, unavailable = false, i
  * Multi- or single-select chips with an optional maximum. `groups` ([{ label, options }]) splits
  * the options into labelled sets; the maximum and the count still apply to the whole group.
  */
-export function ChipGroup({ label, options, groups, value, onChange, max, single = false, icons }) {
+export function ChipGroup({ label, options, groups, value, onChange, max, single = false, icons, marks }) {
   const labelId = useId();
   const atMax = max != null && value.length >= max;
   const toggle = (opt, next) => {
@@ -61,6 +63,7 @@ export function ChipGroup({ label, options, groups, value, onChange, max, single
         <Chip
           key={opt}
           icon={icons?.[opt]}
+          mark={marks?.[opt]}
           selected={value.includes(opt)}
           unavailable={!single && atMax}
           onToggle={(next) => toggle(opt, next)}
@@ -85,7 +88,7 @@ export function ChipGroup({ label, options, groups, value, onChange, max, single
       {groups
         ? groups.map((g) => (
             <div key={g.label} className="chip-group__set">
-              <p className="chip-group__set-label">{g.label}</p>
+              <p className="chip-group__set-label" {...markAttrs(g.mark)}>{g.label}</p>
               {chips(g.options)}
             </div>
           ))
@@ -299,7 +302,7 @@ export function FilterChips({ label, options, value, onChange, className }) {
       {options.map((o) => {
         const on = o.id === value;
         return (
-          <button key={o.id} type="button" className={cx("chip", "chip--filter", on && "is-selected")} aria-pressed={on} onClick={() => onChange(o.id)}>
+          <button key={o.id} type="button" className={cx("chip", "chip--filter", on && "is-selected")} aria-pressed={on} onClick={() => onChange(o.id)} {...markAttrs(o.mark)}>
             {on && <Icon name="check" size={18} className="chip__affordance" />}
             {o.label}
             {o.count != null && <span className="chip__count">{o.count}</span>}

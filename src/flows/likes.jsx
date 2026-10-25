@@ -15,7 +15,7 @@ import {
   Toast,
   TopBar,
 } from "../design-system/index.js";
-import { ACTIVITIES, PEOPLE } from "./data.js";
+import { ACTIVITIES, INTEREST_MARKS, PEOPLE } from "./data.js";
 import { Frame, useFlash } from "./frame.jsx";
 import { LIKE_FILTERS, likesList } from "./model.js";
 import { useStore } from "./store.js";
@@ -132,7 +132,7 @@ export function LikeProfile({ go }) {
         {person.prompt && (
           <ProfilePrompt prompt={person.prompt.q} answer={person.prompt.a} />
         )}
-        <SharedInterests items={person.shared?.map((label) => ({ label }))} />
+        <SharedInterests items={person.shared?.map((label) => ({ label, mark: INTEREST_MARKS[label] }))} />
         {person.distanceKm != null && (
           <ProfileSection title="Location">
             <p className="fl-pf__meta">

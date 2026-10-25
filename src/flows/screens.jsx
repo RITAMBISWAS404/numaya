@@ -54,7 +54,7 @@ import {
   VerifiedBadge,
   Wordmark,
 } from "../design-system/index.js";
-import { INTEREST_GROUPS, INTERESTS, PEOPLE, PROMPT_QUESTIONS, REPORT_REASONS } from "./data.js";
+import { INTEREST_GROUPS, INTEREST_MARKS, INTERESTS, PEOPLE, PROMPT_QUESTIONS, REPORT_REASONS } from "./data.js";
 import { conversations, discoveryQueue, hiddenByFilters, newMatches, useStore } from "./store.js";
 import { Frame, useFlash } from "./frame.jsx";
 import { ReportSheet, ShareSheet } from "./activity.jsx";
@@ -174,7 +174,7 @@ export function InterestsPrompts({ go }) {
         art={<IllustrationSlot id="spot-interests" width="72px" />}
       />
       <div className="fl-stack fl-gap-lg fl-sections">
-        <ChipGroup label="Interests" options={INTERESTS} groups={INTEREST_GROUPS} value={interests} onChange={(v) => dispatch({ type: "profile", patch: { interests: v } })} max={5} />
+        <ChipGroup label="Interests" options={INTERESTS} groups={INTEREST_GROUPS} marks={INTEREST_MARKS} value={interests} onChange={(v) => dispatch({ type: "profile", patch: { interests: v } })} max={5} />
         <Section title="Your prompt" description="Matches reply to this. You can change it any time from your profile.">
           <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} />
         </Section>
@@ -375,7 +375,7 @@ export function Discovery({ go }) {
 
           {photo(1)}
 
-          <SharedInterests items={person.shared?.map((label) => ({ label }))} />
+          <SharedInterests items={person.shared?.map((label) => ({ label, mark: INTEREST_MARKS[label] }))} />
 
           {photo(2)}
 
@@ -554,7 +554,7 @@ export function Match({ go }) {
       }
     >
       <div className="fl-center fl-fill fl-match">
-        <MatchCelebration name={person.name} src={person.src} you={{ name: state.profile.name || "You" }} shared={person.shared} illustration={<IllustrationSlot id="match-hands-heart" />}>
+        <MatchCelebration name={person.name} src={person.src} you={{ name: state.profile.name || "You" }} shared={person.shared} marks={INTEREST_MARKS} illustration={<IllustrationSlot id="match-hands-heart" />}>
           You and <strong>{person.name}</strong> liked each other. Now say hello.
         </MatchCelebration>
       </div>
