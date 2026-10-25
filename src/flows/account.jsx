@@ -216,8 +216,7 @@ export function Premium({ go }) {
     >
       <div className="fl-stack fl-gap-lg fl-sections">
         <div className="fl-stack fl-gap-xs">
-          <p className="fl-caption">Your plan</p>
-          <p className="fl-section-title">{state.plan === "plus" ? "Plus" : "Free"}</p>
+          <p className="fl-section-title">You’re on {state.plan === "plus" ? "Plus" : "Free"}</p>
           <p className="fl-caption">Everything you need to meet people is free. Plus adds a few extras.</p>
         </div>
         <ComparisonTable tiers={["Free", "Plus"]} rows={PLUS_ROWS} caption="Free and Plus compared" />
@@ -287,7 +286,7 @@ export function Connections({ go }) {
                         Disconnect
                       </Button>
                     ) : (
-                      <Button size="sm" block={false} onClick={() => setConnecting(key)}>
+                      <Button variant="secondary" size="sm" block={false} onClick={() => setConnecting(key)}>
                         Connect
                       </Button>
                     )

@@ -786,6 +786,7 @@ export function Chat({ go }) {
             </span>
           </button>
           <Button
+            variant="destructive-solid"
             onClick={() => {
               setConfirm(false);
               dispatch({ type: "end", id, reason: "unmatched" });
