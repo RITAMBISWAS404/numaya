@@ -444,6 +444,20 @@
       "image": "screens/110-prompt-editor-changed-393x852.png"
     },
     {
+      "id": "132",
+      "name": "Desktop: flow previews gallery",
+      "group": "Desktop context",
+      "route": "flows.html",
+      "state": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/132-desktop-flow-previews-1440x900.png"
+    },
+    {
       "id": "140",
       "name": "QA 375: Welcome",
       "group": "Small-phone QA (375 × 667)",

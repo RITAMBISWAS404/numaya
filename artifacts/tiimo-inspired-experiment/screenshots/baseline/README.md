@@ -25,6 +25,7 @@ after any change.
 - [Likes, matches and messages](contact-sheets/03-likes-matches-messaging.png)
 - [Activity](contact-sheets/04-activity.png)
 - [Profile, readiness, settings and account](contact-sheets/05-profile-settings.png)
+- [Desktop context](contact-sheets/06-desktop.png)
 - [Small-phone QA (375 × 667)](contact-sheets/07-qa-375.png)
 
 ## Onboarding
@@ -83,6 +84,12 @@ after any change.
 | 109 | Edit prompt: answer field focused | Viewport · `flows.html?screen=prompt` |  | [109-prompt-editor-focused-393x852.png](screens/109-prompt-editor-focused-393x852.png) |
 | 110 | Edit prompt: new question and answer, ready to save | Viewport · `flows.html?screen=prompt` |  | [110-prompt-editor-changed-393x852.png](screens/110-prompt-editor-changed-393x852.png) |
 
+## Desktop context
+
+| # | Screen or state | Capture | Notes | Image |
+| --- | --- | --- | --- | --- |
+| 132 | Desktop: flow previews gallery | Viewport · `flows.html` |  | [132-desktop-flow-previews-1440x900.png](screens/132-desktop-flow-previews-1440x900.png) |
+
 ## Small-phone QA (375 × 667)
 
 | # | Screen or state | Capture | Notes | Image |
@@ -96,4 +103,4 @@ after any change.
 | 153 | QA 375: Activity Explore | Viewport · `flows.html?screen=activity` |  | [153-qa-activity-375x667.png](screens/153-qa-activity-375x667.png) |
 | 157 | QA 375: Likes | Viewport · `flows.html?screen=likes` |  | [157-qa-likes-375x667.png](screens/157-qa-likes-375x667.png) |
 
-39 captures: 36 viewport, 3 full page (4 MB of screenshots; all-screens sheet 589 KB).
+40 captures: 37 viewport, 3 full page (4 MB of screenshots; all-screens sheet 602 KB).

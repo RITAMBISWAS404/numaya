@@ -25,3 +25,21 @@
 - Proof of scoping: without the flag, all 39 selected states are byte-identical to the approved
   baseline.
 - Checks: check (unit 117/117 and build) and e2e (144/144, 88/88) are green.
+
+## Phases 2–5: screens (done, `982675d`)
+
+- All 12 screens were implemented, rendered and inspected in four batches: entry; discovery and
+  profile; match and messaging; prompt editor and Activity.
+- Defects found and fixed are listed in [validation-report.md](validation-report.md#visual-qa).
+
+## Phases 6–7: QA and delivery (done)
+
+- Final captures:
+  - 40 themed states in [screenshots/tiimo-inspired](screenshots/tiimo-inspired/README.md);
+  - 40 baseline states, taken from this code without the flag and byte-identical to the approved
+    branch;
+  - 17 comparison sheets and one 12-screen contact sheet.
+- Checks: unit 117/117, build, smoke 144/144, product 88/88, experiment 20/20, and a11y clean.
+- Report: [README.md](README.md), with scores, critique and a recommendation.
+- Remaining: none for this experiment. The next step is for the team to decide which of the four
+  promotable elements to bring into the approved design system.
