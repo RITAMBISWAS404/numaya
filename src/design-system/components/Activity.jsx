@@ -114,8 +114,8 @@ export function ActivityCard({ id, title, category, categoryIcon, host, when, pl
           )}
         </ActivityMedia>
         <span className="activity-card__body">
-          <span className="activity-card__category">{category}</span>
           <span className="activity-card__title">{title}</span>
+          <span className="activity-card__category">{category}</span>
           <MetaRow icon="calendar">{when}</MetaRow>
           <MetaRow icon="location">{place}</MetaRow>
           <span className="activity-card__foot">

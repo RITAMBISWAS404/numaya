@@ -554,7 +554,7 @@ export function Match({ go }) {
       }
     >
       <div className="fl-center fl-fill fl-match">
-        <MatchCelebration name={person.name} src={person.src} illustration={<IllustrationSlot id="match-hands-heart" />}>
+        <MatchCelebration name={person.name} src={person.src} you={{ name: state.profile.name || "You" }} shared={person.shared} illustration={<IllustrationSlot id="match-hands-heart" />}>
           You and <strong>{person.name}</strong> liked each other. Now say hello.
         </MatchCelebration>
       </div>
@@ -880,6 +880,13 @@ export function MyProfile({ go }) {
           </div>
         </div>
 
+        {/* Impeccable layout: the person's own words come before the score. */}
+        <div className="list-group">
+          <p className="list-group__title">Your prompt</p>
+          <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} onEdit={() => go("prompt")} />
+          <p className="list-group__footnote">Matches reply to this.</p>
+        </div>
+
         {/* Compact readiness summary leading to the full dashboard. */}
         <section className="card fl-ready-card" aria-labelledby="fl-ready-title">
           <div className="fl-ready-card__top">
@@ -902,12 +909,6 @@ export function MyProfile({ go }) {
             </Button>
           </div>
         </section>
-
-        <div className="list-group">
-          <p className="list-group__title">Your prompt</p>
-          <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} onEdit={() => go("prompt")} />
-          <p className="list-group__footnote">Matches reply to this.</p>
-        </div>
 
         <ListGroup title="Activity">
           <ListRow icon="event" label="My activities" value={`${mine.upcoming.length + mine.hosting.length} upcoming`} kind="value" onPress={() => go("my-activities")} />

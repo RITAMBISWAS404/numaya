@@ -121,7 +121,7 @@ export function Section({ title, description, action, children }) {
       {(title || description) && (
         <header className="section__header">
           <div>
-            {title && <h3 className="section__title">{title}</h3>}
+            {title && <h2 className="section__title">{title}</h2>}
             {description && <p className="section__description">{description}</p>}
           </div>
           {action}
@@ -235,7 +235,7 @@ export function SetupProgress({ title, steps, className }) {
           <li key={step.label} className={cx("setup-step", `is-${step.status}`)} aria-current={step.status === "active" ? "step" : undefined}>
             <Icon name={step.icon} size={24} className="setup-step__icon" />
             <span className="setup-step__text">
-              <span className="setup-step__eyebrow">
+              <span className="setup-step__eyebrow visually-hidden">
                 Step {i + 1} of {steps.length}
               </span>
               <span className="setup-step__label">{step.label}</span>
@@ -453,9 +453,9 @@ export function ProfileCard({ name, age, verified, details = [], isNew = false, 
               {isNew && <span className="profile-card__pill">New here</span>}
             </div>
           )}
-          <h3 className="profile-card__name">
+          <h2 className="profile-card__name">
             {name}, {age}
-          </h3>
+          </h2>
           {headline && (
             <p className="profile-card__detail">
               <Icon name={headline.icon} size={16} /> {headline.text}

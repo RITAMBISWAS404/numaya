@@ -11,6 +11,18 @@
   box-sizing: border-box;
 }
 
+/* Browser surfaces carry the brand too (Impeccable craft floor): selected text sits on a lavender
+   wash in ink (14:1), and the text caret is brand purple. */
+::selection {
+  background: var(--color-brand-tint-strong);
+  color: var(--color-text-primary);
+}
+
+input,
+textarea {
+  caret-color: var(--color-brand);
+}
+
 html,
 body,
 #root {

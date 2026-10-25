@@ -266,10 +266,12 @@
   --button-height: var(--p-dimension-54);
   --button-height-sm: var(--p-dimension-40);
   --button-height-quiet: var(--p-dimension-48);
-  --button-primary-bg-top: var(--p-color-neutral-800);
-  --button-primary-bg-bottom: var(--color-surface-inverse);
-  --button-primary-bg-hover-top: var(--p-color-neutral-750);
-  --button-primary-bg-hover-bottom: var(--p-color-neutral-850);
+  --button-primary-bg-top: var(--color-brand);
+  --button-primary-bg-bottom: var(--color-brand);
+  --button-primary-bg-hover-top: var(--color-brand-hover);
+  --button-primary-bg-hover-bottom: var(--color-brand-hover);
+  --button-ink-bg-top: var(--p-color-neutral-800);
+  --button-ink-bg-bottom: var(--color-surface-inverse);
   --fab-size: var(--p-dimension-56);
   --icon-button-size: var(--p-dimension-40);
   --icon-button-size-sm: var(--p-dimension-36);

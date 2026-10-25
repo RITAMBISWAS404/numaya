@@ -176,10 +176,14 @@
   padding-inline: var(--space-2);
 }
 
+/* Category follows the title as a quiet caption: purple is kept for actions and selection, and no
+   label sits above a heading. */
 .activity-card__category {
-  color: var(--color-text-brand);
+  margin-top: calc(var(--space-1) * -1);
+  margin-bottom: var(--space-1);
+  color: var(--color-text-secondary);
   font-size: var(--type-caption-size);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
 }
 
 .activity-card__title {

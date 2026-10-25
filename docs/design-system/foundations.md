@@ -77,17 +77,17 @@ and the wordmark, which scale with their container. Fraunces uses `--font-displa
 - **Gutters:** 16px screen padding; the Discover card runs to 8px from the edges so the photo leads.
 - **Reference baseline (Bumble layout, Meetup styling):** white pages; cards are white with a hairline
   and a faint shadow (20px), grouped rows 16px, photos 24px (`radius.photo`); buttons and chips are
-  pills (primary ink, secondary light grey); Pass and Like are ink pills (72×56) beside the SuperSwipe pill, which is also a pill when it floats on the photo. SuperSwipe is the single purple action on Discover.
+  pills (primary purple, secondary light grey); Pass and Like are ink pills (72×56) beside the SuperSwipe pill, which is also a pill when it floats on the photo. SuperSwipe is the single purple action on Discover.
 - **Purple footprint:** SuperSwipe, selected chips and pills, outgoing bubbles, send, verification,
-  progress, links and focus. Switches, checkboxes, radios and primary CTAs are ink (Meetup).
+  progress, links, focus and primary CTAs (decision D-22). Switches, checkboxes and radios stay ink (Meetup).
 - **Surfaces (Meetup):** white pages; section cards and list groups are white with a hairline and a
-  faint shadow, inset dividers between rows; quote-like content (prompt answers) sits on flat grey;
+  faint shadow, inset dividers between rows; prompt answers are the lavender pull-quote object (`surface.brand`, deep-purple question, a quiet Fraunces quotation mark, no hairline);
   guidance cards (`InfoCard`) are a flat light-lavender wash with the icon and heading on one row and the body below. Interest chips are white pills with a hairline (selected: purple).
   In chat, incoming bubbles are grey with ink text and outgoing are purple with white text.
 - **Elevation** (neutral ink, very low opacity; flat controls and fields use none): `--shadow-xs` tiny
   moving parts · `sm` cards, list groups and floating icon buttons (no ring) · `float` persistent
   floating chrome (tab bar, hero profile card) · `md` bottom sheets and panels · `lg` dialogs,
-  toasts and popovers (the only tier that must clearly layer) · `button` the primary ink button.
+  toasts and popovers (the only tier that must clearly layer) · `button` the ink action-bar buttons (Pass and Like). Primary buttons are flat purple.
 - **Layout:** single column, max `--layout-content-max` 430px; wider viewports centre it. Respect
   `--safe-top`, `--safe-bottom` and `--keyboard-inset` (runtime, see [README](README.md#runtime-variables)).
 

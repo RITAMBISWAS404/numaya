@@ -155,8 +155,11 @@
   cursor: not-allowed;
 }
 
+/* Impeccable polish: the placeholder here is a suggested opener ("Ask about the record shop…"),
+   content the person is meant to read, so it uses muted text (5.8:1) rather than the 2.8:1
+   placeholder grey. */
 .composer__field textarea::placeholder {
-  color: var(--color-text-subtle);
+  color: var(--color-text-muted);
 }
 
 /* Send: brand purple with a white arrow once there is text; empty, it is the quiet grey circle of

@@ -433,7 +433,7 @@ try {
       check("geometry: no squircle or superellipse corner-shape anywhere (plain border-radius only)", geo.shaped === 0, `${geo.shaped} shaped elements`);
       check("shape: avatars are circles, as in Meetup (plain and ringed)", geo.avatarRadius[0] === "50%" && geo.avatarRadius[1] === "50%", geo.avatarRadius.join(" / "));
       check("shape: the completion ring traces a rounded rectangle with round caps in brand purple", geo.ring.rounded && geo.ring.cap === "round" && geo.ring.stroke === BRAND && geo.ring.width === "4px" && geo.ring.inside, JSON.stringify(geo.ring));
-      check("surfaces: prompt answers are flat grey quote cards (Meetup 'About me'), no shadow", geo.promptShadowAlpha === 0 && geo.promptBg === "rgb(242, 242, 242)", `alpha ${geo.promptShadowAlpha} / ${geo.promptBg}`);
+      check("surfaces: prompt answers are the lavender pull-quote object (the conversation signature), no shadow", geo.promptShadowAlpha === 0 && geo.promptBg === "rgb(243, 240, 253)", `alpha ${geo.promptShadowAlpha} / ${geo.promptBg}`);
       const m2 = await p.evaluate(() => {
         const cs = (sel) => document.querySelector(sel) && getComputedStyle(document.querySelector(sel));
         const groups = [...document.querySelectorAll("#settings .fl-sections > *")].map((e) => e.getBoundingClientRect());
@@ -456,7 +456,7 @@ try {
       check("discover: SuperSwipe sits on the photo, above the tab bar, without scrolling", geo.superTop);
       check("discover: Pass and Like follow the profile, after its sections (reference)", geo.actionsAfterSections);
       check("discover: the photo dominates the screen (≥ 90% width, ≥ 55% height)", geo.photoShare.w >= 0.9 && geo.photoShare.h >= 0.55, `${geo.photoShare.w.toFixed(2)} × ${geo.photoShare.h.toFixed(2)}`);
-      const cardEdge = await p.evaluate(() => getComputedStyle(document.querySelector("#discovery .profile-section")).boxShadow);
+      const cardEdge = await p.evaluate(() => getComputedStyle(document.querySelector("#discovery .profile-section:not(.profile-section--prompt)")).boxShadow);
       check("surfaces: white page; section cards separate with a hairline, not a heavy shadow (Meetup)", geo.pageBg === "rgb(255, 255, 255)" && geo.cardBorder === "0px" && /inset/.test(cardEdge), `${geo.pageBg} / ${cardEdge.slice(0, 60)}`);
       const imagery = await p.evaluate(() => {
         const media = document.querySelector("#discovery .profile-card__media");

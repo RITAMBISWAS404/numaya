@@ -1,7 +1,7 @@
 import { cx } from "../../lib/cx.js";
 import { Button } from "./Button.jsx";
 import { Icon } from "./Icon.jsx";
-import { avatarTone } from "./Content.jsx";
+import { Avatar, avatarTone } from "./Content.jsx";
 
 /**
  * Explains a device permission before the OS prompt. Primary asks; secondary defers.
@@ -73,15 +73,35 @@ export function OrganicPortrait({ name, src, className }) {
 
 /**
  * The match moment (reference: the Numaya sketch): heading, the matched person's photo in the
- * organic frame, one line of copy and the illustration slot. White page; purple stays in the frame
- * backdrop and the artwork. Actions (message, keep browsing) belong to the screen's footer.
+ * organic frame (with `you` overlapping its edge, so the moment shows the pair), one line of copy,
+ * what the two of you really share (`shared`, optional) and the illustration slot. White page;
+ * purple stays in the frame backdrop, the shared pills and the artwork. Actions (message, keep
+ * browsing) belong to the screen's footer.
  */
-export function MatchCelebration({ name, src, title = "It’s a match!", illustration, children }) {
+export function MatchCelebration({ name, src, you, shared, title = "It’s a match!", illustration, children }) {
   return (
     <div className="match">
       <h1 className="match__title">{title}</h1>
-      <OrganicPortrait name={name} src={src} className="match__portrait" />
+      {/* The pair: the matched person in the organic frame, you overlapping its edge. */}
+      <div className="match__pair">
+        <OrganicPortrait name={name} src={src} className="match__portrait" />
+        {you && <Avatar name={you.name} src={you.src} size="lg" className="match__you" />}
+      </div>
       {children && <p className="match__body">{children}</p>}
+      {shared?.length > 0 && (
+        <div className="match__shared">
+          <span className="match__shared-label" id="match-shared-label">
+            You both like
+          </span>
+          <ul className="match__shared-list" aria-labelledby="match-shared-label">
+            {shared.map((s) => (
+              <li key={s} className="chip chip--static match__shared-chip">
+                {s}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       {illustration && <div className="match__art">{illustration}</div>}
     </div>
   );

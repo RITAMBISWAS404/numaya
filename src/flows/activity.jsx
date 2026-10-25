@@ -405,8 +405,8 @@ export function ActivityDetail({ go }) {
           <ActivityStatus participation={card.participation} />
         </ActivityMedia>
         <div className="fl-stack fl-gap-xs">
-          <p className="activity-card__category">{categoryLabel(a.category)}</p>
           <h1 className="fl-activity__title">{a.title}</h1>
+          <p className="activity-card__category">{categoryLabel(a.category)}</p>
         </div>
         {failed && (
           <Banner tone="error" title="Couldn’t send that" action="Try again" onAction={join}>

@@ -305,10 +305,16 @@
       "height-sm":    { "$type": "dimension", "$value": "{primitive.dimension.40}" },
       "height-quiet": { "$type": "dimension", "$value": "{primitive.dimension.48}" },
       "primary": {
-        "bg-top":          { "$type": "color", "$value": "{primitive.color.neutral.800}" },
-        "bg-bottom":       { "$type": "color", "$value": "{semantic.color.surface.inverse}" },
-        "bg-hover-top":    { "$type": "color", "$value": "{primitive.color.neutral.750}" },
-        "bg-hover-bottom": { "$type": "color", "$value": "{primitive.color.neutral.850}" }
+        "$description": "Impeccable colorize: the primary action is flat brand purple (white 4.90:1), the same flat purple fill the system already uses for selection and SuperSwipe. Purple means 'move toward a conversation'.",
+        "bg-top":          { "$type": "color", "$value": "{semantic.color.brand.default}" },
+        "bg-bottom":       { "$type": "color", "$value": "{semantic.color.brand.default}" },
+        "bg-hover-top":    { "$type": "color", "$value": "{semantic.color.brand.hover}" },
+        "bg-hover-bottom": { "$type": "color", "$value": "{semantic.color.brand.hover}" }
+      },
+      "ink": {
+        "$description": "Pass and Like on the action bar stay ink, so SuperSwipe remains the single purple choice in that row.",
+        "bg-top":    { "$type": "color", "$value": "{primitive.color.neutral.800}" },
+        "bg-bottom": { "$type": "color", "$value": "{semantic.color.surface.inverse}" }
       }
     },
     "fab":         { "size": { "$type": "dimension", "$value": "{primitive.dimension.56}" } },

@@ -2349,8 +2349,8 @@ export const tokens = [
     "name": "--button-primary-bg-top",
     "layer": "component",
     "type": "color",
-    "value": "{primitive.color.neutral.800}",
-    "resolved": "#2d2c2f",
+    "value": "{semantic.color.brand.default}",
+    "resolved": "#7262c7",
     "description": null
   },
   {
@@ -2358,8 +2358,8 @@ export const tokens = [
     "name": "--button-primary-bg-bottom",
     "layer": "component",
     "type": "color",
-    "value": "{semantic.color.surface.inverse}",
-    "resolved": "#141316",
+    "value": "{semantic.color.brand.default}",
+    "resolved": "#7262c7",
     "description": null
   },
   {
@@ -2367,8 +2367,8 @@ export const tokens = [
     "name": "--button-primary-bg-hover-top",
     "layer": "component",
     "type": "color",
-    "value": "{primitive.color.neutral.750}",
-    "resolved": "#353438",
+    "value": "{semantic.color.brand.hover}",
+    "resolved": "#5f50b3",
     "description": null
   },
   {
@@ -2376,8 +2376,26 @@ export const tokens = [
     "name": "--button-primary-bg-hover-bottom",
     "layer": "component",
     "type": "color",
-    "value": "{primitive.color.neutral.850}",
-    "resolved": "#1f1e21",
+    "value": "{semantic.color.brand.hover}",
+    "resolved": "#5f50b3",
+    "description": null
+  },
+  {
+    "id": "component.button.ink.bg-top",
+    "name": "--button-ink-bg-top",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.neutral.800}",
+    "resolved": "#2d2c2f",
+    "description": null
+  },
+  {
+    "id": "component.button.ink.bg-bottom",
+    "name": "--button-ink-bg-bottom",
+    "layer": "component",
+    "type": "color",
+    "value": "{semantic.color.surface.inverse}",
+    "resolved": "#141316",
     "description": null
   },
   {
