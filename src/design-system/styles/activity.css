@@ -63,6 +63,12 @@
   min-width: 0;
 }
 
+/* In a list row the identity fills the row, so a trailing action (Connect, Unblock, Approve) sits on
+   the row's right edge instead of wherever the name happens to end. */
+.list-row__hit > .identity-row {
+  flex: 1;
+}
+
 .identity-row__text {
   flex: 1;
   min-width: 0;
@@ -179,11 +185,16 @@
 /* Category follows the title as a quiet caption: purple is kept for actions and selection, and no
    label sits above a heading. */
 .activity-card__category {
-  margin-top: calc(var(--space-1) * -1);
-  margin-bottom: var(--space-1);
   color: var(--color-text-secondary);
   font-size: var(--type-caption-size);
   font-weight: var(--font-weight-medium);
+}
+
+/* In the card the title already carries a bottom margin; pull the caption up to it and keep the
+   same gap before the meta rows. */
+.activity-card__body .activity-card__category {
+  margin-top: calc(var(--space-1) * -1);
+  margin-bottom: var(--space-1);
 }
 
 .activity-card__title {

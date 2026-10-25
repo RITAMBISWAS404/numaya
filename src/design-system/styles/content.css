@@ -1030,6 +1030,9 @@ button.list-row__hit:hover {
   list-style: none;
 }
 
+/* Shared interests are the second conversation hook (after the prompt), so they carry the same
+   lavender as the prompt object wherever they appear: Discover, Like back and the match moment. */
+.shared-interests__pill,
 .match__shared-chip {
   background: var(--color-surface-brand);
   box-shadow: none;
@@ -1247,11 +1250,6 @@ button.list-row__hit:hover {
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-.shared-interests__pill {
-  background: var(--color-surface-soft);
-  box-shadow: none;
 }
 
 /* Profile setup: three stacked horizontal step cards (no connectors or progress bar). Done is flat
