@@ -1,0 +1,246 @@
+{
+  "generatedBy": "npm run gallery",
+  "screens": [
+    {
+      "id": "016",
+      "name": "Interests and prompt",
+      "group": "Onboarding",
+      "route": "flows.html?screen=interests&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/016-interests-prompt-393x852.png"
+    },
+    {
+      "id": "017",
+      "name": "Interests: five chosen, the rest locked",
+      "group": "Onboarding",
+      "route": "flows.html?screen=interests&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/017-interests-max-393x852.png",
+      "notes": "Seeded with five interests; unselected chips are disabled at the maximum."
+    },
+    {
+      "id": "019",
+      "name": "Home: profile card",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/019-discover-393x852.png"
+    },
+    {
+      "id": "021",
+      "name": "Home: “You both like” card",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/021-discover-you-both-like-393x852.png"
+    },
+    {
+      "id": "030",
+      "name": "It’s a match",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=match&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/030-match-393x852.png",
+      "notes": "Seeded as right after liking Maya, who liked you."
+    },
+    {
+      "id": "032",
+      "name": "It’s a match: first message typed",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=match&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/032-match-typing-393x852.png"
+    },
+    {
+      "id": "034",
+      "name": "Messages: search, new matches, filters and conversations",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chats&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/034-chats-393x852.png"
+    },
+    {
+      "id": "038",
+      "name": "Conversation",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/038-chat-conversation-393x852.png"
+    },
+    {
+      "id": "042",
+      "name": "Conversation: new match intro with opening prompts",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/042-chat-new-match-393x852.png",
+      "notes": "Seeded with Jo (no messages yet) as the open chat."
+    },
+    {
+      "id": "054",
+      "name": "Likes: all",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=likes&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/054-likes-393x852.png"
+    },
+    {
+      "id": "059",
+      "name": "Likes: a person who liked you (like back or pass)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=like-profile&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/059-like-profile-393x852.png"
+    },
+    {
+      "id": "061",
+      "name": "Activity: Explore",
+      "group": "Activity",
+      "route": "flows.html?screen=activity&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/061-activity-393x852.png"
+    },
+    {
+      "id": "144",
+      "name": "QA 375: Interests and prompt",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=interests&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/144-qa-interests-375x667.png"
+    },
+    {
+      "id": "145",
+      "name": "QA 375: Home profile card",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=discovery&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/145-qa-discover-375x667.png"
+    },
+    {
+      "id": "146",
+      "name": "QA 375: It’s a match",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=match&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/146-qa-match-375x667.png"
+    },
+    {
+      "id": "147",
+      "name": "QA 375: Chats",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=chats&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/147-qa-chats-375x667.png"
+    },
+    {
+      "id": "148",
+      "name": "QA 375: Conversation with long messages",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=chat&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/148-qa-chat-long-messages-375x667.png"
+    }
+  ]
+}
