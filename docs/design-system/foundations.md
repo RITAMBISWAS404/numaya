@@ -79,7 +79,7 @@ and the wordmark, which scale with their container. Fraunces uses `--font-displa
   and a faint shadow (20px), grouped rows 16px, photos 24px (`radius.photo`); buttons and chips are
   pills (primary purple, secondary light grey); Pass and Like are ink pills (72×56) beside the SuperSwipe pill, which is also a pill when it floats on the photo. SuperSwipe is the single purple action on Discover.
 - **Purple footprint:** SuperSwipe, selected chips and pills, outgoing bubbles, send, verification,
-  progress, links, focus and primary CTAs (decision D-22). Switches, checkboxes and radios stay ink (Meetup).
+  progress, links, focus, selected controls (switches, checkboxes, radios: `control.selected`) and primary CTAs (decision D-22). Pass and Like stay ink.
 - **Surfaces (Meetup):** white pages; section cards and list groups are white with a hairline and a
   faint shadow, inset dividers between rows; prompt answers are the lavender pull-quote object (`surface.brand`, deep-purple question, a quiet Fraunces quotation mark, no hairline);
   guidance cards (`InfoCard`) are a flat light-lavender wash with the icon and heading on one row and the body below. Interest chips are white pills with a hairline (selected: purple).

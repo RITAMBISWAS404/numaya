@@ -26,3 +26,7 @@ Fonts: Fraunces and Inter (SIL OFL), self-hosted. Icons: Material Symbols Rounde
 **Screen gallery:** [artifacts/ui-gallery/](artifacts/ui-gallery/README.md) holds every screen and
 state in user-flow order at 393 × 852, with contact sheets. Any flow screen can also be opened on its
 own, full screen, at `/flows.html?screen=<id>` (for example `?screen=edit`).
+
+**Design review:** [artifacts/overnight-design-refinement/](artifacts/overnight-design-refinement/README.md)
+records the full-app Apple Design + Impeccable refinement, with before-and-after comparisons, the screen
+inventory and validation results.
