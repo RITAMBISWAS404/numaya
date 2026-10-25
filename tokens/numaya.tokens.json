@@ -194,11 +194,10 @@
         "mint-ink":   { "$type": "color", "$value": "{primitive.color.mint.700}" },
         "sky-tint":   { "$type": "color", "$value": "{primitive.color.sky.100}" },
         "sky-ink":    { "$type": "color", "$value": "{primitive.color.sky.700}" },
-        "pill-fill":             { "$type": "color", "$value": "{primitive.color.purple.50}", "$description": "V4 pills: the whisper of lavender behind an unselected chip or tag without a category." },
-        "pill-outline":          { "$type": "color", "$value": "{primitive.color.purple.200}", "$description": "V4 pills: the fine outline of an unselected chip or tag without a category." },
-        "pill-selected-fill":    { "$type": "color", "$value": "{primitive.color.purple.100}" },
-        "pill-selected-outline": { "$type": "color", "$value": "{primitive.color.purple.600}" },
-        "pill-selected-ink":     { "$type": "color", "$value": "{primitive.color.purple.800}", "$description": "Text and glyphs on a selected pill: 7.3:1 on pill-selected-fill." },
+        "pill-fill":             { "$type": "color", "$value": "{primitive.color.neutral.100}", "$description": "V5 emoji-and-text pills, unselected: a very light neutral grey with no outline (the supplied Numaya reference; Tiimo's unselected habit chips also carry no border)." },
+        "pill-selected-fill":    { "$type": "color", "$value": "{primitive.color.purple.150}", "$description": "V5 emoji-and-text pills, selected: the light purple of Tiimo's selected habit chips." },
+        "pill-selected-outline": { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "V5 selected pill: a fine (1px) brand-purple outline." },
+        "pill-selected-ink":     { "$type": "color", "$value": "{primitive.color.purple.800}", "$description": "Text and glyphs on a selected pill: 6.6:1 on pill-selected-fill." },
         "photo-fade": { "$type": "color", "$value": "{primitive.color.alpha.black-72}", "$description": "The theme's only gradient: the end colour of the bottom-to-top black fade on profile photographs that carry text (Discover, Like back). Never on surfaces, cards, controls or decoration." }
       }
     },
@@ -356,7 +355,7 @@
       "radius-item":    { "$type": "dimension", "$value": "{primitive.dimension.16}" },
       "radius-control": { "$type": "dimension", "$value": "{primitive.dimension.12}" },
       "radius-tag":     { "$type": "dimension", "$value": "{primitive.dimension.8}" },
-      "radius-pill":    { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "V4: chips and tags only (interest, filter, shared-interest and fact chips, 36px tall). Never buttons, inputs, navigation or cards." },
+      "radius-pill":    { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "V5: emoji-and-text pills only (interest chips, emoji category filters, shared-interest tags; 36px tall). Never buttons, badges, inputs, navigation or cards." },
       "radius-feature": { "$type": "dimension", "$value": "{primitive.dimension.24}" },
       "emoji-size":     { "$type": "dimension", "$value": "{primitive.dimension.32}" },
       "emoji-radius":   { "$type": "dimension", "$value": "10px" }

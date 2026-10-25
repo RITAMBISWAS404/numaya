@@ -160,9 +160,8 @@
   --color-tiimo-mint-ink: var(--p-color-mint-700);
   --color-tiimo-sky-tint: var(--p-color-sky-100);
   --color-tiimo-sky-ink: var(--p-color-sky-700);
-  --color-tiimo-pill-fill: var(--p-color-purple-50);
-  --color-tiimo-pill-outline: var(--p-color-purple-200);
-  --color-tiimo-pill-selected-fill: var(--p-color-purple-100);
+  --color-tiimo-pill-fill: var(--p-color-neutral-100);
+  --color-tiimo-pill-selected-fill: var(--p-color-purple-150);
   --color-tiimo-pill-selected-outline: var(--p-color-purple-600);
   --color-tiimo-pill-selected-ink: var(--p-color-purple-800);
   --color-tiimo-photo-fade: var(--p-color-alpha-black-72);

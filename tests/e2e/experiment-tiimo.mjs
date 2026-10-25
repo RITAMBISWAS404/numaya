@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * The opt-in Tiimo-inspired experiment (`?theme=tiimo`, artifacts/tiimo-inspired-experiment/, refined
- * in artifacts/tiimo-white-surface-refinement/, artifacts/tiimo-inspired-v3/ and artifacts/tiimo-inspired-v4/).
+ * in artifacts/tiimo-white-surface-refinement/, artifacts/tiimo-inspired-v3/, artifacts/tiimo-inspired-v4/ and
+ * artifacts/version-5-final-screenshot-preview/).
  * Its own contract, kept apart from the approved design's checks in smoke.mjs and product.mjs:
  * scoping (only the 12 selected screens, only with the flag), the visual rules that carry meaning
  * (white canvas, gradients only as the black fade on profile photos, compact rounded controls,
@@ -120,7 +121,7 @@ try {
   const worstLabel = Math.min(...look.labels.map((l) => ratio(l.fg, "rgb(255, 255, 255)")));
   check("contrast: set headings on the white canvas are at least 4.5:1", worstLabel >= 4.5, worstLabel.toFixed(2));
   check("look: the prompt question is a neutral heading, not accent text", look.prompt && neutral(look.prompt), look.prompt);
-  check("look: a selected interest is a purple-outlined pill on a light purple tint", look.chip.pressed === "true" && look.chip.bg === "rgb(243, 240, 253)" && /rgb\(114, 98, 199\) 0px 0px 0px 1.5px inset/.test(look.chip.ring), `${look.chip.bg} / ${look.chip.ring}`);
+  check("look: a selected interest is a light purple pill with a fine purple outline", look.chip.pressed === "true" && look.chip.bg === "rgb(233, 228, 251)" && /rgb\(114, 98, 199\) 0px 0px 0px 1px inset/.test(look.chip.ring), `${look.chip.bg} / ${look.chip.ring}`);
   check("contrast: selected interest text on its tint is at least 4.5:1", ratio(look.chip.fg, look.chip.bg) >= 4.5, ratio(look.chip.fg, look.chip.bg).toFixed(2));
   check("a11y: interest emoji are decorative (alt text empty), the name stays the label", /🍷/.test(look.chip.emoji) && /\/\s*""/.test(look.chip.emoji), look.chip.emoji);
   const name = await p.getByRole("button", { name: "Natural wine", exact: true }).count();
@@ -231,6 +232,35 @@ try {
     });
   };
   for (const screen of ["discovery", "like-profile"]) overlays.push({ screen, ...(await withPhoto(screen)) });
+
+  // The rendered fade, read from pixels (Discover with the pure-white test image): down a column clear
+  // of text and of the SuperSwipe, the photo stays pure white above the fade, then darkens smoothly
+  // and steadily to the bottom, with no band edge (no jump of more than a few levels between rows).
+  await withPhoto("discovery");
+  const media = p.locator(".profile-card__media");
+  const shot = (await media.screenshot()).toString("base64");
+  const column = await p.evaluate(async (b64) => {
+    const img = new Image();
+    img.src = `data:image/png;base64,${b64}`;
+    await img.decode();
+    const c = Object.assign(document.createElement("canvas"), { width: img.width, height: img.height });
+    const x = c.getContext("2d");
+    x.drawImage(img, 0, 0);
+    const media = document.querySelector(".profile-card__media").getBoundingClientRect();
+    // The first text on the photo: the badges (or the name). The overlay box itself starts higher,
+    // with empty padding, so it is not the reference.
+    const text = (document.querySelector(".profile-card__pills") ?? document.querySelector(".profile-card__name")).getBoundingClientRect();
+    const col = Math.round(img.width * 0.75); // right of the name block
+    const end = Math.round(((text.top - media.top) / media.height) * img.height) - 4; // just above the text and SuperSwipe
+    const v = [];
+    for (let y = 0; y < end; y++) v.push(x.getImageData(col, y, 1, 1).data[0]);
+    return { v, height: img.height };
+  }, shot);
+  const fadeTop = column.v.findIndex((v) => v < 254);
+  const jumps = column.v.slice(1).map((v, i) => column.v[i] - v);
+  const steady = jumps.every((d) => d >= -1);
+  const maxJump = Math.max(...jumps);
+  check("look: the rendered fade starts below the upper photo, darkens steadily and has no band edge", fadeTop > column.height * 0.38 && steady && maxJump <= 3 && column.v.at(-1) < 200, `starts ${(fadeTop / column.height * 100).toFixed(0)}% down, largest step ${maxJump} levels per row, ${column.v.at(-1)} just above the text`);
   // Stops compute as rgba(…) or, for color-mix, color(srgb r g b / a).
   const colours = (g) => [...g.matchAll(/rgba?\([^)]*\)|color\(srgb [^)]*\)/g)].map((m) => m[0]);
   const isBlack = (c) => /^rgba?\(0, 0, 0(, [\d.]+)?\)$/.test(c) || /^color\(srgb 0 0 0( \/ [\d.]+)?\)$/.test(c);
@@ -256,88 +286,102 @@ try {
     }
   }
 
-  // 4e. Controls are compact rounded rectangles, not capsules, on the eight refined screens. Pills
-  // stay only where the shape means something: progress, switches, sliders, count badges.
-  // The Discover actions (Pass, SuperSwipe, Like and the SuperSwipe on the photo) keep their approved
-  // 72 x 56 pill geometry on purpose (V4).
-  const PILL_OK = /progress|switch|slider|count-badge|page-dots|fl-disc-head|fl-me__pct|action-bar__btn/;
-  const capsules = [];
-  for (const s of ["basics", "interests", "discovery", "like-profile", "match", "chat", "chats", "activity"]) {
+  // 4e. Shapes that the pill styling must never reach: each component keeps the V2 geometry
+  // (measured from experiment/tiimo-white-surface-refinement, before V3 and V4 squared controls
+  // off). Every rendered instance on the listed screens is checked.
+  const SHAPES = {
+    ".btn--primary": "999px", ".btn--secondary": "999px", ".btn--quiet": "999px",
+    ".action-bar__btn": "28px", ".nav-button": "50%", ".fab": "50%",
+    ".count-badge": "999px", ".conversation__unread": "999px", ".conversation__move": "999px",
+    ".profile-card__pill": "999px", ".person-tile__badge .badge": "999px",
+    ".tab-bar": "999px", ".tab-bar__item": "999px",
+    ".search": "999px", ".composer__field": "20px", ".composer__send": "50%", ".input": "16px",
+    ".segmented__item": "999px", ".filter-chips:not(:has(.chip[data-emoji])) .chip": "999px",
+    ".avatar__image:not(.match__you .avatar__image)": "50%", ".match-queue__image": "20px",
+    ".profile-card__media": "32px", ".message__bubble": "20px",
+  };
+  const shapeErrors = [];
+  const seen = new Set();
+  for (const s of ["basics", "interests", "discovery", "like-profile", "likes", "chats", "chat", "match", "activity"]) {
     if (s === "match") await openSeeded(p, "flows.html?screen=match&theme=tiimo", MATCHED);
     else await open(p, `flows.html?screen=${s}&theme=tiimo`);
-    const found = await p.evaluate((ok) => {
-      const re = new RegExp(ok);
-      const hits = [];
-      for (const el of document.querySelectorAll(".theme-tiimo *")) {
-        if (el.closest("svg")) continue;
-        const r = el.getBoundingClientRect();
-        if (!r.height || r.width < r.height * 1.3) continue;
-        const rad = parseFloat(getComputedStyle(el).borderTopLeftRadius);
-        if (rad < r.height / 2 - 1) continue;
-        const name = `${el.className} ${el.parentElement?.className ?? ""}`;
-        if (!re.test(name)) hits.push(`${el.tagName.toLowerCase()}.${[...el.classList].join(".")}`);
-      }
-      return [...new Set(hits)];
-    }, PILL_OK.source);
-    if (found.length) capsules.push(`${s}: ${found.join(", ")}`);
+    const found = await p.evaluate((shapes) => Object.entries(shapes).map(([sel, want]) => {
+      const got = [...document.querySelectorAll(`.theme-tiimo ${sel}`)].map((el) => getComputedStyle(el).borderTopLeftRadius);
+      return [sel, want, got];
+    }), SHAPES);
+    for (const [sel, want, got] of found) {
+      if (got.length) seen.add(sel);
+      for (const g of new Set(got)) if (g !== want) shapeErrors.push(`${s} ${sel}: ${g} (want ${want})`);
+    }
   }
-  check("geometry: no capsule-shaped controls on the eight refined screens", capsules.length === 0, capsules.join(" | "));
+  check("shapes: buttons, Discover actions, icon buttons, badges, tab bar, inputs, filters, avatars and photos keep their own shapes", shapeErrors.length === 0, shapeErrors.slice(0, 6).join(" | "));
+  check("shapes: every pinned component was found and measured", seen.size === Object.keys(SHAPES).length, Object.keys(SHAPES).filter((k) => !seen.has(k)).join(", "));
 
-  // 4f. The match moment: their photo a rounded square on the scalloped medallion, yours a smaller
-  // circle on its lower-left corner; no halo, no confetti.
+  // 4f. The match moment: their photo fills and is clipped by the scalloped silhouette; yours is a
+  // smaller rounded square on its lower-left edge; no heart, no halo, no confetti.
   await openSeeded(p, "flows.html?screen=match&theme=tiimo", MATCHED);
   const match = await p.evaluate(() => {
     const m = document.querySelector(".match");
     const halo = document.querySelector(".organic-portrait__backdrop");
-    const medallion = document.querySelector(".match .organic-portrait__photo");
-    const image = medallion.querySelector("img, .organic-portrait__fallback");
+    const frame = document.querySelector(".match .organic-portrait");
+    const photo = frame.querySelector(".organic-portrait__photo");
+    const image = photo.querySelector("img, .organic-portrait__fallback");
     const you = document.querySelector(".match__you");
-    const f = medallion.getBoundingClientRect();
+    const f = frame.getBoundingClientRect();
+    const ph = photo.getBoundingClientRect();
     const i = image.getBoundingClientRect();
     const y = you.getBoundingClientRect();
-    const mcs = getComputedStyle(medallion);
-    const icss = getComputedStyle(image);
+    const pcs = getComputedStyle(photo);
+    const yi = getComputedStyle(you.querySelector(".avatar__image"));
+    const art = document.querySelector(".match__art .illustration-slot");
     const yc = { x: y.left + y.width / 2, y: y.top + y.height / 2 };
+    const fc = { x: f.left + f.width / 2, y: f.top + f.height / 2 };
     return {
       confetti: [getComputedStyle(m, "::before").content, getComputedStyle(m, "::after").content],
       halo: halo ? getComputedStyle(halo).display : "none",
-      scallop: /svg/.test(mcs.maskImage || mcs.webkitMaskImage) && mcs.backgroundColor !== "rgba(0, 0, 0, 0)",
-      fill: mcs.backgroundColor,
-      radius: icss.borderRadius,
-      square: Math.abs(i.width - i.height) < 1 && i.width < f.width * 0.8 && parseFloat(icss.borderRadius) >= 12 && parseFloat(icss.borderRadius) < i.width / 2 - 4,
-      youRound: getComputedStyle(you.querySelector(".avatar__image")).borderRadius === "50%",
-      // Your avatar's centre sits near the image's lower-left corner, overlapping it.
-      corner: Math.hypot(yc.x - i.left, yc.y - i.bottom) < y.width * 0.6 && y.right > i.left && y.top < i.bottom,
-      dominant: i.width > 2 * y.width,
-      detail: `image ${Math.round(i.width)}px (radius ${icss.borderRadius}), yours ${Math.round(y.width)}px, centre ${Math.round(Math.hypot(yc.x - i.left, yc.y - i.bottom))}px from the corner`,
+      // The photo layer is masked by the scallop path and the image fills it edge to edge.
+      clipped: /svg/.test(pcs.maskImage || pcs.webkitMaskImage) && pcs.backgroundColor === "rgba(0, 0, 0, 0)" && Math.abs(i.width - ph.width) < 1 && Math.abs(i.height - ph.height) < 1 && Math.abs(ph.width - f.width) < 1,
+      youRadius: yi.borderTopLeftRadius,
+      rounded: parseFloat(yi.borderTopLeftRadius) >= 10 && parseFloat(yi.borderTopLeftRadius) < y.width / 2 - 8,
+      // Lower-left: its centre is left of and below their centre, and the two overlap.
+      lowerLeft: yc.x < fc.x - f.width * 0.2 && yc.y > fc.y + f.height * 0.2 && y.right > f.left + f.width * 0.15 && y.top < f.bottom - f.height * 0.15,
+      clearOfFace: Math.hypot(yc.x - fc.x, yc.y - fc.y) > f.width * 0.35,
+      dominant: f.width > 2.5 * y.width,
+      heart: art ? [...art.querySelectorAll("*")].some((el) => getComputedStyle(el).visibility === "visible" && el.getBoundingClientRect().width > 0) : false,
+      artSpace: art ? Math.round(art.getBoundingClientRect().height) : 0,
+      detail: `frame ${Math.round(f.width)}px, yours ${Math.round(y.width)}px at radius ${yi.borderTopLeftRadius}, centres ${Math.round(Math.hypot(yc.x - fc.x, yc.y - fc.y))}px apart`,
     };
   });
   check("match: no confetti or particles around the photos", match.confetti.every((c) => c === "none" || c === "normal"), match.confetti.join(" "));
-  check("match: no lavender halo or outline around the medallion", match.halo === "none", match.halo);
-  check("match: the scalloped medallion is back, as a solid silhouette", match.scallop, match.fill);
-  check("match: their image is a rounded square inside it, not a circle", match.square, match.detail);
-  check("match: your smaller circular avatar overlaps the image's lower-left corner", match.youRound && match.corner && match.dominant, match.detail);
+  check("match: no lavender halo or outline around their photo", match.halo === "none", match.halo);
+  check("match: their photo fills the scalloped silhouette and is clipped by it", match.clipped, match.detail);
+  check("match: your smaller photo is a rounded square, not a circle", match.rounded, match.youRadius);
+  check("match: your photo overlaps the lower-left edge of theirs, clear of its centre", match.lowerLeft && match.clearOfFace && match.dominant, match.detail);
+  check("match: the temporary purple heart is gone; its slot stays, empty, for the hand illustrations", !match.heart && match.artSpace > 0, `slot ${match.artSpace}px tall`);
 
-  // 4g. Pills (V4): chips and tags are softly rounded rectangles on a light tint with a fine outline;
-  // the excluded components keep their shapes.
-  await open(p, "flows.html?screen=interests&theme=tiimo");
-  const pills = await p.evaluate(() => [...document.querySelectorAll(".chip")].map((c) => {
+  // 4g. Pills (V5): only the emoji-and-text pills. Unselected: light neutral grey, no border;
+  // selected: light purple with a fine purple outline; a 12px rounded rectangle; no gradient.
+  const pillStyle = (sel) => p.evaluate((q) => [...document.querySelectorAll(q)].map((c) => {
     const cs = getComputedStyle(c);
-    return { selected: c.classList.contains("is-selected"), locked: c.classList.contains("is-unavailable"), r: parseFloat(cs.borderTopLeftRadius), h: c.getBoundingClientRect().height, bg: cs.backgroundColor, ring: cs.boxShadow, fg: cs.color };
-  }));
-  const open_ = pills.filter((c) => !c.selected && !c.locked);
-  check("pills: every interest chip is a rounded rectangle (12–16px), not a capsule", pills.every((c) => c.r >= 12 && c.r <= 16 && c.r < c.h / 2 - 4), [...new Set(pills.map((c) => `${c.r}px on ${Math.round(c.h)}px`))].join(", "));
-  check("pills: unselected chips have a light tint and a visible fine outline", open_.length > 0 && open_.every((c) => c.bg !== "rgb(255, 255, 255)" && lum(c.bg) > 0.8 && /inset/.test(c.ring) && /1px/.test(c.ring)), open_.slice(0, 2).map((c) => `${c.bg} ${c.ring}`).join(" | "));
-  const worstPill = Math.min(...pills.filter((c) => !c.locked).map((c) => ratio(c.fg, c.bg)));
-  check("contrast: chip text on its pill is at least 4.5:1", worstPill >= 4.5, worstPill.toFixed(2));
+    return { selected: c.classList.contains("is-selected"), locked: c.classList.contains("is-unavailable"), r: parseFloat(cs.borderTopLeftRadius), h: c.getBoundingClientRect().height, bg: cs.backgroundColor, image: cs.backgroundImage, ring: cs.boxShadow, border: cs.borderTopWidth, fg: cs.color };
+  }), sel);
+  const pills = [];
+  await open(p, "flows.html?screen=interests&theme=tiimo");
+  pills.push(...(await pillStyle(".chip[data-emoji]")));
+  await open(p, "flows.html?screen=activity&theme=tiimo");
+  pills.push(...(await pillStyle(".filter-chips:has(.chip[data-emoji]) .chip")));
   await open(p, "flows.html?screen=discovery&theme=tiimo");
-  const kept = await p.evaluate(() => {
-    const r = (sel) => [...document.querySelectorAll(sel)].map((el) => getComputedStyle(el).borderTopLeftRadius);
-    return { actions: r(".action-bar__btn"), nav: r(".nav-button"), tab: r(".tab-bar"), shared: r(".shared-interests__pill") };
-  });
-  check("excluded: Pass, SuperSwipe, Like and the star on the photo keep their approved 28px pill corner", kept.actions.length >= 1 && kept.actions.every((v) => v === "28px"), kept.actions.join(", "));
-  check("excluded: icon buttons stay circular and the tab bar keeps its V3 corner", kept.nav.every((v) => v === "50%") && kept.tab.every((v) => v === "24px"), `${kept.nav.join(" ")} / ${kept.tab.join(" ")}`);
-  check("pills: shared-interest tags take the pill corner", kept.shared.length > 0 && kept.shared.every((v) => v === "12px"), kept.shared.join(", "));
+  pills.push(...(await pillStyle(".shared-interests__pill")));
+  await openSeeded(p, "flows.html?screen=match&theme=tiimo", MATCHED);
+  pills.push(...(await pillStyle(".match__shared-chip")));
+  const unselected = pills.filter((c) => !c.selected);
+  const selected = pills.filter((c) => c.selected);
+  check("pills: every emoji-and-text pill is a 12px rounded rectangle, not a capsule", pills.length > 10 && pills.every((c) => c.r === 12 && c.h >= 32), [...new Set(pills.map((c) => `${c.r}px on ${Math.round(c.h)}px`))].join(", "));
+  check("pills: unselected pills are light neutral grey with no border or outline", unselected.length > 0 && unselected.every((c) => c.bg === "rgb(242, 242, 242)" && c.ring === "none" && c.border === "0px"), [...new Set(unselected.map((c) => `${c.bg} ${c.ring} ${c.border}`))].join(" | "));
+  check("pills: selected pills are light purple with a fine purple outline", selected.length >= 2 && selected.every((c) => c.bg === "rgb(233, 228, 251)" && /rgb\(114, 98, 199\) 0px 0px 0px 1px inset/.test(c.ring)), [...new Set(selected.map((c) => `${c.bg} ${c.ring}`))].join(" | "));
+  check("pills: no gradient on any pill", pills.every((c) => c.image === "none"));
+  const worstPill = Math.min(...pills.filter((c) => !c.locked).map((c) => ratio(c.fg, c.bg)));
+  check("contrast: pill text is at least 4.5:1, selected and unselected", worstPill >= 4.5, worstPill.toFixed(2));
 
   // 5. Welcome stickers are decoration only.
   await open(p, "?theme=tiimo");

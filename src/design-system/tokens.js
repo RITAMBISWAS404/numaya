@@ -1409,27 +1409,18 @@ export const tokens = [
     "name": "--color-tiimo-pill-fill",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.purple.50}",
-    "resolved": "#faf8ff",
-    "description": "V4 pills: the whisper of lavender behind an unselected chip or tag without a category."
-  },
-  {
-    "id": "semantic.color.tiimo.pill-outline",
-    "name": "--color-tiimo-pill-outline",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.purple.200}",
-    "resolved": "#ddd6f7",
-    "description": "V4 pills: the fine outline of an unselected chip or tag without a category."
+    "value": "{primitive.color.neutral.100}",
+    "resolved": "#f2f2f2",
+    "description": "V5 emoji-and-text pills, unselected: a very light neutral grey with no outline (the supplied Numaya reference; Tiimo's unselected habit chips also carry no border)."
   },
   {
     "id": "semantic.color.tiimo.pill-selected-fill",
     "name": "--color-tiimo-pill-selected-fill",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.purple.100}",
-    "resolved": "#f3f0fd",
-    "description": null
+    "value": "{primitive.color.purple.150}",
+    "resolved": "#e9e4fb",
+    "description": "V5 emoji-and-text pills, selected: the light purple of Tiimo's selected habit chips."
   },
   {
     "id": "semantic.color.tiimo.pill-selected-outline",
@@ -1438,7 +1429,7 @@ export const tokens = [
     "type": "color",
     "value": "{primitive.color.purple.600}",
     "resolved": "#7262c7",
-    "description": null
+    "description": "V5 selected pill: a fine (1px) brand-purple outline."
   },
   {
     "id": "semantic.color.tiimo.pill-selected-ink",
@@ -1447,7 +1438,7 @@ export const tokens = [
     "type": "color",
     "value": "{primitive.color.purple.800}",
     "resolved": "#4f4296",
-    "description": "Text and glyphs on a selected pill: 7.3:1 on pill-selected-fill."
+    "description": "Text and glyphs on a selected pill: 6.6:1 on pill-selected-fill."
   },
   {
     "id": "semantic.color.tiimo.photo-fade",
@@ -2783,7 +2774,7 @@ export const tokens = [
     "type": "dimension",
     "value": "{primitive.dimension.12}",
     "resolved": "12px",
-    "description": "V4: chips and tags only (interest, filter, shared-interest and fact chips, 36px tall). Never buttons, inputs, navigation or cards."
+    "description": "V5: emoji-and-text pills only (interest chips, emoji category filters, shared-interest tags; 36px tall). Never buttons, badges, inputs, navigation or cards."
   },
   {
     "id": "component.tiimo.radius-feature",

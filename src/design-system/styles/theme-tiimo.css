@@ -1,6 +1,7 @@
 /*
  * Tiimo-inspired visual experiment (artifacts/tiimo-inspired-experiment/), refined in
- * artifacts/tiimo-white-surface-refinement/ (V2) and artifacts/tiimo-inspired-v3/ (V3).
+ * artifacts/tiimo-white-surface-refinement/ (V2), artifacts/tiimo-inspired-v3/ (V3), V4 and
+ * artifacts/version-5-final-screenshot-preview/ (V5).
  *
  * Opt-in: a screen renders inside `.theme-tiimo` only with `?theme=tiimo` and only if it takes part
  * in the experiment, so the approved design is untouched everywhere else. Every rule below is scoped
@@ -10,9 +11,10 @@
  * - A pure white canvas; white cards separate by spacing and a restrained shadow, not a hairline.
  * - One gradient only: the black fade at the bottom of a profile photograph that carries text.
  *   Every surface, control and decoration is a solid colour (see "Gradients" at the end).
- * - Two card sizes: item 16px, feature 24px. Controls are compact rounded rectangles, not capsules:
- *   buttons 16, chips 12, tags 8. Circles for avatars and icon buttons; pills only for progress,
- *   switches, sliders and count badges.
+ * - Two card sizes: item 16px, feature 24px. Emoji-and-text pills (interests, emoji category filters,
+ *   shared-interest and activity category tags) are softly rounded rectangles: a light grey fill,
+ *   or light purple with a fine purple outline when selected. Every other control keeps its own
+ *   approved shape: capsule buttons, filters, badges and tab bar; circular icon buttons and avatars.
  * - Headings are neutral ink; colour marks a category (a tinted holder or chip) or a state, never
  *   a heading on its own.
  * - One pastel per category (peach, lilac, mint, sky, butter), always paired with its ink for text.
@@ -121,57 +123,49 @@
   font-size: 13px;
 }
 
-/* Pills (V4) ----------------------------------------------------------------- */
-/* Chips and tags only: interest chips, filter chips, shared-interest tags and fact chips (all
-   `.chip`). A softly rounded rectangle (12px on a 36px chip) on a whisper of tint with a fine
-   outline, instead of a white capsule. Buttons, inputs, navigation, cards and the Discover actions
-   never use these tokens. */
-.theme-tiimo .chip {
+/* Pills (V5) ----------------------------------------------------------------- */
+/* Only the emoji-and-text pills: interest chips, emoji category filters (and the "All" option in
+   the same rail), the shared-interest tags ("You both like") and the activity category tag. They
+   are matched by their emoji mark (data-emoji) or by sitting in a rail of emoji filters, never by a
+   bare `.chip`, so filters without emoji (Messages, Likes), fact chips, buttons, badges, inputs and
+   navigation keep their own shapes. Reference: Tiimo's habit chips (Mobbin, "Add morning routines"):
+   a soft rounded rectangle; unselected without a border; selected light purple with a fine purple
+   outline. */
+.theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip) {
   border-radius: var(--tiimo-radius-pill);
   background: var(--color-tiimo-pill-fill);
-  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-tiimo-pill-outline);
+  box-shadow: none;
+  color: var(--color-text-primary);
 }
 
-/* A chip with a category keeps its pastel, softened to half strength, with an outline in its own
-   ink at low opacity, so the category still reads without a heavy block of colour. */
-.theme-tiimo .chip[data-tone] {
-  background: color-mix(in srgb, var(--tone-tint) 50%, var(--color-surface));
-  box-shadow: inset 0 0 0 var(--border-hairline) color-mix(in srgb, var(--tone-ink) 24%, transparent);
-}
-
-/* Selected (interests and filters alike): a refined purple outline on a very light purple tint,
-   deep purple text and the existing purple glyph (minus or check), so the state never relies on
-   colour alone. Text is 7.3:1. */
-.theme-tiimo .chip.is-selected,
-.theme-tiimo .chip.is-selected[data-tone] {
+/* Selected: light purple, a fine 1px purple outline, deep purple text (6.6:1) and the existing
+   glyph (minus or check), so the state never relies on colour alone. Same size and corner. */
+.theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected {
   background: var(--color-tiimo-pill-selected-fill);
-  box-shadow: inset 0 0 0 var(--border-selected) var(--color-tiimo-pill-selected-outline);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-tiimo-pill-selected-outline);
   color: var(--color-tiimo-pill-selected-ink);
   font-weight: var(--font-weight-semibold);
 }
 
-.theme-tiimo .chip.is-selected .chip__affordance,
-.theme-tiimo .chip.is-selected .chip__icon,
-.theme-tiimo .chip.is-selected .chip__count {
-  color: var(--color-tiimo-pill-selected-outline);
+.theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected :is(.chip__affordance, .chip__icon, .chip__count) {
+  color: var(--color-tiimo-pill-selected-ink);
 }
 
-/* Locked at the maximum: no tint, a paler outline, so it reads as unavailable next to open chips. */
-.theme-tiimo .chip.is-unavailable,
-.theme-tiimo .chip.is-unavailable[data-tone] {
-  background: var(--color-surface);
-  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle);
+/* Locked at the five-interest limit: the same grey pill with the approved muted (disabled) text and
+   glyph, so the set keeps its shape and reads as "full". The chips are inactive (aria-disabled), which
+   contrast minimums exempt; the "5/5 selected" count states the limit in full-contrast text. */
+.theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-unavailable {
+  color: var(--color-text-subtle);
 }
 
-/* Shared interests ("You both like", Discover, Like back, Match): category tags, so the text takes
-   the category ink on the softened pastel. */
-.theme-tiimo .shared-interests__pill[data-tone],
-.theme-tiimo .match__shared-chip[data-tone] {
+/* Shared interests are tags, not choices: the unselected pill, with a little more room around the
+   emoji. */
+.theme-tiimo :is(.shared-interests__pill, .match__shared-chip)[data-emoji] {
   gap: 6px;
-  color: var(--tone-ink);
 }
 
-/* Activity category: a sentence-case tinted tag with its emoji, under the title. */
+/* Activity category: the same pill at tag size (27px tall, so 8px keeps the same proportion as 12px
+   on a 36px chip and does not turn into a capsule). */
 .theme-tiimo .activity-card__category[data-tone] {
   display: inline-flex;
   align-items: center;
@@ -179,8 +173,8 @@
   justify-self: start;
   padding: 2px 8px;
   border-radius: var(--tiimo-radius-tag);
-  background: var(--tone-tint);
-  color: var(--tone-ink);
+  background: var(--color-tiimo-pill-fill);
+  color: var(--color-text-primary);
   font-weight: var(--font-weight-semibold);
 }
 
@@ -213,9 +207,9 @@
   background: var(--color-tiimo-lilac-tint);
 }
 
-/* Tags: sentence-case tinted tags (8px corners). "New" is butter, the reference's highlight tint. */
+/* Tags: sentence-case tinted pills. "New" is butter, the reference's highlight tint. */
 .theme-tiimo .person-tile__badge .badge {
-  border-radius: var(--tiimo-radius-tag);
+  border-radius: var(--radius-pill);
   background: var(--color-tiimo-butter-tint);
   color: var(--color-tiimo-butter-ink);
 }
@@ -245,53 +239,45 @@
 /* Bubbles are the approved ones: yours solid brand purple with white text (4.90:1), theirs the
    light neutral grey with ink text, each with its tail corner on the sender's side. */
 
-/* The match moment (V4): their photo as a rounded square on the scalloped medallion, yours as a
-   smaller circle overlapping its lower-left corner. The scallop is the shared component's own
-   frame (its inline mask on .organic-portrait__photo), now a solid butter silhouette behind the
-   photo instead of the photo's crop; the lavender halo stays hidden and there is no confetti. Your
-   avatar keeps its white ring: it separates the two faces where they overlap. */
+/* The match moment (V5): their photo fills the scalloped silhouette, yours is a smaller rounded
+   square overlapping its lower-left edge. The scallop is the shared component's own mask on
+   .organic-portrait__photo (an SVG path, so the photo itself is clipped to the contour, with no gap);
+   the lavender halo behind it stays hidden, and there is no confetti. Your photo keeps its white
+   ring, which follows its rounded corners: it separates the two faces where they overlap. */
 .theme-tiimo .organic-portrait__backdrop {
   display: none;
 }
 
-.theme-tiimo .match .organic-portrait__photo {
-  display: grid;
-  place-items: center;
-  background: var(--color-tiimo-butter-tint);
+.theme-tiimo .match__you,
+.theme-tiimo .match__you .avatar__image {
+  border-radius: var(--tiimo-radius-item);
 }
 
-/* The person's image: a rounded square inside the medallion, never clipped by the scallop. */
-.theme-tiimo .match .organic-portrait__photo img,
-.theme-tiimo .match .organic-portrait__fallback {
-  width: 64%;
-  height: 64%;
-  border-radius: var(--tiimo-radius-feature);
-}
-
-/* No photo yet: the product's neutral photo placeholder (with their initial), not a pastel that
-   would disappear on the butter medallion. */
-.theme-tiimo .match .organic-portrait__fallback {
-  background: var(--color-surface-photo);
-  font-size: 64px;
-}
-
-/* Your avatar's centre sits just inside the photo's lower-left corner (the square spans 18% to
-   82%), so it overlaps both the photo and the medallion and stays clear of their face. */
+/* Centred on the scallop's lower-left edge (45 degrees, at 95% of its 46.5% radius:
+   50% - 0.95 x 46.5% x 0.707 = 19% from each side), so it overlaps the photo clearly and stays away
+   from its centre, where a face would be. */
 .theme-tiimo .match__you {
   --avatar-size: min(var(--size-avatar-lg), 9.6svh);
-  left: calc(20% - var(--avatar-size) / 2);
-  bottom: calc(20% - var(--avatar-size) / 2);
+  left: calc(19% - var(--avatar-size) / 2);
+  bottom: calc(19% - var(--avatar-size) / 2);
 }
 
-/* Your avatar scales with their portrait on short phones, so it never covers their photo. */
+/* Your photo scales with theirs on short phones, so it never covers their face. */
 @media (max-height: 700px) {
   .theme-tiimo .match__you {
     --avatar-size: min(var(--size-avatar-lg), 7.5svh);
   }
 
-  .theme-tiimo .match .organic-portrait__fallback {
-    font-size: 44px;
+  .theme-tiimo .match__you,
+  .theme-tiimo .match__you .avatar__image {
+    border-radius: var(--tiimo-radius-control);
   }
+}
+
+/* The temporary purple heart goes. Its slot keeps its size, empty, for the two hand illustrations
+   that will form the heart; a real asset (data-status="asset") will show as usual. */
+.theme-tiimo .match__art .illustration-slot[data-status="fallback"] > * {
+  visibility: hidden;
 }
 
 /* Gradients ------------------------------------------------------------------- */
@@ -329,8 +315,8 @@
    fade over the lower 60% of the photo, clear above (where the face is) and darkest behind the
    name, age, badges and detail. It is its own layer (::before on the photo container): above the
    photo, below the text and the SuperSwipe, sized by the photo's height and clipped by its
-   corners. It never reaches surfaces, controls or decoration. Pure black at increasing opacity
-   keeps the photo's colour (no ink or purple cast). */
+   corners. Pure black at increasing opacity keeps the photo's colour (no ink or purple cast).
+   Nine stops on a smooth ease (opacity ~ t^1.6) so there is no visible start line or band. */
 .theme-tiimo .profile-card__media:has(> .profile-card__img)::before {
   content: "";
   position: absolute;
@@ -340,9 +326,13 @@
   background: linear-gradient(
     to top,
     var(--color-tiimo-photo-fade) 0%,
-    color-mix(in srgb, var(--color-tiimo-photo-fade) 80%, transparent) 25%,
-    color-mix(in srgb, var(--color-tiimo-photo-fade) 42%, transparent) 55%,
-    color-mix(in srgb, var(--color-tiimo-photo-fade) 10%, transparent) 82%,
+    color-mix(in srgb, var(--color-tiimo-photo-fade) 86%, transparent) 10%,
+    color-mix(in srgb, var(--color-tiimo-photo-fade) 72%, transparent) 20%,
+    color-mix(in srgb, var(--color-tiimo-photo-fade) 57%, transparent) 31%,
+    color-mix(in srgb, var(--color-tiimo-photo-fade) 42%, transparent) 43%,
+    color-mix(in srgb, var(--color-tiimo-photo-fade) 28%, transparent) 56%,
+    color-mix(in srgb, var(--color-tiimo-photo-fade) 15%, transparent) 70%,
+    color-mix(in srgb, var(--color-tiimo-photo-fade) 5%, transparent) 85%,
     transparent 100%
   );
   pointer-events: none;
@@ -392,40 +382,12 @@
   z-index: 1;
 }
 
-/* Geometry: compact rounded rectangles ------------------------------------------- */
-/* Controls lose the capsule: one corner per size class so related controls match. Large buttons
-   take the item radius (16), small controls 12, tags and badges 8; chips have their own pill token
-   (see "Pills"). Icon buttons, the FAB, the Discover actions, avatars and the photo frames keep
-   their own shapes. */
-.theme-tiimo .btn {
-  border-radius: var(--tiimo-radius-item);
-}
-
-.theme-tiimo .btn--sm,
-.theme-tiimo .segmented__item {
-  border-radius: var(--tiimo-radius-control);
-}
-
-.theme-tiimo .search {
-  border-radius: var(--tiimo-radius-item);
-}
-
-/* Pass, SuperSwipe and Like, and the SuperSwipe on the photo, keep the approved geometry (72 x 56
-   at radius 28): V4 restores them; they never take a chip or button corner. */
-
-.theme-tiimo .profile-card__pill,
-.theme-tiimo .conversation__move {
-  border-radius: var(--tiimo-radius-tag);
-}
-
-/* The floating tab bar: a soft rounded rectangle; its items nest inside the 6px inset. */
-.theme-tiimo .tab-bar {
-  border-radius: var(--tiimo-radius-feature);
-}
-
-.theme-tiimo .tab-bar__item {
-  border-radius: var(--tiimo-radius-item);
-}
+/* Shapes ------------------------------------------------------------------------ */
+/* V5 restores every control shape that V3 and V4 squared off: buttons (Continue, Pass, Like back,
+   Keep browsing), filters without emoji, segmented options, search, the photo badges, "Your move",
+   "New" and the tab bar are the approved capsules again; icon buttons, the FAB, avatars and the
+   Discover actions were never changed. The only new control shape is the emoji-and-text pill
+   above. tests/e2e/experiment-tiimo.mjs pins each of these shapes. */
 
 /* Headings ------------------------------------------------------------------------ */
 /* The prompt's question is a section heading, so it takes the neutral heading colour of the
