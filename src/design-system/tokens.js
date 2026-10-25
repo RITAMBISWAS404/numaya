@@ -1405,6 +1405,51 @@ export const tokens = [
     "description": null
   },
   {
+    "id": "semantic.color.tiimo.pill-fill",
+    "name": "--color-tiimo-pill-fill",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.purple.50}",
+    "resolved": "#faf8ff",
+    "description": "V4 pills: the whisper of lavender behind an unselected chip or tag without a category."
+  },
+  {
+    "id": "semantic.color.tiimo.pill-outline",
+    "name": "--color-tiimo-pill-outline",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.purple.200}",
+    "resolved": "#ddd6f7",
+    "description": "V4 pills: the fine outline of an unselected chip or tag without a category."
+  },
+  {
+    "id": "semantic.color.tiimo.pill-selected-fill",
+    "name": "--color-tiimo-pill-selected-fill",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.purple.100}",
+    "resolved": "#f3f0fd",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.pill-selected-outline",
+    "name": "--color-tiimo-pill-selected-outline",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.purple.600}",
+    "resolved": "#7262c7",
+    "description": null
+  },
+  {
+    "id": "semantic.color.tiimo.pill-selected-ink",
+    "name": "--color-tiimo-pill-selected-ink",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.purple.800}",
+    "resolved": "#4f4296",
+    "description": "Text and glyphs on a selected pill: 7.3:1 on pill-selected-fill."
+  },
+  {
     "id": "semantic.color.tiimo.photo-fade",
     "name": "--color-tiimo-photo-fade",
     "layer": "semantic",
@@ -2730,6 +2775,15 @@ export const tokens = [
     "value": "{primitive.dimension.8}",
     "resolved": "8px",
     "description": null
+  },
+  {
+    "id": "component.tiimo.radius-pill",
+    "name": "--tiimo-radius-pill",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.12}",
+    "resolved": "12px",
+    "description": "V4: chips and tags only (interest, filter, shared-interest and fact chips, 36px tall). Never buttons, inputs, navigation or cards."
   },
   {
     "id": "component.tiimo.radius-feature",

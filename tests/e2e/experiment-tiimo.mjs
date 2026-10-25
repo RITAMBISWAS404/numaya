@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * The opt-in Tiimo-inspired experiment (`?theme=tiimo`, artifacts/tiimo-inspired-experiment/, refined
- * in artifacts/tiimo-white-surface-refinement/ and artifacts/tiimo-inspired-v3/).
+ * in artifacts/tiimo-white-surface-refinement/, artifacts/tiimo-inspired-v3/ and artifacts/tiimo-inspired-v4/).
  * Its own contract, kept apart from the approved design's checks in smoke.mjs and product.mjs:
  * scoping (only the 12 selected screens, only with the flag), the visual rules that carry meaning
  * (white canvas, gradients only as the black fade on profile photos, compact rounded controls,
@@ -24,11 +24,13 @@ function check(name, ok, detail = "") {
   results.push({ name, ok, detail });
   console.log(`${ok ? "✓" : "✗"} ${name}${detail ? ` (${detail})` : ""}`);
 }
-const lum = (rgb) => {
-  const [r, g, b] = rgb.match(/\d+/g).slice(0, 3).map((v) => {
-    v /= 255;
-    return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
-  });
+// Channels 0–1 from a computed colour: rgb(…) in 0–255, or color(srgb …) in 0–1 (what color-mix gives).
+const channels = (c) => {
+  const n = c.match(/[\d.]+/g).map(Number);
+  return c.startsWith("color(") ? n.slice(0, 3) : n.slice(0, 3).map((v) => v / 255);
+};
+const lum = (colour) => {
+  const [r, g, b] = channels(colour).map((v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };
 const ratio = (a, b) => {
@@ -106,7 +108,7 @@ try {
       canvas: cs(screen).backgroundColor,
       labels,
       prompt: prompt && cs(prompt).color,
-      chip: { pressed: chip.getAttribute("aria-pressed"), tone: chip.dataset.tone, bg: cs(chip).backgroundColor, fg: cs(chip).color, emoji: getComputedStyle(chip, "::after").content },
+      chip: { pressed: chip.getAttribute("aria-pressed"), tone: chip.dataset.tone, bg: cs(chip).backgroundColor, ring: cs(chip).boxShadow, fg: cs(chip).color, emoji: getComputedStyle(chip, "::after").content },
     };
   });
   check("look: themed screens sit on a pure white canvas", look.canvas === "rgb(255, 255, 255)", look.canvas);
@@ -118,7 +120,7 @@ try {
   const worstLabel = Math.min(...look.labels.map((l) => ratio(l.fg, "rgb(255, 255, 255)")));
   check("contrast: set headings on the white canvas are at least 4.5:1", worstLabel >= 4.5, worstLabel.toFixed(2));
   check("look: the prompt question is a neutral heading, not accent text", look.prompt && neutral(look.prompt), look.prompt);
-  check("look: a selected interest takes its category tint and ink", look.chip.pressed === "true" && look.chip.tone === "peach" && look.chip.bg === "rgb(253, 232, 220)", `${look.chip.tone} ${look.chip.bg}`);
+  check("look: a selected interest is a purple-outlined pill on a light purple tint", look.chip.pressed === "true" && look.chip.bg === "rgb(243, 240, 253)" && /rgb\(114, 98, 199\) 0px 0px 0px 1.5px inset/.test(look.chip.ring), `${look.chip.bg} / ${look.chip.ring}`);
   check("contrast: selected interest text on its tint is at least 4.5:1", ratio(look.chip.fg, look.chip.bg) >= 4.5, ratio(look.chip.fg, look.chip.bg).toFixed(2));
   check("a11y: interest emoji are decorative (alt text empty), the name stays the label", /🍷/.test(look.chip.emoji) && /\/\s*""/.test(look.chip.emoji), look.chip.emoji);
   const name = await p.getByRole("button", { name: "Natural wine", exact: true }).count();
@@ -156,7 +158,7 @@ try {
   check("look: text fields are a light neutral (no warm or sandy fill)", fr === fg && fg === fb && fr >= 240, field);
 
   // 4c. Gradients: the only one allowed is the black fade over a real profile photograph that carries
-  // text (.profile-card__overlay inside a photo container that holds an <img>). Every other element
+  // text (the ::before layer of a photo container that holds an <img>). Every other element
   // and ::before/::after, on every themed screen, computes no gradient; the sample profiles only have
   // grey placeholders, which take no gradient. Photographs are images, not gradients, so never match.
   const gradients = [];
@@ -172,7 +174,7 @@ try {
           for (const pseudo of [null, "::before", "::after"]) {
             const cs = getComputedStyle(el, pseudo);
             if (!(/gradient/.test(cs.backgroundImage) || /gradient/.test(cs.borderImageSource) || /gradient/.test(cs.maskImage))) continue;
-            const onPhoto = !pseudo && el.classList.contains("profile-card__overlay") && el.closest(".profile-card__media")?.querySelector(".profile-card__img");
+            const onPhoto = pseudo === "::before" && el.classList.contains("profile-card__media") && el.querySelector(":scope > .profile-card__img");
             if (onPhoto) allowed.push(cs.backgroundImage);
             else hits.push(`${el.tagName.toLowerCase()}.${[...el.classList].join(".")}${pseudo ?? ""}`);
           }
@@ -197,12 +199,16 @@ try {
       x.fillRect(0, 0, 300, 400);
       media.querySelector(".profile-card__stand-in")?.remove();
       media.prepend(Object.assign(document.createElement("img"), { className: "profile-card__img", alt: "", src: c.toDataURL() }));
-      const ov = media.querySelector(".profile-card__overlay");
-      const g = getComputedStyle(ov).backgroundImage;
+      const fade = getComputedStyle(media, "::before");
+      const g = fade.backgroundImage;
       const stops = [...g.matchAll(/(rgba?\([^)]*\)|color\(srgb [^)]*\)) ([\d.]+)%/g)].map((m) => [Number(m[2]) / 100, Number(m[1].match(/[,/] ([\d.]+)\)$/)?.[1] ?? 1)]);
-      const box = ov.getBoundingClientRect();
       const mediaBox = media.getBoundingClientRect();
-      // Opacity of the fade at a height: 0 at the overlay's bottom edge, 1 at its top edge.
+      const h = parseFloat(fade.height);
+      const box = { bottom: mediaBox.bottom, top: mediaBox.bottom - h, height: h };
+      // Layering: the fade sits above the photo and below the text and the SuperSwipe.
+      const z = (el) => Number(getComputedStyle(el).zIndex) || 0;
+      const layered = Number(fade.zIndex) > z(media.querySelector(".profile-card__img")) && z(media.querySelector(".profile-card__overlay")) > Number(fade.zIndex) && (!media.querySelector(".profile-card__actions") || z(media.querySelector(".profile-card__actions")) > Number(fade.zIndex));
+      // Opacity of the fade at a height: 0 at its bottom edge, 1 at its top edge.
       const alphaAt = (y) => {
         const t = (box.bottom - y) / box.height;
         for (let i = 1; i < stops.length; i++) if (t <= stops[i][0]) {
@@ -219,6 +225,8 @@ try {
         detail: document.querySelector(".profile-card__detail") ? line(".profile-card__detail") : null,
         clear: (box.top - mediaBox.top) / mediaBox.height, // share of the photo above the fade
         clipped: getComputedStyle(media).overflow === "hidden" && parseFloat(getComputedStyle(media).borderTopLeftRadius) > 0,
+        layered,
+        overlayBg: getComputedStyle(media.querySelector(".profile-card__overlay")).backgroundImage,
       };
     });
   };
@@ -234,7 +242,8 @@ try {
     return /to top/.test(o.gradient) && a[0] > 0.5 && a.at(-1) === 0 && a.every((v, i) => i === 0 || v <= a[i - 1]);
   });
   check("look: the fade is darkest at the bottom and clear at the top", fades);
-  check("look: the fade stays in the photo's lower part and is clipped by its corners", overlays.every((o) => o.clear >= 0.4 && o.clipped), overlays.map((o) => `${o.screen}: ${(o.clear * 100).toFixed(0)}% of the photo clear`).join(", "));
+  check("look: the fade sits above the photo and below the text and actions; the text block adds no second scrim", overlays.every((o) => o.layered && o.overlayBg === "none"), overlays.map((o) => `${o.screen}: ${o.layered} ${o.overlayBg}`).join(", "));
+  check("look: the fade covers only the photo's lower part (its upper 40% has none) and is clipped by its corners", overlays.every((o) => o.clear >= 0.399 && o.clipped), overlays.map((o) => `${o.screen}: ${(o.clear * 100).toFixed(0)}% of the photo clear`).join(", "));
 
   // Text stays readable over a pure white photo: the fade's opacity at each line composited over white.
   const overWhite = (a) => { const v = Math.round(255 * (1 - a)); return `rgb(${v}, ${v}, ${v})`; };
@@ -249,7 +258,9 @@ try {
 
   // 4e. Controls are compact rounded rectangles, not capsules, on the eight refined screens. Pills
   // stay only where the shape means something: progress, switches, sliders, count badges.
-  const PILL_OK = /progress|switch|slider|count-badge|page-dots|fl-disc-head|fl-me__pct/;
+  // The Discover actions (Pass, SuperSwipe, Like and the SuperSwipe on the photo) keep their approved
+  // 72 x 56 pill geometry on purpose (V4).
+  const PILL_OK = /progress|switch|slider|count-badge|page-dots|fl-disc-head|fl-me__pct|action-bar__btn/;
   const capsules = [];
   for (const s of ["basics", "interests", "discovery", "like-profile", "match", "chat", "chats", "activity"]) {
     if (s === "match") await openSeeded(p, "flows.html?screen=match&theme=tiimo", MATCHED);
@@ -272,34 +283,61 @@ try {
   }
   check("geometry: no capsule-shaped controls on the eight refined screens", capsules.length === 0, capsules.join(" | "));
 
-  // 4f. The match moment: two circular portraits, theirs dominant and yours on its edge, no decoration.
+  // 4f. The match moment: their photo a rounded square on the scalloped medallion, yours a smaller
+  // circle on its lower-left corner; no halo, no confetti.
   await openSeeded(p, "flows.html?screen=match&theme=tiimo", MATCHED);
   const match = await p.evaluate(() => {
     const m = document.querySelector(".match");
     const halo = document.querySelector(".organic-portrait__backdrop");
+    const medallion = document.querySelector(".match .organic-portrait__photo");
+    const image = medallion.querySelector("img, .organic-portrait__fallback");
     const you = document.querySelector(".match__you");
-    const portrait = document.querySelector(".match .organic-portrait");
-    const f = portrait.getBoundingClientRect();
+    const f = medallion.getBoundingClientRect();
+    const i = image.getBoundingClientRect();
     const y = you.getBoundingClientRect();
-    const clip = getComputedStyle(portrait).clipPath;
-    const R = (parseFloat(clip.match(/circle\(([\d.]+)%/)?.[1] ?? 50) / 100) * f.width; // the visible circle
-    const r = y.width / 2;
-    const d = Math.hypot(y.left + r - (f.left + f.width / 2), y.top + r - (f.top + f.height / 2));
+    const mcs = getComputedStyle(medallion);
+    const icss = getComputedStyle(image);
+    const yc = { x: y.left + y.width / 2, y: y.top + y.height / 2 };
     return {
       confetti: [getComputedStyle(m, "::before").content, getComputedStyle(m, "::after").content],
       halo: halo ? getComputedStyle(halo).display : "none",
-      clip,
+      scallop: /svg/.test(mcs.maskImage || mcs.webkitMaskImage) && mcs.backgroundColor !== "rgba(0, 0, 0, 0)",
+      fill: mcs.backgroundColor,
+      radius: icss.borderRadius,
+      square: Math.abs(i.width - i.height) < 1 && i.width < f.width * 0.8 && parseFloat(icss.borderRadius) >= 12 && parseFloat(icss.borderRadius) < i.width / 2 - 4,
       youRound: getComputedStyle(you.querySelector(".avatar__image")).borderRadius === "50%",
-      // On the edge: overlapping their circle (d < R + r) without sitting over its centre (d > R - r).
-      edge: d < R + r && d > R - r,
-      dominant: 2 * R > 2.5 * y.width,
-      detail: `circle ${Math.round(2 * R)}px, yours ${Math.round(y.width)}px, centres ${Math.round(d)}px apart`,
+      // Your avatar's centre sits near the image's lower-left corner, overlapping it.
+      corner: Math.hypot(yc.x - i.left, yc.y - i.bottom) < y.width * 0.6 && y.right > i.left && y.top < i.bottom,
+      dominant: i.width > 2 * y.width,
+      detail: `image ${Math.round(i.width)}px (radius ${icss.borderRadius}), yours ${Math.round(y.width)}px, centre ${Math.round(Math.hypot(yc.x - i.left, yc.y - i.bottom))}px from the corner`,
     };
   });
   check("match: no confetti or particles around the photos", match.confetti.every((c) => c === "none" || c === "normal"), match.confetti.join(" "));
-  check("match: no lavender halo or outline around the main photo", match.halo === "none", match.halo);
-  check("match: their photo is a clean circular crop", /^circle\(/.test(match.clip) && match.youRound, match.clip);
-  check("match: your smaller circular photo overlaps the edge of theirs, clear of its centre", match.edge && match.dominant, match.detail);
+  check("match: no lavender halo or outline around the medallion", match.halo === "none", match.halo);
+  check("match: the scalloped medallion is back, as a solid silhouette", match.scallop, match.fill);
+  check("match: their image is a rounded square inside it, not a circle", match.square, match.detail);
+  check("match: your smaller circular avatar overlaps the image's lower-left corner", match.youRound && match.corner && match.dominant, match.detail);
+
+  // 4g. Pills (V4): chips and tags are softly rounded rectangles on a light tint with a fine outline;
+  // the excluded components keep their shapes.
+  await open(p, "flows.html?screen=interests&theme=tiimo");
+  const pills = await p.evaluate(() => [...document.querySelectorAll(".chip")].map((c) => {
+    const cs = getComputedStyle(c);
+    return { selected: c.classList.contains("is-selected"), locked: c.classList.contains("is-unavailable"), r: parseFloat(cs.borderTopLeftRadius), h: c.getBoundingClientRect().height, bg: cs.backgroundColor, ring: cs.boxShadow, fg: cs.color };
+  }));
+  const open_ = pills.filter((c) => !c.selected && !c.locked);
+  check("pills: every interest chip is a rounded rectangle (12–16px), not a capsule", pills.every((c) => c.r >= 12 && c.r <= 16 && c.r < c.h / 2 - 4), [...new Set(pills.map((c) => `${c.r}px on ${Math.round(c.h)}px`))].join(", "));
+  check("pills: unselected chips have a light tint and a visible fine outline", open_.length > 0 && open_.every((c) => c.bg !== "rgb(255, 255, 255)" && lum(c.bg) > 0.8 && /inset/.test(c.ring) && /1px/.test(c.ring)), open_.slice(0, 2).map((c) => `${c.bg} ${c.ring}`).join(" | "));
+  const worstPill = Math.min(...pills.filter((c) => !c.locked).map((c) => ratio(c.fg, c.bg)));
+  check("contrast: chip text on its pill is at least 4.5:1", worstPill >= 4.5, worstPill.toFixed(2));
+  await open(p, "flows.html?screen=discovery&theme=tiimo");
+  const kept = await p.evaluate(() => {
+    const r = (sel) => [...document.querySelectorAll(sel)].map((el) => getComputedStyle(el).borderTopLeftRadius);
+    return { actions: r(".action-bar__btn"), nav: r(".nav-button"), tab: r(".tab-bar"), shared: r(".shared-interests__pill") };
+  });
+  check("excluded: Pass, SuperSwipe, Like and the star on the photo keep their approved 28px pill corner", kept.actions.length >= 1 && kept.actions.every((v) => v === "28px"), kept.actions.join(", "));
+  check("excluded: icon buttons stay circular and the tab bar keeps its V3 corner", kept.nav.every((v) => v === "50%") && kept.tab.every((v) => v === "24px"), `${kept.nav.join(" ")} / ${kept.tab.join(" ")}`);
+  check("pills: shared-interest tags take the pill corner", kept.shared.length > 0 && kept.shared.every((v) => v === "12px"), kept.shared.join(", "));
 
   // 5. Welcome stickers are decoration only.
   await open(p, "?theme=tiimo");

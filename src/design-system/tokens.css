@@ -160,6 +160,11 @@
   --color-tiimo-mint-ink: var(--p-color-mint-700);
   --color-tiimo-sky-tint: var(--p-color-sky-100);
   --color-tiimo-sky-ink: var(--p-color-sky-700);
+  --color-tiimo-pill-fill: var(--p-color-purple-50);
+  --color-tiimo-pill-outline: var(--p-color-purple-200);
+  --color-tiimo-pill-selected-fill: var(--p-color-purple-100);
+  --color-tiimo-pill-selected-outline: var(--p-color-purple-600);
+  --color-tiimo-pill-selected-ink: var(--p-color-purple-800);
   --color-tiimo-photo-fade: var(--p-color-alpha-black-72);
   --font-display: var(--p-font-family-fraunces);
   --font-text: var(--p-font-family-inter);
@@ -309,6 +314,7 @@
   --tiimo-radius-item: var(--p-dimension-16);
   --tiimo-radius-control: var(--p-dimension-12);
   --tiimo-radius-tag: var(--p-dimension-8);
+  --tiimo-radius-pill: var(--p-dimension-12);
   --tiimo-radius-feature: var(--p-dimension-24);
   --tiimo-emoji-size: var(--p-dimension-32);
   --tiimo-emoji-radius: 10px;

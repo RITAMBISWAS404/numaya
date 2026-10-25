@@ -121,24 +121,53 @@
   font-size: 13px;
 }
 
-/* Selected interest: its category tint and ink, a 1.5px ink ring and the minus glyph, so the state
-   never relies on colour alone. */
+/* Pills (V4) ----------------------------------------------------------------- */
+/* Chips and tags only: interest chips, filter chips, shared-interest tags and fact chips (all
+   `.chip`). A softly rounded rectangle (12px on a 36px chip) on a whisper of tint with a fine
+   outline, instead of a white capsule. Buttons, inputs, navigation, cards and the Discover actions
+   never use these tokens. */
+.theme-tiimo .chip {
+  border-radius: var(--tiimo-radius-pill);
+  background: var(--color-tiimo-pill-fill);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-tiimo-pill-outline);
+}
+
+/* A chip with a category keeps its pastel, softened to half strength, with an outline in its own
+   ink at low opacity, so the category still reads without a heavy block of colour. */
+.theme-tiimo .chip[data-tone] {
+  background: color-mix(in srgb, var(--tone-tint) 50%, var(--color-surface));
+  box-shadow: inset 0 0 0 var(--border-hairline) color-mix(in srgb, var(--tone-ink) 24%, transparent);
+}
+
+/* Selected (interests and filters alike): a refined purple outline on a very light purple tint,
+   deep purple text and the existing purple glyph (minus or check), so the state never relies on
+   colour alone. Text is 7.3:1. */
+.theme-tiimo .chip.is-selected,
 .theme-tiimo .chip.is-selected[data-tone] {
-  background: var(--tone-tint);
-  box-shadow: inset 0 0 0 var(--border-selected) var(--tone-ink);
-  color: var(--tone-ink);
+  background: var(--color-tiimo-pill-selected-fill);
+  box-shadow: inset 0 0 0 var(--border-selected) var(--color-tiimo-pill-selected-outline);
+  color: var(--color-tiimo-pill-selected-ink);
   font-weight: var(--font-weight-semibold);
 }
 
-.theme-tiimo .chip.is-selected[data-tone] .chip__affordance {
-  color: var(--tone-ink);
+.theme-tiimo .chip.is-selected .chip__affordance,
+.theme-tiimo .chip.is-selected .chip__icon,
+.theme-tiimo .chip.is-selected .chip__count {
+  color: var(--color-tiimo-pill-selected-outline);
 }
 
-/* Shared interests ("You both like", Discover, Like back, Match): tinted tiles by category. */
+/* Locked at the maximum: no tint, a paler outline, so it reads as unavailable next to open chips. */
+.theme-tiimo .chip.is-unavailable,
+.theme-tiimo .chip.is-unavailable[data-tone] {
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-border-subtle);
+}
+
+/* Shared interests ("You both like", Discover, Like back, Match): category tags, so the text takes
+   the category ink on the softened pastel. */
 .theme-tiimo .shared-interests__pill[data-tone],
 .theme-tiimo .match__shared-chip[data-tone] {
   gap: 6px;
-  background: var(--tone-tint);
   color: var(--tone-ink);
 }
 
@@ -216,34 +245,52 @@
 /* Bubbles are the approved ones: yours solid brand purple with white text (4.90:1), theirs the
    light neutral grey with ink text, each with its tail corner on the sender's side. */
 
-/* The match moment: two people, not a badge. Their photo is a clean circle, the dominant image; yours
-   is a smaller circle overlapping its lower-left edge, so the two portraits carry the moment. No
-   confetti, no lavender halo or outline. The organic frame's mask is an inline style on the shared
-   component; its narrowest radius is 43.5%, so a 43% circular clip gives an exact circle without
-   touching the component. Your avatar keeps its white ring: it separates the two faces where they
-   overlap, and is not decoration. */
+/* The match moment (V4): their photo as a rounded square on the scalloped medallion, yours as a
+   smaller circle overlapping its lower-left corner. The scallop is the shared component's own
+   frame (its inline mask on .organic-portrait__photo), now a solid butter silhouette behind the
+   photo instead of the photo's crop; the lavender halo stays hidden and there is no confetti. Your
+   avatar keeps its white ring: it separates the two faces where they overlap. */
 .theme-tiimo .organic-portrait__backdrop {
   display: none;
 }
 
-.theme-tiimo .match .organic-portrait {
-  clip-path: circle(43% at 50% 50%);
+.theme-tiimo .match .organic-portrait__photo {
+  display: grid;
+  place-items: center;
+  background: var(--color-tiimo-butter-tint);
 }
 
-/* Your avatar's centre sits on their circle's lower-left edge (45 degrees), just inside it (95% of
-   the 43% radius, so 50% - 0.95 x 43% x 0.707 = 21% from each side): a clear overlap that stays away
-   from the centre of their photo, where a face would be, at every size. */
+/* The person's image: a rounded square inside the medallion, never clipped by the scallop. */
+.theme-tiimo .match .organic-portrait__photo img,
+.theme-tiimo .match .organic-portrait__fallback {
+  width: 64%;
+  height: 64%;
+  border-radius: var(--tiimo-radius-feature);
+}
+
+/* No photo yet: the product's neutral photo placeholder (with their initial), not a pastel that
+   would disappear on the butter medallion. */
+.theme-tiimo .match .organic-portrait__fallback {
+  background: var(--color-surface-photo);
+  font-size: 64px;
+}
+
+/* Your avatar's centre sits just inside the photo's lower-left corner (the square spans 18% to
+   82%), so it overlaps both the photo and the medallion and stays clear of their face. */
 .theme-tiimo .match__you {
   --avatar-size: min(var(--size-avatar-lg), 9.6svh);
-  left: calc(21% - var(--avatar-size) / 2);
-  bottom: calc(21% - var(--avatar-size) / 2);
+  left: calc(20% - var(--avatar-size) / 2);
+  bottom: calc(20% - var(--avatar-size) / 2);
 }
 
-/* Your avatar scales with their portrait (about 30% of its frame), so on a short phone it still
-   overlaps the edge instead of covering their photo. Mirrors the portrait's own short-phone rule. */
+/* Your avatar scales with their portrait on short phones, so it never covers their photo. */
 @media (max-height: 700px) {
   .theme-tiimo .match__you {
     --avatar-size: min(var(--size-avatar-lg), 7.5svh);
+  }
+
+  .theme-tiimo .match .organic-portrait__fallback {
+    font-size: 44px;
   }
 }
 
@@ -279,19 +326,35 @@
 }
 
 /* Text on a profile photo. The one permitted gradient: when a real photograph is present, a black
-   fade inside the photo container, clear over the upper photo (where the face is) and darkest
-   behind the name, age and badges. It belongs to the overlay that holds that text, so it sizes with
-   it and is clipped by the photo's own corners; it never reaches surfaces, controls or decoration.
-   Pure black at increasing opacity keeps the photo's colour (no ink or purple cast). */
-.theme-tiimo .profile-card__media:has(.profile-card__img) .profile-card__overlay {
+   fade over the lower 60% of the photo, clear above (where the face is) and darkest behind the
+   name, age, badges and detail. It is its own layer (::before on the photo container): above the
+   photo, below the text and the SuperSwipe, sized by the photo's height and clipped by its
+   corners. It never reaches surfaces, controls or decoration. Pure black at increasing opacity
+   keeps the photo's colour (no ink or purple cast). */
+.theme-tiimo .profile-card__media:has(> .profile-card__img)::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  height: 60%;
   background: linear-gradient(
     to top,
     var(--color-tiimo-photo-fade) 0%,
-    color-mix(in srgb, var(--color-tiimo-photo-fade) 82%, transparent) 30%,
-    color-mix(in srgb, var(--color-tiimo-photo-fade) 45%, transparent) 58%,
-    color-mix(in srgb, var(--color-tiimo-photo-fade) 14%, transparent) 82%,
+    color-mix(in srgb, var(--color-tiimo-photo-fade) 80%, transparent) 25%,
+    color-mix(in srgb, var(--color-tiimo-photo-fade) 42%, transparent) 55%,
+    color-mix(in srgb, var(--color-tiimo-photo-fade) 10%, transparent) 82%,
     transparent 100%
   );
+  pointer-events: none;
+}
+
+.theme-tiimo .profile-card__media:has(> .profile-card__img) .profile-card__overlay {
+  z-index: 2;
+  background: none;
+}
+
+.theme-tiimo .profile-card__media:has(> .profile-card__img) .profile-card__actions {
+  z-index: 2;
 }
 
 /* No photo yet (the grey placeholder): no gradient. The name block sits on a solid translucent ink
@@ -331,14 +394,14 @@
 
 /* Geometry: compact rounded rectangles ------------------------------------------- */
 /* Controls lose the capsule: one corner per size class so related controls match. Large buttons
-   take the item radius (16), chips and small controls 12, tags and badges 8. Icon buttons, the
-   FAB, avatars and the photo frames keep their own shapes. */
+   take the item radius (16), small controls 12, tags and badges 8; chips have their own pill token
+   (see "Pills"). Icon buttons, the FAB, the Discover actions, avatars and the photo frames keep
+   their own shapes. */
 .theme-tiimo .btn {
   border-radius: var(--tiimo-radius-item);
 }
 
 .theme-tiimo .btn--sm,
-.theme-tiimo .chip,
 .theme-tiimo .segmented__item {
   border-radius: var(--tiimo-radius-control);
 }
@@ -347,11 +410,8 @@
   border-radius: var(--tiimo-radius-item);
 }
 
-/* Pass, SuperSwipe and Like (72 x 56) are wide action buttons, not circles: the button corner. */
-.theme-tiimo .action-bar .action-bar__btn,
-.theme-tiimo .profile-card__actions .action-bar__btn {
-  border-radius: var(--tiimo-radius-item);
-}
+/* Pass, SuperSwipe and Like, and the SuperSwipe on the photo, keep the approved geometry (72 x 56
+   at radius 28): V4 restores them; they never take a chip or button corner. */
 
 .theme-tiimo .profile-card__pill,
 .theme-tiimo .conversation__move {
