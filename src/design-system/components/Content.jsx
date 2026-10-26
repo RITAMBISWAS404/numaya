@@ -275,7 +275,10 @@ export function ProfileSection({ title, children, className, ...rest }) {
 export function ProfilePrompt({ prompt, answer, className }) {
   return (
     <section className={cx("card", "profile-section", "profile-section--prompt", className)}>
-      <h2 className="profile-section__title">{prompt}</h2>
+      <h2 className="profile-section__title">
+        <PromptMark />
+        {prompt}
+      </h2>
       <p className="profile-section__answer">{answer}</p>
     </section>
   );
@@ -315,11 +318,24 @@ export function ConsequenceList({ items }) {
 /* Profile content                                                             */
 /* -------------------------------------------------------------------------- */
 
+/** The small speech-bubble mark before a prompt's question. Decorative; drawn only where a theme
+    shows it (the default theme hides it). */
+function PromptMark() {
+  return (
+    <span className="prompt__mark" aria-hidden="true">
+      <Icon name="message" size={14} weight="fill" />
+    </span>
+  );
+}
+
 /** Question + answer. Answer in the display serif. Editable variant shows edit/remove. */
 export function PromptCard({ prompt, answer, onEdit, onRemove, className }) {
   return (
     <article className={cx("prompt", className)}>
-      <p className="prompt__label">{prompt}</p>
+      <p className="prompt__label">
+        <PromptMark />
+        {prompt}
+      </p>
       <p className="prompt__answer">{answer}</p>
       {(onEdit || onRemove) && (
         <div className="prompt__actions">
@@ -328,6 +344,21 @@ export function PromptCard({ prompt, answer, onEdit, onRemove, className }) {
         </div>
       )}
     </article>
+  );
+}
+
+/** Up to three answered prompts as one set. One prompt is a single card; more share one module,
+    divided by hairlines, instead of a stack of cards. items: [{ q, a }]; onEdit(index) is optional
+    per item (return nothing to leave an item without the edit action). */
+export function PromptSet({ items, onEdit, className }) {
+  if (!items?.length) return null;
+  if (items.length === 1) return <PromptCard prompt={items[0].q} answer={items[0].a} onEdit={onEdit?.(0)} className={className} />;
+  return (
+    <div className={cx("prompt-set", className)}>
+      {items.map((p, i) => (
+        <PromptCard key={p.q} prompt={p.q} answer={p.a} onEdit={onEdit?.(i)} />
+      ))}
+    </div>
   );
 }
 

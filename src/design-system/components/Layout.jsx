@@ -126,6 +126,9 @@ export function TabBar({ items, current, onChange }) {
             <Icon name={item.icon} size={24} weight={item.id === current ? "fill" : "outline"} />
             {item.badge ? <CountBadge count={item.badge} label={`${item.badge} new in ${item.label}`} /> : null}
           </span>
+          <span className="tab-bar__label" aria-hidden="true">
+            {item.label}
+          </span>
         </button>
       ))}
     </nav>

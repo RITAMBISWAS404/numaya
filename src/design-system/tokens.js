@@ -442,6 +442,15 @@ export const tokens = [
     "description": null
   },
   {
+    "id": "primitive.color.palette.brand-tint",
+    "name": "--p-color-palette-brand-tint",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#f1eff9",
+    "resolved": "#f1eff9",
+    "description": "V11: purple.600 at 10% on white (#7262C7 mixed into #FFFFFF)."
+  },
+  {
     "id": "primitive.color.palette.inset",
     "name": "--p-color-palette-inset",
     "layer": "primitive",
@@ -1439,6 +1448,15 @@ export const tokens = [
     "value": "{primitive.color.neutral.0}",
     "resolved": "#ffffff",
     "description": "Text and icons on solid brand purple (#FFFFFF, 4.90:1)."
+  },
+  {
+    "id": "semantic.color.palette.brand-tint",
+    "name": "--color-palette-brand-tint",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.brand-tint}",
+    "resolved": "#f1eff9",
+    "description": "V11: the one light purple (#F1EFF9). Holds a small brand-purple icon where it marks meaning (the prompt heading; purple on it 4.4:1). Never cards, pills, headings or large areas."
   },
   {
     "id": "semantic.color.palette.text",
@@ -2856,6 +2874,42 @@ export const tokens = [
     "value": "999px",
     "resolved": "999px",
     "description": "V10: a fully rounded capsule (radius = half the height) for compact actions and toggles. Never on a square component, where it would make a circle."
+  },
+  {
+    "id": "component.tiimo.handle-width",
+    "name": "--tiimo-handle-width",
+    "layer": "component",
+    "type": "dimension",
+    "value": "34px",
+    "resolved": "34px",
+    "description": "V11: the switch handle, a horizontal pill (34 × 26) inset 3px in its 58 × 32 track."
+  },
+  {
+    "id": "component.tiimo.handle-height",
+    "name": "--tiimo-handle-height",
+    "layer": "component",
+    "type": "dimension",
+    "value": "26px",
+    "resolved": "26px",
+    "description": null
+  },
+  {
+    "id": "component.tiimo.handle-slider-width",
+    "name": "--tiimo-handle-slider-width",
+    "layer": "component",
+    "type": "dimension",
+    "value": "30px",
+    "resolved": "30px",
+    "description": "V11: the slider handle, the switch's horizontal pill one step smaller (30 × 22) for the 6px rail."
+  },
+  {
+    "id": "component.tiimo.handle-slider-height",
+    "name": "--tiimo-handle-slider-height",
+    "layer": "component",
+    "type": "dimension",
+    "value": "22px",
+    "resolved": "22px",
+    "description": null
   },
   {
     "id": "component.tiimo.emoji-size",

@@ -35,6 +35,7 @@ import {
   ProfilePrompt,
   ProfileSection,
   PromptCard,
+  PromptSet,
   ReadinessMeter,
   RangeSlider,
   ResultPanel,
@@ -58,7 +59,7 @@ import { INTEREST_GROUPS, INTEREST_MARKS, INTERESTS, PEOPLE, PROMPT_QUESTIONS, R
 import { conversations, discoveryQueue, hiddenByFilters, newMatches, useStore } from "./store.js";
 import { Frame, useFlash } from "./frame.jsx";
 import { ReportSheet, ShareSheet } from "./activity.jsx";
-import { myActivities, openersFor, readiness } from "./model.js";
+import { myActivities, openersFor, promptsOf, readiness } from "./model.js";
 import { accountStatus, useFixAction } from "./account.jsx";
 import { markAttrs } from "../lib/theme.js";
 
@@ -360,7 +361,9 @@ export function Discovery({ go }) {
             {intent && <span className={`fl-swipe__stamp fl-swipe__stamp--${intent}`}>{intent === "like" ? "Like" : "Pass"}</span>}
           </div>
 
-          <ProfilePrompt prompt={person.prompt.q} answer={person.prompt.a} />
+          {promptsOf(person).map((p) => (
+            <ProfilePrompt key={p.q} prompt={p.q} answer={p.a} />
+          ))}
 
           {lookingFor && (
             <ProfileSection title="About me">
@@ -884,8 +887,8 @@ export function MyProfile({ go }) {
 
         {/* Impeccable layout: the person's own words come before the score. */}
         <div className="list-group">
-          <p className="list-group__title">Your prompt</p>
-          <PromptCard prompt={state.profile.prompt.q} answer={state.profile.prompt.a} onEdit={() => go("prompt")} />
+          <p className="list-group__title">{promptsOf(state.profile).length > 1 ? "Your prompts" : "Your prompt"}</p>
+          <PromptSet items={promptsOf(state.profile)} onEdit={(i) => (i === 0 ? () => go("prompt") : undefined)} />
           <p className="list-group__footnote">Matches reply to this.</p>
         </div>
 
@@ -941,7 +944,9 @@ function ProfilePreview({ profile }) {
           <p className="fl-pf__body">{profile.bio}</p>
         </ProfileSection>
       )}
-      <ProfilePrompt prompt={profile.prompt.q} answer={profile.prompt.a} />
+      {promptsOf(profile).map((p) => (
+        <ProfilePrompt key={p.q} prompt={p.q} answer={p.a} />
+      ))}
       {profile.interests.length > 0 && (
         <ProfileSection title="Interests">
           <div className="fl-chip-row">
@@ -1019,8 +1024,8 @@ export function EditProfile({ go }) {
                 <PhotoGrid photos={photos} onAdd={add} onRemove={remove} onSelect={setPhotoId} hint="Your main photo leads your profile in Home." />
               </Section>
             </div>
-            <Section title="Prompt" description="Matches reply to this.">
-              <PromptCard prompt={profile.prompt.q} answer={profile.prompt.a} onEdit={() => go("prompt")} />
+            <Section title={promptsOf(profile).length > 1 ? "Prompts" : "Prompt"} description="Matches reply to this.">
+              <PromptSet items={promptsOf(profile)} onEdit={(i) => (i === 0 ? () => go("prompt") : undefined)} />
             </Section>
             <div data-focus="bio">
               <TextArea label="Bio" placeholder="A few lines about you: what you love, what you’re looking for." value={profile.bio ?? ""} maxLength={300} rows={4} onChange={(e) => set({ bio: e.target.value })} />

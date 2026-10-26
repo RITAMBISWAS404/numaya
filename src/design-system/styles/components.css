@@ -812,6 +812,12 @@
   right: -10px;
 }
 
+/* Visible tab labels are drawn by themes that use them (the opt-in experiment); the approved bar is
+   icon-only, with the label as the accessible name. */
+.tab-bar__label {
+  display: none;
+}
+
 /* ------------------------------------------------------------------ */
 /* Field variants                                                      */
 /* ------------------------------------------------------------------ */

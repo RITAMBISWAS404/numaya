@@ -1,9 +1,11 @@
 /*
- * Tiimo-inspired visual experiment, V10: V9's monochrome system with balanced geometry, a traditional
- * bottom tab bar and a larger match portrait. History: the first experiment
- * (artifacts/tiimo-inspired-experiment/), V2 (artifacts/tiimo-white-surface-refinement/), V3–V9
- * (artifacts/tiimo-inspired-v3/ … artifacts/version-9-final-screenshot-preview/). The rules below are
- * written out in artifacts/version-10-final-screenshot-preview/design-system.md.
+ * Tiimo-inspired visual experiment, V11: V10's monochrome system and balanced geometry, polished: an
+ * icon-plus-label tab bar, one light purple for small meaningful accents, a prompt mark instead of
+ * the quote glyph, a deeper photo fade, aligned settings dividers, calmer activity metadata,
+ * horizontal pill handles on sliders and roomier small controls. History: the first experiment
+ * (artifacts/tiimo-inspired-experiment/), V2 (artifacts/tiimo-white-surface-refinement/), V3–V10
+ * (artifacts/tiimo-inspired-v3/ … artifacts/version-10-final-screenshot-preview/). The rules below are
+ * written out in artifacts/version-11-final-screenshot-preview/design-decisions.md.
  *
  * Opt-in: a screen renders inside `.theme-tiimo` only with `?theme=tiimo` and only if it takes part
  * in the experiment, so the approved design is untouched everywhere else. Every rule below is scoped
@@ -22,8 +24,11 @@
  *   and sheets 20). Conventional shapes stay where function needs them: circular radios, square
  *   checkboxes. Avatars are rounded squares at a quarter of their size. Nested corners follow
  *   inner ≈ outer − inset. The match scallop is the one organic shape.
- * - Navigation (V10): a full-width bottom tab bar with a hairline, the purple icon as the active
- *   state, and red dots instead of numbers (the count stays in the accessible name).
+ * - Navigation (V10, V11): a full-width bottom tab bar with a hairline; each tab an icon over a short
+ *   label, purple when active and grey otherwise; red dots instead of numbers (the count stays in
+ *   the accessible name).
+ * - Light purple (V11): one tint, #F1EFF9 (--color-palette-brand-tint), only as a small holder for a
+ *   brand-purple icon that marks meaning (the prompt heading). Never cards, pills or headings.
  * - One gradient: the black fade under the text on a real profile photograph.
  */
 
@@ -102,8 +107,8 @@
   content: none;
 }
 
-/* Your own prompt (Profile, Edit, Interests) is a module you open and edit: white and outlined; its
-   quote mark is a neutral watermark. */
+/* Your own prompt (Profile, Edit, Interests) is a module you open and edit: white and outlined. V11:
+   no decorative quotation mark. */
 .theme-tiimo .prompt {
   border-radius: var(--tiimo-radius-feature);
   background: var(--color-surface);
@@ -111,7 +116,57 @@
 }
 
 .theme-tiimo .prompt::after {
-  color: var(--color-palette-border);
+  content: none;
+}
+
+/* The prompt mark (V11): a small speech bubble in brand purple on the light purple tint, before the
+   question, so a prompt reads as a conversation starter at a glance. 22px with the tag corner, beside
+   the 14px question, centred on its first line; the answer below stays the largest text. The one
+   use of the tint. */
+.theme-tiimo :is(.prompt__label, .profile-section--prompt .profile-section__title) {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.theme-tiimo .prompt__mark {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--tiimo-radius-tag);
+  background: var(--color-palette-brand-tint);
+  color: var(--color-palette-brand);
+}
+
+/* The edit chevron centres on the question's line (20px padding + half the 22px mark = 31px). */
+.theme-tiimo .prompt__actions {
+  top: 13px;
+}
+
+/* Several prompts (up to three) share one outlined module, separated by hairlines inset to the text,
+   instead of a stack of cards. */
+.theme-tiimo .prompt-set {
+  gap: 0;
+  border-radius: var(--tiimo-radius-feature);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
+}
+
+.theme-tiimo .prompt-set .prompt {
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.theme-tiimo .prompt-set .prompt + .prompt::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: var(--space-5);
+  right: var(--space-5);
+  height: var(--border-hairline);
+  background: var(--color-palette-border);
 }
 
 /* Information containers: the secondary grey with an ink icon. Neutral, flat and clearly not a
@@ -183,9 +238,15 @@
   box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
 }
 
-/* The remove button and the order badge sit 8px inside the 16px tile corner: 16 − 8 = 8px. */
+/* The remove button and the order badge sit 8px inside the 16px tile corner: 16 − 8 = 8px. V11: the
+   remove button is 28px (from 26), still inside its 44px hit area. */
 .theme-tiimo :is(.photo-slot__remove, .photo-slot__index) {
   border-radius: var(--tiimo-radius-tag);
+}
+
+.theme-tiimo .photo-slot__remove {
+  width: 28px;
+  height: 28px;
 }
 
 /* Sheets and dialogs: white with the photo corner; the sheet floats over the page. */
@@ -318,6 +379,11 @@
   border-radius: var(--tiimo-radius-tag);
 }
 
+/* V11: status labels are 26px tall (from 24), level with the 27px activity category. */
+.theme-tiimo .badge {
+  height: 26px;
+}
+
 /* Counts are numbers in a pill: the unread count beside a conversation. At least 26px wide, so a
    single digit still makes a pill and not a circle. */
 .theme-tiimo .conversation__unread {
@@ -344,13 +410,16 @@
 
 /* Controls and chrome ---------------------------------------------------------------- */
 /* Buttons: standard and full-width buttons (48–56px) are rounded rectangles with the button corner;
-   small buttons (40px: "Edit profile", "Write a bio") are compact actions, so full pills. Flat:
-   purple is emphasis enough. */
+   small buttons ("Edit profile", "Write a bio") are compact actions, so full pills, 44px tall in V11
+   (from 40): the touch height, so the visible button is the whole target. Flat: purple is emphasis
+   enough. */
 .theme-tiimo .btn {
   border-radius: var(--tiimo-radius-button);
 }
 
 .theme-tiimo .btn--sm {
+  height: var(--size-touch-min);
+  padding-inline: var(--space-5);
   border-radius: var(--tiimo-radius-pill);
 }
 
@@ -385,6 +454,13 @@
   box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
 }
 
+/* V11: the small header buttons (settings, options, create) and the sheets' close buttons match the
+   40px back button, so every header control is one size. */
+.theme-tiimo :is(.nav-button--floating.nav-button--sm, .nav-button--flat) {
+  width: 40px;
+  height: 40px;
+}
+
 /* The step FAB: a 56px rounded square with the card corner (a pill would make it a circle). */
 .theme-tiimo .fab {
   border-radius: var(--tiimo-radius-feature);
@@ -402,9 +478,9 @@
 }
 
 /* Switch: a slightly wider pill track (58 × 32px, from 51 × 31) with a compact pill handle
-   (34 × 26px, clearly wider than tall) inset 3px, so it reads as a switch and not as a circle on a rail. Purple when on,
-   neutral when off; the handle's position still says on or off, and the native checkbox semantics
-   are unchanged. */
+   (34 × 26px, clearly wider than tall; --tiimo-handle-*) inset 3px, so it reads as a switch and not
+   as a circle on a rail. Purple when on, neutral when off; the handle's position still says on or
+   off, and the native checkbox semantics are unchanged. */
 .theme-tiimo .switch {
   width: 58px;
   height: 32px;
@@ -412,8 +488,8 @@
 }
 
 .theme-tiimo .switch::after {
-  width: 34px;
-  height: 26px;
+  width: var(--tiimo-handle-width);
+  height: var(--tiimo-handle-height);
   border-radius: var(--tiimo-radius-pill);
 }
 
@@ -421,9 +497,10 @@
   transform: translateX(18px);
 }
 
-/* Slider: a solid pill rail and selected interval, and compact pill handles (20 × 28px, from 28px
-   circles): a handle you grip, not a dot. Same height and hit row; the thumb still centres on its
-   value. */
+/* Slider: a solid pill rail and selected interval. V11: the handle is the switch's horizontal white
+   pill one step smaller (30 × 22px, --tiimo-handle-slider-*; V10 had 20 × 28 upright pills), with
+   the same soft thumb shadow to lift it off the rail. Same 28px row; the thumb still centres on its
+   value, and keyboard and range behaviour are the native input's. */
 .theme-tiimo .slider__track::before {
   border-radius: var(--tiimo-radius-pill);
   background: var(--color-control-track-off);
@@ -446,12 +523,14 @@
 }
 
 .theme-tiimo .slider__track input::-webkit-slider-thumb {
-  width: 20px;
+  width: var(--tiimo-handle-slider-width);
+  height: var(--tiimo-handle-slider-height);
   border-radius: var(--tiimo-radius-pill);
 }
 
 .theme-tiimo .slider__track input::-moz-range-thumb {
-  width: 20px;
+  width: var(--tiimo-handle-slider-width);
+  height: var(--tiimo-handle-slider-height);
   border-radius: var(--tiimo-radius-pill);
 }
 
@@ -466,12 +545,13 @@
   border-radius: var(--tiimo-radius-pill);
 }
 
-/* Bottom navigation (V10): a traditional, full-width tab bar. It spans the screen with no outer
+/* Bottom navigation (V10, V11): a traditional, full-width tab bar. It spans the screen with no outer
    margin or capsule, a 1px top divider separates it from the content above (no shadow), and it
    reaches the bottom edge, padding the home-indicator area (--safe-bottom). It stays the last row of
    the screen's flex column, so it never covers the content, which scrolls above it. Five equal items,
-   56px tall, with the approved 24px icons: inactive icons are the secondary grey, the active one the
-   filled brand purple; no background behind it. */
+   56px tall: the approved 24px icon over a short label (V11). Inactive icon and label are the
+   secondary grey, the active ones brand purple (filled icon, semibold label); no background behind
+   it. The label repeats the accessible name, so it is hidden from assistive tech. */
 .theme-tiimo .tab-bar {
   box-sizing: content-box;
   height: 56px;
@@ -505,22 +585,66 @@
   color: var(--color-palette-brand);
 }
 
-/* Notification dots: an 8px red dot at the icon's upper right, with a 2px white ring so it stays
-   distinct where it overlaps the icon. The number is no longer drawn (a dot means "something to
-   check"); it stays in the badge's text and aria-label and in the tab's accessible name ("Likes, 5
-   new"). Numbers stay wherever they carry meaning (filter counts, the unread count in Messages). */
+.theme-tiimo .tab-bar__item {
+  align-content: center;
+  gap: 3px;
+  color: var(--color-palette-secondary);
+}
+
+.theme-tiimo .tab-bar__label {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 11px;
+  line-height: 13px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.theme-tiimo .tab-bar__item:hover {
+  color: var(--color-text-primary);
+}
+
+.theme-tiimo .tab-bar__item.is-current {
+  color: var(--color-palette-brand);
+  font-weight: var(--font-weight-semibold);
+}
+
+.theme-tiimo .tab-bar__item.is-current .tab-bar__label {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Notification dots: an 8px red dot just outside the icon's upper-right corner (V11: moved clear of
+   the glyph, and well above the label), with a 2px white ring. The number is not drawn (a dot means
+   "something to check"): the badge itself is visibility-hidden, so its digit is neither seen nor
+   read, and the dot is its ::after. The count stays in the badge's aria-label and in the tab's
+   accessible name ("Likes, 5 new"), which also keeps the name starting with the visible label.
+   Numbers stay wherever they carry meaning (filter counts, the unread count in Messages). */
 .theme-tiimo .tab-bar .count-badge {
-  top: -1px;
-  right: -3px;
+  top: -3px;
+  right: -9px;
   min-width: 0;
   width: 8px;
   height: 8px;
   padding: 0;
-  overflow: hidden;
   border-radius: 50%;
-  color: transparent;
+  background: none;
+  box-shadow: none;
+  visibility: hidden;
   font-size: 0;
   line-height: 0;
+}
+
+.theme-tiimo .tab-bar .count-badge::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--color-danger);
+  box-shadow: 0 0 0 2px var(--color-surface);
+  visibility: visible;
 }
 
 /* Discover header: the logo and its controls only. The thin bar under the logo was decoration
@@ -707,28 +831,30 @@
 }
 
 /* Text on a profile photograph: the one permitted gradient. With a real photo, pure black fades up
-   from 85% at the bottom edge to clear at 60% of the photo's height, on an ease (opacity ~
-   0.85·(1−t)^1.6) sampled at eleven stops, so it darkens steadily with no start line or band. It is
-   its own layer (::before on the photo container): above the photo, below the name, badges and the
+   from 92% at the bottom edge to fully clear at 55% of the photo's height. V11 replaces V10's ease
+   (85% at the edge, falling fastest at the bottom, so the text sat on a thin grey wash) with
+   0.92·cos²(πt/2): it holds near-black behind the name, then eases out with no slope at either end,
+   so there is no band at the bottom and no start line at the top. Sampled at eleven stops. It is its
+   own layer (::before on the photo container): above the photo, below the name, badges and the
    SuperSwipe, sized by the photo and clipped by its corners. */
 .theme-tiimo .profile-card__media:has(> .profile-card__img)::before {
   content: "";
   position: absolute;
   inset: auto 0 0;
   z-index: 1;
-  height: 60%;
+  height: 55%;
   background: linear-gradient(
     to top,
-    color-mix(in srgb, var(--color-palette-photo-fade) 85%, transparent) 0%,
-    color-mix(in srgb, var(--color-palette-photo-fade) 72.1%, transparent) 10%,
-    color-mix(in srgb, var(--color-palette-photo-fade) 59.5%, transparent) 20%,
-    color-mix(in srgb, var(--color-palette-photo-fade) 48.3%, transparent) 30%,
-    color-mix(in srgb, var(--color-palette-photo-fade) 37.7%, transparent) 40%,
-    color-mix(in srgb, var(--color-palette-photo-fade) 28%, transparent) 50%,
-    color-mix(in srgb, var(--color-palette-photo-fade) 19.6%, transparent) 60%,
-    color-mix(in srgb, var(--color-palette-photo-fade) 12.4%, transparent) 70%,
-    color-mix(in srgb, var(--color-palette-photo-fade) 6.4%, transparent) 80%,
-    color-mix(in srgb, var(--color-palette-photo-fade) 2.1%, transparent) 90%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 92%, transparent) 0%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 89.7%, transparent) 10%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 83.2%, transparent) 20%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 73%, transparent) 30%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 60.2%, transparent) 40%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 46%, transparent) 50%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 31.8%, transparent) 60%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 19%, transparent) 70%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 8.8%, transparent) 80%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 2.3%, transparent) 90%,
     transparent 100%
   );
   pointer-events: none;
@@ -783,4 +909,41 @@
 .theme-tiimo .profile-section--prompt .profile-section__title,
 .theme-tiimo .prompt__label {
   color: var(--color-text-secondary);
+}
+
+/* Settings groups (V11) ------------------------------------------------------------------ */
+/* Dividers between grouped rows were inset 16px on the left (at the text) but ran into the group's
+   right edge, so they looked shifted, and in mixed groups an icon row's divider started at the icon.
+   They are now inset 16px on both sides, the rows' own padding, so each divider spans exactly the
+   content column. The hit area keeps its right padding as margin, so toggles and chevrons stay put. */
+.theme-tiimo .list-group__items > .list-row + .list-row {
+  margin-inline: var(--space-4);
+}
+
+.theme-tiimo .list-group__items > .list-row + .list-row .list-row__hit {
+  padding-inline: 0;
+}
+
+/* Activity cards (V11) ------------------------------------------------------------------- */
+/* The same card, with a clearer rhythm: 12px from the photo to the title, 8px from the title to its
+   category, 12px from the category to the details, 6px between date and place, and 12px before the
+   host and who's going. Meta icons are 18px, centred on the first line of their text. */
+.theme-tiimo .activity-card:not(.activity-card--compact) .activity-card__body {
+  gap: 0;
+}
+
+.theme-tiimo .activity-card:not(.activity-card--compact) .activity-card__title {
+  margin-bottom: var(--space-2);
+}
+
+.theme-tiimo .activity-card:not(.activity-card--compact) .activity-card__body .activity-card__category {
+  margin: 0 0 var(--space-3);
+}
+
+.theme-tiimo .activity-card:not(.activity-card--compact) .meta-row + .meta-row {
+  margin-top: 6px;
+}
+
+.theme-tiimo .activity-card:not(.activity-card--compact) .activity-card__foot {
+  margin-top: var(--space-3);
 }

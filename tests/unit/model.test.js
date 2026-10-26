@@ -11,6 +11,7 @@ import {
   myActivities,
   openersFor,
   phaseOf,
+  promptsOf,
   readiness,
   validateActivity,
   whenLabel,
@@ -102,5 +103,24 @@ describe("profile readiness", () => {
     const full = readiness({ ...initialState.profile, bio: "Cook, climber and occasional poet. Ask me about the best croissant in town.", photos: [1, 2, 3, 4] });
     expect(full.score).toBe(100);
     expect(full.recommendations).toEqual([]);
+  });
+});
+
+describe("profile prompts", () => {
+  const a = { q: "A perfect first date", a: "A record shop." };
+  const b = { q: "My Sunday ritual", a: "A sea swim." };
+  const c = { q: "A green flag", a: "Postcards." };
+  const d = { q: "Let’s debate this", a: "Croissants." };
+
+  it("shows the one prompt a profile holds today", () => {
+    expect(promptsOf(initialState.profile)).toEqual([initialState.profile.prompt]);
+  });
+
+  it("shows up to three answered prompts, in order, and never invents one", () => {
+    expect(promptsOf({ prompt: a, prompts: [a, b] })).toEqual([a, b]);
+    expect(promptsOf({ prompt: a, prompts: [a, b, c, d] })).toEqual([a, b, c]);
+    expect(promptsOf({ prompt: a, prompts: [a, { q: "Unanswered", a: "  " }, c] })).toEqual([a, c]);
+    expect(promptsOf({ prompt: { q: "Unanswered", a: "" } })).toEqual([]);
+    expect(promptsOf({})).toEqual([]);
   });
 });

@@ -38,6 +38,7 @@ export {
   SetupProgress,
   ConsequenceList,
   PromptCard,
+  PromptSet,
   ImagePlaceholder,
   IllustrationPlaceholder,
   PhotoSlot,

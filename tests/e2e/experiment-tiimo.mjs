@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 /**
- * The opt-in Tiimo-inspired experiment (`?theme=tiimo`), V10: artifacts/version-10-final-screenshot-preview/,
- * whose design-system.md this file checks (earlier versions: artifacts/tiimo-inspired-experiment/ through
- * artifacts/version-9-final-screenshot-preview/). Its own contract, kept apart from the approved design's
+ * The opt-in Tiimo-inspired experiment (`?theme=tiimo`), V11: artifacts/version-11-final-screenshot-preview/,
+ * whose design-decisions.md this file checks (earlier versions: artifacts/tiimo-inspired-experiment/ through
+ * artifacts/version-10-final-screenshot-preview/). Its own contract, kept apart from the approved design's
  * checks in smoke.mjs and product.mjs: scoping (only the 15 selected screens, only with the flag), the
  * monochrome palette (a white canvas, neutral greys, purple as the one accent), deliberate surfaces
  * (direct, outlined, secondary, recessed; shadow only for what floats), V10's balanced geometry (pills
  * and rounded rectangles, circular radios, pill switch and slider handles, nested corners), the
  * full-width tab bar with notification dots, the Discover header and photo fade, filter tabs without
- * checkmarks, status labels, the larger match portrait, contrast, and that the screens still work, fit 393 and 375 px wide
+ * checkmarks, status labels, the larger match portrait, and V11's polish (tab labels, the one light
+ * purple, the prompt mark and prompt set, settings dividers, activity rhythm, horizontal slider
+ * handles, roomier small controls, the deeper fade), contrast, and that the screens still work, fit 393 and 375 px wide
  * and log no errors. Run by `npm run test:e2e`.
  */
 import { resolve } from "node:path";
@@ -228,6 +230,8 @@ try {
           const m = cs.backgroundColor.match(/[\d.]+/g);
           if (!m || (m[3] !== undefined && +m[3] === 0)) continue;
           const [r, g, b] = m.map(Number);
+          // V11: the one light purple is allowed only on the prompt mark (7b checks where and how big).
+          if (!pseudo && el.matches(".prompt__mark") && r === 241 && g === 239 && b === 249) continue;
           if (Math.min(r, g, b) > 200 && Math.max(r, g, b) - Math.min(r, g, b) > 4) out.push(`${el.className.baseVal ?? el.className}${pseudo ?? ""} ${r},${g},${b}`.trim());
         }
       }
@@ -235,7 +239,7 @@ try {
     });
     if (hits.length) tinted.push(`${path}: ${hits.slice(0, 3).join(", ")}`);
   }
-  check("colour: every light surface is neutral white or grey: no beige, lavender or pastel on any themed screen", tinted.length === 0, tinted.join(" | "));
+  check("colour: every light surface is neutral white or grey (the prompt mark's tint aside): no beige, lavender or pastel on any themed screen", tinted.length === 0, tinted.join(" | "));
 
   // 4b3. Deliberate containers (V9): someone's profile sections and inbox rows are direct content on
   // the canvas; information containers are the secondary grey, flat; inbox rows are a divided list;
@@ -324,8 +328,10 @@ try {
   // Numbers stay where they carry meaning: the Likes and Messages filter counts and the unread count.
   await open(p, "flows.html?screen=chats&theme=tiimo");
   const dots = await p.evaluate(() => [...document.querySelectorAll(".tab-bar .count-badge")].map((d) => {
-    const cs = getComputedStyle(d); const r = d.getBoundingClientRect(); const icon = d.closest(".tab-bar__icon").querySelector("svg").getBoundingClientRect();
-    return { w: r.width, h: r.height, bg: cs.backgroundColor, radius: cs.borderTopLeftRadius, inkShown: cs.color !== "rgba(0, 0, 0, 0)" && parseFloat(cs.fontSize) > 0, label: d.getAttribute("aria-label"), text: d.textContent, tab: d.closest(".tab-bar__item").getAttribute("aria-label"), upperRight: r.left >= icon.left + icon.width / 2 && r.bottom <= icon.top + icon.height / 2 };
+    // V11: the dot is the badge's ::after (the badge itself is visibility-hidden, so its digit is
+    // neither drawn nor read).
+    const cs = getComputedStyle(d); const dot = getComputedStyle(d, "::after"); const r = d.getBoundingClientRect(); const icon = d.closest(".tab-bar__icon").querySelector("svg").getBoundingClientRect();
+    return { w: r.width, h: r.height, bg: dot.backgroundColor, radius: dot.borderTopLeftRadius, inkShown: cs.visibility !== "hidden" && cs.color !== "rgba(0, 0, 0, 0)" && parseFloat(cs.fontSize) > 0, label: d.getAttribute("aria-label"), text: d.textContent, tab: d.closest(".tab-bar__item").getAttribute("aria-label"), upperRight: r.left >= icon.left + icon.width / 2 && r.bottom <= icon.top + icon.height / 2 };
   }));
   const counts = await p.evaluate(() => ({ filters: [...document.querySelectorAll(".filter-chips .chip__count")].map((c) => c.textContent.trim()), unread: document.querySelector(".conversation__unread")?.textContent.trim(), unreadStyle: getComputedStyle(document.querySelector(".conversation__unread")).fontSize }));
   await open(p, "flows.html?screen=likes&theme=tiimo");
@@ -358,7 +364,7 @@ try {
           const radius = cs.borderTopLeftRadius.endsWith("%") ? (parseFloat(cs.borderTopLeftRadius) / 100) * w : parseFloat(cs.borderTopLeftRadius);
           const circle = Math.abs(w - h) < 2 && radius >= w / 2 - 0.5;
           if (!pseudo && el.matches(".choice__input--radio")) { rad.push(circle); continue; }
-          if (!pseudo && el.matches(".tab-bar .count-badge")) continue;
+          if (el.matches(".tab-bar .count-badge")) continue; // the notification dot (V11: drawn by its ::after)
           if (circle) out.push(`${el.className.baseVal ?? el.className}${pseudo ?? ""} ${Math.round(w)}px`.trim());
         }
       }
@@ -370,10 +376,10 @@ try {
   check("geometry: radios are circles", radios.length >= 6 && radios.every(Boolean), `${radios.filter(Boolean).length}/${radios.length}`);
   check("geometry: apart from radios and notification dots, no circular UI element on any themed screen (avatars, counts, icon buttons, the FAB, switch handles)", circles.length === 0, circles.join(" | "));
 
-  // 4b5'. Switches and sliders (V10): a slightly wider pill track with a compact pill handle that is
-  // wider than tall (not a circle); slider handles are compact 20 x 28px pills (read from the theme's
-  // stylesheet, since the native thumb has no computed style; Chromium, which runs this suite, keeps
-  // only the WebKit thumb rule), on a pill rail.
+  // 4b5'. Switches and sliders (V10, V11): a slightly wider pill track with a compact pill handle that
+  // is wider than tall (not a circle); slider handles are pills too (their V11 shape is checked in 7f,
+  // read from the theme's stylesheet, since the native thumb has no computed style; Chromium, which
+  // runs this suite, keeps only the WebKit thumb rule), on a pill rail.
   await open(p, "flows.html?screen=settings&theme=tiimo");
   const sw = await p.evaluate(() => [...document.querySelectorAll(".switch")].map((s) => {
     const cs = getComputedStyle(s); const t = getComputedStyle(s, "::after"); const r = s.getBoundingClientRect();
@@ -389,7 +395,7 @@ try {
   });
   const rail = await p.evaluate(() => { const t = document.querySelector(".slider__track"); return { rail: getComputedStyle(t, "::before").borderTopLeftRadius, fill: getComputedStyle(t, "::after").borderTopLeftRadius, h: t.getBoundingClientRect().height }; });
   check("switches: a 58 x 32 pill track with a 34 x 26 pill handle (wider than tall), purple when on", sw.length >= 4 && sw.every((s) => s.w === 58 && s.h === 32 && s.r === "999px" && s.tw === 34 && s.th === 26 && s.tr === "999px" && s.role === "switch") && sw.filter((s) => s.checked).every((s) => s.on === "rgb(114, 98, 199)"), JSON.stringify(sw[0]));
-  check("sliders: compact 20px pill handles on a pill rail, same 28px row", thumbRules.length >= 1 && thumbRules.some((t) => /webkit/.test(t.sel)) && thumbRules.every((t) => t.w === "20px" && /var\(--tiimo-radius-pill\)/.test(t.radius)) && rail.rail === "999px" && rail.fill === "999px" && rail.h === 28, JSON.stringify({ thumbRules, rail }));
+  check("sliders: pill handles sized by the handle tokens, on a pill rail, same 28px row", thumbRules.length >= 1 && thumbRules.some((t) => /webkit/.test(t.sel)) && thumbRules.every((t) => t.w === "var(--tiimo-handle-slider-width)" && /var\(--tiimo-radius-pill\)/.test(t.radius)) && rail.rail === "999px" && rail.fill === "999px" && rail.h === 28, JSON.stringify({ thumbRules, rail }));
 
   // 4b5''. Nested corners (V10): where a rounded element sits close to the corner of a rounded parent,
   // its corner follows inner ≈ outer − inset: photo-slot badges and remove buttons, the Likes "New" label,
@@ -453,8 +459,9 @@ try {
   // the approved red, as dots (4b4').
   await open(p, "flows.html?screen=chats&theme=tiimo");
   const labelsChats = await p.evaluate(() => {
-    const s = (q) => { const el = document.querySelector(q); const cs = getComputedStyle(el); return { bg: cs.backgroundColor, fg: cs.color, r: cs.borderTopLeftRadius, h: el.getBoundingClientRect().height }; };
-    return { move: s(".conversation__move"), unread: s(".conversation__unread"), count: s(".tab-bar .count-badge") };
+    const s = (q, pseudo = null) => { const el = document.querySelector(q); const cs = getComputedStyle(el, pseudo); return { bg: cs.backgroundColor, fg: cs.color, r: cs.borderTopLeftRadius, h: el.getBoundingClientRect().height }; };
+    // V11: the tab notification dot is drawn by the badge's ::after.
+    return { move: s(".conversation__move"), unread: s(".conversation__unread"), count: s(".tab-bar .count-badge", "::after") };
   });
   await open(p, "flows.html?screen=likes&theme=tiimo");
   const labelNew = await p.evaluate(() => { const cs = getComputedStyle(document.querySelector(".person-tile__badge .badge")); return { bg: cs.backgroundColor, fg: cs.color, r: cs.borderTopLeftRadius }; });
@@ -768,6 +775,199 @@ try {
   check(`contrast: all ${textCount} text elements on the themed screens meet AA against their actual background`, textCount > 150 && lowContrast.length === 0, lowContrast.slice(0, 4).join(" | "));
   const worstPill = Math.min(...pills.filter((c) => !c.locked).map((c) => ratio(c.fg, c.bg)));
   check("contrast: pill text is at least 4.5:1, selected and unselected", worstPill >= 4.5, worstPill.toFixed(2));
+
+  // 7. V11 polish. Each check below fails on V10's code.
+  // 7a. Navigation labels: each tab is the approved 24px icon over a short visible label (the tab's
+  // product name), centred below it, at 393 and 375 px. Active icon and label are brand purple, the
+  // others the neutral grey. The label repeats the accessible name, so it is hidden from assistive
+  // tech, and the tab's name, aria-current and routing are unchanged. Without the flag the bar stays
+  // icon-only.
+  const TAB_NAMES = ["Home", "Activity", "Likes", "Messages", "Profile"];
+  const labelsOf = async (q, theme) => {
+    await open(q, `flows.html?screen=likes${theme ? "&theme=tiimo" : ""}`);
+    await q.mouse.move(0, 0);
+    await wait(400);
+    return q.evaluate(() => [...document.querySelectorAll(".tab-bar__item")].map((item) => {
+      const label = item.querySelector(".tab-bar__label");
+      const icon = item.querySelector(".tab-bar__icon svg").getBoundingClientRect();
+      const ls = label && getComputedStyle(label); const lr = label?.getBoundingClientRect(); const ir = item.getBoundingClientRect();
+      return {
+        text: label?.textContent, shown: !!label && ls.display !== "none" && lr.height > 0, hidden: label?.getAttribute("aria-hidden"),
+        size: ls && parseFloat(ls.fontSize), colour: ls?.color, iconColour: getComputedStyle(item.querySelector(".tab-bar__icon")).color,
+        below: lr && lr.top >= icon.bottom && lr.top - icon.bottom <= 6, centred: lr && Math.abs((lr.left + lr.right) / 2 - (icon.left + icon.right) / 2) <= 1,
+        inside: lr && lr.left >= ir.left && lr.right <= ir.right && lr.bottom <= ir.bottom, fits: label && label.scrollWidth <= label.clientWidth,
+        baseline: lr && Math.round(lr.bottom), current: item.classList.contains("is-current"), name: item.getAttribute("aria-label"),
+      };
+    }));
+  };
+  const lab393 = await labelsOf(p, true);
+  const q375 = await phone(375, 667);
+  const lab375 = await labelsOf(q375, true);
+  const labApproved = await labelsOf(q375, false);
+  await q375.context().close();
+  check("V11 navigation: every tab shows its label below the icon, centred, inside the tab and unclipped (393 and 375 px)", [lab393, lab375].every((l) => l.length === 5 && l.map((x) => x.text).join() === TAB_NAMES.join() && l.every((x) => x.shown && x.below && x.centred && x.inside && x.fits) && new Set(l.map((x) => x.baseline)).size === 1), JSON.stringify(lab375.map(({ text, shown, below, centred, inside, fits, baseline }) => ({ text, shown, below, centred, inside, fits, baseline }))));
+  check("V11 navigation: labels are 11px; the active icon and label are brand purple, the others the neutral grey; no active background", lab393.every((x) => x.size === 11) && lab393.filter((x) => x.current).every((x) => x.colour === "rgb(114, 98, 199)" && x.iconColour === "rgb(114, 98, 199)") && lab393.filter((x) => !x.current).every((x) => x.colour === "rgb(119, 115, 125)" && x.iconColour === "rgb(119, 115, 125)") && lab393.filter((x) => x.current).length === 1, JSON.stringify(lab393.map(({ text, colour, iconColour }) => ({ text, colour, iconColour }))));
+  check("V11 navigation: the visible label is hidden from assistive tech; the tab's accessible name is unchanged; without the flag the bar stays icon-only", lab393.every((x) => x.hidden === "true") && lab393.map((x) => x.name).join() === labApproved.map((x) => x.name).join() && labApproved.every((x) => !x.shown), lab393.map((x) => x.name).join(" | "));
+  for (const [i, name] of TAB_NAMES.entries()) {
+    await open(p, "flows.html?screen=profile&theme=tiimo");
+    await p.locator(".tab-bar__item").nth(i).click();
+    await wait(300);
+    const at = await p.evaluate(() => ({ current: document.querySelector(".tab-bar__item.is-current .tab-bar__label")?.textContent, themed: !!document.querySelector(".theme-tiimo"), aria: document.querySelector(".tab-bar__item[aria-current=page] .tab-bar__label")?.textContent }));
+    if (at.current !== name || at.aria !== name || !at.themed) { check(`V11 navigation: tapping ${name} opens it and marks it current`, false, JSON.stringify(at)); break; }
+    if (i === TAB_NAMES.length - 1) check("V11 navigation: tapping each tab opens it, marks it current (aria-current) and keeps the theme", true);
+  }
+  await open(p, "flows.html?screen=chats&theme=tiimo");
+  const dotClear = await p.evaluate(() => [...document.querySelectorAll(".tab-bar .count-badge")].map((d) => {
+    const r = d.getBoundingClientRect(); const item = d.closest(".tab-bar__item");
+    const icon = item.querySelector(".tab-bar__icon svg").getBoundingClientRect(); const label = item.querySelector(".tab-bar__label")?.getBoundingClientRect();
+    return { clearOfIcon: r.left >= icon.right, aboveLabel: !!label && label.height > 0 && r.bottom <= label.top - 8, nearIcon: r.left - icon.right <= 4 && r.top <= icon.top + 2 };
+  }));
+  check("V11 dots: each red dot sits just outside the icon's upper-right corner, clear of the glyph and well above the label", dotClear.length >= 2 && dotClear.every((d) => d.clearOfIcon && d.aboveLabel && d.nearIcon), JSON.stringify(dotClear));
+
+  // 7b. The light purple: one tint (#F1EFF9), used only as the small prompt-mark holder. No other
+  // light surface on any themed screen is tinted (checked in 4b2), and pills keep their grey/purple.
+  const tintUses = [];
+  for (const screen of ["interests", "discovery", "like-profile", "profile", "edit", "likes", "chats", "activity", "settings"]) {
+    await open(p, `flows.html?screen=${screen}&theme=tiimo`);
+    tintUses.push(...(await p.evaluate((s) => [...document.querySelectorAll(".theme-tiimo *")].filter((el) => getComputedStyle(el).backgroundColor === "rgb(241, 239, 249)").map((el) => { const r = el.getBoundingClientRect(); return { s, cls: el.className.baseVal ?? el.className, w: r.width, h: r.height }; }), screen)));
+  }
+  const tintToken = await p.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--color-palette-brand-tint").trim());
+  check("V11 purple: the one light purple (#F1EFF9) appears only as the 22px prompt-mark holder, never on a card, pill or large area", tintToken.length > 0 && tintUses.length >= 4 && tintUses.every((t) => t.cls === "prompt__mark" && t.w === 22 && t.h === 22), `${tintToken}; ${[...new Set(tintUses.map((t) => `${t.s} ${t.cls} ${t.w}x${t.h}`))].join(" | ")}`);
+
+  // 7c. Prompts: no decorative quotation mark; a small brand-purple speech-bubble mark sits before the
+  // question (not the answer), vertically centred on it, and the answer stays the largest text. Same
+  // on Profile, Edit profile, Interests, and someone's profile (Discover, Like back).
+  const promptLook = [];
+  for (const screen of ["profile", "edit", "interests", "discovery", "like-profile"]) {
+    await open(p, `flows.html?screen=${screen}&theme=tiimo`);
+    promptLook.push(...(await p.evaluate((s) => [...document.querySelectorAll(".prompt, .profile-section--prompt")].map((el) => {
+      const q = el.querySelector(".prompt__label, .profile-section__title"); const a = el.querySelector(".prompt__answer, .profile-section__answer");
+      const mark = q.querySelector(".prompt__mark"); const mr = mark?.getBoundingClientRect(); const qr = q.getBoundingClientRect();
+      const glyph = mark?.querySelector("svg");
+      const quote = getComputedStyle(el, "::after").content;
+      const text = [...q.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join("").trim();
+      return { s, quote, markFirst: q.firstElementChild === mark && q.firstChild === mark, notInAnswer: !a.querySelector(".prompt__mark"), size: mr && `${mr.width}x${mr.height}`, glyph: glyph && `${glyph.getBoundingClientRect().width}`, colour: mark && getComputedStyle(mark).color, hidden: mark?.getAttribute("aria-hidden"), centred: mr && Math.abs((mr.top + mr.bottom) / 2 - (qr.top + qr.bottom) / 2) <= 1.5, text, answerBigger: parseFloat(getComputedStyle(a).fontSize) > parseFloat(getComputedStyle(q).fontSize) };
+    }), screen)));
+  }
+  check("V11 prompts: no decorative quotation mark on any prompt (Profile, Edit, Interests, Discover, Like back)", promptLook.length >= 5 && promptLook.every((x) => x.quote === "none" || x.quote === "normal"), promptLook.map((x) => `${x.s}: ${x.quote}`).join(" | "));
+  check("V11 prompts: a 22px brand-purple speech-bubble mark (14px glyph) comes first in the question, centred on it, never in the answer; decorative", promptLook.length >= 5 && promptLook.every((x) => x.markFirst && x.notInAnswer && x.size === "22x22" && x.glyph === "14" && x.colour === "rgb(114, 98, 199)" && x.hidden === "true" && x.centred), JSON.stringify(promptLook.map(({ s, markFirst, size, glyph, colour, centred }) => ({ s, markFirst, size, glyph, colour, centred }))));
+  check("V11 prompts: the question text is unchanged and the answer stays larger than it", promptLook.every((x) => x.text.length > 3 && x.answerBigger) && promptLook.some((x) => x.text === "A perfect first date"), promptLook.map((x) => x.text).join(" | "));
+  const approvedMark = await (async () => { await open(p, "flows.html?screen=profile"); return p.evaluate(() => { const m = document.querySelector(".prompt__mark"); return { mark: m ? getComputedStyle(m).display : "absent", quote: getComputedStyle(document.querySelector(".prompt"), "::after").content }; }); })();
+  check("V11 prompts: without the flag the approved prompt keeps its quote glyph and shows no mark", (approvedMark.mark === "none" || approvedMark.mark === "absent") && approvedMark.quote !== "none", JSON.stringify(approvedMark));
+  // Up to three prompts, as one set. The session holds one prompt today, so this seeds a test-only
+  // list made of the repo's own prompt texts (data.js) to exercise the set; a fourth entry and an
+  // unanswered one are not shown, and only the first (the one the prompt editor edits) has the edit action.
+  const FOUR = [initialState.profile.prompt, { q: "My Sunday ritual", a: "Sea swim, then the longest breakfast in the city." }, { q: "", a: "" }, { q: "A green flag", a: "You still send postcards." }, { q: "Let’s debate this", a: "Croissants are a dinner food." }];
+  const seededProfile = { profile: { ...initialState.profile, prompts: FOUR } };
+  const setOf = async (screen) => {
+    await openSeeded(p, `flows.html?screen=${screen}&theme=tiimo`, seededProfile);
+    return p.evaluate(() => {
+      const set = document.querySelector(".prompt-set");
+      const items = set ? [...set.querySelectorAll(".prompt")] : [];
+      const cs = set && getComputedStyle(set);
+      return {
+        n: items.length, qs: items.map((i) => i.querySelector(".prompt__label").textContent), edits: items.map((i) => !!i.querySelector(".prompt__actions button")),
+        outlined: cs && cs.boxShadow === "rgb(228, 228, 231) 0px 0px 0px 1px inset" && cs.borderTopLeftRadius === "16px", inner: items.map((i) => getComputedStyle(i).boxShadow),
+        dividers: items.slice(1).map((i) => { const d = getComputedStyle(i, "::before"); return d.content !== "none" && d.height === "1px" && d.backgroundColor === "rgb(228, 228, 231)"; }),
+      };
+    });
+  };
+  const setProfile = await setOf("profile");
+  const setEdit = await setOf("edit");
+  check("V11 prompts: up to three answered prompts show as one outlined set divided by hairlines (Profile and Edit), not stacked cards", [setProfile, setEdit].every((s) => s.n === 3 && s.outlined && s.inner.every((x) => x === "none") && s.dividers.length === 2 && s.dividers.every(Boolean)), JSON.stringify({ setProfile, setEdit }));
+  check("V11 prompts: the set keeps the order, skips the unanswered entry and the fourth prompt, and only the first opens the prompt editor", [setProfile, setEdit].every((s) => s.qs.join("|") === "A perfect first date|My Sunday ritual|A green flag" && s.edits.join() === "true,false,false"), JSON.stringify(setProfile.qs));
+  await open(p, "flows.html?screen=profile&theme=tiimo");
+  const single = await p.evaluate(() => ({ sets: document.querySelectorAll(".prompt-set").length, prompts: document.querySelectorAll(".prompt").length, title: document.querySelector(".list-group__title").textContent }));
+  check("V11 prompts: with the one prompt the session holds, Profile shows exactly that prompt (no placeholder answers)", single.sets === 0 && single.prompts === 1 && single.title === "Your prompt", JSON.stringify(single));
+  await openSeeded(p, "flows.html?screen=profile&theme=tiimo", seededProfile);
+  await p.getByRole("button", { name: "Edit answer to A perfect first date" }).click();
+  await wait(400);
+  const editorUrl = new URL(p.url());
+  check("V11 prompts: the first prompt's edit action still opens the prompt editor, themed", editorUrl.searchParams.get("screen") === "prompt" && editorUrl.searchParams.get("theme") === "tiimo" && (await themed(p)), editorUrl.search);
+
+  // 7d. Settings dividers: inside a group, each divider is inset 16px on both sides (the rows'
+  // padding), so it spans exactly the content column; text and toggles keep their positions.
+  await open(p, "flows.html?screen=settings&theme=tiimo");
+  const groups = await p.evaluate(() => [...document.querySelectorAll(".list-group__items")].filter((g) => g.children.length > 1).map((g) => {
+    const gr = g.getBoundingClientRect();
+    const rows = [...g.children].map((li) => {
+      const hit = li.querySelector(".list-row__hit"); const hr = hit.getBoundingClientRect();
+      const text = li.querySelector(".switch-row__text, .list-row__text, .list-row__icon").getBoundingClientRect();
+      const toggle = li.querySelector(".switch, .list-row__trail")?.getBoundingClientRect();
+      return { divider: getComputedStyle(hit).boxShadow !== "none", left: Math.round(hr.left - gr.left), right: Math.round(gr.right - hr.right), text: Math.round(text.left - gr.left), toggleRight: toggle && Math.round(gr.right - toggle.right), h: Math.round(li.getBoundingClientRect().height) };
+    });
+    return rows;
+  }));
+  const notif = groups.find((g) => g.length === 3);
+  check("V11 settings: every divider between grouped rows is inset 16px on both sides, level with the row text", groups.length >= 2 && groups.every((g) => g.slice(1).every((r) => r.divider && r.left === 16 && r.right === 16)) && notif.every((r) => r.text === 16), JSON.stringify(groups));
+  check("V11 settings: toggles stay at one position (16px from the group edge) and rows keep their height", notif && new Set(notif.map((r) => r.toggleRight)).size === 1 && notif[0].toggleRight === 16 && notif.every((r) => r.h === notif[0].h), JSON.stringify(notif));
+
+  // 7e. Activity card rhythm: title → category 8px, category → date 12px, date → place 6px, place →
+  // host 12px; meta icons are centred on their text's first line.
+  await open(p, "flows.html?screen=activity&theme=tiimo");
+  const rhythm = await p.evaluate(() => {
+    const c = document.querySelector(".activity-card:not(.activity-card--compact)");
+    const box = (sel, i = 0) => c.querySelectorAll(sel)[i].getBoundingClientRect();
+    const t = box(".activity-card__title"); const cat = box(".activity-card__category"); const m1 = box(".meta-row"); const m2 = box(".meta-row", 1); const foot = box(".activity-card__foot");
+    const icons = [...c.querySelectorAll(".meta-row")].map((m) => { const i = m.querySelector(".meta-row__icon").getBoundingClientRect(); const lh = parseFloat(getComputedStyle(m).lineHeight); const top = m.getBoundingClientRect().top; return Math.abs((i.top + i.bottom) / 2 - (top + lh / 2)); });
+    const body = c.querySelector(".activity-card__body").getBoundingClientRect(); const card = c.getBoundingClientRect();
+    return { titleToCat: Math.round(cat.top - t.bottom), catToMeta: Math.round(m1.top - cat.bottom), metaGap: Math.round(m2.top - m1.bottom), metaToFoot: Math.round(foot.top - m2.bottom), icons, padL: Math.round(body.left - card.left), padR: Math.round(card.right - body.right) };
+  });
+  check("V11 activity: the card's metadata follows one rhythm (title 8, category 12, details 6, host 12) with equal side padding", rhythm.titleToCat === 8 && rhythm.catToMeta === 12 && rhythm.metaGap === 6 && rhythm.metaToFoot === 12 && rhythm.padL === rhythm.padR, JSON.stringify(rhythm));
+  check("V11 activity: date and place icons are centred on the first line of their text", rhythm.icons.every((d) => d <= 1.5), rhythm.icons.map((d) => d.toFixed(1)).join(", "));
+
+  // 7f. Slider handles share the switch handle's shape: a white horizontal pill, one step smaller
+  // (tokens --tiimo-handle-*), read from the theme's WebKit thumb rule and resolved against the tokens.
+  await open(p, "flows.html?screen=settings&theme=tiimo");
+  const handles = await p.evaluate(() => {
+    const root = getComputedStyle(document.documentElement); const v = (s) => s.replace(/var\((--[\w-]+)\)/, (_, n) => root.getPropertyValue(n).trim());
+    let rule = null;
+    for (const sheet of document.styleSheets) { let rules; try { rules = sheet.cssRules; } catch { continue; } for (const r of rules) if (r.selectorText === ".theme-tiimo .slider__track input::-webkit-slider-thumb") rule = r; }
+    const sw = getComputedStyle(document.querySelector(".switch"), "::after");
+    return { thumb: rule && { w: parseFloat(v(rule.style.width)), h: parseFloat(v(rule.style.height)), r: v(rule.style.borderTopLeftRadius || rule.style.borderRadius) }, handle: { w: parseFloat(sw.width), h: parseFloat(sw.height), r: sw.borderTopLeftRadius, bg: sw.backgroundColor }, sliders: document.querySelectorAll(".slider__track input[type=range]").length };
+  });
+  check("V11 sliders: age and distance handles are horizontal white pills like the switch handle (30 x 22 against 34 x 26), on the same 28px row", handles.thumb && handles.thumb.w === 30 && handles.thumb.h === 22 && handles.thumb.r === "999px" && handles.thumb.w > handles.thumb.h && handles.thumb.w < handles.handle.w && handles.handle.w > handles.handle.h && handles.handle.r === "999px" && handles.sliders >= 3, JSON.stringify(handles));
+  const before = await p.evaluate(() => document.querySelector(".slider__value").textContent);
+  await p.locator(".slider__track input").first().focus();
+  await p.keyboard.press("ArrowRight");
+  const after = await p.evaluate(() => document.querySelector(".slider__value").textContent);
+  const sw0 = p.locator(".switch").first();
+  const was = await sw0.isChecked();
+  await sw0.click();
+  const now = await sw0.isChecked();
+  await sw0.click();
+  check("V11 sliders and switches: the keyboard still moves a slider and a switch still toggles", before !== after && was !== now, `${before} → ${after}; switch ${was} → ${now}`);
+
+  // 7g. Roomier small controls: header icon buttons are all 40px, small buttons 44px tall (the touch
+  // height), status labels 26px, the photo remove button 28px; metadata icons stay 18px.
+  const sizes = {};
+  for (const screen of ["discovery", "profile", "activity", "chat", "photos", "likes"]) {
+    await open(p, `flows.html?screen=${screen}&theme=tiimo`);
+    sizes[screen] = await p.evaluate(() => {
+      const dims = (sel) => [...document.querySelectorAll(sel)].map((e) => { const r = e.getBoundingClientRect(); return `${Math.round(r.width)}x${Math.round(r.height)}`; });
+      return { header: dims(".nav-button--floating"), sm: dims(".btn--sm").map((d) => d.split("x")[1]), badge: dims(".badge").map((d) => d.split("x")[1]), remove: dims(".photo-slot__remove"), meta: dims(".meta-row__icon") };
+    });
+  }
+  await open(p, "flows.html?screen=discovery&theme=tiimo");
+  await p.getByRole("button", { name: /filter/i }).first().click();
+  await wait(500);
+  sizes.filters = { header: await p.evaluate(() => [...document.querySelectorAll(".sheet .nav-button--flat")].map((e) => { const r = e.getBoundingClientRect(); return `${Math.round(r.width)}x${Math.round(r.height)}`; })), sm: [], badge: [], remove: [], meta: [] };
+  const all = (k) => Object.values(sizes).flatMap((s) => s[k]);
+  check("V11 sizing: header and sheet-close icon buttons are one 40px size, small buttons 44px, status labels 26px, the photo remove button 28px; meta icons stay 18px", all("header").length >= 5 && sizes.filters.header.length === 1 && all("header").every((d) => d === "40x40") && all("sm").length >= 3 && all("sm").every((h) => h === "44") && all("badge").length >= 3 && all("badge").every((h) => h === "26") && all("remove").length >= 3 && all("remove").every((d) => d === "28x28") && all("meta").every((d) => d === "18x18"), JSON.stringify(sizes));
+
+  // 7h. The photo fade (V11): near-black at the bottom edge (92%), easing out with no slope at either
+  // end and clear by 55% of the photo, so white text sits on dark, not on a grey wash. Placeholders
+  // keep their solid band and no fade.
+  const v11fade = await (async () => {
+    await withPhoto("discovery");
+    return p.evaluate(() => { const f = getComputedStyle(document.querySelector(".profile-card__media"), "::before"); const m = document.querySelector(".profile-card__media").getBoundingClientRect(); return { h: parseFloat(f.height) / m.height, g: f.backgroundImage }; });
+  })();
+  const fa = [...v11fade.g.matchAll(/[,/] ([\d.]+)\)/g)].map((m) => Number(m[1]));
+  const diffs = fa.slice(1).map((v, i) => fa[i] - v);
+  check("V11 fade: 92% black at the bottom, clear at 55% of the photo, gentle at both ends (an ease-in-out, steepest mid-way)", Math.abs(fa[0] - 0.92) < 0.005 && Math.abs(v11fade.h - 0.55) < 0.01 && diffs[0] < diffs[4] && diffs.at(-1) < diffs[4] && diffs.every((d) => d >= 0), `${fa.map((a) => a.toFixed(3)).join(" ")} over ${(v11fade.h * 100).toFixed(0)}%`);
+  await open(p, "flows.html?screen=discovery&theme=tiimo");
+  const band = await p.evaluate(() => { const m = document.querySelector(".profile-card__media"); const o = getComputedStyle(m.querySelector(".profile-card__overlay")); return { img: !!m.querySelector(".profile-card__img"), fade: getComputedStyle(m, "::before").content, bandBg: o.backgroundColor, bandImg: o.backgroundImage }; });
+  check("V11 fade: a placeholder keeps its solid dark information band and gets no fade", !band.img && (band.fade === "none" || band.fade === "normal") && band.bandImg === "none" && !/rgba\(0, 0, 0, 0\)/.test(band.bandBg), JSON.stringify(band));
 
   // 5. Welcome stickers are decoration only.
   await open(p, "?theme=tiimo");

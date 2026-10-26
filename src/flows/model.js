@@ -176,6 +176,15 @@ export function unreadCount(state, id) {
   return thread.slice(read).filter((m) => m.from === "them").length;
 }
 
+/** The answered prompts a profile shows, at most three, in order. A profile holds one `prompt` today;
+    an optional `prompts` list (whose first entry is that prompt) is shown in full. Unanswered entries
+    are skipped, so nothing is shown that the person did not write. */
+export const MAX_PROMPTS = 3;
+export function promptsOf(profile) {
+  const list = Array.isArray(profile?.prompts) && profile.prompts.length ? profile.prompts : [profile?.prompt];
+  return list.filter((p) => p?.q && p?.a?.trim()).slice(0, MAX_PROMPTS);
+}
+
 /** Suggested first messages for a person: their prompt first, then shared interests, then generic. */
 export function openersFor(id) {
   const p = PEOPLE[id];

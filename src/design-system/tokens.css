@@ -51,6 +51,7 @@
   --p-color-alpha-purple-24: rgb(114 98 199 / 0.24);
   --p-color-alpha-white-55: rgb(255 255 255 / 0.55);
   --p-color-palette-secondary-surface: #f7f7f8;
+  --p-color-palette-brand-tint: #f1eff9;
   --p-color-palette-inset: #f0f0f2;
   --p-color-palette-border: #e4e4e7;
   --p-color-palette-disabled: #eaeaed;
@@ -164,6 +165,7 @@
   --color-palette-border: var(--p-color-palette-border);
   --color-palette-brand: var(--p-color-purple-600);
   --color-palette-brand-foreground: var(--p-color-neutral-0);
+  --color-palette-brand-tint: var(--p-color-palette-brand-tint);
   --color-palette-text: var(--p-color-palette-text);
   --color-palette-secondary: var(--p-color-palette-secondary);
   --color-palette-secondary-strong: var(--p-color-palette-secondary-strong);
@@ -323,6 +325,10 @@
   --tiimo-radius-feature: var(--p-dimension-16);
   --tiimo-radius-photo: var(--p-dimension-20);
   --tiimo-radius-pill: 999px;
+  --tiimo-handle-width: 34px;
+  --tiimo-handle-height: 26px;
+  --tiimo-handle-slider-width: 30px;
+  --tiimo-handle-slider-height: 22px;
   --tiimo-emoji-size: var(--p-dimension-32);
   --tiimo-emoji-radius: 10px;
 }

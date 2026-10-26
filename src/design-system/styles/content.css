@@ -491,6 +491,17 @@ button.list-row__hit:hover {
   font-weight: var(--font-weight-semibold);
 }
 
+/* The prompt mark and the prompt set are drawn by themes that use them (the opt-in experiment); the
+   approved design keeps its quote-card prompt. */
+.prompt__mark {
+  display: none;
+}
+
+.prompt-set {
+  display: grid;
+  gap: var(--space-3);
+}
+
 .prompt__answer {
   margin-top: var(--space-2);
   font-family: var(--font-display);

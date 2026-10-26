@@ -17,7 +17,7 @@ import {
 } from "../design-system/index.js";
 import { ACTIVITIES, INTEREST_MARKS, PEOPLE } from "./data.js";
 import { Frame, useFlash } from "./frame.jsx";
-import { LIKE_FILTERS, likesList } from "./model.js";
+import { LIKE_FILTERS, likesList, promptsOf } from "./model.js";
 import { useStore } from "./store.js";
 
 const EMPTY = {
@@ -129,9 +129,9 @@ export function LikeProfile({ go }) {
           </InfoCard>
         )}
         <ProfileCard name={person.name} age={person.age} verified={person.verified} details={person.details ?? []} />
-        {person.prompt && (
-          <ProfilePrompt prompt={person.prompt.q} answer={person.prompt.a} />
-        )}
+        {promptsOf(person).map((p) => (
+          <ProfilePrompt key={p.q} prompt={p.q} answer={p.a} />
+        ))}
         <SharedInterests items={person.shared?.map((label) => ({ label, mark: INTEREST_MARKS[label] }))} />
         {person.distanceKm != null && (
           <ProfileSection title="Location">

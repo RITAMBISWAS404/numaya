@@ -55,6 +55,7 @@
       "palette": {
         "$description": "V9: the monochrome Numaya palette for the experiment (white and neutral greys; purple stays purple.600). Replaces the V6–V8 warm palette, which only the experiment used.",
         "secondary-surface": { "$type": "color", "$value": "#f7f7f8" },
+        "brand-tint":        { "$type": "color", "$value": "#f1eff9", "$description": "V11: purple.600 at 10% on white (#7262C7 mixed into #FFFFFF)." },
         "inset":             { "$type": "color", "$value": "#f0f0f2" },
         "border":            { "$type": "color", "$value": "#e4e4e7" },
         "disabled":          { "$type": "color", "$value": "#eaeaed" },
@@ -201,6 +202,7 @@
         "border":            { "$type": "color", "$value": "{primitive.color.palette.border}", "$description": "Outlines and dividers (#E4E4E7)." },
         "brand":             { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "Primary actions, selection, the active tab icon (#7262C7)." },
         "brand-foreground":  { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Text and icons on solid brand purple (#FFFFFF, 4.90:1)." },
+        "brand-tint":        { "$type": "color", "$value": "{primitive.color.palette.brand-tint}", "$description": "V11: the one light purple (#F1EFF9). Holds a small brand-purple icon where it marks meaning (the prompt heading; purple on it 4.4:1). Never cards, pills, headings or large areas." },
         "text":              { "$type": "color", "$value": "{primitive.color.palette.text}", "$description": "Primary text and headings (#28262D)." },
         "secondary":         { "$type": "color", "$value": "{primitive.color.palette.secondary}", "$description": "Secondary text on white (#77737D, 4.63:1)." },
         "secondary-strong":  { "$type": "color", "$value": "{primitive.color.palette.secondary-strong}", "$description": "Secondary text on the grey surfaces (#6B6771)." },
@@ -368,6 +370,10 @@
       "radius-feature": { "$type": "dimension", "$value": "{primitive.dimension.16}", "$description": "V10: cards, outlined groups, the prompt, information containers, photo tiles and slots, new-match portraits, message bubbles, the FAB, the readiness meter, your match photo." },
       "radius-photo":   { "$type": "dimension", "$value": "{primitive.dimension.20}", "$description": "V10: full-width profile photographs, sheets and dialogs." },
       "radius-pill":    { "$type": "dimension", "$value": "999px", "$description": "V10: a fully rounded capsule (radius = half the height) for compact actions and toggles. Never on a square component, where it would make a circle." },
+      "handle-width":   { "$type": "dimension", "$value": "34px", "$description": "V11: the switch handle, a horizontal pill (34 × 26) inset 3px in its 58 × 32 track." },
+      "handle-height":  { "$type": "dimension", "$value": "26px" },
+      "handle-slider-width":  { "$type": "dimension", "$value": "30px", "$description": "V11: the slider handle, the switch's horizontal pill one step smaller (30 × 22) for the 6px rail." },
+      "handle-slider-height": { "$type": "dimension", "$value": "22px" },
       "emoji-size":     { "$type": "dimension", "$value": "{primitive.dimension.32}" },
       "emoji-radius":   { "$type": "dimension", "$value": "10px" }
     }
