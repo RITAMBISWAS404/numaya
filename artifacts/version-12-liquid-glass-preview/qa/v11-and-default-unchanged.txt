@@ -1,0 +1,13 @@
+The experiment leaves V11 and the approved default design untouched. Captured at 79fd316 (the
+implementation commit). The follow-up cf9844e changes only theme-liquid-glass.css and the glass test,
+so neither result below can change.
+
+V11 (?theme=tiimo), the 30 review states of artifacts/version-11-final-screenshot-preview/final/,
+captured with the same gallery script and launch flags as V11:
+  30 compared, 0 differ (byte for byte).
+
+Default (no flag), all 162 gallery states, against the approved design's committed gallery
+(design/apple-impeccable-full-app at 944c532, artifacts/ui-gallery/screens):
+  162 compared, 0 differ (byte for byte).
+
+Compared with: cmp, file by file.

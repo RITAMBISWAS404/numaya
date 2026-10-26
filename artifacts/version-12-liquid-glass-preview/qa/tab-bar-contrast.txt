@@ -1,0 +1,14 @@
+Rendered contrast of the tab-bar labels in the Liquid Glass theme, read from screenshot pixels
+(SwiftShader rendering, 393 x 852): over the white Messages page, and over a solid black block
+scrolled under the bar (the darkest content a photo can put there). WCAG AA for text is 4.5:1.
+
+white page                           Home      label rgb(107, 103, 113)   on rgb(255,255,255) → 5.52:1
+white page                           Activity  label rgb(107, 103, 113)   on rgb(255,255,255) → 5.52:1
+white page                           Likes     label rgb(107, 103, 113)   on rgb(255,255,255) → 5.52:1
+white page                           Messages  label rgb(114, 98, 199)    on rgb(255,255,255) → 4.90:1
+white page                           Profile   label rgb(107, 103, 113)   on rgb(255,255,255) → 5.52:1
+black block under the bar            Home      label rgb(107, 103, 113)   on rgb(250,250,250) → 5.29:1
+black block under the bar            Activity  label rgb(107, 103, 113)   on rgb(246,246,246) → 5.11:1
+black block under the bar            Likes     label rgb(107, 103, 113)   on rgb(246,246,246) → 5.11:1
+black block under the bar            Messages  label rgb(114, 98, 199)    on rgb(246,246,246) → 4.53:1
+black block under the bar            Profile   label rgb(107, 103, 113)   on rgb(246,246,246) → 5.11:1

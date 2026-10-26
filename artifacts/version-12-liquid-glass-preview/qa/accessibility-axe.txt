@@ -1,0 +1,13 @@
+✓ prototype welcome: 18 rules pass, 0 serious/critical, 0 advisory
+✓ flow previews: 36 rules pass, 0 serious/critical, 0 advisory
+✓ tiimo experiment: welcome: 18 rules pass, 0 serious/critical, 0 advisory
+✓ tiimo experiment: flow previews: 36 rules pass, 0 serious/critical, 0 advisory
+✓ liquid glass experiment: flow previews: 36 rules pass, 0 serious/critical, 0 advisory
+✓ liquid glass experiment: discover filters sheet: 21 rules pass, 0 serious/critical, 0 advisory
+✓ chat options menu: 14 rules pass, 0 serious/critical, 0 advisory
+✓ unmatch sheet: 17 rules pass, 0 serious/critical, 0 advisory
+✓ discover filters sheet: 21 rules pass, 0 serious/critical, 0 advisory
+✓ edit profile preview: 16 rules pass, 0 serious/critical, 0 advisory
+✓ photo options sheet: 23 rules pass, 0 serious/critical, 0 advisory
+✓ design-system showcase: 34 rules pass, 0 serious/critical, 0 advisory
+No serious or critical accessibility violations.
