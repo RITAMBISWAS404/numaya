@@ -12,8 +12,9 @@ const RUNTIME = new Set([
   "--safe-top", "--safe-bottom", "--keyboard-inset", "--keypad-h",
   "--x", "--r", "--s", "--i", "--from", "--to", "--code-length", "--code-group", "--sc-min", "--avatar-size", "--avatar-inset", "--dx", "--rot", "--p",
   "--profile-card-photo-height", "--profile-card-photo-min", "--profile-card-ratio",
-  // Category tone of the opt-in Tiimo-inspired experiment, set per [data-tone] in theme-tiimo.css.
-  "--tone-tint", "--tone-ink",
+  // The opt-in Tiimo-inspired experiment (theme-tiimo.css): the avatar corner set per avatar size, and
+  // the readiness score that ReadinessMeter exposes inline for the bar meter.
+  "--avatar-radius", "--value",
 ]);
 const files = walk("src").filter((f) => /\.(css|jsx?)$/.test(f) && !f.endsWith("tokens.css") && !f.endsWith("tokens.js"));
 

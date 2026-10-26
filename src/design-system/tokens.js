@@ -406,12 +406,12 @@ export const tokens = [
     "description": null
   },
   {
-    "id": "primitive.color.alpha.black-72",
-    "name": "--p-color-alpha-black-72",
+    "id": "primitive.color.alpha.black",
+    "name": "--p-color-alpha-black",
     "layer": "primitive",
     "type": "color",
-    "value": "rgb(0 0 0 / 0.72)",
-    "resolved": "rgb(0 0 0 / 0.72)",
+    "value": "rgb(0 0 0)",
+    "resolved": "rgb(0 0 0)",
     "description": null
   },
   {
@@ -433,12 +433,12 @@ export const tokens = [
     "description": null
   },
   {
-    "id": "primitive.color.palette.background",
-    "name": "--p-color-palette-background",
+    "id": "primitive.color.palette.secondary-surface",
+    "name": "--p-color-palette-secondary-surface",
     "layer": "primitive",
     "type": "color",
-    "value": "#f1f0ea",
-    "resolved": "#f1f0ea",
+    "value": "#f7f7f8",
+    "resolved": "#f7f7f8",
     "description": null
   },
   {
@@ -446,17 +446,8 @@ export const tokens = [
     "name": "--p-color-palette-inset",
     "layer": "primitive",
     "type": "color",
-    "value": "#f8f7f3",
-    "resolved": "#f8f7f3",
-    "description": null
-  },
-  {
-    "id": "primitive.color.palette.purple-tint",
-    "name": "--p-color-palette-purple-tint",
-    "layer": "primitive",
-    "type": "color",
-    "value": "#e5e3fa",
-    "resolved": "#e5e3fa",
+    "value": "#f0f0f2",
+    "resolved": "#f0f0f2",
     "description": null
   },
   {
@@ -464,8 +455,17 @@ export const tokens = [
     "name": "--p-color-palette-border",
     "layer": "primitive",
     "type": "color",
-    "value": "#e6e3dd",
-    "resolved": "#e6e3dd",
+    "value": "#e4e4e7",
+    "resolved": "#e4e4e7",
+    "description": null
+  },
+  {
+    "id": "primitive.color.palette.disabled",
+    "name": "--p-color-palette-disabled",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#eaeaed",
+    "resolved": "#eaeaed",
     "description": null
   },
   {
@@ -487,40 +487,22 @@ export const tokens = [
     "description": null
   },
   {
-    "id": "primitive.color.palette.muted",
-    "name": "--p-color-palette-muted",
-    "layer": "primitive",
-    "type": "color",
-    "value": "#f2f0fe",
-    "resolved": "#f2f0fe",
-    "description": null
-  },
-  {
     "id": "primitive.color.palette.secondary-strong",
     "name": "--p-color-palette-secondary-strong",
     "layer": "primitive",
     "type": "color",
     "value": "#6b6771",
     "resolved": "#6b6771",
-    "description": "Derived, not supplied: Secondary moved toward Text just far enough for 4.5:1 on Background (4.84) and Inset. Secondary itself is 4.06:1 on Background, below AA for small text."
+    "description": "Secondary moved toward Text: 4.85:1 on the inset grey and 5.16:1 on the secondary grey, where #77737D is 4.07 and 4.33."
   },
   {
-    "id": "primitive.color.palette.canvas",
-    "name": "--p-color-palette-canvas",
+    "id": "primitive.color.palette.muted",
+    "name": "--p-color-palette-muted",
     "layer": "primitive",
     "type": "color",
-    "value": "#f6f5f1",
-    "resolved": "#f6f5f1",
-    "description": "V7 canvas: the supplied Background lightened toward white (L 0.912 vs 0.870), same warm-neutral hue, less beige. Chosen from a side-by-side study (artifacts/version-7-final-screenshot-preview/qa/background-study.png)."
-  },
-  {
-    "id": "primitive.color.palette.recess",
-    "name": "--p-color-palette-recess",
-    "layer": "primitive",
-    "type": "color",
-    "value": "#edebe5",
-    "resolved": "#edebe5",
-    "description": "V7, derived: one step darker than the canvas (1.09:1), the recessed fill for controls on the canvas (fields, search, composer, unselected pills)."
+    "value": "#929099",
+    "resolved": "#929099",
+    "description": "3.15:1 on white: disabled text and icons only, never body text."
   },
   {
     "id": "primitive.font.family.fraunces",
@@ -1396,139 +1378,49 @@ export const tokens = [
     "description": null
   },
   {
-    "id": "semantic.color.tiimo.canvas",
-    "name": "--color-tiimo-canvas",
+    "id": "semantic.color.palette.canvas",
+    "name": "--color-palette-canvas",
     "layer": "semantic",
     "type": "color",
     "value": "{primitive.color.neutral.0}",
     "resolved": "#ffffff",
-    "description": "Pure white: white cards separate by spacing and restrained shadow, never by a tinted canvas or a gradient."
+    "description": "The app canvas (#FFFFFF)."
   },
   {
-    "id": "semantic.color.tiimo.lilac-tint",
-    "name": "--color-tiimo-lilac-tint",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.purple.150}",
-    "resolved": "#e9e4fb",
-    "description": null
-  },
-  {
-    "id": "semantic.color.tiimo.lilac-ink",
-    "name": "--color-tiimo-lilac-ink",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.purple.800}",
-    "resolved": "#4f4296",
-    "description": null
-  },
-  {
-    "id": "semantic.color.tiimo.peach-tint",
-    "name": "--color-tiimo-peach-tint",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.peach.100}",
-    "resolved": "#fde8dc",
-    "description": null
-  },
-  {
-    "id": "semantic.color.tiimo.peach-ink",
-    "name": "--color-tiimo-peach-ink",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.peach.700}",
-    "resolved": "#94461f",
-    "description": null
-  },
-  {
-    "id": "semantic.color.tiimo.butter-tint",
-    "name": "--color-tiimo-butter-tint",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.butter.100}",
-    "resolved": "#fbf0c9",
-    "description": null
-  },
-  {
-    "id": "semantic.color.tiimo.butter-ink",
-    "name": "--color-tiimo-butter-ink",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.butter.800}",
-    "resolved": "#6e5200",
-    "description": null
-  },
-  {
-    "id": "semantic.color.tiimo.mint-tint",
-    "name": "--color-tiimo-mint-tint",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.mint.100}",
-    "resolved": "#ddf1e5",
-    "description": null
-  },
-  {
-    "id": "semantic.color.tiimo.mint-ink",
-    "name": "--color-tiimo-mint-ink",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.mint.700}",
-    "resolved": "#2b6646",
-    "description": null
-  },
-  {
-    "id": "semantic.color.tiimo.sky-tint",
-    "name": "--color-tiimo-sky-tint",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.sky.100}",
-    "resolved": "#e1e9fb",
-    "description": null
-  },
-  {
-    "id": "semantic.color.tiimo.sky-ink",
-    "name": "--color-tiimo-sky-ink",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.sky.700}",
-    "resolved": "#33509a",
-    "description": null
-  },
-  {
-    "id": "semantic.color.tiimo.photo-fade",
-    "name": "--color-tiimo-photo-fade",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.alpha.black-72}",
-    "resolved": "rgb(0 0 0 / 0.72)",
-    "description": "The theme's only gradient: the end colour of the bottom-to-top black fade on profile photographs that carry text (Discover, Like back). Never on surfaces, cards, controls or decoration."
-  },
-  {
-    "id": "semantic.color.palette.background",
-    "name": "--color-palette-background",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.palette.background}",
-    "resolved": "#f1f0ea",
-    "description": "Main app canvas (#F1F0EA)."
-  },
-  {
-    "id": "semantic.color.palette.card",
-    "name": "--color-palette-card",
+    "id": "semantic.color.palette.surface",
+    "name": "--color-palette-surface",
     "layer": "semantic",
     "type": "color",
     "value": "{primitive.color.neutral.0}",
     "resolved": "#ffffff",
-    "description": "Primary cards and important content surfaces (#FFFFFF)."
+    "description": "Primary content surfaces: outlined modules and groups, floating chrome (#FFFFFF)."
   },
   {
-    "id": "semantic.color.palette.inset",
-    "name": "--color-palette-inset",
+    "id": "semantic.color.palette.surface-secondary",
+    "name": "--color-palette-surface-secondary",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.secondary-surface}",
+    "resolved": "#f7f7f8",
+    "description": "Gentle separation without elevation: informational containers, the active tab item (#F7F7F8)."
+  },
+  {
+    "id": "semantic.color.palette.surface-inset",
+    "name": "--color-palette-surface-inset",
     "layer": "semantic",
     "type": "color",
     "value": "{primitive.color.palette.inset}",
-    "resolved": "#f8f7f3",
-    "description": "Recessed and secondary surfaces (#F8F7F3); quiet fills inside white cards."
+    "resolved": "#f0f0f2",
+    "description": "Recessed controls: fields, search, composer, text areas, unselected pills and filters (#F0F0F2)."
+  },
+  {
+    "id": "semantic.color.palette.border",
+    "name": "--color-palette-border",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.border}",
+    "resolved": "#e4e4e7",
+    "description": "Outlines and dividers (#E4E4E7)."
   },
   {
     "id": "semantic.color.palette.brand",
@@ -1537,25 +1429,16 @@ export const tokens = [
     "type": "color",
     "value": "{primitive.color.purple.600}",
     "resolved": "#7262c7",
-    "description": "Primary actions, active and selected states (#7262C7)."
+    "description": "Primary actions, selection, the active tab icon (#7262C7)."
   },
   {
-    "id": "semantic.color.palette.purple-tint",
-    "name": "--color-palette-purple-tint",
+    "id": "semantic.color.palette.brand-foreground",
+    "name": "--color-palette-brand-foreground",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.palette.purple-tint}",
-    "resolved": "#e5e3fa",
-    "description": "Selected pills and the active tab item (#E5E3FA). Never the default pill fill."
-  },
-  {
-    "id": "semantic.color.palette.border",
-    "name": "--color-palette-border",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.palette.border}",
-    "resolved": "#e6e3dd",
-    "description": "Subtle neutral dividers and outlines (#E6E3DD)."
+    "value": "{primitive.color.neutral.0}",
+    "resolved": "#ffffff",
+    "description": "Text and icons on solid brand purple (#FFFFFF, 4.90:1)."
   },
   {
     "id": "semantic.color.palette.text",
@@ -1573,7 +1456,7 @@ export const tokens = [
     "type": "color",
     "value": "{primitive.color.palette.secondary}",
     "resolved": "#77737d",
-    "description": "Secondary labels and descriptions on white cards (#77737D, 4.63:1)."
+    "description": "Secondary text on white (#77737D, 4.63:1)."
   },
   {
     "id": "semantic.color.palette.secondary-strong",
@@ -1582,7 +1465,7 @@ export const tokens = [
     "type": "color",
     "value": "{primitive.color.palette.secondary-strong}",
     "resolved": "#6b6771",
-    "description": "Secondary text on Background, Inset and Muted, where #77737D is below 4.5:1 (derived; 4.84:1 on Background)."
+    "description": "Secondary text on the grey surfaces (#6B6771)."
   },
   {
     "id": "semantic.color.palette.muted",
@@ -1590,35 +1473,26 @@ export const tokens = [
     "layer": "semantic",
     "type": "color",
     "value": "{primitive.color.palette.muted}",
-    "resolved": "#f2f0fe",
-    "description": "Very light supporting surfaces: the prompt tile and info cards (#F2F0FE)."
+    "resolved": "#929099",
+    "description": "Disabled foreground (#929099); not for readable text."
   },
   {
-    "id": "semantic.color.palette.canvas",
-    "name": "--color-palette-canvas",
+    "id": "semantic.color.palette.disabled",
+    "name": "--color-palette-disabled",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.palette.canvas}",
-    "resolved": "#f6f5f1",
-    "description": "V7 app canvas (#F6F5F1). The supplied Background (#F1F0EA) now serves as fill-on-card."
+    "value": "{primitive.color.palette.disabled}",
+    "resolved": "#eaeaed",
+    "description": "Disabled control surfaces (#EAEAED)."
   },
   {
-    "id": "semantic.color.palette.fill-on-canvas",
-    "name": "--color-palette-fill-on-canvas",
+    "id": "semantic.color.palette.photo-fade",
+    "name": "--color-palette-photo-fade",
     "layer": "semantic",
     "type": "color",
-    "value": "{primitive.color.palette.recess}",
-    "resolved": "#edebe5",
-    "description": "Recessed controls on the canvas: fields, search, composer, unselected pills (#EDEBE5)."
-  },
-  {
-    "id": "semantic.color.palette.fill-on-card",
-    "name": "--color-palette-fill-on-card",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.palette.background}",
-    "resolved": "#f1f0ea",
-    "description": "Recessed fills inside white cards: unselected pills, the activity tag (#F1F0EA, the supplied Background)."
+    "value": "{primitive.color.alpha.black}",
+    "resolved": "rgb(0 0 0)",
+    "description": "The one gradient's colour: pure black, faded upward over the lower part of a real profile photograph that carries text (opacities set with color-mix in theme-tiimo.css). Never on surfaces, controls or decoration."
   },
   {
     "id": "semantic.font.display",
@@ -2593,22 +2467,13 @@ export const tokens = [
     "description": "Floating purple actions (Meetup 'Map' pill, confirm FAB): a contact shadow and a soft purple drop. Flat purple pills inside content use none."
   },
   {
-    "id": "semantic.shadow.tiimo-card",
-    "name": "--shadow-tiimo-card",
-    "layer": "semantic",
-    "type": "shadow",
-    "value": "0 1px 2px rgb(20 19 22 / 0.03), 0 4px 18px -6px rgb(20 19 22 / 0.09)",
-    "resolved": "0 1px 2px rgb(20 19 22 / 0.03), 0 4px 18px -6px rgb(20 19 22 / 0.09)",
-    "description": "Tiimo-inspired experiment: a diffuse, borderless lift for white cards on the lilac canvas."
-  },
-  {
     "id": "semantic.shadow.tiimo-float",
     "name": "--shadow-tiimo-float",
     "layer": "semantic",
     "type": "shadow",
-    "value": "0 2px 4px rgb(20 19 22 / 0.04), 0 10px 28px -10px rgb(20 19 22 / 0.18)",
-    "resolved": "0 2px 4px rgb(20 19 22 / 0.04), 0 10px 28px -10px rgb(20 19 22 / 0.18)",
-    "description": "Tiimo-inspired experiment: floating chrome (corner buttons, tab bar, white secondary pills)."
+    "value": "0 4px 20px -6px rgb(20 19 22 / 0.12)",
+    "resolved": "0 4px 20px -6px rgb(20 19 22 / 0.12)",
+    "description": "Tiimo-inspired experiment (V9): the one elevation, a single soft diffuse layer for chrome that floats above content (tab bar, floating icon buttons, the FAB, Discover actions, sheets)."
   },
   {
     "id": "semantic.opacity.disabled",
@@ -2918,52 +2783,52 @@ export const tokens = [
     "type": "dimension",
     "value": "{primitive.dimension.6}",
     "resolved": "6px",
-    "description": "V8: ≤ 27px tall: tags, badges, the activity category, photo index and remove buttons, checkboxes."
+    "description": "V9: ≤ 27px tall: tags, badges, counts, checkboxes and radios, photo index and remove buttons, switch thumbs; 24px avatars."
   },
   {
     "id": "component.tiimo.radius-pill",
     "name": "--tiimo-radius-pill",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.10}",
-    "resolved": "10px",
-    "description": "V8: 36px chips: emoji-and-text pills, filter chips, fact chips and segmented options. Never buttons, inputs, navigation or cards."
+    "value": "{primitive.dimension.8}",
+    "resolved": "8px",
+    "description": "V9: 36px chips (emoji pills, filter tabs, fact chips, segmented options); 36px avatars."
   },
   {
     "id": "component.tiimo.radius-control",
     "name": "--tiimo-radius-control",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.12}",
-    "resolved": "12px",
-    "description": "V8: 40–56px controls: buttons, icon buttons, the send button and, on short phones, your match photo."
+    "value": "{primitive.dimension.10}",
+    "resolved": "10px",
+    "description": "V9: 40–56px controls: buttons, icon buttons, the send button, the active tab item, your match photo on short phones."
   },
   {
     "id": "component.tiimo.radius-item",
     "name": "--tiimo-radius-item",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.12}",
-    "resolved": "12px",
-    "description": "V8: fields, search, the composer, selection rows, photo slots and the new-match portraits."
+    "value": "{primitive.dimension.10}",
+    "resolved": "10px",
+    "description": "V9: fields, search, the composer, selection rows, photo slots, info containers, new-match portraits; 48px avatars."
   },
   {
     "id": "component.tiimo.radius-feature",
     "name": "--tiimo-radius-feature",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.16}",
-    "resolved": "16px",
-    "description": "V8: cards, outlined groups, the prompt, message bubbles, the FAB and your match photo."
+    "value": "{primitive.dimension.12}",
+    "resolved": "12px",
+    "description": "V9: cards, outlined groups, the prompt, message bubbles, the FAB, Discover actions, the tab bar; 64px avatars and your match photo."
   },
   {
     "id": "component.tiimo.radius-photo",
     "name": "--tiimo-radius-photo",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.20}",
-    "resolved": "20px",
-    "description": "V8: full-width profile photographs (Discover, Like back) and the top of sheets."
+    "value": "{primitive.dimension.14}",
+    "resolved": "14px",
+    "description": "V9: full-width profile photographs, Likes tiles, sheets and dialogs; 88–96px avatars."
   },
   {
     "id": "component.tiimo.emoji-size",

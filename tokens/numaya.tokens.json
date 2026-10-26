@@ -48,22 +48,20 @@
       "alpha": {
         "ink-34":   { "$type": "color", "$value": "rgb(20 19 22 / 0.34)" },
         "ink-62":   { "$type": "color", "$value": "rgb(20 19 22 / 0.62)" },
-        "black-72": { "$type": "color", "$value": "rgb(0 0 0 / 0.72)" },
+        "black":    { "$type": "color", "$value": "rgb(0 0 0)" },
         "purple-24": { "$type": "color", "$value": "rgb(114 98 199 / 0.24)" },
         "white-55": { "$type": "color", "$value": "rgb(255 255 255 / 0.55)" }
       },
       "palette": {
-        "$description": "The supplied Numaya palette (V6 experiment), exact values. Brand (#7262C7) and Card (#FFFFFF) already exist as purple.600 and neutral.0.",
-        "background":       { "$type": "color", "$value": "#f1f0ea" },
-        "inset":            { "$type": "color", "$value": "#f8f7f3" },
-        "purple-tint":      { "$type": "color", "$value": "#e5e3fa" },
-        "border":           { "$type": "color", "$value": "#e6e3dd" },
-        "text":             { "$type": "color", "$value": "#28262d" },
-        "secondary":        { "$type": "color", "$value": "#77737d" },
-        "muted":            { "$type": "color", "$value": "#f2f0fe" },
-        "secondary-strong": { "$type": "color", "$value": "#6b6771", "$description": "Derived, not supplied: Secondary moved toward Text just far enough for 4.5:1 on Background (4.84) and Inset. Secondary itself is 4.06:1 on Background, below AA for small text." },
-        "canvas":           { "$type": "color", "$value": "#f6f5f1", "$description": "V7 canvas: the supplied Background lightened toward white (L 0.912 vs 0.870), same warm-neutral hue, less beige. Chosen from a side-by-side study (artifacts/version-7-final-screenshot-preview/qa/background-study.png)." },
-        "recess":           { "$type": "color", "$value": "#edebe5", "$description": "V7, derived: one step darker than the canvas (1.09:1), the recessed fill for controls on the canvas (fields, search, composer, unselected pills)." }
+        "$description": "V9: the monochrome Numaya palette for the experiment (white and neutral greys; purple stays purple.600). Replaces the V6–V8 warm palette, which only the experiment used.",
+        "secondary-surface": { "$type": "color", "$value": "#f7f7f8" },
+        "inset":             { "$type": "color", "$value": "#f0f0f2" },
+        "border":            { "$type": "color", "$value": "#e4e4e7" },
+        "disabled":          { "$type": "color", "$value": "#eaeaed" },
+        "text":              { "$type": "color", "$value": "#28262d" },
+        "secondary":         { "$type": "color", "$value": "#77737d" },
+        "secondary-strong":  { "$type": "color", "$value": "#6b6771", "$description": "Secondary moved toward Text: 4.85:1 on the inset grey and 5.16:1 on the secondary grey, where #77737D is 4.07 and 4.33." },
+        "muted":             { "$type": "color", "$value": "#929099", "$description": "3.15:1 on white: disabled text and icons only, never body text." }
       }
     },
     "font": {
@@ -194,36 +192,21 @@
       "danger":  { "default": { "$type": "color", "$value": "{primitive.color.red.600}" },   "tint": { "$type": "color", "$value": "{primitive.color.red.50}" }, "badge": { "$type": "color", "$value": "{primitive.color.red.600}", "$description": "Unread and notification count badges (Meetup red), white numerals 4.9:1." } },
       "success": { "default": { "$type": "color", "$value": "{primitive.color.green.700}" }, "tint": { "$type": "color", "$value": "{primitive.color.green.50}" } },
       "warning": { "default": { "$type": "color", "$value": "{primitive.color.amber.700}" }, "tint": { "$type": "color", "$value": "{primitive.color.amber.50}" } },
-      "tiimo": {
-        "$description": "Tiimo-inspired visual experiment (opt-in with ?theme=tiimo, scoped to .theme-tiimo). Each pastel 'tint' codes one category and is paired with an 'ink' for text on it (≥ 4.5:1). Pastels are never text colours.",
-        "canvas":     { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Pure white: white cards separate by spacing and restrained shadow, never by a tinted canvas or a gradient." },
-        "lilac-tint": { "$type": "color", "$value": "{primitive.color.purple.150}" },
-        "lilac-ink":  { "$type": "color", "$value": "{primitive.color.purple.800}" },
-        "peach-tint": { "$type": "color", "$value": "{primitive.color.peach.100}" },
-        "peach-ink":  { "$type": "color", "$value": "{primitive.color.peach.700}" },
-        "butter-tint": { "$type": "color", "$value": "{primitive.color.butter.100}" },
-        "butter-ink": { "$type": "color", "$value": "{primitive.color.butter.800}" },
-        "mint-tint":  { "$type": "color", "$value": "{primitive.color.mint.100}" },
-        "mint-ink":   { "$type": "color", "$value": "{primitive.color.mint.700}" },
-        "sky-tint":   { "$type": "color", "$value": "{primitive.color.sky.100}" },
-        "sky-ink":    { "$type": "color", "$value": "{primitive.color.sky.700}" },
-        "photo-fade": { "$type": "color", "$value": "{primitive.color.alpha.black-72}", "$description": "The theme's only gradient: the end colour of the bottom-to-top black fade on profile photographs that carry text (Discover, Like back). Never on surfaces, cards, controls or decoration." }
-      },
       "palette": {
-        "$description": "V6: the supplied Numaya palette by role, used only inside .theme-tiimo. Card and Brand point at the existing white and brand purple, which are the same exact values.",
-        "background":       { "$type": "color", "$value": "{primitive.color.palette.background}", "$description": "Main app canvas (#F1F0EA)." },
-        "card":             { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Primary cards and important content surfaces (#FFFFFF)." },
-        "inset":            { "$type": "color", "$value": "{primitive.color.palette.inset}", "$description": "Recessed and secondary surfaces (#F8F7F3); quiet fills inside white cards." },
-        "brand":            { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "Primary actions, active and selected states (#7262C7)." },
-        "purple-tint":      { "$type": "color", "$value": "{primitive.color.palette.purple-tint}", "$description": "Selected pills and the active tab item (#E5E3FA). Never the default pill fill." },
-        "border":           { "$type": "color", "$value": "{primitive.color.palette.border}", "$description": "Subtle neutral dividers and outlines (#E6E3DD)." },
-        "text":             { "$type": "color", "$value": "{primitive.color.palette.text}", "$description": "Primary text and headings (#28262D)." },
-        "secondary":        { "$type": "color", "$value": "{primitive.color.palette.secondary}", "$description": "Secondary labels and descriptions on white cards (#77737D, 4.63:1)." },
-        "secondary-strong": { "$type": "color", "$value": "{primitive.color.palette.secondary-strong}", "$description": "Secondary text on Background, Inset and Muted, where #77737D is below 4.5:1 (derived; 4.84:1 on Background)." },
-        "muted":            { "$type": "color", "$value": "{primitive.color.palette.muted}", "$description": "Very light supporting surfaces: the prompt tile and info cards (#F2F0FE)." },
-        "canvas":           { "$type": "color", "$value": "{primitive.color.palette.canvas}", "$description": "V7 app canvas (#F6F5F1). The supplied Background (#F1F0EA) now serves as fill-on-card." },
-        "fill-on-canvas":   { "$type": "color", "$value": "{primitive.color.palette.recess}", "$description": "Recessed controls on the canvas: fields, search, composer, unselected pills (#EDEBE5)." },
-        "fill-on-card":     { "$type": "color", "$value": "{primitive.color.palette.background}", "$description": "Recessed fills inside white cards: unselected pills, the activity tag (#F1F0EA, the supplied Background)." }
+        "$description": "V9: the monochrome palette by role, used only inside .theme-tiimo (artifacts/version-9-final-screenshot-preview/design-system.md). White and greys build the hierarchy; Brand is the one accent.",
+        "canvas":            { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "The app canvas (#FFFFFF)." },
+        "surface":           { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Primary content surfaces: outlined modules and groups, floating chrome (#FFFFFF)." },
+        "surface-secondary": { "$type": "color", "$value": "{primitive.color.palette.secondary-surface}", "$description": "Gentle separation without elevation: informational containers, the active tab item (#F7F7F8)." },
+        "surface-inset":     { "$type": "color", "$value": "{primitive.color.palette.inset}", "$description": "Recessed controls: fields, search, composer, text areas, unselected pills and filters (#F0F0F2)." },
+        "border":            { "$type": "color", "$value": "{primitive.color.palette.border}", "$description": "Outlines and dividers (#E4E4E7)." },
+        "brand":             { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "Primary actions, selection, the active tab icon (#7262C7)." },
+        "brand-foreground":  { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Text and icons on solid brand purple (#FFFFFF, 4.90:1)." },
+        "text":              { "$type": "color", "$value": "{primitive.color.palette.text}", "$description": "Primary text and headings (#28262D)." },
+        "secondary":         { "$type": "color", "$value": "{primitive.color.palette.secondary}", "$description": "Secondary text on white (#77737D, 4.63:1)." },
+        "secondary-strong":  { "$type": "color", "$value": "{primitive.color.palette.secondary-strong}", "$description": "Secondary text on the grey surfaces (#6B6771)." },
+        "muted":             { "$type": "color", "$value": "{primitive.color.palette.muted}", "$description": "Disabled foreground (#929099); not for readable text." },
+        "disabled":          { "$type": "color", "$value": "{primitive.color.palette.disabled}", "$description": "Disabled control surfaces (#EAEAED)." },
+        "photo-fade":        { "$type": "color", "$value": "{primitive.color.alpha.black}", "$description": "The one gradient's colour: pure black, faded upward over the lower part of a real profile photograph that carries text (opacities set with color-mix in theme-tiimo.css). Never on surfaces, controls or decoration." }
       }
     },
 
@@ -321,8 +304,7 @@
       "lg":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.06), 0 10px 28px -8px rgb(20 19 22 / 0.20)", "$description": "Dialogs, toasts and popovers: the only tier that must clearly read as layered." },
       "button": { "$type": "shadow", "$value": "inset 0 1px 0 rgb(255 255 255 / 0.10), 0 1px 2px rgb(20 19 22 / 0.14)", "$description": "Primary ink buttons: a faint top highlight and a contact shadow." },
       "brand":  { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.08), 0 6px 16px -6px rgb(114 98 199 / 0.40)", "$description": "Floating purple actions (Meetup 'Map' pill, confirm FAB): a contact shadow and a soft purple drop. Flat purple pills inside content use none." },
-      "tiimo-card":  { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.03), 0 4px 18px -6px rgb(20 19 22 / 0.09)", "$description": "Tiimo-inspired experiment: a diffuse, borderless lift for white cards on the lilac canvas." },
-      "tiimo-float": { "$type": "shadow", "$value": "0 2px 4px rgb(20 19 22 / 0.04), 0 10px 28px -10px rgb(20 19 22 / 0.18)", "$description": "Tiimo-inspired experiment: floating chrome (corner buttons, tab bar, white secondary pills)." }
+      "tiimo-float": { "$type": "shadow", "$value": "0 4px 20px -6px rgb(20 19 22 / 0.12)", "$description": "Tiimo-inspired experiment (V9): the one elevation, a single soft diffuse layer for chrome that floats above content (tab bar, floating icon buttons, the FAB, Discover actions, sheets)." }
     },
     "opacity": {
       "disabled": { "$type": "number", "$value": "0.45" },
@@ -376,13 +358,13 @@
     "switch":      { "width": { "$type": "dimension", "$value": "51px" }, "height": { "$type": "dimension", "$value": "31px" } },
     "tab-bar":     { "height": { "$type": "dimension", "$value": "{primitive.dimension.64}" } },
     "tiimo":       {
-      "$description": "Tiimo-inspired experiment geometry. V8 radius scale, chosen by component size and role (artifacts/version-8-final-screenshot-preview/design-system.md): tags and badges 6, 36px pills and filters 10, buttons, fields, rows and icon buttons 12, cards, groups and large controls 16, profile photographs 20. Circles stay for avatars, radios, numeric badges and the switch; capsules for the tab bar, progress and the Discover actions.",
-      "radius-tag":     { "$type": "dimension", "$value": "{primitive.dimension.6}",  "$description": "V8: ≤ 27px tall: tags, badges, the activity category, photo index and remove buttons, checkboxes." },
-      "radius-pill":    { "$type": "dimension", "$value": "{primitive.dimension.10}", "$description": "V8: 36px chips: emoji-and-text pills, filter chips, fact chips and segmented options. Never buttons, inputs, navigation or cards." },
-      "radius-control": { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "V8: 40–56px controls: buttons, icon buttons, the send button and, on short phones, your match photo." },
-      "radius-item":    { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "V8: fields, search, the composer, selection rows, photo slots and the new-match portraits." },
-      "radius-feature": { "$type": "dimension", "$value": "{primitive.dimension.16}", "$description": "V8: cards, outlined groups, the prompt, message bubbles, the FAB and your match photo." },
-      "radius-photo":   { "$type": "dimension", "$value": "{primitive.dimension.20}", "$description": "V8: full-width profile photographs (Discover, Like back) and the top of sheets." },
+      "$description": "Tiimo-inspired experiment geometry. V9 radius scale, chosen by component size and role (artifacts/version-9-final-screenshot-preview/design-system.md): tags and badges 6, 36px pills and filters 8, buttons, fields, rows and icon buttons 10, cards, groups, bubbles and the FAB 12, profile photographs and sheets 14. No circles: avatars are rounded squares sized to the same scale; capsules only for the progress segments.",
+      "radius-tag":     { "$type": "dimension", "$value": "{primitive.dimension.6}",  "$description": "V9: ≤ 27px tall: tags, badges, counts, checkboxes and radios, photo index and remove buttons, switch thumbs; 24px avatars." },
+      "radius-pill":    { "$type": "dimension", "$value": "{primitive.dimension.8}",  "$description": "V9: 36px chips (emoji pills, filter tabs, fact chips, segmented options); 36px avatars." },
+      "radius-control": { "$type": "dimension", "$value": "{primitive.dimension.10}", "$description": "V9: 40–56px controls: buttons, icon buttons, the send button, the active tab item, your match photo on short phones." },
+      "radius-item":    { "$type": "dimension", "$value": "{primitive.dimension.10}", "$description": "V9: fields, search, the composer, selection rows, photo slots, info containers, new-match portraits; 48px avatars." },
+      "radius-feature": { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "V9: cards, outlined groups, the prompt, message bubbles, the FAB, Discover actions, the tab bar; 64px avatars and your match photo." },
+      "radius-photo":   { "$type": "dimension", "$value": "{primitive.dimension.14}", "$description": "V9: full-width profile photographs, Likes tiles, sheets and dialogs; 88–96px avatars." },
       "emoji-size":     { "$type": "dimension", "$value": "{primitive.dimension.32}" },
       "emoji-radius":   { "$type": "dimension", "$value": "10px" }
     }

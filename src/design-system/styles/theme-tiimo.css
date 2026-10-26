@@ -1,92 +1,57 @@
 /*
- * Tiimo-inspired visual experiment (artifacts/tiimo-inspired-experiment/), refined in
- * artifacts/tiimo-white-surface-refinement/ (V2), artifacts/tiimo-inspired-v3/ (V3), V4 and
- * artifacts/version-5-final-screenshot-preview/ (V5), artifacts/version-6-final-screenshot-preview/
- * (V6, the supplied Numaya palette), artifacts/version-7-final-screenshot-preview/ (V7, the surface
- * system) and artifacts/version-8-final-screenshot-preview/ (V8: no lavender surfaces, a tighter
- * radius scale and fewer containers; its rules are in design-system.md there and win over the older
- * notes below where they differ).
+ * Tiimo-inspired visual experiment, V9: the monochrome refinement. History: the first experiment
+ * (artifacts/tiimo-inspired-experiment/), V2 (artifacts/tiimo-white-surface-refinement/), V3–V8
+ * (artifacts/tiimo-inspired-v3/ … artifacts/version-8-final-screenshot-preview/). The rules below
+ * are V9's; they are written out in artifacts/version-9-final-screenshot-preview/design-system.md,
+ * with the Bumble research behind them in mobbin-research.md there.
  *
  * Opt-in: a screen renders inside `.theme-tiimo` only with `?theme=tiimo` and only if it takes part
  * in the experiment, so the approved design is untouched everywhere else. Every rule below is scoped
  * to `.theme-tiimo`; the component markup and contracts are the same in both designs.
  *
- * The rules, from the reference analysis:
- * - V8 surfaces: the canvas (#F6F5F1); ordinary content directly on it (profile sections, notes,
- *   inbox rows with hairline dividers); outlined white modules and groups (1px Border, no shadow);
- *   recessed fields (one step darker, no shadow); raised feed objects (activity cards, the soft card
- *   shadow); floating chrome (the only real elevation). No lavender surface anywhere: purple
- *   (#7262C7) is a solid fill, mark or text for actions, active navigation and selection only.
- * - One gradient only: the black fade at the bottom of a profile photograph that carries text.
- *   Every surface, control and decoration is a solid colour (see "Gradients" at the end).
- * - V8 radius scale by size and role: tags 6, 36px pills and filters 10, buttons, fields, rows and
- *   icon buttons 12, cards, groups, bubbles and the FAB 16, profile photographs and sheets 20.
- *   Circles only where the form means something (avatars, radios, numeric badges, the switch);
- *   capsules only for the tab bar, progress and the Discover actions. Emoji-and-text pills are a
- *   recessed neutral fill, or solid brand purple when selected.
- * - Headings are neutral ink; colour marks a category (a tinted holder or chip) or a state, never
- *   a heading on its own.
- * - One pastel per category (peach, lilac, mint, sky, butter), always paired with its ink for text.
- * - Emoji mark content (interests, activity categories), never utility controls.
- * - Fields and quiet controls take the contextual recessed fill; purple keeps actions and selection,
- *   and your own messages.
+ * The system:
+ * - Colour: a pure white canvas; neutral greys build the hierarchy (secondary #F7F7F8 for gentle
+ *   separation, inset #F0F0F2 for recessed controls, border #E4E4E7); purple #7262C7 is the one
+ *   accent, for actions, selection and the active tab. No warm neutrals, no lavender, no category
+ *   pastels, no decorative gradient.
+ * - Surfaces: direct content on the canvas; outlined white modules and groups; recessed fields;
+ *   neutral information containers; one soft shadow, for what floats (the tab bar, the SuperSwipe on
+ *   a photo, sheets).
+ * - Geometry: tag 6, pill 8, control and item 10, feature 12, photo 14 (tokens). No circular UI:
+ *   avatars, counts, radios, switch thumbs, slider thumbs and the readiness meter are rounded
+ *   squares or bars. The match scallop is the one organic shape.
+ * - One gradient: the black fade under the text on a real profile photograph.
  */
 
-/* Surfaces and text: the V7 system --------------------------------------------- */
-/* The rules live in artifacts/version-7-final-screenshot-preview/design-system.md. Two contexts,
-   set once and inherited by every component:
-   - On the canvas (the default): the page is the V7 canvas #F6F5F1 (the supplied Background,
-     lightened); recessed controls (fields, search, composer, unselected pills) are fill-on-canvas
-     #EDEBE5, one step darker; secondary text is the derived #6B6771 (5.06:1; Secondary #77737D is
-     4.25:1 here).
-   - Inside a white card or group: recessed fills are fill-on-card #F1F0EA (the supplied Background)
-     and secondary text is the exact Secondary #77737D (4.63:1 on white).
-   Body and heading text is Text #28262D in both. Muted #F2F0FE is only for supporting tiles (the
-   prompt, info banners). Purple link text is Brand on white (4.90:1) and the deep brand purple on
-   the canvas, where Brand is 4.49:1. */
-/* V8: no lavender surfaces. The two lavender roles the approved components draw with (the "brand
-   surface" behind info cards, prompts and fallbacks, and the "brand tint" behind selected rows and
-   pressed icon buttons) resolve to the neutral recessed fill; purple is the solid brand only. */
+/* Colour and text contexts ---------------------------------------------------------- */
+/* The approved components read these roles, so setting them once re-colours every component. The two
+   lavender roles (the brand surface behind info cards, prompts and fallbacks; the brand tint behind
+   selected rows and pressed buttons) resolve to neutral greys. */
 .theme-tiimo {
   --color-surface-page: var(--color-palette-canvas);
-  --color-surface-soft: var(--color-palette-fill-on-canvas);
-  --color-surface-brand: var(--color-palette-fill-on-canvas);
-  --color-brand-tint: var(--color-palette-fill-on-canvas);
+  --color-surface: var(--color-palette-surface);
+  --color-surface-soft: var(--color-palette-surface-inset);
+  --color-surface-brand: var(--color-palette-surface-inset);
+  --color-brand-tint: var(--color-palette-surface-inset);
   --color-text-primary: var(--color-palette-text);
   --color-text-secondary: var(--color-palette-text);
-  --color-text-muted: var(--color-palette-secondary-strong);
+  --color-text-muted: var(--color-palette-secondary);
   --color-text-brand: var(--color-text-brand-deep);
   --color-border-subtle: var(--color-palette-border);
 }
 
-.theme-tiimo :is(.card, .activity-card, .list-group__items, .option-card, .banner--info, .metric-card, .coach, .setup-step, .dialog__panel, .action-sheet__list, .prompt) {
-  --color-surface-soft: var(--color-palette-fill-on-card);
-  --color-text-muted: var(--color-palette-secondary);
-  --color-text-brand: var(--color-palette-brand);
-}
-
-/* V8: someone's profile sections (Discover, Like back) are direct content on the canvas, not cards,
-   so their contents take the canvas context again. */
-.theme-tiimo .profile-section {
-  --color-surface-soft: var(--color-palette-fill-on-canvas);
+/* On the grey surfaces the exact Secondary (#77737D) drops below 4.5:1 (4.07 on the inset grey), so
+   secondary text inside them takes the strong secondary (#6B6771, 4.85:1 or better). */
+.theme-tiimo :is(.input, .search, .composer__field, .textarea, .info-card, .fl-sheet-note, .chip, .segmented__item, .tab-bar__item, .badge, .activity-card__category, .conversation__move, .readiness-meter) {
   --color-text-muted: var(--color-palette-secondary-strong);
-  --color-text-brand: var(--color-text-brand-deep);
 }
 
-/* Photo placeholders are not recessed fills: they are a neutral photo grey. On the lighter V7 canvas
-   the light tones (#F2F2F2) all but vanish (1.03:1), so every tone takes the darker photo grey the
-   other tones already use (surface-sunken #E9E8EB, 1.15:1). :where() keeps this at one class, so the
-   more specific placeholder rules (photo slots, activity media) still win, as in V5. */
+/* Photo placeholders are a neutral photo grey, not a recessed fill: every tone takes the same grey
+   (surface-sunken). :where() keeps this at one class, so the more specific placeholder rules (photo
+   slots, activity media) still win. */
 .theme-tiimo :where(.image-placeholder--stone, .image-placeholder--sand) {
   background: var(--color-surface-sunken);
 }
-
-/* Category tones: one pastel and its ink, set by `data-tone` (see lib/theme.js markAttrs). */
-.theme-tiimo [data-tone="peach"] { --tone-tint: var(--color-tiimo-peach-tint); --tone-ink: var(--color-tiimo-peach-ink); }
-.theme-tiimo [data-tone="lilac"] { --tone-tint: var(--color-tiimo-lilac-tint); --tone-ink: var(--color-tiimo-lilac-ink); }
-.theme-tiimo [data-tone="mint"] { --tone-tint: var(--color-tiimo-mint-tint); --tone-ink: var(--color-tiimo-mint-ink); }
-.theme-tiimo [data-tone="sky"] { --tone-tint: var(--color-tiimo-sky-tint); --tone-ink: var(--color-tiimo-sky-ink); }
-.theme-tiimo [data-tone="butter"] { --tone-tint: var(--color-tiimo-butter-tint); --tone-ink: var(--color-tiimo-butter-ink); }
 
 /* Emoji marks: decorative (empty alt text), the label stays the accessible name. Drawn with ::after
    and moved first in the flex row, because ::before already carries the enlarged touch target on
@@ -98,36 +63,29 @@
   line-height: 1;
 }
 
-/* Surfaces, elevation and containers (V8) ------------------------------------- */
-/* A container is a decision, not a wrapper. Six treatments, each with one job:
-   - Direct: ordinary content sits on the canvas and is structured by type, spacing and, in lists,
-     a hairline divider (someone's profile sections, info notes, inbox rows).
-   - Raised: white with the restrained card shadow, only for independent content objects in a feed
-     (activity cards).
-   - Outlined: white with a 1px Border and no shadow, for a module you act on as a whole (your
-     prompt, profile readiness) and for groups of controls and selection rows.
-   - Recessed: one neutral step darker than its surface, no border or shadow, for fields.
-   - Floating: the only strong shadow, for chrome above scrolling content.
-   - Photographs keep their own shape. */
-.theme-tiimo .card {
+/* Surfaces and containers ------------------------------------------------------------ */
+/* A container is a decision, not a wrapper:
+   - Direct: ordinary content sits on the white canvas, structured by type, spacing and, in lists,
+     a hairline divider (someone's profile sections, inbox rows, section headings).
+   - Outlined: white with a 1px Border, no shadow, for a module you act on as a whole (your prompt,
+     profile readiness, an activity) and for groups of controls and selection rows.
+   - Secondary: the #F7F7F8 grey, no border or shadow, for information that belongs together (the
+     first-photo tip, why someone liked you, the report note).
+   - Recessed: the #F0F0F2 grey, no border or shadow, for fields and unselected chips.
+   - Floating: the one soft shadow, for chrome above content. */
+.theme-tiimo :is(.card, .activity-card) {
   border-radius: var(--tiimo-radius-feature);
   box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
 }
 
-.theme-tiimo .activity-card {
-  border-radius: var(--tiimo-radius-feature);
-  box-shadow: var(--shadow-tiimo-card);
-}
-
-/* The photo inside an activity card is inset 8px, so its corner is the card's minus the inset (8px):
+/* The photo inside an activity card is inset 8px, so its corner is the card's minus the inset:
    concentric with the card instead of rounder than it. */
 .theme-tiimo .activity-card__media {
   border-radius: calc(var(--tiimo-radius-feature) - var(--space-2));
 }
 
 /* Someone's profile (Discover, Like back): the photos already break the page into sections, so the
-   sections between them are direct content: a label and the answer, chips or details on the canvas,
-   aligned with the name on the photo. */
+   sections between them are direct content, aligned with the name on the photo. */
 .theme-tiimo .profile-section {
   border-radius: 0;
   background: none;
@@ -135,14 +93,13 @@
   padding-block: var(--space-3);
 }
 
-/* Their prompt is typography: the question as a label, the answer in the display face. The quote mark
-   belonged to the lavender tile; without a tile it would only be a clipped glyph. */
+/* Their prompt is typography: the question as a label, the answer in the display face. */
 .theme-tiimo .profile-section--prompt::after {
   content: none;
 }
 
-/* Your own prompt (Profile, Edit, Interests) is a module you open and edit: white and outlined, no
-   tint and no shadow; its quote mark is a neutral watermark. */
+/* Your own prompt (Profile, Edit, Interests) is a module you open and edit: white and outlined; its
+   quote mark is a neutral watermark. */
 .theme-tiimo .prompt {
   border-radius: var(--tiimo-radius-feature);
   background: var(--color-surface);
@@ -153,20 +110,19 @@
   color: var(--color-palette-border);
 }
 
-/* Info notes (the first-photo tip, why someone liked you, the blocking note) are secondary
-   information: direct on the canvas, led by an ink icon, not a tinted box. */
+/* Information containers: the secondary grey with an ink icon. Neutral, flat and clearly not a
+   control (no border, no chevron, no shadow). */
 .theme-tiimo .info-card {
-  padding: 0;
-  border-radius: 0;
-  background: none;
+  padding: var(--space-4);
+  border-radius: var(--tiimo-radius-item);
+  background: var(--color-palette-surface-secondary);
 }
 
 .theme-tiimo .info-card__icon {
   color: var(--color-text-primary);
 }
 
-/* Outlined: groups of rows (settings, account, the filter panels) and selection rows (radios,
-   checkboxes). They hold controls, they do not float. */
+/* Outlined groups of rows (settings, account, the filter panels) and selection rows. */
 .theme-tiimo .list-group__items {
   border-radius: var(--tiimo-radius-feature);
   box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
@@ -178,22 +134,17 @@
   box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
 }
 
-/* Selected: the approved 2px brand ring replaces the outline, on white (no lavender wash); the filled
-   radio or ticked box inside says the same without colour. */
+/* Selected: the approved 2px brand ring replaces the outline, on white; the filled radio or ticked
+   box inside says the same without colour. */
 .theme-tiimo .option-card.is-selected {
   background: var(--color-surface);
   box-shadow: inset 0 0 0 var(--border-focus) var(--color-control-selected);
 }
 
-/* Recessed: fields and search take the contextual recessed fill through --color-surface-soft (the
-   approved components already use it), no border and no shadow; focus is the approved white fill
+/* Recessed: fields, search and the composer take the inset grey through --color-surface-soft (the
+   approved components already use it), with no border or shadow; focus is the approved white fill
    with the brand ring. */
-.theme-tiimo :is(.input, .search) {
-  border-radius: var(--tiimo-radius-item);
-}
-
-/* The composer is a field too: recessed, not a white card with a shadow. Focus stays approved. */
-.theme-tiimo .composer__field {
+.theme-tiimo :is(.input, .search, .composer__field) {
   border-radius: var(--tiimo-radius-item);
 }
 
@@ -206,10 +157,9 @@
   border-radius: var(--tiimo-radius-control);
 }
 
-/* Photos: slots take the item corner; empty slots are dashed "add" placeholders. The plus sits in a
-   small white square with a hairline, flat: an empty slot is not an object to lift. */
-.theme-tiimo .photo-slot,
-.theme-tiimo .photo-slot__select {
+/* Photos: slots take the item corner; empty slots are dashed "add" placeholders with the plus in a
+   small white rounded square with a hairline, flat. */
+.theme-tiimo :is(.photo-slot, .photo-slot__select) {
   border-radius: var(--tiimo-radius-item);
 }
 
@@ -228,18 +178,26 @@
   box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
 }
 
-/* The small controls on a photo: the remove button is a compact rounded square, the order badge a tag. */
-.theme-tiimo .photo-slot__remove {
+.theme-tiimo :is(.photo-slot__remove, .photo-slot__index) {
   border-radius: var(--tiimo-radius-tag);
 }
 
-.theme-tiimo .photo-slot__index {
-  border-radius: var(--tiimo-radius-tag);
+/* Sheets and dialogs: white with the photo corner; the sheet floats over the page. */
+.theme-tiimo .sheet__panel {
+  border-radius: var(--tiimo-radius-photo) var(--tiimo-radius-photo) 0 0;
+  background: var(--color-surface-page);
 }
 
-/* Chips ------------------------------------------------------------------- */
-/* Interest sets: a neutral ink heading; the category colour lives only in the small tinted holder
-   behind its emoji, so the label reads as a heading and the colour still says which category. */
+.theme-tiimo .dialog__panel {
+  border-radius: var(--tiimo-radius-photo);
+}
+
+.theme-tiimo .action-sheet__list {
+  border-radius: var(--tiimo-radius-feature);
+}
+
+/* Chips ------------------------------------------------------------------------------- */
+/* Interest sets: a neutral ink heading with its emoji in a small inset-grey holder. */
 .theme-tiimo .chip-group__set-label[data-tone] {
   display: inline-flex;
   align-items: center;
@@ -257,64 +215,64 @@
   width: 24px;
   height: 24px;
   border-radius: var(--tiimo-radius-tag);
-  background: var(--tone-tint);
+  background: var(--color-palette-surface-inset);
   font-size: 13px;
 }
 
-/* Every 36px chip shares the V8 pill corner: emoji pills, filter chips with or without emoji, fact
-   chips ("Long-term") and segmented options. One shape for one size, so the Activity rail and the
-   Messages filters no longer disagree (V7: 12px against capsules). Colour stays per component. */
+/* Every 36px chip shares the pill corner: emoji pills, filter tabs, fact chips and segmented options. */
 .theme-tiimo :is(.chip, .segmented__item) {
   border-radius: var(--tiimo-radius-pill);
 }
 
-/* Pills (V5 behaviour, V7 colour, V8 corner) ------------------------------------ */
-/* Only the emoji-and-text pills: interest chips, emoji category filters (and the "All" option in
-   the same rail), the shared-interest tags ("You both like") and the activity category tag. They
-   are matched by their emoji mark (data-emoji) or by sitting in a rail of emoji filters, never by a
-   bare `.chip`, so filters without emoji (Messages, Likes), fact chips, buttons, badges, inputs and
-   navigation keep their own shapes. Reference: Tiimo's habit chips (Mobbin, "Add morning routines"):
-   a soft rounded rectangle; unselected without a border; selected light purple with a fine purple
-   outline.
-   V8 corner: 10px on the 36px pill (the radius scale's pill step).
-   V7 colour: unselected pills take the contextual recessed fill, a solid neutral one step darker
-   than what they sit on: fill-on-canvas #EDEBE5 on the canvas, fill-on-card #F1F0EA inside a white
-   card. Never the purple tint, no border, no gradient. */
+/* Emoji-and-text pills (interests, emoji category filters with their "All", shared-interest tags):
+   unselected, the inset grey with ink text, no border; selected, solid brand purple with a white
+   label and a white minus or check (4.90:1). Same size either way. */
 .theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip) {
-  border-radius: var(--tiimo-radius-pill);
   background: var(--color-surface-soft);
   box-shadow: none;
   color: var(--color-text-primary);
 }
 
-/* Selected (V7): solid Brand #7262C7 with white label, glyph (minus or check) and count (4.90:1), the
-   same selected language as the filter chips and segmented options. No outline. Same size and
-   corner as unselected. */
 .theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected {
   background: var(--color-palette-brand);
   box-shadow: none;
-  color: var(--color-on-brand);
+  color: var(--color-palette-brand-foreground);
   font-weight: var(--font-weight-semibold);
 }
 
 .theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected :is(.chip__affordance, .chip__icon, .chip__count) {
-  color: var(--color-on-brand);
+  color: var(--color-palette-brand-foreground);
 }
 
-/* Locked at the five-interest limit: the same grey pill with the approved muted (disabled) text and
-   glyph, so the set keeps its shape and reads as "full". The chips are inactive (aria-disabled), which
-   contrast minimums exempt; the "5/5 selected" count states the limit in full-contrast text. */
+/* Locked at the five-interest limit: the same grey pill with the disabled foreground, so the set
+   keeps its shape and reads as "full" (inactive chips are exempt from contrast minimums; "5/5
+   selected" states the limit in full-contrast text). */
 .theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-unavailable {
-  color: var(--color-text-subtle);
+  color: var(--color-palette-muted);
 }
 
-/* Shared interests are tags, not choices: the unselected pill, with a little more room around the
-   emoji. */
 .theme-tiimo :is(.shared-interests__pill, .match__shared-chip)[data-emoji] {
   gap: 6px;
 }
 
-/* Activity category: the same pill at tag size (27px tall, the scale's 6px tag corner). */
+/* Filter tabs without emoji (Likes: All, Activity, New, Nearby; Messages: All, Unread, Your move):
+   unselected, the inset grey with no outline; selected, solid brand purple with a white label and
+   count, and no checkmark: the fill is the state, and aria-pressed carries it for assistive tech.
+   Checkmarks stay where they mean a choice was added (interests, form options). */
+.theme-tiimo .filter-chips:not(:has(.chip[data-emoji])) .chip:not(.is-selected) {
+  background: var(--color-surface-soft);
+  box-shadow: none;
+}
+
+.theme-tiimo .filter-chips:not(:has(.chip[data-emoji])) .chip.is-selected .chip__affordance {
+  display: none;
+}
+
+.theme-tiimo .filter-chips:not(:has(.chip[data-emoji])) .chip.is-selected .chip__count {
+  color: var(--color-palette-brand-foreground);
+}
+
+/* Activity category: the pill at tag size (27px). */
 .theme-tiimo .activity-card__category[data-tone] {
   display: inline-flex;
   align-items: center;
@@ -327,35 +285,57 @@
   font-weight: var(--font-weight-semibold);
 }
 
-/* No activity photo: the neutral photo grey with an ink glyph, like every other missing photo (V7
-   used the lavender wash). */
+/* No activity photo: the neutral photo grey with a muted glyph, like every other missing photo. */
 .theme-tiimo .activity-media__fallback {
   background: var(--color-surface-sunken);
   color: var(--color-text-muted);
 }
 
-/* Sheets and dialogs: the canvas colour and the photo corner at the top; the groups inside are
-   outlined. */
-.theme-tiimo .sheet__panel {
-  border-radius: var(--tiimo-radius-photo) var(--tiimo-radius-photo) 0 0;
-  background: var(--color-surface-page);
+/* Status labels ---------------------------------------------------------------------- */
+/* One label shape (24px, 6px corner, semibold micro text) in four semantic tones:
+   - Neutral (inset grey, ink): ordinary states, e.g. "Your move", "Snoozed", "You're going".
+   - Emphasis (white or inset grey, deep purple): states that should be noticed, e.g. "New" on a
+     like, "Live now".
+   - Strong (solid purple, white): counts you act on, e.g. unread messages.
+   - Alert (the approved red): notification counts on the tab bar, unchanged.
+   On a photo the label is white so it reads on any image; "Verified" and "New here" keep the
+   approved dark translucent label over the photo. */
+.theme-tiimo :is(.badge, .profile-card__pill, .conversation__move, .count-badge, .conversation__unread, .fl-me__pct) {
+  border-radius: var(--tiimo-radius-tag);
 }
 
-.theme-tiimo .dialog__panel {
-  border-radius: var(--tiimo-radius-photo);
+.theme-tiimo :is(.badge, .conversation__move) {
+  background: var(--color-surface-soft);
+  color: var(--color-text-primary);
 }
 
-.theme-tiimo .action-sheet__list {
-  border-radius: var(--tiimo-radius-feature);
+.theme-tiimo .badge--brand {
+  color: var(--color-text-brand-deep);
 }
 
-/* Buttons and chrome ------------------------------------------------------- */
-/* V8: buttons are rounded rectangles with the control corner (12px on 40–54px), not capsules. */
+.theme-tiimo :is(.person-tile__badge, .activity-media__badges) .badge {
+  background: var(--color-surface);
+}
+
+.theme-tiimo .person-tile__badge .badge {
+  color: var(--color-text-brand-deep);
+}
+
+.theme-tiimo .badge :is(svg, .icon) {
+  color: currentColor;
+}
+
+/* Controls and chrome ---------------------------------------------------------------- */
+/* Buttons: rounded rectangles with the control corner; flat (purple is emphasis enough). */
 .theme-tiimo .btn {
   border-radius: var(--tiimo-radius-control);
 }
 
-/* Secondary: white with a 1px Border. It sits in the layout, so it is outlined, not elevated. */
+.theme-tiimo :is(.btn--primary, .fab) {
+  box-shadow: none;
+}
+
+/* Secondary: white with a 1px Border. */
 .theme-tiimo .btn--secondary {
   background: var(--color-surface);
   box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
@@ -365,14 +345,21 @@
   background: var(--color-surface);
 }
 
-/* Icon buttons (back, close, filters, more, edit): compact rounded squares rather than circles; the
-   floating ones keep the float shadow because they sit over scrolling content. */
+.theme-tiimo .btn:disabled:not(.is-loading) {
+  background: var(--color-palette-disabled);
+  color: var(--color-palette-muted);
+}
+
+/* Icon buttons (back, close, filters, more, settings, undo): compact white rounded squares with a
+   hairline. They sit in headers on the white canvas, not above content, so they take a boundary,
+   not a shadow. */
 .theme-tiimo .nav-button {
   border-radius: var(--tiimo-radius-control);
 }
 
 .theme-tiimo .nav-button--floating {
-  box-shadow: var(--shadow-tiimo-float);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
 }
 
 /* The step FAB: a 56px rounded square with the feature corner. */
@@ -380,53 +367,170 @@
   border-radius: var(--tiimo-radius-feature);
 }
 
-/* The tab bar keeps its floating capsule (navigation is an established shape). */
-.theme-tiimo .tab-bar {
-  background: var(--color-surface);
+/* Discover actions (Pass, Like, SuperSwipe): 56px rounded rectangles with the feature corner, the
+   star kept. Flat in the action row; the SuperSwipe that sits on a photo floats above it. */
+.theme-tiimo .action-bar__btn {
+  border-radius: var(--tiimo-radius-feature);
+  box-shadow: none;
+}
+
+.theme-tiimo .profile-card__actions .action-bar__btn {
   box-shadow: var(--shadow-tiimo-float);
 }
 
-/* The active tab (V8): a neutral recessed fill behind the filled brand-purple icon. Purple marks the
-   state on the icon; the lavender tint is gone. */
-.theme-tiimo .tab-bar__item.is-current {
-  background: var(--color-palette-fill-on-canvas);
+/* Switch: a rounded-rectangle track with a rounded-square thumb (concentric: the thumb's corner
+   plus its 3px inset). The thumb position still says on or off. */
+.theme-tiimo .switch {
+  border-radius: calc(var(--tiimo-radius-tag) + 3px);
 }
 
-/* Tags and badges (≤ 27px): the tag corner, not capsules. "New" and "Your move" keep butter, the
-   reference's highlight tint for a state, not a surface. */
-.theme-tiimo :is(.badge, .profile-card__pill, .conversation__move) {
+.theme-tiimo .switch::after {
   border-radius: var(--tiimo-radius-tag);
 }
 
-.theme-tiimo .person-tile__badge .badge {
-  background: var(--color-tiimo-butter-tint);
-  color: var(--color-tiimo-butter-ink);
+/* Slider: a solid rail and selected interval with squared ends, and rounded-square thumbs (same
+   28px size and hit area). */
+.theme-tiimo .slider__track::before {
+  border-radius: 3px;
+  background: var(--color-control-track-off);
 }
 
-.theme-tiimo .conversation__move {
-  background: var(--color-tiimo-butter-tint);
-  color: var(--color-tiimo-butter-ink);
+.theme-tiimo .slider__track::after {
+  content: "";
+  position: absolute;
+  top: 11px;
+  left: var(--from);
+  right: calc(100% - var(--to));
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-control-selected);
+  pointer-events: none;
 }
 
-.theme-tiimo .choice__input--checkbox {
+.theme-tiimo .slider__track input {
+  z-index: 1;
+}
+
+.theme-tiimo .slider__track input::-webkit-slider-thumb {
+  border-radius: var(--tiimo-radius-pill);
+}
+
+.theme-tiimo .slider__track input::-moz-range-thumb {
+  border-radius: var(--tiimo-radius-pill);
+}
+
+/* Checkboxes and radios: both rounded squares; the radio's inner mark is a smaller square (the
+   approved white gap), the checkbox's a tick, so they stay distinct without a circle. */
+.theme-tiimo :is(.choice__input--checkbox, .choice__input--radio) {
   border-radius: var(--tiimo-radius-tag);
 }
 
-/* Likes: portrait tiles take the feature corner; the tiles themselves have no card around them. */
-.theme-tiimo .person-tile__photo {
+/* Onboarding progress: rounded bars, not capsules. */
+.theme-tiimo :is(.progress__segment, .progress__fill) {
+  border-radius: 3px;
+}
+
+/* Bottom navigation: compact and the one piece of chrome with elevation. Shorter (56px, from 64),
+   with less inner padding and no gap, so the five items sit closer; the icons keep their size and
+   each item keeps a 48px-tall, ~70px-wide touch target. White with a hairline and one soft shadow;
+   a rounded rectangle, not a capsule. */
+.theme-tiimo .tab-bar {
+  height: 56px;
+  padding: 4px;
+  gap: 0;
   border-radius: var(--tiimo-radius-feature);
+  background: var(--color-surface);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border), var(--shadow-tiimo-float);
 }
 
-/* Someone's profile photographs (Discover, Like back): the photo corner, tighter than 32px but still
-   soft at full width. */
-.theme-tiimo :is(.profile-card__media, .fl-pf__photo) {
-  border-radius: var(--tiimo-radius-photo);
+/* The active tab: the inset grey behind the filled brand-purple icon, a rounded rectangle. */
+.theme-tiimo .tab-bar__item {
+  border-radius: var(--tiimo-radius-control);
 }
 
-/* Messaging ---------------------------------------------------------------- */
-/* Inbox rows sit directly on the canvas: a list, not a stack of cards. V8 adds a hairline divider
-   between rows, inset to start under the name so the avatars read as one column, and a little more
-   room per row. */
+.theme-tiimo .tab-bar__item.is-current {
+  background: var(--color-palette-surface-inset);
+}
+
+/* Discover header: the logo and its controls only. The thin bar under the logo was decoration
+   (aria-hidden) that read as an unexplained progress indicator. */
+.theme-tiimo .fl-disc-head__progress {
+  display: none;
+}
+
+/* Avatars and portraits ----------------------------------------------------------- */
+/* No circles: every avatar is a rounded square, its corner from the same scale by size (24px 6,
+   36px 8, 48px 10, 64px 12, 96px 14). Fallbacks are the inset grey with an ink initial (no
+   identity pastels). The readiness ring around your avatar goes; the readiness meter below says it
+   as a bar, and the score label stays. */
+.theme-tiimo .avatar--xs { --avatar-radius: var(--tiimo-radius-tag); }
+.theme-tiimo .avatar--sm { --avatar-radius: var(--tiimo-radius-pill); }
+.theme-tiimo .avatar--md { --avatar-radius: var(--tiimo-radius-item); }
+.theme-tiimo .avatar--lg { --avatar-radius: var(--tiimo-radius-feature); }
+.theme-tiimo .avatar--xl { --avatar-radius: var(--tiimo-radius-photo); }
+
+.theme-tiimo .avatar .avatar__image {
+  border-radius: var(--avatar-radius);
+  background: var(--color-palette-surface-inset);
+}
+
+.theme-tiimo .avatar__ring {
+  display: none;
+}
+
+.theme-tiimo .avatar.has-ring .avatar__image {
+  margin: 0;
+}
+
+.theme-tiimo .match-queue__image[class] {
+  border-radius: var(--tiimo-radius-item);
+  background: var(--color-palette-surface-inset);
+}
+
+.theme-tiimo .organic-portrait__fallback[class] {
+  background: var(--color-surface-sunken);
+}
+
+/* Profile readiness as a bar: the score in a secondary-grey rounded square with a 4px track along its
+   foot, filled to the score in brand purple (the meter keeps role="meter" and its values). */
+.theme-tiimo .readiness-meter {
+  border-radius: var(--tiimo-radius-feature);
+  background: var(--color-palette-surface-secondary);
+}
+
+.theme-tiimo .readiness-meter svg {
+  display: none;
+}
+
+.theme-tiimo .readiness-meter::before,
+.theme-tiimo .readiness-meter::after {
+  content: "";
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.theme-tiimo .readiness-meter::before {
+  right: 10px;
+  background: var(--color-palette-border);
+}
+
+.theme-tiimo .readiness-meter::after {
+  width: calc((100% - 20px) * var(--value, 0) / 100);
+  background: var(--color-palette-brand);
+}
+
+.theme-tiimo .readiness-meter__label {
+  margin-bottom: 6px;
+}
+
+/* Messaging --------------------------------------------------------------------------- */
+/* Inbox rows sit directly on the canvas: a list, with a hairline divider between rows that starts
+   under the name so the avatars read as one column. */
 .theme-tiimo .conversation + .conversation {
   position: relative;
 }
@@ -446,41 +550,35 @@
   border-radius: var(--tiimo-radius-item);
 }
 
-/* New matches: portrait previews with the item corner, no shadow; an unopened match keeps its brand
-   ring (a state, so it stays purple). */
-.theme-tiimo .match-queue__image {
-  border-radius: var(--tiimo-radius-item);
-}
-
-/* Bubbles: the feature corner with the approved small tail corner on the sender's side. Yours solid
-   brand purple with white text (4.90:1, approved); theirs white and flat on the canvas. */
+/* Bubbles: the feature corner with a small tail corner on the sender's side. Yours solid brand
+   purple with white text (4.90:1); theirs the inset grey with ink text (13.1:1), which separates
+   from the white canvas without an outline. */
 .theme-tiimo .message__bubble {
   border-radius: var(--tiimo-radius-feature);
 }
 
 .theme-tiimo .message--me .message__bubble {
-  border-bottom-right-radius: var(--tiimo-radius-tag);
+  border-bottom-right-radius: 4px;
 }
 
 .theme-tiimo .message--them .message__bubble {
-  border-bottom-left-radius: var(--tiimo-radius-tag);
-  background: var(--color-surface);
+  border-bottom-left-radius: 4px;
+  background: var(--color-palette-surface-inset);
 }
 
 .theme-tiimo .message.is-grouped.message--me .message__bubble {
-  border-top-right-radius: var(--tiimo-radius-tag);
+  border-top-right-radius: 4px;
 }
 
 .theme-tiimo .message.is-grouped.message--them .message__bubble {
-  border-top-left-radius: var(--tiimo-radius-tag);
+  border-top-left-radius: 4px;
 }
 
-/* The match moment (V5): their photo fills the scalloped silhouette, yours is a smaller rounded
-   square overlapping its lower-left edge. The scallop is the shared component's own mask on
-   .organic-portrait__photo (an SVG path, so the photo itself is clipped to the contour, with no gap);
-   the lavender halo behind it stays hidden, and there is no confetti. Your photo keeps its white
-   ring, which follows its rounded corners: it separates the two faces where they overlap. Its 16px
-   corner is unchanged in V8. */
+/* The match moment: their photo fills the scalloped silhouette, yours is a smaller rounded square
+   overlapping its lower-left edge. The scallop is the shared component's own mask on
+   .organic-portrait__photo (an SVG path, so the photo itself is clipped to the contour); the halo
+   behind it stays hidden, and there is no confetti. Your photo keeps its white ring, which follows
+   its rounded corners and separates the two faces where they overlap. */
 .theme-tiimo .organic-portrait__backdrop {
   display: none;
 }
@@ -517,29 +615,15 @@
   visibility: hidden;
 }
 
-/* Gradients ------------------------------------------------------------------- */
-/* Every gradient the approved components draw is replaced by a solid colour inside the theme,
-   except one: the black fade on profile photographs that carry text (below). */
-
-/* Page washes (Welcome, the Home header): solid white. */
-.theme-tiimo.screen--wash,
-.theme-tiimo .screen--wash {
-  background: var(--color-surface-page);
+/* Photos --------------------------------------------------------------------------------- */
+/* Someone's profile photographs (Discover, Like back) take the photo corner; Likes tiles the
+   feature corner. */
+.theme-tiimo :is(.profile-card__media, .fl-pf__photo) {
+  border-radius: var(--tiimo-radius-photo);
 }
 
-/* Primary buttons and the step FAB: the flat brand fill they already look like, as a solid colour. */
-.theme-tiimo .btn--primary,
-.theme-tiimo .fab {
-  background: var(--button-primary-bg-top);
-}
-
-.theme-tiimo .btn--primary:hover:not(:disabled) {
-  background: var(--button-primary-bg-hover-top);
-}
-
-/* Pass and Like: solid ink instead of the soft sheen. SuperSwipe keeps its solid purple. */
-.theme-tiimo .action-bar__btn:not(.action-bar__btn--super) {
-  background: var(--button-ink-bg-bottom);
+.theme-tiimo .person-tile__photo {
+  border-radius: var(--tiimo-radius-feature);
 }
 
 /* Photo placeholder: one solid photo grey instead of "lit from above". */
@@ -548,12 +632,11 @@
   background-color: var(--color-surface-photo);
 }
 
-/* Text on a profile photo. The one permitted gradient: when a real photograph is present, a black
-   fade over the lower 60% of the photo, clear above (where the face is) and darkest behind the
-   name, age, badges and detail. It is its own layer (::before on the photo container): above the
-   photo, below the text and the SuperSwipe, sized by the photo's height and clipped by its
-   corners. Pure black at increasing opacity keeps the photo's colour (no ink or purple cast).
-   Nine stops on a smooth ease (opacity ~ t^1.6) so there is no visible start line or band. */
+/* Text on a profile photograph: the one permitted gradient. With a real photo, pure black fades up
+   from 85% at the bottom edge to clear at 60% of the photo's height, on an ease (opacity ~
+   0.85·(1−t)^1.6) sampled at eleven stops, so it darkens steadily with no start line or band. It is
+   its own layer (::before on the photo container): above the photo, below the name, badges and the
+   SuperSwipe, sized by the photo and clipped by its corners. */
 .theme-tiimo .profile-card__media:has(> .profile-card__img)::before {
   content: "";
   position: absolute;
@@ -562,14 +645,16 @@
   height: 60%;
   background: linear-gradient(
     to top,
-    var(--color-tiimo-photo-fade) 0%,
-    color-mix(in srgb, var(--color-tiimo-photo-fade) 86%, transparent) 10%,
-    color-mix(in srgb, var(--color-tiimo-photo-fade) 72%, transparent) 20%,
-    color-mix(in srgb, var(--color-tiimo-photo-fade) 57%, transparent) 31%,
-    color-mix(in srgb, var(--color-tiimo-photo-fade) 42%, transparent) 43%,
-    color-mix(in srgb, var(--color-tiimo-photo-fade) 28%, transparent) 56%,
-    color-mix(in srgb, var(--color-tiimo-photo-fade) 15%, transparent) 70%,
-    color-mix(in srgb, var(--color-tiimo-photo-fade) 5%, transparent) 85%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 85%, transparent) 0%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 72.1%, transparent) 10%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 59.5%, transparent) 20%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 48.3%, transparent) 30%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 37.7%, transparent) 40%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 28%, transparent) 50%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 19.6%, transparent) 60%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 12.4%, transparent) 70%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 6.4%, transparent) 80%,
+    color-mix(in srgb, var(--color-palette-photo-fade) 2.1%, transparent) 90%,
     transparent 100%
   );
   pointer-events: none;
@@ -591,44 +676,36 @@
   background: var(--color-overlay-photo);
 }
 
+/* Solid fills instead of the approved gradients ------------------------------------------ */
+/* Page washes (Welcome, the Home header): the white canvas. */
+.theme-tiimo.screen--wash,
+.theme-tiimo .screen--wash {
+  background: var(--color-surface-page);
+}
+
+/* Primary buttons and the step FAB: the flat brand fill they already look like, as a solid colour. */
+.theme-tiimo .btn--primary,
+.theme-tiimo .fab {
+  background: var(--button-primary-bg-top);
+}
+
+.theme-tiimo .btn--primary:hover:not(:disabled) {
+  background: var(--button-primary-bg-hover-top);
+}
+
+/* Pass and Like: solid ink instead of the soft sheen. SuperSwipe keeps its solid purple. */
+.theme-tiimo .action-bar__btn:not(.action-bar__btn--super) {
+  background: var(--button-ink-bg-bottom);
+}
+
 /* Loading skeletons: solid, without the shimmer sweep. */
 .theme-tiimo .skeleton {
   background: var(--color-surface-sunken);
   animation: none;
 }
 
-/* Slider: a solid rail (::before) and a solid selected interval (::after) instead of a hard-stop
-   gradient; the native input stays on top so its thumbs remain visible and draggable. */
-.theme-tiimo .slider__track::before {
-  background: var(--color-control-track-off);
-}
-
-.theme-tiimo .slider__track::after {
-  content: "";
-  position: absolute;
-  top: 11px;
-  left: var(--from);
-  right: calc(100% - var(--to));
-  height: 6px;
-  border-radius: var(--radius-pill);
-  background: var(--color-control-selected);
-  pointer-events: none;
-}
-
-.theme-tiimo .slider__track input {
-  z-index: 1;
-}
-
-/* Shapes ------------------------------------------------------------------------ */
-/* V8 replaces V5's capsules with a size-based scale (tokens: tag 6, pill 10, control 12, item 12,
-   feature 16, photo 20). Kept as they were, on purpose: the Discover actions (Pass, Like,
-   SuperSwipe, the star), the tab bar and its items, avatars, radios, the switch, slider, progress
-   and the numeric badges, your rounded-square photo on the match and the scallop.
-   tests/e2e/experiment-tiimo.mjs pins every one of these shapes. */
-
-/* Headings ------------------------------------------------------------------------ */
-/* The prompt's question is a section heading, so it takes the neutral heading colour of the
-   other sections; the display-face answer (and, on your own prompt, the quote mark) says "prompt". */
+/* Headings ------------------------------------------------------------------------------ */
+/* The prompt's question is a section heading, so it takes the neutral heading colour. */
 .theme-tiimo .profile-section--prompt .profile-section__title,
 .theme-tiimo .prompt__label {
   color: var(--color-text-secondary);

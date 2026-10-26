@@ -152,8 +152,9 @@
 }
 
 
-/* Tiimo-inspired experiment (?theme=tiimo): the welcome sits on the lilac-white canvas and the
-   reserved hero holds four tinted emoji stickers, interests as the first brand moment. */
+/* Tiimo-inspired experiment (?theme=tiimo): the welcome sits on the white canvas and the reserved
+   hero holds four emoji stickers, interests as the first brand moment. V9: neutral grey tiles with a
+   hairline, flat (no category pastels, no shadow). */
 .welcome.theme-tiimo.screen--wash {
   background: var(--color-surface-page);
 }
@@ -172,9 +173,9 @@
   place-items: center;
   width: 76px;
   height: 76px;
-  border-radius: var(--tiimo-radius-feature);
-  background: var(--tone-tint);
-  box-shadow: var(--shadow-tiimo-card);
+  border-radius: var(--tiimo-radius-photo);
+  background: var(--color-palette-surface-secondary);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
   font-size: 34px;
   line-height: 1;
 }
