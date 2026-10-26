@@ -1,0 +1,33 @@
+Computed corner radius of each component on nine screens (radius/height in px), V7. Identical to V6 and V5 (diff empty).
+
+.nav-button                  basics:50%/40  interests:50%/40  discovery:50%/36  like-profile:50%/40  chat:50%/36  match:50%/40  activity:50%/36
+.fab                         basics:50%/56  interests:50%/56
+.input                       basics:16px/56
+.option-card                 basics:16px/52
+.chip[data-emoji]            interests:12px/36  discovery:12px/36  like-profile:12px/36  match:12px/36  activity:12px/36
+.action-bar__btn             discovery:28px/56
+.count-badge                 discovery:999px/18  likes:999px/18  chats:999px/18  activity:999px/18
+.tab-bar                     discovery:999px/64  likes:999px/64  chats:999px/64  activity:999px/64
+.tab-bar__item               discovery:999px/52  likes:999px/52  chats:999px/52  activity:999px/52
+.chip:not([data-emoji])      discovery:999px/36  likes:999px/36  chats:999px/36  activity:12px/36
+.shared-interests__pill      discovery:12px/36  like-profile:12px/36
+.profile-card__pill          discovery:999px/24  like-profile:999px/24
+.profile-card__media         discovery:32px/683  like-profile:32px/481
+.profile-section             discovery:24px/130 24px/106 24px/141  like-profile:24px/160 24px/106 24px/93
+.btn--primary                like-profile:999px/54
+.btn--secondary              like-profile:999px/54
+.badge                       likes:999px/24  activity:8px/24
+.person-tile__badge .badge   likes:999px/24
+.conversation__unread        chats:999px/20
+.conversation__move          chats:999px/24
+.search                      chats:999px/48
+.avatar__image               chats:50%/64  chat:50%/36  match:16px/64  activity:50%/24
+.match-queue__image          chats:20px/96
+.composer__field             chat:20px/44  match:20px/44
+.composer__send              chat:50%/44  match:50%/44
+.message__bubble             chat:20px/64
+.btn--quiet                  match:999px/48
+.match__shared-chip          match:12px/36
+.segmented__item             activity:999px/36
+.activity-card__category     activity:8px/27
+.activity-card               activity:24px/397 24px/422 24px/421

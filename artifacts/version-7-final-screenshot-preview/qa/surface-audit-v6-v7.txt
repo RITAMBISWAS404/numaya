@@ -1,0 +1,140 @@
+Elevation, white surfaces and input treatment per screen: V6 then V7.
+('elevated' = has an outer box-shadow.)
+
+===== V6 =====
+
+## basics
+  elevated: nav-button.nav-button--floating×1, option-card×4, option-card.is-selected×2, fab×1
+  white surfaces: input×2, option-card×4
+  input input: rgb(255, 255, 255) | shadow no | border 0px rgb(40, 38, 45)
+
+## photos
+  elevated: nav-button.nav-button--floating×1, fab×1
+  white surfaces: 
+
+## interests
+  elevated: nav-button.nav-button--floating×1, fab×1
+  white surfaces: chip×7
+
+## discovery
+  elevated: nav-button.nav-button--floating×2, action-bar__btn.action-bar__btn--super×2, card.profile-section×3, action-bar__btn.action-bar__btn--pass×1, action-bar__btn.action-bar__btn--like×1, tab-bar×1, count-badge×2
+  white surfaces: card.profile-section×3, chip.chip--static×3, tab-bar×1
+
+## discovery#filters
+  elevated: nav-button.nav-button--floating×2, action-bar__btn.action-bar__btn--super×2, card.profile-section×3, action-bar__btn.action-bar__btn--pass×1, action-bar__btn.action-bar__btn--like×1, tab-bar×1, count-badge×2, sheet__panel×1, list-group__items×2, btn.btn--primary×1
+  white surfaces: card.profile-section×3, chip.chip--static×3, tab-bar×1, list-group__items×2
+
+## like-profile
+  elevated: nav-button.nav-button--floating×1, card.profile-section×2, btn.btn--secondary×1, btn.btn--primary×1
+  white surfaces: card.profile-section×2, btn.btn--secondary×1
+
+## likes
+  elevated: tab-bar×1, count-badge×2
+  white surfaces: chip.chip--filter×3, tab-bar×1
+
+## match
+  elevated: nav-button.nav-button--floating×1, avatar.avatar--lg×1, composer__field×1
+  white surfaces: chip.chip--static×2, composer__field×1
+  input composer__field: rgb(255, 255, 255) | shadow yes | border 0px rgb(20, 19, 22)
+  input textarea: rgba(0, 0, 0, 0) | shadow no | border 0px rgb(0, 0, 0)
+
+## chats
+  elevated: match-queue__image.avatar--tone-0×1, conversation__hit×2, tab-bar×1, count-badge×2
+  white surfaces: search×1, chip.chip--filter×2, conversation__hit×2, tab-bar×1
+  input search: rgb(255, 255, 255) | shadow no | border 0px rgb(107, 103, 113)
+  input search__input: rgba(0, 0, 0, 0) | shadow no | border 0px rgb(40, 38, 45)
+
+## chat
+  elevated: nav-button.nav-button--floating×2, composer__field×1
+  white surfaces: message__bubble×1, composer__field×1
+  input composer__field: rgb(255, 255, 255) | shadow yes | border 0px rgb(20, 19, 22)
+  input textarea: rgba(0, 0, 0, 0) | shadow no | border 0px rgb(0, 0, 0)
+
+## prompt
+  elevated: nav-button.nav-button--floating×1, option-card.is-selected×1, option-card×5
+  white surfaces: option-card×5, input.textarea__input×1
+  input input.textarea__input: rgb(255, 255, 255) | shadow no | border 0px rgb(40, 38, 45)
+
+## activity
+  elevated: nav-button.nav-button--floating×1, activity-card×6, avatar__image×10, tab-bar×1, count-badge×2
+  white surfaces: segmented__item×1, chip.chip--filter×6, activity-card×6, tab-bar×1
+
+## profile
+  elevated: nav-button.nav-button--floating×1, card.fl-ready-card×1, btn.btn--primary×1, tab-bar×1, count-badge×2
+  white surfaces: fl-screen.fl-screen--page×1, chip.chip--static×2, card.fl-ready-card×1, list-group__items×3
+
+## settings
+  elevated: nav-button.nav-button--floating×1
+  white surfaces: fl-screen.fl-screen--page×1, list-group__items×8
+
+===== V7 =====
+
+## basics
+  elevated: nav-button.nav-button--floating×1, fab×1
+  white surfaces: option-card×4
+  input input: rgb(237, 235, 229) | shadow no | border 0px rgb(40, 38, 45)
+
+## photos
+  elevated: nav-button.nav-button--floating×1, fab×1
+  white surfaces: 
+
+## interests
+  elevated: nav-button.nav-button--floating×1, fab×1
+  white surfaces: 
+
+## discovery
+  elevated: nav-button.nav-button--floating×2, action-bar__btn.action-bar__btn--super×2, card.profile-section×3, action-bar__btn.action-bar__btn--pass×1, action-bar__btn.action-bar__btn--like×1, tab-bar×1, count-badge×2
+  white surfaces: card.profile-section×3, chip.chip--static×3, tab-bar×1
+
+## discovery#filters
+  elevated: nav-button.nav-button--floating×2, action-bar__btn.action-bar__btn--super×2, card.profile-section×3, action-bar__btn.action-bar__btn--pass×1, action-bar__btn.action-bar__btn--like×1, tab-bar×1, count-badge×2, sheet__panel×1, btn.btn--primary×1
+  white surfaces: card.profile-section×3, chip.chip--static×3, tab-bar×1, list-group__items×2
+
+## like-profile
+  elevated: nav-button.nav-button--floating×1, card.profile-section×2, btn.btn--primary×1
+  white surfaces: card.profile-section×2, btn.btn--secondary×1
+
+## likes
+  elevated: tab-bar×1, count-badge×2
+  white surfaces: chip.chip--filter×3, tab-bar×1
+
+## match
+  elevated: nav-button.nav-button--floating×1, avatar.avatar--lg×1
+  white surfaces: 
+  input composer__field: rgb(237, 235, 229) | shadow no | border 0px rgb(20, 19, 22)
+  input textarea: rgba(0, 0, 0, 0) | shadow no | border 0px rgb(0, 0, 0)
+
+## chats
+  elevated: match-queue__image.avatar--tone-0×1, tab-bar×1, count-badge×2
+  white surfaces: chip.chip--filter×2, tab-bar×1
+  input search: rgb(237, 235, 229) | shadow no | border 0px rgb(107, 103, 113)
+  input search__input: rgba(0, 0, 0, 0) | shadow no | border 0px rgb(40, 38, 45)
+
+## chat
+  elevated: nav-button.nav-button--floating×2
+  white surfaces: message__bubble×1
+  input composer__field: rgb(237, 235, 229) | shadow no | border 0px rgb(20, 19, 22)
+  input textarea: rgba(0, 0, 0, 0) | shadow no | border 0px rgb(0, 0, 0)
+
+## prompt
+  elevated: nav-button.nav-button--floating×1
+  white surfaces: option-card×5
+  input input.textarea__input: rgb(237, 235, 229) | shadow no | border 0px rgb(40, 38, 45)
+
+## activity
+  elevated: nav-button.nav-button--floating×1, activity-card×6, avatar__image×10, tab-bar×1, count-badge×2
+  white surfaces: activity-card×6, tab-bar×1
+
+## profile
+  elevated: nav-button.nav-button--floating×1, card.fl-ready-card×1, btn.btn--primary×1, tab-bar×1, count-badge×2
+  white surfaces: btn.btn--secondary×1, card.fl-ready-card×1, list-group__items×3, tab-bar×1
+
+## edit
+  elevated: nav-button.nav-button--floating×1
+  white surfaces: list-group__items×2
+  input input.textarea__input: rgb(237, 235, 229) | shadow no | border 0px rgb(40, 38, 45)
+  input input: rgb(237, 235, 229) | shadow no | border 0px rgb(40, 38, 45)
+
+## settings
+  elevated: nav-button.nav-button--floating×1
+  white surfaces: list-group__items×8
