@@ -1,0 +1,20 @@
+/* V16 Withings Health Mate reconstruction: flow-screen rules (see
+   src/design-system/styles/theme-withings.css for the component layer). Scoped to `.theme-withings`,
+   which only the experiment's screens carry, and only with ?theme=withings. */
+
+/* Every screen sits on the warm stone page; cards and groups are white on it. */
+.theme-withings .fl-screen,
+.theme-withings .fl-disc-head {
+  background: var(--color-surface-page);
+}
+
+/* Opening lines on a new match: white rows on the page with the card corner. */
+.theme-withings .fl-opener {
+  border-radius: var(--withings-radius-card);
+  background: var(--color-surface);
+  box-shadow: none;
+}
+
+.theme-withings .fl-sheet-note {
+  border-radius: var(--withings-radius-card);
+}

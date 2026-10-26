@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, IllustrationSlot, Screen, Toast, Wordmark } from "../../design-system/index.js";
-import { experimentTheme } from "../../lib/theme.js";
+import { themeClasses } from "../../lib/theme.js";
 
 /* Tiimo-inspired experiment only: interests as tinted emoji stickers in the reserved hero (the
    artwork slot itself stays empty). Decorative. */
@@ -25,9 +25,10 @@ export function Welcome({ active, onCreate, onSignIn }) {
     setNotice(`${name} opens in your browser`);
   };
 
-  const tiimo = experimentTheme() === "tiimo";
+  const themed = themeClasses();
+  const tiimo = Boolean(themed);
   return (
-    <Screen tone="brand" className={tiimo ? "welcome theme-tiimo" : "welcome"} aria-labelledby="welcome-title">
+    <Screen tone="brand" className={tiimo ? `welcome ${themed}` : "welcome"} aria-labelledby="welcome-title">
       {/* Brand header: sets the left axis the headline, lede and actions share. */}
       <header className="welcome__brand">
         <Wordmark />

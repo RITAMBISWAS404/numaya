@@ -1,0 +1,961 @@
+/*
+ * V16: the Withings Health Mate reconstruction (artifacts/version-16-design-experiment/). The visual
+ * system is taken from the Withings Health Mate iOS screens on Mobbin; the layouts, copy and
+ * behaviour are V11's. A V16 screen carries `.theme-tiimo.theme-withings`: V11's rules
+ * (theme-tiimo.css) set the layout and the component markup, and the rules below, loaded after them,
+ * restyle it. Every rule is scoped to `.theme-withings`, which only renders with `?theme=withings`.
+ *
+ * The system (DESIGN_PRINCIPLES.md, TOKENS.md, COMPONENT_RULES.md):
+ * - Colour: a warm stone page (#F5F4F1); white cards that separate from it by surface contrast alone,
+ *   with no border and no shadow; near-black ink (#121212) for text, primary buttons, selected radios
+ *   and the active tab; Withings blue (#5066CC) for brand accents (your messages, the SuperSwipe,
+ *   checked boxes, slider fills, links, focus) and its light tint (#E4EBFC) for selected pills and
+ *   tinted actions; green for switches; red for destruction and notification dots.
+ * - Type: one grotesk (Hanken Grotesk, the closest free match) for everything. Heavy bold page
+ *   titles, medium section headings, regular body; modal headers in tracked capitals; field labels in
+ *   small bold capitals.
+ * - Geometry: rounded rectangles (tags 6, fields 8, buttons and chips 12, cards 14, photos and
+ *   sheets 16); full pills only for compact outlined actions and tint tabs; circles for header
+ *   buttons, avatars, radios, the step button and switch thumbs.
+ * - Lists: rows grouped in one white card with hairline dividers inset to the text.
+ */
+
+/* Roles ----------------------------------------------------------------------------------- */
+/* The shared components read these roles, so setting them here re-colours and re-types them all.
+   Two selectors' worth of specificity, so they win over V11's own role assignments. */
+.theme-tiimo.theme-withings {
+  /* Type: one family. */
+  --font-display: var(--font-withings);
+  --font-text: var(--font-withings);
+  --font-display-axes: normal;
+  --font-weight-bold: 700;
+  --type-hero-size: 32px;
+  --type-hero-line: 38px;
+  --type-hero-weight: 700;
+  --type-hero-tracking: -0.02em;
+  --type-display-size: 30px;
+  --type-display-line: 36px;
+  --type-display-weight: 700;
+  --type-display-tracking: -0.02em;
+  --type-headline-size: 24px;
+  --type-headline-line: 30px;
+  --type-headline-weight: 600;
+  --type-headline-tracking: -0.015em;
+  --type-title-sm-size: 20px;
+  --type-title-sm-line: 26px;
+  --type-title-sm-weight: 500;
+  --type-title-sm-tracking: -0.01em;
+  --type-title-size: 20px;
+  --type-title-line: 26px;
+  --type-title-weight: 500;
+  --type-title-tracking: -0.01em;
+  --type-body-size: 15.5px;
+  --type-body-line: 22px;
+  --type-body-tracking: 0em;
+  --type-body-sm-size: 15px;
+  --type-body-sm-line: 21px;
+  --type-body-sm-tracking: 0em;
+  --type-input-size: 16px;
+  --type-input-line: 22px;
+  --type-input-weight: 400;
+  --type-button-size: 16px;
+  --type-button-weight: 600;
+  --type-button-tracking: 0em;
+  --type-label-size: 14px;
+  --type-label-line: 18px;
+  --type-caption-size: 13.5px;
+  --type-caption-line: 18px;
+  --type-micro-size: 12.5px;
+  --type-eyebrow-size: 11.5px;
+  --type-eyebrow-weight: 700;
+  --type-eyebrow-tracking: 0.08em;
+
+  /* Surfaces. */
+  --color-surface-page: var(--color-withings-canvas);
+  --color-surface-canvas: var(--color-withings-canvas);
+  --color-surface: var(--color-withings-surface);
+  --color-surface-soft: var(--color-withings-fill);
+  --color-surface-sunken: var(--color-withings-photo);
+  --color-surface-photo: var(--color-withings-photo);
+  --color-surface-brand: var(--color-withings-accent-tint);
+  --color-surface-inverse: var(--color-withings-ink);
+
+  /* Text. */
+  --color-text-primary: var(--color-withings-ink);
+  --color-text-secondary: var(--color-withings-text-secondary);
+  --color-text-muted: var(--color-withings-text-muted);
+  --color-text-subtle: var(--color-withings-disabled-foreground);
+  --color-text-brand: var(--color-withings-accent-on-tint);
+  --color-text-brand-deep: var(--color-withings-accent-on-tint);
+
+  /* Edges. */
+  --color-border-subtle: var(--color-withings-border);
+  --color-border-strong: var(--color-withings-border-strong);
+  --color-border-control: var(--color-withings-control);
+  --color-border-brand: var(--color-withings-accent);
+
+  /* Brand and controls: blue is the accent; ink is the selected control and the primary action. */
+  --color-brand: var(--color-withings-accent);
+  --color-brand-hover: var(--color-withings-accent-hover);
+  --color-brand-tint: var(--color-withings-accent-tint);
+  --color-brand-tint-strong: var(--color-withings-accent-tint);
+  --color-brand-subtle: var(--color-withings-accent-tint);
+  --color-brand-soft: var(--color-withings-accent-tint);
+  --color-on-brand: var(--color-withings-accent-foreground);
+  --color-control-selected: var(--color-withings-ink);
+  --color-control-selected-text: var(--color-withings-ink-foreground);
+  --color-control-track-off: var(--color-withings-fill);
+  --color-focus-ring: var(--color-withings-accent);
+  --color-focus-field: var(--color-withings-accent);
+  --color-focus-halo: color-mix(in srgb, var(--color-withings-accent) 24%, transparent);
+  --color-danger: var(--color-withings-negative);
+  --color-danger-badge: var(--color-withings-negative);
+  --color-success: var(--color-withings-positive);
+
+  /* V11's palette roles, which its rules read. */
+  --color-palette-canvas: var(--color-withings-canvas);
+  --color-palette-surface: var(--color-withings-surface);
+  --color-palette-surface-secondary: var(--color-withings-canvas);
+  --color-palette-surface-inset: var(--color-withings-fill);
+  --color-palette-border: var(--color-withings-border);
+  --color-palette-brand: var(--color-withings-accent);
+  --color-palette-brand-foreground: var(--color-withings-accent-foreground);
+  --color-palette-brand-tint: var(--color-withings-accent-tint);
+  --color-palette-text: var(--color-withings-ink);
+  --color-palette-secondary: var(--color-withings-text-muted);
+  --color-palette-secondary-strong: var(--color-withings-text-muted);
+  --color-palette-muted: var(--color-withings-disabled-foreground);
+  --color-palette-disabled: var(--color-withings-disabled);
+
+  /* Buttons: ink is the primary fill (Done, Next, Join, Continue in the reference). */
+  --button-primary-bg-top: var(--color-withings-ink);
+  --button-primary-bg-bottom: var(--color-withings-ink);
+  --button-primary-bg-hover-top: color-mix(in srgb, var(--color-withings-ink) 86%, var(--color-withings-surface));
+  --button-primary-bg-hover-bottom: color-mix(in srgb, var(--color-withings-ink) 86%, var(--color-withings-surface));
+  --button-ink-bg-top: var(--color-withings-ink);
+  --button-ink-bg-bottom: var(--color-withings-ink);
+  --shadow-tiimo-float: var(--shadow-withings-float);
+
+  background-color: var(--color-surface-page);
+  color: var(--color-text-primary);
+  /* body sets the text family from :root, so the themed subtree has to set it again for inherited
+     text (rows, buttons, body copy) to take the one family. */
+  font-family: var(--font-text);
+}
+
+/* V11 raised secondary text inside grey surfaces; V16's muted grey already passes on every surface. */
+.theme-withings :is(.input, .search, .composer__field, .textarea, .info-card, .fl-sheet-note, .chip, .segmented__item, .tab-bar__item, .badge, .activity-card__category, .conversation__move, .readiness-meter) {
+  --color-text-muted: var(--color-withings-text-muted);
+}
+
+/* Typography -------------------------------------------------------------------------------- */
+/* Page titles (Likes, Messages, Profile, Activity): heavy bold, like "Good morning, John". */
+.theme-withings :is(.topbar__large-title, .screen-header__title) {
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Modal and detail headers: tracked small capitals, centred ("PROFILE", "BODY COMPOSITION"). */
+.theme-withings .topbar__title {
+  font-size: 12.5px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Section headings ("Today's Missions", "Account Settings"): medium weight, ink, a size below the
+   page title. */
+.theme-withings :is(.fl-section-title, .section__title) {
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* Group headings over grouped rows: the same medium heading, in ink, not a grey label. */
+.theme-withings .list-group__title {
+  padding: 0;
+  color: var(--color-text-primary);
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.theme-withings .list-group__footnote {
+  color: var(--color-text-secondary);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+}
+
+/* Field labels: small bold capitals ("FIRST NAME", "DATE OF BIRTH"). */
+.theme-withings .field__label {
+  color: var(--color-text-primary);
+  font-size: 11.5px;
+  line-height: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* The wordmark keeps Numaya's name and mark; its type follows the one family. */
+.theme-withings .wordmark__text {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+/* Surfaces ---------------------------------------------------------------------------------- */
+/* Cards are white on the stone page with no border and no shadow: the reference separates them by
+   surface contrast alone. */
+.theme-withings :is(.card, .activity-card, .prompt, .prompt-set, .list-group__items, .fl-ready-card, .fl-me-card) {
+  border-radius: var(--withings-radius-card);
+  background: var(--color-surface);
+  box-shadow: none;
+}
+
+.theme-withings .prompt-set .prompt {
+  background: none;
+}
+
+.theme-withings .activity-card__media {
+  border-radius: calc(var(--withings-radius-card) - var(--space-2));
+}
+
+/* Someone's profile (Discover, Like back): each section between the photos is a white card, like the
+   reference's measurement cards, aligned to the photo's edges. */
+.theme-withings .profile-section {
+  border-radius: var(--withings-radius-card);
+  background: var(--color-surface);
+  box-shadow: none;
+  padding: var(--space-4);
+}
+
+/* Information boxes (why they liked you, the first-photo tip, the report note): the reference's
+   notification box, the page colour with a hairline outline, so it reads as information, not a
+   card you open. */
+.theme-withings :is(.info-card, .fl-sheet-note) {
+  border-radius: var(--withings-radius-card);
+  background: var(--color-surface-page);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-withings-border);
+}
+
+.theme-withings .info-card__icon {
+  color: var(--color-text-primary);
+}
+
+/* Grouped rows: 56px rows, a 16px regular label, a secondary subtitle, hairline dividers inset 16px
+   on both sides (V11's alignment). */
+.theme-withings .list-row__hit {
+  min-height: var(--withings-row-height);
+}
+
+.theme-withings .list-row__label {
+  font-weight: var(--font-weight-regular);
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.theme-withings .list-row__description {
+  color: var(--color-text-secondary);
+}
+
+.theme-withings .list-group__items > .list-row + .list-row {
+  box-shadow: inset 0 var(--border-hairline) 0 var(--color-withings-border);
+}
+
+/* Selection rows: one white card with hairline dividers, like the reference's radio lists ("Are your
+   cycles regular?"). The radio or checkbox carries the selection, so the selected row takes no
+   ring. */
+.theme-withings .option-cards {
+  gap: 0;
+}
+
+.theme-withings .option-card,
+.theme-withings .option-card:has(.choice__description),
+.theme-withings .option-card.is-selected {
+  min-height: var(--withings-row-height);
+  padding: var(--space-3) var(--space-4);
+  border-radius: 0;
+  background: var(--color-surface);
+  box-shadow: none;
+}
+
+.theme-withings .option-card + .option-card {
+  box-shadow: inset 0 var(--border-hairline) 0 var(--color-withings-border);
+}
+
+.theme-withings .option-cards > .option-card:first-of-type {
+  border-top-left-radius: var(--withings-radius-card);
+  border-top-right-radius: var(--withings-radius-card);
+}
+
+.theme-withings .option-cards > .option-card:last-of-type {
+  border-bottom-left-radius: var(--withings-radius-card);
+  border-bottom-right-radius: var(--withings-radius-card);
+}
+
+.theme-withings .option-card:focus-within {
+  outline: var(--border-focus) solid var(--color-focus-ring);
+  outline-offset: -2px;
+}
+
+/* Radios: a grey ring; selected, an ink ring around an ink dot. Checkboxes: a grey rounded square;
+   checked, Withings blue with a white tick (the privacy step). */
+.theme-withings .choice__input {
+  width: 22px;
+  height: 22px;
+  box-shadow: inset 0 0 0 1.5px var(--color-withings-control);
+}
+
+.theme-withings .choice__input--radio:checked {
+  background: radial-gradient(circle, var(--color-withings-ink) 0 5.5px, var(--color-withings-surface) 6px);
+  box-shadow: inset 0 0 0 1.5px var(--color-withings-ink);
+}
+
+.theme-withings .choice__input--checkbox {
+  border-radius: var(--withings-radius-tag);
+}
+
+.theme-withings .choice__input--checkbox:checked {
+  background-color: var(--color-withings-accent);
+  box-shadow: none;
+}
+
+/* Fields: white, a 1px dark outline, 8px corners, 54px tall; focus, a 2px blue outline. */
+.theme-withings :is(.input, .textarea__input) {
+  border-radius: var(--withings-radius-field);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-withings-outline);
+  font-weight: var(--font-weight-regular);
+}
+
+.theme-withings .input {
+  height: var(--withings-field-height);
+}
+
+.theme-withings :is(.input, .textarea__input):focus-within,
+.theme-withings :is(.input, .textarea__input):focus {
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-focus-field);
+}
+
+/* Search and the composer sit on the page: white with a hairline, the field corner. */
+.theme-withings .search {
+  height: 46px;
+  border-radius: var(--withings-radius-control);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-withings-border);
+}
+
+.theme-withings .search:focus-within {
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-focus-field);
+}
+
+.theme-withings .composer__field,
+.theme-withings .composer__field:not(:focus-within) {
+  border-radius: 22px;
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-withings-border);
+}
+
+.theme-withings .composer__field:focus-within {
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-focus-field);
+}
+
+.theme-withings .composer__send {
+  border-radius: 50%;
+  background: var(--color-withings-ink);
+  color: var(--color-withings-ink-foreground);
+}
+
+.theme-withings .composer__send:disabled {
+  background: var(--color-withings-disabled);
+  color: var(--color-withings-disabled-foreground);
+}
+
+/* Photos ------------------------------------------------------------------------------------ */
+.theme-withings :is(.profile-card__media, .fl-pf__photo) {
+  border-radius: var(--withings-radius-photo);
+}
+
+.theme-withings :is(.person-tile__photo, .photo-slot, .photo-slot__select) {
+  border-radius: var(--withings-radius-card);
+}
+
+.theme-withings .photo-slot--empty {
+  background: var(--color-surface);
+  outline: 1.5px dashed var(--color-withings-border-strong);
+}
+
+.theme-withings .photo-slot--empty svg {
+  border-radius: 50%;
+  background: var(--color-withings-ink);
+  color: var(--color-withings-ink-foreground);
+  box-shadow: none;
+}
+
+.theme-withings :is(.photo-slot__remove, .photo-slot__index) {
+  border-radius: var(--withings-radius-tag);
+}
+
+.theme-withings .photo-slot__remove {
+  border-radius: 50%;
+}
+
+/* Sheets and dialogs: white panels; a medium title with a hairline under the header, like the
+   reference's "Assigned Sex" sheet. */
+.theme-withings .sheet__panel {
+  border-radius: var(--withings-radius-photo) var(--withings-radius-photo) 0 0;
+  background: var(--color-surface);
+}
+
+.theme-withings .sheet__grabber {
+  background: var(--color-withings-border-strong);
+}
+
+.theme-withings .sheet__header {
+  margin-inline: calc(-1 * var(--layout-gutter));
+  padding: 0 var(--layout-gutter) var(--space-3);
+  box-shadow: inset 0 calc(-1 * var(--border-hairline)) 0 var(--color-withings-border);
+}
+
+.theme-withings .sheet__title {
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.theme-withings .dialog__panel {
+  border-radius: var(--withings-radius-card);
+}
+
+.theme-withings .action-sheet__list {
+  border-radius: var(--withings-radius-card);
+}
+
+/* Toast: the reference's light blue pill ("Password created"). */
+.theme-withings .pill {
+  border-radius: var(--withings-radius-pill);
+  background: var(--color-withings-accent-tint);
+  color: var(--color-withings-accent-on-tint);
+  box-shadow: var(--shadow-withings-float);
+}
+
+/* Chips and tabs ---------------------------------------------------------------------------- */
+/* Content chips (interests, shared interests, facts): white rounded rectangles with an emoji or
+   icon and a label, like "Withings+", "6 Weeks", "Activity". Selected: the blue tint with deep-blue
+   text. On a white card they take the fill so they still read as chips. */
+.theme-withings .chip,
+.theme-withings :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip) {
+  border-radius: var(--withings-radius-control);
+  background: var(--color-surface);
+  box-shadow: none;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.theme-withings :is(.card, .profile-section, .prompt, .list-group__items, .fl-me-card, .sheet__panel, .match) .chip {
+  background: var(--color-surface-soft);
+}
+
+.theme-withings .chip.is-selected,
+.theme-withings :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected {
+  background: var(--color-withings-accent-tint);
+  box-shadow: none;
+  color: var(--color-withings-accent-on-tint);
+  font-weight: var(--font-weight-semibold);
+}
+
+.theme-withings :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected :is(.chip__affordance, .chip__icon, .chip__count),
+.theme-withings .chip.is-selected :is(.chip__affordance, .chip__icon, .chip__count) {
+  color: var(--color-withings-accent-on-tint);
+}
+
+.theme-withings :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-unavailable {
+  color: var(--color-withings-disabled-foreground);
+}
+
+/* View tabs without emoji (Likes: All, Activity, New, Nearby; Messages: All, Unread, Your move): the
+   reference's period tabs ("Week Month Quarter Year"): plain ink text; selected, a blue-tint pill
+   with blue text. */
+.theme-withings .filter-chips:not(:has(.chip[data-emoji])) .chip,
+.theme-withings .filter-chips:not(:has(.chip[data-emoji])) .chip:not(.is-selected) {
+  border-radius: var(--withings-radius-pill);
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.theme-withings .filter-chips:not(:has(.chip[data-emoji])) .chip.is-selected {
+  background: var(--color-withings-accent-tint);
+  color: var(--color-withings-accent-on-tint);
+}
+
+.theme-withings .filter-chips:not(:has(.chip[data-emoji])) .chip.is-selected .chip__count {
+  color: var(--color-withings-accent-on-tint);
+}
+
+/* Segmented control (Edit / Preview, Explore / My activities): the reference's grey track with a
+   white selected segment ("Programs / Library"). */
+.theme-withings .segmented {
+  gap: 0;
+  padding: 2px;
+  border-radius: 10px;
+  background: var(--color-withings-fill);
+}
+
+.theme-withings .segmented__item {
+  flex: 1;
+  height: 32px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.theme-withings .segmented__item.is-selected {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-withings-segment);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Interest-set headings: the emoji in a round pastel holder, like the reference's category icons
+   (Activity on yellow, Body on lavender). */
+.theme-withings .chip-group__set-label[data-tone]::after {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-withings-mark-yellow);
+}
+
+.theme-withings .chip-group__set-label[data-tone="lilac"]::after,
+.theme-withings .chip-group__set-label[data-tone="sky"]::after {
+  background: var(--color-withings-mark-lavender);
+}
+
+.theme-withings .chip-group__set-label[data-tone="peach"]::after {
+  background: var(--color-withings-mark-pink);
+}
+
+.theme-withings .chip-group__set-label[data-tone="mint"]::after {
+  background: var(--color-withings-accent-tint);
+}
+
+.theme-withings .activity-card__category[data-tone] {
+  border-radius: var(--withings-radius-tag);
+  background: var(--color-surface-soft);
+}
+
+.theme-withings .activity-media__fallback {
+  background: var(--color-withings-photo);
+}
+
+/* Status labels: the reference's outlined "Withings+" badge (1px ink, 6px corner) for neutral
+   states; the blue tint for states to notice ("New", "Live now"); white on photos. */
+.theme-withings :is(.badge, .profile-card__pill, .conversation__move, .fl-me__pct) {
+  border-radius: var(--withings-radius-tag);
+}
+
+.theme-withings :is(.badge, .conversation__move) {
+  background: transparent;
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-withings-ink);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.theme-withings .badge--brand {
+  background: var(--color-withings-accent-tint);
+  box-shadow: none;
+  color: var(--color-withings-accent-on-tint);
+  font-weight: var(--font-weight-semibold);
+}
+
+.theme-withings :is(.person-tile__badge, .activity-media__badges) .badge {
+  background: var(--color-surface);
+  box-shadow: none;
+}
+
+.theme-withings :is(.person-tile__badge, .activity-media__badges) .badge--brand {
+  color: var(--color-withings-accent-on-tint);
+}
+
+.theme-withings .conversation__unread {
+  background: var(--color-withings-accent);
+  color: var(--color-withings-accent-foreground);
+}
+
+/* Buttons ----------------------------------------------------------------------------------- */
+/* Full-width buttons: 50px rounded rectangles with the control corner. Primary is ink with white
+   text ("Done", "Next"); secondary is white with a 1px ink outline ("Share", "Previous"). */
+.theme-withings .btn {
+  height: var(--withings-button-height);
+  border-radius: var(--withings-radius-control);
+  font-weight: var(--font-weight-semibold);
+}
+
+.theme-withings .btn--primary {
+  background: var(--color-withings-ink);
+  color: var(--color-withings-ink-foreground);
+}
+
+.theme-withings .btn--primary:hover:not(:disabled) {
+  background: var(--button-primary-bg-hover-top);
+}
+
+.theme-withings .btn--secondary,
+.theme-withings .btn--secondary:hover:not(:disabled) {
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-withings-ink);
+  color: var(--color-text-primary);
+}
+
+/* Tinted action ("Explore data", "All settings"): the blue tint with deep-blue text, no outline. */
+.theme-withings .btn--brand {
+  background: var(--color-withings-accent-tint);
+  box-shadow: none;
+  color: var(--color-withings-accent-on-tint);
+}
+
+.theme-withings .btn--destructive-solid {
+  background: var(--color-withings-negative);
+  color: var(--color-withings-accent-foreground);
+}
+
+.theme-withings .btn:disabled:not(.is-loading) {
+  background: var(--color-withings-disabled);
+  box-shadow: none;
+  color: var(--color-withings-disabled-foreground);
+}
+
+.theme-withings :is(.btn--quiet, .btn--destructive):disabled:not(.is-loading) {
+  background: transparent;
+}
+
+/* Small buttons ("Edit profile", "Write a bio", "See insights"): the reference's compact outlined
+   pills ("Add a Reminder", "Share"), 36px tall inside the 44px touch target; primary ones stay ink. */
+.theme-withings .btn--sm {
+  height: 36px;
+  padding-inline: var(--space-4);
+  border-radius: var(--withings-radius-pill);
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+}
+
+.theme-withings .btn--sm:not(.btn--primary):not(.btn--brand):not(.btn--destructive-solid) {
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-withings-ink);
+  color: var(--color-text-primary);
+}
+
+/* Links: blue, underlined (the reference's "Get help →"). */
+.theme-withings .text-button {
+  color: var(--color-withings-accent-on-tint);
+}
+
+/* Icon buttons: in headers on the page, white circles with a hairline (the reference's home
+   header); in modal headers, a bare icon. */
+.theme-withings .nav-button {
+  border-radius: 50%;
+}
+
+.theme-withings .nav-button--floating {
+  width: var(--withings-header-button);
+  height: var(--withings-header-button);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-withings-border);
+}
+
+.theme-withings .nav-button--flat {
+  background: var(--color-surface-soft);
+  color: var(--color-text-primary);
+}
+
+.theme-withings .topbar .nav-button--floating {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* The step button: an ink circle with a white arrow, like the reference's "Add Logs" button. */
+.theme-withings .fab {
+  border-radius: 50%;
+  background: var(--color-withings-ink);
+  color: var(--color-withings-ink-foreground);
+}
+
+.theme-withings .fab:disabled {
+  background: var(--color-withings-disabled);
+  color: var(--color-withings-disabled-foreground);
+}
+
+/* Discover actions: circles, as the reference draws icon-only actions. Pass is the outlined
+   secondary, Like the ink primary (the reference's Share / Done pair), the SuperSwipe Withings
+   blue. */
+.theme-withings .action-bar__btn {
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+.theme-withings .action-bar__btn:not(.action-bar__btn--super) {
+  background: var(--color-withings-ink);
+  color: var(--color-withings-ink-foreground);
+}
+
+.theme-withings .action-bar__btn--super {
+  background: var(--color-withings-accent);
+  color: var(--color-withings-accent-foreground);
+}
+
+.theme-withings .profile-card__actions .action-bar__btn {
+  box-shadow: var(--shadow-withings-float);
+}
+
+/* Switch: the iOS proportions (51 × 31) with a round thumb; green when on. */
+.theme-withings .switch {
+  width: var(--switch-width);
+  height: var(--switch-height);
+  border-radius: var(--withings-radius-pill);
+}
+
+.theme-withings .switch:checked {
+  background: var(--color-withings-positive);
+}
+
+.theme-withings .switch::after {
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+}
+
+.theme-withings .switch:checked::after {
+  transform: translateX(20px);
+}
+
+/* Slider: a fill rail with a blue interval and round white thumbs. */
+.theme-withings .slider__track::before {
+  background: var(--color-withings-fill);
+}
+
+.theme-withings .slider__track::after {
+  background: var(--color-withings-accent);
+}
+
+.theme-withings .slider__track input::-webkit-slider-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+}
+
+.theme-withings .slider__track input::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+}
+
+/* Onboarding progress: ink segments on the fill. */
+.theme-withings .progress__segment {
+  background: var(--color-withings-fill);
+}
+
+.theme-withings .progress__fill {
+  background: var(--color-withings-ink);
+}
+
+/* Bottom navigation: white with a hairline, the active tab ink (filled icon, semibold label), the
+   others grey, notification dots red, as in the reference. */
+.theme-withings .tab-bar {
+  background: var(--color-surface);
+  box-shadow: inset 0 var(--border-hairline) 0 var(--color-withings-border);
+}
+
+.theme-withings :is(.tab-bar__item, .tab-bar__icon) {
+  color: var(--color-withings-text-muted);
+}
+
+.theme-withings .tab-bar__item.is-current,
+.theme-withings .tab-bar__item.is-current .tab-bar__icon {
+  color: var(--color-withings-ink);
+}
+
+.theme-withings .tab-bar .count-badge::after {
+  background: var(--color-withings-negative);
+}
+
+/* Avatars: circles; initials white on navy (the reference's "JO" and "JA" avatars). */
+.theme-withings .avatar .avatar__image,
+.theme-withings .match__you,
+.theme-withings .match__you .avatar__image {
+  border-radius: 50%;
+}
+
+.theme-withings .avatar .avatar__image,
+.theme-withings .match-queue__image[class] {
+  background: var(--color-withings-identity);
+  color: var(--color-withings-accent-foreground);
+}
+
+.theme-withings .match-queue__image[class] {
+  border-radius: 50%;
+}
+
+.theme-withings .organic-portrait__fallback[class] {
+  background: var(--color-withings-identity);
+  color: var(--color-withings-accent-foreground);
+}
+
+/* Profile readiness: the score on the fill with a blue bar. */
+.theme-withings .readiness-meter {
+  border-radius: var(--withings-radius-control);
+  background: var(--color-surface-soft);
+}
+
+.theme-withings .readiness-meter::before {
+  background: var(--color-withings-border-strong);
+}
+
+/* The prompt mark: a round tint holder for the blue speech bubble, like the reference's round
+   category icons. */
+.theme-withings .prompt__mark {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+/* The prompt answer: medium, not display-bold, like the reference's card statements. */
+.theme-withings :is(.prompt__answer, .profile-section__answer) {
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.theme-withings .profile-section__answer {
+  font-size: 22px;
+  line-height: 28px;
+}
+
+/* Messaging --------------------------------------------------------------------------------- */
+/* Bubbles: yours Withings blue with white text; theirs white on the page. */
+.theme-withings .message__bubble {
+  border-radius: var(--withings-radius-card);
+}
+
+.theme-withings .message--me .message__bubble {
+  background: var(--color-withings-accent);
+  color: var(--color-withings-accent-foreground);
+}
+
+.theme-withings .message--them .message__bubble {
+  background: var(--color-surface);
+}
+
+.theme-withings .conversation__hit {
+  border-radius: var(--withings-radius-card);
+}
+
+/* Photo placeholders: one warm photo grey. */
+.theme-withings .profile-card__media:not(:has(.profile-card__img)) {
+  background-color: var(--color-withings-photo);
+}
+
+.theme-withings :where(.image-placeholder--stone, .image-placeholder--sand) {
+  background: var(--color-withings-photo);
+}
+
+.theme-withings .skeleton {
+  background: var(--color-withings-fill);
+}
+
+.theme-withings.screen--wash,
+.theme-withings .screen--wash {
+  background: var(--color-surface-page);
+}
+
+/* Refinement pass A -------------------------------------------------------------------------- */
+/* Discover actions are round (56px): Pass the outlined secondary, Like the ink primary, the
+   SuperSwipe Withings blue. V11's 72 × 56 pills rendered as ellipses once rounded at 50%. */
+.theme-withings :is(.action-bar, .profile-card__actions) .action-bar__btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+
+.theme-withings .action-bar__btn.action-bar__btn--pass:not(.action-bar__btn--super) {
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-withings-ink);
+  color: var(--color-text-primary);
+}
+
+/* Legends over choices and chip sets read as field labels: the same small bold capitals as "FIRST
+   NAME", so a form has one label style. Sentence-length labels (.fl-label) stay in sentence case:
+   the reference sets only short labels in capitals. */
+.theme-withings :is(.option-cards__legend, .chip-group__label) {
+  color: var(--color-text-primary);
+  font-size: 11.5px;
+  line-height: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.theme-withings .chip-group__count {
+  color: var(--color-text-muted);
+  letter-spacing: 0.06em;
+}
+
+/* Card titles inside someone's profile ("You both like", the prompt question): the reference's card
+   header, ink and medium ("Weight", "Daily Steps"). */
+.theme-withings .profile-section__title {
+  color: var(--color-text-primary);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+/* A portrait placeholder is a photo stand-in, so the warm photo grey with an ink initial; navy is
+   for avatars. The new-match portraits keep their rounded-rectangle shape. */
+.theme-withings .organic-portrait__fallback[class] {
+  background: var(--color-withings-photo);
+  color: var(--color-text-primary);
+}
+
+.theme-withings .match-queue__image[class] {
+  border-radius: var(--withings-radius-card);
+}
+
+/* Stacked sheet actions: the cancel under a destructive or primary button is the outlined secondary
+   ("Previous" under "Next" in the reference). */
+.theme-withings .sheet__panel .btn--quiet {
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-withings-ink);
+  color: var(--color-text-primary);
+}
+
+/* Refinement pass B -------------------------------------------------------------------------- */
+/* Modal and flow headers: a white bar with a hairline under it, above the stone page ("ACCOUNT &
+   SECURITY", "CYCLE TRACKING"). Tab roots keep their large title on the page. */
+.theme-withings .topbar:not(.topbar--large) {
+  background: var(--color-surface);
+  box-shadow: inset 0 calc(-1 * var(--border-hairline)) 0 var(--color-withings-border);
+}
+
+/* Group headings a step larger, as in the reference ("Account Settings", "Security"). */
+.theme-withings .list-group__title {
+  font-size: 22px;
+  line-height: 28px;
+}
+
+/* Flow headings (onboarding steps) are statements in a flow, like "Are your cycles regular?" and
+   "Nice to meet you, John.": medium weight, a size above section headings. Bold stays for the tab
+   roots' page titles. */
+.theme-withings .screen-header__title {
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}

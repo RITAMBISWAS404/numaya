@@ -63,12 +63,38 @@
         "secondary":         { "$type": "color", "$value": "#77737d" },
         "secondary-strong":  { "$type": "color", "$value": "#6b6771", "$description": "Secondary moved toward Text: 4.85:1 on the inset grey and 5.16:1 on the secondary grey, where #77737D is 4.07 and 4.33." },
         "muted":             { "$type": "color", "$value": "#929099", "$description": "3.15:1 on white: disabled text and icons only, never body text." }
+      },
+      "withings": {
+        "$description": "V16: colours sampled from the Withings Health Mate iOS screens on Mobbin (artifacts/version-16-design-experiment/research/REFERENCE_ANALYSIS.md). Used only inside .theme-withings.",
+        "stone":        { "$type": "color", "$value": "#f5f4f1", "$description": "The warm off-white page (sampled #F6F3F3 / #F3F3F0 across 10 screens)." },
+        "fill":         { "$type": "color", "$value": "#eae9e6", "$description": "Segmented track and unselected fills (sampled #E4E4E4, warmed to sit on the stone page)." },
+        "border":       { "$type": "color", "$value": "#e6e5e2", "$description": "Hairlines: row dividers inside cards, the tab bar's top edge, outlined information boxes (sampled #E3E2E0 / #E8E8E8 / #ECECEC)." },
+        "border-strong":{ "$type": "color", "$value": "#d3d0cc", "$description": "Dashed empty photo slots and the sheet grabber (the reference's grabber samples #CCCCCC, warmed)." },
+        "photo":        { "$type": "color", "$value": "#dfddd9", "$description": "Photo placeholder grey, warm like the page (the reference's empty device and product tiles sample #DCD8D4 / #D8D4D0)." },
+        "outline":      { "$type": "color", "$value": "#6d6c6a", "$description": "The 1px outline of text fields (sampled #6D6C6A), 5.25:1 on white." },
+        "control":      { "$type": "color", "$value": "#8a8784", "$description": "Unselected radio and checkbox rings (sampled #B0B0B0, deepened to 3.57:1 for the non-text contrast minimum)." },
+        "ink":          { "$type": "color", "$value": "#121212", "$description": "Text, primary buttons, the selected radio, the active tab (sampled #0F0F0F / #0C0C0C)." },
+        "secondary":    { "$type": "color", "$value": "#5e5c59", "$description": "Secondary text: row subtitles, helper text (sampled #5F5D5E), 6.06:1 on stone." },
+        "muted":        { "$type": "color", "$value": "#6b6966", "$description": "Metadata and inactive labels (sampled #717171), 4.98:1 on stone and 4.51:1 on the fill." },
+        "disabled":     { "$type": "color", "$value": "#d6d2ce", "$description": "Disabled button fill (sampled #C3BDBA, lightened one step)." },
+        "disabled-fg":  { "$type": "color", "$value": "#77736f", "$description": "Disabled button label (sampled #716D6A)." },
+        "blue":         { "$type": "color", "$value": "#5066cc", "$description": "Withings blue (sampled #5166CC on the pace screen, #5064CC on 'Got it'): white on it 5.11:1." },
+        "blue-hover":   { "$type": "color", "$value": "#4357b8" },
+        "blue-tint":    { "$type": "color", "$value": "#e4ebfc", "$description": "The light blue behind 'Explore data', 'All settings', the selected period tab and the privacy row (sampled #E4EBFC)." },
+        "blue-deep":    { "$type": "color", "$value": "#3e4a8f", "$description": "Blue text on the tint (the 'Explore data' and 'Quarter' labels sample #3E4987 at their darkest), 6.8:1 on the tint." },
+        "navy":         { "$type": "color", "$value": "#203068", "$description": "Initial avatars (sampled #203068), white initials 12.5:1." },
+        "green":        { "$type": "color", "$value": "#3c783c", "$description": "Switch track when on, completion checks (sampled #3C783C)." },
+        "red":          { "$type": "color", "$value": "#cf3336", "$description": "Destructive buttons and notification dots (sampled #CF3336), white on it 5.02:1." },
+        "yellow":       { "$type": "color", "$value": "#fceab7", "$description": "Category mark tile (sampled #FCEAB7). Marks only, never text." },
+        "lavender":     { "$type": "color", "$value": "#e4c9ed", "$description": "Category mark tile (sampled #E4C9ED). Marks only, never text." },
+        "pink":         { "$type": "color", "$value": "#fcccc4", "$description": "Category mark tile (sampled #FCCCC4). Marks only, never text." }
       }
     },
     "font": {
       "family": {
         "fraunces": { "$type": "fontFamily", "$value": "\"Fraunces Variable\", ui-serif, Georgia, \"Times New Roman\", serif" },
-        "inter":    { "$type": "fontFamily", "$value": "\"Inter Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif" }
+        "inter":    { "$type": "fontFamily", "$value": "\"Inter Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif" },
+        "hanken":   { "$type": "fontFamily", "$value": "\"Hanken Grotesk Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif", "$description": "V16: the closest legally available match (SIL OFL) to the Withings app's grotesk: single-storey g, open apertures, a heavy bold." }
       },
       "size": {
         "11": { "$type": "dimension", "$value": "11px" },
@@ -209,6 +235,34 @@
         "muted":             { "$type": "color", "$value": "{primitive.color.palette.muted}", "$description": "Disabled foreground (#929099); not for readable text." },
         "disabled":          { "$type": "color", "$value": "{primitive.color.palette.disabled}", "$description": "Disabled control surfaces (#EAEAED)." },
         "photo-fade":        { "$type": "color", "$value": "{primitive.color.alpha.black}", "$description": "The one gradient's colour: pure black, faded upward over the lower part of a real profile photograph that carries text (opacities set with color-mix in theme-tiimo.css). Never on surfaces, controls or decoration." }
+      },
+      "withings": {
+        "$description": "V16: the Withings Health Mate palette by role, used only inside .theme-withings (artifacts/version-16-design-experiment/design-system/TOKENS.md). A warm stone page, white cards that separate by surface contrast alone, near-black ink for text and primary actions, Withings blue for brand accents and selection tints, green for switches, red for destruction and notification dots.",
+        "canvas":              { "$type": "color", "$value": "{primitive.color.withings.stone}", "$description": "The page behind every screen (#F5F4F1)." },
+        "surface":             { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Cards, grouped rows, fields, sheets, the tab bar and modal headers (#FFFFFF). No border or shadow on the stone page." },
+        "fill":                { "$type": "color", "$value": "{primitive.color.withings.fill}", "$description": "Segmented-control track, unselected filter and interest pills, recessed placeholders (#EAE9E6)." },
+        "border":              { "$type": "color", "$value": "{primitive.color.withings.border}", "$description": "Row dividers inside cards, modal header and tab bar edges, outlined boxes on the page (#E6E5E2)." },
+        "border-strong":       { "$type": "color", "$value": "{primitive.color.withings.border-strong}", "$description": "Dashed empty photo slots, the sheet grabber (#D3D0CC). Decorative edges only." },
+        "photo":               { "$type": "color", "$value": "{primitive.color.withings.photo}", "$description": "Photo placeholders and missing activity images (#DFDDD9)." },
+        "outline":             { "$type": "color", "$value": "{primitive.color.withings.outline}", "$description": "Text-field outline (#6D6C6A)." },
+        "control":             { "$type": "color", "$value": "{primitive.color.withings.control}", "$description": "Unselected radio and checkbox rings (#8A8784)." },
+        "ink":                 { "$type": "color", "$value": "{primitive.color.withings.ink}", "$description": "Primary text and headings, primary buttons, selected radios and option rings, the active tab (#121212)." },
+        "ink-foreground":      { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Text on ink (#FFFFFF, 18.7:1)." },
+        "text-secondary":      { "$type": "color", "$value": "{primitive.color.withings.secondary}", "$description": "Row subtitles, helper text, descriptions (#5E5C59)." },
+        "text-muted":          { "$type": "color", "$value": "{primitive.color.withings.muted}", "$description": "Metadata, timestamps, inactive tab labels (#6B6966); 4.5:1 or better on every V16 surface." },
+        "disabled":            { "$type": "color", "$value": "{primitive.color.withings.disabled}", "$description": "Disabled button fill (#D6D2CE)." },
+        "disabled-foreground": { "$type": "color", "$value": "{primitive.color.withings.disabled-fg}", "$description": "Disabled button label (#77736F)." },
+        "accent":              { "$type": "color", "$value": "{primitive.color.withings.blue}", "$description": "Withings blue (#5066CC): your message bubbles, the SuperSwipe, checked checkboxes, slider fills, unread counts, links and focus." },
+        "accent-hover":        { "$type": "color", "$value": "{primitive.color.withings.blue-hover}" },
+        "accent-foreground":   { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Text on Withings blue (#FFFFFF, 5.11:1)." },
+        "accent-tint":         { "$type": "color", "$value": "{primitive.color.withings.blue-tint}", "$description": "Selected filter and period pills, selected interests, the tinted action row (#E4EBFC)." },
+        "accent-on-tint":      { "$type": "color", "$value": "{primitive.color.withings.blue-deep}", "$description": "Text and icons on the blue tint (#3E4A8F, 6.8:1)." },
+        "identity":            { "$type": "color", "$value": "{primitive.color.withings.navy}", "$description": "Initial avatars and portrait fallbacks (#203068) with white initials." },
+        "positive":            { "$type": "color", "$value": "{primitive.color.withings.green}", "$description": "Switch on, completion checks (#3C783C)." },
+        "negative":            { "$type": "color", "$value": "{primitive.color.withings.red}", "$description": "Destructive buttons, notification dots (#CF3336)." },
+        "mark-yellow":         { "$type": "color", "$value": "{primitive.color.withings.yellow}", "$description": "Round holder behind an emoji mark (category headings). Never text or controls." },
+        "mark-lavender":       { "$type": "color", "$value": "{primitive.color.withings.lavender}", "$description": "Round holder behind an emoji mark. Never text or controls." },
+        "mark-pink":           { "$type": "color", "$value": "{primitive.color.withings.pink}", "$description": "Round holder behind an emoji mark. Never text or controls." }
       }
     },
 
@@ -216,6 +270,7 @@
       "display": { "$type": "fontFamily", "$value": "{primitive.font.family.fraunces}", "$description": "Headlines, wordmark, prompt answers, sheet titles." },
       "text":    { "$type": "fontFamily", "$value": "{primitive.font.family.inter}", "$description": "Body, labels, inputs, buttons, numerals." },
       "display-axes": { "$type": "other", "$value": "\"SOFT\" 50, \"WONK\" 0", "$description": "font-variation-settings for Fraunces." },
+      "withings": { "$type": "fontFamily", "$value": "{primitive.font.family.hanken}", "$description": "V16: the one family inside .theme-withings, for headings and text alike (the reference uses one grotesk throughout)." },
       "weight": {
         "regular":  { "$type": "fontWeight", "$value": "400" },
         "medium":   { "$type": "fontWeight", "$value": "500" },
@@ -306,7 +361,9 @@
       "lg":     { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.06), 0 10px 28px -8px rgb(20 19 22 / 0.20)", "$description": "Dialogs, toasts and popovers: the only tier that must clearly read as layered." },
       "button": { "$type": "shadow", "$value": "inset 0 1px 0 rgb(255 255 255 / 0.10), 0 1px 2px rgb(20 19 22 / 0.14)", "$description": "Primary ink buttons: a faint top highlight and a contact shadow." },
       "brand":  { "$type": "shadow", "$value": "0 1px 2px rgb(20 19 22 / 0.08), 0 6px 16px -6px rgb(114 98 199 / 0.40)", "$description": "Floating purple actions (Meetup 'Map' pill, confirm FAB): a contact shadow and a soft purple drop. Flat purple pills inside content use none." },
-      "tiimo-float": { "$type": "shadow", "$value": "0 4px 20px -6px rgb(20 19 22 / 0.12)", "$description": "Tiimo-inspired experiment (V9): the one elevation, a single soft diffuse layer for chrome that floats above content (tab bar, floating icon buttons, the FAB, Discover actions, sheets)." }
+      "tiimo-float": { "$type": "shadow", "$value": "0 4px 20px -6px rgb(20 19 22 / 0.12)", "$description": "Tiimo-inspired experiment (V9): the one elevation, a single soft diffuse layer for chrome that floats above content (tab bar, floating icon buttons, the FAB, Discover actions, sheets)." },
+      "withings-float": { "$type": "shadow", "$value": "0 1px 2px rgb(18 18 18 / 0.06), 0 4px 14px -4px rgb(18 18 18 / 0.14)", "$description": "V16: the one elevation, for controls that float over a photograph (the SuperSwipe) and the toast. Cards on the page never take it."},
+      "withings-segment": { "$type": "shadow", "$value": "0 1px 2px rgb(18 18 18 / 0.08), 0 0 0 0.5px rgb(18 18 18 / 0.04)", "$description": "V16: lifts the selected segment off the segmented control's grey track (the reference's 'Programs / Library')."}
     },
     "opacity": {
       "disabled": { "$type": "number", "$value": "0.45" },
@@ -376,6 +433,19 @@
       "handle-slider-height": { "$type": "dimension", "$value": "22px" },
       "emoji-size":     { "$type": "dimension", "$value": "{primitive.dimension.32}" },
       "emoji-radius":   { "$type": "dimension", "$value": "10px" }
+    },
+    "withings":    {
+      "$description": "V16 geometry, measured from the Withings Health Mate screens (preview images 299px wide for a 393pt screen, so 1px ≈ 1.31pt; see TOKENS.md). Rounded rectangles throughout; full pills only for compact outlined actions and tint tabs; circles for header buttons, avatars, radios and switch thumbs.",
+      "radius-tag":     { "$type": "dimension", "$value": "{primitive.dimension.6}",  "$description": "Outlined labels ('Withings+' badge), status labels, the checkbox." },
+      "radius-field":   { "$type": "dimension", "$value": "{primitive.dimension.8}",  "$description": "Text fields, search, the composer (measured ≈8pt)." },
+      "radius-control": { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "Full-width buttons, tinted action rows, chips and interest pills (measured 10–12pt)." },
+      "radius-card":    { "$type": "dimension", "$value": "{primitive.dimension.14}", "$description": "Cards, grouped rows, the prompt, information boxes, photo tiles, message bubbles (measured 12–14pt)." },
+      "radius-photo":   { "$type": "dimension", "$value": "{primitive.dimension.16}", "$description": "Full-width profile photographs and sheets." },
+      "radius-pill":    { "$type": "dimension", "$value": "999px", "$description": "Compact outlined actions ('Add a Reminder', 'Share'), period and filter tabs, segmented options, counts." },
+      "button-height":  { "$type": "dimension", "$value": "50px", "$description": "Full-width buttons (measured 46–49pt)." },
+      "field-height":   { "$type": "dimension", "$value": "{primitive.dimension.54}", "$description": "Text fields (measured 55pt)." },
+      "header-button":  { "$type": "dimension", "$value": "{primitive.dimension.40}", "$description": "Circular header buttons (measured 40pt)." },
+      "row-height":     { "$type": "dimension", "$value": "{primitive.dimension.56}", "$description": "Single-line rows in a grouped card (measured 56pt)." }
     }
   }
 }

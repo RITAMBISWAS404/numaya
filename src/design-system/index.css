@@ -1,6 +1,7 @@
 /* Numaya design system styles. Import once at the app entry. */
 @import "@fontsource-variable/fraunces/full.css";
 @import "@fontsource-variable/inter";
+@import "@fontsource-variable/hanken-grotesk";
 @import "./tokens.css";
 @import "./styles/base.css";
 @import "./styles/components.css";
@@ -12,3 +13,5 @@
 @import "./styles/activity.css";
 /* Opt-in visual experiment, scoped to .theme-tiimo (?theme=tiimo). */
 @import "./styles/theme-tiimo.css";
+/* V16, scoped to .theme-withings (?theme=withings); loaded after V11, whose layouts it restyles. */
+@import "./styles/theme-withings.css";

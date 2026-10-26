@@ -514,6 +514,204 @@ export const tokens = [
     "description": "3.15:1 on white: disabled text and icons only, never body text."
   },
   {
+    "id": "primitive.color.withings.stone",
+    "name": "--p-color-withings-stone",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#f5f4f1",
+    "resolved": "#f5f4f1",
+    "description": "The warm off-white page (sampled #F6F3F3 / #F3F3F0 across 10 screens)."
+  },
+  {
+    "id": "primitive.color.withings.fill",
+    "name": "--p-color-withings-fill",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#eae9e6",
+    "resolved": "#eae9e6",
+    "description": "Segmented track and unselected fills (sampled #E4E4E4, warmed to sit on the stone page)."
+  },
+  {
+    "id": "primitive.color.withings.border",
+    "name": "--p-color-withings-border",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#e6e5e2",
+    "resolved": "#e6e5e2",
+    "description": "Hairlines: row dividers inside cards, the tab bar's top edge, outlined information boxes (sampled #E3E2E0 / #E8E8E8 / #ECECEC)."
+  },
+  {
+    "id": "primitive.color.withings.border-strong",
+    "name": "--p-color-withings-border-strong",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#d3d0cc",
+    "resolved": "#d3d0cc",
+    "description": "Dashed empty photo slots and the sheet grabber (the reference's grabber samples #CCCCCC, warmed)."
+  },
+  {
+    "id": "primitive.color.withings.photo",
+    "name": "--p-color-withings-photo",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#dfddd9",
+    "resolved": "#dfddd9",
+    "description": "Photo placeholder grey, warm like the page (the reference's empty device and product tiles sample #DCD8D4 / #D8D4D0)."
+  },
+  {
+    "id": "primitive.color.withings.outline",
+    "name": "--p-color-withings-outline",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#6d6c6a",
+    "resolved": "#6d6c6a",
+    "description": "The 1px outline of text fields (sampled #6D6C6A), 5.25:1 on white."
+  },
+  {
+    "id": "primitive.color.withings.control",
+    "name": "--p-color-withings-control",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#8a8784",
+    "resolved": "#8a8784",
+    "description": "Unselected radio and checkbox rings (sampled #B0B0B0, deepened to 3.57:1 for the non-text contrast minimum)."
+  },
+  {
+    "id": "primitive.color.withings.ink",
+    "name": "--p-color-withings-ink",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#121212",
+    "resolved": "#121212",
+    "description": "Text, primary buttons, the selected radio, the active tab (sampled #0F0F0F / #0C0C0C)."
+  },
+  {
+    "id": "primitive.color.withings.secondary",
+    "name": "--p-color-withings-secondary",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#5e5c59",
+    "resolved": "#5e5c59",
+    "description": "Secondary text: row subtitles, helper text (sampled #5F5D5E), 6.06:1 on stone."
+  },
+  {
+    "id": "primitive.color.withings.muted",
+    "name": "--p-color-withings-muted",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#6b6966",
+    "resolved": "#6b6966",
+    "description": "Metadata and inactive labels (sampled #717171), 4.98:1 on stone and 4.51:1 on the fill."
+  },
+  {
+    "id": "primitive.color.withings.disabled",
+    "name": "--p-color-withings-disabled",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#d6d2ce",
+    "resolved": "#d6d2ce",
+    "description": "Disabled button fill (sampled #C3BDBA, lightened one step)."
+  },
+  {
+    "id": "primitive.color.withings.disabled-fg",
+    "name": "--p-color-withings-disabled-fg",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#77736f",
+    "resolved": "#77736f",
+    "description": "Disabled button label (sampled #716D6A)."
+  },
+  {
+    "id": "primitive.color.withings.blue",
+    "name": "--p-color-withings-blue",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#5066cc",
+    "resolved": "#5066cc",
+    "description": "Withings blue (sampled #5166CC on the pace screen, #5064CC on 'Got it'): white on it 5.11:1."
+  },
+  {
+    "id": "primitive.color.withings.blue-hover",
+    "name": "--p-color-withings-blue-hover",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#4357b8",
+    "resolved": "#4357b8",
+    "description": null
+  },
+  {
+    "id": "primitive.color.withings.blue-tint",
+    "name": "--p-color-withings-blue-tint",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#e4ebfc",
+    "resolved": "#e4ebfc",
+    "description": "The light blue behind 'Explore data', 'All settings', the selected period tab and the privacy row (sampled #E4EBFC)."
+  },
+  {
+    "id": "primitive.color.withings.blue-deep",
+    "name": "--p-color-withings-blue-deep",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#3e4a8f",
+    "resolved": "#3e4a8f",
+    "description": "Blue text on the tint (the 'Explore data' and 'Quarter' labels sample #3E4987 at their darkest), 6.8:1 on the tint."
+  },
+  {
+    "id": "primitive.color.withings.navy",
+    "name": "--p-color-withings-navy",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#203068",
+    "resolved": "#203068",
+    "description": "Initial avatars (sampled #203068), white initials 12.5:1."
+  },
+  {
+    "id": "primitive.color.withings.green",
+    "name": "--p-color-withings-green",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#3c783c",
+    "resolved": "#3c783c",
+    "description": "Switch track when on, completion checks (sampled #3C783C)."
+  },
+  {
+    "id": "primitive.color.withings.red",
+    "name": "--p-color-withings-red",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#cf3336",
+    "resolved": "#cf3336",
+    "description": "Destructive buttons and notification dots (sampled #CF3336), white on it 5.02:1."
+  },
+  {
+    "id": "primitive.color.withings.yellow",
+    "name": "--p-color-withings-yellow",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#fceab7",
+    "resolved": "#fceab7",
+    "description": "Category mark tile (sampled #FCEAB7). Marks only, never text."
+  },
+  {
+    "id": "primitive.color.withings.lavender",
+    "name": "--p-color-withings-lavender",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#e4c9ed",
+    "resolved": "#e4c9ed",
+    "description": "Category mark tile (sampled #E4C9ED). Marks only, never text."
+  },
+  {
+    "id": "primitive.color.withings.pink",
+    "name": "--p-color-withings-pink",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#fcccc4",
+    "resolved": "#fcccc4",
+    "description": "Category mark tile (sampled #FCCCC4). Marks only, never text."
+  },
+  {
     "id": "primitive.font.family.fraunces",
     "name": "--p-font-family-fraunces",
     "layer": "primitive",
@@ -530,6 +728,15 @@ export const tokens = [
     "value": "\"Inter Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
     "resolved": "\"Inter Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
     "description": null
+  },
+  {
+    "id": "primitive.font.family.hanken",
+    "name": "--p-font-family-hanken",
+    "layer": "primitive",
+    "type": "fontFamily",
+    "value": "\"Hanken Grotesk Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+    "resolved": "\"Hanken Grotesk Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+    "description": "V16: the closest legally available match (SIL OFL) to the Withings app's grotesk: single-storey g, open apertures, a heavy bold."
   },
   {
     "id": "primitive.font.size.11",
@@ -1513,6 +1720,231 @@ export const tokens = [
     "description": "The one gradient's colour: pure black, faded upward over the lower part of a real profile photograph that carries text (opacities set with color-mix in theme-tiimo.css). Never on surfaces, controls or decoration."
   },
   {
+    "id": "semantic.color.withings.canvas",
+    "name": "--color-withings-canvas",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.stone}",
+    "resolved": "#f5f4f1",
+    "description": "The page behind every screen (#F5F4F1)."
+  },
+  {
+    "id": "semantic.color.withings.surface",
+    "name": "--color-withings-surface",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.neutral.0}",
+    "resolved": "#ffffff",
+    "description": "Cards, grouped rows, fields, sheets, the tab bar and modal headers (#FFFFFF). No border or shadow on the stone page."
+  },
+  {
+    "id": "semantic.color.withings.fill",
+    "name": "--color-withings-fill",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.fill}",
+    "resolved": "#eae9e6",
+    "description": "Segmented-control track, unselected filter and interest pills, recessed placeholders (#EAE9E6)."
+  },
+  {
+    "id": "semantic.color.withings.border",
+    "name": "--color-withings-border",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.border}",
+    "resolved": "#e6e5e2",
+    "description": "Row dividers inside cards, modal header and tab bar edges, outlined boxes on the page (#E6E5E2)."
+  },
+  {
+    "id": "semantic.color.withings.border-strong",
+    "name": "--color-withings-border-strong",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.border-strong}",
+    "resolved": "#d3d0cc",
+    "description": "Dashed empty photo slots, the sheet grabber (#D3D0CC). Decorative edges only."
+  },
+  {
+    "id": "semantic.color.withings.photo",
+    "name": "--color-withings-photo",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.photo}",
+    "resolved": "#dfddd9",
+    "description": "Photo placeholders and missing activity images (#DFDDD9)."
+  },
+  {
+    "id": "semantic.color.withings.outline",
+    "name": "--color-withings-outline",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.outline}",
+    "resolved": "#6d6c6a",
+    "description": "Text-field outline (#6D6C6A)."
+  },
+  {
+    "id": "semantic.color.withings.control",
+    "name": "--color-withings-control",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.control}",
+    "resolved": "#8a8784",
+    "description": "Unselected radio and checkbox rings (#8A8784)."
+  },
+  {
+    "id": "semantic.color.withings.ink",
+    "name": "--color-withings-ink",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.ink}",
+    "resolved": "#121212",
+    "description": "Primary text and headings, primary buttons, selected radios and option rings, the active tab (#121212)."
+  },
+  {
+    "id": "semantic.color.withings.ink-foreground",
+    "name": "--color-withings-ink-foreground",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.neutral.0}",
+    "resolved": "#ffffff",
+    "description": "Text on ink (#FFFFFF, 18.7:1)."
+  },
+  {
+    "id": "semantic.color.withings.text-secondary",
+    "name": "--color-withings-text-secondary",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.secondary}",
+    "resolved": "#5e5c59",
+    "description": "Row subtitles, helper text, descriptions (#5E5C59)."
+  },
+  {
+    "id": "semantic.color.withings.text-muted",
+    "name": "--color-withings-text-muted",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.muted}",
+    "resolved": "#6b6966",
+    "description": "Metadata, timestamps, inactive tab labels (#6B6966); 4.5:1 or better on every V16 surface."
+  },
+  {
+    "id": "semantic.color.withings.disabled",
+    "name": "--color-withings-disabled",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.disabled}",
+    "resolved": "#d6d2ce",
+    "description": "Disabled button fill (#D6D2CE)."
+  },
+  {
+    "id": "semantic.color.withings.disabled-foreground",
+    "name": "--color-withings-disabled-foreground",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.disabled-fg}",
+    "resolved": "#77736f",
+    "description": "Disabled button label (#77736F)."
+  },
+  {
+    "id": "semantic.color.withings.accent",
+    "name": "--color-withings-accent",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.blue}",
+    "resolved": "#5066cc",
+    "description": "Withings blue (#5066CC): your message bubbles, the SuperSwipe, checked checkboxes, slider fills, unread counts, links and focus."
+  },
+  {
+    "id": "semantic.color.withings.accent-hover",
+    "name": "--color-withings-accent-hover",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.blue-hover}",
+    "resolved": "#4357b8",
+    "description": null
+  },
+  {
+    "id": "semantic.color.withings.accent-foreground",
+    "name": "--color-withings-accent-foreground",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.neutral.0}",
+    "resolved": "#ffffff",
+    "description": "Text on Withings blue (#FFFFFF, 5.11:1)."
+  },
+  {
+    "id": "semantic.color.withings.accent-tint",
+    "name": "--color-withings-accent-tint",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.blue-tint}",
+    "resolved": "#e4ebfc",
+    "description": "Selected filter and period pills, selected interests, the tinted action row (#E4EBFC)."
+  },
+  {
+    "id": "semantic.color.withings.accent-on-tint",
+    "name": "--color-withings-accent-on-tint",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.blue-deep}",
+    "resolved": "#3e4a8f",
+    "description": "Text and icons on the blue tint (#3E4A8F, 6.8:1)."
+  },
+  {
+    "id": "semantic.color.withings.identity",
+    "name": "--color-withings-identity",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.navy}",
+    "resolved": "#203068",
+    "description": "Initial avatars and portrait fallbacks (#203068) with white initials."
+  },
+  {
+    "id": "semantic.color.withings.positive",
+    "name": "--color-withings-positive",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.green}",
+    "resolved": "#3c783c",
+    "description": "Switch on, completion checks (#3C783C)."
+  },
+  {
+    "id": "semantic.color.withings.negative",
+    "name": "--color-withings-negative",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.red}",
+    "resolved": "#cf3336",
+    "description": "Destructive buttons, notification dots (#CF3336)."
+  },
+  {
+    "id": "semantic.color.withings.mark-yellow",
+    "name": "--color-withings-mark-yellow",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.yellow}",
+    "resolved": "#fceab7",
+    "description": "Round holder behind an emoji mark (category headings). Never text or controls."
+  },
+  {
+    "id": "semantic.color.withings.mark-lavender",
+    "name": "--color-withings-mark-lavender",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.lavender}",
+    "resolved": "#e4c9ed",
+    "description": "Round holder behind an emoji mark. Never text or controls."
+  },
+  {
+    "id": "semantic.color.withings.mark-pink",
+    "name": "--color-withings-mark-pink",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.withings.pink}",
+    "resolved": "#fcccc4",
+    "description": "Round holder behind an emoji mark. Never text or controls."
+  },
+  {
     "id": "semantic.font.display",
     "name": "--font-display",
     "layer": "semantic",
@@ -1538,6 +1970,15 @@ export const tokens = [
     "value": "\"SOFT\" 50, \"WONK\" 0",
     "resolved": "\"SOFT\" 50, \"WONK\" 0",
     "description": "font-variation-settings for Fraunces."
+  },
+  {
+    "id": "semantic.font.withings",
+    "name": "--font-withings",
+    "layer": "semantic",
+    "type": "fontFamily",
+    "value": "{primitive.font.family.hanken}",
+    "resolved": "\"Hanken Grotesk Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+    "description": "V16: the one family inside .theme-withings, for headings and text alike (the reference uses one grotesk throughout)."
   },
   {
     "id": "semantic.font.weight.regular",
@@ -2494,6 +2935,24 @@ export const tokens = [
     "description": "Tiimo-inspired experiment (V9): the one elevation, a single soft diffuse layer for chrome that floats above content (tab bar, floating icon buttons, the FAB, Discover actions, sheets)."
   },
   {
+    "id": "semantic.shadow.withings-float",
+    "name": "--shadow-withings-float",
+    "layer": "semantic",
+    "type": "shadow",
+    "value": "0 1px 2px rgb(18 18 18 / 0.06), 0 4px 14px -4px rgb(18 18 18 / 0.14)",
+    "resolved": "0 1px 2px rgb(18 18 18 / 0.06), 0 4px 14px -4px rgb(18 18 18 / 0.14)",
+    "description": "V16: the one elevation, for controls that float over a photograph (the SuperSwipe) and the toast. Cards on the page never take it."
+  },
+  {
+    "id": "semantic.shadow.withings-segment",
+    "name": "--shadow-withings-segment",
+    "layer": "semantic",
+    "type": "shadow",
+    "value": "0 1px 2px rgb(18 18 18 / 0.08), 0 0 0 0.5px rgb(18 18 18 / 0.04)",
+    "resolved": "0 1px 2px rgb(18 18 18 / 0.08), 0 0 0 0.5px rgb(18 18 18 / 0.04)",
+    "description": "V16: lifts the selected segment off the segmented control's grey track (the reference's 'Programs / Library')."
+  },
+  {
     "id": "semantic.opacity.disabled",
     "name": "--opacity-disabled",
     "layer": "semantic",
@@ -2928,6 +3387,96 @@ export const tokens = [
     "value": "10px",
     "resolved": "10px",
     "description": null
+  },
+  {
+    "id": "component.withings.radius-tag",
+    "name": "--withings-radius-tag",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.6}",
+    "resolved": "6px",
+    "description": "Outlined labels ('Withings+' badge), status labels, the checkbox."
+  },
+  {
+    "id": "component.withings.radius-field",
+    "name": "--withings-radius-field",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.8}",
+    "resolved": "8px",
+    "description": "Text fields, search, the composer (measured ≈8pt)."
+  },
+  {
+    "id": "component.withings.radius-control",
+    "name": "--withings-radius-control",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.12}",
+    "resolved": "12px",
+    "description": "Full-width buttons, tinted action rows, chips and interest pills (measured 10–12pt)."
+  },
+  {
+    "id": "component.withings.radius-card",
+    "name": "--withings-radius-card",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.14}",
+    "resolved": "14px",
+    "description": "Cards, grouped rows, the prompt, information boxes, photo tiles, message bubbles (measured 12–14pt)."
+  },
+  {
+    "id": "component.withings.radius-photo",
+    "name": "--withings-radius-photo",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.16}",
+    "resolved": "16px",
+    "description": "Full-width profile photographs and sheets."
+  },
+  {
+    "id": "component.withings.radius-pill",
+    "name": "--withings-radius-pill",
+    "layer": "component",
+    "type": "dimension",
+    "value": "999px",
+    "resolved": "999px",
+    "description": "Compact outlined actions ('Add a Reminder', 'Share'), period and filter tabs, segmented options, counts."
+  },
+  {
+    "id": "component.withings.button-height",
+    "name": "--withings-button-height",
+    "layer": "component",
+    "type": "dimension",
+    "value": "50px",
+    "resolved": "50px",
+    "description": "Full-width buttons (measured 46–49pt)."
+  },
+  {
+    "id": "component.withings.field-height",
+    "name": "--withings-field-height",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.54}",
+    "resolved": "54px",
+    "description": "Text fields (measured 55pt)."
+  },
+  {
+    "id": "component.withings.header-button",
+    "name": "--withings-header-button",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.40}",
+    "resolved": "40px",
+    "description": "Circular header buttons (measured 40pt)."
+  },
+  {
+    "id": "component.withings.row-height",
+    "name": "--withings-row-height",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.56}",
+    "resolved": "56px",
+    "description": "Single-line rows in a grouped card (measured 56pt)."
   }
 ];
 
