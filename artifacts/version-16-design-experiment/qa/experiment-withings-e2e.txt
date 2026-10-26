@@ -1,0 +1,42 @@
+✓ scoping: without ?theme=withings no screen carries V16
+✓ scoping: with ?theme=withings all 15 V11 screens carry .theme-tiimo.theme-withings
+✓ scoping: screens outside the experiment keep the approved design even with the flag
+✓ isolation: ?theme=tiimo (V11) does not carry V16
+✓ palette: the page is warm stone #F5F4F1 (rgb(245, 244, 241))
+✓ surfaces: grouped rows are a white card, no border or shadow, 14px corner (rgb(255, 255, 255) / none / 14px)
+✓ type: the modal header title is tracked bold capitals (uppercase / 700 / true)
+✓ surfaces: the modal header is a white bar with a hairline (rgb(255, 255, 255) / rgb(230, 229, 226) 0px -1px 0px 0px inset)
+✓ type: group headings are 22px medium ink (rgb(18, 18, 18) / 22px / 500)
+✓ type: text is set in Hanken Grotesk ("Hanken Grotesk Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif)
+✓ controls: a switch that is on is green, 51 × 31, with a round thumb (rgb(60, 120, 60) / 51 / 31 / 50% / 27px)
+✓ behaviour: a switch still toggles
+✓ behaviour: the keyboard still moves a slider (27 → 28)
+✓ fields: white, a 1px #6D6C6A outline, 8px corner, 54px tall (rgb(255, 255, 255) / rgb(109, 108, 106) 0px 0px 0px 1px inset / 8px / 54)
+✓ fields: labels are bold capitals (uppercase / 700)
+✓ selection: legends share the field-label capitals (uppercase)
+✓ selection: a selected radio is an ink ring around an ink dot (["rgb(18, 18, 18) 0px 0px 0px 1.5px inset","50%"])
+✓ selection: a checked box is Withings blue (rgb(80, 102, 204))
+✓ selection: choice rows sit in one white card, no ring on the selected row (rgb(255, 255, 255) / none)
+✓ buttons: the step button is an ink circle (rgb(18, 18, 18) / 50%)
+✓ buttons: primary is ink with white text, 12px corner, 50px tall (rgb(18, 18, 18) / rgb(255, 255, 255) / 12px / 50)
+✓ buttons: secondary is white with a 1px ink outline (rgb(255, 255, 255) / rgb(18, 18, 18))
+✓ discover: the SuperSwipe is a 56px Withings-blue circle (rgb(80, 102, 204) / 56 / 56 / 50%)
+✓ discover: profile sections are white cards on the page (rgb(255, 255, 255) / 14px)
+✓ sheets: a white panel, a hairline under the header, a medium title (rgb(255, 255, 255) / rgb(230, 229, 226) / 500)
+✓ tabs: the selected view tab is a blue-tint pill with blue text (rgb(228, 235, 252) / rgb(62, 74, 143))
+✓ tabs: unselected view tabs are plain text (rgba(0, 0, 0, 0))
+✓ navigation: the active tab is ink, the others grey, dots red (rgb(18, 18, 18) / rgb(107, 105, 102) / rgb(207, 51, 54))
+✓ type: tab-root page titles are 30px bold (["30px","700"])
+✓ navigation: moving to another tab keeps ?theme=withings (?screen=chats&theme=withings)
+✓ segmented: a grey track with a white selected segment (rgb(234, 233, 230) / rgb(255, 255, 255))
+✓ messages: yours Withings blue, theirs white (rgb(80, 102, 204) / rgb(255, 255, 255) / 50%)
+✓ avatars: circles (50%)
+✓ palette: no V11 purple (#7262C7) on any V16 screen
+✓ a11y: readable text meets 4.5:1 on its background on the 14 flow screens
+✓ responsive 393: no horizontal overflow on the 15 V16 screens
+✓ console 393: no errors on the 15 V16 screens
+✓ responsive 375: no horizontal overflow on the 15 V16 screens
+✓ console 375: no errors on the 15 V16 screens
+✓ console: no errors during the scoping and interaction checks
+
+40/40 V16 checks passed.

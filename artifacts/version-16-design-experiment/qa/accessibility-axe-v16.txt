@@ -1,0 +1,17 @@
+✓ welcome: 0 serious/critical
+✓ flows.html?screen=basics&: 0 serious/critical; all: landmark-one-main(moderate,1) region(moderate,3)
+✓ flows.html?screen=photos&: 0 serious/critical; all: landmark-one-main(moderate,1) region(moderate,7)
+✓ flows.html?screen=interests&: 0 serious/critical; all: landmark-one-main(moderate,1) region(moderate,4)
+✓ flows.html?screen=discovery&: 0 serious/critical; all: region(moderate,9)
+✓ flows.html?screen=like-profile&: 0 serious/critical; all: landmark-one-main(moderate,1) page-has-heading-one(moderate,1) region(moderate,7)
+✓ flows.html?screen=likes&: 0 serious/critical; all: landmark-one-main(moderate,1) region(moderate,1)
+✓ flows.html?screen=match&: 0 serious/critical; all: landmark-one-main(moderate,1) page-has-heading-one(moderate,1) region(moderate,2)
+✓ flows.html?screen=chats&: 0 serious/critical; all: landmark-one-main(moderate,1) region(moderate,3)
+✓ flows.html?screen=chat&: 0 serious/critical; all: landmark-one-main(moderate,1) page-has-heading-one(moderate,1) region(moderate,2)
+✓ flows.html?screen=prompt&: 0 serious/critical; all: landmark-one-main(moderate,1) page-has-heading-one(moderate,1) region(moderate,4)
+✓ flows.html?screen=activity&: 0 serious/critical; all: landmark-one-main(moderate,1) region(moderate,2)
+✓ flows.html?screen=profile&: 0 serious/critical; all: landmark-one-main(moderate,1) region(moderate,14)
+✓ flows.html?screen=edit&: 0 serious/critical; all: landmark-one-main(moderate,1) page-has-heading-one(moderate,1) region(moderate,19)
+✓ flows.html?screen=settings&: 0 serious/critical; all: landmark-one-main(moderate,1) page-has-heading-one(moderate,1) region(moderate,13)
+
+0 serious or critical violations on 15 V16 screens.
