@@ -2912,13 +2912,22 @@ export const tokens = [
     "description": null
   },
   {
-    "id": "component.tiimo.radius-item",
-    "name": "--tiimo-radius-item",
+    "id": "component.tiimo.radius-tag",
+    "name": "--tiimo-radius-tag",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.16}",
-    "resolved": "16px",
-    "description": null
+    "value": "{primitive.dimension.6}",
+    "resolved": "6px",
+    "description": "V8: ≤ 27px tall: tags, badges, the activity category, photo index and remove buttons, checkboxes."
+  },
+  {
+    "id": "component.tiimo.radius-pill",
+    "name": "--tiimo-radius-pill",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.10}",
+    "resolved": "10px",
+    "description": "V8: 36px chips: emoji-and-text pills, filter chips, fact chips and segmented options. Never buttons, inputs, navigation or cards."
   },
   {
     "id": "component.tiimo.radius-control",
@@ -2927,34 +2936,34 @@ export const tokens = [
     "type": "dimension",
     "value": "{primitive.dimension.12}",
     "resolved": "12px",
-    "description": null
+    "description": "V8: 40–56px controls: buttons, icon buttons, the send button and, on short phones, your match photo."
   },
   {
-    "id": "component.tiimo.radius-tag",
-    "name": "--tiimo-radius-tag",
-    "layer": "component",
-    "type": "dimension",
-    "value": "{primitive.dimension.8}",
-    "resolved": "8px",
-    "description": null
-  },
-  {
-    "id": "component.tiimo.radius-pill",
-    "name": "--tiimo-radius-pill",
+    "id": "component.tiimo.radius-item",
+    "name": "--tiimo-radius-item",
     "layer": "component",
     "type": "dimension",
     "value": "{primitive.dimension.12}",
     "resolved": "12px",
-    "description": "V5: emoji-and-text pills only (interest chips, emoji category filters, shared-interest tags; 36px tall). Never buttons, badges, inputs, navigation or cards."
+    "description": "V8: fields, search, the composer, selection rows, photo slots and the new-match portraits."
   },
   {
     "id": "component.tiimo.radius-feature",
     "name": "--tiimo-radius-feature",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.24}",
-    "resolved": "24px",
-    "description": null
+    "value": "{primitive.dimension.16}",
+    "resolved": "16px",
+    "description": "V8: cards, outlined groups, the prompt, message bubbles, the FAB and your match photo."
+  },
+  {
+    "id": "component.tiimo.radius-photo",
+    "name": "--tiimo-radius-photo",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.20}",
+    "resolved": "20px",
+    "description": "V8: full-width profile photographs (Discover, Like back) and the top of sheets."
   },
   {
     "id": "component.tiimo.emoji-size",

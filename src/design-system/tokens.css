@@ -329,11 +329,12 @@
   --switch-width: 51px;
   --switch-height: 31px;
   --tab-bar-height: var(--p-dimension-64);
-  --tiimo-radius-item: var(--p-dimension-16);
+  --tiimo-radius-tag: var(--p-dimension-6);
+  --tiimo-radius-pill: var(--p-dimension-10);
   --tiimo-radius-control: var(--p-dimension-12);
-  --tiimo-radius-tag: var(--p-dimension-8);
-  --tiimo-radius-pill: var(--p-dimension-12);
-  --tiimo-radius-feature: var(--p-dimension-24);
+  --tiimo-radius-item: var(--p-dimension-12);
+  --tiimo-radius-feature: var(--p-dimension-16);
+  --tiimo-radius-photo: var(--p-dimension-20);
   --tiimo-emoji-size: var(--p-dimension-32);
   --tiimo-emoji-radius: 10px;
 }

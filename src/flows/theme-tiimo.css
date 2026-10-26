@@ -2,8 +2,8 @@
    the component layer). Scoped to `.theme-tiimo`, which only the experiment's screens carry, and
    only with ?theme=tiimo. */
 
-/* Every themed screen sits on the warm Background canvas (V6); white cards separate by spacing and a
-   restrained shadow. */
+/* Every themed screen sits on the canvas (#F6F5F1, V7). V8: ordinary content sits directly on it;
+   only feed objects are raised (see the component layer). */
 .theme-tiimo .fl-screen {
   background: var(--color-surface-page);
 }
@@ -11,4 +11,15 @@
 /* The Home header's lavender wash becomes the solid canvas colour (no gradients in the theme). */
 .theme-tiimo .fl-disc-head {
   background: var(--color-surface-page);
+}
+
+/* Opening lines on a new match: outlined white rows you tap, with the V8 item corner (12px) like the
+   selection rows, not the 20px card corner. */
+.theme-tiimo .fl-opener {
+  border-radius: var(--tiimo-radius-item);
+}
+
+/* The "report instead" note in the unmatch sheet: a recessed row you tap, with the item corner. */
+.theme-tiimo .fl-sheet-note {
+  border-radius: var(--tiimo-radius-item);
 }

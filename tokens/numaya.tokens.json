@@ -376,12 +376,13 @@
     "switch":      { "width": { "$type": "dimension", "$value": "51px" }, "height": { "$type": "dimension", "$value": "31px" } },
     "tab-bar":     { "height": { "$type": "dimension", "$value": "{primitive.dimension.64}" } },
     "tiimo":       {
-      "$description": "Tiimo-inspired experiment geometry. Content: item cards 16, feature cards 24. Controls (V3): compact rounded rectangles instead of capsules: buttons 16 (radius-item), chips and small controls 12, tags, badges and icon holders 8. Circles stay for avatars and icon buttons; pills only for progress, switches, sliders and count badges.",
-      "radius-item":    { "$type": "dimension", "$value": "{primitive.dimension.16}" },
-      "radius-control": { "$type": "dimension", "$value": "{primitive.dimension.12}" },
-      "radius-tag":     { "$type": "dimension", "$value": "{primitive.dimension.8}" },
-      "radius-pill":    { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "V5: emoji-and-text pills only (interest chips, emoji category filters, shared-interest tags; 36px tall). Never buttons, badges, inputs, navigation or cards." },
-      "radius-feature": { "$type": "dimension", "$value": "{primitive.dimension.24}" },
+      "$description": "Tiimo-inspired experiment geometry. V8 radius scale, chosen by component size and role (artifacts/version-8-final-screenshot-preview/design-system.md): tags and badges 6, 36px pills and filters 10, buttons, fields, rows and icon buttons 12, cards, groups and large controls 16, profile photographs 20. Circles stay for avatars, radios, numeric badges and the switch; capsules for the tab bar, progress and the Discover actions.",
+      "radius-tag":     { "$type": "dimension", "$value": "{primitive.dimension.6}",  "$description": "V8: ≤ 27px tall: tags, badges, the activity category, photo index and remove buttons, checkboxes." },
+      "radius-pill":    { "$type": "dimension", "$value": "{primitive.dimension.10}", "$description": "V8: 36px chips: emoji-and-text pills, filter chips, fact chips and segmented options. Never buttons, inputs, navigation or cards." },
+      "radius-control": { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "V8: 40–56px controls: buttons, icon buttons, the send button and, on short phones, your match photo." },
+      "radius-item":    { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "V8: fields, search, the composer, selection rows, photo slots and the new-match portraits." },
+      "radius-feature": { "$type": "dimension", "$value": "{primitive.dimension.16}", "$description": "V8: cards, outlined groups, the prompt, message bubbles, the FAB and your match photo." },
+      "radius-photo":   { "$type": "dimension", "$value": "{primitive.dimension.20}", "$description": "V8: full-width profile photographs (Discover, Like back) and the top of sheets." },
       "emoji-size":     { "$type": "dimension", "$value": "{primitive.dimension.32}" },
       "emoji-radius":   { "$type": "dimension", "$value": "10px" }
     }
