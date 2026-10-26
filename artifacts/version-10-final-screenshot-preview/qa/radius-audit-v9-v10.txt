@@ -1,0 +1,95 @@
+Computed corner radius per component and screen (radius/height in px; 999px is a full pill), measured with ?theme=tiimo at 393 x 852, V9 then V10.
+= unchanged; * changed. V10 scale: check 6, tag 8, chip/control/item 12, button 14, card 16, photo 20, pill 999px; radios 50%; avatars a quarter of their size.
+
+* .nav-button
+    V9   basics:10px/40  interests:10px/40  discovery:10px/36  like-profile:10px/40  chat:10px/36  match:10px/40  activity:10px/36
+    V10  basics:12px/40  interests:12px/40  discovery:12px/36  like-profile:12px/40  chat:12px/36  match:12px/40  activity:12px/36
+* .fab
+    V9   basics:12px/56  interests:12px/56
+    V10  basics:16px/56  interests:16px/56
+* .input
+    V9   basics:10px/56
+    V10  basics:12px/56
+* .option-card
+    V9   basics:10px/52
+    V10  basics:12px/52
+* .chip[data-emoji]
+    V9   interests:8px/36  discovery:8px/36  like-profile:8px/36  match:8px/36  activity:8px/36
+    V10  interests:12px/36  discovery:12px/36  like-profile:12px/36  match:12px/36  activity:12px/36
+* .action-bar__btn
+    V9   discovery:12px/56
+    V10  discovery:999px/56
+* .count-badge
+    V9   discovery:6px/18  likes:6px/18  chats:6px/18  activity:6px/18
+    V10  discovery:50%/8  likes:50%/8  chats:50%/8  activity:50%/8
+* .tab-bar
+    V9   discovery:12px/56  likes:12px/56  chats:12px/56  activity:12px/56
+    V10  discovery:0px/68  likes:0px/68  chats:0px/68  activity:0px/68
+* .tab-bar__item
+    V9   discovery:10px/48  likes:10px/48  chats:10px/48  activity:10px/48
+    V10  discovery:12px/56  likes:12px/56  chats:12px/56  activity:12px/56
+* .chip:not([data-emoji])
+    V9   discovery:8px/36  likes:8px/36  chats:8px/36  activity:8px/36
+    V10  discovery:12px/36  likes:999px/36  chats:999px/36  activity:12px/36
+* .shared-interests__pill
+    V9   discovery:8px/36  like-profile:8px/36
+    V10  discovery:12px/36  like-profile:12px/36
+* .profile-card__pill
+    V9   discovery:6px/24  like-profile:6px/24
+    V10  discovery:8px/24  like-profile:8px/24
+* .profile-card__media
+    V9   discovery:14px/696  like-profile:14px/481
+    V10  discovery:20px/704  like-profile:20px/481
+= .profile-section
+    V9   discovery:0px/110 0px/90 0px/125  like-profile:0px/140 0px/90 0px/77
+* .btn--primary
+    V9   like-profile:10px/54
+    V10  like-profile:14px/54
+* .btn--secondary
+    V9   like-profile:10px/54
+    V10  like-profile:14px/54
+* .badge
+    V9   likes:6px/24  activity:6px/24
+    V10  likes:8px/24  activity:8px/24
+* .person-tile__badge .badge
+    V9   likes:6px/24
+    V10  likes:8px/24
+* .conversation__unread
+    V9   chats:6px/20
+    V10  chats:999px/20
+* .conversation__move
+    V9   chats:6px/24
+    V10  chats:8px/24
+* .search
+    V9   chats:10px/48
+    V10  chats:12px/48
+* .avatar__image
+    V9   chats:12px/64  chat:8px/36  match:12px/64  activity:6px/24
+    V10  chats:16px/64  chat:9px/36  match:16px/64  activity:6px/24
+* .match-queue__image
+    V9   chats:10px/96
+    V10  chats:16px/96
+* .composer__field
+    V9   chat:10px/44  match:10px/44
+    V10  chat:12px/44  match:12px/44
+* .composer__send
+    V9   chat:10px/44  match:10px/44
+    V10  chat:12px/44  match:12px/44
+* .message__bubble
+    V9   chat:12px/64
+    V10  chat:16px/64
+* .btn--quiet
+    V9   match:10px/48
+    V10  match:14px/48
+* .match__shared-chip
+    V9   match:8px/36
+    V10  match:12px/36
+* .segmented__item
+    V9   activity:8px/36
+    V10  activity:999px/36
+* .activity-card__category
+    V9   activity:6px/27
+    V10  activity:8px/27
+* .activity-card
+    V9   activity:12px/397 12px/422 12px/421
+    V10  activity:16px/397 16px/422 16px/421

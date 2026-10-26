@@ -1,0 +1,109 @@
+Nested corner audit: every visible rounded element whose corner sits within (outer radius + 12px) of a rounded, visible ancestor's corner, on 14 themed screens at 393 x 852.
+Format: count x inner in outer | outer radius, inset from that corner -> inner radius (concentric target = outer - inset, floored at 0).
+Pairs whose inset is at least the outer radius (controls 18-20px inside a row or card) are listed but are not corner-nested; they keep their own shapes.
+
+===== V9 =====
+
+## photos
+  5× progress__fill in progress__segment | outer 3 inset 0 → inner 3 (concentric 3)
+  1× photo-slot__index in image-placeholder.image-placeholder--sky | outer 16 inset 8 → inner 6 (concentric 8)
+  1× photo-slot__index in image-placeholder.image-placeholder--stone | outer 16 inset 8 → inner 6 (concentric 8)
+  1× photo-slot__index in image-placeholder.image-placeholder--mist | outer 16 inset 8 → inner 6 (concentric 8)
+
+## edit
+  1× photo-slot__index in image-placeholder.image-placeholder--sky | outer 16 inset 8 → inner 6 (concentric 8)
+  1× photo-slot__index in image-placeholder.image-placeholder--stone | outer 16 inset 8 → inner 6 (concentric 8)
+  1× photo-slot__index in image-placeholder.image-placeholder--mist | outer 16 inset 8 → inner 6 (concentric 8)
+
+## discovery
+  1× action-bar__btn.action-bar__btn--super in profile-card__media | outer 14 inset 20 → inner 12 (concentric 0)
+  1× tab-bar__item in tab-bar | outer 12 inset 4 → inner 10 (concentric 8)
+
+## like-profile
+
+## likes
+  2× badge.badge--brand in image-placeholder.image-placeholder--sand | outer 12 inset 8 → inner 6 (concentric 4)
+  1× badge.badge--brand in image-placeholder.image-placeholder--sky | outer 12 inset 8 → inner 6 (concentric 4)
+  1× badge.badge--success in image-placeholder.image-placeholder--sky | outer 12 inset 8 → inner 6 (concentric 4)
+  1× count-badge in tab-bar__item | outer 10 inset 14 → inner 6 (concentric 0)
+
+## chats
+  1× count-badge in tab-bar__item | outer 10 inset 14 → inner 6 (concentric 0)
+
+## chat
+
+## match
+
+## activity
+  1× badge.badge--brand in activity-card | outer 12 inset 20 → inner 6 (concentric 0)
+  1× badge.badge--warning in activity-card | outer 12 inset 20 → inner 6 (concentric 0)
+
+## profile
+  1× readiness-meter in card.fl-ready-card | outer 12 inset 20 → inner 12 (concentric 0)
+  1× btn.btn--primary in card.fl-ready-card | outer 12 inset 20 → inner 10 (concentric 0)
+  1× tab-bar__item in tab-bar | outer 12 inset 4 → inner 10 (concentric 8)
+
+## settings
+  4× switch in list-group__items | outer 12 inset 19 → inner 9 (concentric 0)
+
+## basics
+  3× progress__fill in progress__segment | outer 3 inset 0 → inner 3 (concentric 3)
+  3× choice__input.choice__input--radio in option-card | outer 10 inset 20 → inner 6 (concentric 0)
+  3× choice__input.choice__input--checkbox in option-card | outer 10 inset 20 → inner 6 (concentric 0)
+
+## interests
+  4× progress__fill in progress__segment | outer 3 inset 0 → inner 3 (concentric 3)
+
+## prompt
+  6× choice__input.choice__input--radio in option-card | outer 10 inset 20 → inner 6 (concentric 0)
+
+===== V10 =====
+
+## photos
+  5× progress__fill in progress__segment | outer 4 inset 0 → inner 4 (concentric 4)
+  1× photo-slot__index in image-placeholder.image-placeholder--sky | outer 16 inset 8 → inner 8 (concentric 8)
+  1× photo-slot__index in image-placeholder.image-placeholder--stone | outer 16 inset 8 → inner 8 (concentric 8)
+  1× photo-slot__index in image-placeholder.image-placeholder--mist | outer 16 inset 8 → inner 8 (concentric 8)
+
+## edit
+  1× photo-slot__index in image-placeholder.image-placeholder--sky | outer 16 inset 8 → inner 8 (concentric 8)
+  1× photo-slot__index in image-placeholder.image-placeholder--stone | outer 16 inset 8 → inner 8 (concentric 8)
+  1× photo-slot__index in image-placeholder.image-placeholder--mist | outer 16 inset 8 → inner 8 (concentric 8)
+
+## discovery
+  1× action-bar__btn.action-bar__btn--super in profile-card__media | outer 20 inset 20 → inner 28 (concentric 0)
+
+## like-profile
+
+## likes
+  2× badge.badge--brand in image-placeholder.image-placeholder--sand | outer 16 inset 8 → inner 8 (concentric 8)
+  1× badge.badge--brand in image-placeholder.image-placeholder--sky | outer 16 inset 8 → inner 8 (concentric 8)
+  1× badge.badge--success in image-placeholder.image-placeholder--sky | outer 16 inset 8 → inner 8 (concentric 8)
+
+## chats
+
+## chat
+
+## match
+
+## activity
+  1× badge.badge--brand in activity-card | outer 16 inset 20 → inner 8 (concentric 0)
+  1× badge.badge--warning in activity-card | outer 16 inset 20 → inner 8 (concentric 0)
+
+## profile
+  1× readiness-meter in card.fl-ready-card | outer 16 inset 20 → inner 16 (concentric 0)
+  1× btn.btn--primary in card.fl-ready-card | outer 16 inset 20 → inner 20 (concentric 0)
+
+## settings
+  4× switch in list-group__items | outer 16 inset 18 → inner 16 (concentric 0)
+
+## basics
+  3× progress__fill in progress__segment | outer 4 inset 0 → inner 4 (concentric 4)
+  3× choice__input.choice__input--radio in option-card | outer 12 inset 20 → inner 12 (concentric 0)
+  3× choice__input.choice__input--checkbox in option-card | outer 12 inset 20 → inner 6 (concentric 0)
+
+## interests
+  4× progress__fill in progress__segment | outer 4 inset 0 → inner 4 (concentric 4)
+
+## prompt
+  6× choice__input.choice__input--radio in option-card | outer 12 inset 20 → inner 12 (concentric 0)
