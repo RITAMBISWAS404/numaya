@@ -293,7 +293,8 @@
 
 /* Status labels ---------------------------------------------------------------------- */
 /* One label shape (24px, 6px corner, semibold micro text) in four semantic tones:
-   - Neutral (inset grey, ink): ordinary states, e.g. "Your move", "Snoozed", "You're going".
+   - Neutral (inset grey or white, ink): ordinary states, e.g. "Your move", "Matched", "Snoozed",
+     "You're going".
    - Emphasis (white or inset grey, deep purple): states that should be noticed, e.g. "New" on a
      like, "Live now".
    - Strong (solid purple, white): counts you act on, e.g. unread messages.
@@ -315,10 +316,6 @@
 
 .theme-tiimo :is(.person-tile__badge, .activity-media__badges) .badge {
   background: var(--color-surface);
-}
-
-.theme-tiimo .person-tile__badge .badge {
-  color: var(--color-text-brand-deep);
 }
 
 .theme-tiimo .badge :is(svg, .icon) {
