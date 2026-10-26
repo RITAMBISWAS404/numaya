@@ -416,7 +416,7 @@ try {
     ".input": "12px", ".search": "12px", ".composer__field": "12px", ".option-card": "12px",
     ".chip[data-emoji]": "10px", ".filter-chips:not(:has(.chip[data-emoji])) .chip": "10px", ".chip--static:not([data-emoji])": "10px", ".segmented__item": "10px",
     ".conversation__move": "6px", ".profile-card__pill": "6px", ".person-tile__badge .badge": "6px", ".activity-card__category": "6px", ".choice__input--checkbox": "6px",
-    ".activity-card": "16px", ".person-tile__photo": "16px", ".message__bubble": "16px", ".match-queue__image": "12px",
+    ".activity-card": "16px", ".activity-card__media": "8px", ".person-tile__photo": "16px", ".message__bubble": "16px", ".match-queue__image": "12px",
     ".profile-card__media": "20px", ".fl-pf__photo": "20px",
     // Kept on purpose
     ".action-bar__btn": "28px", ".tab-bar": "999px", ".tab-bar__item": "999px",

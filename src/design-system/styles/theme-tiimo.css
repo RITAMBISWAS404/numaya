@@ -119,6 +119,12 @@
   box-shadow: var(--shadow-tiimo-card);
 }
 
+/* The photo inside an activity card is inset 8px, so its corner is the card's minus the inset (8px):
+   concentric with the card instead of rounder than it. */
+.theme-tiimo .activity-card__media {
+  border-radius: calc(var(--tiimo-radius-feature) - var(--space-2));
+}
+
 /* Someone's profile (Discover, Like back): the photos already break the page into sections, so the
    sections between them are direct content: a label and the answer, chips or details on the canvas,
    aligned with the name on the photo. */
