@@ -60,6 +60,7 @@ import { Frame, useFlash } from "./frame.jsx";
 import { ReportSheet, ShareSheet } from "./activity.jsx";
 import { myActivities, openersFor, readiness } from "./model.js";
 import { accountStatus, useFixAction } from "./account.jsx";
+import { markAttrs } from "../lib/theme.js";
 
 const ageOf = (year) => (year.length === 4 ? new Date().getFullYear() - Number(year) : null);
 
@@ -863,7 +864,7 @@ export function MyProfile({ go }) {
           {interests.length > 0 && (
             <ul className="fl-me__interests" aria-label="Your interests">
               {interests.map((s) => (
-                <li key={s} className="chip chip--static">
+                <li key={s} className="chip chip--static" {...markAttrs(INTEREST_MARKS[s])}>
                   {s}
                 </li>
               ))}
@@ -945,7 +946,7 @@ function ProfilePreview({ profile }) {
         <ProfileSection title="Interests">
           <div className="fl-chip-row">
             {profile.interests.map((s) => (
-              <Chip key={s} kind="static">
+              <Chip key={s} kind="static" mark={INTEREST_MARKS[s]}>
                 {s}
               </Chip>
             ))}
@@ -1025,7 +1026,7 @@ export function EditProfile({ go }) {
               <TextArea label="Bio" placeholder="A few lines about you: what you love, what you’re looking for." value={profile.bio ?? ""} maxLength={300} rows={4} onChange={(e) => set({ bio: e.target.value })} />
             </div>
             <div data-focus="interests">
-              <ChipGroup label="Interests" options={INTERESTS} groups={INTEREST_GROUPS} value={profile.interests} onChange={(v) => set({ interests: v })} max={5} />
+              <ChipGroup label="Interests" options={INTERESTS} groups={INTEREST_GROUPS} marks={INTEREST_MARKS} value={profile.interests} onChange={(v) => set({ interests: v })} max={5} />
             </div>
             <TextField
               data-focus="name"

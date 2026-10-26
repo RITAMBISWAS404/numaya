@@ -58,6 +58,8 @@
   --p-color-palette-secondary: #77737d;
   --p-color-palette-muted: #f2f0fe;
   --p-color-palette-secondary-strong: #6b6771;
+  --p-color-palette-canvas: #f6f5f1;
+  --p-color-palette-recess: #edebe5;
   --p-font-family-fraunces: "Fraunces Variable", ui-serif, Georgia, "Times New Roman", serif;
   --p-font-family-inter: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --p-font-size-11: 11px;
@@ -179,6 +181,9 @@
   --color-palette-secondary: var(--p-color-palette-secondary);
   --color-palette-secondary-strong: var(--p-color-palette-secondary-strong);
   --color-palette-muted: var(--p-color-palette-muted);
+  --color-palette-canvas: var(--p-color-palette-canvas);
+  --color-palette-fill-on-canvas: var(--p-color-palette-recess);
+  --color-palette-fill-on-card: var(--p-color-palette-background);
   --font-display: var(--p-font-family-fraunces);
   --font-text: var(--p-font-family-inter);
   --font-display-axes: "SOFT" 50, "WONK" 0;

@@ -1,45 +1,48 @@
 /*
  * Tiimo-inspired visual experiment (artifacts/tiimo-inspired-experiment/), refined in
  * artifacts/tiimo-white-surface-refinement/ (V2), artifacts/tiimo-inspired-v3/ (V3), V4 and
- * artifacts/version-5-final-screenshot-preview/ (V5) and artifacts/version-6-final-screenshot-preview/
- * (V6, the supplied Numaya palette).
+ * artifacts/version-5-final-screenshot-preview/ (V5), artifacts/version-6-final-screenshot-preview/
+ * (V6, the supplied Numaya palette) and artifacts/version-7-final-screenshot-preview/ (V7, the surface
+ * system; its rules are in design-system.md there).
  *
  * Opt-in: a screen renders inside `.theme-tiimo` only with `?theme=tiimo` and only if it takes part
  * in the experiment, so the approved design is untouched everywhere else. Every rule below is scoped
  * to `.theme-tiimo`; the component markup and contracts are the same in both designs.
  *
  * The rules, from the reference analysis:
- * - V6 palette: a warm neutral canvas (#F1F0EA) under white cards (#FFFFFF); quiet fills are white on
- *   the canvas and the inset off-white (#F8F7F3) inside cards; text #28262D, secondary #77737D on
- *   cards. Purple (#7262C7, tint #E5E3FA) marks actions, the active tab and selection only.
+ * - V7 surfaces, five levels: the canvas (#F6F5F1); raised content cards (white, soft shadow);
+ *   recessed controls (one step darker than what they sit on, no shadow); outlined groups and
+ *   selection rows (white, 1px border, no shadow); floating chrome (the only real elevation).
+ *   Purple (#7262C7) marks actions, active navigation and selection only.
  * - One gradient only: the black fade at the bottom of a profile photograph that carries text.
  *   Every surface, control and decoration is a solid colour (see "Gradients" at the end).
  * - Two card sizes: item 16px, feature 24px. Emoji-and-text pills (interests, emoji category filters,
- *   shared-interest and activity category tags) are softly rounded rectangles: a neutral white or
- *   off-white fill, or the purple tint with a fine purple outline when selected. Every other control keeps its own
+ *   shared-interest and activity category tags) are softly rounded rectangles: a recessed neutral
+ *   fill, or solid brand purple when selected. Every other control keeps its own
  *   approved shape: capsule buttons, filters, badges and tab bar; circular icon buttons and avatars.
  * - Headings are neutral ink; colour marks a category (a tinted holder or chip) or a state, never
  *   a heading on its own.
  * - One pastel per category (peach, lilac, mint, sky, butter), always paired with its ink for text.
  * - Emoji mark content (interests, activity categories), never utility controls.
- * - Fields and quiet controls take the contextual quiet fill (white on the canvas, off-white in cards);
- *   purple keeps actions and selection, and your own messages.
+ * - Fields and quiet controls take the contextual recessed fill; purple keeps actions and selection,
+ *   and your own messages.
  */
 
-/* Surfaces and text: the V6 palette ------------------------------------------- */
-/* Two contexts, set once and inherited by every component:
-   - On the canvas (the default): the page is Background #F1F0EA; quiet fills (fields, search,
-     incoming bubbles, unselected pills) are white Card #FFFFFF so they stand off the warm canvas;
-     secondary text is the derived #6B6771, because Secondary #77737D is 4.06:1 on Background.
-   - Inside a white card: quiet fills are Inset #F8F7F3 (white on white would vanish) and secondary
-     text is the exact Secondary #77737D (4.63:1 on white).
-   Body and heading text is Text #28262D in both. Supporting lavender surfaces (the prompt tile, info
-   banners) are Muted #F2F0FE, where secondary text again takes the derived value (4.88:1).
-   Purple text (links such as "Terms") is Brand #7262C7 on white cards (4.90:1); on the canvas it is
-   4.29:1, so there it takes the existing deep brand purple (purple 800). */
+/* Surfaces and text: the V7 system --------------------------------------------- */
+/* The rules live in artifacts/version-7-final-screenshot-preview/design-system.md. Two contexts,
+   set once and inherited by every component:
+   - On the canvas (the default): the page is the V7 canvas #F6F5F1 (the supplied Background,
+     lightened); recessed controls (fields, search, composer, unselected pills) are fill-on-canvas
+     #EDEBE5, one step darker; secondary text is the derived #6B6771 (5.06:1; Secondary #77737D is
+     4.25:1 here).
+   - Inside a white card or group: recessed fills are fill-on-card #F1F0EA (the supplied Background)
+     and secondary text is the exact Secondary #77737D (4.63:1 on white).
+   Body and heading text is Text #28262D in both. Muted #F2F0FE is only for supporting tiles (the
+   prompt, info banners). Purple link text is Brand on white (4.90:1) and the deep brand purple on
+   the canvas, where Brand is 4.49:1. */
 .theme-tiimo {
-  --color-surface-page: var(--color-palette-background);
-  --color-surface-soft: var(--color-palette-card);
+  --color-surface-page: var(--color-palette-canvas);
+  --color-surface-soft: var(--color-palette-fill-on-canvas);
   --color-surface-brand: var(--color-palette-muted);
   --color-text-primary: var(--color-palette-text);
   --color-text-secondary: var(--color-palette-text);
@@ -48,8 +51,8 @@
   --color-border-subtle: var(--color-palette-border);
 }
 
-.theme-tiimo :is(.card, .activity-card, .list-group__items, .option-card, .conversation__hit, .banner--info, .metric-card, .coach, .setup-step, .dialog__panel, .action-sheet__list) {
-  --color-surface-soft: var(--color-palette-inset);
+.theme-tiimo :is(.card, .activity-card, .list-group__items, .option-card, .banner--info, .metric-card, .coach, .setup-step, .dialog__panel, .action-sheet__list) {
+  --color-surface-soft: var(--color-palette-fill-on-card);
   --color-text-muted: var(--color-palette-secondary);
   --color-text-brand: var(--color-palette-brand);
 }
@@ -59,11 +62,12 @@
   --color-text-muted: var(--color-palette-secondary-strong);
 }
 
-/* Photo placeholders are not quiet fills: they keep their neutral photo grey (as in V5), so a tile
-   without a photo never turns white on the canvas. :where() keeps this at one class, so the more
-   specific placeholder rules (photo slots, activity media) still win, exactly as in V5. */
+/* Photo placeholders are not recessed fills: they are a neutral photo grey. On the lighter V7 canvas
+   the light tones (#F2F2F2) all but vanish (1.03:1), so every tone takes the darker photo grey the
+   other tones already use (surface-sunken #E9E8EB, 1.15:1). :where() keeps this at one class, so the
+   more specific placeholder rules (photo slots, activity media) still win, as in V5. */
 .theme-tiimo :where(.image-placeholder--stone, .image-placeholder--sand) {
-  background: var(--color-surface-canvas);
+  background: var(--color-surface-sunken);
 }
 
 /* Category tones: one pastel and its ink, set by `data-tone` (see lib/theme.js markAttrs). */
@@ -83,36 +87,52 @@
   line-height: 1;
 }
 
-/* Cards ------------------------------------------------------------------- */
+/* Elevation and outlines (V7) ------------------------------------------------- */
+/* Level 2, raised: content cards that carry a person's or an activity's content (profile sections,
+   activity cards, the profile readiness card). White, the restrained diffuse card shadow, no border. */
 .theme-tiimo .card,
-.theme-tiimo .activity-card,
-.theme-tiimo .list-group__items {
+.theme-tiimo .activity-card {
   border-radius: var(--tiimo-radius-feature);
   box-shadow: var(--shadow-tiimo-card);
 }
 
-/* The prompt object keeps its lavender fill and stays flat: a tinted tile, not a raised card. */
+/* The prompt object is a Muted tile: flat, no shadow, no border. */
 .theme-tiimo .profile-section--prompt {
   box-shadow: none;
 }
 
-/* Choice rows (radios, checkboxes): borderless white item cards; selected keeps the purple ring. */
+/* Level 4, outlined: groups of rows (settings, account, the filter panels) and selection rows
+   (radios, checkboxes). White with a 1px Border, no shadow: they hold controls, they do not float. */
+.theme-tiimo .list-group__items {
+  border-radius: var(--tiimo-radius-feature);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
+}
+
 .theme-tiimo .option-card {
   border-radius: var(--tiimo-radius-item);
-  box-shadow: var(--shadow-tiimo-card);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
 }
 
 .theme-tiimo .option-card:has(.choice__description) {
   border-radius: var(--tiimo-radius-item);
 }
 
+/* Selected: the approved 2px brand ring replaces the outline. */
 .theme-tiimo .option-card.is-selected {
-  box-shadow: inset 0 0 0 var(--border-focus) var(--color-control-selected), var(--shadow-tiimo-card);
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-control-selected);
 }
 
-/* Fields: the light neutral grey fill (no warm tint), no border, softer corners. */
+/* Level 3, recessed: fields and search take the contextual recessed fill through --color-surface-soft
+   (the approved components already use it), no border and no shadow; focus is the approved white
+   fill with the brand ring. Fields keep the softer item corner. */
 .theme-tiimo .input {
   border-radius: var(--tiimo-radius-item);
+}
+
+/* The composer is a field too: recessed, not a white card with a shadow. Focus stays approved. */
+.theme-tiimo .composer__field:not(:focus-within) {
+  background: var(--color-surface-soft);
+  box-shadow: none;
 }
 
 /* Photos: filled slots take the feature radius; empty slots are dashed "add" placeholders with
@@ -169,9 +189,9 @@
    navigation keep their own shapes. Reference: Tiimo's habit chips (Mobbin, "Add morning routines"):
    a soft rounded rectangle; unselected without a border; selected light purple with a fine purple
    outline.
-   V6 colour: unselected pills take the contextual quiet fill, so a solid neutral that stands off
-   whatever is behind them: white Card on the canvas, Inset off-white inside a white card. Never the
-   purple tint, no border, no gradient. */
+   V7 colour: unselected pills take the contextual recessed fill, a solid neutral one step darker
+   than what they sit on: fill-on-canvas #EDEBE5 on the canvas, fill-on-card #F1F0EA inside a white
+   card. Never the purple tint, no border, no gradient. */
 .theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip) {
   border-radius: var(--tiimo-radius-pill);
   background: var(--color-surface-soft);
@@ -179,22 +199,18 @@
   color: var(--color-text-primary);
 }
 
-/* Selected: the purple tint #E5E3FA, a fine 1px brand-purple outline and the brand-purple glyph
-   (minus or check), so the state never relies on colour alone. The label stays Text (11.9:1): purple
-   marks the state once (fill, outline, glyph), not four times. Same size and corner. */
+/* Selected (V7): solid Brand #7262C7 with white label, glyph (minus or check) and count (4.90:1), the
+   same selected language as the filter chips and segmented options. No outline. Same size and
+   corner as unselected. */
 .theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected {
-  background: var(--color-palette-purple-tint);
-  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-brand);
-  color: var(--color-text-primary);
+  background: var(--color-palette-brand);
+  box-shadow: none;
+  color: var(--color-on-brand);
   font-weight: var(--font-weight-semibold);
 }
 
-.theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected :is(.chip__affordance, .chip__icon) {
-  color: var(--color-palette-brand);
-}
-
-.theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected .chip__count {
-  color: var(--color-text-primary);
+.theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected :is(.chip__affordance, .chip__icon, .chip__count) {
+  color: var(--color-on-brand);
 }
 
 /* Locked at the five-interest limit: the same grey pill with the approved muted (disabled) text and
@@ -230,10 +246,10 @@
 }
 
 /* Buttons and chrome ------------------------------------------------------- */
-/* Secondary: a white pill that floats on the canvas instead of a grey fill. */
+/* Secondary: a white pill with a 1px Border. It sits in the layout, so it is outlined, not elevated. */
 .theme-tiimo .btn--secondary {
   background: var(--color-surface);
-  box-shadow: var(--shadow-tiimo-float);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
 }
 
 .theme-tiimo .btn--secondary:hover:not(:disabled) {
@@ -272,19 +288,15 @@
 }
 
 /* Messaging ---------------------------------------------------------------- */
-/* Inbox rows: separate white item cards with a small gap, like the reference's task rows. */
-.theme-tiimo .conversation__hit {
-  width: 100%;
-  margin-inline: 0;
-  margin-bottom: var(--space-2);
-  padding: var(--space-3);
-  border-radius: var(--tiimo-radius-item);
+/* Inbox rows sit directly on the canvas (V7), as the approved rows do: a list, not a stack of cards. */
+
+/* Incoming bubbles are content: white on the canvas, flat. */
+.theme-tiimo .message--them .message__bubble {
   background: var(--color-surface);
-  box-shadow: var(--shadow-tiimo-card);
 }
 
-/* Bubbles are the approved ones: yours solid brand purple with white text (4.90:1), theirs the
-   light neutral grey with ink text, each with its tail corner on the sender's side. */
+/* Bubbles: yours solid brand purple with white text (4.90:1, approved); theirs white on the canvas
+   (above), each with its tail corner on the sender's side. */
 
 /* The match moment (V5): their photo fills the scalloped silhouette, yours is a smaller rounded
    square overlapping its lower-left edge. The scallop is the shared component's own mask on

@@ -37,9 +37,10 @@ export const SCREENS = [
   { id: "maintenance", flow: "System state", title: "Service unavailable", Component: P.Maintenance },
 ];
 
-/* Screens that take part in the Tiimo-inspired experiment (artifacts/tiimo-inspired-experiment/).
+/* Screens that take part in the Tiimo-inspired experiment (artifacts/tiimo-inspired-experiment/;
+   Profile, Edit profile and Settings joined in V7, artifacts/version-7-final-screenshot-preview/).
    With ?theme=tiimo they render inside `.theme-tiimo`; every other screen keeps the approved design. */
-const TIIMO_SCREENS = new Set(["basics", "photos", "interests", "discovery", "like-profile", "likes", "match", "chats", "chat", "prompt", "activity"]);
+const TIIMO_SCREENS = new Set(["basics", "photos", "interests", "discovery", "like-profile", "likes", "match", "chats", "chat", "prompt", "activity", "profile", "edit", "settings"]);
 
 function PreviewFrame({ screen, active, go }) {
   const [root, setRoot] = useState(null);

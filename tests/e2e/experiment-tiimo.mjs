@@ -2,9 +2,10 @@
 /**
  * The opt-in Tiimo-inspired experiment (`?theme=tiimo`, artifacts/tiimo-inspired-experiment/, refined
  * in artifacts/tiimo-white-surface-refinement/, artifacts/tiimo-inspired-v3/, artifacts/tiimo-inspired-v4/ and
- * artifacts/version-5-final-screenshot-preview/ and artifacts/version-6-final-screenshot-preview/).
+ * artifacts/version-5-final-screenshot-preview/, artifacts/version-6-final-screenshot-preview/ and
+ * artifacts/version-7-final-screenshot-preview/, whose design-system.md this file checks).
  * Its own contract, kept apart from the approved design's checks in smoke.mjs and product.mjs:
- * scoping (only the 12 selected screens, only with the flag), the visual rules that carry meaning
+ * scoping (only the 15 selected screens, only with the flag), the visual rules that carry meaning
  * (white canvas, gradients only as the black fade on profile photos, compact rounded controls,
  * neutral headings, a match without decoration, neutral fields, solid purple for your messages,
  * category tones with readable inks, decorative emoji), and that the screens still work,
@@ -16,8 +17,8 @@ import { createServer } from "vite";
 import { initialState, STORAGE_KEY } from "../../src/flows/store.js";
 
 const ROOT = resolve(import.meta.dirname, "../..");
-const FLOW_SCREENS = ["basics", "photos", "interests", "discovery", "like-profile", "likes", "match", "chats", "chat", "prompt", "activity"];
-const OUTSIDE = ["profile", "edit", "settings", "insights", "activity-detail"];
+const FLOW_SCREENS = ["basics", "photos", "interests", "discovery", "like-profile", "likes", "match", "chats", "chat", "prompt", "activity", "profile", "edit", "settings"];
+const OUTSIDE = ["insights", "activity-detail", "blocked", "premium", "help"];
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const results = [];
@@ -87,7 +88,7 @@ try {
   }
   await open(p, "?theme=tiimo");
   if (!(await themed(p))) missing.push("welcome");
-  check("scoping: with ?theme=tiimo all 12 selected screens carry it", missing.length === 0, missing.join(", "));
+  check("scoping: with ?theme=tiimo all 15 selected screens carry it", missing.length === 0, missing.join(", "));
 
   const leaked = [];
   for (const s of OUTSIDE) {
@@ -112,7 +113,7 @@ try {
       chip: { pressed: chip.getAttribute("aria-pressed"), tone: chip.dataset.tone, bg: cs(chip).backgroundColor, ring: cs(chip).boxShadow, fg: cs(chip).color, emoji: getComputedStyle(chip, "::after").content },
     };
   });
-  check("look: themed screens sit on the palette's Background canvas (#F1F0EA)", look.canvas === "rgb(241, 240, 234)", look.canvas);
+  check("look: themed screens sit on the V7 canvas (#F6F5F1, the supplied Background lightened)", look.canvas === "rgb(246, 245, 241)", look.canvas);
 
   // V6: the supplied palette, exact values, as tokens; and the theme's surfaces and text use them.
   const palette = await p.evaluate(() => {
@@ -120,13 +121,15 @@ try {
     const theme = getComputedStyle(document.querySelector(".theme-tiimo"));
     const v = (cs, n) => cs.getPropertyValue(n).trim().toLowerCase();
     return {
-      tokens: Object.fromEntries(["background", "card", "inset", "brand", "purple-tint", "border", "text", "secondary", "muted"].map((k) => [k, v(root, `--color-palette-${k}`)])),
+      tokens: Object.fromEntries(["background", "card", "inset", "brand", "purple-tint", "border", "text", "secondary", "muted", "canvas", "fill-on-canvas", "fill-on-card"].map((k) => [k, v(root, `--color-palette-${k}`)])),
       mapped: { page: v(theme, "--color-surface-page"), text: v(theme, "--color-text-primary"), border: v(theme, "--color-border-subtle"), brand: v(theme, "--color-brand") },
     };
   });
   const WANT = { background: "#f1f0ea", card: "#ffffff", inset: "#f8f7f3", brand: "#7262c7", "purple-tint": "#e5e3fa", border: "#e6e3dd", text: "#28262d", secondary: "#77737d", muted: "#f2f0fe" };
   check("palette: the nine supplied colours are tokens with their exact values", Object.entries(WANT).every(([k, hex]) => palette.tokens[k] === hex), JSON.stringify(palette.tokens));
-  check("palette: the theme's canvas, text, border and brand resolve to the palette", palette.mapped.page === "#f1f0ea" && palette.mapped.text === "#28262d" && palette.mapped.border === "#e6e3dd" && palette.mapped.brand === "#7262c7", JSON.stringify(palette.mapped));
+  check("palette: the V7 roles: canvas #F6F5F1, recessed fills #EDEBE5 on the canvas and #F1F0EA in cards", palette.tokens.canvas === "#f6f5f1" && palette.tokens["fill-on-canvas"] === "#edebe5" && palette.tokens["fill-on-card"] === "#f1f0ea");
+  check("palette: canvas, card, recessed fill and border are four distinct values", new Set([palette.tokens.canvas, palette.tokens.card, palette.tokens["fill-on-canvas"], palette.tokens.border]).size === 4);
+  check("palette: the theme's canvas, text, border and brand resolve to the palette", palette.mapped.page === "#f6f5f1" && palette.mapped.text === "#28262d" && palette.mapped.border === "#e6e3dd" && palette.mapped.brand === "#7262c7", JSON.stringify(palette.mapped));
   // Neutral = no visible hue (the palette's Text #28262D is a near-black with a 7-point cool cast).
   const neutral = (c) => { const [r, g, b] = c.match(/\d+/g).map(Number); return Math.max(r, g, b) - Math.min(r, g, b) <= 8; };
   check("look: interest sets keep their categories (peach, lilac, mint)", look.labels.map((l) => l.tone).join() === "peach,lilac,mint", look.labels.map((l) => l.tone).join());
@@ -135,7 +138,7 @@ try {
   const worstLabel = Math.min(...look.labels.map((l) => ratio(l.fg, "rgb(255, 255, 255)")));
   check("contrast: set headings on the white canvas are at least 4.5:1", worstLabel >= 4.5, worstLabel.toFixed(2));
   check("look: the prompt question is a neutral heading, not accent text", look.prompt && neutral(look.prompt), look.prompt);
-  check("look: a selected interest is the purple tint with a fine brand-purple outline and dark label", look.chip.pressed === "true" && look.chip.bg === "rgb(229, 227, 250)" && /rgb\(114, 98, 199\) 0px 0px 0px 1px inset/.test(look.chip.ring) && look.chip.fg === "rgb(40, 38, 45)", `${look.chip.bg} / ${look.chip.ring} / ${look.chip.fg}`);
+  check("look: a selected interest is solid brand purple with a white label", look.chip.pressed === "true" && look.chip.bg === "rgb(114, 98, 199)" && look.chip.ring === "none" && look.chip.fg === "rgb(255, 255, 255)", `${look.chip.bg} / ${look.chip.ring} / ${look.chip.fg}`);
   check("contrast: selected interest text on its tint is at least 4.5:1", ratio(look.chip.fg, look.chip.bg) >= 4.5, ratio(look.chip.fg, look.chip.bg).toFixed(2));
   check("a11y: interest emoji are decorative (alt text empty), the name stays the label", /🍷/.test(look.chip.emoji) && /\/\s*""/.test(look.chip.emoji), look.chip.emoji);
   const name = await p.getByRole("button", { name: "Natural wine", exact: true }).count();
@@ -166,11 +169,46 @@ try {
   check("look: their messages are white Card bubbles on the warm canvas, distinct from yours", bubbles.them.bg === "rgb(255, 255, 255)" && bubbles.them.bg !== bubbles.me.bg, bubbles.them.bg);
   check("contrast: their message text is at least 4.5:1", ratio(bubbles.them.fg, bubbles.them.bg) >= 4.5, ratio(bubbles.them.fg, bubbles.them.bg).toFixed(2));
 
-  // 4b. Fields are white or a light neutral grey, never a warm tint (equal R, G and B).
-  await open(p, "flows.html?screen=basics&theme=tiimo");
-  const field = await p.evaluate(() => getComputedStyle(document.querySelector(".input")).backgroundColor);
-  const [fr, fg, fb] = field.match(/\d+/g).map(Number);
-  check("look: text fields are a light neutral (no warm or sandy fill)", fr === fg && fg === fb && fr >= 240, field);
+  // 4b. Recessed controls (V7): fields, search, the composer and text areas sit one step darker than
+  // the canvas, with no shadow and no border; they are controls, not cards.
+  const recessed = [];
+  for (const [screen, sel] of [["basics", ".input"], ["chats", ".search"], ["chat", ".composer__field"], ["prompt", ".textarea__input"], ["edit", ".input"]]) {
+    await open(p, `flows.html?screen=${screen}&theme=tiimo`);
+    recessed.push([screen, await p.evaluate((q) => {
+      const cs = getComputedStyle(document.querySelector(q));
+      return { bg: cs.backgroundColor, shadow: cs.boxShadow, border: cs.borderTopWidth };
+    }, sel)]);
+  }
+  // A fully transparent ring (the approved field keeps one so focus can animate) is not a shadow.
+  const noVisibleShadow = (sh) => sh === "none" || sh.split(/,(?![^(]*\))/).every((x) => /^rgba\(0, 0, 0, 0\)/.test(x.trim()));
+  check("surfaces: fields, search, composer and text areas are recessed (#EDEBE5), with no shadow or border", recessed.every(([, r]) => r.bg === "rgb(237, 235, 229)" && noVisibleShadow(r.shadow) && r.border === "0px"), recessed.map(([s, r]) => `${s}: ${r.bg} ${r.shadow} ${r.border}`).join(" | "));
+
+  // 4b'. Elevation is reserved (V7): on every themed screen, only raised content cards and floating
+  // or primary controls carry an outer shadow. Selection rows, groups, inbox rows, inputs and
+  // secondary buttons are flat (outlined or recessed instead).
+  const RAISED = /(^|\s)(card|activity-card|tab-bar|nav-button--floating|fab|action-bar__btn|count-badge|sheet__panel|btn--primary|match__you|avatar__image|match-queue__image|toast)(\s|$)/;
+  const elevated = [];
+  const outlined = [];
+  for (const path of FLOW_SCREENS.map((s) => `flows.html?screen=${s}&theme=tiimo`)) {
+    await open(p, path);
+    const r = await p.evaluate((re) => {
+      const ok = new RegExp(re);
+      const bad = []; const groups = [];
+      for (const el of document.querySelectorAll(".theme-tiimo *")) {
+        if (el.closest("svg") || !el.getBoundingClientRect().width) continue;
+        const cs = getComputedStyle(el);
+        const outer = cs.boxShadow !== "none" && cs.boxShadow.split(/,(?![^(]*\))/).some((x) => !/inset/.test(x));
+        const cls = `${el.className.baseVal ?? el.className}`;
+        if (outer && !ok.test(cls)) bad.push(cls.split(" ").slice(0, 2).join("."));
+        if (el.matches(".list-group__items, .option-card:not(.is-selected)")) groups.push(cs.boxShadow);
+      }
+      return { bad: [...new Set(bad)], groups };
+    }, RAISED.source);
+    if (r.bad.length) elevated.push(`${path}: ${r.bad.join(", ")}`);
+    outlined.push(...r.groups);
+  }
+  check("surfaces: only raised content and floating or primary controls cast a shadow", elevated.length === 0, elevated.join(" | "));
+  check("surfaces: groups and selection rows are outlined with the 1px Border, not elevated", outlined.length > 10 && outlined.every((b) => b === "rgb(230, 227, 221) 0px 0px 0px 1px inset"), [...new Set(outlined)].join(" | "));
 
   // 4c. Gradients: the only one allowed is the black fade over a real profile photograph that carries
   // text (the ::before layer of a photo container that holds an <img>). Every other element
@@ -200,7 +238,7 @@ try {
     if (found.hits.length) gradients.push(`${path}: ${found.hits.slice(0, 3).join(", ")}`);
     overlays.push(...found.allowed);
   }
-  check("look: no gradient on the 12 themed screens and the match moment, placeholders included (elements and ::before/::after)", gradients.length === 0 && overlays.length === 0, [...gradients, ...overlays].join(" | "));
+  check("look: no gradient on the 15 themed screens and the match moment, placeholders included (elements and ::before/::after)", gradients.length === 0 && overlays.length === 0, [...gradients, ...overlays].join(" | "));
 
   // 4d. With a real photograph the card gets the fade. The repo has no photography, so a test image
   // is put into the card: pure white, the worst case for white text.
@@ -394,14 +432,14 @@ try {
   check("pills: every emoji-and-text pill is a 12px rounded rectangle, not a capsule", pills.length > 10 && pills.every((c) => c.r === 12 && c.h >= 32), [...new Set(pills.map((c) => `${c.r}px on ${Math.round(c.h)}px`))].join(", "));
   const onCanvas = unselected.filter((c) => !c.inCard);
   const onCard = unselected.filter((c) => c.inCard);
-  check("pills: unselected pills on the canvas are solid white Card, with no border or outline", onCanvas.length > 0 && onCanvas.every((c) => c.bg === "rgb(255, 255, 255)" && c.ring === "none" && c.border === "0px"), [...new Set(onCanvas.map((c) => `${c.bg} ${c.ring} ${c.border}`))].join(" | "));
-  check("pills: unselected pills inside white cards are solid Inset off-white, with no border or outline", onCard.length > 0 && onCard.every((c) => c.bg === "rgb(248, 247, 243)" && c.ring === "none" && c.border === "0px"), [...new Set(onCard.map((c) => `${c.bg} ${c.ring} ${c.border}`))].join(" | "));
+  check("pills: unselected pills on the canvas are the recessed neutral #EDEBE5, with no border or outline", onCanvas.length > 0 && onCanvas.every((c) => c.bg === "rgb(237, 235, 229)" && c.ring === "none" && c.border === "0px"), [...new Set(onCanvas.map((c) => `${c.bg} ${c.ring} ${c.border}`))].join(" | "));
+  check("pills: unselected pills inside white cards are the off-white #F1F0EA, with no border or outline", onCard.length > 0 && onCard.every((c) => c.bg === "rgb(241, 240, 234)" && c.ring === "none" && c.border === "0px"), [...new Set(onCard.map((c) => `${c.bg} ${c.ring} ${c.border}`))].join(" | "));
   check("pills: no unselected pill uses the purple tint or the muted lavender", unselected.every((c) => !["rgb(229, 227, 250)", "rgb(242, 240, 254)"].includes(c.bg)));
-  check("pills: selected pills are the purple tint with a fine brand-purple outline and a dark label", selected.length >= 2 && selected.every((c) => c.bg === "rgb(229, 227, 250)" && /rgb\(114, 98, 199\) 0px 0px 0px 1px inset/.test(c.ring) && c.fg === "rgb(40, 38, 45)"), [...new Set(selected.map((c) => `${c.bg} ${c.ring} ${c.fg}`))].join(" | "));
+  check("pills: selected pills are solid brand purple, no outline, with a white label", selected.length >= 2 && selected.every((c) => c.bg === "rgb(114, 98, 199)" && c.ring === "none" && c.fg === "rgb(255, 255, 255)"), [...new Set(selected.map((c) => `${c.bg} ${c.ring} ${c.fg}`))].join(" | "));
   check("pills: no gradient on any pill", pills.every((c) => c.image === "none"));
   await open(p, "flows.html?screen=interests&theme=tiimo");
   const glyph = await p.evaluate(() => getComputedStyle(document.querySelector(".chip.is-selected .chip__affordance")).color);
-  check("pills: the selection indicator (minus or check) is brand purple", glyph === "rgb(114, 98, 199)", glyph);
+  check("pills: the selection indicator (minus or check) is white on the purple pill (4.90:1)", glyph === "rgb(255, 255, 255)", glyph);
 
   // 4h. Rendered contrast on every themed screen: each visible text element against the first solid
   // background behind it (text over photos and translucent scrims is checked separately above).
@@ -459,8 +497,8 @@ try {
       const over = await q.evaluate(() => document.documentElement.scrollWidth - innerWidth);
       if (over > 0) wide.push(`${path} +${over}px`);
     }
-    check(`responsive ${w}: no horizontal overflow on the 12 themed screens`, wide.length === 0, wide.join(", "));
-    check(`console ${w}: no errors on the 12 themed screens`, q.errors.length === 0, q.errors.slice(0, 3).join(" | "));
+    check(`responsive ${w}: no horizontal overflow on the 15 themed screens`, wide.length === 0, wide.join(", "));
+    check(`console ${w}: no errors on the 15 themed screens`, q.errors.length === 0, q.errors.slice(0, 3).join(" | "));
     await q.context().close();
   }
   check("console: no errors during the scoping and interaction checks", p.errors.length === 0, p.errors.slice(0, 3).join(" | "));

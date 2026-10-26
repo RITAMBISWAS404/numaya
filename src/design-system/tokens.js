@@ -505,6 +505,24 @@ export const tokens = [
     "description": "Derived, not supplied: Secondary moved toward Text just far enough for 4.5:1 on Background (4.84) and Inset. Secondary itself is 4.06:1 on Background, below AA for small text."
   },
   {
+    "id": "primitive.color.palette.canvas",
+    "name": "--p-color-palette-canvas",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#f6f5f1",
+    "resolved": "#f6f5f1",
+    "description": "V7 canvas: the supplied Background lightened toward white (L 0.912 vs 0.870), same warm-neutral hue, less beige. Chosen from a side-by-side study (artifacts/version-7-final-screenshot-preview/qa/background-study.png)."
+  },
+  {
+    "id": "primitive.color.palette.recess",
+    "name": "--p-color-palette-recess",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#edebe5",
+    "resolved": "#edebe5",
+    "description": "V7, derived: one step darker than the canvas (1.09:1), the recessed fill for controls on the canvas (fields, search, composer, unselected pills)."
+  },
+  {
     "id": "primitive.font.family.fraunces",
     "name": "--p-font-family-fraunces",
     "layer": "primitive",
@@ -1574,6 +1592,33 @@ export const tokens = [
     "value": "{primitive.color.palette.muted}",
     "resolved": "#f2f0fe",
     "description": "Very light supporting surfaces: the prompt tile and info cards (#F2F0FE)."
+  },
+  {
+    "id": "semantic.color.palette.canvas",
+    "name": "--color-palette-canvas",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.canvas}",
+    "resolved": "#f6f5f1",
+    "description": "V7 app canvas (#F6F5F1). The supplied Background (#F1F0EA) now serves as fill-on-card."
+  },
+  {
+    "id": "semantic.color.palette.fill-on-canvas",
+    "name": "--color-palette-fill-on-canvas",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.recess}",
+    "resolved": "#edebe5",
+    "description": "Recessed controls on the canvas: fields, search, composer, unselected pills (#EDEBE5)."
+  },
+  {
+    "id": "semantic.color.palette.fill-on-card",
+    "name": "--color-palette-fill-on-card",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.background}",
+    "resolved": "#f1f0ea",
+    "description": "Recessed fills inside white cards: unselected pills, the activity tag (#F1F0EA, the supplied Background)."
   },
   {
     "id": "semantic.font.display",

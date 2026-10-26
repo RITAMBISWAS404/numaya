@@ -61,7 +61,9 @@
         "text":             { "$type": "color", "$value": "#28262d" },
         "secondary":        { "$type": "color", "$value": "#77737d" },
         "muted":            { "$type": "color", "$value": "#f2f0fe" },
-        "secondary-strong": { "$type": "color", "$value": "#6b6771", "$description": "Derived, not supplied: Secondary moved toward Text just far enough for 4.5:1 on Background (4.84) and Inset. Secondary itself is 4.06:1 on Background, below AA for small text." }
+        "secondary-strong": { "$type": "color", "$value": "#6b6771", "$description": "Derived, not supplied: Secondary moved toward Text just far enough for 4.5:1 on Background (4.84) and Inset. Secondary itself is 4.06:1 on Background, below AA for small text." },
+        "canvas":           { "$type": "color", "$value": "#f6f5f1", "$description": "V7 canvas: the supplied Background lightened toward white (L 0.912 vs 0.870), same warm-neutral hue, less beige. Chosen from a side-by-side study (artifacts/version-7-final-screenshot-preview/qa/background-study.png)." },
+        "recess":           { "$type": "color", "$value": "#edebe5", "$description": "V7, derived: one step darker than the canvas (1.09:1), the recessed fill for controls on the canvas (fields, search, composer, unselected pills)." }
       }
     },
     "font": {
@@ -218,7 +220,10 @@
         "text":             { "$type": "color", "$value": "{primitive.color.palette.text}", "$description": "Primary text and headings (#28262D)." },
         "secondary":        { "$type": "color", "$value": "{primitive.color.palette.secondary}", "$description": "Secondary labels and descriptions on white cards (#77737D, 4.63:1)." },
         "secondary-strong": { "$type": "color", "$value": "{primitive.color.palette.secondary-strong}", "$description": "Secondary text on Background, Inset and Muted, where #77737D is below 4.5:1 (derived; 4.84:1 on Background)." },
-        "muted":            { "$type": "color", "$value": "{primitive.color.palette.muted}", "$description": "Very light supporting surfaces: the prompt tile and info cards (#F2F0FE)." }
+        "muted":            { "$type": "color", "$value": "{primitive.color.palette.muted}", "$description": "Very light supporting surfaces: the prompt tile and info cards (#F2F0FE)." },
+        "canvas":           { "$type": "color", "$value": "{primitive.color.palette.canvas}", "$description": "V7 app canvas (#F6F5F1). The supplied Background (#F1F0EA) now serves as fill-on-card." },
+        "fill-on-canvas":   { "$type": "color", "$value": "{primitive.color.palette.recess}", "$description": "Recessed controls on the canvas: fields, search, composer, unselected pills (#EDEBE5)." },
+        "fill-on-card":     { "$type": "color", "$value": "{primitive.color.palette.background}", "$description": "Recessed fills inside white cards: unselected pills, the activity tag (#F1F0EA, the supplied Background)." }
       }
     },
 
