@@ -1,0 +1,82 @@
+Every purple fill, outline, text and icon on the themed screens (V8), then the difference from V7.
+
+
+welcome
+  1x welcome__sticker [fill]
+  1x btn.btn--primary [fill]
+  2x a [text]
+
+basics
+  3x progress__fill [fill]
+  2x option-card.is-selected [outline]
+  1x choice__input.choice__input--radio [fill+outline]
+  1x choice__input.choice__input--checkbox [fill]
+  1x fab [fill]
+
+interests
+  4x progress__fill [fill]
+  3x chip.is-selected [fill]
+  1x fab [fill]
+
+discovery
+  2x action-bar__btn.action-bar__btn--super [fill+outline]
+  1x icon [icon]
+
+like-profile
+  1x btn.btn--primary [fill]
+
+likes
+  1x chip.chip--filter [fill]
+  5x icon.verified__mark [icon]
+  5x visually-hidden [text]
+  1x icon [icon]
+
+match
+
+chats
+  1x match-queue__image.avatar--tone-0 [outline]
+  1x chip.chip--filter [fill]
+  1x icon.avatar__badge [icon]
+  1x conversation__unread [fill]
+  1x icon [icon]
+
+chat
+  1x icon.verified__mark [icon]
+  1x visually-hidden [text]
+  1x message__bubble [fill]
+
+activity
+  1x segmented__item.is-selected [fill]
+  1x chip.chip--filter [fill]
+  1x badge.badge--brand [text]
+  2x icon [icon]
+  5x icon.verified__mark [icon]
+  5x visually-hidden [text]
+
+Difference from V7 (< V7, > V8):
+  9c9
+  <   2x option-card.is-selected [fill+outline]
+  ---
+  >   2x option-card.is-selected [outline]
+  17d16
+  <   1x prompt [fill]
+  22,23d20
+  <   1x card.profile-section [fill]
+  <   1x tab-bar__item.is-current [fill]
+  27,29d23
+  <   1x info-card [fill]
+  <   1x icon.info-card__icon [icon]
+  <   1x card.profile-section [fill]
+  36d29
+  <   1x tab-bar__item.is-current [fill]
+  46d38
+  <   1x tab-bar__item.is-current [fill]
+  57,58c49,50
+  <   1x badge.badge--brand [fill+text]
+  <   3x icon [icon]
+  ---
+  >   1x badge.badge--brand [text]
+  >   2x icon [icon]
+  61,62d52
+  <   1x activity-media__fallback [fill]
+  <   1x tab-bar__item.is-current [fill]

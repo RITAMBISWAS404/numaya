@@ -1,0 +1,483 @@
+Every visible element with a fill, shadow or border on the 14 themed flow screens: count x class | radius (CIRCLE/CAPSULE when fully round) | size | fill | SHADOW (outer) or inset (outline).
+V7 first, then V8. Read with design-system.md section 4 (containers).
+
+===== V7 =====
+
+## basics
+  1× fl-screen | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | CIRCLE | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  6× progress__segment | CAPSULE | 18x8 | bg rgb(233, 232, 235) |  
+  3× progress__fill | CAPSULE | 18x8 | bg rgb(114, 98, 199) |  
+  2× input | 16px | 361x56 | bg rgb(237, 235, 229) | inset 
+  4× option-card | 16px | 361x52 | bg rgb(255, 255, 255) | inset 
+  2× choice__input.choice__input--radio | CIRCLE | 24x24 | bg rgb(255, 255, 255) | inset 
+  2× option-card | 16px | 361x52 | bg rgb(250, 248, 255) | inset 
+  1× choice__input.choice__input--radio | CIRCLE | 24x24 | bg rgb(114, 98, 199) | inset 
+  1× choice__input.choice__input--checkbox | 8px | 24x24 | bg rgb(114, 98, 199) |  
+  2× choice__input.choice__input--checkbox | 8px | 24x24 | bg rgb(255, 255, 255) | inset 
+  1× fab | CIRCLE | 56x56 | bg rgb(114, 98, 199) | inset 
+
+## photos
+  1× fl-screen | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | CIRCLE | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  6× progress__segment | CAPSULE | 18x8 | bg rgb(233, 232, 235) |  
+  5× progress__fill | CAPSULE | 18x8 | bg rgb(114, 98, 199) |  
+  1× image-placeholder.image-placeholder--sky | 16px | 114x152 | bg rgb(218, 218, 221) |  
+  1× photo-slot__index | CAPSULE | 42x27 | bg rgb(255, 255, 255) |  
+  3× photo-slot__remove | CIRCLE | 26x26 | bg rgb(20, 19, 22) |  
+  1× image-placeholder.image-placeholder--stone | 16px | 114x152 | bg rgb(218, 218, 221) |  
+  2× photo-slot__index | CAPSULE | 23x27 | bg rgb(255, 255, 255) |  
+  1× image-placeholder.image-placeholder--mist | 16px | 114x152 | bg rgb(218, 218, 221) |  
+  3× icon | CIRCLE | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  1× info-card | 20px | 361x93 | bg rgb(242, 240, 254) |  
+  1× fab | CIRCLE | 56x56 | bg rgb(114, 98, 199) | inset 
+
+## interests
+  1× fl-screen | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | CIRCLE | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  6× progress__segment | CAPSULE | 18x8 | bg rgb(233, 232, 235) |  
+  4× progress__fill | CAPSULE | 18x8 | bg rgb(114, 98, 199) |  
+  1× chip | 12px | 166x36 | bg rgb(114, 98, 199) |  
+  1× chip | 12px | 135x36 | bg rgb(114, 98, 199) |  
+  1× chip | 12px | 169x36 | bg rgb(237, 235, 229) |  
+  1× chip | 12px | 109x36 | bg rgb(114, 98, 199) |  
+  1× chip | 12px | 145x36 | bg rgb(237, 235, 229) |  
+  1× chip | 12px | 122x36 | bg rgb(237, 235, 229) |  
+  1× chip | 12px | 199x36 | bg rgb(237, 235, 229) |  
+  1× chip | 12px | 138x36 | bg rgb(237, 235, 229) |  
+  1× chip | 12px | 134x36 | bg rgb(237, 235, 229) |  
+  1× chip | 12px | 119x36 | bg rgb(237, 235, 229) |  
+  1× prompt | 20px | 361x120 | bg rgb(242, 240, 254) |  
+  1× fab | CIRCLE | 56x56 | bg rgb(114, 98, 199) | inset 
+
+## discovery
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× fl-disc-head | 0px | 393x69 | bg rgb(246, 245, 241) |  
+  2× nav-button.nav-button--floating | CIRCLE | 36x36 | bg rgb(255, 255, 255) | SHADOW 
+  1× profile-card__media | 32px | 377x683 | bg rgb(218, 218, 221) |  
+  1× profile-card__overlay | 0px | 377x138 | bg rgba(20, 19, 22, 0.62) |  
+  1× profile-card__pill | CAPSULE | 85x24 | bg color(srgb 0.0784314 0.0745098 0.0862745 / 0.45) |  
+  1× profile-card__pill | CAPSULE | 77x24 | bg color(srgb 0.0784314 0.0745098 0.0862745 / 0.45) |  
+  2× action-bar__btn.action-bar__btn--super | CAPSULE | 72x56 | bg rgb(114, 98, 199) | SHADOW 
+  1× card.profile-section | 24px | 377x130 | bg rgb(242, 240, 254) |  
+  2× card.profile-section | 24px | 377x106 | bg rgb(255, 255, 255) | SHADOW 
+  1× chip.chip--static | CAPSULE | 113x36 | bg rgb(255, 255, 255) | inset 
+  1× chip.chip--static | CAPSULE | 151x36 | bg rgb(255, 255, 255) | inset 
+  3× image-placeholder.image-placeholder--sky | 32px | 377x471 | bg rgb(233, 232, 235) |  
+  1× chip.chip--static | 12px | 78x36 | bg rgb(241, 240, 234) |  
+  1× chip.chip--static | 12px | 129x36 | bg rgb(241, 240, 234) |  
+  1× card.profile-section | 24px | 377x141 | bg rgb(255, 255, 255) | SHADOW 
+  1× chip.chip--static | CAPSULE | 132x36 | bg rgb(255, 255, 255) | inset 
+  1× action-bar__btn.action-bar__btn--pass | CAPSULE | 72x56 | bg rgb(20, 19, 22) | inset 
+  1× action-bar__btn.action-bar__btn--like | CAPSULE | 72x56 | bg rgb(20, 19, 22) | inset 
+  1× tab-bar | CAPSULE | 369x64 | bg rgb(255, 255, 255) | SHADOW 
+  1× tab-bar__item | CAPSULE | 68x52 | bg rgb(229, 227, 250) |  
+  2× count-badge | CIRCLE | 18x18 | bg rgb(185, 58, 54) | SHADOW 
+
+## like-profile
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | CIRCLE | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  1× info-card | 20px | 361x93 | bg rgb(242, 240, 254) |  
+  1× profile-card__media | 32px | 361x481 | bg rgb(218, 218, 221) |  
+  1× profile-card__overlay | 0px | 361x138 | bg rgba(20, 19, 22, 0.62) |  
+  1× profile-card__pill | CAPSULE | 85x24 | bg color(srgb 0.0784314 0.0745098 0.0862745 / 0.45) |  
+  1× card.profile-section | 24px | 361x160 | bg rgb(242, 240, 254) |  
+  1× card.profile-section | 24px | 361x106 | bg rgb(255, 255, 255) | SHADOW 
+  1× chip.chip--static | 12px | 78x36 | bg rgb(241, 240, 234) |  
+  1× chip.chip--static | 12px | 129x36 | bg rgb(241, 240, 234) |  
+  1× card.profile-section | 24px | 361x93 | bg rgb(255, 255, 255) | SHADOW 
+  1× image-placeholder.image-placeholder--sky | 32px | 361x451 | bg rgb(233, 232, 235) |  
+  1× btn.btn--secondary | CAPSULE | 175x54 | bg rgb(255, 255, 255) | inset 
+  1× btn.btn--primary | CAPSULE | 175x54 | bg rgb(114, 98, 199) | inset 
+
+## likes
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× chip.chip--filter | CAPSULE | 84x36 | bg rgb(114, 98, 199) |  
+  1× chip.chip--filter | CAPSULE | 97x36 | bg rgb(255, 255, 255) | inset 
+  1× chip.chip--filter | CAPSULE | 76x36 | bg rgb(255, 255, 255) | inset 
+  1× chip.chip--filter | CAPSULE | 96x36 | bg rgb(255, 255, 255) | inset 
+  3× image-placeholder.image-placeholder--sand | 24px | 175x233 | bg rgb(233, 232, 235) |  
+  3× badge.badge--brand | CAPSULE | 63x24 | bg rgb(251, 240, 201) |  
+  2× image-placeholder.image-placeholder--sky | 24px | 175x233 | bg rgb(233, 232, 235) |  
+  1× image-placeholder.image-placeholder--stone | 24px | 175x233 | bg rgb(233, 232, 235) |  
+  1× badge.badge--success | CAPSULE | 88x24 | bg rgb(251, 240, 201) |  
+  1× tab-bar | CAPSULE | 369x64 | bg rgb(255, 255, 255) | SHADOW 
+  1× tab-bar__item | CAPSULE | 68x52 | bg rgb(229, 227, 250) |  
+  2× count-badge | CIRCLE | 18x18 | bg rgb(185, 58, 54) | SHADOW 
+
+## match
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | CIRCLE | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  1× organic-portrait__fallback.avatar--tone-3 | 0px | 259x259 | bg rgb(253, 240, 208) |  
+  1× avatar.avatar--lg | 16px | 64x64 | bg - | SHADOW 
+  1× avatar__image | 16px | 64x64 | bg rgb(214, 220, 253) |  
+  1× chip.chip--static | 12px | 78x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--static | 12px | 129x36 | bg rgb(237, 235, 229) |  
+  1× composer__field | 20px | 309x44 | bg rgb(237, 235, 229) |  
+  1× composer__send | CIRCLE | 44x44 | bg rgb(237, 235, 229) |  
+
+## chats
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× search | CAPSULE | 361x48 | bg rgb(237, 235, 229) |  
+  1× match-queue__image.avatar--tone-0 | 20px | 72x96 | bg rgb(253, 232, 238) | SHADOW 
+  1× chip.chip--filter | CAPSULE | 84x36 | bg rgb(114, 98, 199) |  
+  1× chip.chip--filter | CAPSULE | 95x36 | bg rgb(255, 255, 255) | inset 
+  1× chip.chip--filter | CAPSULE | 119x36 | bg rgb(255, 255, 255) | inset 
+  1× avatar__image | CIRCLE | 64x64 | bg rgb(253, 232, 238) |  
+  1× conversation__move | CAPSULE | 83x24 | bg rgb(251, 240, 201) |  
+  1× conversation__unread | CIRCLE | 20x20 | bg rgb(114, 98, 199) |  
+  1× avatar__image | CIRCLE | 64x64 | bg rgb(214, 220, 253) |  
+  1× tab-bar | CAPSULE | 369x64 | bg rgb(255, 255, 255) | SHADOW 
+  2× count-badge | CIRCLE | 18x18 | bg rgb(185, 58, 54) | SHADOW 
+  1× tab-bar__item | CAPSULE | 68x52 | bg rgb(229, 227, 250) |  
+
+## chat
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  2× nav-button.nav-button--floating | CIRCLE | 36x36 | bg rgb(255, 255, 255) | SHADOW 
+  1× avatar__image | CIRCLE | 36x36 | bg rgb(253, 232, 238) |  
+  1× message__bubble | 20px | 282x64 | bg rgb(114, 98, 199) |  
+  1× message__bubble | 20px | 282x64 | bg rgb(255, 255, 255) |  
+  1× composer__field | 20px | 309x44 | bg rgb(237, 235, 229) |  
+  1× composer__send | CIRCLE | 44x44 | bg rgb(237, 235, 229) |  
+
+## prompt
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | CIRCLE | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  1× option-card | 16px | 361x52 | bg rgb(250, 248, 255) | inset 
+  1× choice__input.choice__input--radio | CIRCLE | 24x24 | bg rgb(114, 98, 199) | inset 
+  5× option-card | 16px | 361x52 | bg rgb(255, 255, 255) | inset 
+  5× choice__input.choice__input--radio | CIRCLE | 24x24 | bg rgb(255, 255, 255) | inset 
+  1× input.textarea__input | 16px | 361x140 | bg rgb(237, 235, 229) | inset 
+  1× btn.btn--primary | CAPSULE | 361x54 | bg rgb(233, 232, 235) |  
+
+## activity
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | CIRCLE | 36x36 | bg rgb(255, 255, 255) | SHADOW 
+  1× segmented__item | CAPSULE | 80x36 | bg rgb(114, 98, 199) |  
+  1× segmented__item | CAPSULE | 114x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--filter | 12px | 69x36 | bg rgb(114, 98, 199) |  
+  1× chip.chip--filter | 12px | 96x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--filter | 12px | 159x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--filter | 12px | 120x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--filter | 12px | 92x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--filter | 12px | 83x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--filter | 12px | 103x36 | bg rgb(237, 235, 229) |  
+  4× activity-card | 24px | 361x397 | bg rgb(255, 255, 255) | SHADOW 
+  2× image-placeholder.image-placeholder--stone | 0px | 345x194 | bg rgb(233, 232, 235) |  
+  1× badge.badge--brand | 8px | 89x24 | bg rgb(250, 248, 255) |  
+  1× badge.badge--success | 8px | 111x24 | bg rgb(235, 244, 238) |  
+  2× activity-card__category | 8px | 71x27 | bg rgb(241, 240, 234) |  
+  3× avatar__image | CIRCLE | 24x24 | bg rgb(253, 232, 238) | SHADOW 
+  4× avatar__image | CIRCLE | 24x24 | bg rgb(214, 220, 253) | SHADOW 
+  1× image-placeholder.image-placeholder--sand | 0px | 345x194 | bg rgb(233, 232, 235) |  
+  1× activity-card__category | 8px | 75x27 | bg rgb(241, 240, 234) |  
+  3× avatar__image | CIRCLE | 24x24 | bg rgb(253, 240, 208) | SHADOW 
+  1× image-placeholder.image-placeholder--sky | 0px | 345x194 | bg rgb(233, 232, 235) |  
+  1× activity-card | 24px | 361x422 | bg rgb(255, 255, 255) | SHADOW 
+  1× image-placeholder.image-placeholder--mist | 0px | 345x194 | bg rgb(233, 232, 235) |  
+  1× activity-card__category | 8px | 95x27 | bg rgb(241, 240, 234) |  
+  1× badge.badge--warning | 8px | 57x24 | bg rgb(255, 246, 229) |  
+  1× activity-card__category | 8px | 80x27 | bg rgb(241, 240, 234) |  
+  1× activity-card | 24px | 361x421 | bg rgb(255, 255, 255) | SHADOW 
+  1× activity-media__fallback | 0px | 345x194 | bg rgb(242, 240, 254) |  
+  1× activity-card__category | 8px | 63x27 | bg rgb(241, 240, 234) |  
+  1× tab-bar | CAPSULE | 369x64 | bg rgb(255, 255, 255) | SHADOW 
+  1× tab-bar__item | CAPSULE | 68x52 | bg rgb(229, 227, 250) |  
+  2× count-badge | CIRCLE | 18x18 | bg rgb(185, 58, 54) | SHADOW 
+
+## profile
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | CIRCLE | 36x36 | bg rgb(255, 255, 255) | SHADOW 
+  1× avatar__image | CIRCLE | 88x88 | bg rgb(214, 220, 253) |  
+  1× fl-me__pct | CAPSULE | 32x27 | bg rgb(20, 19, 22) |  
+  1× chip.chip--static | 12px | 128x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--static | 12px | 78x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--static | 12px | 101x36 | bg rgb(237, 235, 229) |  
+  1× btn.btn--secondary | CAPSULE | 129x40 | bg rgb(255, 255, 255) | inset 
+  1× prompt | 20px | 361x120 | bg rgb(242, 240, 254) |  
+  1× card.fl-ready-card | 24px | 361x152 | bg rgb(255, 255, 255) | SHADOW 
+  1× btn.btn--primary | CAPSULE | 100x40 | bg rgb(114, 98, 199) | inset 
+  2× list-group__items | 24px | 361x52 | bg rgb(255, 255, 255) | inset 
+  1× list-group__items | 24px | 361x260 | bg rgb(255, 255, 255) | inset 
+  4× list-row__hit | 0px | 345x52 | bg - | inset 
+  1× tab-bar | CAPSULE | 369x64 | bg rgb(255, 255, 255) | SHADOW 
+  2× count-badge | CIRCLE | 18x18 | bg rgb(185, 58, 54) | SHADOW 
+  1× tab-bar__item | CAPSULE | 68x52 | bg rgb(229, 227, 250) |  
+
+## edit
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | CIRCLE | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  1× segmented__item | CAPSULE | 57x36 | bg rgb(114, 98, 199) |  
+  1× segmented__item | CAPSULE | 83x36 | bg rgb(237, 235, 229) |  
+  1× image-placeholder.image-placeholder--sky | 16px | 114x152 | bg rgb(218, 218, 221) |  
+  1× photo-slot__index | CAPSULE | 42x27 | bg rgb(255, 255, 255) |  
+  3× photo-slot__remove | CIRCLE | 26x26 | bg rgb(20, 19, 22) |  
+  1× image-placeholder.image-placeholder--stone | 16px | 114x152 | bg rgb(218, 218, 221) |  
+  2× photo-slot__index | CAPSULE | 23x27 | bg rgb(255, 255, 255) |  
+  1× image-placeholder.image-placeholder--mist | 16px | 114x152 | bg rgb(218, 218, 221) |  
+  3× icon | CIRCLE | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  1× prompt | 20px | 361x120 | bg rgb(242, 240, 254) |  
+  1× input.textarea__input | 16px | 361x140 | bg rgb(237, 235, 229) | inset 
+  1× chip | 12px | 166x36 | bg rgb(114, 98, 199) |  
+  1× chip | 12px | 135x36 | bg rgb(114, 98, 199) |  
+  1× chip | 12px | 169x36 | bg rgb(237, 235, 229) |  
+  1× chip | 12px | 109x36 | bg rgb(114, 98, 199) |  
+  1× chip | 12px | 145x36 | bg rgb(237, 235, 229) |  
+  1× chip | 12px | 122x36 | bg rgb(237, 235, 229) |  
+  1× chip | 12px | 199x36 | bg rgb(237, 235, 229) |  
+  1× chip | 12px | 138x36 | bg rgb(237, 235, 229) |  
+  1× chip | 12px | 134x36 | bg rgb(237, 235, 229) |  
+  1× chip | 12px | 119x36 | bg rgb(237, 235, 229) |  
+  1× input | 16px | 361x56 | bg rgb(237, 235, 229) | inset 
+  1× list-group__items | 24px | 361x104 | bg rgb(255, 255, 255) | inset 
+  1× list-row__hit | 0px | 345x52 | bg - | inset 
+  1× list-group__items | 24px | 361x52 | bg rgb(255, 255, 255) | inset 
+
+## settings
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | CIRCLE | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  2× list-group__items | 24px | 361x87 | bg rgb(255, 255, 255) | inset 
+  1× list-group__items | 24px | 361x68 | bg rgb(255, 255, 255) | inset 
+  2× switch | CAPSULE | 51x31 | bg rgb(218, 218, 221) |  
+  1× list-group__items | 24px | 361x204 | bg rgb(255, 255, 255) | inset 
+  3× switch | CAPSULE | 51x31 | bg rgb(114, 98, 199) |  
+  2× list-row__hit | 0px | 345x68 | bg - | inset 
+  3× list-group__items | 24px | 361x52 | bg rgb(255, 255, 255) | inset 
+  1× info-card | 20px | 361x111 | bg rgb(242, 240, 254) |  
+  1× list-group__items | 24px | 361x120 | bg rgb(255, 255, 255) | inset 
+  1× list-row__hit | 0px | 345x52 | bg - | inset 
+
+===== V8 =====
+
+## basics
+  1× fl-screen | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | 12px | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  6× progress__segment | CAPSULE | 18x8 | bg rgb(233, 232, 235) |  
+  3× progress__fill | CAPSULE | 18x8 | bg rgb(114, 98, 199) |  
+  2× input | 12px | 361x56 | bg rgb(237, 235, 229) | inset 
+  6× option-card | 12px | 361x52 | bg rgb(255, 255, 255) | inset 
+  2× choice__input.choice__input--radio | CIRCLE | 24x24 | bg rgb(255, 255, 255) | inset 
+  1× choice__input.choice__input--radio | CIRCLE | 24x24 | bg rgb(114, 98, 199) | inset 
+  1× choice__input.choice__input--checkbox | 6px | 24x24 | bg rgb(114, 98, 199) |  
+  2× choice__input.choice__input--checkbox | 6px | 24x24 | bg rgb(255, 255, 255) | inset 
+  1× fab | 16px | 56x56 | bg rgb(114, 98, 199) | inset 
+
+## photos
+  1× fl-screen | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | 12px | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  6× progress__segment | CAPSULE | 18x8 | bg rgb(233, 232, 235) |  
+  5× progress__fill | CAPSULE | 18x8 | bg rgb(114, 98, 199) |  
+  1× image-placeholder.image-placeholder--sky | 16px | 114x152 | bg rgb(218, 218, 221) |  
+  1× photo-slot__index | 6px | 42x27 | bg rgb(255, 255, 255) |  
+  3× photo-slot__remove | 6px | 26x26 | bg rgb(20, 19, 22) |  
+  1× image-placeholder.image-placeholder--stone | 16px | 114x152 | bg rgb(218, 218, 221) |  
+  2× photo-slot__index | 6px | 23x27 | bg rgb(255, 255, 255) |  
+  1× image-placeholder.image-placeholder--mist | 16px | 114x152 | bg rgb(218, 218, 221) |  
+  3× icon | 12px | 40x40 | bg rgb(255, 255, 255) | inset 
+  1× fab | 16px | 56x56 | bg rgb(114, 98, 199) | inset 
+
+## interests
+  1× fl-screen | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | 12px | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  6× progress__segment | CAPSULE | 18x8 | bg rgb(233, 232, 235) |  
+  4× progress__fill | CAPSULE | 18x8 | bg rgb(114, 98, 199) |  
+  1× chip | 10px | 166x36 | bg rgb(114, 98, 199) |  
+  1× chip | 10px | 135x36 | bg rgb(114, 98, 199) |  
+  1× chip | 10px | 169x36 | bg rgb(237, 235, 229) |  
+  1× chip | 10px | 109x36 | bg rgb(114, 98, 199) |  
+  1× chip | 10px | 145x36 | bg rgb(237, 235, 229) |  
+  1× chip | 10px | 122x36 | bg rgb(237, 235, 229) |  
+  1× chip | 10px | 199x36 | bg rgb(237, 235, 229) |  
+  1× chip | 10px | 138x36 | bg rgb(237, 235, 229) |  
+  1× chip | 10px | 134x36 | bg rgb(237, 235, 229) |  
+  1× chip | 10px | 119x36 | bg rgb(237, 235, 229) |  
+  1× prompt | 16px | 361x120 | bg rgb(255, 255, 255) | inset 
+  1× fab | 16px | 56x56 | bg rgb(114, 98, 199) | inset 
+
+## discovery
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× fl-disc-head | 0px | 393x69 | bg rgb(246, 245, 241) |  
+  2× nav-button.nav-button--floating | 12px | 36x36 | bg rgb(255, 255, 255) | SHADOW 
+  1× profile-card__media | 20px | 377x683 | bg rgb(218, 218, 221) |  
+  1× profile-card__overlay | 0px | 377x138 | bg rgba(20, 19, 22, 0.62) |  
+  1× profile-card__pill | 6px | 85x24 | bg color(srgb 0.0784314 0.0745098 0.0862745 / 0.45) |  
+  1× profile-card__pill | 6px | 77x24 | bg color(srgb 0.0784314 0.0745098 0.0862745 / 0.45) |  
+  2× action-bar__btn.action-bar__btn--super | CAPSULE | 72x56 | bg rgb(114, 98, 199) | SHADOW 
+  1× chip.chip--static | 10px | 113x36 | bg rgb(255, 255, 255) | inset 
+  1× chip.chip--static | 10px | 151x36 | bg rgb(255, 255, 255) | inset 
+  3× image-placeholder.image-placeholder--sky | 20px | 377x471 | bg rgb(233, 232, 235) |  
+  1× chip.chip--static | 10px | 78x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--static | 10px | 129x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--static | 10px | 132x36 | bg rgb(255, 255, 255) | inset 
+  1× action-bar__btn.action-bar__btn--pass | CAPSULE | 72x56 | bg rgb(20, 19, 22) | inset 
+  1× action-bar__btn.action-bar__btn--like | CAPSULE | 72x56 | bg rgb(20, 19, 22) | inset 
+  1× tab-bar | CAPSULE | 369x64 | bg rgb(255, 255, 255) | SHADOW 
+  1× tab-bar__item | CAPSULE | 68x52 | bg rgb(237, 235, 229) |  
+  2× count-badge | CIRCLE | 18x18 | bg rgb(185, 58, 54) | SHADOW 
+
+## like-profile
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | 12px | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  1× profile-card__media | 20px | 361x481 | bg rgb(218, 218, 221) |  
+  1× profile-card__overlay | 0px | 361x138 | bg rgba(20, 19, 22, 0.62) |  
+  1× profile-card__pill | 6px | 85x24 | bg color(srgb 0.0784314 0.0745098 0.0862745 / 0.45) |  
+  1× chip.chip--static | 10px | 78x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--static | 10px | 129x36 | bg rgb(237, 235, 229) |  
+  1× image-placeholder.image-placeholder--sky | 20px | 361x451 | bg rgb(233, 232, 235) |  
+  1× btn.btn--secondary | 12px | 175x54 | bg rgb(255, 255, 255) | inset 
+  1× btn.btn--primary | 12px | 175x54 | bg rgb(114, 98, 199) | inset 
+
+## likes
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× chip.chip--filter | 10px | 84x36 | bg rgb(114, 98, 199) |  
+  1× chip.chip--filter | 10px | 97x36 | bg rgb(255, 255, 255) | inset 
+  1× chip.chip--filter | 10px | 76x36 | bg rgb(255, 255, 255) | inset 
+  1× chip.chip--filter | 10px | 96x36 | bg rgb(255, 255, 255) | inset 
+  3× image-placeholder.image-placeholder--sand | 16px | 175x233 | bg rgb(233, 232, 235) |  
+  3× badge.badge--brand | 6px | 63x24 | bg rgb(251, 240, 201) |  
+  2× image-placeholder.image-placeholder--sky | 16px | 175x233 | bg rgb(233, 232, 235) |  
+  1× image-placeholder.image-placeholder--stone | 16px | 175x233 | bg rgb(233, 232, 235) |  
+  1× badge.badge--success | 6px | 88x24 | bg rgb(251, 240, 201) |  
+  1× tab-bar | CAPSULE | 369x64 | bg rgb(255, 255, 255) | SHADOW 
+  1× tab-bar__item | CAPSULE | 68x52 | bg rgb(237, 235, 229) |  
+  2× count-badge | CIRCLE | 18x18 | bg rgb(185, 58, 54) | SHADOW 
+
+## match
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | 12px | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  1× organic-portrait__fallback.avatar--tone-3 | 0px | 259x259 | bg rgb(253, 240, 208) |  
+  1× avatar.avatar--lg | 16px | 64x64 | bg - | SHADOW 
+  1× avatar__image | 16px | 64x64 | bg rgb(214, 220, 253) |  
+  1× chip.chip--static | 10px | 78x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--static | 10px | 129x36 | bg rgb(237, 235, 229) |  
+  1× composer__field | 12px | 309x44 | bg rgb(237, 235, 229) |  
+  1× composer__send | 12px | 44x44 | bg rgb(237, 235, 229) |  
+
+## chats
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× search | 12px | 361x48 | bg rgb(237, 235, 229) |  
+  1× match-queue__image.avatar--tone-0 | 12px | 72x96 | bg rgb(253, 232, 238) | SHADOW 
+  1× chip.chip--filter | 10px | 84x36 | bg rgb(114, 98, 199) |  
+  1× chip.chip--filter | 10px | 95x36 | bg rgb(255, 255, 255) | inset 
+  1× chip.chip--filter | 10px | 119x36 | bg rgb(255, 255, 255) | inset 
+  1× avatar__image | CIRCLE | 64x64 | bg rgb(253, 232, 238) |  
+  1× conversation__move | 6px | 83x24 | bg rgb(251, 240, 201) |  
+  1× conversation__unread | CIRCLE | 20x20 | bg rgb(114, 98, 199) |  
+  1× avatar__image | CIRCLE | 64x64 | bg rgb(214, 220, 253) |  
+  1× tab-bar | CAPSULE | 369x64 | bg rgb(255, 255, 255) | SHADOW 
+  2× count-badge | CIRCLE | 18x18 | bg rgb(185, 58, 54) | SHADOW 
+  1× tab-bar__item | CAPSULE | 68x52 | bg rgb(237, 235, 229) |  
+
+## chat
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  2× nav-button.nav-button--floating | 12px | 36x36 | bg rgb(255, 255, 255) | SHADOW 
+  1× avatar__image | CIRCLE | 36x36 | bg rgb(253, 232, 238) |  
+  1× message__bubble | 16px | 282x64 | bg rgb(114, 98, 199) |  
+  1× message__bubble | 16px | 282x64 | bg rgb(255, 255, 255) |  
+  1× composer__field | 12px | 309x44 | bg rgb(237, 235, 229) |  
+  1× composer__send | 12px | 44x44 | bg rgb(237, 235, 229) |  
+
+## prompt
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | 12px | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  6× option-card | 12px | 361x52 | bg rgb(255, 255, 255) | inset 
+  1× choice__input.choice__input--radio | CIRCLE | 24x24 | bg rgb(114, 98, 199) | inset 
+  5× choice__input.choice__input--radio | CIRCLE | 24x24 | bg rgb(255, 255, 255) | inset 
+  1× input.textarea__input | 12px | 361x140 | bg rgb(237, 235, 229) | inset 
+  1× btn.btn--primary | 12px | 361x54 | bg rgb(233, 232, 235) |  
+
+## activity
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | 12px | 36x36 | bg rgb(255, 255, 255) | SHADOW 
+  1× segmented__item | 10px | 80x36 | bg rgb(114, 98, 199) |  
+  1× segmented__item | 10px | 114x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--filter | 10px | 69x36 | bg rgb(114, 98, 199) |  
+  1× chip.chip--filter | 10px | 96x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--filter | 10px | 159x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--filter | 10px | 120x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--filter | 10px | 92x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--filter | 10px | 83x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--filter | 10px | 103x36 | bg rgb(237, 235, 229) |  
+  4× activity-card | 16px | 361x397 | bg rgb(255, 255, 255) | SHADOW 
+  2× image-placeholder.image-placeholder--stone | 0px | 345x194 | bg rgb(233, 232, 235) |  
+  1× badge.badge--brand | 6px | 89x24 | bg rgb(237, 235, 229) |  
+  1× badge.badge--success | 6px | 111x24 | bg rgb(235, 244, 238) |  
+  2× activity-card__category | 6px | 71x27 | bg rgb(241, 240, 234) |  
+  3× avatar__image | CIRCLE | 24x24 | bg rgb(253, 232, 238) | SHADOW 
+  4× avatar__image | CIRCLE | 24x24 | bg rgb(214, 220, 253) | SHADOW 
+  1× image-placeholder.image-placeholder--sand | 0px | 345x194 | bg rgb(233, 232, 235) |  
+  1× activity-card__category | 6px | 75x27 | bg rgb(241, 240, 234) |  
+  3× avatar__image | CIRCLE | 24x24 | bg rgb(253, 240, 208) | SHADOW 
+  1× image-placeholder.image-placeholder--sky | 0px | 345x194 | bg rgb(233, 232, 235) |  
+  1× activity-card | 16px | 361x422 | bg rgb(255, 255, 255) | SHADOW 
+  1× image-placeholder.image-placeholder--mist | 0px | 345x194 | bg rgb(233, 232, 235) |  
+  1× activity-card__category | 6px | 95x27 | bg rgb(241, 240, 234) |  
+  1× badge.badge--warning | 6px | 57x24 | bg rgb(255, 246, 229) |  
+  1× activity-card__category | 6px | 80x27 | bg rgb(241, 240, 234) |  
+  1× activity-card | 16px | 361x421 | bg rgb(255, 255, 255) | SHADOW 
+  1× activity-media__fallback | 0px | 345x194 | bg rgb(233, 232, 235) |  
+  1× activity-card__category | 6px | 63x27 | bg rgb(241, 240, 234) |  
+  1× tab-bar | CAPSULE | 369x64 | bg rgb(255, 255, 255) | SHADOW 
+  1× tab-bar__item | CAPSULE | 68x52 | bg rgb(237, 235, 229) |  
+  2× count-badge | CIRCLE | 18x18 | bg rgb(185, 58, 54) | SHADOW 
+
+## profile
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | 12px | 36x36 | bg rgb(255, 255, 255) | SHADOW 
+  1× avatar__image | CIRCLE | 88x88 | bg rgb(214, 220, 253) |  
+  1× fl-me__pct | CAPSULE | 32x27 | bg rgb(20, 19, 22) |  
+  1× chip.chip--static | 10px | 128x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--static | 10px | 78x36 | bg rgb(237, 235, 229) |  
+  1× chip.chip--static | 10px | 101x36 | bg rgb(237, 235, 229) |  
+  1× btn.btn--secondary | 12px | 129x40 | bg rgb(255, 255, 255) | inset 
+  1× prompt | 16px | 361x120 | bg rgb(255, 255, 255) | inset 
+  1× card.fl-ready-card | 16px | 361x152 | bg rgb(255, 255, 255) | inset 
+  1× btn.btn--primary | 12px | 100x40 | bg rgb(114, 98, 199) | inset 
+  2× list-group__items | 16px | 361x52 | bg rgb(255, 255, 255) | inset 
+  1× list-group__items | 16px | 361x260 | bg rgb(255, 255, 255) | inset 
+  4× list-row__hit | 0px | 345x52 | bg - | inset 
+  1× tab-bar | CAPSULE | 369x64 | bg rgb(255, 255, 255) | SHADOW 
+  2× count-badge | CIRCLE | 18x18 | bg rgb(185, 58, 54) | SHADOW 
+  1× tab-bar__item | CAPSULE | 68x52 | bg rgb(237, 235, 229) |  
+
+## edit
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | 12px | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  1× segmented__item | 10px | 57x36 | bg rgb(114, 98, 199) |  
+  1× segmented__item | 10px | 83x36 | bg rgb(237, 235, 229) |  
+  1× image-placeholder.image-placeholder--sky | 16px | 114x152 | bg rgb(218, 218, 221) |  
+  1× photo-slot__index | 6px | 42x27 | bg rgb(255, 255, 255) |  
+  3× photo-slot__remove | 6px | 26x26 | bg rgb(20, 19, 22) |  
+  1× image-placeholder.image-placeholder--stone | 16px | 114x152 | bg rgb(218, 218, 221) |  
+  2× photo-slot__index | 6px | 23x27 | bg rgb(255, 255, 255) |  
+  1× image-placeholder.image-placeholder--mist | 16px | 114x152 | bg rgb(218, 218, 221) |  
+  3× icon | 12px | 40x40 | bg rgb(255, 255, 255) | inset 
+  1× prompt | 16px | 361x120 | bg rgb(255, 255, 255) | inset 
+  1× input.textarea__input | 12px | 361x140 | bg rgb(237, 235, 229) | inset 
+  1× chip | 10px | 166x36 | bg rgb(114, 98, 199) |  
+  1× chip | 10px | 135x36 | bg rgb(114, 98, 199) |  
+  1× chip | 10px | 169x36 | bg rgb(237, 235, 229) |  
+  1× chip | 10px | 109x36 | bg rgb(114, 98, 199) |  
+  1× chip | 10px | 145x36 | bg rgb(237, 235, 229) |  
+  1× chip | 10px | 122x36 | bg rgb(237, 235, 229) |  
+  1× chip | 10px | 199x36 | bg rgb(237, 235, 229) |  
+  1× chip | 10px | 138x36 | bg rgb(237, 235, 229) |  
+  1× chip | 10px | 134x36 | bg rgb(237, 235, 229) |  
+  1× chip | 10px | 119x36 | bg rgb(237, 235, 229) |  
+  1× input | 12px | 361x56 | bg rgb(237, 235, 229) | inset 
+  1× list-group__items | 16px | 361x104 | bg rgb(255, 255, 255) | inset 
+  1× list-row__hit | 0px | 345x52 | bg - | inset 
+  1× list-group__items | 16px | 361x52 | bg rgb(255, 255, 255) | inset 
+
+## settings
+  1× fl-screen.fl-screen--page | 0px | 393x852 | bg rgb(246, 245, 241) |  
+  1× nav-button.nav-button--floating | 12px | 40x40 | bg rgb(255, 255, 255) | SHADOW 
+  2× list-group__items | 16px | 361x87 | bg rgb(255, 255, 255) | inset 
+  1× list-group__items | 16px | 361x68 | bg rgb(255, 255, 255) | inset 
+  2× switch | CAPSULE | 51x31 | bg rgb(218, 218, 221) |  
+  1× list-group__items | 16px | 361x204 | bg rgb(255, 255, 255) | inset 
+  3× switch | CAPSULE | 51x31 | bg rgb(114, 98, 199) |  
+  2× list-row__hit | 0px | 345x68 | bg - | inset 
+  3× list-group__items | 16px | 361x52 | bg rgb(255, 255, 255) | inset 
+  1× list-group__items | 16px | 361x120 | bg rgb(255, 255, 255) | inset 
+  1× list-row__hit | 0px | 345x52 | bg - | inset 

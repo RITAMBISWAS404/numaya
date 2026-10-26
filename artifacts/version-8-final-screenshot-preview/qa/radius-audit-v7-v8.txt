@@ -1,0 +1,90 @@
+Computed corner radius per component and screen (radius/height in px), measured at 393 x 852 with ?theme=tiimo.
+= unchanged on purpose; * moved to the V8 scale (tag 6, pill 10, control/item 12, feature 16, photo 20).
+
+* .nav-button
+    V7  basics:50%/40  interests:50%/40  discovery:50%/36  like-profile:50%/40  chat:50%/36  match:50%/40  activity:50%/36
+    V8  basics:12px/40  interests:12px/40  discovery:12px/36  like-profile:12px/40  chat:12px/36  match:12px/40  activity:12px/36
+* .fab
+    V7  basics:50%/56  interests:50%/56
+    V8  basics:16px/56  interests:16px/56
+* .input
+    V7  basics:16px/56
+    V8  basics:12px/56
+* .option-card
+    V7  basics:16px/52
+    V8  basics:12px/52
+* .chip[data-emoji]
+    V7  interests:12px/36  discovery:12px/36  like-profile:12px/36  match:12px/36  activity:12px/36
+    V8  interests:10px/36  discovery:10px/36  like-profile:10px/36  match:10px/36  activity:10px/36
+= .action-bar__btn
+    V7  discovery:28px/56
+= .count-badge
+    V7  discovery:999px/18  likes:999px/18  chats:999px/18  activity:999px/18
+= .tab-bar
+    V7  discovery:999px/64  likes:999px/64  chats:999px/64  activity:999px/64
+= .tab-bar__item
+    V7  discovery:999px/52  likes:999px/52  chats:999px/52  activity:999px/52
+* .chip:not([data-emoji])
+    V7  discovery:999px/36  likes:999px/36  chats:999px/36  activity:12px/36
+    V8  discovery:10px/36  likes:10px/36  chats:10px/36  activity:10px/36
+* .shared-interests__pill
+    V7  discovery:12px/36  like-profile:12px/36
+    V8  discovery:10px/36  like-profile:10px/36
+* .profile-card__pill
+    V7  discovery:999px/24  like-profile:999px/24
+    V8  discovery:6px/24  like-profile:6px/24
+* .profile-card__media
+    V7  discovery:32px/683  like-profile:32px/481
+    V8  discovery:20px/683  like-profile:20px/481
+* .profile-section
+    V7  discovery:24px/130 24px/106 24px/141  like-profile:24px/160 24px/106 24px/93
+    V8  discovery:0px/110 0px/90 0px/125  like-profile:0px/140 0px/90 0px/77
+* .btn--primary
+    V7  like-profile:999px/54
+    V8  like-profile:12px/54
+* .btn--secondary
+    V7  like-profile:999px/54
+    V8  like-profile:12px/54
+* .badge
+    V7  likes:999px/24  activity:8px/24
+    V8  likes:6px/24  activity:6px/24
+* .person-tile__badge .badge
+    V7  likes:999px/24
+    V8  likes:6px/24
+= .conversation__unread
+    V7  chats:999px/20
+* .conversation__move
+    V7  chats:999px/24
+    V8  chats:6px/24
+* .search
+    V7  chats:999px/48
+    V8  chats:12px/48
+= .avatar__image
+    V7  chats:50%/64  chat:50%/36  match:16px/64  activity:50%/24
+* .match-queue__image
+    V7  chats:20px/96
+    V8  chats:12px/96
+* .composer__field
+    V7  chat:20px/44  match:20px/44
+    V8  chat:12px/44  match:12px/44
+* .composer__send
+    V7  chat:50%/44  match:50%/44
+    V8  chat:12px/44  match:12px/44
+* .message__bubble
+    V7  chat:20px/64
+    V8  chat:16px/64
+* .btn--quiet
+    V7  match:999px/48
+    V8  match:12px/48
+* .match__shared-chip
+    V7  match:12px/36
+    V8  match:10px/36
+* .segmented__item
+    V7  activity:999px/36
+    V8  activity:10px/36
+* .activity-card__category
+    V7  activity:8px/27
+    V8  activity:6px/27
+* .activity-card
+    V7  activity:24px/397 24px/422 24px/421
+    V8  activity:16px/397 16px/422 16px/421
