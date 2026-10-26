@@ -358,13 +358,16 @@
     "switch":      { "width": { "$type": "dimension", "$value": "51px" }, "height": { "$type": "dimension", "$value": "31px" } },
     "tab-bar":     { "height": { "$type": "dimension", "$value": "{primitive.dimension.64}" } },
     "tiimo":       {
-      "$description": "Tiimo-inspired experiment geometry. V9 radius scale, chosen by component size and role (artifacts/version-9-final-screenshot-preview/design-system.md): tags and badges 6, 36px pills and filters 8, buttons, fields, rows and icon buttons 10, cards, groups, bubbles and the FAB 12, profile photographs and sheets 14. No circles: avatars are rounded squares sized to the same scale; capsules only for the progress segments.",
-      "radius-tag":     { "$type": "dimension", "$value": "{primitive.dimension.6}",  "$description": "V9: ≤ 27px tall: tags, badges, counts, checkboxes and radios, photo index and remove buttons, switch thumbs; 24px avatars." },
-      "radius-pill":    { "$type": "dimension", "$value": "{primitive.dimension.8}",  "$description": "V9: 36px chips (emoji pills, filter tabs, fact chips, segmented options); 36px avatars." },
-      "radius-control": { "$type": "dimension", "$value": "{primitive.dimension.10}", "$description": "V9: 40–56px controls: buttons, icon buttons, the send button, the active tab item, your match photo on short phones." },
-      "radius-item":    { "$type": "dimension", "$value": "{primitive.dimension.10}", "$description": "V9: fields, search, the composer, selection rows, photo slots, info containers, new-match portraits; 48px avatars." },
-      "radius-feature": { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "V9: cards, outlined groups, the prompt, message bubbles, the FAB, Discover actions, the tab bar; 64px avatars and your match photo." },
-      "radius-photo":   { "$type": "dimension", "$value": "{primitive.dimension.14}", "$description": "V9: full-width profile photographs, Likes tiles, sheets and dialogs; 88–96px avatars." },
+      "$description": "Tiimo-inspired experiment geometry. V10 balanced scale, chosen per component (artifacts/version-10-final-screenshot-preview/design-system.md): fully rounded pills for compact actions and toggles (filter tabs, segmented options, small buttons, Discover actions, counts, progress, switch tracks); generously rounded rectangles for structured controls and surfaces (tags 8, chips, fields, rows and icon buttons 12, buttons 14, cards, groups and tiles 16, photographs and sheets 20); conventional shapes where function needs them (circular radios, square checkboxes). Nested corners: inner ≈ outer − inset.",
+      "radius-check":   { "$type": "dimension", "$value": "{primitive.dimension.6}",  "$description": "V10: checkboxes, a conventional slightly rounded square." },
+      "radius-tag":     { "$type": "dimension", "$value": "{primitive.dimension.8}",  "$description": "V10: 24–27px labels and badges, the photo order badge and remove button (inset 8px in a 16px tile)." },
+      "radius-chip":    { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "V10: 36px content chips: interest and emoji pills, shared-interest and fact chips." },
+      "radius-control": { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "V10: 36–44px icon buttons, the send button, slider handles (half their height: a compact pill)." },
+      "radius-item":    { "$type": "dimension", "$value": "{primitive.dimension.12}", "$description": "V10: fields, search, the composer, selection rows and opener rows." },
+      "radius-button":  { "$type": "dimension", "$value": "{primitive.dimension.14}", "$description": "V10: full-width and standard 48–56px buttons." },
+      "radius-feature": { "$type": "dimension", "$value": "{primitive.dimension.16}", "$description": "V10: cards, outlined groups, the prompt, information containers, photo tiles and slots, new-match portraits, message bubbles, the FAB, the readiness meter, your match photo." },
+      "radius-photo":   { "$type": "dimension", "$value": "{primitive.dimension.20}", "$description": "V10: full-width profile photographs, sheets and dialogs." },
+      "radius-pill":    { "$type": "dimension", "$value": "999px", "$description": "V10: a fully rounded capsule (radius = half the height) for compact actions and toggles. Never on a square component, where it would make a circle." },
       "emoji-size":     { "$type": "dimension", "$value": "{primitive.dimension.32}" },
       "emoji-radius":   { "$type": "dimension", "$value": "10px" }
     }

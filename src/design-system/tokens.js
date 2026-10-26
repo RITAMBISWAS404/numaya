@@ -2777,58 +2777,85 @@ export const tokens = [
     "description": null
   },
   {
-    "id": "component.tiimo.radius-tag",
-    "name": "--tiimo-radius-tag",
+    "id": "component.tiimo.radius-check",
+    "name": "--tiimo-radius-check",
     "layer": "component",
     "type": "dimension",
     "value": "{primitive.dimension.6}",
     "resolved": "6px",
-    "description": "V9: ≤ 27px tall: tags, badges, counts, checkboxes and radios, photo index and remove buttons, switch thumbs; 24px avatars."
+    "description": "V10: checkboxes, a conventional slightly rounded square."
   },
   {
-    "id": "component.tiimo.radius-pill",
-    "name": "--tiimo-radius-pill",
+    "id": "component.tiimo.radius-tag",
+    "name": "--tiimo-radius-tag",
     "layer": "component",
     "type": "dimension",
     "value": "{primitive.dimension.8}",
     "resolved": "8px",
-    "description": "V9: 36px chips (emoji pills, filter tabs, fact chips, segmented options); 36px avatars."
+    "description": "V10: 24–27px labels and badges, the photo order badge and remove button (inset 8px in a 16px tile)."
+  },
+  {
+    "id": "component.tiimo.radius-chip",
+    "name": "--tiimo-radius-chip",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.12}",
+    "resolved": "12px",
+    "description": "V10: 36px content chips: interest and emoji pills, shared-interest and fact chips."
   },
   {
     "id": "component.tiimo.radius-control",
     "name": "--tiimo-radius-control",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.10}",
-    "resolved": "10px",
-    "description": "V9: 40–56px controls: buttons, icon buttons, the send button, the active tab item, your match photo on short phones."
+    "value": "{primitive.dimension.12}",
+    "resolved": "12px",
+    "description": "V10: 36–44px icon buttons, the send button, slider handles (half their height: a compact pill)."
   },
   {
     "id": "component.tiimo.radius-item",
     "name": "--tiimo-radius-item",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.10}",
-    "resolved": "10px",
-    "description": "V9: fields, search, the composer, selection rows, photo slots, info containers, new-match portraits; 48px avatars."
+    "value": "{primitive.dimension.12}",
+    "resolved": "12px",
+    "description": "V10: fields, search, the composer, selection rows and opener rows."
+  },
+  {
+    "id": "component.tiimo.radius-button",
+    "name": "--tiimo-radius-button",
+    "layer": "component",
+    "type": "dimension",
+    "value": "{primitive.dimension.14}",
+    "resolved": "14px",
+    "description": "V10: full-width and standard 48–56px buttons."
   },
   {
     "id": "component.tiimo.radius-feature",
     "name": "--tiimo-radius-feature",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.12}",
-    "resolved": "12px",
-    "description": "V9: cards, outlined groups, the prompt, message bubbles, the FAB, Discover actions, the tab bar; 64px avatars and your match photo."
+    "value": "{primitive.dimension.16}",
+    "resolved": "16px",
+    "description": "V10: cards, outlined groups, the prompt, information containers, photo tiles and slots, new-match portraits, message bubbles, the FAB, the readiness meter, your match photo."
   },
   {
     "id": "component.tiimo.radius-photo",
     "name": "--tiimo-radius-photo",
     "layer": "component",
     "type": "dimension",
-    "value": "{primitive.dimension.14}",
-    "resolved": "14px",
-    "description": "V9: full-width profile photographs, Likes tiles, sheets and dialogs; 88–96px avatars."
+    "value": "{primitive.dimension.20}",
+    "resolved": "20px",
+    "description": "V10: full-width profile photographs, sheets and dialogs."
+  },
+  {
+    "id": "component.tiimo.radius-pill",
+    "name": "--tiimo-radius-pill",
+    "layer": "component",
+    "type": "dimension",
+    "value": "999px",
+    "resolved": "999px",
+    "description": "V10: a fully rounded capsule (radius = half the height) for compact actions and toggles. Never on a square component, where it would make a circle."
   },
   {
     "id": "component.tiimo.emoji-size",

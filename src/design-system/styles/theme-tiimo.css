@@ -1,25 +1,29 @@
 /*
- * Tiimo-inspired visual experiment, V9: the monochrome refinement. History: the first experiment
- * (artifacts/tiimo-inspired-experiment/), V2 (artifacts/tiimo-white-surface-refinement/), V3–V8
- * (artifacts/tiimo-inspired-v3/ … artifacts/version-8-final-screenshot-preview/). The rules below
- * are V9's; they are written out in artifacts/version-9-final-screenshot-preview/design-system.md,
- * with the Bumble research behind them in mobbin-research.md there.
+ * Tiimo-inspired visual experiment, V10: V9's monochrome system with balanced geometry, a traditional
+ * bottom tab bar and a larger match portrait. History: the first experiment
+ * (artifacts/tiimo-inspired-experiment/), V2 (artifacts/tiimo-white-surface-refinement/), V3–V9
+ * (artifacts/tiimo-inspired-v3/ … artifacts/version-9-final-screenshot-preview/). The rules below are
+ * written out in artifacts/version-10-final-screenshot-preview/design-system.md.
  *
  * Opt-in: a screen renders inside `.theme-tiimo` only with `?theme=tiimo` and only if it takes part
  * in the experiment, so the approved design is untouched everywhere else. Every rule below is scoped
  * to `.theme-tiimo`; the component markup and contracts are the same in both designs.
  *
  * The system:
- * - Colour: a pure white canvas; neutral greys build the hierarchy (secondary #F7F7F8 for gentle
- *   separation, inset #F0F0F2 for recessed controls, border #E4E4E7); purple #7262C7 is the one
- *   accent, for actions, selection and the active tab. No warm neutrals, no lavender, no category
- *   pastels, no decorative gradient.
- * - Surfaces: direct content on the canvas; outlined white modules and groups; recessed fields;
- *   neutral information containers; one soft shadow, for what floats (the tab bar, the SuperSwipe on
- *   a photo, sheets).
- * - Geometry: tag 6, pill 8, control and item 10, feature 12, photo 14 (tokens). No circular UI:
- *   avatars, counts, radios, switch thumbs, slider thumbs and the readiness meter are rounded
- *   squares or bars. The match scallop is the one organic shape.
+ * - Colour (V9, unchanged): a pure white canvas; neutral greys build the hierarchy (secondary #F7F7F8,
+ *   inset #F0F0F2, border #E4E4E7); purple #7262C7 is the one accent, for actions, selection and the
+ *   active tab. No warm neutrals, no lavender, no category pastels, no decorative gradient.
+ * - Surfaces (V9, unchanged): direct content on the canvas; outlined white modules and groups;
+ *   recessed fields; neutral information containers; one soft shadow, for what floats.
+ * - Geometry (V10): a balance of fully rounded pills for compact actions and toggles (filter tabs,
+ *   segmented options, small buttons, the Discover actions, counts, progress, switch tracks, slider
+ *   and switch handles) and generously rounded rectangles for structured controls and surfaces (tags
+ *   8, chips, fields, rows and icon buttons 12, buttons 14, cards, groups and tiles 16, photographs
+ *   and sheets 20). Conventional shapes stay where function needs them: circular radios, square
+ *   checkboxes. Avatars are rounded squares at a quarter of their size. Nested corners follow
+ *   inner ≈ outer − inset. The match scallop is the one organic shape.
+ * - Navigation (V10): a full-width bottom tab bar with a hairline, the purple icon as the active
+ *   state, and red dots instead of numbers (the count stays in the accessible name).
  * - One gradient: the black fade under the text on a real profile photograph.
  */
 
@@ -111,10 +115,10 @@
 }
 
 /* Information containers: the secondary grey with an ink icon. Neutral, flat and clearly not a
-   control (no border, no chevron, no shadow). */
+   control (no border, no chevron, no shadow); the card corner, as a content surface. */
 .theme-tiimo .info-card {
   padding: var(--space-4);
-  border-radius: var(--tiimo-radius-item);
+  border-radius: var(--tiimo-radius-feature);
   background: var(--color-palette-surface-secondary);
 }
 
@@ -157,10 +161,11 @@
   border-radius: var(--tiimo-radius-control);
 }
 
-/* Photos: slots take the item corner; empty slots are dashed "add" placeholders with the plus in a
-   small white rounded square with a hairline, flat. */
+/* Photos: slots take the tile corner (16px, the same as the photo placeholder inside them, so the
+   two no longer clip each other); empty slots are dashed "add" placeholders with the plus in a small
+   white rounded square with a hairline, flat. */
 .theme-tiimo :is(.photo-slot, .photo-slot__select) {
-  border-radius: var(--tiimo-radius-item);
+  border-radius: var(--tiimo-radius-feature);
 }
 
 .theme-tiimo .photo-slot--empty {
@@ -178,6 +183,7 @@
   box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
 }
 
+/* The remove button and the order badge sit 8px inside the 16px tile corner: 16 − 8 = 8px. */
 .theme-tiimo :is(.photo-slot__remove, .photo-slot__index) {
   border-radius: var(--tiimo-radius-tag);
 }
@@ -219,8 +225,15 @@
   font-size: 13px;
 }
 
-/* Every 36px chip shares the pill corner: emoji pills, filter tabs, fact chips and segmented options. */
-.theme-tiimo :is(.chip, .segmented__item) {
+/* Content chips (interests, emoji categories, shared interests, facts) are generously rounded
+   rectangles: they are things, grouped in families, and a 12px corner on 36px keeps them calm in
+   wrapped sets. Toggles that switch a view (the Likes and Messages filter tabs, segmented options) are
+   full pills: compact actions in a single row. */
+.theme-tiimo .chip {
+  border-radius: var(--tiimo-radius-chip);
+}
+
+.theme-tiimo :is(.filter-chips:not(:has(.chip[data-emoji])) .chip, .segmented__item) {
   border-radius: var(--tiimo-radius-pill);
 }
 
@@ -292,7 +305,7 @@
 }
 
 /* Status labels ---------------------------------------------------------------------- */
-/* One label shape (24px, 6px corner, semibold micro text) in four semantic tones:
+/* One label shape (24px, 8px corner, semibold micro text) in four semantic tones:
    - Neutral (inset grey or white, ink): ordinary states, e.g. "Your move", "Matched", "Snoozed",
      "You're going".
    - Emphasis (white or inset grey, deep purple): states that should be noticed, e.g. "New" on a
@@ -301,8 +314,15 @@
    - Alert (the approved red): notification counts on the tab bar, unchanged.
    On a photo the label is white so it reads on any image; "Verified" and "New here" keep the
    approved dark translucent label over the photo. */
-.theme-tiimo :is(.badge, .profile-card__pill, .conversation__move, .count-badge, .conversation__unread, .fl-me__pct) {
+.theme-tiimo :is(.badge, .profile-card__pill, .conversation__move, .fl-me__pct) {
   border-radius: var(--tiimo-radius-tag);
+}
+
+/* Counts are numbers in a pill: the unread count beside a conversation. At least 26px wide, so a
+   single digit still makes a pill and not a circle. */
+.theme-tiimo .conversation__unread {
+  min-width: 26px;
+  border-radius: var(--tiimo-radius-pill);
 }
 
 .theme-tiimo :is(.badge, .conversation__move) {
@@ -323,9 +343,15 @@
 }
 
 /* Controls and chrome ---------------------------------------------------------------- */
-/* Buttons: rounded rectangles with the control corner; flat (purple is emphasis enough). */
+/* Buttons: standard and full-width buttons (48–56px) are rounded rectangles with the button corner;
+   small buttons (40px: "Edit profile", "Write a bio") are compact actions, so full pills. Flat:
+   purple is emphasis enough. */
 .theme-tiimo .btn {
-  border-radius: var(--tiimo-radius-control);
+  border-radius: var(--tiimo-radius-button);
+}
+
+.theme-tiimo .btn--sm {
+  border-radius: var(--tiimo-radius-pill);
 }
 
 .theme-tiimo :is(.btn--primary, .fab) {
@@ -359,15 +385,15 @@
   box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border);
 }
 
-/* The step FAB: a 56px rounded square with the feature corner. */
+/* The step FAB: a 56px rounded square with the card corner (a pill would make it a circle). */
 .theme-tiimo .fab {
   border-radius: var(--tiimo-radius-feature);
 }
 
-/* Discover actions (Pass, Like, SuperSwipe): 56px rounded rectangles with the feature corner, the
-   star kept. Flat in the action row; the SuperSwipe that sits on a photo floats above it. */
+/* Discover actions (Pass, Like, SuperSwipe): 72 × 56px full pills, the star kept: three compact,
+   wider-than-tall actions. Flat in the action row; the SuperSwipe on a photo floats above it. */
 .theme-tiimo .action-bar__btn {
-  border-radius: var(--tiimo-radius-feature);
+  border-radius: var(--tiimo-radius-pill);
   box-shadow: none;
 }
 
@@ -375,20 +401,31 @@
   box-shadow: var(--shadow-tiimo-float);
 }
 
-/* Switch: a rounded-rectangle track with a rounded-square thumb (concentric: the thumb's corner
-   plus its 3px inset). The thumb position still says on or off. */
+/* Switch: a slightly wider pill track (58 × 32px, from 51 × 31) with a compact pill handle
+   (34 × 26px, clearly wider than tall) inset 3px, so it reads as a switch and not as a circle on a rail. Purple when on,
+   neutral when off; the handle's position still says on or off, and the native checkbox semantics
+   are unchanged. */
 .theme-tiimo .switch {
-  border-radius: calc(var(--tiimo-radius-tag) + 3px);
+  width: 58px;
+  height: 32px;
+  border-radius: var(--tiimo-radius-pill);
 }
 
 .theme-tiimo .switch::after {
-  border-radius: var(--tiimo-radius-tag);
+  width: 34px;
+  height: 26px;
+  border-radius: var(--tiimo-radius-pill);
 }
 
-/* Slider: a solid rail and selected interval with squared ends, and rounded-square thumbs (same
-   28px size and hit area). */
+.theme-tiimo .switch:checked::after {
+  transform: translateX(18px);
+}
+
+/* Slider: a solid pill rail and selected interval, and compact pill handles (20 × 28px, from 28px
+   circles): a handle you grip, not a dot. Same height and hit row; the thumb still centres on its
+   value. */
 .theme-tiimo .slider__track::before {
-  border-radius: 3px;
+  border-radius: var(--tiimo-radius-pill);
   background: var(--color-control-track-off);
 }
 
@@ -399,7 +436,7 @@
   left: var(--from);
   right: calc(100% - var(--to));
   height: 6px;
-  border-radius: 3px;
+  border-radius: var(--tiimo-radius-pill);
   background: var(--color-control-selected);
   pointer-events: none;
 }
@@ -409,46 +446,81 @@
 }
 
 .theme-tiimo .slider__track input::-webkit-slider-thumb {
+  width: 20px;
   border-radius: var(--tiimo-radius-pill);
 }
 
 .theme-tiimo .slider__track input::-moz-range-thumb {
+  width: 20px;
   border-radius: var(--tiimo-radius-pill);
 }
 
-/* Checkboxes and radios: both rounded squares; the radio's inner mark is a smaller square (the
-   approved white gap), the checkbox's a tick, so they stay distinct without a circle. */
-.theme-tiimo :is(.choice__input--checkbox, .choice__input--radio) {
-  border-radius: var(--tiimo-radius-tag);
+/* Checkboxes and radios keep their conventional shapes: a slightly rounded square with a tick, and a
+   circle with a dot (the approved radio, untouched). */
+.theme-tiimo .choice__input--checkbox {
+  border-radius: var(--tiimo-radius-check);
 }
 
-/* Onboarding progress: rounded bars, not capsules. */
+/* Onboarding progress: pill segments (8px tall). */
 .theme-tiimo :is(.progress__segment, .progress__fill) {
-  border-radius: 3px;
+  border-radius: var(--tiimo-radius-pill);
 }
 
-/* Bottom navigation: compact and the one piece of chrome with elevation. Shorter (56px, from 64),
-   with less inner padding and no gap, so the five items sit closer; the icons keep their size and
-   each item keeps a 48px-tall, ~70px-wide touch target. White with a hairline and one soft shadow;
-   a rounded rectangle, not a capsule. */
+/* Bottom navigation (V10): a traditional, full-width tab bar. It spans the screen with no outer
+   margin or capsule, a 1px top divider separates it from the content above (no shadow), and it
+   reaches the bottom edge, padding the home-indicator area (--safe-bottom). It stays the last row of
+   the screen's flex column, so it never covers the content, which scrolls above it. Five equal items,
+   56px tall, with the approved 24px icons: inactive icons are the secondary grey, the active one the
+   filled brand purple; no background behind it. */
 .theme-tiimo .tab-bar {
+  box-sizing: content-box;
   height: 56px;
-  padding: 4px;
+  margin: 0;
+  padding: 0 var(--space-2) var(--safe-bottom);
   gap: 0;
-  border-radius: var(--tiimo-radius-feature);
+  border-radius: 0;
   background: var(--color-surface);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
-  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-border), var(--shadow-tiimo-float);
+  box-shadow: inset 0 var(--border-hairline) 0 var(--color-palette-border);
 }
 
-/* The active tab: the inset grey behind the filled brand-purple icon, a rounded rectangle. */
 .theme-tiimo .tab-bar__item {
   border-radius: var(--tiimo-radius-control);
 }
 
 .theme-tiimo .tab-bar__item.is-current {
-  background: var(--color-palette-surface-inset);
+  background: none;
+}
+
+.theme-tiimo .tab-bar__icon {
+  color: var(--color-palette-secondary);
+}
+
+.theme-tiimo .tab-bar__item:hover .tab-bar__icon {
+  color: var(--color-text-primary);
+}
+
+.theme-tiimo .tab-bar__item.is-current .tab-bar__icon {
+  color: var(--color-palette-brand);
+}
+
+/* Notification dots: an 8px red dot at the icon's upper right, with a 2px white ring so it stays
+   distinct where it overlaps the icon. The number is no longer drawn (a dot means "something to
+   check"); it stays in the badge's text and aria-label and in the tab's accessible name ("Likes, 5
+   new"). Numbers stay wherever they carry meaning (filter counts, the unread count in Messages). */
+.theme-tiimo .tab-bar .count-badge {
+  top: -1px;
+  right: -3px;
+  min-width: 0;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  color: transparent;
+  font-size: 0;
+  line-height: 0;
 }
 
 /* Discover header: the logo and its controls only. The thin bar under the logo was decoration
@@ -458,18 +530,12 @@
 }
 
 /* Avatars and portraits ----------------------------------------------------------- */
-/* No circles: every avatar is a rounded square, its corner from the same scale by size (24px 6,
-   36px 8, 48px 10, 64px 12, 96px 14). Fallbacks are the inset grey with an ink initial (no
-   identity pastels). The readiness ring around your avatar goes; the readiness meter below says it
-   as a bar, and the score label stays. */
-.theme-tiimo .avatar--xs { --avatar-radius: var(--tiimo-radius-tag); }
-.theme-tiimo .avatar--sm { --avatar-radius: var(--tiimo-radius-pill); }
-.theme-tiimo .avatar--md { --avatar-radius: var(--tiimo-radius-item); }
-.theme-tiimo .avatar--lg { --avatar-radius: var(--tiimo-radius-feature); }
-.theme-tiimo .avatar--xl { --avatar-radius: var(--tiimo-radius-photo); }
-
+/* Avatars stay rounded squares (no circular photo masks), with a corner of a quarter of their size,
+   so every size reads as the same shape: 24px 6, 36px 9, 48px 12, 64px 16, 96px 24. Fallbacks are the
+   inset grey with an ink initial. The readiness ring around your avatar stays off; the readiness
+   meter says it as a bar, and the score label stays. */
 .theme-tiimo .avatar .avatar__image {
-  border-radius: var(--avatar-radius);
+  border-radius: calc(var(--avatar-size) / 4);
   background: var(--color-palette-surface-inset);
 }
 
@@ -482,7 +548,7 @@
 }
 
 .theme-tiimo .match-queue__image[class] {
-  border-radius: var(--tiimo-radius-item);
+  border-radius: var(--tiimo-radius-feature);
   background: var(--color-palette-surface-inset);
 }
 
@@ -508,7 +574,7 @@
   bottom: 10px;
   left: 10px;
   height: 4px;
-  border-radius: 2px;
+  border-radius: var(--tiimo-radius-pill);
 }
 
 .theme-tiimo .readiness-meter::before {
@@ -547,7 +613,7 @@
   border-radius: var(--tiimo-radius-item);
 }
 
-/* Bubbles: the feature corner with a small tail corner on the sender's side. Yours solid brand
+/* Bubbles: the card corner (16px) with a 6px tail corner on the sender's side. Yours solid brand
    purple with white text (4.90:1); theirs the inset grey with ink text (13.1:1), which separates
    from the white canvas without an outline. */
 .theme-tiimo .message__bubble {
@@ -555,34 +621,45 @@
 }
 
 .theme-tiimo .message--me .message__bubble {
-  border-bottom-right-radius: 4px;
+  border-bottom-right-radius: 6px;
 }
 
 .theme-tiimo .message--them .message__bubble {
-  border-bottom-left-radius: 4px;
+  border-bottom-left-radius: 6px;
   background: var(--color-palette-surface-inset);
 }
 
 .theme-tiimo .message.is-grouped.message--me .message__bubble {
-  border-top-right-radius: 4px;
+  border-top-right-radius: 6px;
 }
 
 .theme-tiimo .message.is-grouped.message--them .message__bubble {
-  border-top-left-radius: 4px;
+  border-top-left-radius: 6px;
 }
 
 /* The match moment: their photo fills the scalloped silhouette, yours is a smaller rounded square
-   overlapping its lower-left edge. The scallop is the shared component's own mask on
-   .organic-portrait__photo (an SVG path, so the photo itself is clipped to the contour); the halo
-   behind it stays hidden, and there is no confetti. Your photo keeps its white ring, which follows
-   its rounded corners and separates the two faces where they overlap. */
+   overlapping its lower-left edge. V10 makes their portrait about 12% larger (up to 296px or 74vw,
+   from 264px or 66vw) and
+   uses the scallop's softer variant: eight lobes instead of ten at the same depth, so each lobe's
+   curve is about 45% more generous (a fuller, rounder edge) while the silhouette stays a scallop.
+   The variant is chosen through --organic-frame, which the shared component reads (its default is
+   the approved ten-lobe frame). The halo behind it stays hidden, and there is no confetti. Your photo
+   keeps its white ring, which follows its rounded corners. */
 .theme-tiimo .organic-portrait__backdrop {
   display: none;
 }
 
+.theme-tiimo .organic-portrait__photo {
+  --organic-frame: var(--organic-frame-soft);
+}
+
+.theme-tiimo .match .organic-portrait {
+  width: min(296px, 74vw, 36svh);
+}
+
 .theme-tiimo .match__you,
 .theme-tiimo .match__you .avatar__image {
-  border-radius: var(--tiimo-radius-feature);
+  border-radius: calc(var(--avatar-size) / 4);
 }
 
 /* Centred on the scallop's lower-left edge (45 degrees, at 95% of its 46.5% radius:
@@ -594,15 +671,15 @@
   bottom: calc(19% - var(--avatar-size) / 2);
 }
 
-/* Your photo scales with theirs on short phones, so it never covers their face. */
+/* Short phones: the portrait gives up some height so the whole moment fits above the composer, and
+   your photo scales with it, so it never covers their face. */
 @media (max-height: 700px) {
-  .theme-tiimo .match__you {
-    --avatar-size: min(var(--size-avatar-lg), 7.5svh);
+  .theme-tiimo .match .organic-portrait {
+    width: min(272px, 68vw, 27svh);
   }
 
-  .theme-tiimo .match__you,
-  .theme-tiimo .match__you .avatar__image {
-    border-radius: var(--tiimo-radius-control);
+  .theme-tiimo .match__you {
+    --avatar-size: min(var(--size-avatar-lg), 7.5svh);
   }
 }
 
@@ -613,8 +690,8 @@
 }
 
 /* Photos --------------------------------------------------------------------------------- */
-/* Someone's profile photographs (Discover, Like back) take the photo corner; Likes tiles the
-   feature corner. */
+/* Someone's profile photographs (Discover, Like back) take the photo corner (20px); Likes tiles the
+   card corner (16px), so the "New" label 8px inside them takes 16 − 8 = 8px. */
 .theme-tiimo :is(.profile-card__media, .fl-pf__photo) {
   border-radius: var(--tiimo-radius-photo);
 }

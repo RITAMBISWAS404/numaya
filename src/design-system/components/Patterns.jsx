@@ -47,7 +47,11 @@ function scallop(lobes, radius, depth, steps = 160) {
   return `M${pts.join("L")}Z`;
 }
 const FRAME = scallop(10, 46.5, 3);
-const FRAME_MASK = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='${FRAME}'/></svg>`)}")`;
+const frameMask = (path) => `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='${path}'/></svg>`)}")`;
+const FRAME_MASK = frameMask(FRAME);
+/* A softer variant (eight lobes, same depth: rounder, more generous lobes) that a theme can select by
+   setting --organic-frame to var(--organic-frame-soft); the approved frame is the default. */
+const FRAME_MASK_SOFT = frameMask(scallop(8, 46.5, 3));
 
 /**
  * A person's photo inside the organic frame. `src` is their real profile photo; without one, the
@@ -59,7 +63,10 @@ export function OrganicPortrait({ name, src, className }) {
       <svg className="organic-portrait__backdrop" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
         <path d={FRAME} />
       </svg>
-      <div className="organic-portrait__photo" style={{ WebkitMaskImage: FRAME_MASK, maskImage: FRAME_MASK }}>
+      <div
+        className="organic-portrait__photo"
+        style={{ "--organic-frame-soft": FRAME_MASK_SOFT, WebkitMaskImage: `var(--organic-frame, ${FRAME_MASK})`, maskImage: `var(--organic-frame, ${FRAME_MASK})` }}
+      >
         {src ? (
           <img src={src} alt="" />
         ) : (

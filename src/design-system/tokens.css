@@ -314,12 +314,15 @@
   --switch-width: 51px;
   --switch-height: 31px;
   --tab-bar-height: var(--p-dimension-64);
-  --tiimo-radius-tag: var(--p-dimension-6);
-  --tiimo-radius-pill: var(--p-dimension-8);
-  --tiimo-radius-control: var(--p-dimension-10);
-  --tiimo-radius-item: var(--p-dimension-10);
-  --tiimo-radius-feature: var(--p-dimension-12);
-  --tiimo-radius-photo: var(--p-dimension-14);
+  --tiimo-radius-check: var(--p-dimension-6);
+  --tiimo-radius-tag: var(--p-dimension-8);
+  --tiimo-radius-chip: var(--p-dimension-12);
+  --tiimo-radius-control: var(--p-dimension-12);
+  --tiimo-radius-item: var(--p-dimension-12);
+  --tiimo-radius-button: var(--p-dimension-14);
+  --tiimo-radius-feature: var(--p-dimension-16);
+  --tiimo-radius-photo: var(--p-dimension-20);
+  --tiimo-radius-pill: 999px;
   --tiimo-emoji-size: var(--p-dimension-32);
   --tiimo-emoji-radius: 10px;
 }

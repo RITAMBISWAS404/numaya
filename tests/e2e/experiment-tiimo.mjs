@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 /**
- * The opt-in Tiimo-inspired experiment (`?theme=tiimo`), V9: artifacts/version-9-final-screenshot-preview/,
+ * The opt-in Tiimo-inspired experiment (`?theme=tiimo`), V10: artifacts/version-10-final-screenshot-preview/,
  * whose design-system.md this file checks (earlier versions: artifacts/tiimo-inspired-experiment/ through
- * artifacts/version-8-final-screenshot-preview/). Its own contract, kept apart from the approved design's
+ * artifacts/version-9-final-screenshot-preview/). Its own contract, kept apart from the approved design's
  * checks in smoke.mjs and product.mjs: scoping (only the 15 selected screens, only with the flag), the
  * monochrome palette (a white canvas, neutral greys, purple as the one accent), deliberate surfaces
- * (direct, outlined, secondary, recessed; shadow only for what floats), geometry without circles,
- * the compact navigation, the Discover header and photo fade, filter tabs without checkmarks, status
- * labels, the match composition, contrast, and that the screens still work, fit 393 and 375 px wide
+ * (direct, outlined, secondary, recessed; shadow only for what floats), V10's balanced geometry (pills
+ * and rounded rectangles, circular radios, pill switch and slider handles, nested corners), the
+ * full-width tab bar with notification dots, the Discover header and photo fade, filter tabs without
+ * checkmarks, status labels, the larger match portrait, contrast, and that the screens still work, fit 393 and 375 px wide
  * and log no errors. Run by `npm run test:e2e`.
  */
 import { resolve } from "node:path";
@@ -256,7 +257,7 @@ try {
     await open(p, `flows.html?screen=${screen}&theme=tiimo`);
     infos.push(...(await read(".info-card")).map((r) => ({ screen, ...r })));
   }
-  check("containers: information containers (first-photo tip, why they liked you, the blocking note) are the flat secondary grey (#F7F7F8)", infos.length >= 3 && infos.every((r) => r.bg === "rgb(247, 247, 248)" && r.shadow === "none" && r.border === "0px" && r.r === "10px"), infos.map((r) => `${r.screen}: ${r.bg} ${r.shadow} ${r.r}`).join(" | "));
+  check("containers: information containers (first-photo tip, why they liked you, the blocking note) are the flat secondary grey (#F7F7F8)", infos.length >= 3 && infos.every((r) => r.bg === "rgb(247, 247, 248)" && r.shadow === "none" && r.border === "0px" && r.r === "16px"), infos.map((r) => `${r.screen}: ${r.bg} ${r.shadow} ${r.r}`).join(" | "));
   await open(p, "flows.html?screen=chats&theme=tiimo");
   const dividers = await p.evaluate(() => [...document.querySelectorAll(".conversation")].slice(1).map((li) => {
     const d = getComputedStyle(li, "::before");
@@ -274,48 +275,76 @@ try {
   const chosen = await read(".option-card.is-selected");
   check("colour: a selected row is white with the 2px brand ring, not a tinted wash", chosen.length > 0 && chosen.every((r) => r.bg === "rgb(255, 255, 255)" && /rgb\(114, 98, 199\) 0px 0px 0px 2px inset/.test(r.shadow)), chosen.map((r) => `${r.bg} ${r.shadow}`).join(" | "));
 
-  // 4b4. Bottom navigation (V9): compact (56px, from 64) with the approved icon size, touch targets of
-  // at least 44px, a rounded rectangle rather than a capsule, white with a hairline and a single soft
-  // shadow layer; the active item is the inset grey (a rounded rectangle) behind the brand-purple icon.
-  const navOf = async (theme) => {
-    await open(p, `flows.html?screen=likes${theme ? "&theme=tiimo" : ""}`);
-    await p.mouse.move(0, 0); // the pointer may still rest on a tab from the navigation check (hover is ink)
+  // 4b4. Bottom navigation (V10): a traditional full-width tab bar. It spans the screen with no outer
+  // margin or rounded capsule, is separated by a 1px top divider and no shadow, reaches the bottom edge
+  // and pads the home-indicator area; the content scrolls above it and ends where it begins. The icons
+  // keep the approved 24px, each item keeps a touch target of at least 44 x 44, and the active item is
+  // the brand-purple icon with no background behind it. Checked at 393 x 852 and 375 x 667.
+  const navOf = async (q, theme) => {
+    await open(q, `flows.html?screen=likes${theme ? "&theme=tiimo" : ""}`);
+    await q.mouse.move(0, 0); // the pointer may still rest on a tab from the navigation check (hover is ink)
     await wait(400); // let the colour transition finish
-    return p.evaluate(() => {
+    return q.evaluate(() => {
       const bar = document.querySelector(".tab-bar");
+      const screen = document.querySelector(".fl-frame__screen") ?? document.body;
+      const body = bar.previousElementSibling;
       const items = [...bar.querySelectorAll(".tab-bar__item")];
       const cur = bar.querySelector(".tab-bar__item.is-current");
       const cs = getComputedStyle(bar);
+      const b = bar.getBoundingClientRect(); const s = screen.getBoundingClientRect();
+      const safe = parseFloat(getComputedStyle(bar).getPropertyValue("--safe-bottom")) || 0;
       return {
-        h: bar.getBoundingClientRect().height,
-        radius: cs.borderTopLeftRadius,
-        shadow: cs.boxShadow,
-        bg: cs.backgroundColor,
-        icons: items.map((i) => { const s = i.querySelector(".tab-bar__icon svg").getBoundingClientRect(); return `${Math.round(s.width)}x${Math.round(s.height)}`; }),
+        h: b.height, left: b.left - s.left, right: s.right - b.right, bottomGap: s.bottom - b.bottom,
+        radius: cs.borderTopLeftRadius, shadow: cs.boxShadow, bg: cs.backgroundColor,
+        padBottom: parseFloat(cs.paddingBottom), safe,
+        bodyEnd: body ? Math.round(body.getBoundingClientRect().bottom) : null, barTop: Math.round(b.top),
+        bodyScrolls: body ? getComputedStyle(body).overflowY : null,
+        icons: items.map((i) => { const r = i.querySelector(".tab-bar__icon svg").getBoundingClientRect(); return `${Math.round(r.width)}x${Math.round(r.height)}`; }),
         targets: items.map((i) => { const r = i.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; }),
         labels: items.map((i) => i.getAttribute("aria-label") ?? i.textContent.trim()),
-        current: { bg: getComputedStyle(cur).backgroundColor, radius: getComputedStyle(cur).borderTopLeftRadius, icon: getComputedStyle(cur.querySelector(".tab-bar__icon")).color, ariaCurrent: cur.getAttribute("aria-current") },
-        counts: bar.querySelectorAll(".count-badge").length,
+        current: { bg: getComputedStyle(cur).backgroundColor, icon: getComputedStyle(cur.querySelector(".tab-bar__icon")).color, ariaCurrent: cur.getAttribute("aria-current") },
+        idleIcon: getComputedStyle(items.find((i) => i !== cur).querySelector(".tab-bar__icon")).color,
       };
     });
   };
-  const navV9 = await navOf(true);
-  const navApproved = await navOf(false);
-  const outerLayers = navV9.shadow.split(/,(?![^(]*\))/).filter((x) => !/inset/.test(x));
-  check("navigation: the bar is compact (56px, from 64) and a rounded rectangle, not a capsule", navV9.h === 56 && navApproved.h === 64 && navV9.radius === "12px", `${navV9.h}px (approved ${navApproved.h}px), radius ${navV9.radius}`);
-  check("navigation: icons keep the approved size, and every item keeps a touch target of at least 44 x 44", navV9.icons.join() === navApproved.icons.join() && navV9.targets.every(([w, h]) => w >= 44 && h >= 44), `icons ${navV9.icons.join(" ")} (approved ${navApproved.icons.join(" ")}), targets ${navV9.targets.map(([w, h]) => `${w}x${h}`).join(" ")}`);
-  check("navigation: white with a hairline and one soft shadow layer", navV9.bg === "rgb(255, 255, 255)" && outerLayers.length === 1 && /inset/.test(navV9.shadow), navV9.shadow);
-  check("navigation: the active item is the inset grey (a rounded rectangle) behind the brand-purple icon, and stays marked for assistive tech", navV9.current.bg === "rgb(240, 240, 242)" && navV9.current.radius === "10px" && navV9.current.icon === "rgb(114, 98, 199)" && navV9.current.ariaCurrent === navApproved.current.ariaCurrent && navV9.labels.join() === navApproved.labels.join() && navV9.counts === navApproved.counts && navV9.counts > 0, JSON.stringify(navV9.current));
+  const navV10 = await navOf(p, true);
+  const navApproved = await navOf(p, false);
+  const short = await phone(375, 667);
+  const navShort = await navOf(short, true);
+  await short.context().close();
+  const outerNav = (sh) => sh.split(/,(?![^(]*\))/).filter((x) => x.trim() !== "none" && !/inset/.test(x));
+  check("navigation: a full-width bar at the bottom edge, square-cornered, with no outer margin (393 and 375 px)", [navV10, navShort].every((n) => n.left === 0 && n.right === 0 && n.bottomGap <= 0.5 && n.radius === "0px"), [navV10, navShort].map((n) => `left ${n.left} right ${n.right} bottom ${n.bottomGap} radius ${n.radius}`).join(" | "));
+  check("navigation: a 1px top divider and no shadow; white", outerNav(navV10.shadow).length === 0 && /rgb\(228, 228, 231\) 0px 1px 0px 0px inset/.test(navV10.shadow) && navV10.bg === "rgb(255, 255, 255)", navV10.shadow);
+  check("navigation: 56px of items plus the home-indicator inset; the content scrolls above the bar and ends where it begins", [navV10, navShort].every((n) => n.h === 56 + n.padBottom && n.padBottom === n.safe && n.safe > 0 && n.bodyEnd === n.barTop && n.bodyScrolls === "auto"), [navV10, navShort].map((n) => `${n.h}px = 56 + ${n.padBottom} (safe ${n.safe}); body ends ${n.bodyEnd}, bar ${n.barTop}`).join(" | "));
+  check("navigation: icons keep the approved 24px size, and every item keeps a touch target of at least 44 x 44", navV10.icons.join() === navApproved.icons.join() && navV10.icons.every((i) => i === "24x24") && [navV10, navShort].every((n) => n.targets.every(([w, h]) => w >= 44 && h >= 44)), `icons ${navV10.icons.join(" ")}, targets ${navV10.targets.map(([w, h]) => `${w}x${h}`).join(" ")} / ${navShort.targets.map(([w, h]) => `${w}x${h}`).join(" ")}`);
+  check("navigation: the active item is the brand-purple icon with no background; inactive icons are the neutral grey; labels and aria-current unchanged", navV10.current.bg === "rgba(0, 0, 0, 0)" && navV10.current.icon === "rgb(114, 98, 199)" && navV10.idleIcon === "rgb(119, 115, 125)" && navV10.current.ariaCurrent === navApproved.current.ariaCurrent && navV10.labels.join() === navApproved.labels.join(), JSON.stringify({ ...navV10.current, idle: navV10.idleIcon }));
 
-  // 4b5. No circles (V9): on every themed screen and the match moment, no visible UI element (one with
-  // a fill, border, shadow or image) is a circle, pseudo-elements included (switch thumbs). The match
-  // scallop is an SVG mask, not a radius, and stays.
+  // 4b4'. Notification dots (V10): the tab bar's numeric badges become 8px red dots at the icon's upper
+  // right, with no number drawn; the count stays in the badge's accessible label and the tab's name.
+  // Numbers stay where they carry meaning: the Likes and Messages filter counts and the unread count.
+  await open(p, "flows.html?screen=chats&theme=tiimo");
+  const dots = await p.evaluate(() => [...document.querySelectorAll(".tab-bar .count-badge")].map((d) => {
+    const cs = getComputedStyle(d); const r = d.getBoundingClientRect(); const icon = d.closest(".tab-bar__icon").querySelector("svg").getBoundingClientRect();
+    return { w: r.width, h: r.height, bg: cs.backgroundColor, radius: cs.borderTopLeftRadius, inkShown: cs.color !== "rgba(0, 0, 0, 0)" && parseFloat(cs.fontSize) > 0, label: d.getAttribute("aria-label"), text: d.textContent, tab: d.closest(".tab-bar__item").getAttribute("aria-label"), upperRight: r.left >= icon.left + icon.width / 2 && r.bottom <= icon.top + icon.height / 2 };
+  }));
+  const counts = await p.evaluate(() => ({ filters: [...document.querySelectorAll(".filter-chips .chip__count")].map((c) => c.textContent.trim()), unread: document.querySelector(".conversation__unread")?.textContent.trim(), unreadStyle: getComputedStyle(document.querySelector(".conversation__unread")).fontSize }));
+  await open(p, "flows.html?screen=likes&theme=tiimo");
+  const likeCounts = await p.evaluate(() => [...document.querySelectorAll(".filter-chips .chip__count")].map((c) => c.textContent.trim()));
+  check("dots: every tab-bar badge is an 8px red dot at the icon's upper right, with no number drawn", dots.length >= 2 && dots.every((d) => d.w === 8 && d.h === 8 && d.bg === "rgb(185, 58, 54)" && d.radius === "50%" && !d.inkShown && d.upperRight), JSON.stringify(dots.map(({ w, h, bg, radius, inkShown, upperRight }) => ({ w, h, bg, radius, inkShown, upperRight }))));
+  check("dots: the count stays available to assistive tech (badge label and the tab's name)", dots.every((d) => /^\d+ new in /.test(d.label) && /^\d+$/.test(d.text) && /, \d+ new$/.test(d.tab)), dots.map((d) => `${d.label} / ${d.tab}`).join(" | "));
+  check("dots: numbers stay where they mean something (Likes and Messages filter counts, the unread count)", likeCounts.length >= 4 && likeCounts.every((c) => /^\d+$/.test(c)) && counts.filters.length >= 3 && counts.unread === "1" && parseFloat(counts.unreadStyle) > 0, `likes ${likeCounts.join(",")}; messages ${counts.filters.join(",")}; unread ${counts.unread}`);
+
+  // 4b5. Conventional shapes where function needs them (V10): radios are circles; checkboxes are
+  // slightly rounded squares; the notification dot is a dot. Everything else that is visible (a fill,
+  // border, shadow or image) and square stays non-circular: avatars, icon buttons, counts, the FAB,
+  // switch handles. The match scallop is an SVG mask, not a radius.
   const circles = [];
+  const radios = [];
   for (const path of ["?theme=tiimo", ...FLOW_SCREENS.map((s) => `flows.html?screen=${s}&theme=tiimo`), "matched"]) {
     if (path === "matched") await openSeeded(p, "flows.html?screen=match&theme=tiimo", MATCHED);
     else await open(p, path);
-    const hits = await p.evaluate(() => {
-      const out = [];
+    const r = await p.evaluate(() => {
+      const out = []; const rad = [];
       for (const el of document.querySelectorAll(".theme-tiimo *")) {
         if (el.closest("svg")) continue;
         for (const pseudo of [null, "::before", "::after"]) {
@@ -326,15 +355,62 @@ try {
           if (!(w > 4 && h > 4) || cs.display === "none" || cs.visibility === "hidden") continue;
           const visible = !/rgba\(0, 0, 0, 0\)/.test(cs.backgroundColor) || cs.borderTopWidth !== "0px" || cs.boxShadow !== "none" || el.tagName === "IMG" || el.tagName === "INPUT";
           if (!visible) continue;
-          const r = cs.borderTopLeftRadius.endsWith("%") ? (parseFloat(cs.borderTopLeftRadius) / 100) * w : parseFloat(cs.borderTopLeftRadius);
-          if (Math.abs(w - h) < 2 && r >= w / 2 - 0.5) out.push(`${el.className.baseVal ?? el.className}${pseudo ?? ""} ${Math.round(w)}px`.trim());
+          const radius = cs.borderTopLeftRadius.endsWith("%") ? (parseFloat(cs.borderTopLeftRadius) / 100) * w : parseFloat(cs.borderTopLeftRadius);
+          const circle = Math.abs(w - h) < 2 && radius >= w / 2 - 0.5;
+          if (!pseudo && el.matches(".choice__input--radio")) { rad.push(circle); continue; }
+          if (!pseudo && el.matches(".tab-bar .count-badge")) continue;
+          if (circle) out.push(`${el.className.baseVal ?? el.className}${pseudo ?? ""} ${Math.round(w)}px`.trim());
         }
       }
-      return [...new Set(out)];
+      return { out: [...new Set(out)], rad };
     });
-    if (hits.length) circles.push(`${path}: ${hits.slice(0, 4).join(", ")}`);
+    if (r.out.length) circles.push(`${path}: ${r.out.slice(0, 4).join(", ")}`);
+    radios.push(...r.rad);
   }
-  check("geometry: no circular UI element on any themed screen (avatars, counts, radios, icon buttons, switch thumbs included)", circles.length === 0, circles.join(" | "));
+  check("geometry: radios are circles", radios.length >= 6 && radios.every(Boolean), `${radios.filter(Boolean).length}/${radios.length}`);
+  check("geometry: apart from radios and notification dots, no circular UI element on any themed screen (avatars, counts, icon buttons, the FAB, switch handles)", circles.length === 0, circles.join(" | "));
+
+  // 4b5'. Switches and sliders (V10): a slightly wider pill track with a compact pill handle that is
+  // wider than tall (not a circle); slider handles are compact 20 x 28px pills (read from the theme's
+  // stylesheet, since the native thumb has no computed style; Chromium, which runs this suite, keeps
+  // only the WebKit thumb rule), on a pill rail.
+  await open(p, "flows.html?screen=settings&theme=tiimo");
+  const sw = await p.evaluate(() => [...document.querySelectorAll(".switch")].map((s) => {
+    const cs = getComputedStyle(s); const t = getComputedStyle(s, "::after"); const r = s.getBoundingClientRect();
+    return { w: r.width, h: r.height, r: cs.borderTopLeftRadius, tw: parseFloat(t.width), th: parseFloat(t.height), tr: t.borderTopLeftRadius, checked: s.checked, role: s.getAttribute("role") ?? s.type, on: cs.backgroundColor };
+  }));
+  const thumbRules = await p.evaluate(() => {
+    const out = [];
+    for (const sheet of document.styleSheets) {
+      let rules; try { rules = sheet.cssRules; } catch { continue; }
+      for (const r of rules) if (r.selectorText && /\.theme-tiimo .slider__track input::-(webkit-slider|moz-range)-thumb/.test(r.selectorText)) out.push({ sel: r.selectorText, w: r.style.width, radius: r.style.borderTopLeftRadius || r.style.borderRadius });
+    }
+    return out;
+  });
+  const rail = await p.evaluate(() => { const t = document.querySelector(".slider__track"); return { rail: getComputedStyle(t, "::before").borderTopLeftRadius, fill: getComputedStyle(t, "::after").borderTopLeftRadius, h: t.getBoundingClientRect().height }; });
+  check("switches: a 58 x 32 pill track with a 34 x 26 pill handle (wider than tall), purple when on", sw.length >= 4 && sw.every((s) => s.w === 58 && s.h === 32 && s.r === "999px" && s.tw === 34 && s.th === 26 && s.tr === "999px" && s.role === "switch") && sw.filter((s) => s.checked).every((s) => s.on === "rgb(114, 98, 199)"), JSON.stringify(sw[0]));
+  check("sliders: compact 20px pill handles on a pill rail, same 28px row", thumbRules.length >= 1 && thumbRules.some((t) => /webkit/.test(t.sel)) && thumbRules.every((t) => t.w === "20px" && /var\(--tiimo-radius-pill\)/.test(t.radius)) && rail.rail === "999px" && rail.fill === "999px" && rail.h === 28, JSON.stringify({ thumbRules, rail }));
+
+  // 4b5''. Nested corners (V10): where a rounded element sits close to the corner of a rounded parent,
+  // its corner follows inner ≈ outer − inset: photo-slot badges and remove buttons, the Likes "New" label,
+  // the photo inside an activity card, and the placeholder inside a photo slot.
+  const nest = async (screen, inner, outer) => {
+    await open(p, `flows.html?screen=${screen}&theme=tiimo`);
+    return p.evaluate(([iq, oq]) => [...document.querySelectorAll(iq)].slice(0, 3).map((el) => {
+      const o = el.closest(oq); const a = el.getBoundingClientRect(); const b = o.getBoundingClientRect();
+      const inset = Math.round(Math.min(a.left - b.left, a.top - b.top, b.right - a.right, b.bottom - a.bottom) >= 0 ? Math.min(...[a.left - b.left, a.top - b.top, b.right - a.right, b.bottom - a.bottom].filter((v) => v <= 24)) : 0);
+      return { inner: parseFloat(getComputedStyle(el).borderTopLeftRadius), outer: parseFloat(getComputedStyle(o).borderTopLeftRadius), inset };
+    }), [inner, outer]);
+  };
+  const nested = [
+    ["photos", ".photo-slot__index", ".photo-slot"], ["photos", ".photo-slot__remove", ".photo-slot"], ["photos", ".photo-slot .image-placeholder", ".photo-slot"],
+    ["likes", ".person-tile__badge .badge", ".person-tile__photo"], ["activity", ".activity-card__media", ".activity-card"],
+  ];
+  const nestErrors = [];
+  for (const [screen, inner, outer] of nested) {
+    for (const n of await nest(screen, inner, outer)) if (Math.abs(n.inner - Math.max(0, n.outer - n.inset)) > 2) nestErrors.push(`${screen} ${inner}: outer ${n.outer} inset ${n.inset} inner ${n.inner}`);
+  }
+  check("geometry: nested corners follow inner ≈ outer − inset (photo slots and their badges, the Likes label, the activity photo)", nestErrors.length === 0, nestErrors.join(" | "));
 
   // 4b6. The Discover header shows the logo and its controls, without the bar under the logo; the
   // onboarding progress elsewhere is untouched.
@@ -372,9 +448,9 @@ try {
   const railTick = await p.evaluate(() => { const t = document.querySelector(".filter-chips .chip.is-selected .chip__affordance"); return !!t && t.getBoundingClientRect().width > 0; });
   check("filters: checkmarks remain where they mean a choice (the ticked checkbox, the Activity category rail)", ticked.length > 0 && ticked.every((b) => /svg/.test(b)) && railTick, `${ticked.length} ticked, rail ${railTick}`);
 
-  // 4b8. Status labels: one shape (6px corner) in semantic tones. "Your move" neutral grey with ink;
-  // "New" on a like white with deep purple; the unread count solid purple; tab notification counts
-  // keep the approved red. None is a capsule.
+  // 4b8. Status labels: one shape (8px corner) in semantic tones. "Your move" neutral grey with ink;
+  // "New" on a like white with deep purple; the unread count a solid purple pill; tab notifications
+  // the approved red, as dots (4b4').
   await open(p, "flows.html?screen=chats&theme=tiimo");
   const labelsChats = await p.evaluate(() => {
     const s = (q) => { const el = document.querySelector(q); const cs = getComputedStyle(el); return { bg: cs.backgroundColor, fg: cs.color, r: cs.borderTopLeftRadius, h: el.getBoundingClientRect().height }; };
@@ -382,9 +458,9 @@ try {
   });
   await open(p, "flows.html?screen=likes&theme=tiimo");
   const labelNew = await p.evaluate(() => { const cs = getComputedStyle(document.querySelector(".person-tile__badge .badge")); return { bg: cs.backgroundColor, fg: cs.color, r: cs.borderTopLeftRadius }; });
-  check("labels: \"Your move\" is the neutral grey with ink text", labelsChats.move.bg === "rgb(240, 240, 242)" && labelsChats.move.fg === "rgb(40, 38, 45)" && labelsChats.move.r === "6px", JSON.stringify(labelsChats.move));
-  check("labels: \"New\" on a like is white with deep-purple text (emphasis, not a fill)", labelNew.bg === "rgb(255, 255, 255)" && labelNew.fg === "rgb(79, 66, 150)" && labelNew.r === "6px", JSON.stringify(labelNew));
-  check("labels: the unread count is solid brand purple with white text; tab counts keep the approved red", labelsChats.unread.bg === "rgb(114, 98, 199)" && labelsChats.unread.fg === "rgb(255, 255, 255)" && labelsChats.count.bg === "rgb(185, 58, 54)" && labelsChats.unread.r === "6px" && labelsChats.count.r === "6px", `${JSON.stringify(labelsChats.unread)} ${JSON.stringify(labelsChats.count)}`);
+  check("labels: \"Your move\" is the neutral grey with ink text", labelsChats.move.bg === "rgb(240, 240, 242)" && labelsChats.move.fg === "rgb(40, 38, 45)" && labelsChats.move.r === "8px", JSON.stringify(labelsChats.move));
+  check("labels: \"New\" on a like is white with deep-purple text (emphasis, not a fill)", labelNew.bg === "rgb(255, 255, 255)" && labelNew.fg === "rgb(79, 66, 150)" && labelNew.r === "8px", JSON.stringify(labelNew));
+  check("labels: the unread count is a solid brand-purple pill with white text; tab notifications keep the approved red", labelsChats.unread.bg === "rgb(114, 98, 199)" && labelsChats.unread.fg === "rgb(255, 255, 255)" && labelsChats.count.bg === "rgb(185, 58, 54)" && labelsChats.unread.r === "999px", `${JSON.stringify(labelsChats.unread)} ${JSON.stringify(labelsChats.count)}`);
 
   // 4b9. Profile readiness is a bar, not a ring: the meter keeps role="meter" and its value; the ring
   // around your avatar is gone.
@@ -524,24 +600,26 @@ try {
     }
   }
 
-  // 4e. Shapes (V9). Every rendered instance on the listed screens is checked against the V9 scale
-  // (tag 6, pill 8, control and item 10, feature 12, photo 14), applied per component; nothing on
-  // these screens is a circle (see 4b5), and your match photo stays a rounded square.
+  // 4e. Shapes (V10). Every rendered instance on the listed screens is checked against the balanced
+  // scale: full pills (999px) for compact actions and toggles; rounded rectangles for structured
+  // controls and surfaces (check 6, tag 8, chip, control and item 12, button 14, card 16, photo 20);
+  // avatars at a quarter of their size; radios circular.
   const SHAPES = {
-    ".btn--primary": "10px", ".btn--secondary": "10px", ".btn--quiet": "10px",
-    ".nav-button": "10px", ".fab": "12px", ".composer__send": "10px",
-    ".input": "10px", ".search": "10px", ".composer__field": "10px", ".option-card": "10px",
-    ".chip[data-emoji]": "8px", ".filter-chips:not(:has(.chip[data-emoji])) .chip": "8px", ".chip--static:not([data-emoji])": "8px", ".segmented__item": "8px",
-    ".conversation__move": "6px", ".profile-card__pill": "6px", ".person-tile__badge .badge": "6px", ".activity-card__category": "6px",
-    ".choice__input--checkbox": "6px", ".choice__input--radio": "6px", ".count-badge": "6px", ".conversation__unread": "6px",
-    ".activity-card": "12px", ".activity-card__media": "4px", ".person-tile__photo": "12px", ".message__bubble": "12px", ".match-queue__image": "10px",
-    ".profile-card__media": "14px", ".fl-pf__photo": "14px", ".action-bar__btn": "12px", ".tab-bar": "12px", ".tab-bar__item": "10px",
-    ".avatar--xs .avatar__image": "6px", ".avatar--sm .avatar__image": "8px", ".avatar--lg:not(.match__you) .avatar__image": "12px", ".avatar--xl .avatar__image": "14px",
-    ".match__you .avatar__image": "12px", ".switch": "9px",
+    ".btn--primary:not(.btn--sm)": "14px", ".btn--secondary:not(.btn--sm)": "14px", ".btn--quiet:not(.btn--sm)": "14px", ".btn--sm": "999px",
+    ".nav-button": "12px", ".fab": "16px", ".composer__send": "12px",
+    ".input": "12px", ".search": "12px", ".composer__field": "12px", ".option-card": "12px",
+    ".chip[data-emoji]": "12px", ".chip--static:not([data-emoji])": "12px", ".filter-chips:not(:has(.chip[data-emoji])) .chip": "999px", ".segmented__item": "999px",
+    ".conversation__move": "8px", ".profile-card__pill": "8px", ".person-tile__badge .badge": "8px", ".activity-card__category": "8px",
+    ".choice__input--checkbox": "6px", ".choice__input--radio": "50%", ".tab-bar .count-badge": "50%", ".conversation__unread": "999px",
+    ".activity-card": "16px", ".activity-card__media": "8px", ".person-tile__photo": "16px", ".message__bubble": "16px", ".match-queue__image": "16px",
+    ".photo-slot": "16px", ".info-card": "16px", ".prompt": "16px", ".list-group__items": "16px",
+    ".profile-card__media": "20px", ".fl-pf__photo": "20px", ".action-bar__btn": "999px", ".tab-bar": "0px", ".switch": "999px",
+    ".avatar--xs .avatar__image": "6px", ".avatar--sm .avatar__image": "9px", ".avatar--lg:not(.match__you) .avatar__image": "16px", ".avatar--xl .avatar__image": "24px",
+    ".match__you .avatar__image": "16px", ".progress__segment": "999px",
   };
   const shapeErrors = [];
   const seen = new Set();
-  for (const s of ["basics", "interests", "discovery", "like-profile", "likes", "chats", "chat", "match", "activity", "prompt", "profile", "settings"]) {
+  for (const s of ["basics", "photos", "interests", "discovery", "like-profile", "likes", "chats", "chat", "match", "activity", "prompt", "profile", "settings"]) {
     if (s === "match") await openSeeded(p, "flows.html?screen=match&theme=tiimo", MATCHED);
     else await open(p, `flows.html?screen=${s}&theme=tiimo`);
     const found = await p.evaluate((shapes) => Object.entries(shapes).map(([sel, want]) => {
@@ -553,7 +631,7 @@ try {
       for (const g of new Set(got)) if (g !== want) shapeErrors.push(`${s} ${sel}: ${g} (want ${want})`);
     }
   }
-  check("shapes: buttons, icon buttons, fields, chips, tags, counts, cards, bubbles, avatars, navigation and photos follow the V9 radius scale", shapeErrors.length === 0, shapeErrors.slice(0, 6).join(" | "));
+  check("shapes: pills, rounded rectangles, avatars, radios and the tab bar follow the V10 balanced scale", shapeErrors.length === 0, shapeErrors.slice(0, 6).join(" | "));
 
   // The scale is scoped: without the flag the same components keep the approved shapes.
   const APPROVED = { ".btn--primary": "999px", ".nav-button": "50%", ".search": "999px", ".input": "16px", ".fab": "50%", ".chip--filter": "999px", ".profile-card__media": "32px", ".message__bubble": "20px" };
@@ -607,9 +685,19 @@ try {
   check("match: your smaller photo is a rounded square, not a circle", match.rounded, match.youRadius);
   check("match: your photo overlaps the lower-left edge of theirs, clear of its centre", match.lowerLeft && match.clearOfFace && match.dominant, match.detail);
   check("match: the temporary purple heart is gone; its slot stays, empty, for the hand illustrations", !match.heart && match.artSpace > 0, `slot ${match.artSpace}px tall`);
+  // V10: their portrait is about 12% larger than the approved one (both are capped by the viewport width here: 74vw against 66vw) and uses the softer eight-lobe
+  // scallop (a different mask from the approved ten-lobe frame, still an SVG path).
+  const portraitOf = async (theme) => {
+    await openSeeded(p, `flows.html?screen=match${theme ? "&theme=tiimo" : ""}`, MATCHED);
+    return p.evaluate(() => { const f = document.querySelector(".match .organic-portrait"); const ph = f.querySelector(".organic-portrait__photo"); return { w: Math.round(f.getBoundingClientRect().width), mask: getComputedStyle(ph).maskImage || getComputedStyle(ph).webkitMaskImage }; });
+  };
+  const portraitV10 = await portraitOf(true);
+  const portraitApproved = await portraitOf(false);
+  const lobes = (m) => (decodeURIComponent(m).match(/L/g) || []).length;
+  check("match: their portrait is about 12% larger than the approved one, with the softer scallop (a different SVG mask, same path length)", portraitV10.w / portraitApproved.w >= 1.1 && portraitV10.w / portraitApproved.w <= 1.15 && /svg/.test(portraitV10.mask) && portraitV10.mask !== portraitApproved.mask && lobes(portraitV10.mask) === lobes(portraitApproved.mask), `${portraitV10.w}px vs ${portraitApproved.w}px`);
 
   // 4g. Pills: only the emoji-and-text pills. Unselected: the inset grey, no border; selected: solid
-  // brand purple; an 8px rounded rectangle (V9); no gradient.
+  // brand purple; a 12px rounded rectangle (V10, a content chip); no gradient.
   const pillStyle = (sel) => p.evaluate((q) => [...document.querySelectorAll(q)].map((c) => {
     const cs = getComputedStyle(c);
     const inCard = !!c.closest(".card:not(.profile-section), .activity-card, .list-group__items, .option-card, .prompt");
@@ -626,7 +714,7 @@ try {
   pills.push(...(await pillStyle(".match__shared-chip")));
   const unselected = pills.filter((c) => !c.selected);
   const selected = pills.filter((c) => c.selected);
-  check("pills: every emoji-and-text pill is an 8px rounded rectangle, not a capsule", pills.length > 10 && pills.every((c) => c.r === 8 && c.h >= 32), [...new Set(pills.map((c) => `${c.r}px on ${Math.round(c.h)}px`))].join(", "));
+  check("pills: every emoji-and-text pill is a 12px rounded rectangle, not a capsule", pills.length > 10 && pills.every((c) => c.r === 12 && c.h >= 32), [...new Set(pills.map((c) => `${c.r}px on ${Math.round(c.h)}px`))].join(", "));
   const onCanvas = unselected.filter((c) => !c.inCard);
   // Inside white: the activity category (the pill at tag size) on its activity card.
   await open(p, "flows.html?screen=activity&theme=tiimo");
