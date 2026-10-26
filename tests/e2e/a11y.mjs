@@ -33,6 +33,15 @@ const TARGETS = [
   // The opt-in Tiimo-inspired experiment: the gallery themes all 11 of its flow screens at once.
   { name: "tiimo experiment: welcome", url: "?theme=tiimo" },
   { name: "tiimo experiment: flow previews", url: "flows.html?theme=tiimo" },
+  // The V12 Liquid Glass experiment (V11 plus a glass material on the tab bar, sheets and photo
+  // controls), with a glass sheet open.
+  { name: "liquid glass experiment: flow previews", url: "flows.html?theme=liquid-glass" },
+  {
+    name: "liquid glass experiment: discover filters sheet",
+    url: "flows.html?theme=liquid-glass",
+    scope: "#discovery",
+    open: async (p) => p.locator("#discovery").getByRole("button", { name: /^Filters/ }).click(),
+  },
   {
     name: "chat options menu",
     url: "flows.html",

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { OverlayRootProvider, Wordmark } from "../design-system/index.js";
 import { cx } from "../lib/cx.js";
-import { experimentTheme } from "../lib/theme.js";
+import { experimentTheme, themeClassName } from "../lib/theme.js";
 import * as S from "./screens.jsx";
 import * as A from "./activity.jsx";
 import * as H from "./activity-host.jsx";
@@ -39,20 +39,21 @@ export const SCREENS = [
 
 /* Screens that take part in the Tiimo-inspired experiment (artifacts/tiimo-inspired-experiment/;
    Profile, Edit profile and Settings joined in V7, artifacts/version-7-final-screenshot-preview/).
-   With ?theme=tiimo they render inside `.theme-tiimo`; every other screen keeps the approved design. */
+   With ?theme=tiimo they render inside `.theme-tiimo`, with ?theme=liquid-glass inside `.theme-tiimo
+   .theme-liquid-glass` (V12); every other screen keeps the approved design. */
 const TIIMO_SCREENS = new Set(["basics", "photos", "interests", "discovery", "like-profile", "likes", "match", "chats", "chat", "prompt", "activity", "profile", "edit", "settings"]);
 
 function PreviewFrame({ screen, active, go }) {
   const [root, setRoot] = useState(null);
   const { Component } = screen;
-  const themed = experimentTheme() === "tiimo" && TIIMO_SCREENS.has(screen.id);
+  const themed = TIIMO_SCREENS.has(screen.id) ? themeClassName(experimentTheme()) : null;
   return (
     <figure id={screen.id} className={cx("fl-frame", active && "is-active")}>
       <figcaption className="fl-frame__caption">
         <span className="fl-frame__flow">{screen.flow}</span>
         <span className="fl-frame__title">{screen.title}</span>
       </figcaption>
-      <div className={cx("fl-frame__screen", themed && "theme-tiimo")}>
+      <div className={cx("fl-frame__screen", themed)}>
         <OverlayRootProvider root={root}>
           <Component go={go} />
         </OverlayRootProvider>

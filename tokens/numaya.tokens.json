@@ -376,6 +376,19 @@
       "handle-slider-height": { "$type": "dimension", "$value": "22px" },
       "emoji-size":     { "$type": "dimension", "$value": "{primitive.dimension.32}" },
       "emoji-radius":   { "$type": "dimension", "$value": "10px" }
+    },
+    "glass": {
+      "$description": "V12 Liquid Glass experiment (?theme=liquid-glass). One material for the functional layer above content: bars and sheets in light glass, small controls on photos in dark glass. Never on content, cards, pills, tags or inputs.",
+      "fill":          { "$type": "color", "$value": "rgb(255 255 255 / 0.88)", "$description": "Regular glass: the tab bar. White at 88%: with the scroll-edge fade, the darkest content beneath (solid black) still leaves the bar at 246/255 or lighter, where the purple active label keeps 4.5:1 (measured). 72% and 85% were tried first and failed AA over black." },
+      "edge-fade":     { "$type": "number", "$value": "0.2", "$description": "Scroll edge: content passing under a glass bar fades to 20% (a mask on the scrolling area), so the bar keeps AA contrast for its labels over any content, dark photos included, while still showing it as a soft ghost." },
+      "fill-thick":    { "$type": "color", "$value": "rgb(255 255 255 / 0.9)", "$description": "Thick glass: sheets, which hold a task. Opaque enough that labels and controls read as on white and colour behind (a purple message) stays a faint tint, not a cloud." },
+      "fill-dark":     { "$type": "color", "$value": "rgb(20 19 22 / 0.5)", "$description": "Dark glass: small controls on photographs (white icons), e.g. the photo remove button. At 50% a white icon keeps 3:1 even over a pure white photo." },
+      "filter":        { "$type": "other", "$value": "blur(24px) saturate(1.2)", "$description": "The one backdrop: a 24px blur, so content beneath reads only as soft shapes, with saturation lifted slightly (1.2) so it does not turn grey. A stronger lift (1.6, tried first) turned the purple messages behind the unmatch sheet into a lavender cloud." },
+      "edge":          { "$type": "color", "$value": "rgb(20 19 22 / 0.10)", "$description": "Hairline at the glass edge that meets content (the tab bar's top, a sheet's rim)." },
+      "highlight":     { "$type": "color", "$value": "rgb(255 255 255 / 0.70)", "$description": "A 1px inner top highlight: the lit edge of the glass. Light glass only." },
+      "shadow":        { "$type": "shadow", "$value": "0 -8px 28px -12px rgb(20 19 22 / 0.16)", "$description": "Sheets only: a soft upward shadow so the glass reads as a layer above the page. Bars have none." },
+      "fallback":      { "$type": "color", "$value": "{semantic.color.palette.surface}", "$description": "Opaque light surface when transparency is reduced, contrast is increased, or backdrop-filter is unsupported." },
+      "fallback-dark": { "$type": "color", "$value": "{primitive.color.alpha.ink-62}", "$description": "Opaque-enough dark surface for controls on photos in the same cases." }
     }
   }
 }

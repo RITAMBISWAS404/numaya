@@ -302,7 +302,11 @@ async function openMenu(p, action) {
 const server = await createServer({ root: ROOT, server: { port: 0, host: "127.0.0.1" }, logLevel: "error" });
 await server.listen();
 const base = server.resolvedUrls.local[0];
-const browser = await chromium.launch();
+// GALLERY_CHROMIUM_ARGS passes launch flags, e.g. "--use-angle=swiftshader --enable-unsafe-swiftshader"
+// for captures of the Liquid Glass experiment: in some headless environments the default GPU path
+// leaves backdrop-filter blur unrendered over scrolling content (see
+// artifacts/version-12-liquid-glass-preview/README.md).
+const browser = await chromium.launch({ args: process.env.GALLERY_CHROMIUM_ARGS?.split(" ").filter(Boolean) ?? [] });
 
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(SCREENS, { recursive: true });

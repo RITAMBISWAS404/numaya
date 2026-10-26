@@ -16,6 +16,9 @@ const RUNTIME = new Set([
   // exposes inline for the bar meter, and the match frame OrganicPortrait reads (the soft variant is
   // set inline; a theme selects it through --organic-frame).
   "--value", "--organic-frame", "--organic-frame-soft",
+  // The opt-in Liquid Glass experiment (theme-liquid-glass.css): the working material properties
+  // the theme maps from the --glass-* tokens (and swaps to the fallbacks), and the bar height.
+  "--lg-fill", "--lg-fill-thick", "--lg-fill-dark", "--lg-filter", "--lg-edge-fade", "--lg-bar", "--lg-mask",
 ]);
 const files = walk("src").filter((f) => /\.(css|jsx?)$/.test(f) && !f.endsWith("tokens.css") && !f.endsWith("tokens.js"));
 

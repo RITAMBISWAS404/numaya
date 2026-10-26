@@ -12,3 +12,6 @@
 @import "./styles/activity.css";
 /* Opt-in visual experiment, scoped to .theme-tiimo (?theme=tiimo). */
 @import "./styles/theme-tiimo.css";
+/* Opt-in V12 material experiment, scoped to .theme-liquid-glass (?theme=liquid-glass), on top of the
+   tiimo theme. */
+@import "./styles/theme-liquid-glass.css";

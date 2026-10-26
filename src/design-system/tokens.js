@@ -2928,6 +2928,96 @@ export const tokens = [
     "value": "10px",
     "resolved": "10px",
     "description": null
+  },
+  {
+    "id": "component.glass.fill",
+    "name": "--glass-fill",
+    "layer": "component",
+    "type": "color",
+    "value": "rgb(255 255 255 / 0.88)",
+    "resolved": "rgb(255 255 255 / 0.88)",
+    "description": "Regular glass: the tab bar. White at 88%: with the scroll-edge fade, the darkest content beneath (solid black) still leaves the bar at 246/255 or lighter, where the purple active label keeps 4.5:1 (measured). 72% and 85% were tried first and failed AA over black."
+  },
+  {
+    "id": "component.glass.edge-fade",
+    "name": "--glass-edge-fade",
+    "layer": "component",
+    "type": "number",
+    "value": "0.2",
+    "resolved": "0.2",
+    "description": "Scroll edge: content passing under a glass bar fades to 20% (a mask on the scrolling area), so the bar keeps AA contrast for its labels over any content, dark photos included, while still showing it as a soft ghost."
+  },
+  {
+    "id": "component.glass.fill-thick",
+    "name": "--glass-fill-thick",
+    "layer": "component",
+    "type": "color",
+    "value": "rgb(255 255 255 / 0.9)",
+    "resolved": "rgb(255 255 255 / 0.9)",
+    "description": "Thick glass: sheets, which hold a task. Opaque enough that labels and controls read as on white and colour behind (a purple message) stays a faint tint, not a cloud."
+  },
+  {
+    "id": "component.glass.fill-dark",
+    "name": "--glass-fill-dark",
+    "layer": "component",
+    "type": "color",
+    "value": "rgb(20 19 22 / 0.5)",
+    "resolved": "rgb(20 19 22 / 0.5)",
+    "description": "Dark glass: small controls on photographs (white icons), e.g. the photo remove button. At 50% a white icon keeps 3:1 even over a pure white photo."
+  },
+  {
+    "id": "component.glass.filter",
+    "name": "--glass-filter",
+    "layer": "component",
+    "type": "other",
+    "value": "blur(24px) saturate(1.2)",
+    "resolved": "blur(24px) saturate(1.2)",
+    "description": "The one backdrop: a 24px blur, so content beneath reads only as soft shapes, with saturation lifted slightly (1.2) so it does not turn grey. A stronger lift (1.6, tried first) turned the purple messages behind the unmatch sheet into a lavender cloud."
+  },
+  {
+    "id": "component.glass.edge",
+    "name": "--glass-edge",
+    "layer": "component",
+    "type": "color",
+    "value": "rgb(20 19 22 / 0.10)",
+    "resolved": "rgb(20 19 22 / 0.10)",
+    "description": "Hairline at the glass edge that meets content (the tab bar's top, a sheet's rim)."
+  },
+  {
+    "id": "component.glass.highlight",
+    "name": "--glass-highlight",
+    "layer": "component",
+    "type": "color",
+    "value": "rgb(255 255 255 / 0.70)",
+    "resolved": "rgb(255 255 255 / 0.70)",
+    "description": "A 1px inner top highlight: the lit edge of the glass. Light glass only."
+  },
+  {
+    "id": "component.glass.shadow",
+    "name": "--glass-shadow",
+    "layer": "component",
+    "type": "shadow",
+    "value": "0 -8px 28px -12px rgb(20 19 22 / 0.16)",
+    "resolved": "0 -8px 28px -12px rgb(20 19 22 / 0.16)",
+    "description": "Sheets only: a soft upward shadow so the glass reads as a layer above the page. Bars have none."
+  },
+  {
+    "id": "component.glass.fallback",
+    "name": "--glass-fallback",
+    "layer": "component",
+    "type": "color",
+    "value": "{semantic.color.palette.surface}",
+    "resolved": "#ffffff",
+    "description": "Opaque light surface when transparency is reduced, contrast is increased, or backdrop-filter is unsupported."
+  },
+  {
+    "id": "component.glass.fallback-dark",
+    "name": "--glass-fallback-dark",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.alpha.ink-62}",
+    "resolved": "rgb(20 19 22 / 0.62)",
+    "description": "Opaque-enough dark surface for controls on photos in the same cases."
   }
 ];
 

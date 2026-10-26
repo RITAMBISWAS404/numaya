@@ -1,0 +1,116 @@
+/*
+ * Liquid Glass experiment, V12 (?theme=liquid-glass): artifacts/version-12-liquid-glass-preview/,
+ * whose design-decisions.md these rules follow.
+ *
+ * A screen in this experiment renders `.theme-tiimo .theme-liquid-glass`: the V11 design is the base,
+ * and every rule here only adds a material to selected layers of the functional layer above content.
+ * - Light glass: the tab bar (regular) and sheets (thick). Content scrolls beneath the tab bar and
+ *   shows through it, blurred; a sheet shows the dimmed page beneath it.
+ * - Dark glass: small controls on photographs (the photo remove button).
+ * Content stays opaque: cards, groups, pills, tags, inputs, buttons, profile information, the
+ * Discover fade and the match moment are V11, unchanged.
+ *
+ * The material is one set of custom properties per screen, so the accessible fallbacks swap the
+ * whole material at once: opaque surfaces and no backdrop when transparency is reduced, contrast is
+ * increased, or backdrop-filter is unsupported.
+ */
+.theme-liquid-glass {
+  --lg-fill: var(--glass-fill);
+  --lg-fill-thick: var(--glass-fill-thick);
+  --lg-fill-dark: var(--glass-fill-dark);
+  --lg-filter: var(--glass-filter);
+  --lg-edge-fade: var(--glass-edge-fade);
+}
+
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .theme-liquid-glass {
+    --lg-fill: var(--glass-fallback);
+    --lg-fill-thick: var(--glass-fallback);
+    --lg-fill-dark: var(--glass-fallback-dark);
+    --lg-filter: none;
+    --lg-edge-fade: 1;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .theme-liquid-glass {
+    --lg-fill: var(--glass-fallback);
+    --lg-fill-thick: var(--glass-fallback);
+    --lg-fill-dark: var(--glass-fallback-dark);
+    --lg-filter: none;
+    --lg-edge-fade: 1;
+  }
+}
+
+/* Tab bar: the V11 full-width bar (icon over label, red dots, 56px plus the home-indicator inset) in
+   regular glass. It now overlays the bottom of the screen and the body scrolls beneath it, with
+   bottom padding so its last row still clears the bar. A hairline edge and a 1px lit line mark its
+   top; no shadow, no capsule. */
+.theme-liquid-glass .fl-screen:has(> .tab-bar) {
+  position: relative;
+}
+
+.theme-liquid-glass .fl-screen > .tab-bar {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: var(--z-sticky);
+}
+
+.theme-liquid-glass .fl-screen__body:has(+ .tab-bar) {
+  --lg-bar: calc(56px + var(--safe-bottom));
+  padding-bottom: calc(var(--lg-bar) + var(--space-4));
+  scroll-padding-bottom: var(--lg-bar);
+  /* Scroll edge: what passes under the bar fades to --glass-edge-fade, so the bar's labels keep their
+     contrast over dark photos too. Only the strip under the bar is affected. A mask reads only alpha,
+     so any opaque colour will do. */
+  --lg-mask: linear-gradient(
+    to bottom,
+    var(--color-surface) calc(100% - var(--lg-bar)),
+    color-mix(in srgb, var(--color-surface) calc(var(--lg-edge-fade) * 100%), transparent) calc(100% - var(--lg-bar) + 24px)
+  );
+  -webkit-mask-image: var(--lg-mask);
+  mask-image: var(--lg-mask);
+}
+
+.theme-liquid-glass .tab-bar {
+  background: var(--lg-fill);
+  -webkit-backdrop-filter: var(--lg-filter);
+  backdrop-filter: var(--lg-filter);
+  box-shadow:
+    inset 0 var(--border-hairline) 0 var(--glass-edge),
+    inset 0 calc(var(--border-hairline) * 2) 0 var(--glass-highlight);
+}
+
+/* On glass, inactive icons and labels take the stronger secondary grey (#6B6771, 5.5:1 on white), so
+   they keep AA when content darkens the glass; the active tab stays brand purple. */
+.theme-liquid-glass .tab-bar__item:not(.is-current),
+.theme-liquid-glass .tab-bar__item:not(.is-current) .tab-bar__icon {
+  color: var(--color-palette-secondary-strong);
+}
+
+.theme-liquid-glass .tab-bar__item:not(.is-current):hover,
+.theme-liquid-glass .tab-bar__item:not(.is-current):hover .tab-bar__icon {
+  color: var(--color-text-primary);
+}
+
+/* Sheets (Discover and Activity filters, unmatch, photo options): thick glass over the dimmed page,
+   so the page stays faintly present behind the task. The groups inside stay opaque white, which
+   reads as content set on the glass. Same corners and layout as V11. */
+.theme-liquid-glass .sheet__panel {
+  /* Grey text on the glass takes the stronger secondary grey (#6B6771): V11's #77737D is 4.63:1 on
+     white but drops under AA once the page darkens the glass (measured 4.1:1). */
+  --color-text-muted: var(--color-palette-secondary-strong);
+  --color-text-secondary: var(--color-palette-secondary-strong);
+  background: var(--lg-fill-thick);
+  -webkit-backdrop-filter: var(--lg-filter);
+  backdrop-filter: var(--lg-filter);
+  box-shadow: inset 0 var(--border-hairline) 0 var(--glass-highlight), var(--glass-shadow);
+}
+
+/* Controls on photographs: the photo remove button in dark glass with a white icon, instead of solid
+   ink, so it sits on the photo rather than covering it. Same 28px size and corner. */
+.theme-liquid-glass .photo-slot__remove {
+  background: var(--lg-fill-dark);
+  -webkit-backdrop-filter: var(--lg-filter);
+  backdrop-filter: var(--lg-filter);
+}
