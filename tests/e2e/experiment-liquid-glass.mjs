@@ -230,6 +230,20 @@ try {
   await wait(700);
   check("sheets: the filter sheet still closes", (await p.locator(".sheet__panel").count()) === 0);
 
+  // Sheet text keeps V11's colours; only muted labels move from #77737D to the stronger #6B6771.
+  const sheetText = async (theme) => {
+    await open(p, `flows.html?screen=chat&theme=${theme}`);
+    await p.getByRole("button", { name: "Conversation options" }).click();
+    await wait(500);
+    await p.getByRole("button", { name: /^Unmatch/ }).first().click();
+    await wait(700);
+    return p.evaluate(() => [...document.querySelectorAll(".sheet__panel *")].filter((e) => e.childElementCount === 0 && e.textContent.trim()).map((e) => getComputedStyle(e).color));
+  };
+  const textV11 = await sheetText("tiimo");
+  const textGlass = await sheetText("liquid-glass");
+  const changed = textV11.map((c, i) => [c, textGlass[i]]).filter(([a2, b2]) => a2 !== b2);
+  check("sheets: text keeps V11's colours on the glass; only muted grey labels take the stronger grey", textV11.length > 3 && textV11.length === textGlass.length && changed.every(([a2, b2]) => a2 === "rgb(119, 115, 125)" && b2 === "rgb(107, 103, 113)"), `${textGlass.length} text elements, ${changed.length} changed`);
+
   // 6. Photo controls: the remove button in dark glass (ink 50%), same 28px size; its white icon keeps
   // 3:1 over a pure white photo (computed: the fill over white).
   await open(p, "flows.html?screen=photos&theme=liquid-glass");

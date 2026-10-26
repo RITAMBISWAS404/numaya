@@ -97,10 +97,10 @@
    so the page stays faintly present behind the task. The groups inside stay opaque white, which
    reads as content set on the glass. Same corners and layout as V11. */
 .theme-liquid-glass .sheet__panel {
-  /* Grey text on the glass takes the stronger secondary grey (#6B6771): V11's #77737D is 4.63:1 on
-     white but drops under AA once the page darkens the glass (measured 4.1:1). */
+  /* Muted grey text on the glass (section labels such as "How old are they?") takes the stronger
+     secondary grey (#6B6771): V11's #77737D is 4.63:1 on white but drops under AA once the page
+     darkens the glass (measured 4.1:1). Other text keeps its V11 colour. */
   --color-text-muted: var(--color-palette-secondary-strong);
-  --color-text-secondary: var(--color-palette-secondary-strong);
   background: var(--lg-fill-thick);
   -webkit-backdrop-filter: var(--lg-filter);
   backdrop-filter: var(--lg-filter);
