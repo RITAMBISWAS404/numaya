@@ -1,0 +1,10 @@
+Default mode (no ?theme=tiimo) at ff84175, compared byte for byte with the approved design's committed
+gallery (design/apple-impeccable-full-app at 944c532, artifacts/ui-gallery/screens).
+
+Captured with: GALLERY_OUT=<dir> node scripts/gallery.mjs (all 162 states, no theme)
+Compared with: cmp, file by file
+
+162 compared, 0 differ.
+
+The new elements (the tab label and the prompt mark) render in both designs but are display: none
+outside the theme, and every V11 style rule is scoped to .theme-tiimo.

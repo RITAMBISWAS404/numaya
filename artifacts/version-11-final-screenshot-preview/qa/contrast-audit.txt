@@ -1,0 +1,5 @@
+Text contrast on the V11 themed screens (?theme=tiimo), 393 x 852: every visible text element against
+the first solid background behind it (WCAG AA: 4.5:1, or 3:1 for large text). Text over photos and
+scrims is skipped. The tab labels are included although they are aria-hidden (they are visible text).
+
+325 text elements checked on 15 screens; 0 below AA
