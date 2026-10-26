@@ -1,31 +1,69 @@
 /*
  * Tiimo-inspired visual experiment (artifacts/tiimo-inspired-experiment/), refined in
  * artifacts/tiimo-white-surface-refinement/ (V2), artifacts/tiimo-inspired-v3/ (V3), V4 and
- * artifacts/version-5-final-screenshot-preview/ (V5).
+ * artifacts/version-5-final-screenshot-preview/ (V5) and artifacts/version-6-final-screenshot-preview/
+ * (V6, the supplied Numaya palette).
  *
  * Opt-in: a screen renders inside `.theme-tiimo` only with `?theme=tiimo` and only if it takes part
  * in the experiment, so the approved design is untouched everywhere else. Every rule below is scoped
  * to `.theme-tiimo`; the component markup and contracts are the same in both designs.
  *
  * The rules, from the reference analysis:
- * - A pure white canvas; white cards separate by spacing and a restrained shadow, not a hairline.
+ * - V6 palette: a warm neutral canvas (#F1F0EA) under white cards (#FFFFFF); quiet fills are white on
+ *   the canvas and the inset off-white (#F8F7F3) inside cards; text #28262D, secondary #77737D on
+ *   cards. Purple (#7262C7, tint #E5E3FA) marks actions, the active tab and selection only.
  * - One gradient only: the black fade at the bottom of a profile photograph that carries text.
  *   Every surface, control and decoration is a solid colour (see "Gradients" at the end).
  * - Two card sizes: item 16px, feature 24px. Emoji-and-text pills (interests, emoji category filters,
- *   shared-interest and activity category tags) are softly rounded rectangles: a light grey fill,
- *   or light purple with a fine purple outline when selected. Every other control keeps its own
+ *   shared-interest and activity category tags) are softly rounded rectangles: a neutral white or
+ *   off-white fill, or the purple tint with a fine purple outline when selected. Every other control keeps its own
  *   approved shape: capsule buttons, filters, badges and tab bar; circular icon buttons and avatars.
  * - Headings are neutral ink; colour marks a category (a tinted holder or chip) or a state, never
  *   a heading on its own.
  * - One pastel per category (peach, lilac, mint, sky, butter), always paired with its ink for text.
  * - Emoji mark content (interests, activity categories), never utility controls.
- * - Fields and quiet controls keep the light neutral grey; purple keeps actions and selection,
- *   and your own messages.
+ * - Fields and quiet controls take the contextual quiet fill (white on the canvas, off-white in cards);
+ *   purple keeps actions and selection, and your own messages.
  */
 
-/* Surfaces ---------------------------------------------------------------- */
+/* Surfaces and text: the V6 palette ------------------------------------------- */
+/* Two contexts, set once and inherited by every component:
+   - On the canvas (the default): the page is Background #F1F0EA; quiet fills (fields, search,
+     incoming bubbles, unselected pills) are white Card #FFFFFF so they stand off the warm canvas;
+     secondary text is the derived #6B6771, because Secondary #77737D is 4.06:1 on Background.
+   - Inside a white card: quiet fills are Inset #F8F7F3 (white on white would vanish) and secondary
+     text is the exact Secondary #77737D (4.63:1 on white).
+   Body and heading text is Text #28262D in both. Supporting lavender surfaces (the prompt tile, info
+   banners) are Muted #F2F0FE, where secondary text again takes the derived value (4.88:1).
+   Purple text (links such as "Terms") is Brand #7262C7 on white cards (4.90:1); on the canvas it is
+   4.29:1, so there it takes the existing deep brand purple (purple 800). */
 .theme-tiimo {
-  --color-surface-page: var(--color-tiimo-canvas);
+  --color-surface-page: var(--color-palette-background);
+  --color-surface-soft: var(--color-palette-card);
+  --color-surface-brand: var(--color-palette-muted);
+  --color-text-primary: var(--color-palette-text);
+  --color-text-secondary: var(--color-palette-text);
+  --color-text-muted: var(--color-palette-secondary-strong);
+  --color-text-brand: var(--color-text-brand-deep);
+  --color-border-subtle: var(--color-palette-border);
+}
+
+.theme-tiimo :is(.card, .activity-card, .list-group__items, .option-card, .conversation__hit, .banner--info, .metric-card, .coach, .setup-step, .dialog__panel, .action-sheet__list) {
+  --color-surface-soft: var(--color-palette-inset);
+  --color-text-muted: var(--color-palette-secondary);
+  --color-text-brand: var(--color-palette-brand);
+}
+
+/* A Muted tile inside a card (the prompt): secondary text goes back to the derived value. */
+.theme-tiimo .profile-section--prompt {
+  --color-text-muted: var(--color-palette-secondary-strong);
+}
+
+/* Photo placeholders are not quiet fills: they keep their neutral photo grey (as in V5), so a tile
+   without a photo never turns white on the canvas. :where() keeps this at one class, so the more
+   specific placeholder rules (photo slots, activity media) still win, exactly as in V5. */
+.theme-tiimo :where(.image-placeholder--stone, .image-placeholder--sand) {
+  background: var(--color-surface-canvas);
 }
 
 /* Category tones: one pastel and its ink, set by `data-tone` (see lib/theme.js markAttrs). */
@@ -123,32 +161,40 @@
   font-size: 13px;
 }
 
-/* Pills (V5) ----------------------------------------------------------------- */
+/* Pills (V5 shape, V6 colour) ------------------------------------------------- */
 /* Only the emoji-and-text pills: interest chips, emoji category filters (and the "All" option in
    the same rail), the shared-interest tags ("You both like") and the activity category tag. They
    are matched by their emoji mark (data-emoji) or by sitting in a rail of emoji filters, never by a
    bare `.chip`, so filters without emoji (Messages, Likes), fact chips, buttons, badges, inputs and
    navigation keep their own shapes. Reference: Tiimo's habit chips (Mobbin, "Add morning routines"):
    a soft rounded rectangle; unselected without a border; selected light purple with a fine purple
-   outline. */
+   outline.
+   V6 colour: unselected pills take the contextual quiet fill, so a solid neutral that stands off
+   whatever is behind them: white Card on the canvas, Inset off-white inside a white card. Never the
+   purple tint, no border, no gradient. */
 .theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip) {
   border-radius: var(--tiimo-radius-pill);
-  background: var(--color-tiimo-pill-fill);
+  background: var(--color-surface-soft);
   box-shadow: none;
   color: var(--color-text-primary);
 }
 
-/* Selected: light purple, a fine 1px purple outline, deep purple text (6.6:1) and the existing
-   glyph (minus or check), so the state never relies on colour alone. Same size and corner. */
+/* Selected: the purple tint #E5E3FA, a fine 1px brand-purple outline and the brand-purple glyph
+   (minus or check), so the state never relies on colour alone. The label stays Text (11.9:1): purple
+   marks the state once (fill, outline, glyph), not four times. Same size and corner. */
 .theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected {
-  background: var(--color-tiimo-pill-selected-fill);
-  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-tiimo-pill-selected-outline);
-  color: var(--color-tiimo-pill-selected-ink);
+  background: var(--color-palette-purple-tint);
+  box-shadow: inset 0 0 0 var(--border-hairline) var(--color-palette-brand);
+  color: var(--color-text-primary);
   font-weight: var(--font-weight-semibold);
 }
 
-.theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected :is(.chip__affordance, .chip__icon, .chip__count) {
-  color: var(--color-tiimo-pill-selected-ink);
+.theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected :is(.chip__affordance, .chip__icon) {
+  color: var(--color-palette-brand);
+}
+
+.theme-tiimo :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected .chip__count {
+  color: var(--color-text-primary);
 }
 
 /* Locked at the five-interest limit: the same grey pill with the approved muted (disabled) text and
@@ -173,12 +219,12 @@
   justify-self: start;
   padding: 2px 8px;
   border-radius: var(--tiimo-radius-tag);
-  background: var(--color-tiimo-pill-fill);
+  background: var(--color-surface-soft);
   color: var(--color-text-primary);
   font-weight: var(--font-weight-semibold);
 }
 
-/* Sheets: the canvas colour (white); the white groups inside separate by their restrained shadow. */
+/* Sheets: the canvas colour; the white groups inside separate by their restrained shadow. */
 .theme-tiimo .sheet__panel {
   background: var(--color-surface-page);
 }
@@ -203,8 +249,9 @@
   box-shadow: var(--shadow-tiimo-float);
 }
 
+/* The active tab: the palette's purple tint behind the brand-purple icon. */
 .theme-tiimo .tab-bar__item.is-current {
-  background: var(--color-tiimo-lilac-tint);
+  background: var(--color-palette-purple-tint);
 }
 
 /* Tags: sentence-case tinted pills. "New" is butter, the reference's highlight tint. */

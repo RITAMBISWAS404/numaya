@@ -433,6 +433,78 @@ export const tokens = [
     "description": null
   },
   {
+    "id": "primitive.color.palette.background",
+    "name": "--p-color-palette-background",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#f1f0ea",
+    "resolved": "#f1f0ea",
+    "description": null
+  },
+  {
+    "id": "primitive.color.palette.inset",
+    "name": "--p-color-palette-inset",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#f8f7f3",
+    "resolved": "#f8f7f3",
+    "description": null
+  },
+  {
+    "id": "primitive.color.palette.purple-tint",
+    "name": "--p-color-palette-purple-tint",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#e5e3fa",
+    "resolved": "#e5e3fa",
+    "description": null
+  },
+  {
+    "id": "primitive.color.palette.border",
+    "name": "--p-color-palette-border",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#e6e3dd",
+    "resolved": "#e6e3dd",
+    "description": null
+  },
+  {
+    "id": "primitive.color.palette.text",
+    "name": "--p-color-palette-text",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#28262d",
+    "resolved": "#28262d",
+    "description": null
+  },
+  {
+    "id": "primitive.color.palette.secondary",
+    "name": "--p-color-palette-secondary",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#77737d",
+    "resolved": "#77737d",
+    "description": null
+  },
+  {
+    "id": "primitive.color.palette.muted",
+    "name": "--p-color-palette-muted",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#f2f0fe",
+    "resolved": "#f2f0fe",
+    "description": null
+  },
+  {
+    "id": "primitive.color.palette.secondary-strong",
+    "name": "--p-color-palette-secondary-strong",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#6b6771",
+    "resolved": "#6b6771",
+    "description": "Derived, not supplied: Secondary moved toward Text just far enough for 4.5:1 on Background (4.84) and Inset. Secondary itself is 4.06:1 on Background, below AA for small text."
+  },
+  {
     "id": "primitive.font.family.fraunces",
     "name": "--p-font-family-fraunces",
     "layer": "primitive",
@@ -1405,42 +1477,6 @@ export const tokens = [
     "description": null
   },
   {
-    "id": "semantic.color.tiimo.pill-fill",
-    "name": "--color-tiimo-pill-fill",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.neutral.100}",
-    "resolved": "#f2f2f2",
-    "description": "V5 emoji-and-text pills, unselected: a very light neutral grey with no outline (the supplied Numaya reference; Tiimo's unselected habit chips also carry no border)."
-  },
-  {
-    "id": "semantic.color.tiimo.pill-selected-fill",
-    "name": "--color-tiimo-pill-selected-fill",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.purple.150}",
-    "resolved": "#e9e4fb",
-    "description": "V5 emoji-and-text pills, selected: the light purple of Tiimo's selected habit chips."
-  },
-  {
-    "id": "semantic.color.tiimo.pill-selected-outline",
-    "name": "--color-tiimo-pill-selected-outline",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.purple.600}",
-    "resolved": "#7262c7",
-    "description": "V5 selected pill: a fine (1px) brand-purple outline."
-  },
-  {
-    "id": "semantic.color.tiimo.pill-selected-ink",
-    "name": "--color-tiimo-pill-selected-ink",
-    "layer": "semantic",
-    "type": "color",
-    "value": "{primitive.color.purple.800}",
-    "resolved": "#4f4296",
-    "description": "Text and glyphs on a selected pill: 6.6:1 on pill-selected-fill."
-  },
-  {
     "id": "semantic.color.tiimo.photo-fade",
     "name": "--color-tiimo-photo-fade",
     "layer": "semantic",
@@ -1448,6 +1484,96 @@ export const tokens = [
     "value": "{primitive.color.alpha.black-72}",
     "resolved": "rgb(0 0 0 / 0.72)",
     "description": "The theme's only gradient: the end colour of the bottom-to-top black fade on profile photographs that carry text (Discover, Like back). Never on surfaces, cards, controls or decoration."
+  },
+  {
+    "id": "semantic.color.palette.background",
+    "name": "--color-palette-background",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.background}",
+    "resolved": "#f1f0ea",
+    "description": "Main app canvas (#F1F0EA)."
+  },
+  {
+    "id": "semantic.color.palette.card",
+    "name": "--color-palette-card",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.neutral.0}",
+    "resolved": "#ffffff",
+    "description": "Primary cards and important content surfaces (#FFFFFF)."
+  },
+  {
+    "id": "semantic.color.palette.inset",
+    "name": "--color-palette-inset",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.inset}",
+    "resolved": "#f8f7f3",
+    "description": "Recessed and secondary surfaces (#F8F7F3); quiet fills inside white cards."
+  },
+  {
+    "id": "semantic.color.palette.brand",
+    "name": "--color-palette-brand",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.purple.600}",
+    "resolved": "#7262c7",
+    "description": "Primary actions, active and selected states (#7262C7)."
+  },
+  {
+    "id": "semantic.color.palette.purple-tint",
+    "name": "--color-palette-purple-tint",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.purple-tint}",
+    "resolved": "#e5e3fa",
+    "description": "Selected pills and the active tab item (#E5E3FA). Never the default pill fill."
+  },
+  {
+    "id": "semantic.color.palette.border",
+    "name": "--color-palette-border",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.border}",
+    "resolved": "#e6e3dd",
+    "description": "Subtle neutral dividers and outlines (#E6E3DD)."
+  },
+  {
+    "id": "semantic.color.palette.text",
+    "name": "--color-palette-text",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.text}",
+    "resolved": "#28262d",
+    "description": "Primary text and headings (#28262D)."
+  },
+  {
+    "id": "semantic.color.palette.secondary",
+    "name": "--color-palette-secondary",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.secondary}",
+    "resolved": "#77737d",
+    "description": "Secondary labels and descriptions on white cards (#77737D, 4.63:1)."
+  },
+  {
+    "id": "semantic.color.palette.secondary-strong",
+    "name": "--color-palette-secondary-strong",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.secondary-strong}",
+    "resolved": "#6b6771",
+    "description": "Secondary text on Background, Inset and Muted, where #77737D is below 4.5:1 (derived; 4.84:1 on Background)."
+  },
+  {
+    "id": "semantic.color.palette.muted",
+    "name": "--color-palette-muted",
+    "layer": "semantic",
+    "type": "color",
+    "value": "{primitive.color.palette.muted}",
+    "resolved": "#f2f0fe",
+    "description": "Very light supporting surfaces: the prompt tile and info cards (#F2F0FE)."
   },
   {
     "id": "semantic.font.display",

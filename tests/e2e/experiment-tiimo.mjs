@@ -2,7 +2,7 @@
 /**
  * The opt-in Tiimo-inspired experiment (`?theme=tiimo`, artifacts/tiimo-inspired-experiment/, refined
  * in artifacts/tiimo-white-surface-refinement/, artifacts/tiimo-inspired-v3/, artifacts/tiimo-inspired-v4/ and
- * artifacts/version-5-final-screenshot-preview/).
+ * artifacts/version-5-final-screenshot-preview/ and artifacts/version-6-final-screenshot-preview/).
  * Its own contract, kept apart from the approved design's checks in smoke.mjs and product.mjs:
  * scoping (only the 12 selected screens, only with the flag), the visual rules that carry meaning
  * (white canvas, gradients only as the black fade on profile photos, compact rounded controls,
@@ -112,16 +112,30 @@ try {
       chip: { pressed: chip.getAttribute("aria-pressed"), tone: chip.dataset.tone, bg: cs(chip).backgroundColor, ring: cs(chip).boxShadow, fg: cs(chip).color, emoji: getComputedStyle(chip, "::after").content },
     };
   });
-  check("look: themed screens sit on a pure white canvas", look.canvas === "rgb(255, 255, 255)", look.canvas);
-  // Neutral = no visible hue (the ink is a near-black with a 3-point cool cast).
-  const neutral = (c) => { const [r, g, b] = c.match(/\d+/g).map(Number); return Math.max(r, g, b) - Math.min(r, g, b) <= 6; };
+  check("look: themed screens sit on the palette's Background canvas (#F1F0EA)", look.canvas === "rgb(241, 240, 234)", look.canvas);
+
+  // V6: the supplied palette, exact values, as tokens; and the theme's surfaces and text use them.
+  const palette = await p.evaluate(() => {
+    const root = getComputedStyle(document.documentElement);
+    const theme = getComputedStyle(document.querySelector(".theme-tiimo"));
+    const v = (cs, n) => cs.getPropertyValue(n).trim().toLowerCase();
+    return {
+      tokens: Object.fromEntries(["background", "card", "inset", "brand", "purple-tint", "border", "text", "secondary", "muted"].map((k) => [k, v(root, `--color-palette-${k}`)])),
+      mapped: { page: v(theme, "--color-surface-page"), text: v(theme, "--color-text-primary"), border: v(theme, "--color-border-subtle"), brand: v(theme, "--color-brand") },
+    };
+  });
+  const WANT = { background: "#f1f0ea", card: "#ffffff", inset: "#f8f7f3", brand: "#7262c7", "purple-tint": "#e5e3fa", border: "#e6e3dd", text: "#28262d", secondary: "#77737d", muted: "#f2f0fe" };
+  check("palette: the nine supplied colours are tokens with their exact values", Object.entries(WANT).every(([k, hex]) => palette.tokens[k] === hex), JSON.stringify(palette.tokens));
+  check("palette: the theme's canvas, text, border and brand resolve to the palette", palette.mapped.page === "#f1f0ea" && palette.mapped.text === "#28262d" && palette.mapped.border === "#e6e3dd" && palette.mapped.brand === "#7262c7", JSON.stringify(palette.mapped));
+  // Neutral = no visible hue (the palette's Text #28262D is a near-black with a 7-point cool cast).
+  const neutral = (c) => { const [r, g, b] = c.match(/\d+/g).map(Number); return Math.max(r, g, b) - Math.min(r, g, b) <= 8; };
   check("look: interest sets keep their categories (peach, lilac, mint)", look.labels.map((l) => l.tone).join() === "peach,lilac,mint", look.labels.map((l) => l.tone).join());
   check("look: interest set headings are neutral ink, on no coloured fill", look.labels.every((l) => neutral(l.fg) && l.bg === "rgba(0, 0, 0, 0)"), look.labels.map((l) => `${l.fg} on ${l.bg}`).join(", "));
   check("look: each set's category colour sits in its tinted emoji holder", look.labels.every((l) => l.holder !== "rgba(0, 0, 0, 0)" && !neutral(l.holder)), look.labels.map((l) => l.holder).join(", "));
   const worstLabel = Math.min(...look.labels.map((l) => ratio(l.fg, "rgb(255, 255, 255)")));
   check("contrast: set headings on the white canvas are at least 4.5:1", worstLabel >= 4.5, worstLabel.toFixed(2));
   check("look: the prompt question is a neutral heading, not accent text", look.prompt && neutral(look.prompt), look.prompt);
-  check("look: a selected interest is a light purple pill with a fine purple outline", look.chip.pressed === "true" && look.chip.bg === "rgb(233, 228, 251)" && /rgb\(114, 98, 199\) 0px 0px 0px 1px inset/.test(look.chip.ring), `${look.chip.bg} / ${look.chip.ring}`);
+  check("look: a selected interest is the purple tint with a fine brand-purple outline and dark label", look.chip.pressed === "true" && look.chip.bg === "rgb(229, 227, 250)" && /rgb\(114, 98, 199\) 0px 0px 0px 1px inset/.test(look.chip.ring) && look.chip.fg === "rgb(40, 38, 45)", `${look.chip.bg} / ${look.chip.ring} / ${look.chip.fg}`);
   check("contrast: selected interest text on its tint is at least 4.5:1", ratio(look.chip.fg, look.chip.bg) >= 4.5, ratio(look.chip.fg, look.chip.bg).toFixed(2));
   check("a11y: interest emoji are decorative (alt text empty), the name stays the label", /🍷/.test(look.chip.emoji) && /\/\s*""/.test(look.chip.emoji), look.chip.emoji);
   const name = await p.getByRole("button", { name: "Natural wine", exact: true }).count();
@@ -149,7 +163,7 @@ try {
   });
   check("look: your messages are solid brand purple with white text", bubbles.me.bg === "rgb(114, 98, 199)" && bubbles.me.fg === "rgb(255, 255, 255)" && bubbles.me.image === "none", `${bubbles.me.bg} / ${bubbles.me.fg} / ${bubbles.me.image}`);
   check("contrast: your message text on purple is at least 4.5:1", ratio(bubbles.me.fg, bubbles.me.bg) >= 4.5, ratio(bubbles.me.fg, bubbles.me.bg).toFixed(2));
-  check("look: their messages are a light neutral, distinct from yours and from the canvas", bubbles.them.bg !== bubbles.me.bg && bubbles.them.bg !== "rgb(255, 255, 255)" && lum(bubbles.them.bg) > 0.8, bubbles.them.bg);
+  check("look: their messages are white Card bubbles on the warm canvas, distinct from yours", bubbles.them.bg === "rgb(255, 255, 255)" && bubbles.them.bg !== bubbles.me.bg, bubbles.them.bg);
   check("contrast: their message text is at least 4.5:1", ratio(bubbles.them.fg, bubbles.them.bg) >= 4.5, ratio(bubbles.them.fg, bubbles.them.bg).toFixed(2));
 
   // 4b. Fields are white or a light neutral grey, never a warm tint (equal R, G and B).
@@ -363,7 +377,8 @@ try {
   // selected: light purple with a fine purple outline; a 12px rounded rectangle; no gradient.
   const pillStyle = (sel) => p.evaluate((q) => [...document.querySelectorAll(q)].map((c) => {
     const cs = getComputedStyle(c);
-    return { selected: c.classList.contains("is-selected"), locked: c.classList.contains("is-unavailable"), r: parseFloat(cs.borderTopLeftRadius), h: c.getBoundingClientRect().height, bg: cs.backgroundColor, image: cs.backgroundImage, ring: cs.boxShadow, border: cs.borderTopWidth, fg: cs.color };
+    const inCard = !!c.closest(".card, .activity-card, .list-group__items, .option-card, .conversation__hit");
+    return { selected: c.classList.contains("is-selected"), locked: c.classList.contains("is-unavailable"), inCard, r: parseFloat(cs.borderTopLeftRadius), h: c.getBoundingClientRect().height, bg: cs.backgroundColor, image: cs.backgroundImage, ring: cs.boxShadow, border: cs.borderTopWidth, fg: cs.color };
   }), sel);
   const pills = [];
   await open(p, "flows.html?screen=interests&theme=tiimo");
@@ -377,9 +392,56 @@ try {
   const unselected = pills.filter((c) => !c.selected);
   const selected = pills.filter((c) => c.selected);
   check("pills: every emoji-and-text pill is a 12px rounded rectangle, not a capsule", pills.length > 10 && pills.every((c) => c.r === 12 && c.h >= 32), [...new Set(pills.map((c) => `${c.r}px on ${Math.round(c.h)}px`))].join(", "));
-  check("pills: unselected pills are light neutral grey with no border or outline", unselected.length > 0 && unselected.every((c) => c.bg === "rgb(242, 242, 242)" && c.ring === "none" && c.border === "0px"), [...new Set(unselected.map((c) => `${c.bg} ${c.ring} ${c.border}`))].join(" | "));
-  check("pills: selected pills are light purple with a fine purple outline", selected.length >= 2 && selected.every((c) => c.bg === "rgb(233, 228, 251)" && /rgb\(114, 98, 199\) 0px 0px 0px 1px inset/.test(c.ring)), [...new Set(selected.map((c) => `${c.bg} ${c.ring}`))].join(" | "));
+  const onCanvas = unselected.filter((c) => !c.inCard);
+  const onCard = unselected.filter((c) => c.inCard);
+  check("pills: unselected pills on the canvas are solid white Card, with no border or outline", onCanvas.length > 0 && onCanvas.every((c) => c.bg === "rgb(255, 255, 255)" && c.ring === "none" && c.border === "0px"), [...new Set(onCanvas.map((c) => `${c.bg} ${c.ring} ${c.border}`))].join(" | "));
+  check("pills: unselected pills inside white cards are solid Inset off-white, with no border or outline", onCard.length > 0 && onCard.every((c) => c.bg === "rgb(248, 247, 243)" && c.ring === "none" && c.border === "0px"), [...new Set(onCard.map((c) => `${c.bg} ${c.ring} ${c.border}`))].join(" | "));
+  check("pills: no unselected pill uses the purple tint or the muted lavender", unselected.every((c) => !["rgb(229, 227, 250)", "rgb(242, 240, 254)"].includes(c.bg)));
+  check("pills: selected pills are the purple tint with a fine brand-purple outline and a dark label", selected.length >= 2 && selected.every((c) => c.bg === "rgb(229, 227, 250)" && /rgb\(114, 98, 199\) 0px 0px 0px 1px inset/.test(c.ring) && c.fg === "rgb(40, 38, 45)"), [...new Set(selected.map((c) => `${c.bg} ${c.ring} ${c.fg}`))].join(" | "));
   check("pills: no gradient on any pill", pills.every((c) => c.image === "none"));
+  await open(p, "flows.html?screen=interests&theme=tiimo");
+  const glyph = await p.evaluate(() => getComputedStyle(document.querySelector(".chip.is-selected .chip__affordance")).color);
+  check("pills: the selection indicator (minus or check) is brand purple", glyph === "rgb(114, 98, 199)", glyph);
+
+  // 4h. Rendered contrast on every themed screen: each visible text element against the first solid
+  // background behind it (text over photos and translucent scrims is checked separately above).
+  const lowContrast = [];
+  let textCount = 0;
+  for (const path of ["?theme=tiimo", ...FLOW_SCREENS.map((s) => `flows.html?screen=${s}&theme=tiimo`), "matched"]) {
+    if (path === "matched") await openSeeded(p, "flows.html?screen=match&theme=tiimo", MATCHED);
+    else await open(p, path);
+    const r = await p.evaluate(() => {
+      const parse = (c) => { const n = c.match(/[\d.]+/g).map(Number); return c.startsWith("color(") ? { rgb: n.slice(0, 3).map((v) => v * 255), a: n[3] ?? 1 } : { rgb: n.slice(0, 3), a: n[3] ?? 1 }; };
+      const lum = ([r, g, b]) => { const f = (v) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
+      const out = []; let n = 0;
+      for (const el of document.querySelectorAll(".theme-tiimo *")) {
+        if (![...el.childNodes].some((t) => t.nodeType === 3 && t.textContent.trim())) continue;
+        const cs = getComputedStyle(el);
+        if (!el.getBoundingClientRect().width || cs.visibility !== "visible" || el.closest("[aria-hidden=true], .visually-hidden, [aria-disabled=true], :disabled")) continue;
+        let bg = null;
+        for (let a = el; a; a = a.parentElement) {
+          const ac = getComputedStyle(a);
+          if (ac.backgroundImage !== "none" || a.matches(".profile-card__media")) break;
+          const c = parse(ac.backgroundColor);
+          if (c.a === 0) continue;
+          if (c.a === 1) bg = c.rgb;
+          break;
+        }
+        const fg = parse(cs.color);
+        if (!bg || fg.a < 1) continue;
+        n++;
+        const [x, y] = [lum(fg.rgb), lum(bg)].sort((p, q) => q - p);
+        const ratio = (x + 0.05) / (y + 0.05);
+        const size = parseFloat(cs.fontSize);
+        const need = size >= 24 || (+cs.fontWeight >= 700 && size >= 18.66) ? 3 : 4.5;
+        if (ratio < need) out.push(`"${el.textContent.trim().slice(0, 20)}" ${ratio.toFixed(2)}`);
+      }
+      return { n, out };
+    });
+    textCount += r.n;
+    lowContrast.push(...r.out.map((o) => `${path}: ${o}`));
+  }
+  check(`contrast: all ${textCount} text elements on the themed screens meet AA against their actual background`, textCount > 150 && lowContrast.length === 0, lowContrast.slice(0, 4).join(" | "));
   const worstPill = Math.min(...pills.filter((c) => !c.locked).map((c) => ratio(c.fg, c.bg)));
   check("contrast: pill text is at least 4.5:1, selected and unselected", worstPill >= 4.5, worstPill.toFixed(2));
 

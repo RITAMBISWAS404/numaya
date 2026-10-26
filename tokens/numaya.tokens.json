@@ -51,6 +51,17 @@
         "black-72": { "$type": "color", "$value": "rgb(0 0 0 / 0.72)" },
         "purple-24": { "$type": "color", "$value": "rgb(114 98 199 / 0.24)" },
         "white-55": { "$type": "color", "$value": "rgb(255 255 255 / 0.55)" }
+      },
+      "palette": {
+        "$description": "The supplied Numaya palette (V6 experiment), exact values. Brand (#7262C7) and Card (#FFFFFF) already exist as purple.600 and neutral.0.",
+        "background":       { "$type": "color", "$value": "#f1f0ea" },
+        "inset":            { "$type": "color", "$value": "#f8f7f3" },
+        "purple-tint":      { "$type": "color", "$value": "#e5e3fa" },
+        "border":           { "$type": "color", "$value": "#e6e3dd" },
+        "text":             { "$type": "color", "$value": "#28262d" },
+        "secondary":        { "$type": "color", "$value": "#77737d" },
+        "muted":            { "$type": "color", "$value": "#f2f0fe" },
+        "secondary-strong": { "$type": "color", "$value": "#6b6771", "$description": "Derived, not supplied: Secondary moved toward Text just far enough for 4.5:1 on Background (4.84) and Inset. Secondary itself is 4.06:1 on Background, below AA for small text." }
       }
     },
     "font": {
@@ -194,11 +205,20 @@
         "mint-ink":   { "$type": "color", "$value": "{primitive.color.mint.700}" },
         "sky-tint":   { "$type": "color", "$value": "{primitive.color.sky.100}" },
         "sky-ink":    { "$type": "color", "$value": "{primitive.color.sky.700}" },
-        "pill-fill":             { "$type": "color", "$value": "{primitive.color.neutral.100}", "$description": "V5 emoji-and-text pills, unselected: a very light neutral grey with no outline (the supplied Numaya reference; Tiimo's unselected habit chips also carry no border)." },
-        "pill-selected-fill":    { "$type": "color", "$value": "{primitive.color.purple.150}", "$description": "V5 emoji-and-text pills, selected: the light purple of Tiimo's selected habit chips." },
-        "pill-selected-outline": { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "V5 selected pill: a fine (1px) brand-purple outline." },
-        "pill-selected-ink":     { "$type": "color", "$value": "{primitive.color.purple.800}", "$description": "Text and glyphs on a selected pill: 6.6:1 on pill-selected-fill." },
         "photo-fade": { "$type": "color", "$value": "{primitive.color.alpha.black-72}", "$description": "The theme's only gradient: the end colour of the bottom-to-top black fade on profile photographs that carry text (Discover, Like back). Never on surfaces, cards, controls or decoration." }
+      },
+      "palette": {
+        "$description": "V6: the supplied Numaya palette by role, used only inside .theme-tiimo. Card and Brand point at the existing white and brand purple, which are the same exact values.",
+        "background":       { "$type": "color", "$value": "{primitive.color.palette.background}", "$description": "Main app canvas (#F1F0EA)." },
+        "card":             { "$type": "color", "$value": "{primitive.color.neutral.0}", "$description": "Primary cards and important content surfaces (#FFFFFF)." },
+        "inset":            { "$type": "color", "$value": "{primitive.color.palette.inset}", "$description": "Recessed and secondary surfaces (#F8F7F3); quiet fills inside white cards." },
+        "brand":            { "$type": "color", "$value": "{primitive.color.purple.600}", "$description": "Primary actions, active and selected states (#7262C7)." },
+        "purple-tint":      { "$type": "color", "$value": "{primitive.color.palette.purple-tint}", "$description": "Selected pills and the active tab item (#E5E3FA). Never the default pill fill." },
+        "border":           { "$type": "color", "$value": "{primitive.color.palette.border}", "$description": "Subtle neutral dividers and outlines (#E6E3DD)." },
+        "text":             { "$type": "color", "$value": "{primitive.color.palette.text}", "$description": "Primary text and headings (#28262D)." },
+        "secondary":        { "$type": "color", "$value": "{primitive.color.palette.secondary}", "$description": "Secondary labels and descriptions on white cards (#77737D, 4.63:1)." },
+        "secondary-strong": { "$type": "color", "$value": "{primitive.color.palette.secondary-strong}", "$description": "Secondary text on Background, Inset and Muted, where #77737D is below 4.5:1 (derived; 4.84:1 on Background)." },
+        "muted":            { "$type": "color", "$value": "{primitive.color.palette.muted}", "$description": "Very light supporting surfaces: the prompt tile and info cards (#F2F0FE)." }
       }
     },
 
