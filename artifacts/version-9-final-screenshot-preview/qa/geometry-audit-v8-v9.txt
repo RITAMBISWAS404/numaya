@@ -1,0 +1,95 @@
+Geometry audit, V8 → V9, measured with ?theme=tiimo at 393 x 852.
+
+Rows in the element inventory (qa/surface-audit-v8-v9.txt) whose element is fully round: V8 17 circle rows and 22 capsule rows; V9 0 circle rows and 0 capsule rows.
+The e2e check 'geometry: no circular UI element' covers the 15 themed screens and the match, pseudo-elements included (switch thumbs).
+Excluded by design: the match scallop (an SVG mask, not a radius), the Numaya wordmark (logo artwork) and illustrations.
+
+Computed corner radius per component and screen (radius/height in px). V9 scale: tag 6, pill 8, control/item 10, feature 12, photo 14.
+
+* .nav-button
+    V8  basics:12px/40  interests:12px/40  discovery:12px/36  like-profile:12px/40  chat:12px/36  match:12px/40  activity:12px/36
+    V9  basics:10px/40  interests:10px/40  discovery:10px/36  like-profile:10px/40  chat:10px/36  match:10px/40  activity:10px/36
+* .fab
+    V8  basics:16px/56  interests:16px/56
+    V9  basics:12px/56  interests:12px/56
+* .input
+    V8  basics:12px/56
+    V9  basics:10px/56
+* .option-card
+    V8  basics:12px/52
+    V9  basics:10px/52
+* .chip[data-emoji]
+    V8  interests:10px/36  discovery:10px/36  like-profile:10px/36  match:10px/36  activity:10px/36
+    V9  interests:8px/36  discovery:8px/36  like-profile:8px/36  match:8px/36  activity:8px/36
+* .action-bar__btn
+    V8  discovery:28px/56
+    V9  discovery:12px/56
+* .count-badge
+    V8  discovery:999px/18  likes:999px/18  chats:999px/18  activity:999px/18
+    V9  discovery:6px/18  likes:6px/18  chats:6px/18  activity:6px/18
+* .tab-bar
+    V8  discovery:999px/64  likes:999px/64  chats:999px/64  activity:999px/64
+    V9  discovery:12px/56  likes:12px/56  chats:12px/56  activity:12px/56
+* .tab-bar__item
+    V8  discovery:999px/52  likes:999px/52  chats:999px/52  activity:999px/52
+    V9  discovery:10px/48  likes:10px/48  chats:10px/48  activity:10px/48
+* .chip:not([data-emoji])
+    V8  discovery:10px/36  likes:10px/36  chats:10px/36  activity:10px/36
+    V9  discovery:8px/36  likes:8px/36  chats:8px/36  activity:8px/36
+* .shared-interests__pill
+    V8  discovery:10px/36  like-profile:10px/36
+    V9  discovery:8px/36  like-profile:8px/36
+= .profile-card__pill
+    V8  discovery:6px/24  like-profile:6px/24
+* .profile-card__media
+    V8  discovery:20px/683  like-profile:20px/481
+    V9  discovery:14px/696  like-profile:14px/481
+= .profile-section
+    V8  discovery:0px/110 0px/90 0px/125  like-profile:0px/140 0px/90 0px/77
+* .btn--primary
+    V8  like-profile:12px/54
+    V9  like-profile:10px/54
+* .btn--secondary
+    V8  like-profile:12px/54
+    V9  like-profile:10px/54
+= .badge
+    V8  likes:6px/24  activity:6px/24
+= .person-tile__badge .badge
+    V8  likes:6px/24
+* .conversation__unread
+    V8  chats:999px/20
+    V9  chats:6px/20
+= .conversation__move
+    V8  chats:6px/24
+* .search
+    V8  chats:12px/48
+    V9  chats:10px/48
+* .avatar__image
+    V8  chats:50%/64  chat:50%/36  match:16px/64  activity:50%/24
+    V9  chats:12px/64  chat:8px/36  match:12px/64  activity:6px/24
+* .match-queue__image
+    V8  chats:12px/96
+    V9  chats:10px/96
+* .composer__field
+    V8  chat:12px/44  match:12px/44
+    V9  chat:10px/44  match:10px/44
+* .composer__send
+    V8  chat:12px/44  match:12px/44
+    V9  chat:10px/44  match:10px/44
+* .message__bubble
+    V8  chat:16px/64
+    V9  chat:12px/64
+* .btn--quiet
+    V8  match:12px/48
+    V9  match:10px/48
+* .match__shared-chip
+    V8  match:10px/36
+    V9  match:8px/36
+* .segmented__item
+    V8  activity:10px/36
+    V9  activity:8px/36
+= .activity-card__category
+    V8  activity:6px/27
+* .activity-card
+    V8  activity:16px/397 16px/422 16px/421
+    V9  activity:12px/397 12px/422 12px/421
