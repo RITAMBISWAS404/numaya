@@ -261,6 +261,47 @@ try {
   const shared = await p.evaluate(() => getComputedStyle(document.querySelector(".shared-interests__pill")).backgroundColor);
   check("chips: on a white card, chips sit on the fill", shared === "rgb(234, 233, 230)", shared);
 
+  // 6c. Final polish: nested geometry, focus, targets and equivalent roles.
+  await open(p, "flows.html?screen=edit&theme=withings");
+  const nest = await p.evaluate(() => { const t = getComputedStyle(document.querySelector(".segmented")); const i = getComputedStyle(document.querySelector(".segmented__item.is-selected")); return [parseFloat(t.borderTopLeftRadius), parseFloat(t.paddingTop), parseFloat(i.borderTopLeftRadius)]; });
+  check("segmented: the selected segment nests in the track (its corner = the track's minus the inset), not a pill", nest[2] === nest[0] - nest[1], nest.join(" / "));
+  await open(p, "flows.html?screen=photos&theme=withings");
+  await p.mouse.click(1, 1);
+  let onSlot = false;
+  for (let i = 0; i < 30 && !onSlot; i++) { await p.keyboard.press("Tab"); onSlot = await p.evaluate(() => document.activeElement?.matches(".photo-slot--empty")); }
+  const slotRing = await p.evaluate(() => { const c = getComputedStyle(document.activeElement); return [c.outlineStyle, c.outlineColor, c.outlineWidth]; });
+  check("focus: an empty photo slot shows the solid blue focus ring (its dashed edge no longer replaces it)", onSlot && slotRing[0] === "solid" && slotRing[1] === BLUE, slotRing.join(" / "));
+  await open(p, "flows.html?screen=settings&theme=withings");
+  const hit = await p.evaluate(() => { const s = document.querySelector(".switch"); const r = s.getBoundingClientRect(); return [document.elementFromPoint(r.left + r.width / 2, r.top - 6) === s, document.elementFromPoint(r.left + r.width / 2, r.bottom + 6) === s]; });
+  check("targets: a switch answers taps within the 44px touch area around its 31px track", hit[0] && hit[1], hit.join(" / "));
+  await open(p, "flows.html?screen=chats&theme=withings");
+  const search = await p.evaluate(() => [Math.round(document.querySelector(".search__input").getBoundingClientRect().height), Math.round(document.querySelector(".search").getBoundingClientRect().height)]);
+  check("targets: the search input fills its field, so a tap anywhere in it focuses the input", search[0] === search[1], search.join(" / "));
+  const roles = {};
+  for (const s of ["profile", "discovery", "interests", "likes", "chats"]) {
+    await open(p, `flows.html?screen=${s}&theme=withings`);
+    Object.assign(roles, await p.evaluate((s) => {
+      const o = {}; const cs = (sel) => { const e = document.querySelector(sel); return e && getComputedStyle(e); };
+      const pl = cs(".prompt__label"), pt = cs(".profile-section--prompt .profile-section__title");
+      if (pl) o.prompt_mine = [pl.fontSize, pl.fontWeight, pl.color].join(" ");
+      if (pt) o.prompt_theirs = [pt.fontSize, pt.fontWeight, pt.color].join(" ");
+      for (const c of document.querySelectorAll(".chip")) { const st = getComputedStyle(c); (o["chip_" + s] ||= new Set()).add(st.fontSize); }
+      if (o["chip_" + s]) o["chip_" + s] = [...o["chip_" + s]].join(",");
+      const n1 = cs(".conversation__name"), n2 = cs(".person-tile__name");
+      if (n1) o.name_inbox = n1.fontWeight; if (n2) o.name_tile = n2.fontWeight;
+      return o;
+    }, s));
+  }
+  check("roles: the prompt question looks the same on your profile and on someone else's", roles.prompt_mine && roles.prompt_mine === roles.prompt_theirs, `${roles.prompt_mine} | ${roles.prompt_theirs}`);
+  const chipSizes = new Set(Object.entries(roles).filter(([k]) => k.startsWith("chip_")).flatMap(([, v]) => v.split(",")));
+  check("roles: every chip uses one text size", chipSizes.size === 1, [...chipSizes].join(", "));
+  check("roles: person names use one weight in the inbox and on Likes tiles", roles.name_inbox && roles.name_inbox === roles.name_tile, `${roles.name_inbox} / ${roles.name_tile}`);
+  const wide = await phone(430, 932);
+  await open(wide, "flows.html?screen=likes&theme=withings");
+  const tiles = await wide.evaluate(() => [...document.querySelectorAll(".person-tile__photo")].slice(0, 4).map((e) => Math.round(e.getBoundingClientRect().height)));
+  check("layout: Likes photos in a row are the same size whatever their captions do (430px)", tiles[0] === tiles[1] && tiles[2] === tiles[3], tiles.join(" / "));
+  await wide.context().close();
+
   // 7. No V11 purple anywhere on a V16 screen, and text contrast.
   const purple = [];
   const low = [];

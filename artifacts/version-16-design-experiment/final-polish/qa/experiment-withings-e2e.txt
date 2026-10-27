@@ -1,0 +1,59 @@
+node tests/e2e/experiment-withings.mjs (final polish code)
+
+✓ scoping: without ?theme=withings no screen carries V16
+✓ scoping: with ?theme=withings all 15 V11 screens carry .theme-tiimo.theme-withings
+✓ scoping: screens outside the experiment keep the approved design even with the flag
+✓ isolation: ?theme=tiimo (V11) does not carry V16
+✓ palette: the page is warm stone #F5F4F1 (rgb(245, 244, 241))
+✓ surfaces: grouped rows are a white card, no border or shadow, 14px corner
+✓ type: the modal header title is tracked bold capitals
+✓ surfaces: the modal header is a white bar with a hairline
+✓ type: group headings are 22px medium ink
+✓ type: text is set in Hanken Grotesk
+✓ controls: a switch that is on is green, 51 × 31, with a round thumb
+✓ behaviour: a switch still toggles
+✓ behaviour: the keyboard still moves a slider (27 → 28)
+✓ fields: white, a 1px #6D6C6A outline, 8px corner, 54px tall
+✓ fields: labels are bold capitals
+✓ selection: legends share the field-label capitals
+✓ selection: a selected radio is an ink ring around an ink dot
+✓ selection: a checked box is Withings blue
+✓ selection: choice rows sit in one white card, no ring on the selected row
+✓ buttons: the step button is an ink circle
+✓ buttons: primary is ink with white text, 12px corner, 50px tall
+✓ buttons: secondary is white with a 1px ink outline
+✓ discover: the SuperSwipe is a 56px Withings-blue circle
+✓ discover: profile sections are white cards on the page
+✓ sheets: a white panel, a hairline under the header, a medium title
+✓ tabs: the selected view tab is a blue-tint pill with blue text
+✓ tabs: unselected view tabs are plain text
+✓ navigation: the active tab is ink, the others grey, dots red
+✓ type: tab-root page titles are 30px bold
+✓ navigation: moving to another tab keeps ?theme=withings
+✓ segmented: a grey track with a white selected segment
+✓ messages: yours Withings blue, theirs white
+✓ avatars: circles
+✓ headers: tab-root icon buttons are white circles, as on the reference's Home
+✓ messages: new-match portraits are circles with the name below (72 / 72 / 50%)
+✓ empty states: a white card with the card corner
+✓ action sheets: Cancel is a separate white block, no outline, the card corner
+✓ sheets: the dismiss is a bare icon, not a filled circle
+✓ fields: an invalid field keeps the 2px red outline
+✓ chips: on a white card, chips sit on the fill
+✓ segmented: the selected segment nests in the track (10 / 2 / 8)                    [new in final polish]
+✓ focus: an empty photo slot shows the solid blue focus ring (solid / blue / 2px)      [new in final polish]
+✓ targets: a switch answers taps within the 44px touch area (true / true)             [new in final polish]
+✓ targets: the search input fills its field (46 / 46)                                  [new in final polish]
+✓ roles: the prompt question looks the same on your profile and on someone else's     [new in final polish]
+✓ roles: every chip uses one text size (15px)                                          [new in final polish]
+✓ roles: person names use one weight in the inbox and on Likes tiles (600 / 600)       [new in final polish]
+✓ layout: Likes photos in a row are the same size (430px) (257 / 257 / 257 / 257)      [new in final polish]
+✓ palette: no V11 purple (#7262C7) on any V16 screen
+✓ a11y: readable text meets 4.5:1 on its background on the 14 flow screens
+✓ responsive 393: no horizontal overflow on the 15 V16 screens
+✓ console 393: no errors on the 15 V16 screens
+✓ responsive 375: no horizontal overflow on the 15 V16 screens
+✓ console 375: no errors on the 15 V16 screens
+✓ console: no errors during the scoping and interaction checks
+
+55/55 V16 checks passed.

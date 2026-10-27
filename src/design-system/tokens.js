@@ -3477,6 +3477,465 @@ export const tokens = [
     "value": "{primitive.dimension.56}",
     "resolved": "56px",
     "description": "Single-line rows in a grouped card (measured 56pt)."
+  },
+  {
+    "id": "component.withings.button-height-sm",
+    "name": "--withings-button-height-sm",
+    "layer": "component",
+    "type": "dimension",
+    "value": "36px",
+    "resolved": "36px",
+    "description": "Small outlined pills ('Add a Reminder'), visible height inside the 44px target."
+  },
+  {
+    "id": "component.withings.segment-radius",
+    "name": "--withings-segment-radius",
+    "layer": "component",
+    "type": "dimension",
+    "value": "10px",
+    "resolved": "10px",
+    "description": "Segmented-control track corner (Programs / Library)."
+  },
+  {
+    "id": "component.withings.segment-inset",
+    "name": "--withings-segment-inset",
+    "layer": "component",
+    "type": "dimension",
+    "value": "2px",
+    "resolved": "2px",
+    "description": "Gap between the segmented track and its segments; a segment's corner is the track's minus this."
+  },
+  {
+    "id": "component.withings.segment-height",
+    "name": "--withings-segment-height",
+    "layer": "component",
+    "type": "dimension",
+    "value": "32px",
+    "resolved": "32px",
+    "description": "Segment height (track = this + 2 × inset)."
+  },
+  {
+    "id": "component.withings.search-height",
+    "name": "--withings-search-height",
+    "layer": "component",
+    "type": "dimension",
+    "value": "46px",
+    "resolved": "46px",
+    "description": "Search field height."
+  },
+  {
+    "id": "component.withings.composer-radius",
+    "name": "--withings-composer-radius",
+    "layer": "component",
+    "type": "dimension",
+    "value": "22px",
+    "resolved": "22px",
+    "description": "Composer field corner: half its 44px height, a pill beside the round send button."
+  },
+  {
+    "id": "component.withings.action-size",
+    "name": "--withings-action-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "56px",
+    "resolved": "56px",
+    "description": "Discover action circles and the step button."
+  },
+  {
+    "id": "component.withings.portrait-size",
+    "name": "--withings-portrait-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "72px",
+    "resolved": "72px",
+    "description": "New-match portraits (round)."
+  },
+  {
+    "id": "component.withings.mark-size",
+    "name": "--withings-mark-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "28px",
+    "resolved": "28px",
+    "description": "Round pastel holder behind an interest-set emoji."
+  },
+  {
+    "id": "component.withings.prompt-mark-size",
+    "name": "--withings-prompt-mark-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "24px",
+    "resolved": "24px",
+    "description": "Round tint holder behind the prompt mark."
+  },
+  {
+    "id": "component.withings.choice-size",
+    "name": "--withings-choice-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "22px",
+    "resolved": "22px",
+    "description": "Radio and checkbox size."
+  },
+  {
+    "id": "component.withings.thumb-switch",
+    "name": "--withings-thumb-switch",
+    "layer": "component",
+    "type": "dimension",
+    "value": "27px",
+    "resolved": "27px",
+    "description": "Switch thumb (iOS proportions in a 51 × 31 track)."
+  },
+  {
+    "id": "component.withings.thumb-slider",
+    "name": "--withings-thumb-slider",
+    "layer": "component",
+    "type": "dimension",
+    "value": "26px",
+    "resolved": "26px",
+    "description": "Slider thumb."
+  },
+  {
+    "id": "component.withings.type.hero-size",
+    "name": "--withings-type-hero-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "32px",
+    "resolved": "32px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.hero-line",
+    "name": "--withings-type-hero-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "38px",
+    "resolved": "38px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.page-size",
+    "name": "--withings-type-page-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "30px",
+    "resolved": "30px",
+    "description": "Tab-root page titles"
+  },
+  {
+    "id": "component.withings.type.page-line",
+    "name": "--withings-type-page-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "36px",
+    "resolved": "36px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.headline-size",
+    "name": "--withings-type-headline-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "24px",
+    "resolved": "24px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.headline-line",
+    "name": "--withings-type-headline-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "30px",
+    "resolved": "30px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.flow-size",
+    "name": "--withings-type-flow-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "26px",
+    "resolved": "26px",
+    "description": "Onboarding flow headings"
+  },
+  {
+    "id": "component.withings.type.flow-line",
+    "name": "--withings-type-flow-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "32px",
+    "resolved": "32px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.section-size",
+    "name": "--withings-type-section-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "22px",
+    "resolved": "22px",
+    "description": "Section and group headings, profile prompt answers"
+  },
+  {
+    "id": "component.withings.type.section-line",
+    "name": "--withings-type-section-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "28px",
+    "resolved": "28px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.sheet-size",
+    "name": "--withings-type-sheet-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "20px",
+    "resolved": "20px",
+    "description": "Sheet titles"
+  },
+  {
+    "id": "component.withings.type.sheet-line",
+    "name": "--withings-type-sheet-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "26px",
+    "resolved": "26px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.empty-size",
+    "name": "--withings-type-empty-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "18px",
+    "resolved": "18px",
+    "description": "Empty-state card titles"
+  },
+  {
+    "id": "component.withings.type.empty-line",
+    "name": "--withings-type-empty-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "24px",
+    "resolved": "24px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.row-size",
+    "name": "--withings-type-row-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "16px",
+    "resolved": "16px",
+    "description": "Row labels, inputs"
+  },
+  {
+    "id": "component.withings.type.row-line",
+    "name": "--withings-type-row-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "22px",
+    "resolved": "22px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.card-size",
+    "name": "--withings-type-card-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "15px",
+    "resolved": "15px",
+    "description": "Card titles, chips"
+  },
+  {
+    "id": "component.withings.type.card-line",
+    "name": "--withings-type-card-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "20px",
+    "resolved": "20px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.body-size",
+    "name": "--withings-type-body-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "15.5px",
+    "resolved": "15.5px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.body-line",
+    "name": "--withings-type-body-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "22px",
+    "resolved": "22px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.body-sm-size",
+    "name": "--withings-type-body-sm-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "15px",
+    "resolved": "15px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.body-sm-line",
+    "name": "--withings-type-body-sm-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "21px",
+    "resolved": "21px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.button-sm-size",
+    "name": "--withings-type-button-sm-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "14px",
+    "resolved": "14px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.label-size",
+    "name": "--withings-type-label-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "14px",
+    "resolved": "14px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.label-line",
+    "name": "--withings-type-label-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "18px",
+    "resolved": "18px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.caption-size",
+    "name": "--withings-type-caption-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "13.5px",
+    "resolved": "13.5px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.caption-line",
+    "name": "--withings-type-caption-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "18px",
+    "resolved": "18px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.micro-size",
+    "name": "--withings-type-micro-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "12.5px",
+    "resolved": "12.5px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.header-caps-size",
+    "name": "--withings-type-header-caps-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "12.5px",
+    "resolved": "12.5px",
+    "description": "Modal header capitals"
+  },
+  {
+    "id": "component.withings.type.header-caps-line",
+    "name": "--withings-type-header-caps-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "16px",
+    "resolved": "16px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.label-caps-size",
+    "name": "--withings-type-label-caps-size",
+    "layer": "component",
+    "type": "dimension",
+    "value": "11.5px",
+    "resolved": "11.5px",
+    "description": "Field and legend capitals"
+  },
+  {
+    "id": "component.withings.type.label-caps-line",
+    "name": "--withings-type-label-caps-line",
+    "layer": "component",
+    "type": "dimension",
+    "value": "14px",
+    "resolved": "14px",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.match-max",
+    "name": "--withings-type-match-max",
+    "layer": "component",
+    "type": "dimension",
+    "value": "36px",
+    "resolved": "36px",
+    "description": "Upper bound of the match title clamp (the lower bound is hero-size)."
+  },
+  {
+    "id": "component.withings.type.tracking-title",
+    "name": "--withings-type-tracking-title",
+    "layer": "component",
+    "type": "dimension",
+    "value": "-0.02em",
+    "resolved": "-0.02em",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.tracking-flow",
+    "name": "--withings-type-tracking-flow",
+    "layer": "component",
+    "type": "dimension",
+    "value": "-0.015em",
+    "resolved": "-0.015em",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.tracking-heading",
+    "name": "--withings-type-tracking-heading",
+    "layer": "component",
+    "type": "dimension",
+    "value": "-0.01em",
+    "resolved": "-0.01em",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.tracking-header-caps",
+    "name": "--withings-type-tracking-header-caps",
+    "layer": "component",
+    "type": "dimension",
+    "value": "0.16em",
+    "resolved": "0.16em",
+    "description": null
+  },
+  {
+    "id": "component.withings.type.tracking-label-caps",
+    "name": "--withings-type-tracking-label-caps",
+    "layer": "component",
+    "type": "dimension",
+    "value": "0.06em",
+    "resolved": "0.06em",
+    "description": null
   }
 ];
 

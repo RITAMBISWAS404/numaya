@@ -4,6 +4,16 @@ Implemented in `src/design-system/styles/theme-withings.css` (components) and `s
 screens). Each rule maps an existing Numaya component to the closest reference pattern. No component, markup or
 behaviour was added or removed. **Checked** means asserted by `tests/e2e/experiment-withings.mjs`.
 
+**Final polish** (`final-polish/ISSUE_TRACKER.md`) refined these rules:
+- **Segmented control:** a segment's corner is the track's minus the inset (8 in 10), no longer a pill.
+- **Prompt question:** one card-title role (15 / 20 medium ink) on every profile.
+- **Chips:** one text size (15).
+- **Person names:** one weight (600).
+- **Likes tiles:** fill their column.
+- **Switch:** a 44px hit area.
+- **Search:** the input fills the field.
+- **Empty photo slot:** keeps a visible keyboard focus ring.
+
 | Numaya component | V11 | V16 rule | Reference | Checked |
 |---|---|---|---|---|
 | Page (`.fl-screen`) | White | Stone `#F5F4F1` | all | ✓ |

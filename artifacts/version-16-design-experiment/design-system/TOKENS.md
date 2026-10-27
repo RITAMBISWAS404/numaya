@@ -1,7 +1,8 @@
 # V16 tokens
 
-Source: `tokens/numaya.tokens.json`, compiled by `npm run tokens` into `src/design-system/tokens.{css,js}` (386 tokens;
-V16 adds 61). Generated files are never edited. Components only read the semantic and component tokens. Inside
+Source: `tokens/numaya.tokens.json`, compiled by `npm run tokens` into `src/design-system/tokens.{css,js}` (437 tokens;
+V16 adds 112, of which 51 came with the final polish: every type role and component size the stylesheet uses; see
+`final-polish/PASS_1_DESIGN_SYSTEM.md`). Generated files are never edited. Components only read the semantic and component tokens. Inside
 `.theme-tiimo.theme-withings` the shared roles (`--color-surface`, `--font-text`, `--type-*`, …) are re-pointed at
 these, so every existing component picks them up.
 

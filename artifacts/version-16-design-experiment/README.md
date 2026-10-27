@@ -49,6 +49,7 @@ Withings Health Mate iOS screens on Mobbin:
 | [SCREEN_REVIEW.md](SCREEN_REVIEW.md) | Three review passes: problems found and corrections |
 | [FINAL_FIDELITY_AUDIT.md](FINAL_FIDELITY_AUDIT.md) | Final audit: reference revisited, category-by-category traceability matrix, fixes |
 | [ACCEPTANCE_REVIEW.md](ACCEPTANCE_REVIEW.md) | Final 1–10 scores with evidence, remaining discrepancies |
+| [final-polish/](final-polish/FINAL_ACCEPTANCE.md) | Final design QA: inventory, seven passes, issue tracker, acceptance, screenshots and QA logs |
 
 ## Screenshots
 

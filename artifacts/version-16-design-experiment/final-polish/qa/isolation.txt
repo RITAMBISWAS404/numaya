@@ -1,0 +1,19 @@
+Isolation and regression comparisons, final polish code (uncommitted on top of 6f81133), 2026-10-27,
+Chromium headless shell 1243 via Playwright 1.56.1. Pixel diffs of gallery captures (scripts/gallery.mjs, 2x).
+
+Default mode (no ?theme), 162 states vs the untouched V11 commit 59e06e8 rendered in the same browser:
+162 identical, 0 different
+
+V11 (?theme=tiimo), 49 states vs captures taken before any V16 CSS existed:
+49 identical, 0 different
+
+Consolidated stylesheet (pass 1, refactor only) vs pre-polish V16 (6f81133), 54 states:
+54 identical, 0 different
+
+Polished V16 vs pre-polish V16, 54 states:
+32 identical, 22 different. Every changed state is accounted for by a tracked fix (ISSUE_TRACKER.md):
+020 021 022 030 031 032 059 099 100 106 107 146 158 (chip text size, prompt question role),
+061 062 064 102 103 104 153 (segmented control), 034 147 (search input, name weight, prompt role where shown).
+
+New V16 e2e checks run against the pre-polish code (6f81133) in a temporary worktree:
+47/55 passed; exactly the 8 checks added in this task failed, so they detect the defects they guard.

@@ -1,0 +1,29 @@
+Final polish: automated audit results (session tooling run against the rendered app, 393 × 852 unless noted).
+
+== Style inventory: what changed (computed height, radius, font size, weight; 47 component classes, 14 screens + sheets)
+Before (6f81133)                                           After (final polish)
+.chip [chip--static]   h36 r12px fs14px fw500              h36 r12px fs15px fw500     one chip text size
+.conversation__name    h23 fs15.5px fw700                  h23 fs15.5px fw600         one name weight
+.prompt__label         h24 fs14px fw600 (grey)             h24 fs15px fw500 (ink)     = .profile-section__title
+.segmented__item       h32 r999px (pill in a r10 track)    h32 r8px (10 − 2 inset)    nested corner
+All other 43 classes: unchanged. Equivalent roles now share one value line each, except the documented variants
+(full buttons r12 vs small pills r999; view tabs r999 vs category chips r12; badges 26px vs counts 20px).
+
+== Geometry audit (surface children hugging their container, 22 states incl. open sheets and menus)
+Before: segmented (r10) > segmented__item (r16) inset 2 [pill in non-pill]  on edit, edit:preview, activity, activity:filters
+        + false positives (the page as container; a switch inside a transparent row)
+After:  0 real conflicts. Remaining hits: the same false positives only.
+
+== Focus and target audit (tab through 14 flow screens; hit areas incl. the shared 44px ::before)
+Before: photo-slot--empty focused with no visible indicator (photos, edit)            -> fixed (FP-02)
+        switch 51×31 hit area (settings)                                                -> fixed (FP-08)
+        search__input 299×25 inside a 46px field (chats)                                -> fixed (FP-10)
+After:  no target under 44pt. "No indicator" entries remaining are controls whose ring is drawn on a wrapper
+        (.input, .search, .composer__field, slider thumb); each confirmed visible in a 2× capture
+        (screenshots/comparisons/keyboard-focus.png).
+
+== Layout audit (Welcome + 14 flow screens at 360×740, 375×667, 393×852, 430×932; desktop gallery 1440×900)
+Page overflow 0 / off-screen elements 0 / tab bar over content 0 / console errors 0 at every width.
+Clipped text: only .visually-hidden screen-reader labels (intended).
+Visual inspection at 430 found one defect the audit cannot see: Likes tiles of different sizes in a row
+(257 vs 243px photos) -> fixed (FP-07), now 257 / 257.
