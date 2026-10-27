@@ -4335,6 +4335,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Photo replaced (placeholder: upload isn’t connected)'**
   String get photoReplaced;
+
+  /// No description provided for @settingsApp.
+  ///
+  /// In en, this message translates to:
+  /// **'App'**
+  String get settingsApp;
+
+  /// No description provided for @settingsVibration.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibration'**
+  String get settingsVibration;
+
+  /// No description provided for @settingsVibrationNote.
+  ///
+  /// In en, this message translates to:
+  /// **'A short tap when you choose an option, like, match or send. Your phone’s own vibration setting still applies.'**
+  String get settingsVibrationNote;
+
+  /// No description provided for @demoReduceMotion.
+  ///
+  /// In en, this message translates to:
+  /// **'Reduce motion'**
+  String get demoReduceMotion;
+
+  /// No description provided for @demoReduceMotionNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Acts as if the phone’s Remove animations setting were on'**
+  String get demoReduceMotionNote;
 }
 
 class _AppLocalizationsDelegate

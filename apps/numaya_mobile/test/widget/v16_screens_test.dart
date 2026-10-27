@@ -10,6 +10,7 @@ Finder get _fab => find.byType(NumayaFab);
 Future<void> _tap(WidgetTester tester, Finder f) async {
   await tester.ensureVisible(f.first);
   await tester.tap(f.first);
+  await tester.pump();
   await tester.pump(const Duration(milliseconds: 500));
 }
 
@@ -33,6 +34,7 @@ Future<void> _toInterests(WidgetTester tester, DemoAuthRepository auth) async {
   await _tap(tester, find.text('Woman'));
   await _tap(tester, find.text('Something casual'));
   await tester.tap(_fab);
+  await tester.pump();
   await tester.pump(const Duration(milliseconds: 600));
 }
 
@@ -51,6 +53,7 @@ Future<void> _toHome(WidgetTester tester) async {
   await _tap(tester, find.text('Save prompt'));
   await tester.pump(const Duration(milliseconds: 600));
   await tester.tap(_fab);
+  await tester.pump();
   await tester.pump(const Duration(milliseconds: 600));
   await _tap(tester, find.bySemanticsLabel('Add a photo'));
   await _tap(tester, find.bySemanticsLabel('Add a photo'));

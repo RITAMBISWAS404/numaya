@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../foundations/app_colors.dart';
+import '../foundations/app_haptics.dart';
 import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../icons/numaya_icon_data.g.dart';
@@ -147,6 +148,7 @@ class Pressable extends StatefulWidget {
     this.toggled,
     this.excludeChildSemantics = false,
     this.minSize = AppSizes.touchMin,
+    this.haptic,
   });
 
   final Widget child;
@@ -163,6 +165,10 @@ class Pressable extends StatefulWidget {
   /// Minimum hit area (44 by default, as the web's `--size-touch-min`).
   final double minSize;
 
+  /// The haptic a tap commits, if any. Plain presses are silent; selection controls pass
+  /// [HapticMoment.selection].
+  final HapticMoment? haptic;
+
   @override
   State<Pressable> createState() => _PressableState();
 }
@@ -172,6 +178,12 @@ class _PressableState extends State<Pressable> {
   bool _focused = false;
 
   bool get _enabled => widget.onTap != null;
+
+  void _activate() {
+    final haptic = widget.haptic;
+    if (haptic != null) AppHaptics.fire(context, haptic);
+    widget.onTap?.call();
+  }
 
   void _setPressed(bool value) {
     if (_pressed != value && mounted) setState(() => _pressed = value);
@@ -212,7 +224,7 @@ class _PressableState extends State<Pressable> {
         actions: {
           ActivateIntent: CallbackAction<ActivateIntent>(
             onInvoke: (_) {
-              widget.onTap?.call();
+              _activate();
               return null;
             },
           ),
@@ -226,7 +238,7 @@ class _PressableState extends State<Pressable> {
           onTapDown: _enabled ? (_) => _setPressed(true) : null,
           onTapUp: _enabled ? (_) => _setPressed(false) : null,
           onTapCancel: _enabled ? () => _setPressed(false) : null,
-          onTap: widget.onTap,
+          onTap: _enabled ? _activate : null,
           child: ConstrainedBox(
             constraints: BoxConstraints(
               minWidth: widget.minSize,

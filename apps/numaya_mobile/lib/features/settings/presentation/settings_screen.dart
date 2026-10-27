@@ -283,6 +283,21 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.sectionGap),
           ListGroup(
+            title: l10n.settingsApp,
+            footnote: l10n.settingsVibrationNote,
+            children: [
+              ListRow(
+                label: l10n.settingsVibration,
+                detail: prefs.haptics
+                    ? l10n.settingsSwitchOn
+                    : l10n.settingsSwitchOff,
+                switchValue: prefs.haptics,
+                onSwitch: prefsController.setHaptics,
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sectionGap),
+          ListGroup(
             title: l10n.settingsPrivacy,
             children: [
               ListRow(

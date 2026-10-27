@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 
@@ -88,7 +90,6 @@ class _ToastViewState extends State<_ToastView> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    if (widget.busy) _dots.repeat();
     widget.handle._animateOut = () async {
       if (!mounted) return widget.handle._remove();
       await _in.animateBack(
@@ -98,6 +99,18 @@ class _ToastViewState extends State<_ToastView> with TickerProviderStateMixin {
       );
       widget.handle._remove();
     };
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // The busy dots loop only while the toast is up, and not at all under reduced motion.
+    final loop = widget.busy && !AppMotion.reduced(context);
+    if (loop && !_dots.isAnimating) {
+      unawaited(_dots.repeat());
+    } else if (!loop && _dots.isAnimating) {
+      _dots.stop();
+    }
   }
 
   @override

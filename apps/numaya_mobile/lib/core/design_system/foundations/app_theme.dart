@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'app_colors.dart';
 import 'app_layout.dart';
+import 'app_transitions.dart';
 import 'app_typography.dart';
 
 /// Material theme built from the V16 roles. Numaya widgets style themselves from the foundations;
@@ -71,7 +72,9 @@ abstract final class AppTheme {
       ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          // Android: V16's push on the motion tokens (system back handles going back).
+          TargetPlatform.android: NumayaPageTransitionsBuilder(),
+          // iOS keeps the native edge swipe back.
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
         },
       ),

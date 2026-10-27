@@ -1317,5 +1317,10 @@
   "photoMoveLater": "Move later",
   "photoReplace": "Replace with a new placeholder",
   "photoMoved": "Photo order updated",
-  "photoReplaced": "Photo replaced (placeholder: upload isn’t connected)"
+  "photoReplaced": "Photo replaced (placeholder: upload isn’t connected)",
+  "settingsApp": "App",
+  "settingsVibration": "Vibration",
+  "settingsVibrationNote": "A short tap when you choose an option, like, match or send. Your phone’s own vibration setting still applies.",
+  "demoReduceMotion": "Reduce motion",
+  "demoReduceMotionNote": "Acts as if the phone’s Remove animations setting were on"
 }

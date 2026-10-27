@@ -25,6 +25,7 @@ void main() {
     await tapOn(tester, find.text('Save prompt'));
     await tester.pump(const Duration(milliseconds: 600));
     await tester.tap(fab);
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
     for (var i = 0; i < 3; i++) {
       await tapOn(tester, find.bySemanticsLabel('Add a photo'));

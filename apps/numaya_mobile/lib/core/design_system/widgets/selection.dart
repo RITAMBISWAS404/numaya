@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../foundations/app_colors.dart';
+import '../foundations/app_haptics.dart';
 import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
@@ -44,11 +45,11 @@ class _CodeInputState extends State<CodeInput> with TickerProviderStateMixin {
   FocusNode get _focus => widget.focusNode ?? (_ownFocus ??= FocusNode());
   late final AnimationController _shake = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 440),
+    duration: AppMotion.reject,
   );
   late final AnimationController _caret = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 1050),
+    duration: AppMotion.caretBlink,
   );
 
   @override
@@ -62,9 +63,10 @@ class _CodeInputState extends State<CodeInput> with TickerProviderStateMixin {
   void didUpdateWidget(CodeInput old) {
     super.didUpdateWidget(old);
     if (old.state != CodeInputState.error &&
-        widget.state == CodeInputState.error &&
-        !AppMotion.reduced(context)) {
-      _shake.forward(from: 0);
+        widget.state == CodeInputState.error) {
+      // The haptic survives reduced motion; the shake doesn't.
+      AppHaptics.fire(context, HapticMoment.reject);
+      if (!AppMotion.reduced(context)) _shake.forward(from: 0);
     }
   }
 
@@ -92,12 +94,14 @@ class _CodeInputState extends State<CodeInput> with TickerProviderStateMixin {
     final locked =
         widget.state == CodeInputState.checking ||
         widget.state == CodeInputState.success;
-    // Blink only while a cell shows the caret, so an idle screen schedules no frames.
+    // Blink only while a cell shows the caret, so an idle screen schedules no frames. Under
+    // reduced motion the caret stays on.
     final caretVisible =
         _focus.hasFocus && !locked && text.length < widget.length;
-    if (caretVisible && !_caret.isAnimating) {
+    final blink = caretVisible && !AppMotion.reduced(context);
+    if (blink && !_caret.isAnimating) {
       _caret.repeat();
-    } else if (!caretVisible && _caret.isAnimating) {
+    } else if (!blink && _caret.isAnimating) {
       _caret.stop();
     }
     final cells = <Widget>[];
@@ -304,6 +308,7 @@ class NumayaChip extends StatelessWidget {
         : AppColors.ink;
     return Pressable(
       onTap: unavailable ? null : onTap,
+      haptic: HapticMoment.selection,
       semanticLabel: label,
       selected: selected,
       excludeChildSemantics: true,
@@ -444,6 +449,7 @@ class OptionCard extends StatelessWidget {
       checked: selected,
       child: Pressable(
         onTap: enabled ? onTap : null,
+        haptic: HapticMoment.selection,
         semanticLabel: description == null ? label : '$label. $description',
         excludeChildSemantics: true,
         pressedScale: 1,

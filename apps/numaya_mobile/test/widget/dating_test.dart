@@ -49,13 +49,16 @@ void main() {
     await usePhoneSize(tester);
     await signUpToHome(tester, testAuth());
     await tester.drag(find.text('Maya, 29'), const Offset(-200, 0));
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.text('Sam, 31'), findsOneWidget);
     await tester.drag(find.text('Sam, 31'), const Offset(200, 0));
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.text('You liked Sam'), findsOneWidget);
     // A short drag springs back without deciding.
     await tester.drag(find.text('Noor, 28'), const Offset(40, 0));
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.text('Noor, 28'), findsOneWidget);
     await settle(tester);

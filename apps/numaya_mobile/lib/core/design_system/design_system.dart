@@ -3,9 +3,11 @@
 library;
 
 export 'foundations/app_colors.dart';
+export 'foundations/app_haptics.dart';
 export 'foundations/app_layout.dart';
 export 'foundations/app_motion.dart';
 export 'foundations/app_theme.dart';
+export 'foundations/app_transitions.dart';
 export 'foundations/app_typography.dart';
 export 'icons/numaya_icon_data.g.dart';
 export 'widgets/buttons.dart';

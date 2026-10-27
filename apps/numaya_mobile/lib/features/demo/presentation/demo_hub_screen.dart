@@ -10,6 +10,7 @@ import '../../dating/application/dating_controller.dart';
 import '../../home/presentation/filters_sheet.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../verification/application/verification_controller.dart';
+import '../application/demo_motion.dart';
 
 /// DEVELOPMENT ONLY. A catalogue of every screen, grouped by area, with the demo's data controls:
 /// quick start, the sample world, reset, premium, simulated errors and the next verification
@@ -128,6 +129,12 @@ class DemoHubScreen extends ConsumerWidget {
                 onSwitch: ref
                     .read(photoVerificationProvider.notifier)
                     .setApproveNext,
+              ),
+              ListRow(
+                label: l10n.demoReduceMotion,
+                detail: l10n.demoReduceMotionNote,
+                switchValue: ref.watch(demoReduceMotionProvider),
+                onSwitch: ref.read(demoReduceMotionProvider.notifier).set,
               ),
               ListRow(
                 label: l10n.demoResetVerification,

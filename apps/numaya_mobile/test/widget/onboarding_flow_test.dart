@@ -11,7 +11,8 @@ bool fabEnabled(WidgetTester tester) =>
 Future<void> tapText(WidgetTester tester, String text) async {
   await tester.ensureVisible(find.text(text).first);
   await tester.tap(find.text(text).first);
-  await tester.pump(const Duration(milliseconds: 400));
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 500));
 }
 
 void main() {
@@ -180,9 +181,11 @@ void main() {
       expect(find.text('Add your photos'), findsOneWidget);
       expect(fabEnabled(tester), isFalse);
       await tester.tap(find.bySemanticsLabel('Add a photo').first);
+      await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
       expect(fabEnabled(tester), isFalse);
       await tester.tap(find.bySemanticsLabel('Add a photo').first);
+      await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
       expect(find.text('Add 2 more for the best results'), findsOneWidget);
       expect(fabEnabled(tester), isTrue);

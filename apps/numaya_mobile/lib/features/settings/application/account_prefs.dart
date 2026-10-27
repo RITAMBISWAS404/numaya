@@ -26,6 +26,7 @@ class AccountPrefs {
     this.snoozeLength,
     this.snoozedAt,
     this.awayStatus,
+    this.haptics = true,
   });
 
   /// Channels turned off per category; everything is on by default except email (no email on
@@ -34,6 +35,9 @@ class AccountPrefs {
   final SnoozeLength? snoozeLength;
   final DateTime? snoozedAt;
   final String? awayStatus;
+
+  /// Whether the app vibrates on selections, decisions and successes (the one haptics gate).
+  final bool haptics;
 
   static const Set<NotificationChannel> defaults = {
     NotificationChannel.push,
@@ -63,6 +67,7 @@ class AccountPrefs {
     SnoozeLength? snoozeLength,
     DateTime? snoozedAt,
     String? awayStatus,
+    bool? haptics,
     bool clearSnooze = false,
     bool clearStatus = false,
   }) => AccountPrefs(
@@ -72,6 +77,7 @@ class AccountPrefs {
     awayStatus: clearSnooze || clearStatus
         ? null
         : (awayStatus ?? this.awayStatus),
+    haptics: haptics ?? this.haptics,
   );
 }
 
@@ -109,6 +115,8 @@ class AccountPrefsController extends Notifier<AccountPrefs> {
       : state.copyWith(awayStatus: status);
 
   void endSnooze() => state = state.copyWith(clearSnooze: true);
+
+  void setHaptics(bool on) => state = state.copyWith(haptics: on);
 }
 
 final accountPrefsProvider =

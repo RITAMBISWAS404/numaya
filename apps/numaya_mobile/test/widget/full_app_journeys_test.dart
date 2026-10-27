@@ -79,6 +79,8 @@ void main() {
       findsOneWidget,
     );
     await tapOn(tester, find.bySemanticsLabel('Like Maya'));
+    // The match rises in as a modal; at its first frame it is still transparent.
+    await tester.pump(const Duration(milliseconds: 100));
     expect(find.text('It’s a match!'), findsOneWidget);
     await tapOn(tester, find.text('Keep browsing'));
     await tester.pump(const Duration(milliseconds: 600));

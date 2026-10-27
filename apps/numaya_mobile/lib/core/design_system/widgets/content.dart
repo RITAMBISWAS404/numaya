@@ -551,7 +551,7 @@ class _BadgeIn extends StatelessWidget {
     if (AppMotion.reduced(context)) return child;
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
-      duration: const Duration(milliseconds: 560),
+      duration: AppMotion.celebrate,
       curve: AppMotion.easeOut,
       builder: (context, t, child) => Opacity(
         opacity: t,
@@ -753,6 +753,7 @@ Future<T?> showNumayaSheet<T>({
 }) {
   return showModalBottomSheet<T>(
     context: context,
+    sheetAnimationStyle: AppMotion.sheet(context),
     isScrollControlled: true,
     useSafeArea: true,
     // Sheets cover the tab bar, as on the web.

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../foundations/app_colors.dart';
+import '../foundations/app_haptics.dart';
 import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
@@ -261,6 +262,7 @@ class ListRow extends StatelessWidget {
     if (isSwitch) {
       return Pressable(
         onTap: onSwitch == null ? null : () => onSwitch!(!switchValue!),
+        haptic: HapticMoment.selection,
         semanticLabel: detail == null ? label : '$label. $detail',
         toggled: switchValue,
         excludeChildSemantics: true,

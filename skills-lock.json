@@ -1,11 +1,143 @@
 {
   "version": 1,
   "skills": {
+    "accessibility-as-code": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/accessibility-as-code/SKILL.md",
+      "computedHash": "f15b3db3f463d2b88d3216aba9e6a2114830040241aed55bef4648b70f6663be"
+    },
+    "adaptive-layout": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/adaptive-layout/SKILL.md",
+      "computedHash": "02e8012c58088076a66d32cdd58997f9cdb7a42b60e17e6769226f533141d10c"
+    },
+    "animate": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/animate/SKILL.md",
+      "computedHash": "7598d33e7f60dd5c24531eaaa897621cc3bdb48e8050324211627973bc59c4ce"
+    },
+    "animation-performance": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/animation-performance/SKILL.md",
+      "computedHash": "b68ba704106e27b1f83df0cb817e09ec947abb76825d86eabdee2954b6c1bb84"
+    },
+    "animation-vocabulary": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/animation-vocabulary/SKILL.md",
+      "computedHash": "0058036865ecbb864fd0c4132efcc62425355d6e99c7e6ef6a936742d62a5dea"
+    },
     "apple-design": {
       "source": "emilkowalski/skills",
       "sourceType": "github",
       "skillPath": "skills/apple-design/SKILL.md",
       "computedHash": "0190417d092a0df447b000154e39733ea6d97efad6d3bec8a6ce3845aeb88914"
+    },
+    "break-ui": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/break-ui/SKILL.md",
+      "computedHash": "60ada67662925f4df5e3c6ff41cac3ab241b66f8898100a5ffcd7ba7196cb868"
+    },
+    "dependency-hygiene": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/dependency-hygiene/SKILL.md",
+      "computedHash": "33fd752937b33a4f2558118c2099b92e19d6e5e790b5fb8e3d8992221979e9b7"
+    },
+    "design-system-structure": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/design-system-structure/SKILL.md",
+      "computedHash": "0ec90e0e1e0d2538131b18a0e2cdb0d735c4098d7e3d3195eb11a97e08ce57df"
+    },
+    "emil-design-eng": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/emil-design-eng/SKILL.md",
+      "computedHash": "51f2537e04d15911b41d78e2de24c36a0e26d41beae15e82a954fe5496a5eda9"
+    },
+    "find-animation-opportunities": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/find-animation-opportunities/SKILL.md",
+      "computedHash": "465d087c41768e4f14ed640dd049036009f613feb55baaa5831b68b33178f9d2"
+    },
+    "flutter-conventions-index": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/flutter-conventions-index/SKILL.md",
+      "computedHash": "2afbc6ab45afd9607a9817d9ec7f42e817d320907f1c5f1fd3aa57667a1a2462"
+    },
+    "flutter-performance": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/flutter-performance/SKILL.md",
+      "computedHash": "87eeb58ea986cb3dad6b50373df02978cafa6cada463ae11b5c2496a0b2a971a"
+    },
+    "forms-and-input": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/forms-and-input/SKILL.md",
+      "computedHash": "eadea3bd99531eaaaae06f40fec42b7ddec935822496d73425a706e9464e0c18"
+    },
+    "improve-animations": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/improve-animations/SKILL.md",
+      "computedHash": "524ea241e41d58bbdd8e288700fe24f5725e2a2f3ae7186ad7cebf9055058356"
+    },
+    "motion-and-haptics": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/motion-and-haptics/SKILL.md",
+      "computedHash": "5649e9d49b1f65678e4383569957b704197c0cac5ab6d0243dca9f140b2155c2"
+    },
+    "navigation-and-routing": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/navigation-and-routing/SKILL.md",
+      "computedHash": "4fc5b3950d407449b287fe29ebd4ad5d1bcac7cfc87c0f88bb174e62ce2202b0"
+    },
+    "review-animations": {
+      "source": "emilkowalski/skills",
+      "sourceType": "github",
+      "skillPath": "skills/review-animations/SKILL.md",
+      "computedHash": "b4e5f0f4fe3e2743c85bf7354108f48a0b9d502cb20ef5c4a9c195da91f93736"
+    },
+    "state-management-riverpod": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/state-management-riverpod/SKILL.md",
+      "computedHash": "9e48c2a8edecfe9f7075d22cbd141a123b723c84049336a55beb1f36f1162962"
+    },
+    "testing-strategy": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/testing-strategy/SKILL.md",
+      "computedHash": "8c5d0323d70bdc230fb4e34e0167a26f842bd93f2a0b7cbc30d839a986458c52"
+    },
+    "ui-states-and-feedback": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/ui-states-and-feedback/SKILL.md",
+      "computedHash": "8f6e22b7731805c1474de045bd615a5360d024df9bb1cd9316f015f9c14e041b"
+    },
+    "widget-composition": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/widget-composition/SKILL.md",
+      "computedHash": "097df65a85d4d9f2ba70d10de6b7b6f2cb146d08b81d02e221b1ce1f276bbd5d"
+    },
+    "widget-golden-and-a11y-testing": {
+      "source": "zakariaf/Flutter-Skills",
+      "sourceType": "github",
+      "skillPath": "skills/widget-golden-and-a11y-testing/SKILL.md",
+      "computedHash": "9d467f8883c828509ce85bcb29087270d6c7d6248df19098295c13b597002a40"
     }
   }
 }

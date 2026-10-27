@@ -77,6 +77,8 @@ void main() {
       expect(fabEnabled(tester), isTrue);
 
       await tester.tap(fab);
+
+      await tester.pump();
       await tester.pump(const Duration(milliseconds: 600));
       expect(find.text('What are you into?'), findsOneWidget);
       expect(find.textContaining('1/5'), findsWidgets);
@@ -90,9 +92,11 @@ void main() {
     await usePhoneSize(tester);
     await signUpToInterests(tester, testAuth());
     await tester.binding.handlePopRoute();
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.text('Let’s start with the basics'), findsOneWidget);
     await tester.tap(fab);
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
     await finishProfileToHome(tester);
 
@@ -104,6 +108,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.text('Demo · saved on this device, not sent'), findsOneWidget);
     await tester.binding.handlePopRoute();
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.text('Conversations'), findsOneWidget);
     await settle(tester);

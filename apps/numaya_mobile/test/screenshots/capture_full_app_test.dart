@@ -54,6 +54,7 @@ void main() {
 
     Future<void> closeSheet() async {
       await tester.tap(find.bySemanticsLabel('Close').last);
+      await tester.pump();
       await tester.pump(const Duration(milliseconds: 600));
     }
 
@@ -118,6 +119,8 @@ void main() {
     await shot('24-verify-capture');
     await tapOn(tester, find.text('Take demo selfie'));
     await tapOn(tester, find.text('Submit for review'));
+    // Stop the spinner on a legible phase of its arc.
+    await tester.pump(const Duration(milliseconds: 300));
     await shot('25-verify-pending');
     await tester.pump(const Duration(seconds: 3));
     await shot('26-verify-done');

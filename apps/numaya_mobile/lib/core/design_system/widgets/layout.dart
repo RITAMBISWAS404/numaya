@@ -270,9 +270,7 @@ class _Segment extends StatelessWidget {
             ? Container(color: AppColors.ink)
             : TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0, end: 1),
-                duration: AppMotion.reduced(context)
-                    ? Duration.zero
-                    : const Duration(milliseconds: 560),
+                duration: AppMotion.duration(context, AppMotion.progress),
                 curve: AppMotion.easeOut,
                 builder: (context, v, _) => FractionallySizedBox(
                   widthFactor: v,

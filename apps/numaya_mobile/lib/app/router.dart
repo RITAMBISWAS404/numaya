@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart' show MaterialPage;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../core/design_system/design_system.dart';
 import '../features/auth/application/session_controller.dart';
 import '../features/auth/application/verification_controller.dart';
 import '../features/auth/domain/auth_repository.dart';
@@ -48,7 +50,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
     initialLocation: Routes.welcome,
     refreshListenable: refresh,
-    errorBuilder: (_, _) => const NotFoundScreen(),
+    errorPageBuilder: (_, state) => _page(state, const NotFoundScreen()),
     redirect: (context, state) {
       final path = state.uri.path;
       final session = ref.read(sessionProvider);
@@ -87,8 +89,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
-      GoRoute(path: Routes.welcome, builder: (_, _) => const WelcomeScreen()),
-      GoRoute(
+      _route(path: Routes.welcome, builder: (_, _) => const WelcomeScreen()),
+      _route(
         path: Routes.phone,
         builder: (_, state) => PhoneScreen(
           intent: state.uri.queryParameters['intent'] == Routes.intentSignIn
@@ -96,25 +98,20 @@ final routerProvider = Provider<GoRouter>((ref) {
               : AuthIntent.signUp,
         ),
       ),
-      GoRoute(path: Routes.verify, builder: (_, _) => const VerifyScreen()),
-      GoRoute(
+      _route(path: Routes.verify, builder: (_, _) => const VerifyScreen()),
+      _route(
         path: Routes.setup,
         builder: (_, _) => const SetupHubScreen(),
         routes: [
-          GoRoute(path: 'basics', builder: (_, _) => const BasicsScreen()),
-          GoRoute(
-            path: 'interests',
-            builder: (_, _) => const InterestsScreen(),
-          ),
-          GoRoute(path: 'photos', builder: (_, _) => const PhotosScreen()),
-          GoRoute(
-            path: 'prompt',
-            builder: (_, _) => const PromptEditorScreen(),
-          ),
+          _route(path: 'basics', builder: (_, _) => const BasicsScreen()),
+          _route(path: 'interests', builder: (_, _) => const InterestsScreen()),
+          _route(path: 'photos', builder: (_, _) => const PhotosScreen()),
+          _route(path: 'prompt', builder: (_, _) => const PromptEditorScreen()),
         ],
       ),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, shell) => HomeShell(shell: shell),
+        pageBuilder: (context, state, shell) =>
+            _page(state, HomeShell(shell: shell)),
         branches: [
           StatefulShellBranch(
             routes: [
@@ -150,23 +147,23 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-      GoRoute(
+      _route(
         path: Routes.editProfile,
         builder: (_, _) => const EditProfileScreen(),
         routes: [
-          GoRoute(
+          _route(
             path: 'basics',
             builder: (_, _) => const BasicsScreen(editing: true),
           ),
-          GoRoute(
+          _route(
             path: 'interests',
             builder: (_, _) => const InterestsScreen(editing: true),
           ),
-          GoRoute(
+          _route(
             path: 'photos',
             builder: (_, _) => const PhotosScreen(editing: true),
           ),
-          GoRoute(
+          _route(
             path: 'prompt',
             builder: (_, state) => PromptEditorScreen(
               editing: true,
@@ -178,98 +175,138 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-      GoRoute(
+      _route(
         path: Routes.notifications,
         builder: (_, _) => const NotificationSettingsScreen(),
       ),
-      GoRoute(path: Routes.privacy, builder: (_, _) => const PrivacyScreen()),
-      GoRoute(
+      _route(path: Routes.privacy, builder: (_, _) => const PrivacyScreen()),
+      _route(
         path: Routes.deleteAccount,
         builder: (_, _) => const DeleteAccountScreen(),
       ),
-      GoRoute(
+      _route(
         path: Routes.completion,
         builder: (_, _) => const CompletionHubScreen(),
       ),
-      GoRoute(
+      _route(
         path: Routes.preview,
         builder: (_, _) => const ProfilePreviewScreen(),
       ),
-      GoRoute(
+      _route(
         path: Routes.openingMoves,
         builder: (_, _) => const OpeningMovesScreen(),
       ),
       GoRoute(
         path: Routes.verifyPhoto,
-        builder: (_, _) => const VerificationScreen(),
+        pageBuilder: (_, state) => _modal(state, const VerificationScreen()),
       ),
-      GoRoute(path: Routes.premium, builder: (_, _) => const PremiumScreen()),
       GoRoute(
+        path: Routes.premium,
+        pageBuilder: (_, state) => _modal(state, const PremiumScreen()),
+      ),
+      _route(
         path: Routes.safety,
         builder: (_, _) => const SafetyCentreScreen(),
       ),
-      GoRoute(path: Routes.forYou, builder: (_, _) => const ForYouScreen()),
+      _route(path: Routes.forYou, builder: (_, _) => const ForYouScreen()),
       GoRoute(
         path: Routes.paywall,
-        builder: (_, state) {
+        pageBuilder: (_, state) {
           final name = state.uri.queryParameters['feature'];
-          return PaywallScreen(
-            feature: PremiumFeature.values
-                .where((f) => f.name == name)
-                .firstOrNull,
+          return _modal(
+            state,
+            PaywallScreen(
+              feature: PremiumFeature.values
+                  .where((f) => f.name == name)
+                  .firstOrNull,
+            ),
           );
         },
       ),
-      GoRoute(
+      _route(
         path: Routes.help,
         builder: (_, _) => const HelpCentreScreen(),
         routes: [
-          GoRoute(
+          _route(
             path: 'contact',
             builder: (_, _) => const ContactSupportScreen(),
           ),
-          GoRoute(
+          _route(
             path: ':id',
             builder: (_, state) =>
                 HelpArticleScreen(id: state.pathParameters['id']!),
           ),
         ],
       ),
-      GoRoute(
+      _route(
         path: Routes.restore,
         builder: (_, _) => const RestoreAccountScreen(),
       ),
-      GoRoute(
+      _route(
         path: Routes.accountBlocked,
         builder: (_, _) => const AccountBlockedScreen(),
       ),
-      GoRoute(path: Routes.demo, builder: (_, _) => const DemoHubScreen()),
-      GoRoute(
+      _route(path: Routes.demo, builder: (_, _) => const DemoHubScreen()),
+      _route(
         path: '${Routes.like}/:id',
         builder: (_, state) =>
             LikeProfileScreen(personId: state.pathParameters['id']!),
       ),
       GoRoute(
         path: '${Routes.match}/:id',
-        builder: (_, state) =>
-            MatchScreen(personId: state.pathParameters['id']!),
+        pageBuilder: (_, state) =>
+            _modal(state, MatchScreen(personId: state.pathParameters['id']!)),
       ),
-      GoRoute(
+      _route(
         path: '${Routes.chat}/:id',
         builder: (_, state) =>
             ChatScreen(personId: state.pathParameters['id']!),
       ),
-      GoRoute(
+      _route(
         path: '${Routes.person}/:id',
         builder: (_, state) => PersonProfileScreen(
           personId: state.pathParameters['id']!,
           canDecide: state.uri.queryParameters['decide'] == '1',
         ),
       ),
-      GoRoute(path: Routes.blocked, builder: (_, _) => const BlockedScreen()),
-      GoRoute(path: Routes.settings, builder: (_, _) => const SettingsScreen()),
+      _route(path: Routes.blocked, builder: (_, _) => const BlockedScreen()),
+      _route(path: Routes.settings, builder: (_, _) => const SettingsScreen()),
     ],
   );
   ref.onDispose(router.dispose);
   return router;
 });
+
+/// A modal moment (match, paywall, Premium, verification) rises over the page it interrupts rather
+/// than pushing sideways (docs/mobile/MOTION_DESIGN_AUDIT.md).
+Page<void> _modal(GoRouterState state, Widget child) => CustomTransitionPage(
+  key: state.pageKey,
+  name: state.name,
+  arguments: state.extra,
+  child: child,
+  transitionDuration: AppMotion.push,
+  reverseTransitionDuration: AppMotion.state,
+  transitionsBuilder: modalTransition,
+);
+
+/// Every page is built here rather than by go_router: go_router 18 looks for `material_ui`'s
+/// `MaterialApp`, doesn't find Flutter's, and would fall back to pages with no transition. A
+/// [MaterialPage] runs the theme's page transition (NumayaPageTransitionsBuilder on Android).
+Page<void> _page(GoRouterState state, Widget child) => MaterialPage(
+  key: state.pageKey,
+  name: state.name,
+  arguments: state.extra,
+  restorationId: state.pageKey.value,
+  child: child,
+);
+
+/// A [GoRoute] whose page is a [_page].
+GoRoute _route({
+  required String path,
+  required GoRouterWidgetBuilder builder,
+  List<RouteBase> routes = const [],
+}) => GoRoute(
+  path: path,
+  pageBuilder: (context, state) => _page(state, builder(context, state)),
+  routes: routes,
+);

@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../foundations/app_colors.dart';
+import '../foundations/app_haptics.dart';
 import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
@@ -692,6 +693,7 @@ Future<int?> showNumayaActionSheet({
 }) {
   return showModalBottomSheet<int>(
     context: context,
+    sheetAnimationStyle: AppMotion.sheet(context),
     useRootNavigator: true,
     useSafeArea: true,
     backgroundColor: Colors.transparent,
@@ -811,6 +813,7 @@ class ViewTabs extends StatelessWidget {
             for (var i = 0; i < options.length; i++)
               Pressable(
                 onTap: () => onSelect(i),
+                haptic: HapticMoment.selection,
                 semanticLabel: options[i].count == null
                     ? options[i].label
                     : '${options[i].label}, ${options[i].count}',

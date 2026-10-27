@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../foundations/app_colors.dart';
+import '../foundations/app_haptics.dart';
 import '../foundations/app_layout.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
@@ -257,6 +258,7 @@ class PlanCard extends StatelessWidget {
       inMutuallyExclusiveGroup: true,
       child: Pressable(
         onTap: onTap,
+        haptic: HapticMoment.selection,
         semanticLabel: [title, price, perWeek, ?tag].join(', '),
         excludeChildSemantics: true,
         pressedScale: 0.98,

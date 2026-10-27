@@ -2509,4 +2509,21 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get photoReplaced =>
       'Photo replaced (placeholder: upload isn’t connected)';
+
+  @override
+  String get settingsApp => 'App';
+
+  @override
+  String get settingsVibration => 'Vibration';
+
+  @override
+  String get settingsVibrationNote =>
+      'A short tap when you choose an option, like, match or send. Your phone’s own vibration setting still applies.';
+
+  @override
+  String get demoReduceMotion => 'Reduce motion';
+
+  @override
+  String get demoReduceMotionNote =>
+      'Acts as if the phone’s Remove animations setting were on';
 }

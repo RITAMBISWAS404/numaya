@@ -40,6 +40,7 @@ void main() {
     Future<void> tap(Finder f) async {
       await tester.ensureVisible(f.first);
       await tester.tap(f.first);
+      await tester.pump();
       await tester.pump(const Duration(milliseconds: 500));
     }
 
@@ -54,6 +55,7 @@ void main() {
     await tap(find.bySemanticsLabel('Country: United States, plus 1'));
     await shot('04-country-sheet');
     await tester.tap(find.bySemanticsLabel('Close').last);
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
 
     await tap(fab);
@@ -136,6 +138,7 @@ void main() {
     await tap(find.bySemanticsLabel('Filters'));
     await shot('17-filters');
     await tester.tap(find.bySemanticsLabel('Close').last);
+    await tester.pump();
     await tester.pump(const Duration(seconds: 3));
     await tap(find.text('Likes'));
     await shot('18-likes');
@@ -157,6 +160,7 @@ void main() {
     await tap(find.text('Continue'));
     await shot('23-delete-sheet');
     await tester.tap(find.bySemanticsLabel('Close').last);
+    await tester.pump();
     await tester.pump(const Duration(seconds: 3));
   });
 

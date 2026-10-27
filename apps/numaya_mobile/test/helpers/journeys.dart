@@ -23,6 +23,8 @@ Future<void> tapOn(WidgetTester tester, Finder f) async {
     await tester.pump(const Duration(milliseconds: 200));
   }
   await tester.tap(f.first);
+  // One frame to start any route transition, then let it run.
+  await tester.pump();
   await tester.pump(const Duration(milliseconds: 500));
 }
 
@@ -58,6 +60,7 @@ Future<void> signUpToInterests(
   await tapOn(tester, find.text('Woman'));
   await tapOn(tester, find.text('Something casual'));
   await tester.tap(fab);
+  await tester.pump();
   await tester.pump(const Duration(milliseconds: 600));
   await check(); // Interests
 }
@@ -82,6 +85,7 @@ Future<void> finishProfileToHome(
   await tapOn(tester, find.text('Save prompt'));
   await tester.pump(const Duration(milliseconds: 600));
   await tester.tap(fab);
+  await tester.pump();
   await tester.pump(const Duration(milliseconds: 600));
   await tapOn(tester, find.bySemanticsLabel('Add a photo'));
   await tapOn(tester, find.bySemanticsLabel('Add a photo'));
@@ -100,6 +104,7 @@ Future<void> openTab(WidgetTester tester, String label) async {
   await tester.tap(
     find.descendant(of: find.byType(NumayaTabBar), matching: find.text(label)),
   );
+  await tester.pump();
   await tester.pump(const Duration(milliseconds: 600));
 }
 
