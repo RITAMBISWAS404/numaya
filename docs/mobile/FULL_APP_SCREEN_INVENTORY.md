@@ -121,7 +121,7 @@ Tabs: Home (Discover) · Likes · Messages · Profile
 | ID | Screen | Req | Flutter route | Status | States covered | Tests | Dependency / note |
 |---|---|---|---|---|---|---|---|
 | B-30 | People stack | Core | `/home` | Done | like, pass, swipe, undo, SuperSwipe (credits → paywall), fallback banner, retry skeleton, error, snoozed | `dating_test`, `full_app_test` | Real profiles need a backend |
-| B-31 | Swipe coach mark | Optional | — | Deferred | — | — | Would cover the card on first run; low priority |
+| B-31 | Swipe coach mark | Optional | — | Deferred | — | — | Would cover the card on first run and change Home's V16-matched first screen; the swipe is explained by the card's screen-reader hint and the buttons below it. Re-checked in the quality pass: still low priority |
 | B-32 | Expanded profile | Core | `/home` scroll, `/person/:id?decide=1` | Done | prompts (up to 3), about me with bio and details, shared interests, location, photos, Like / Pass | `dating_test`, `full_app_journeys_test` | — |
 | B-33 | Curated Discover ("For you") | Supporting | `/for-you` | Done | picks, refresh countdown, empty | `full_app_journeys_test`, unit | P-08: both formats offered |
 | B-34 | Filters: basic | Core | sheet | Done | who to date, age + fallback, distance + fallback, verified only, live count, none fit, reset | `dating_test`, `full_app_journeys_test` | — |
@@ -222,3 +222,40 @@ refused by the network policy.
 | P-10 | Notification primer | No primer (nothing to ask for yet) | After the first match |
 | C-2 | Under 18 | Inline error, corrected in place | Legal decision |
 | D-13 | Reporting always blocks | "Also block" on by default, can be unticked | Decide whether to make it mandatory as D-13 states |
+
+## Quality matrix (quality and motion pass)
+
+Added on `experiment/numaya-quality-motion`. One row per route. **Motion:** *push* = the token page slide
+(460 ms, drawer curve), *modal* = rises and fades over the page it interrupts, *tab* = instant (frequent),
+*sheet* = sheets on the screen use the drawer curve; every one is instant under *Remove animations*.
+**A11y:** *G* = tap-target and label guidelines pass, *L* = no layout error at 375 × 667 and 130% text,
+*W* = no layout error with worst-case data at 320 pt, 130% and 200% text. **Device:** nothing has been run
+on a phone or emulator (no Android SDK here), so the column is *No* throughout.
+
+| Route | Screen | Status | Motion and feedback | A11y | Tests | Open defects | Device |
+|---|---|---|---|---|---|---|---|
+| `/` | Welcome | Done | push; scrolls under large text | G L W | `onboarding_flow_test` | — | No |
+| `/phone` | Phone | Done | push; selection haptic on country | G L | `onboarding_flow_test` | — | No |
+| `/verify` | Code | Done | push; shake + reject haptic on a wrong code; caret still under reduced motion | G L | `onboarding_flow_test`, `motion_test` | — | No |
+| `/setup` … `/setup/photos`, `/setup/prompt` | Setup hub, basics, interests, photos, prompt | Done | push; progress segment fills (`progress`); chips and options tick | G L | `onboarding_*`, `v16_screens_test` | O-01 first name unbounded | No |
+| `/home` | Home (Discover) | Done | decide: exit 200 ms in the decision's direction, settle 220 ms, commit haptic; swipe: threshold tick, fling, leaves from release; sheets | G L W | `dating_test`, `motion_test` | O-05 spring on release | No |
+| `/for-you` | For you | Done | push | G L | `full_app_journeys_test` | — | No |
+| `/match/:id` | Match | Done | modal; staged 560 ms entrance, one success haptic, touch skips, complete under reduced motion | G L | `dating_test`, `motion_test` | — | No |
+| `/likes`, `/like/:id` | Likes, a like's profile | Done | tab; push | G L | `dating_test` | — | No |
+| `/person/:id` | Profile from a chat or For you | Done | push | L | `full_app_journeys_test` | — | No |
+| `/messages` | Messages | Done | tab; filter chips tick | G L W | `dating_test`, `full_app_journeys_test` | — | No |
+| `/chat/:id` | Conversation | Partial (text only) | push; opens at newest; sent bubble settles in; commit haptic; follows to new message after layout | G L W | `dating_test`, `motion_test` | — | No |
+| `/profile` | Profile | Done | tab; completion ring fills from old value | G L W | `full_app_journeys_test` | — | No |
+| `/profile/complete` | Completion hub | Done | push | G L W | `full_app_journeys_test` | — | No |
+| `/profile/edit` and sub-routes | Edit profile | Done | push; sheets | G L W | `full_app_journeys_test`, `photo_options_test` | — | No |
+| `/profile/preview` | Preview | Done | push; card grows under large text | G L W | `full_app_journeys_test` | — | No |
+| `/profile/opening-moves` | Opening Moves | Done | push | G L W | `full_app_journeys_test` | — | No |
+| `/profile/verify` | Photo verification | Partial (no camera) | modal; success / reject haptic on the review result | G L | `full_app_journeys_test` | — | No |
+| `/profile/premium`, `/paywall` | Premium, paywall | Partial (no store) | modal; plan cards tick; success / reject haptic on the simulated result | G L W | `full_app_journeys_test` | — | No |
+| `/profile/settings` | Settings | Done | push; switches tick; Vibration switch gates all haptics | G L W | `v16_screens_test`, `motion_test` | — | No |
+| `/profile/settings/notifications`, `/privacy`, `/delete`, `/blocked` | Settings pages | Done | push | G L | `full_app_journeys_test`, `v16_screens_test` | — | No |
+| `/profile/safety`, `/help`, `/help/:id`, `/help/contact` | Safety and help | Done | push | G L | `full_app_journeys_test` | — | No |
+| `/restore`, `/account-blocked` | Account lifecycle | Done | push | G L | `full_app_journeys_test` | — | No |
+| `/demo` | Demo Hub (development only) | Done | push; *Reduce motion* switch | G L | `full_app_journeys_test`, `motion_test` | — | No |
+| unknown | Not found | Done | push | G L | `full_app_journeys_test` | — | No |
+| (shell) | Tab bar and back | Done | tabs instant; Android back on another tab returns to Home first | — | `full_app_journeys_test` | — | No |

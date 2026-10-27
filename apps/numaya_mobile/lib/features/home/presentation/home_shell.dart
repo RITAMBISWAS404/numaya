@@ -20,29 +20,36 @@ class HomeShell extends ConsumerWidget {
     final dating = ref.read(datingProvider.notifier);
     final newLikes = dating.unansweredLikes();
     final newMatches = dating.unopenedMatches();
-    return Scaffold(
-      backgroundColor: AppColors.canvas,
-      body: shell,
-      bottomNavigationBar: NumayaTabBar(
-        currentIndex: shell.currentIndex,
-        onSelect: (i) =>
-            shell.goBranch(i, initialLocation: i == shell.currentIndex),
-        items: [
-          TabItem(label: l10n.tabDiscover, icon: NumayaIcons.home),
-          TabItem(
-            label: l10n.tabLikes,
-            icon: NumayaIcons.heart,
-            badgeCount: newLikes,
-            badgeLabel: l10n.tabNewCount(l10n.tabLikes, newLikes),
-          ),
-          TabItem(
-            label: l10n.tabChats,
-            icon: NumayaIcons.message,
-            badgeCount: newMatches,
-            badgeLabel: l10n.tabNewCount(l10n.tabChats, newMatches),
-          ),
-          TabItem(label: l10n.tabProfile, icon: NumayaIcons.user),
-        ],
+    // Android back on another tab's root returns to Home first; back on Home leaves the app.
+    return PopScope(
+      canPop: shell.currentIndex == 0,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) shell.goBranch(0);
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.canvas,
+        body: shell,
+        bottomNavigationBar: NumayaTabBar(
+          currentIndex: shell.currentIndex,
+          onSelect: (i) =>
+              shell.goBranch(i, initialLocation: i == shell.currentIndex),
+          items: [
+            TabItem(label: l10n.tabDiscover, icon: NumayaIcons.home),
+            TabItem(
+              label: l10n.tabLikes,
+              icon: NumayaIcons.heart,
+              badgeCount: newLikes,
+              badgeLabel: l10n.tabNewCount(l10n.tabLikes, newLikes),
+            ),
+            TabItem(
+              label: l10n.tabChats,
+              icon: NumayaIcons.message,
+              badgeCount: newMatches,
+              badgeLabel: l10n.tabNewCount(l10n.tabChats, newMatches),
+            ),
+            TabItem(label: l10n.tabProfile, icon: NumayaIcons.user),
+          ],
+        ),
       ),
     );
   }

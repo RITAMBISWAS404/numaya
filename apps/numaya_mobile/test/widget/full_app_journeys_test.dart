@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:numaya_mobile/app/router.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
@@ -374,6 +375,35 @@ void main() {
     await settle(tester);
     await openTab(tester, 'Profile');
     expect(find.text('Sam, 31'), findsOneWidget);
+    await settle(tester);
+  });
+
+  testWidgets('Android back on another tab returns to Home before leaving', (
+    tester,
+  ) async {
+    await usePhoneSize(tester);
+    final c = await quickStartApp(tester);
+    await openTab(tester, 'Messages');
+    expect(find.text('Conversations'), findsOneWidget);
+    await tester.binding.handlePopRoute();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(find.text('Conversations'), findsNothing);
+    expect(
+      c.read(routerProvider).routerDelegate.currentConfiguration.uri.path,
+      Routes.home,
+    );
+    // A pushed page still closes first.
+    await openTab(tester, 'Profile');
+    await tapOn(tester, find.bySemanticsLabel('Settings'));
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.binding.handlePopRoute();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(
+      c.read(routerProvider).routerDelegate.currentConfiguration.uri.path,
+      Routes.profile,
+    );
     await settle(tester);
   });
 }

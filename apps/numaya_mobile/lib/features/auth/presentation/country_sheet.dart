@@ -64,6 +64,7 @@ class _CountryListState extends State<_CountryList> {
                     final isSelected = country == widget.selected;
                     return Pressable(
                       onTap: () => Navigator.of(context).pop(country),
+                      haptic: HapticMoment.selection,
                       semanticLabel:
                           '${country.name}, plus ${country.dialCode}',
                       selected: isSelected,

@@ -298,6 +298,33 @@ void main() {
     });
   });
 
+  group('Idle', () {
+    testWidgets('settled screens schedule no frames (nothing loops)', (
+      tester,
+    ) async {
+      await usePhoneSize(tester);
+      final c = await quickStartApp(tester);
+      for (final route in [
+        Routes.home,
+        Routes.likes,
+        Routes.messages,
+        '${Routes.chat}/sasha',
+        Routes.profile,
+        Routes.settings,
+        Routes.premium,
+        Routes.verifyPhoto,
+        Routes.demo,
+      ]) {
+        await goTo(c, tester, route);
+        // Toasts and route transitions finish within a few seconds.
+        for (var i = 0; i < 10; i++) {
+          await tester.pump(const Duration(milliseconds: 500));
+        }
+        expect(tester.binding.hasScheduledFrame, isFalse, reason: route);
+      }
+    });
+  });
+
   group('Transitions', () {
     testWidgets(
       'a page push slides in on the tokens, and is instant when reduced',
