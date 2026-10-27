@@ -225,6 +225,42 @@ try {
   check("messages: yours Withings blue, theirs white", chat[0] === BLUE && chat[1] === WHITE, chat.join(" / "));
   check("avatars: circles", chat[2] === "50%", chat[2]);
 
+  // 6b. Final fidelity pass: tab-root header buttons, new-match portraits, sheet dismiss, action
+  // sheets, empty states, field error state, chips on white cards.
+  await open(p, "flows.html?screen=profile&theme=withings");
+  const gear = await p.evaluate(() => { const b = document.querySelector(".topbar--large .nav-button"); const c = getComputedStyle(b); return [c.backgroundColor, c.borderTopLeftRadius]; });
+  check("headers: tab-root icon buttons are white circles, as on the reference's Home", gear[0] === WHITE && gear[1] === "50%", gear.join(" / "));
+  await open(p, "flows.html?screen=chats&theme=withings");
+  const queue = await p.evaluate(() => { const i = document.querySelector(".match-queue__image"); const r = i.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height), getComputedStyle(i).borderTopLeftRadius]; });
+  check("messages: new-match portraits are circles with the name below (the reference's people rows)", queue[0] === queue[1] && queue[2] === "50%", queue.join(" / "));
+  await p.getByRole("searchbox").fill("raf");
+  await p.getByRole("button", { name: /^Unread/ }).click();
+  await wait(400);
+  const empty = await p.evaluate(() => { const e = document.querySelector(".empty-state"); const c = getComputedStyle(e); return [c.backgroundColor, c.borderTopLeftRadius]; });
+  check("empty states: a white card with the card corner (the reference's empty-state card)", empty[0] === WHITE && empty[1] === "14px", empty.join(" / "));
+  await open(p, "flows.html?screen=chat&theme=withings");
+  await p.getByRole("button", { name: "Conversation options" }).click();
+  await wait(500);
+  const actions = await p.evaluate(() => { const b = document.querySelector(".sheet--actions .sheet__panel > .btn"); const c = getComputedStyle(b); return [c.backgroundColor, c.boxShadow, c.borderTopLeftRadius]; });
+  check("action sheets: Cancel is a separate white block, no outline, the card corner", actions[0] === WHITE && actions[1] === "none" && actions[2] === "14px", actions.join(" / "));
+  await p.keyboard.press("Escape");
+  await wait(400);
+  await p.getByRole("button", { name: "Conversation options" }).click();
+  await wait(400);
+  await p.getByRole("button", { name: "Report" }).click();
+  await wait(500);
+  const close = await p.evaluate(() => getComputedStyle(document.querySelector(".sheet__header .nav-button")).backgroundColor);
+  check("sheets: the dismiss is a bare icon, not a filled circle", close === "rgba(0, 0, 0, 0)", close);
+  await open(p, "flows.html?screen=basics&theme=withings");
+  await p.getByLabel("Year you were born").fill("2012");
+  await p.getByLabel("Year you were born").blur();
+  await wait(300);
+  const invalid = await p.evaluate(() => { const i = document.querySelector(".input.is-invalid"); return i ? getComputedStyle(i).boxShadow : "no .is-invalid"; });
+  check("fields: an invalid field keeps the 2px red outline", ring(invalid) === RED && /2px/.test(invalid), invalid);
+  await open(p, "flows.html?screen=discovery&theme=withings");
+  const shared = await p.evaluate(() => getComputedStyle(document.querySelector(".shared-interests__pill")).backgroundColor);
+  check("chips: on a white card, chips sit on the fill", shared === "rgb(234, 233, 230)", shared);
+
   // 7. No V11 purple anywhere on a V16 screen, and text contrast.
   const purple = [];
   const low = [];

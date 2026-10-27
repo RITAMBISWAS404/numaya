@@ -68,3 +68,22 @@ Compared Settings with "Account & Security" (`14`) and Basics with "Cycle tracki
   wider.
 - **The new-match portrait's double ring** (V11's unseen-match ring, now blue around a navy tile) is heavier than
   anything in the reference. I kept it because it carries state.
+
+## Final fidelity audit (passes A, B and C)
+
+The full matrix is in [FINAL_FIDELITY_AUDIT.md](FINAL_FIDELITY_AUDIT.md); before/after crops are in
+`screenshots/final-review/audit-before-after.png`.
+
+| Pass | Problem found in the rendered app | Correction | Verified |
+|---|---|---|---|
+| A | Profile's gear and Activity's "+" were bare; the modal-header rule leaked into tab-root bars | Circles in page and tab-root headers; bare icons only in modal headers | Capture and e2e |
+| A | Sheet dismiss was a filled grey circle (no reference counterpart) | Bare ink ✕ | Capture and e2e |
+| A | Action-sheet Cancel was an outlined full pill | Separate white block, 14 corner, semibold | Capture and e2e |
+| A | Empty states floated bare on the page | White empty-state card | Capture and e2e |
+| A | New-match portraits were navy rectangles with a heavy double ring | 72pt circles, thinner blue ring (people-row evidence `40`, `13`) | Capture and e2e |
+| A | Match avatar had a drop shadow; match title oversized | Flat avatar; title 32–36 | Capture |
+| B | Invalid field showed no red outline (the V16 field rule overrode `.is-invalid`); disabled field lost its fill | States restored | Capture and e2e |
+| B | Chips on "You both like" were white on a white card (specificity clash) | Matching selector; fill on cards, tint when selected | Capture and e2e |
+| B | Checked: photo-options action sheet shows the form through the scrim | Kept: matches the reference's iOS action sheet | Capture |
+| B | 375 × 667 states | No clipping or overflow | Capture and e2e |
+| C | Empty-state cards were centred and inset 16pt beyond the content column | Left-aligned like the reference card, aligned to the column | Capture |

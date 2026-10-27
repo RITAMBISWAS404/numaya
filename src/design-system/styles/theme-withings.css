@@ -676,7 +676,7 @@
   color: var(--color-text-primary);
 }
 
-.theme-withings .topbar .nav-button--floating {
+.theme-withings .topbar:not(.topbar--large) .nav-button--floating {
   background: transparent;
   box-shadow: none;
 }
@@ -958,4 +958,118 @@
   line-height: 32px;
   font-weight: 500;
   letter-spacing: -0.015em;
+}
+
+/* Final fidelity pass A: design-system corrections (FINAL_FIDELITY_AUDIT.md) -------------------- */
+/* Sheet dismiss: a bare ink icon, like the reference's ✕ and "Cancel" in sheet headers (21, 39, 42),
+   not a filled grey circle. The 44px target is kept by the shared ::before. */
+.theme-withings .sheet__header .nav-button--flat {
+  background: transparent;
+  color: var(--color-text-primary);
+}
+
+.theme-withings .sheet__header .nav-button--flat:hover {
+  background: var(--color-surface-soft);
+}
+
+/* Action sheets: the reference's iOS action sheet (cffd85c8): a white group of rows and a separate
+   white Cancel block with the card corner, semibold, no outline. */
+.theme-withings .action-sheet__list {
+  border-radius: var(--withings-radius-card);
+  box-shadow: none;
+}
+
+.theme-withings .sheet--actions .sheet__panel {
+  background: transparent;
+  box-shadow: none;
+}
+
+.theme-withings .sheet--actions .sheet__panel > .btn,
+.theme-withings .sheet--actions .sheet__panel > .btn:hover:not(:disabled) {
+  height: var(--withings-row-height);
+  border-radius: var(--withings-radius-card);
+  background: var(--color-surface);
+  box-shadow: none;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Empty states: the reference's empty-state card ("Discover now", "Add a new family member"): the
+   illustration, a semibold title and the body inside a white card on the page. */
+.theme-withings .empty-state {
+  margin: var(--space-4) var(--layout-gutter) 0;
+  padding: var(--space-8) var(--space-5) var(--space-6);
+  border-radius: var(--withings-radius-card);
+  background: var(--color-surface);
+}
+
+.theme-withings .empty-state__title {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* New matches: round portraits with the name below, as in the reference's people rows ("Assign to",
+   "Family": 60pt circles, initials on navy). The 72px circle replaces V11's 72 × 96 portrait; the
+   unopened-match ring stays, thinner, in Withings blue. */
+.theme-withings .match-queue__image[class] {
+  height: 72px;
+  border-radius: 50%;
+}
+
+.theme-withings .match-queue__portrait.is-new .match-queue__image {
+  box-shadow: 0 0 0 2px var(--color-surface-page), 0 0 0 4px var(--color-withings-accent);
+}
+
+/* Your avatar on the match keeps its white ring but no drop shadow: avatars are flat in the
+   reference. */
+.theme-withings .match__you {
+  box-shadow: 0 0 0 4px var(--color-surface);
+}
+
+/* The match title on the page-title scale (V11's 36–42px clamp overshot the reference's 30–32pt
+   titles). */
+.theme-withings .match__title {
+  font-size: clamp(32px, 9vw, 36px);
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Final fidelity pass B: screen-level corrections ------------------------------------------- */
+/* Field states the V16 field rule had overridden: invalid keeps the design system's 2px red outline
+   (focused or not), disabled keeps its recessed fill. */
+.theme-withings .input.is-invalid,
+.theme-withings .input.is-invalid:focus,
+.theme-withings .input.is-invalid:focus-within {
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 var(--border-focus) var(--color-danger);
+}
+
+.theme-withings .input:disabled {
+  background: var(--color-surface-soft);
+  box-shadow: none;
+}
+
+/* Chips on a white card take the fill, emoji chips included. The emoji-chip rule above outranks a
+   plain `.card .chip`, so this matches its specificity; selected chips keep the tint. */
+.theme-withings :is(.card, .profile-section, .prompt, .list-group__items, .fl-me-card, .sheet__panel) :is(.chip, .chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip):not(.is-selected) {
+  background: var(--color-surface-soft);
+}
+
+/* Final fidelity pass C: the empty-state card is left-aligned, illustration first, like the
+   reference's "Discover now" and family cards (20, 13). */
+.theme-withings .empty-state {
+  box-sizing: border-box;
+  justify-self: stretch;
+  justify-items: start;
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  text-align: left;
+}
+
+.theme-withings .empty-state__body {
+  max-width: none;
 }

@@ -17,7 +17,7 @@ behaviour was added or removed. **Checked** means asserted by `tests/e2e/experim
 | Choice legend, chip-set label | Grey sentence case | **Bold capitals** like field labels | "FIRST NAME" | ✓ |
 | Radio | Purple fill | 22, grey ring; selected ink ring plus ink dot | 21, 22 | ✓ |
 | Checkbox | Purple | 22, 6 corner, grey ring; checked Withings blue with white tick | 23 | ✓ |
-| Text field (`.input`, `.textarea__input`) | Grey fill, 12 corner | **White, 1px `#6D6C6A` outline, 8 corner, 54 tall**; focus 2px blue | 11, 16, 26 | ✓ |
+| Text field (`.input`, `.textarea__input`) | Grey fill, 12 corner | **White, 1px `#6D6C6A` outline, 8 corner, 54 tall**; focus 2px blue; invalid 2px red; disabled the fill | 11, 16, 26 | ✓ |
 | Field label | 13.5 grey | **11.5 bold capitals, ink** | 11, 16 | ✓ |
 | Search, composer | Grey fill | White with a hairline; composer 22 corner; send button an ink circle (disabled `#D6D2CE`) | inferred | — |
 | Primary button | Purple, 14 corner | **Ink, white text, 12 corner, 50 tall** | Done, Next, Join | ✓ |
@@ -27,7 +27,7 @@ behaviour was added or removed. **Checked** means asserted by `tests/e2e/experim
 | Stacked cancel in a sheet (`.sheet__panel .btn--quiet`) | Plain text | Outlined secondary | Previous under Next | — |
 | Disabled button | Grey | `#D6D2CE` with `#77736F` text | Disabled Next (23) | — |
 | Small button (`.btn--sm`) | 44 pill, purple or grey | **36 visible pill (44 hit area kept), white with ink outline**; primary ones ink | Add a Reminder, Share | — |
-| Header icon button (`.nav-button--floating`) | 12-corner square, hairline | **40 white circle**, hairline; in a modal header, bare icon | 34 (home), 14 (modal) | — |
+| Header icon button (`.nav-button--floating`) | 12-corner square, hairline | **40 white circle** with a hairline in page and tab-root headers (Discover, Profile, Activity); a bare icon in modal headers | 10, 34 (home), 14 (modal) | ✓ |
 | Modal header (`.topbar`) | On canvas, 16 semibold title | **White bar, bottom hairline, tracked bold capitals** | PROFILE, ACCOUNT & SECURITY | ✓ |
 | Page title (tab roots) | 26 serif | **30 bold grotesk** | Good morning, John | ✓ |
 | Flow heading (onboarding) | 31 serif | 26 medium | Are your cycles regular? | — |
@@ -44,11 +44,13 @@ behaviour was added or removed. **Checked** means asserted by `tests/e2e/experim
 | Progress segments | Purple | Ink fill on the fill grey | Program progress (24) | — |
 | Tab bar | Purple active | **Ink active (filled icon, semibold label), `#6B6966` inactive**, red dots, white with a hairline | 10 | ✓ |
 | Avatars | Rounded squares, grey | **Circles; initials white on navy** | JO / JA (11, 13, 19) | ✓ |
-| New-match portraits | Rounded rectangles | Navy fill, 14 corner (shape kept) | JA | — |
-| Match portrait placeholder | Grey scallop | Warm photo grey with an ink initial (scallop kept) | — | — |
+| New-match portraits | 72 × 96 rounded rectangles | **72 circles**, navy initials, a thinner blue ring when unopened (final audit) | Assign to (40), Family (13) | ✓ |
+| Match portrait placeholder | Grey scallop | Warm photo grey with an ink initial (scallop kept); your avatar flat with a white ring; title 32–36 bold | — | — |
 | Photos | 20 / 16 corners | 16 profile photos, 14 tiles and slots; empty slot dashed with an ink "+" circle | — | — |
 | Bubbles | Purple / grey | **Yours blue with white text, theirs white**, 14 corner with V11's 6 tail | inferred | ✓ |
-| Sheets | White, 20 corner | White, 16 corner, **hairline under the header**, 20 medium title, warm grabber | Assigned Sex sheet (21) | ✓ |
+| Sheets | White, 20 corner | White, 16 corner, **hairline under the header**, 20 medium title, warm grabber; dismiss is a **bare ✕** (final audit) | Assigned Sex (21), Continue with (42) | ✓ |
+| Action sheet | White rows; outlined pill Cancel | White row group without shadow; Cancel a **separate white block**, 14 corner, semibold (final audit) | iOS action sheet (cffd85c8) | ✓ |
+| Empty state | Centred on the page | **White card**, aligned to the content column, left-aligned, 18 semibold title (final audit) | Discover now (20), Family (13) | ✓ |
 | Toast (`.pill`) | Ink | **Blue-tint pill** with deep-blue text | Password created (15) | — |
 | Prompt mark | 22 purple on lavender, 8 corner | 24 **circle**, blue on tint | Round icon holders | — |
 | Wordmark | Fraunces, purple mark | Hanken bold ink, mark in accent blue, rose dot kept | — (Numaya identity) | — |

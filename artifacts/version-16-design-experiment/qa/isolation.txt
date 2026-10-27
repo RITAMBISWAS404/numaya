@@ -1,26 +1,13 @@
-Isolation checks, run 2026-10-26 in this container (Chromium headless shell build 1243 via Playwright 1.56.1).
+Isolation checks, final code (after the final fidelity audit), run 2026-10-27 in this container (Chromium headless shell build 1243 via Playwright 1.56.1).
 
-1. Default mode (no ?theme): all 162 gallery states, V16 branch vs the untouched V11 commit 59e06e8 rendered in the same browser:
+1. Default mode (no ?theme): all 162 gallery states vs the untouched V11 commit 59e06e8 rendered in the same browser:
 162 identical, 0 different
 
 
-2. V11 (?theme=tiimo): 49 states, before any V16 CSS existed vs after V16 was finished:
+2. V11 (?theme=tiimo): 49 states captured before any V16 CSS existed vs the final code:
 49 identical, 0 different
 
 
 3. Default mode vs the committed artifacts/ui-gallery (generated earlier, in a different browser build):
 149 identical, 13 different
-006-verify-code-sms-banner-393x852.png
-019-discover-393x852.png
-020-discover-fullpage-393w.png
-026-home-undo-393x852.png
-027-home-profile-options-393x852.png
-028-home-share-sheet-393x852.png
-059-like-profile-393x852.png
-060-like-profile-matched-393x852.png
-106-edit-preview-393x852.png
-107-edit-preview-fullpage-393w.png
-135-desktop-flow-previews-chats-1440x900.png
-136-desktop-flow-previews-activity-1440x900.png
-145-qa-discover-375x667.png
    The same 13 differ when the untouched V11 commit is rendered here (check 1 shows V16 == V11), so these are browser-version drift, not V16.

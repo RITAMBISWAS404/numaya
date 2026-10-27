@@ -31,6 +31,13 @@
 ✓ segmented: a grey track with a white selected segment (rgb(234, 233, 230) / rgb(255, 255, 255))
 ✓ messages: yours Withings blue, theirs white (rgb(80, 102, 204) / rgb(255, 255, 255) / 50%)
 ✓ avatars: circles (50%)
+✓ headers: tab-root icon buttons are white circles, as on the reference's Home (rgb(255, 255, 255) / 50%)
+✓ messages: new-match portraits are circles with the name below (the reference's people rows) (72 / 72 / 50%)
+✓ empty states: a white card with the card corner (the reference's empty-state card) (rgb(255, 255, 255) / 14px)
+✓ action sheets: Cancel is a separate white block, no outline, the card corner (rgb(255, 255, 255) / none / 14px)
+✓ sheets: the dismiss is a bare icon, not a filled circle (rgba(0, 0, 0, 0))
+✓ fields: an invalid field keeps the 2px red outline (rgb(207, 51, 54) 0px 0px 0px 2px inset)
+✓ chips: on a white card, chips sit on the fill (rgb(234, 233, 230))
 ✓ palette: no V11 purple (#7262C7) on any V16 screen
 ✓ a11y: readable text meets 4.5:1 on its background on the 14 flow screens
 ✓ responsive 393: no horizontal overflow on the 15 V16 screens
@@ -39,4 +46,4 @@
 ✓ console 375: no errors on the 15 V16 screens
 ✓ console: no errors during the scoping and interaction checks
 
-40/40 V16 checks passed.
+47/47 V16 checks passed.
