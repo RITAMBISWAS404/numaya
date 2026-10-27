@@ -52,7 +52,7 @@ they're for other platforms.
 cd $HOME
 git clone https://github.com/RITAMBISWAS404/numaya.git
 cd numaya
-git checkout experiment/numaya-flutter-full-app
+git checkout experiment/numaya-quality-motion
 cd apps\numaya_mobile
 flutter pub get
 ```
@@ -108,6 +108,10 @@ Prototype tools › Demo hub.
 7. **Settings:** Snooze (length and away status), Incognito and Travel (Premium), notification categories, profile
    visibility, blocked people, help centre, log out (with confirmation) and delete account (reason → confirm).
 8. **Restore:** delete the account, then **I have an account** with the same number: you're offered to restore it.
+9. **Motion and feel:** like and pass to see the profile leave in the decision's direction; drag the photo past
+   the line and back (the phone ticks each time); match with Maya for the one-time match entrance. Settings ›
+   App › **Vibration** turns every haptic off. Demo hub › **Reduce motion** shows the app as it behaves with
+   Android's *Remove animations* setting (Settings › Accessibility on the phone).
 
 Alternatively, the helper script does steps 5–7 checks for you:
 ```powershell

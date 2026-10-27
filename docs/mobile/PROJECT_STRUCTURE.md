@@ -17,7 +17,9 @@ apps/numaya_mobile/
 │   │       ├── tokens/numaya_tokens.g.dart   GENERATED from tokens/numaya.tokens.json
 │   │       ├── icons/numaya_icon_data.g.dart GENERATED from the web icon set
 │   │       ├── foundations/              AppColors, AppTypography, AppSpacing/AppRadii/AppSizes/
-│   │       │                             AppElevation (app_layout.dart), AppMotion, AppTheme
+│   │       │                             AppElevation (app_layout.dart), AppMotion (duration roles,
+│   │       │                             sheet style), AppHaptics (one gated haptic map),
+│   │       │                             app_transitions (page push, modal rise), AppTheme
 │   │       └── widgets/                  buttons, fields, selection, content, layout, navigation, toast,
 │   │                                     people (avatars, badges, composer, bubbles, action sheet, tabs, tiles)
 │   ├── features/

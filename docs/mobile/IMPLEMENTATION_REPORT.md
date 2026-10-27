@@ -1,5 +1,28 @@
 # Implementation report
 
+## Quality and motion pass (branch `experiment/numaya-quality-motion`)
+
+Based on `experiment/numaya-flutter-full-app` at `84481d5` (unchanged). Batch record, test results and the next
+task: [QUALITY_ROADMAP.md](QUALITY_ROADMAP.md).
+
+- **Motion system:** duration roles in `AppMotion`, one gated haptic map (`AppHaptics`, Settings › App ›
+  Vibration), page and modal transitions on the tokens, sheets on the drawer curve, and reduced motion
+  everywhere (plus a Demo Hub switch to try it). See [MOTION_DESIGN_AUDIT.md](MOTION_DESIGN_AUDIT.md) and
+  [MOTION_QA_REPORT.md](MOTION_QA_REPORT.md).
+- **Defects found and fixed:**
+  - No route ever animated: go_router 18 fell back to zero-duration pages.
+  - Long chats opened at the oldest message.
+  - Sending a message scrolled short of it.
+  - Home swapped profiles in the same frame.
+  - Nine layout breaks with worst-case data or 200% text.
+  - Screen readers missed list-row values.
+  - Android back on another tab left the app.
+
+  See [UI_POLISH_BACKLOG.md](UI_POLISH_BACKLOG.md) and [UI_POLISH_QA.md](UI_POLISH_QA.md).
+- **Tests:** 132 passed, 3 skipped (opt-in captures). New: `motion_test.dart` (13) and `break_ui_test.dart`
+  (3), plus 1 back-navigation journey in `full_app_journeys_test.dart`.
+- **Not done:** nothing ran on a phone or emulator; the Android SDK download is refused here.
+
 ## Full app coverage (branch `experiment/numaya-flutter-full-app`)
 
 Based on `experiment/numaya-flutter-v16-complete` at `37a8007` (unchanged). V16 remains the visual direction;
