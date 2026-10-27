@@ -25,14 +25,53 @@ class MatchScreen extends ConsumerStatefulWidget {
   ConsumerState<MatchScreen> createState() => _MatchScreenState();
 }
 
-class _MatchScreenState extends ConsumerState<MatchScreen> {
+class _MatchScreenState extends ConsumerState<MatchScreen>
+    with SingleTickerProviderStateMixin {
   final _text = TextEditingController();
+
+  /// The match celebration (MOTION_DESIGN_AUDIT "Match"): plays once, never loops, and any touch
+  /// finishes it.
+  late final AnimationController _celebrate = AnimationController(
+    vsync: this,
+    duration: AppMotion.celebrate,
+  );
+  bool _started = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_started) return;
+    _started = true;
+    // One success haptic on arrival; it stays even when motion is reduced.
+    AppHaptics.fire(context, HapticMoment.success);
+    if (AppMotion.reduced(context)) {
+      _celebrate.value = 1;
+    } else {
+      unawaited(_celebrate.forward());
+    }
+  }
 
   @override
   void dispose() {
+    _celebrate.dispose();
     _text.dispose();
     super.dispose();
   }
+
+  Widget _enter(
+    Widget child, {
+    required double from,
+    double rise = 12,
+    double scaleFrom = 1,
+  }) => _Enter(
+    animation: CurvedAnimation(
+      parent: _celebrate,
+      curve: Interval(from, (from + 0.6).clamp(0, 1), curve: AppMotion.easeOut),
+    ),
+    rise: rise,
+    scaleFrom: scaleFrom,
+    child: child,
+  );
 
   void _close() => context.canPop() ? context.pop() : context.go(Routes.home);
 
@@ -52,157 +91,222 @@ class _MatchScreenState extends ConsumerState<MatchScreen> {
       screen.height * (screen.height <= 700 ? 0.25 : 0.32),
     ].reduce(math.min);
 
-    return NumayaScreen(
-      footer: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Composer(
-            controller: _text,
-            placeholder: person.opener ?? l10n.matchSayHello(person.name),
-            sendLabel: l10n.chatSend,
-            onSend: (text) {
-              unawaited(
-                ref.read(datingProvider.notifier).send(person.id, text),
-              );
-              context.pushReplacement('${Routes.chat}/${person.id}');
-            },
-          ),
-          const SizedBox(height: AppSpacing.s2),
-          NumayaButton(
-            label: l10n.matchKeepBrowsing,
-            variant: NumayaButtonVariant.quiet,
-            onPressed: _close,
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: NavIconButton(
-              icon: NumayaIcons.close,
-              label: l10n.matchClose,
+    // Any touch finishes the celebration; nothing waits for it.
+    return Listener(
+      onPointerDown: (_) {
+        if (_celebrate.isAnimating) _celebrate.value = 1;
+      },
+      child: NumayaScreen(
+        footer: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Composer(
+              controller: _text,
+              placeholder: person.opener ?? l10n.matchSayHello(person.name),
+              sendLabel: l10n.chatSend,
+              onSend: (text) {
+                unawaited(
+                  ref.read(datingProvider.notifier).send(person.id, text),
+                );
+                context.pushReplacement('${Routes.chat}/${person.id}');
+              },
+            ),
+            const SizedBox(height: AppSpacing.s2),
+            NumayaButton(
+              label: l10n.matchKeepBrowsing,
+              variant: NumayaButtonVariant.quiet,
               onPressed: _close,
             ),
-          ),
-          const SizedBox(height: AppSpacing.s6),
-          Semantics(
-            header: true,
-            liveRegion: true,
-            child: Text(
-              l10n.matchTitle,
-              textAlign: TextAlign.center,
-              style:
-                  AppTypography.weight(
-                    AppTypography.hero,
-                    AppTypography.bold,
-                  ).copyWith(
-                    fontSize: (MediaQuery.sizeOf(context).width * 0.09).clamp(
-                      32.0,
-                      36.0,
-                    ),
-                    height: 1.1,
-                  ),
+          ],
+        ),
+        body: Column(
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: NavIconButton(
+                icon: NumayaIcons.close,
+                label: l10n.matchClose,
+                onPressed: _close,
+              ),
             ),
-          ),
-          SizedBox(height: AppSpacing.s6 + 0.05 * portrait),
-          SizedBox.square(
-            dimension: portrait,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                // V16's backdrop frame is 10% larger than the photo box (inset -5%) and reads as
-                // one photo-grey shape.
-                Positioned(
-                  left: -0.05 * portrait,
-                  top: -0.05 * portrait,
-                  child: ScallopPortrait(
-                    initial: person.initial,
-                    size: portrait * 1.1,
-                  ),
+            const SizedBox(height: AppSpacing.s6),
+            _enter(
+              Semantics(
+                header: true,
+                liveRegion: true,
+                child: Text(
+                  l10n.matchTitle,
+                  textAlign: TextAlign.center,
+                  style:
+                      AppTypography.weight(
+                        AppTypography.hero,
+                        AppTypography.bold,
+                      ).copyWith(
+                        fontSize: (MediaQuery.sizeOf(context).width * 0.09)
+                            .clamp(32.0, 36.0),
+                        height: 1.1,
+                      ),
                 ),
-                // You overlap the frame's lower left on a white ring (V16 `.match__you`).
-                Positioned(
-                  left: -0.09 * portrait,
-                  bottom: -0.03 * portrait,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: AppColors.surface,
-                      shape: BoxShape.circle,
-                    ),
-                    child: InitialsAvatar(
-                      initial: me.trim().isEmpty
-                          ? '?'
-                          : me.trim()[0].toUpperCase(),
-                      size: 60,
-                    ),
-                  ),
-                ),
-              ],
+              ),
+              from: 0,
             ),
-          ),
-          SizedBox(height: AppSpacing.s5 + 0.05 * portrait),
-          // V16 `.match__body`: 16pt, at most 300pt wide, balanced.
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 300),
-            child: BalancedText.rich(
-              TextSpan(
-                children: split < 0
-                    ? [TextSpan(text: body)]
-                    : [
-                        TextSpan(text: body.substring(0, split)),
-                        TextSpan(
-                          text: person.name,
-                          style: AppTypography.weight(
-                            AppTypography.input,
-                            AppTypography.semibold,
-                          ).copyWith(color: AppColors.ink),
+            SizedBox(height: AppSpacing.s6 + 0.05 * portrait),
+            _enter(
+              SizedBox.square(
+                dimension: portrait,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    // V16's backdrop frame is 10% larger than the photo box (inset -5%) and reads as
+                    // one photo-grey shape.
+                    Positioned(
+                      left: -0.05 * portrait,
+                      top: -0.05 * portrait,
+                      child: ScallopPortrait(
+                        initial: person.initial,
+                        size: portrait * 1.1,
+                      ),
+                    ),
+                    // You overlap the frame's lower left on a white ring (V16 `.match__you`).
+                    Positioned(
+                      left: -0.09 * portrait,
+                      bottom: -0.03 * portrait,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: AppColors.surface,
+                          shape: BoxShape.circle,
                         ),
-                        TextSpan(
-                          text: body.substring(split + person.name.length),
+                        child: InitialsAvatar(
+                          initial: me.trim().isEmpty
+                              ? '?'
+                              : me.trim()[0].toUpperCase(),
+                          size: 60,
                         ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              from: 0.1,
+              rise: 0,
+              scaleFrom: 0.92,
+            ),
+            SizedBox(height: AppSpacing.s5 + 0.05 * portrait),
+            // V16 `.match__body`: 16pt, at most 300pt wide, balanced.
+            _enter(
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 300),
+                child: BalancedText.rich(
+                  TextSpan(
+                    children: split < 0
+                        ? [TextSpan(text: body)]
+                        : [
+                            TextSpan(text: body.substring(0, split)),
+                            TextSpan(
+                              text: person.name,
+                              style: AppTypography.weight(
+                                AppTypography.input,
+                                AppTypography.semibold,
+                              ).copyWith(color: AppColors.ink),
+                            ),
+                            TextSpan(
+                              text: body.substring(split + person.name.length),
+                            ),
+                          ],
+                  ),
+                  style: AppTypography.input.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              from: 0.25,
+            ),
+            _enter(
+              Column(
+                children: [
+                  if (person.shared.isNotEmpty) ...[
+                    const SizedBox(height: AppSpacing.s5),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: AppSpacing.s2,
+                      runSpacing: AppSpacing.s2,
+                      children: [
+                        Text(
+                          l10n.discoverYouBothLike,
+                          style: AppTypography.caption,
+                        ),
+                        for (final s in person.shared)
+                          InfoChip(
+                            label: s,
+                            emoji: kInterestEmoji[s],
+                            onPage: true,
+                          ),
                       ],
+                    ),
+                  ],
+                  // B-41: their Opening Move, which the first message can answer.
+                  if (person.openingMove != null) ...[
+                    const SizedBox(height: AppSpacing.s4),
+                    Text(
+                      l10n.matchTheirMove(person.openingMove!, person.name),
+                      textAlign: TextAlign.center,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.bodySm.copyWith(
+                        color: AppColors.ink,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: AppSpacing.s5),
+                  Text(
+                    l10n.matchSampleNote(person.name),
+                    textAlign: TextAlign.center,
+                    style: AppTypography.caption,
+                  ),
+                ],
               ),
-              style: AppTypography.input.copyWith(
-                color: AppColors.textSecondary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          if (person.shared.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.s5),
-            Wrap(
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: AppSpacing.s2,
-              runSpacing: AppSpacing.s2,
-              children: [
-                Text(l10n.discoverYouBothLike, style: AppTypography.caption),
-                for (final s in person.shared)
-                  InfoChip(label: s, emoji: kInterestEmoji[s], onPage: true),
-              ],
+              from: 0.4,
             ),
           ],
-          // B-41: their Opening Move, which the first message can answer.
-          if (person.openingMove != null) ...[
-            const SizedBox(height: AppSpacing.s4),
-            Text(
-              l10n.matchTheirMove(person.openingMove!, person.name),
-              textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.bodySm.copyWith(color: AppColors.ink),
-            ),
-          ],
-          const SizedBox(height: AppSpacing.s5),
-          Text(
-            l10n.matchSampleNote(person.name),
-            textAlign: TextAlign.center,
-            style: AppTypography.caption,
-          ),
-        ],
+        ),
       ),
     );
   }
+}
+
+/// Fades [child] in, rising [rise] points and growing from [scaleFrom], as [animation] runs 0 → 1.
+class _Enter extends StatelessWidget {
+  const _Enter({
+    required this.animation,
+    required this.rise,
+    required this.scaleFrom,
+    required this.child,
+  });
+
+  final Animation<double> animation;
+  final double rise;
+  final double scaleFrom;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+    animation: animation,
+    builder: (context, child) {
+      final v = animation.value;
+      return Opacity(
+        opacity: v,
+        child: Transform.translate(
+          offset: Offset(0, rise * (1 - v)),
+          child: Transform.scale(
+            scale: scaleFrom + (1 - scaleFrom) * v,
+            child: child,
+          ),
+        ),
+      );
+    },
+    child: child,
+  );
 }

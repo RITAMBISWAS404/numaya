@@ -27,21 +27,66 @@ class DiscoverScreen extends ConsumerStatefulWidget {
   ConsumerState<DiscoverScreen> createState() => _DiscoverScreenState();
 }
 
-class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
+class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
+    with SingleTickerProviderStateMixin {
   final _scroll = ScrollController();
   bool _retrying = false;
   String? _shownId;
 
+  /// The decided profile leaving (MOTION_DESIGN_AUDIT "Decide"): right for a like, left for a
+  /// pass, up for a SuperSwipe. The decision itself is applied when it has left.
+  late final AnimationController _exit = AnimationController(
+    vsync: this,
+    duration: AppMotion.exit,
+  );
+  Offset _exitDirection = Offset.zero;
+
   @override
   void dispose() {
+    _exit.dispose();
     _scroll.dispose();
     super.dispose();
   }
 
-  void _decide(
+  Future<void> _decide(
     SamplePerson person, {
     required bool liked,
     bool superSwipe = false,
+  }) async {
+    // One decision at a time: taps during the 200 ms exit are ignored.
+    if (_exit.isAnimating) return;
+    final controller = ref.read(datingProvider.notifier);
+    if (superSwipe && controller.superSwipesLeft <= 0) {
+      // No SuperSwipes left: the contextual paywall names what triggered it (D-14).
+      unawaited(
+        context.push(
+          '${Routes.paywall}?feature=${PremiumFeature.superSwipes.name}',
+        ),
+      );
+      return;
+    }
+    AppHaptics.fire(context, HapticMoment.commit);
+    if (!AppMotion.reduced(context)) {
+      setState(
+        () => _exitDirection = superSwipe
+            ? const Offset(0, -1)
+            : Offset(liked ? 1 : -1, 0),
+      );
+      try {
+        await _exit.forward(from: 0).orCancel;
+      } on TickerCanceled {
+        return;
+      }
+      if (!mounted) return;
+    }
+    _commit(person, liked: liked, superSwipe: superSwipe);
+    _exit.value = 0;
+  }
+
+  void _commit(
+    SamplePerson person, {
+    required bool liked,
+    required bool superSwipe,
   }) {
     final l10n = context.l10n;
     final controller = ref.read(datingProvider.notifier);
@@ -269,63 +314,115 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
       scrollController: _scroll,
       topGap: false,
       gutter: AppSpacing.gutterTight,
-      child: Column(
+      child: _DecisionMotion(
         key: ValueKey(person.id),
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (controller.showingFallback(filters)) ...[
-            StatusBanner(
-              title: l10n.discoverFallbackTitle,
-              body: l10n.discoverFallbackBody,
+        exit: _exit,
+        direction: _exitDirection,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (controller.showingFallback(filters)) ...[
+              StatusBanner(
+                title: l10n.discoverFallbackTitle,
+                body: l10n.discoverFallbackBody,
+              ),
+              const SizedBox(height: AppSpacing.s3),
+            ],
+            _SwipeCard(
+              person: person,
+              onDecide: (liked) => unawaited(_decide(person, liked: liked)),
+              superAction: RoundAction(
+                kind: ActionKind.superSwipe,
+                label: l10n.discoverSuperSwipe,
+                floating: true,
+                onPressed: () =>
+                    unawaited(_decide(person, liked: true, superSwipe: true)),
+              ),
             ),
             const SizedBox(height: AppSpacing.s3),
-          ],
-          _SwipeCard(
-            person: person,
-            onDecide: (liked) => _decide(person, liked: liked),
-            superAction: RoundAction(
-              kind: ActionKind.superSwipe,
-              label: l10n.discoverSuperSwipe,
-              floating: true,
-              onPressed: () => _decide(person, liked: true, superSwipe: true),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          ...personSections(context, person),
-          const SizedBox(height: AppSpacing.s6),
-          // V16 `.fl-pf .action-bar`: 8pt more inset than the photo cards.
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s2),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RoundAction(
-                  kind: ActionKind.pass,
-                  label: l10n.discoverPass,
-                  onPressed: () => _decide(person, liked: false),
-                ),
-                RoundAction(
-                  kind: ActionKind.superSwipe,
-                  label: l10n.discoverSuperSwipe,
-                  onPressed: () =>
+            ...personSections(context, person),
+            const SizedBox(height: AppSpacing.s6),
+            // V16 `.fl-pf .action-bar`: 8pt more inset than the photo cards.
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s2),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RoundAction(
+                    kind: ActionKind.pass,
+                    label: l10n.discoverPass,
+                    onPressed: () => unawaited(_decide(person, liked: false)),
+                  ),
+                  RoundAction(
+                    kind: ActionKind.superSwipe,
+                    label: l10n.discoverSuperSwipe,
+                    onPressed: () => unawaited(
                       _decide(person, liked: true, superSwipe: true),
-                ),
-                RoundAction(
-                  kind: ActionKind.like,
-                  label: l10n.discoverLike,
-                  onPressed: () => _decide(person, liked: true),
-                ),
-              ],
+                    ),
+                  ),
+                  RoundAction(
+                    kind: ActionKind.like,
+                    label: l10n.discoverLike,
+                    onPressed: () => unawaited(_decide(person, liked: true)),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: AppSpacing.s4),
-          Text(
-            l10n.discoverSampleNote,
-            textAlign: TextAlign.center,
-            style: AppTypography.caption,
-          ),
-        ],
+            const SizedBox(height: AppSpacing.s4),
+            Text(
+              l10n.discoverSampleNote,
+              textAlign: TextAlign.center,
+              style: AppTypography.caption,
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+/// A profile settling in when it becomes the current one, and leaving in [direction] while [exit]
+/// runs. Under reduced motion the profile is simply replaced.
+class _DecisionMotion extends StatelessWidget {
+  const _DecisionMotion({
+    super.key,
+    required this.exit,
+    required this.direction,
+    required this.child,
+  });
+
+  final Animation<double> exit;
+  final Offset direction;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (AppMotion.reduced(context)) return child;
+    final width = MediaQuery.sizeOf(context).width;
+    // Entering: a small settle (opacity and 97% → 100%), quick because it happens on every
+    // decision.
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: AppMotion.state,
+      curve: AppMotion.easeOut,
+      builder: (context, enter, child) => AnimatedBuilder(
+        animation: exit,
+        builder: (context, child) {
+          final t = AppMotion.easeOut.transform(exit.value);
+          return Opacity(
+            opacity: (enter * (1 - t)).clamp(0.0, 1.0),
+            child: Transform.translate(
+              offset: Offset(
+                direction.dx * width * 0.5 * t,
+                direction.dy * 160 * t,
+              ),
+              child: Transform.scale(scale: 0.97 + 0.03 * enter, child: child),
+            ),
+          );
+        },
+        child: child,
+      ),
+      child: child,
     );
   }
 }
@@ -348,6 +445,9 @@ class _SwipeCard extends StatefulWidget {
 
 class _SwipeCardState extends State<_SwipeCard> {
   static const _threshold = 96.0;
+
+  /// A flick this fast decides even short of the threshold (logical pixels per second).
+  static const _flingVelocity = 800.0;
   double _dx = 0;
 
   @override
@@ -361,11 +461,28 @@ class _SwipeCardState extends State<_SwipeCard> {
     return Semantics(
       label: l10n.discoverSwipeHint(widget.person.name),
       child: GestureDetector(
-        onHorizontalDragUpdate: (d) => setState(() => _dx += d.delta.dx),
-        onHorizontalDragEnd: (_) {
-          final dx = _dx;
-          setState(() => _dx = 0);
-          if (dx.abs() >= _threshold) widget.onDecide(dx > 0);
+        onHorizontalDragUpdate: (d) {
+          final wasPast = _dx.abs() >= _threshold;
+          setState(() => _dx += d.delta.dx);
+          // One tick each time the card crosses the line, so the stamp is felt as well as seen.
+          if (wasPast != _dx.abs() >= _threshold) {
+            AppHaptics.fire(context, HapticMoment.selection);
+          }
+        },
+        onHorizontalDragEnd: (d) {
+          final v = d.velocity.pixelsPerSecond.dx;
+          // Past the line, or flung firmly the way it already leans.
+          final decided =
+              _dx.abs() >= _threshold ||
+              (v.abs() >= _flingVelocity &&
+                  _dx.abs() >= 24 &&
+                  v.sign == _dx.sign);
+          if (decided) {
+            // The card stays where the finger left it and leaves from there.
+            widget.onDecide(_dx > 0);
+          } else {
+            setState(() => _dx = 0);
+          }
         },
         onHorizontalDragCancel: () => setState(() => _dx = 0),
         child: AnimatedContainer(

@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/router.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
+import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 import 'package:numaya_mobile/features/demo/application/demo_motion.dart';
 
 import '../helpers/journeys.dart';
@@ -116,6 +117,143 @@ void main() {
       await tapOn(tester, find.text('Help centre'));
       await tester.pump(const Duration(milliseconds: 600));
       expect(log, isEmpty);
+      await settle(tester);
+    });
+  });
+
+  group('Discover decisions', () {
+    testWidgets('Pass leaves first, then the next profile; one commit haptic', (
+      tester,
+    ) async {
+      await usePhoneSize(tester);
+      await quickStartApp(tester, world: DemoWorld.fresh);
+      final log = recordHaptics(tester);
+      expect(find.text('Maya, 29'), findsOneWidget);
+      await tester.ensureVisible(find.bySemanticsLabel('Pass').last);
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.bySemanticsLabel('Pass').last);
+      await tester.pump();
+      await tester.pump(AppMotion.exit ~/ 2);
+      // Mid-exit: still Maya, fading out; a second tap is ignored.
+      expect(find.text('Maya, 29'), findsOneWidget);
+      await tester.tap(find.bySemanticsLabel('Pass').last, warnIfMissed: false);
+      await tester.pump(AppMotion.exit);
+      await tester.pump(AppMotion.state);
+      expect(find.text('Sam, 31'), findsOneWidget);
+      expect(log, ['HapticFeedbackType.lightImpact']);
+      await settle(tester);
+    });
+
+    testWidgets('under reduced motion the next profile replaces it at once', (
+      tester,
+    ) async {
+      await usePhoneSize(tester);
+      final c = await quickStartApp(tester, world: DemoWorld.fresh);
+      c.read(demoReduceMotionProvider.notifier).set(true);
+      await tester.pump();
+      await tester.ensureVisible(find.bySemanticsLabel('Pass').last);
+      await tester.pump();
+      await tester.tap(find.bySemanticsLabel('Pass').last);
+      await tester.pump();
+      expect(find.text('Sam, 31'), findsOneWidget);
+      expect(c.read(datingProvider).seen, contains('maya'));
+      await settle(tester);
+    });
+
+    testWidgets('a quick flick decides short of the line; crossing it ticks', (
+      tester,
+    ) async {
+      await usePhoneSize(tester);
+      await quickStartApp(tester, world: DemoWorld.fresh);
+      final log = recordHaptics(tester);
+      // A slow 40 pt drag springs back.
+      await tester.timedDrag(
+        find.text('Maya, 29'),
+        const Offset(40, 0),
+        const Duration(milliseconds: 600),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text('Maya, 29'), findsOneWidget);
+      expect(log, isEmpty);
+      // A fast 60 pt flick to the left passes.
+      await tester.fling(find.text('Maya, 29'), const Offset(-60, 0), 1500);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(find.text('Sam, 31'), findsOneWidget);
+      expect(log, ['HapticFeedbackType.lightImpact']);
+      // Dragging past the line and back ticks on each crossing.
+      log.clear();
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.text('Sam, 31')),
+      );
+      for (final dx in [...List.filled(8, 30.0), ...List.filled(8, -30.0)]) {
+        await gesture.moveBy(Offset(dx, 0));
+        await tester.pump();
+      }
+      await gesture.up();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(log, [
+        'HapticFeedbackType.selectionClick',
+        'HapticFeedbackType.selectionClick',
+      ]);
+      expect(find.text('Sam, 31'), findsOneWidget);
+      await settle(tester);
+    });
+  });
+
+  group('Match', () {
+    Future<void> likeMaya(WidgetTester tester) async {
+      await tester.ensureVisible(find.bySemanticsLabel('Like').last);
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.bySemanticsLabel('Like').last);
+      await tester.pump();
+      await tester.pump(AppMotion.exit);
+      await tester.pump(); // the match route starts
+    }
+
+    double titleOpacity(WidgetTester tester) => tester
+        .widget<Opacity>(
+          find
+              .ancestor(
+                of: find.text('It’s a match!', skipOffstage: false),
+                matching: find.byType(Opacity, skipOffstage: false),
+              )
+              .first,
+        )
+        .opacity;
+
+    testWidgets('one success haptic, and a touch finishes the entrance', (
+      tester,
+    ) async {
+      await usePhoneSize(tester);
+      await quickStartApp(tester, world: DemoWorld.fresh);
+      final log = recordHaptics(tester);
+      await likeMaya(tester);
+      await tester.pump(const Duration(milliseconds: 50));
+      await tester.pump(const Duration(milliseconds: 50));
+      expect(titleOpacity(tester), lessThan(1));
+      await tester.tap(find.text('It’s a match!'), warnIfMissed: true);
+      await tester.pump();
+      expect(titleOpacity(tester), 1);
+      await settle(tester);
+      expect(log, [
+        'HapticFeedbackType.lightImpact',
+        'HapticFeedbackType.mediumImpact',
+      ]);
+    });
+
+    testWidgets('under reduced motion it appears complete', (tester) async {
+      await usePhoneSize(tester);
+      final c = await quickStartApp(tester, world: DemoWorld.fresh);
+      c.read(demoReduceMotionProvider.notifier).set(true);
+      await tester.pump();
+      await tester.ensureVisible(find.bySemanticsLabel('Like').last);
+      await tester.pump();
+      await tester.tap(find.bySemanticsLabel('Like').last);
+      await tester.pump();
+      await tester.pump();
+      expect(titleOpacity(tester), 1);
       await settle(tester);
     });
   });
