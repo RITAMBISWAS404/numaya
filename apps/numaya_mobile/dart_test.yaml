@@ -1,0 +1,5 @@
+tags:
+  screenshots:
+    # Pixel output differs between operating systems, so screenshot capture is opt-in:
+    #   flutter test --tags screenshots --run-skipped --update-goldens
+    skip: "Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens"

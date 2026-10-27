@@ -1,0 +1,47 @@
+name: numaya_mobile
+description: "Numaya: native mobile app (Flutter)."
+publish_to: 'none'
+
+# version: <marketing name>+<build number>. Bump the build number for every store upload.
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.13.7
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  # State management: Notifier view models and dependency injection (see docs/mobile/TECH_STACK.md).
+  flutter_riverpod: ^3.4.3
+  # Declarative routing with redirects (onboarding guard).
+  go_router: ^18.1.1
+  # Renders the design system's icons and illustrations, exported from the web as SVG.
+  flutter_svg: ^2.3.0
+  # Pinned by flutter_localizations.
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  assets:
+    - assets/illustrations/
+
+  # Variable fonts converted from the web app's Fontsource files (SIL OFL 1.1, Latin subset).
+  # Licences: assets/fonts/OFL-*.txt. Regenerate with tool/convert_fonts.py.
+  fonts:
+    - family: Fraunces
+      fonts:
+        - asset: assets/fonts/Fraunces-Variable.ttf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Variable.ttf
