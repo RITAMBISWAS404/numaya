@@ -6,7 +6,8 @@ import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 
-/// Floating status pill (`.pill`): ink background, white semibold text, three pulsing dots while
+/// Floating status pill (`.theme-withings .pill`): the reference's light blue pill ("Password
+/// created"): blue tint, deep-blue semibold text, a soft float shadow, three pulsing dots while
 /// busy. Announced to screen readers. Returns a handle so busy toasts can be closed by the caller.
 abstract final class NumayaToast {
   static ToastHandle show(
@@ -135,9 +136,9 @@ class _ToastViewState extends State<_ToastView> with TickerProviderStateMixin {
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(16, 9, 16, 10),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceInverse,
-                    borderRadius: AppRadii.all(AppRadii.md),
-                    boxShadow: AppElevation.lg,
+                    color: AppColors.accentTint,
+                    borderRadius: AppRadii.all(AppRadii.pill),
+                    boxShadow: AppElevation.withingsFloat,
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -151,7 +152,7 @@ class _ToastViewState extends State<_ToastView> with TickerProviderStateMixin {
                             ).copyWith(
                               fontSize: 14,
                               height: 18 / 14,
-                              color: AppColors.textOnInverse,
+                              color: AppColors.accentOnTint,
                             ),
                       ),
                       if (widget.busy) ...[
@@ -173,7 +174,7 @@ class _ToastViewState extends State<_ToastView> with TickerProviderStateMixin {
                                   width: 4,
                                   height: 4,
                                   decoration: const BoxDecoration(
-                                    color: AppColors.textOnInverse,
+                                    color: AppColors.accentOnTint,
                                     shape: BoxShape.circle,
                                   ),
                                 ),

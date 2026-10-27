@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Converts the web app's variable fonts (Fontsource woff2, SIL OFL 1.1) to TTF for Flutter.
+"""Converts the web app's V16 variable font (Fontsource woff2, SIL OFL 1.1) to TTF for Flutter.
 
 Run from the repository root after `npm install`:
     pip install fonttools brotli
@@ -14,13 +14,12 @@ from fontTools.ttLib import TTFont
 
 ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / "apps/numaya_mobile/assets/fonts"
+# V16 uses one family, Hanken Grotesk (theme-withings.css: --font-withings).
 FONTS = {
-    "Fraunces-Variable.ttf": "node_modules/@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2",
-    "Inter-Variable.ttf": "node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2",
+    "HankenGrotesk-Variable.ttf": "node_modules/@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2",
 }
 LICENSES = {
-    "OFL-Fraunces.txt": "node_modules/@fontsource-variable/fraunces/LICENSE",
-    "OFL-Inter.txt": "node_modules/@fontsource-variable/inter/LICENSE",
+    "OFL-HankenGrotesk.txt": "node_modules/@fontsource-variable/hanken-grotesk/LICENSE",
 }
 
 OUT.mkdir(parents=True, exist_ok=True)

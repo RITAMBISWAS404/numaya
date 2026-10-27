@@ -337,9 +337,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get interestsNeedPrompt => 'Now answer your prompt';
 
   @override
-  String get interestsMaxReached => 'That’s 5. Remove one to pick another.';
-
-  @override
   String get promptSectionTitle => 'Your prompt';
 
   @override
@@ -372,6 +369,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get promptWriteToSave => 'Write an answer to save.';
+
+  @override
+  String get promptNoChanges => 'No changes yet.';
+
+  @override
+  String get promptSavedHint =>
+      'Saved prompts show on your profile straight away.';
+
+  @override
+  String promptCharsLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count characters left',
+      one: '1 character left',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get photosTitle => 'Add your photos';
@@ -447,8 +462,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filtersAge => 'Age';
 
   @override
+  String get filtersAgeHeading => 'How old are they?';
+
+  @override
+  String get filtersDistanceHeading => 'How far away are they?';
+
+  @override
+  String get filtersDistanceLabel => 'Distance';
+
+  @override
   String filtersAgeValue(int min, int max) {
-    return '$min to $max';
+    return '$min - $max';
   }
 
   @override
@@ -456,7 +480,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String filtersDistanceValue(int km) {
-    return '$km km';
+    return 'Up to $km km';
   }
 
   @override
@@ -469,17 +493,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filtersSaved => 'Filters saved';
 
   @override
-  String get likesEmptyTitle => 'No likes yet';
+  String get likesSubtitle => 'People who liked you. Like them back to match.';
 
   @override
-  String get likesEmptyBody => 'When someone likes you, they’ll show up here.';
+  String get likesEmptyTitle => 'No new likes right now';
 
   @override
-  String get chatsEmptyTitle => 'No conversations yet';
+  String get likesEmptyBody =>
+      'When someone likes your profile, they’ll show up here.';
+
+  @override
+  String get goToHome => 'Go to Home';
+
+  @override
+  String get chatsEmptyTitle => 'Connections start here';
 
   @override
   String get chatsEmptyBody =>
-      'When you match with someone, you can start chatting here.';
+      'When you like each other, you’ll match. Here’s where you can chat.';
+
+  @override
+  String get findYourPeople => 'Find your people';
 
   @override
   String profileNameAge(Object name, int age) {
@@ -500,7 +534,54 @@ class AppLocalizationsEn extends AppLocalizations {
       'Placeholder photos until upload is connected.';
 
   @override
+  String get profilePromptTitle => 'Your prompt';
+
+  @override
+  String get profilePromptCaption => 'Matches reply to this.';
+
+  @override
+  String get profileAccount => 'Account';
+
+  @override
+  String get profileTrust => 'Trust';
+
+  @override
+  String get profileVerification => 'Verification';
+
+  @override
+  String get profilePhoneVerified => 'Phone verified';
+
+  @override
+  String get profileLookingLongTerm => 'Looking for long-term';
+
+  @override
+  String get profileLookingOpen => 'Open to seeing where it goes';
+
+  @override
+  String get profileLookingCasual => 'Looking for something casual';
+
+  @override
+  String get profileInitialLabel =>
+      'Your initial, until photo upload is connected';
+
+  @override
   String get editTitle => 'Edit profile';
+
+  @override
+  String get editPhotosTitle => 'Photos';
+
+  @override
+  String get editPhotosHint => 'Keep at least 2.';
+
+  @override
+  String get editPhotosNote =>
+      'Upload isn’t connected yet, so + adds a placeholder tile.';
+
+  @override
+  String get editPromptSection => 'Prompt';
+
+  @override
+  String get editAboutSection => 'About you';
 
   @override
   String get editSaved => 'Saved';
@@ -531,7 +612,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Push notifications aren’t connected in this build. These choices are kept for this session.';
 
   @override
-  String get settingsSignOut => 'Sign out';
+  String get settingsSignOut => 'Log out';
+
+  @override
+  String get settingsDeleteNote =>
+      'Deleting removes your profile, matches and messages.';
 
   @override
   String get settingsDelete => 'Delete account';

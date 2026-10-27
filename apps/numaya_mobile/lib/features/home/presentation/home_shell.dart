@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 
-/// Signed-in shell: four tabs (Home, Likes, Messages, Profile), each keeping its own stack.
+/// Signed-in shell: four tabs (Home, Likes, Messages, Profile) on the stone page, each keeping its
+/// own stack, above V16's white tab bar.
 class HomeShell extends StatelessWidget {
   const HomeShell({super.key, required this.shell});
 
@@ -14,9 +15,8 @@ class HomeShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Scaffold(
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.canvas,
       body: shell,
-      extendBody: true,
       bottomNavigationBar: NumayaTabBar(
         currentIndex: shell.currentIndex,
         onSelect: (i) =>
@@ -32,7 +32,8 @@ class HomeShell extends StatelessWidget {
   }
 }
 
-/// Large-title header used by tab roots (`.topbar--large`).
+/// Tab-root header (`.theme-withings .topbar--large`): a 30pt bold page title on the stone page,
+/// with round white header buttons.
 class TabHeader extends StatelessWidget {
   const TabHeader({super.key, required this.title, this.actions = const []});
 
@@ -42,7 +43,7 @@ class TabHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: AppSizes.topBar,
+      height: 64,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
         child: Row(
@@ -50,7 +51,7 @@ class TabHeader extends StatelessWidget {
             Expanded(
               child: Semantics(
                 header: true,
-                child: Text(title, style: AppTypography.headline),
+                child: Text(title, style: AppTypography.pageTitle),
               ),
             ),
             for (final a in actions) ...[

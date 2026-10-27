@@ -96,7 +96,14 @@ void main() {
     await tester.pump(const Duration(milliseconds: 600));
 
     await shot('12-interests-empty');
-    for (final i in ['Natural wine', 'Cooking', 'Jazz']) {
+    for (final i in ['Natural wine', 'Cooking', 'Jazz', 'Poetry', 'Climbing']) {
+      await tap(find.text(i));
+    }
+    await shot('12b-interests-max');
+    for (final i in ['Poetry', 'Climbing']) {
+      await tap(find.text(i));
+    }
+    for (final i in <String>[]) {
       await tap(find.text(i));
     }
     await tap(find.text('Tap to write your answer'));
@@ -129,11 +136,23 @@ void main() {
     await shot('17-filters');
     await tester.tapAt(const Offset(200, 40));
     await tester.pump(const Duration(seconds: 3));
+    await tap(find.text('Likes'));
+    await shot('18-likes');
+    await tap(find.text('Messages'));
+    await shot('19-messages');
     await tap(find.text('Profile'));
-    await shot('18-profile');
-    await tap(find.bySemanticsLabel('Settings'));
+    await shot('20-profile');
+    await tap(find.text('Edit profile'));
     await tester.pump(const Duration(milliseconds: 600));
-    await shot('19-settings');
+    await shot('21-edit-profile');
+    await tap(find.bySemanticsLabel('Back'));
+    await tester.pump(const Duration(milliseconds: 600));
+    await tap(find.bySemanticsLabel('Settings').first);
+    await tester.pump(const Duration(milliseconds: 600));
+    await shot('22-settings');
+    await tap(find.text('Delete account'));
+    await shot('23-delete-sheet');
+    await tester.tapAt(const Offset(200, 40));
     await tester.pump(const Duration(seconds: 3));
   });
 }

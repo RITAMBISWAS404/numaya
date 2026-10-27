@@ -172,32 +172,33 @@ class _CodeCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final filled = digit != null;
-    final (Color bg, Color? ring, double ringWidth, Color fg) = switch (state) {
+    // V16 has no code cell of its own; the cells extend the V16 field: white, 1pt outline, 8pt
+    // corner, a 2pt blue outline when active, red when wrong, the blue tint when verified.
+    final (Color bg, Color ring, double ringWidth, Color fg) = switch (state) {
       CodeInputState.error => (
         AppColors.dangerTint,
-        AppColors.danger,
-        AppBorders.selected,
-        AppColors.danger,
+        AppColors.negative,
+        AppBorders.focus,
+        AppColors.negative,
       ),
       CodeInputState.success => (
-        AppColors.brandTint,
-        AppColors.brand,
+        AppColors.accentTint,
+        AppColors.accent,
         AppBorders.selected,
-        AppColors.textBrandDeep,
+        AppColors.accentOnTint,
       ),
       _ when active => (
         AppColors.surface,
         AppColors.focusField,
         AppBorders.focus,
-        AppColors.textPrimary,
+        AppColors.ink,
       ),
-      _ when filled => (
+      _ => (
         AppColors.surface,
-        AppColors.borderStrong,
+        AppColors.outline,
         AppBorders.hairline,
-        AppColors.textPrimary,
+        AppColors.ink,
       ),
-      _ => (AppColors.surfaceSoft, null, 0, AppColors.textPrimary),
     };
     return AnimatedOpacity(
       opacity: state == CodeInputState.checking ? AppOpacity.pending : 1,
@@ -208,17 +209,12 @@ class _CodeCell extends StatelessWidget {
         height: AppSizes.codeCellHeight,
         decoration: BoxDecoration(
           color: bg,
-          borderRadius: AppRadii.all(AppSizes.codeCellRadius),
-          border: ring == null
-              ? null
-              : Border.all(
-                  color: ring,
-                  width: ringWidth,
-                  strokeAlign: BorderSide.strokeAlignInside,
-                ),
-          boxShadow: active && state == CodeInputState.idle
-              ? const [BoxShadow(color: AppColors.focusHalo, spreadRadius: 4)]
-              : const [],
+          borderRadius: AppRadii.all(AppRadii.field),
+          border: Border.all(
+            color: ring,
+            width: ringWidth,
+            strokeAlign: BorderSide.strokeAlignInside,
+          ),
         ),
         alignment: Alignment.center,
         child: filled
@@ -244,7 +240,7 @@ class _CodeCell extends StatelessWidget {
                   width: 2,
                   height: 26,
                   decoration: BoxDecoration(
-                    color: AppColors.textBrand,
+                    color: AppColors.accent,
                     borderRadius: BorderRadius.circular(1),
                   ),
                 ),
@@ -261,8 +257,25 @@ class _StepBlink extends Animatable<double> {
   double transform(double t) => t < 0.5 ? 1 : 0;
 }
 
-/// Selectable chip (`.chip`): outlined white; selected solid purple with a minus; unavailable
-/// (quota reached) greyed with a muted plus.
+/// Tone of an interest set's emoji holder (V11 data tones, V16 pastels).
+enum MarkTone {
+  peach(AppColors.markPink),
+  lilac(AppColors.markLavender),
+  sky(AppColors.markLavender),
+  mint(AppColors.accentTint),
+  butter(AppColors.markYellow);
+
+  const MarkTone(this.color);
+  final Color color;
+
+  static MarkTone byName(String name) =>
+      values.firstWhere((t) => t.name == name, orElse: () => butter);
+}
+
+/// V16 content chip (`.theme-withings .chip[data-emoji]`): a white 12pt-corner rectangle with an
+/// emoji and a 15pt medium label, a plus or minus at the end. Selected: the blue tint with deep-blue
+/// semibold text. On a white card or sheet ([onCard]) it takes the fill so it still reads as a chip.
+/// Unavailable (quota reached): the disabled foreground.
 class NumayaChip extends StatelessWidget {
   const NumayaChip({
     super.key,
@@ -270,56 +283,59 @@ class NumayaChip extends StatelessWidget {
     required this.selected,
     required this.onTap,
     this.available = true,
+    this.emoji,
+    this.onCard = false,
   });
 
   final String label;
   final bool selected;
   final bool available;
+  final String? emoji;
+  final bool onCard;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final unavailable = !available && !selected;
     final fg = selected
-        ? AppColors.controlSelectedText
+        ? AppColors.accentOnTint
         : unavailable
-        ? AppColors.textSubtle
-        : AppColors.textPrimary;
+        ? AppColors.disabledForeground
+        : AppColors.ink;
     return Pressable(
       onTap: unavailable ? null : onTap,
       semanticLabel: label,
       selected: selected,
       excludeChildSemantics: true,
       pressedScale: 0.97,
-      borderRadius: AppRadii.all(AppRadii.pill),
+      borderRadius: AppRadii.all(AppRadii.control),
       child: AnimatedContainer(
         duration: AppMotion.duration(context, AppMotion.base),
         curve: AppMotion.easeOut,
         constraints: const BoxConstraints(minHeight: AppSizes.chip),
-        padding: const EdgeInsets.fromLTRB(14, 5, AppSpacing.s3, 5),
+        padding: const EdgeInsets.fromLTRB(AppSpacing.s3, 5, AppSpacing.s3, 5),
         decoration: BoxDecoration(
-          color: selected ? AppColors.controlSelected : AppColors.surface,
-          borderRadius: AppRadii.all(AppRadii.pill),
-          border: selected
-              ? null
-              : Border.all(
-                  color: unavailable
-                      ? AppColors.borderSubtle
-                      : AppColors.borderStrong,
-                  width: AppBorders.hairline,
-                  strokeAlign: BorderSide.strokeAlignInside,
-                ),
+          color: selected
+              ? AppColors.accentTint
+              : onCard
+              ? AppColors.fill
+              : AppColors.surface,
+          borderRadius: AppRadii.all(AppRadii.control),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (emoji != null) ...[
+              Emoji(emoji!, size: 15.5),
+              const SizedBox(width: 6),
+            ],
             Flexible(
               child: Text(
                 label,
                 style: AppTypography.weight(
-                  AppTypography.bodySm,
-                  AppTypography.medium,
-                ).copyWith(color: fg, height: 20 / 15),
+                  AppTypography.card,
+                  selected ? AppTypography.semibold : AppTypography.medium,
+                ).copyWith(color: fg),
               ),
             ),
             const SizedBox(width: 6),
@@ -327,7 +343,7 @@ class NumayaChip extends StatelessWidget {
               selected ? NumayaIcons.minus : NumayaIcons.plus,
               size: 18,
               color: selected
-                  ? AppColors.onBrand
+                  ? AppColors.accentOnTint
                   : unavailable
                   ? AppColors.borderStrong
                   : AppColors.textMuted,
@@ -339,11 +355,20 @@ class NumayaChip extends StatelessWidget {
   }
 }
 
-/// A labelled set of chips.
+/// A labelled set of chips (`.chip-group__set`): the set name beside its emoji in a round pastel
+/// holder (V16's category icons), chips below.
 class ChipSet extends StatelessWidget {
-  const ChipSet({super.key, required this.label, required this.children});
+  const ChipSet({
+    super.key,
+    required this.label,
+    required this.children,
+    this.emoji,
+    this.tone = MarkTone.butter,
+  });
 
   final String label;
+  final String? emoji;
+  final MarkTone tone;
   final List<Widget> children;
 
   @override
@@ -351,7 +376,32 @@ class ChipSet extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppTypography.caption),
+        Row(
+          children: [
+            if (emoji != null) ...[
+              ExcludeSemantics(
+                child: Container(
+                  width: AppSizes.mark,
+                  height: AppSizes.mark,
+                  decoration: BoxDecoration(
+                    color: tone.color,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Emoji(emoji!, size: 13),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.s2),
+            ],
+            Text(
+              label,
+              style: AppTypography.weight(
+                AppTypography.label,
+                AppTypography.semibold,
+              ).copyWith(color: AppColors.ink),
+            ),
+          ],
+        ),
         const SizedBox(height: AppSpacing.s2),
         Wrap(
           spacing: AppSpacing.s2,
@@ -365,8 +415,9 @@ class ChipSet extends StatelessWidget {
 
 enum OptionKind { radio, checkbox }
 
-/// Option card (`.option-card`): pill row with a radio or checkbox at the end. Selected: lavender
-/// fill with a 2pt purple ring.
+/// One selection row (`.theme-withings .option-card`). Rows sit in one white card with hairline
+/// dividers ([OptionGroup]); the radio or checkbox carries the selection, so a selected row takes no
+/// ring.
 class OptionCard extends StatelessWidget {
   const OptionCard({
     super.key,
@@ -387,8 +438,7 @@ class OptionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radius = description == null ? AppRadii.pill : AppRadii.lg;
-    final fg = enabled ? AppColors.textPrimary : AppColors.textSubtle;
+    final fg = enabled ? AppColors.ink : AppColors.disabledForeground;
     return Semantics(
       inMutuallyExclusiveGroup: kind == OptionKind.radio,
       checked: selected,
@@ -396,32 +446,20 @@ class OptionCard extends StatelessWidget {
         onTap: enabled ? onTap : null,
         semanticLabel: description == null ? label : '$label. $description',
         excludeChildSemantics: true,
-        pressedScale: 0.99,
-        borderRadius: AppRadii.all(radius),
-        child: AnimatedContainer(
-          duration: AppMotion.duration(context, AppMotion.base),
+        pressedScale: 1,
+        child: Container(
           width: double.infinity,
-          constraints: const BoxConstraints(minHeight: AppSizes.touchMin),
+          constraints: const BoxConstraints(minHeight: AppSizes.row),
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.s5,
-            vertical: 14,
-          ),
-          decoration: BoxDecoration(
-            color: selected ? AppColors.brandTint : AppColors.surface,
-            borderRadius: AppRadii.all(radius),
-            border: Border.all(
-              color: selected
-                  ? AppColors.controlSelected
-                  : AppColors.borderStrong,
-              width: selected ? AppBorders.focus : AppBorders.hairline,
-              strokeAlign: BorderSide.strokeAlignInside,
-            ),
+            horizontal: AppSpacing.s4,
+            vertical: AppSpacing.s3,
           ),
           child: Row(
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       label,
@@ -447,6 +485,8 @@ class OptionCard extends StatelessWidget {
   }
 }
 
+/// V16 radio: a grey ring; selected an ink ring around an ink dot. Checkbox: a grey 6pt square;
+/// checked Withings blue with a white tick.
 class _ChoiceMark extends StatelessWidget {
   const _ChoiceMark({
     required this.kind,
@@ -461,49 +501,48 @@ class _ChoiceMark extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final radio = kind == OptionKind.radio;
+    final checked = selected && !radio;
     return Opacity(
       opacity: enabled ? 1 : AppOpacity.disabled,
       child: AnimatedContainer(
         duration: AppMotion.duration(context, AppMotion.fast),
-        width: 24,
-        height: 24,
+        width: AppSizes.choice,
+        height: AppSizes.choice,
         decoration: BoxDecoration(
-          color: selected && !radio
-              ? AppColors.controlSelected
-              : AppColors.surface,
+          color: checked ? AppColors.accent : AppColors.surface,
           shape: radio ? BoxShape.circle : BoxShape.rectangle,
-          borderRadius: radio ? null : AppRadii.all(AppRadii.xs),
-          border: Border.all(
-            color: selected
-                ? AppColors.controlSelected
-                : AppColors.borderControl,
-            width: selected && radio ? AppBorders.focus : AppBorders.selected,
-            strokeAlign: BorderSide.strokeAlignInside,
-          ),
+          borderRadius: radio ? null : AppRadii.all(AppRadii.tag),
+          border: checked
+              ? null
+              : Border.all(
+                  color: selected ? AppColors.ink : AppColors.control,
+                  width: AppBorders.selected,
+                  strokeAlign: BorderSide.strokeAlignInside,
+                ),
         ),
         alignment: Alignment.center,
         child: !selected
             ? null
             : radio
             ? Container(
-                width: 12,
-                height: 12,
+                width: 11,
+                height: 11,
                 decoration: const BoxDecoration(
-                  color: AppColors.controlSelected,
+                  color: AppColors.ink,
                   shape: BoxShape.circle,
                 ),
               )
             : const NumayaIcon(
                 NumayaIcons.check,
-                size: 18,
-                color: AppColors.onBrand,
+                size: 16,
+                color: AppColors.accentForeground,
               ),
       ),
     );
   }
 }
 
-/// A legend over a column of option cards (`.option-cards`).
+/// A capital legend over one white card of selection rows (`.option-cards`), dividers between.
 class OptionGroup extends StatelessWidget {
   const OptionGroup({super.key, required this.legend, required this.children});
 
@@ -519,21 +558,53 @@ class OptionGroup extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ExcludeSemantics(
-            child: Text(
-              legend,
-              style: AppTypography.weight(
-                AppTypography.label,
-                AppTypography.semibold,
-              ),
-            ),
+            child: Text(legend.toUpperCase(), style: AppTypography.labelCaps),
           ),
           const SizedBox(height: AppSpacing.s3),
-          for (var i = 0; i < children.length; i++) ...[
-            if (i > 0) const SizedBox(height: 10),
-            children[i],
-          ],
+          WhiteCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                for (var i = 0; i < children.length; i++) ...[
+                  if (i > 0)
+                    const Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: AppColors.border,
+                    ),
+                  children[i],
+                ],
+              ],
+            ),
+          ),
         ],
       ),
+    );
+  }
+}
+
+/// V16 card: white on the stone page, 14pt corner, no border, no shadow.
+class WhiteCard extends StatelessWidget {
+  const WhiteCard({
+    super.key,
+    required this.child,
+    this.padding = const EdgeInsets.all(AppSpacing.s4),
+  });
+
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: padding,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.card),
+      ),
+      child: child,
     );
   }
 }

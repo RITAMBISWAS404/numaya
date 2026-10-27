@@ -13,8 +13,8 @@ class TabItem {
   final NumayaIcons icon;
 }
 
-/// Floating pill tab bar (`.tab-bar`): the current tab is a sunken pill with a filled purple icon;
-/// others use the outline glyph.
+/// Bottom navigation (`.theme-withings .tab-bar`): white with a top hairline; the current tab ink
+/// (filled icon, semibold label), the others muted grey with the outline icon.
 class NumayaTabBar extends StatelessWidget {
   const NumayaTabBar({
     super.key,
@@ -30,33 +30,30 @@ class NumayaTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bottom = MediaQuery.paddingOf(context).bottom;
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        AppSpacing.s3,
-        AppSpacing.s2,
-        AppSpacing.s3,
-        bottom + AppSpacing.s2,
-      ),
-      child: Container(
-        height: AppSizes.tabBar,
-        padding: const EdgeInsets.all(6),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: AppRadii.all(AppRadii.pill),
-          border: Border.all(
-            color: AppColors.borderSubtle,
-            width: AppBorders.hairline,
-            strokeAlign: BorderSide.strokeAlignInside,
-          ),
-          boxShadow: AppElevation.float,
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        border: Border(
+          top: BorderSide(color: AppColors.border, width: AppBorders.hairline),
         ),
-        child: Row(
-          children: [
-            for (var i = 0; i < items.length; i++) ...[
-              if (i > 0) const SizedBox(width: AppSpacing.s1),
-              Expanded(child: _tab(context, i)),
-            ],
-          ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(bottom: bottom),
+        child: SizedBox(
+          height: AppSizes.tabBar,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: AppSpacing.contentMax,
+              ),
+              child: Row(
+                children: [
+                  for (var i = 0; i < items.length; i++)
+                    Expanded(child: _tab(context, i)),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -65,6 +62,7 @@ class NumayaTabBar extends StatelessWidget {
   Widget _tab(BuildContext context, int i) {
     final item = items[i];
     final current = i == currentIndex;
+    final color = current ? AppColors.ink : AppColors.textMuted;
     return Semantics(
       selected: current,
       child: Pressable(
@@ -72,38 +70,22 @@ class NumayaTabBar extends StatelessWidget {
         semanticLabel: item.label,
         excludeChildSemantics: true,
         pressedScale: 0.96,
-        borderRadius: AppRadii.all(AppRadii.pill),
-        child: AnimatedContainer(
-          duration: AppMotion.duration(context, AppMotion.base),
+        child: SizedBox(
           height: double.infinity,
-          decoration: BoxDecoration(
-            color: current ? AppColors.surfaceSunken : Colors.transparent,
-            borderRadius: AppRadii.all(AppRadii.pill),
-          ),
+          width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              NumayaIcon(
-                item.icon,
-                outline: !current,
-                color: current ? AppColors.brand : AppColors.textSecondary,
-              ),
-              const SizedBox(height: 2),
+              NumayaIcon(item.icon, outline: !current, color: color),
+              const SizedBox(height: 3),
               Text(
                 item.label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style:
-                    AppTypography.weight(
-                      AppTypography.micro,
-                      current ? AppTypography.semibold : AppTypography.medium,
-                    ).copyWith(
-                      fontSize: 11,
-                      height: 13 / 11,
-                      color: current
-                          ? AppColors.textBrandDeep
-                          : AppColors.textSecondary,
-                    ),
+                style: AppTypography.weight(
+                  AppTypography.micro,
+                  current ? AppTypography.semibold : AppTypography.medium,
+                ).copyWith(fontSize: 11, height: 13 / 11, color: color),
               ),
             ],
           ),
@@ -113,7 +95,8 @@ class NumayaTabBar extends StatelessWidget {
   }
 }
 
-/// Switch (`.switch`): 51 × 31, purple when on, white thumb.
+/// Switch (`.theme-withings .switch`): iOS proportions (51 × 31), a round 27pt white thumb, green
+/// when on, the fill when off.
 class NumayaSwitch extends StatelessWidget {
   const NumayaSwitch({super.key, required this.value, required this.onChanged});
 
@@ -129,7 +112,7 @@ class NumayaSwitch extends StatelessWidget {
       height: AppSizes.switchHeight,
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        color: value ? AppColors.controlSelected : AppColors.controlTrackOff,
+        color: value ? AppColors.positive : AppColors.fill,
         borderRadius: AppRadii.all(AppRadii.pill),
       ),
       child: AnimatedAlign(
@@ -137,8 +120,8 @@ class NumayaSwitch extends StatelessWidget {
         curve: AppMotion.easeOut,
         alignment: value ? Alignment.centerRight : Alignment.centerLeft,
         child: Container(
-          width: 27,
-          height: 27,
+          width: AppSizes.switchThumb,
+          height: AppSizes.switchThumb,
           decoration: const BoxDecoration(
             color: AppColors.surface,
             shape: BoxShape.circle,
@@ -150,7 +133,8 @@ class NumayaSwitch extends StatelessWidget {
   }
 }
 
-/// Settings-style row: label, optional detail, and a trailing switch, value or chevron.
+/// Grouped row (`.theme-withings .list-row`): 56pt minimum, a 16pt regular label, a secondary
+/// subtitle, and a trailing switch, value or chevron.
 class ListRow extends StatelessWidget {
   const ListRow({
     super.key,
@@ -162,6 +146,7 @@ class ListRow extends StatelessWidget {
     this.onSwitch,
     this.danger = false,
     this.showChevron,
+    this.leading,
   });
 
   final String label;
@@ -172,38 +157,43 @@ class ListRow extends StatelessWidget {
   final ValueChanged<bool>? onSwitch;
   final bool danger;
   final bool? showChevron;
+  final NumayaIcons? leading;
 
   @override
   Widget build(BuildContext context) {
     final isSwitch = switchValue != null;
     final chevron = showChevron ?? (onTap != null && !isSwitch && !danger);
     final row = Container(
-      constraints: const BoxConstraints(minHeight: 52),
+      constraints: const BoxConstraints(minHeight: AppSizes.row),
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.s4,
         vertical: AppSpacing.s3,
       ),
       child: Row(
         children: [
+          if (leading != null) ...[
+            NumayaIcon(leading!, size: AppSizes.iconMd, color: AppColors.ink),
+            const SizedBox(width: AppSpacing.s3),
+          ],
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   label,
-                  style:
-                      AppTypography.weight(
-                        AppTypography.body,
-                        AppTypography.medium,
-                      ).copyWith(
-                        color: danger
-                            ? AppColors.danger
-                            : AppColors.textPrimary,
-                      ),
+                  style: AppTypography.row.copyWith(
+                    color: danger ? AppColors.negative : AppColors.ink,
+                  ),
                 ),
-                if (detail != null) ...[
+                if (detail != null && detail!.isNotEmpty) ...[
                   const SizedBox(height: 2),
-                  Text(detail!, style: AppTypography.caption),
+                  Text(
+                    detail!,
+                    style: AppTypography.caption.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
                 ],
               ],
             ),
@@ -213,9 +203,7 @@ class ListRow extends StatelessWidget {
               padding: const EdgeInsets.only(left: AppSpacing.s3),
               child: Text(
                 value!,
-                style: AppTypography.bodySm.copyWith(
-                  color: AppColors.textMuted,
-                ),
+                style: AppTypography.row.copyWith(color: AppColors.textMuted),
               ),
             ),
           if (isSwitch)
@@ -262,7 +250,8 @@ class ListRow extends StatelessWidget {
   }
 }
 
-/// Group of rows on a soft card (`.list-group`), with an optional heading.
+/// A titled group of rows (`.list-group`): a 22pt medium ink heading, the rows on one white card
+/// with hairline dividers inset 16pt on both sides, a secondary footnote.
 class ListGroup extends StatelessWidget {
   const ListGroup({
     super.key,
@@ -282,25 +271,16 @@ class ListGroup extends StatelessWidget {
       children: [
         if (title != null)
           Padding(
-            padding: const EdgeInsets.only(
-              left: AppSpacing.s1,
-              bottom: AppSpacing.s2,
-            ),
+            padding: const EdgeInsets.only(bottom: AppSpacing.s3),
             child: Semantics(
               header: true,
-              child: Text(
-                title!,
-                style: AppTypography.weight(
-                  AppTypography.label,
-                  AppTypography.semibold,
-                ),
-              ),
+              child: Text(title!, style: AppTypography.section),
             ),
           ),
         Container(
           decoration: BoxDecoration(
-            color: AppColors.surfaceSoft,
-            borderRadius: AppRadii.all(AppRadii.lg),
+            color: AppColors.surface,
+            borderRadius: AppRadii.all(AppRadii.card),
           ),
           clipBehavior: Clip.antiAlias,
           child: Column(
@@ -312,7 +292,7 @@ class ListGroup extends StatelessWidget {
                     thickness: 1,
                     indent: AppSpacing.s4,
                     endIndent: AppSpacing.s4,
-                    color: AppColors.borderSubtle,
+                    color: AppColors.border,
                   ),
                 children[i],
               ],
@@ -327,14 +307,21 @@ class ListGroup extends StatelessWidget {
               AppSpacing.s1,
               0,
             ),
-            child: Text(footnote!, style: AppTypography.caption),
+            child: Text(
+              footnote!,
+              style: AppTypography.caption.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
           ),
       ],
     );
   }
 }
 
-/// Empty state: illustration (optional), serif title, body, optional action.
+/// Empty state (`.theme-withings .empty-state`): the reference's empty-state card: a white card on
+/// the content column with the illustration, an 18pt semibold title and the body, left-aligned,
+/// and an optional compact action.
 class EmptyState extends StatelessWidget {
   const EmptyState({
     super.key,
@@ -351,37 +338,38 @@ class EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s6),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (art != null) ExcludeSemantics(child: art!),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.s5,
+        AppSpacing.s8,
+        AppSpacing.s5,
+        AppSpacing.s6,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.card),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (art != null) ExcludeSemantics(child: art!),
+          const SizedBox(height: AppSpacing.s5),
+          Semantics(
+            header: true,
+            child: Text(title, style: AppTypography.emptyTitle),
+          ),
+          const SizedBox(height: AppSpacing.s2),
+          Text(
+            body,
+            style: AppTypography.body.copyWith(color: AppColors.textSecondary),
+          ),
+          if (action != null) ...[
             const SizedBox(height: AppSpacing.s5),
-            Semantics(
-              header: true,
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: AppTypography.headline,
-              ),
-            ),
-            const SizedBox(height: 10),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 300),
-              child: Text(
-                body,
-                textAlign: TextAlign.center,
-                style: AppTypography.body.copyWith(color: AppColors.textMuted),
-              ),
-            ),
-            if (action != null) ...[
-              const SizedBox(height: AppSpacing.s6),
-              action!,
-            ],
+            action!,
           ],
-        ),
+        ],
       ),
     );
   }

@@ -35,24 +35,33 @@ class SettingsScreen extends ConsumerWidget {
 
   static const version = '0.1.0';
 
+  /// V16 delete confirmation (screenshot 130): a sheet with the consequence, a solid red
+  /// "Delete account" and an outlined Cancel.
   Future<void> _delete(BuildContext context, WidgetRef ref) async {
     final l10n = context.l10n;
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showNumayaSheet<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.settingsDeleteTitle),
-        content: Text(l10n.settingsDeleteBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.cancel, style: AppTypography.button),
+      title: l10n.settingsDeleteTitle,
+      closeLabel: l10n.close,
+      builder: (context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            l10n.settingsDeleteBody,
+            style: AppTypography.body.copyWith(color: AppColors.textSecondary),
           ),
-          TextButton(
+          const SizedBox(height: AppSpacing.s6),
+          NumayaButton(
+            label: l10n.settingsDelete,
+            variant: NumayaButtonVariant.destructiveSolid,
             onPressed: () => Navigator.of(context).pop(true),
-            child: Text(
-              l10n.settingsDelete,
-              style: AppTypography.button.copyWith(color: AppColors.danger),
-            ),
+          ),
+          const SizedBox(height: AppSpacing.s3),
+          NumayaButton(
+            label: l10n.cancel,
+            variant: NumayaButtonVariant.secondary,
+            onPressed: () => Navigator.of(context).pop(false),
           ),
         ],
       ),
@@ -117,10 +126,10 @@ class SettingsScreen extends ConsumerWidget {
             children: [ListRow(label: l10n.settingsVersion(version))],
           ),
           const SizedBox(height: AppSpacing.sectionGap),
-          NumayaButton(
+          // V16 (screenshot 112): Log out and Delete account are white blocks on the page.
+          _ActionBlock(
             label: l10n.settingsSignOut,
-            variant: NumayaButtonVariant.secondary,
-            onPressed: () async {
+            onTap: () async {
               NumayaToast.show(
                 context,
                 l10n.settingsSignedOut,
@@ -129,13 +138,65 @@ class SettingsScreen extends ConsumerWidget {
               await ref.read(sessionProvider.notifier).signOut();
             },
           ),
-          const SizedBox(height: AppSpacing.s2),
-          NumayaButton(
+          const SizedBox(height: AppSpacing.sectionGap),
+          _ActionBlock(
             label: l10n.settingsDelete,
-            variant: NumayaButtonVariant.destructive,
-            onPressed: () => _delete(context, ref),
+            danger: true,
+            onTap: () => _delete(context, ref),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.s1,
+              AppSpacing.s3,
+              0,
+              0,
+            ),
+            child: Text(
+              l10n.settingsDeleteNote,
+              style: AppTypography.caption.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ActionBlock extends StatelessWidget {
+  const _ActionBlock({
+    required this.label,
+    required this.onTap,
+    this.danger = false,
+  });
+
+  final String label;
+  final VoidCallback onTap;
+  final bool danger;
+
+  @override
+  Widget build(BuildContext context) {
+    return Pressable(
+      onTap: onTap,
+      semanticLabel: label,
+      excludeChildSemantics: true,
+      pressedScale: 0.99,
+      borderRadius: AppRadii.all(AppRadii.card),
+      child: Container(
+        width: double.infinity,
+        height: AppSizes.row,
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: AppRadii.all(AppRadii.card),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          style: AppTypography.row.copyWith(
+            color: danger ? AppColors.negative : AppColors.ink,
+          ),
+        ),
       ),
     );
   }

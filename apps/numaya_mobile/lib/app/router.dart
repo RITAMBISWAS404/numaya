@@ -13,6 +13,7 @@ import '../features/home/presentation/tab_screens.dart';
 import '../features/onboarding/presentation/basics_screen.dart';
 import '../features/onboarding/presentation/interests_screen.dart';
 import '../features/onboarding/presentation/photos_screen.dart';
+import '../features/onboarding/presentation/prompt_editor_screen.dart';
 import '../features/onboarding/presentation/setup_hub_screen.dart';
 import '../features/profile/presentation/edit_profile_screen.dart';
 import '../features/profile/presentation/profile_screen.dart';
@@ -76,6 +77,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, _) => const InterestsScreen(),
           ),
           GoRoute(path: 'photos', builder: (_, _) => const PhotosScreen()),
+          GoRoute(
+            path: 'prompt',
+            builder: (_, _) => const PromptEditorScreen(),
+          ),
         ],
       ),
       StatefulShellRoute.indexedStack(
@@ -130,6 +135,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'photos',
             builder: (_, _) => const PhotosScreen(editing: true),
+          ),
+          GoRoute(
+            path: 'prompt',
+            builder: (_, _) => const PromptEditorScreen(editing: true),
           ),
         ],
       ),

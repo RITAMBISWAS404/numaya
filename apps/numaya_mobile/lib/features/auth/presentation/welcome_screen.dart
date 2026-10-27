@@ -10,8 +10,8 @@ import '../../../l10n/l10n.dart';
 import '../application/phone_entry_controller.dart';
 import '../domain/auth_repository.dart';
 
-/// B-02 Welcome: create an account or sign in. The hero slot stays empty until the supplied
-/// artwork exists (no stand-in photos or art).
+/// B-02 Welcome in V16 form: the stone page, the wordmark, V11's emoji sticker hero (interests,
+/// not people), a bold grotesk headline, an ink primary button and a quiet sign-in.
 class WelcomeScreen extends ConsumerStatefulWidget {
   const WelcomeScreen({super.key});
 
@@ -67,25 +67,15 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
           AppTypography.micro,
           AppTypography.semibold,
         ).copyWith(
-          color: AppColors.textBrand,
+          color: AppColors.accentOnTint,
           height: 18 / 12.5,
           decoration: TextDecoration.underline,
-          decorationColor: AppColors.textBrand.withValues(alpha: 0.45),
+          decorationColor: AppColors.accentOnTint.withValues(alpha: 0.45),
         );
 
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.surfaceBrand,
-            AppColors.brandTint,
-            AppColors.surface,
-          ],
-          stops: [0, 0.48, 0.72],
-        ),
-      ),
+    // V16: the welcome sits on the stone page (`.theme-withings.screen--wash`).
+    return ColoredBox(
+      color: AppColors.canvas,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(
@@ -112,8 +102,8 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                       ],
                     ),
                   ),
-                  // Reserved hero slot (registry id "welcome-hero"): empty until artwork exists.
-                  const Spacer(),
+                  // V16 keeps V11's hero: interests as tilted emoji stickers.
+                  const Expanded(child: _StickerHero()),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(
                       AppSpacing.gutter,
@@ -132,14 +122,17 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                           ),
                         ),
                         const SizedBox(height: AppSpacing.s4),
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 340),
-                          child: Text(
-                            l10n.welcomeLede,
-                            style: AppTypography.weight(
-                              AppTypography.input,
-                              400,
-                            ).copyWith(color: AppColors.textMuted),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: ConstrainedBox(
+                            // `.welcome__lede { max-width: 31ch }`.
+                            constraints: const BoxConstraints(maxWidth: 272),
+                            child: Text(
+                              l10n.welcomeLede,
+                              style: AppTypography.input.copyWith(
+                                color: AppColors.textMuted,
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(height: AppSpacing.s8),
@@ -195,24 +188,77 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
   }
 }
 
-/// Small label marking a development build that uses demo sign-in.
+/// Small label marking a development build that uses demo sign-in: V16's neutral status label
+/// (`.badge`: outlined 1pt ink, 6pt corner, medium).
 class DemoBadge extends StatelessWidget {
   const DemoBadge({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: AppColors.warningTint,
-        borderRadius: AppRadii.all(AppRadii.pill),
+        borderRadius: AppRadii.all(AppRadii.tag),
+        border: Border.all(color: AppColors.ink, width: AppBorders.hairline),
       ),
       child: Text(
         context.l10n.demoBuildLabel,
         style: AppTypography.weight(
           AppTypography.caption,
-          AppTypography.semibold,
-        ).copyWith(color: AppColors.warning),
+          AppTypography.medium,
+        ).copyWith(color: AppColors.ink),
+      ),
+    );
+  }
+}
+
+/// The welcome hero (`.welcome__stickers`): four interest emoji on 76pt page-coloured tiles with a
+/// hairline, 20pt corners, tilted, placed by percentage of the hero as on the web.
+class _StickerHero extends StatelessWidget {
+  const _StickerHero();
+
+  static const _stickers = [
+    (emoji: '🍷', left: 0.16, top: 0.30, turn: -8.0),
+    (emoji: '🎷', left: 0.50, top: 0.18, turn: 6.0),
+    (emoji: '📷', left: 0.62, top: 0.50, turn: -4.0),
+    (emoji: '🧗', left: 0.28, top: 0.62, turn: 5.0),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return ExcludeSemantics(
+      child: LayoutBuilder(
+        builder: (context, box) {
+          // The stickers need room; on short screens the hero simply stays empty.
+          if (box.maxHeight < 200) return const SizedBox.expand();
+          return Stack(
+            children: [
+              for (final s in _stickers)
+                Positioned(
+                  left: box.maxWidth * s.left,
+                  top: box.maxHeight * s.top,
+                  child: Transform.rotate(
+                    angle: s.turn * 3.1415926535 / 180,
+                    child: Container(
+                      width: 76,
+                      height: 76,
+                      decoration: BoxDecoration(
+                        color: AppColors.canvas,
+                        borderRadius: AppRadii.all(20),
+                        border: Border.all(
+                          color: AppColors.border,
+                          width: AppBorders.hairline,
+                          strokeAlign: BorderSide.strokeAlignInside,
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: Emoji(s.emoji, size: 34),
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }

@@ -9,7 +9,8 @@ import '../icons/numaya_icon_data.g.dart';
 import 'buttons.dart';
 import 'primitives.dart';
 
-/// The Numaya mark: a purple soft square with a bite out of its corner and a rose dot in the bite.
+/// The Numaya mark: a soft square with a bite out of its corner and a rose dot in the bite. In V16
+/// the square is Withings blue (COMPONENT_RULES.md: "mark in accent blue, rose dot kept").
 class BrandMark extends StatelessWidget {
   const BrandMark({super.key, this.size = 26});
   final double size;
@@ -30,7 +31,7 @@ class _BrandMarkPainter extends CustomPainter {
       ..addOval(Rect.fromCircle(center: const Offset(27, 5), radius: 7));
     canvas.drawPath(
       Path.combine(PathOperation.difference, square, bite),
-      Paint()..color = AppColors.brand,
+      Paint()..color = AppColors.accent,
     );
     canvas.drawCircle(
       const Offset(27, 5),
@@ -43,7 +44,7 @@ class _BrandMarkPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// Mark plus the "numaya" wordmark.
+/// Mark plus the "numaya" wordmark in bold Hanken Grotesk ink.
 class Wordmark extends StatelessWidget {
   const Wordmark({super.key, this.small = false});
   final bool small;
@@ -113,7 +114,8 @@ class IllustrationView extends StatelessWidget {
   }
 }
 
-/// Lavender guidance card (`.info-card`): icon and title on one line, body below.
+/// Information box (`.theme-withings .info-card`): the reference's notification box, the page
+/// colour with a hairline and an ink icon, so it reads as information, not a card you open.
 class InfoCard extends StatelessWidget {
   const InfoCard({
     super.key,
@@ -132,15 +134,20 @@ class InfoCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.s4),
       decoration: BoxDecoration(
-        color: AppColors.surfaceBrand,
-        borderRadius: AppRadii.all(AppRadii.lg),
+        color: AppColors.canvas,
+        borderRadius: AppRadii.all(AppRadii.card),
+        border: Border.all(
+          color: AppColors.border,
+          width: AppBorders.hairline,
+          strokeAlign: BorderSide.strokeAlignInside,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              NumayaIcon(icon, size: AppSizes.iconMd, color: AppColors.brand),
+              NumayaIcon(icon, size: AppSizes.iconMd, color: AppColors.ink),
               const SizedBox(width: AppSpacing.s2),
               Expanded(
                 child: Text(
@@ -168,8 +175,9 @@ class InfoCard extends StatelessWidget {
   }
 }
 
-/// Prompt card (`.prompt`): question label, serif answer, a large quotation mark behind.
-/// Without an answer it becomes the call to write one.
+/// Prompt card (`.theme-withings .prompt`): a white card (14pt corner, no border) with the question
+/// as the card title beside a round tint mark, and the answer in semibold below. Without an answer
+/// it becomes the call to write one; [onTap] adds a chevron.
 class PromptCard extends StatelessWidget {
   const PromptCard({
     super.key,
@@ -189,73 +197,44 @@ class PromptCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasAnswer = answer != null && answer!.isNotEmpty;
-    final card = ClipRRect(
-      borderRadius: AppRadii.all(AppRadii.lg),
-      child: Container(
-        width: double.infinity,
-        color: AppColors.surfaceBrand,
-        child: Stack(
-          children: [
-            Positioned(
-              right: AppSpacing.s4,
-              bottom: -74,
-              child: ExcludeSemantics(
-                child: Text(
-                  '”',
-                  style: AppTypography.display.copyWith(
-                    fontSize: 112,
-                    height: 1,
-                    color: AppColors.brandSubtle,
-                  ),
+    final card = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.s5,
+        AppSpacing.s4,
+        AppSpacing.s4,
+        AppSpacing.s6,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.card),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const PromptMark(),
+              const SizedBox(width: AppSpacing.s2),
+              Expanded(child: Text(question, style: AppTypography.card)),
+              if (onTap != null)
+                const NumayaIcon(
+                  NumayaIcons.chevronRight,
+                  size: AppSizes.iconMd,
+                  color: AppColors.textSecondary,
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.s5,
-                AppSpacing.s5,
-                AppSpacing.s5,
-                AppSpacing.s6,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          question,
-                          style: AppTypography.weight(
-                            AppTypography.label,
-                            AppTypography.semibold,
-                          ).copyWith(color: AppColors.textBrandDeep),
-                        ),
-                        const SizedBox(height: AppSpacing.s2),
-                        Text(
-                          hasAnswer ? answer! : (emptyLabel ?? ''),
-                          style: hasAnswer
-                              ? AppTypography.title
-                              : AppTypography.title.copyWith(
-                                  color: AppColors.textMuted,
-                                ),
-                        ),
-                      ],
-                    ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.s3),
+          Text(
+            hasAnswer ? answer! : (emptyLabel ?? ''),
+            style: hasAnswer
+                ? AppTypography.promptAnswer
+                : AppTypography.promptAnswer.copyWith(
+                    color: AppColors.textMuted,
                   ),
-                  if (onTap != null)
-                    const Padding(
-                      padding: EdgeInsets.only(left: AppSpacing.s2),
-                      child: NumayaIcon(
-                        NumayaIcons.chevronRight,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
     if (onTap == null) {
@@ -268,10 +247,31 @@ class PromptCard extends StatelessWidget {
           : '$question. ${emptyLabel ?? ''}',
       excludeChildSemantics: true,
       pressedScale: 0.99,
-      borderRadius: AppRadii.all(AppRadii.lg),
+      borderRadius: AppRadii.all(AppRadii.card),
       child: card,
     );
   }
+}
+
+/// The prompt mark: a blue speech bubble in a round 24pt tint holder.
+class PromptMark extends StatelessWidget {
+  const PromptMark({super.key});
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: AppSizes.promptMark,
+    height: AppSizes.promptMark,
+    decoration: const BoxDecoration(
+      color: AppColors.accentTint,
+      shape: BoxShape.circle,
+    ),
+    alignment: Alignment.center,
+    child: const NumayaIcon(
+      NumayaIcons.message,
+      size: 14,
+      color: AppColors.accent,
+    ),
+  );
 }
 
 /// One photo in a grid, by id. [tone] picks the placeholder shade until real images exist.
@@ -281,8 +281,9 @@ class GridPhoto {
   final int tone;
 }
 
-/// 3 × 2 photo grid (`.photo-grid`): filled slots show their order ("Main", 2, 3...) and a remove
-/// button; empty slots show a plus.
+/// 3 × 2 photo grid (`.theme-withings .photo-grid`): 14pt tiles in the warm photo grey with an order
+/// tag ("Main", 2, 3: 6pt corner) and a round remove button; empty slots are white with a dashed
+/// edge and an ink "+" circle.
 class PhotoGrid extends StatelessWidget {
   const PhotoGrid({
     super.key,
@@ -334,8 +335,8 @@ class PhotoGrid extends StatelessWidget {
           Positioned.fill(
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: AppColors.surfacePhoto,
-                borderRadius: AppRadii.all(AppRadii.md),
+                color: AppColors.photo,
+                borderRadius: AppRadii.all(AppRadii.card),
               ),
             ),
           ),
@@ -346,7 +347,7 @@ class PhotoGrid extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
                 color: AppColors.surface,
-                borderRadius: AppRadii.all(AppRadii.pill),
+                borderRadius: AppRadii.all(AppRadii.tag),
               ),
               child: Text(
                 i == 0 ? mainLabel : '${i + 1}',
@@ -388,31 +389,83 @@ class PhotoGrid extends StatelessWidget {
 
   /// Any empty slot adds the next photo at the end, so photos stay in order.
   Widget _empty() {
-    final tile = Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: AppRadii.all(AppRadii.md),
-        border: Border.all(
-          color: AppColors.borderStrong,
-          width: AppBorders.hairline,
-          strokeAlign: BorderSide.strokeAlignInside,
+    final tile = CustomPaint(
+      painter: _DashedRRectPainter(
+        color: AppColors.borderStrong,
+        radius: AppRadii.card,
+        strokeWidth: 1.5,
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: AppRadii.all(AppRadii.card),
+        ),
+        alignment: Alignment.center,
+        child: Container(
+          width: 32,
+          height: 32,
+          decoration: const BoxDecoration(
+            color: AppColors.ink,
+            shape: BoxShape.circle,
+          ),
+          alignment: Alignment.center,
+          child: const NumayaIcon(
+            NumayaIcons.plus,
+            size: 20,
+            color: AppColors.inkForeground,
+          ),
         ),
       ),
-      alignment: Alignment.center,
-      child: const NumayaIcon(NumayaIcons.plus, color: AppColors.textPrimary),
     );
     return Pressable(
       onTap: onAdd,
       semanticLabel: addLabel,
       excludeChildSemantics: true,
       pressedScale: 0.97,
-      borderRadius: AppRadii.all(AppRadii.md),
+      borderRadius: AppRadii.all(AppRadii.card),
       child: SizedBox.expand(child: tile),
     );
   }
 }
 
-/// Outcome block (`.result`): illustration, serif title, muted body.
+/// A dashed rounded-rectangle edge (`outline: 1.5px dashed`).
+class _DashedRRectPainter extends CustomPainter {
+  _DashedRRectPainter({
+    required this.color,
+    required this.radius,
+    required this.strokeWidth,
+  });
+
+  final Color color;
+  final double radius;
+  final double strokeWidth;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = (Offset.zero & size).inflate(strokeWidth / 2);
+    final path = Path()
+      ..addRRect(RRect.fromRectAndRadius(rect, Radius.circular(radius)));
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth;
+    const dash = 3.0;
+    const gap = 3.0;
+    for (final metric in path.computeMetrics()) {
+      for (var d = 0.0; d < metric.length; d += dash + gap) {
+        canvas.drawPath(metric.extractPath(d, d + dash), paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_DashedRRectPainter old) =>
+      old.color != color ||
+      old.radius != radius ||
+      old.strokeWidth != strokeWidth;
+}
+
+/// Outcome block (`.result`): illustration, 24pt semibold title, muted body.
 class ResultPanel extends StatelessWidget {
   const ResultPanel({
     super.key,
@@ -501,7 +554,8 @@ class SetupStepData {
   final SetupStepStatus status;
 }
 
-/// Profile setup checklist (`.setup-steps`).
+/// Profile setup checklist (`.setup-steps`), in V16's language: white cards on the page with no
+/// border; done steps on the fill; the step up next ringed in ink with a blue-tint "Up next" tag.
 class SetupProgress extends StatelessWidget {
   const SetupProgress({
     super.key,
@@ -530,7 +584,7 @@ class SetupProgress extends StatelessWidget {
             Expanded(
               child: Semantics(
                 header: true,
-                child: Text(title, style: AppTypography.titleSm),
+                child: Text(title, style: AppTypography.sheetTitle),
               ),
             ),
             Text(countLabel, style: AppTypography.caption),
@@ -585,18 +639,17 @@ class _SetupStepTile extends StatelessWidget {
           vertical: AppSpacing.s3,
         ),
         decoration: BoxDecoration(
-          color: done ? AppColors.surfaceSoft : AppColors.surface,
-          borderRadius: AppRadii.all(AppRadii.lg),
+          color: done ? AppColors.fill : AppColors.surface,
+          borderRadius: AppRadii.all(AppRadii.card),
           border: done
               ? null
               : Border.all(
                   color: active
                       ? AppColors.controlSelected
-                      : AppColors.borderSubtle,
+                      : Colors.transparent,
                   width: active ? AppBorders.focus : AppBorders.hairline,
                   strokeAlign: BorderSide.strokeAlignInside,
                 ),
-          boxShadow: active ? AppElevation.sm : const [],
         ),
         child: Row(
           children: [
@@ -640,7 +693,7 @@ class _SetupStepTile extends StatelessWidget {
                     : EdgeInsets.zero,
                 decoration: active
                     ? BoxDecoration(
-                        color: AppColors.brandTint,
+                        color: AppColors.accentTint,
                         borderRadius: AppRadii.all(AppRadii.pill),
                       )
                     : null,
@@ -665,7 +718,8 @@ class _SetupStepTile extends StatelessWidget {
   }
 }
 
-/// Bottom sheet (`.sheet`): 28 top corners, grabber, serif title and a close button.
+/// Bottom sheet (`.theme-withings .sheet`): white, 16pt top corners, a warm grabber, a 20pt medium
+/// title with a hairline under the header, and a bare ✕ to dismiss.
 Future<T?> showNumayaSheet<T>({
   required BuildContext context,
   required String title,
@@ -677,18 +731,17 @@ Future<T?> showNumayaSheet<T>({
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
+    // Sheets cover the tab bar, as on the web.
+    useRootNavigator: true,
     backgroundColor: AppColors.surface,
     barrierColor: AppColors.scrim,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.xl)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.photo)),
     ),
     builder: (context) {
       final sheet = Padding(
-        padding: EdgeInsets.fromLTRB(
-          AppSpacing.gutter,
-          AppSpacing.s2,
-          AppSpacing.gutter,
-          AppSpacing.s4 + MediaQuery.viewInsetsOf(context).bottom,
+        padding: EdgeInsets.only(
+          bottom: AppSpacing.s4 + MediaQuery.viewInsetsOf(context).bottom,
         ),
         child: Column(
           mainAxisSize: tall ? MainAxisSize.max : MainAxisSize.min,
@@ -698,36 +751,55 @@ Future<T?> showNumayaSheet<T>({
               child: Container(
                 width: 36,
                 height: 5,
-                margin: const EdgeInsets.only(bottom: 14),
+                margin: const EdgeInsets.only(top: AppSpacing.s2, bottom: 14),
                 decoration: BoxDecoration(
                   color: AppColors.borderStrong,
                   borderRadius: AppRadii.all(AppRadii.pill),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: AppSpacing.s4),
+            Container(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.gutter,
+                0,
+                AppSpacing.s2,
+                AppSpacing.s3,
+              ),
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: AppColors.border,
+                    width: AppBorders.hairline,
+                  ),
+                ),
+              ),
               child: Row(
                 children: [
                   Expanded(
                     child: Semantics(
                       header: true,
-                      child: Text(title, style: AppTypography.titleSm),
+                      child: Text(title, style: AppTypography.sheetTitle),
                     ),
                   ),
                   NavIconButton(
                     icon: NumayaIcons.close,
                     label: closeLabel,
-                    style: NavButtonStyle.flat,
+                    style: NavButtonStyle.plain,
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
               ),
             ),
-            if (tall)
-              Expanded(child: builder(context))
-            else
-              Flexible(child: builder(context)),
+            const SizedBox(height: AppSpacing.s4),
+            Flexible(
+              fit: tall ? FlexFit.tight : FlexFit.loose,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.gutter,
+                ),
+                child: builder(context),
+              ),
+            ),
           ],
         ),
       );

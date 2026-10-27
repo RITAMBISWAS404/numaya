@@ -42,14 +42,16 @@ Future<void> usePhoneSize(
 
 bool _fontsLoaded = false;
 
-/// Loads the bundled Fraunces and Inter so screenshots show real type.
+/// Loads the bundled Hanken Grotesk (and the system colour-emoji font, when present) so
+/// screenshots show real type and emoji.
 Future<void> loadAppFonts() async {
   if (_fontsLoaded) return;
   _fontsLoaded = true;
   for (final (family, file) in [
-    ('Fraunces', 'assets/fonts/Fraunces-Variable.ttf'),
-    ('Inter', 'assets/fonts/Inter-Variable.ttf'),
+    ('Hanken Grotesk', 'assets/fonts/HankenGrotesk-Variable.ttf'),
+    ('Noto Color Emoji', '/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf'),
   ]) {
+    if (!File(file).existsSync()) continue;
     final bytes = File(file).readAsBytesSync();
     final loader = FontLoader(family)
       ..addFont(Future.value(ByteData.view(bytes.buffer)));

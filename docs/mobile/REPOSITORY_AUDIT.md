@@ -1,5 +1,10 @@
 # Repository audit (Phase 0)
 
+> **Correction (branch `experiment/numaya-flutter-v16`).** The target design is **Numaya V16**, the Withings Health
+> Mate reconstruction, not the approved default purple design chosen below. The section "Which design is
+> canonical" records the original (mistaken) reasoning; the V16 sources now used are listed in
+> [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md). The web app and the V16 experiment are unchanged.
+
 Done before any Flutter code was written, on 2026-10-27.
 
 ## Git state

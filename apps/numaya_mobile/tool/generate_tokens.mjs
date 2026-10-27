@@ -3,8 +3,9 @@
 // tokens (src/design-system/tokens.js, itself generated from tokens/numaya.tokens.json).
 //
 // One source of truth: change a colour in tokens/numaya.tokens.json, run `npm run tokens` at the repo
-// root, then run this script. Only the approved (default) semantic and component tokens are exported;
-// the opt-in web experiments (tiimo, withings) and raw primitives stay on the web side.
+// root, then run this script. The app implements V16, so the shared semantic and component tokens and
+// V16's own (withings) tokens are exported; AppColors / AppTypography re-point the roles onto the V16
+// values exactly as src/design-system/styles/theme-withings.css does on the web.
 //
 //   node apps/numaya_mobile/tool/generate_tokens.mjs           write the Dart file
 //   node apps/numaya_mobile/tool/generate_tokens.mjs --check   exit 1 if the Dart file is stale
@@ -20,8 +21,11 @@ const out = resolve(appRoot, "lib/core/design_system/tokens/numaya_tokens.g.dart
 
 const { tokens } = await import(pathToFileURL(resolve(repoRoot, "src/design-system/tokens.js")).href);
 
+// The Flutter app implements V16 (the Withings Health Mate reconstruction). Its tokens are the
+// shared semantic and component tokens plus V16's own (`--color-withings-*`, `--withings-*`,
+// `--shadow-withings-*`). V11 (tiimo) tokens and raw primitives stay on the web side.
 const approved = tokens.filter(
-  (t) => t.layer !== "primitive" && !/withings|tiimo|palette/.test(t.name),
+  (t) => t.layer !== "primitive" && !/tiimo|palette/.test(t.name),
 );
 
 const camel = (name) =>
@@ -128,7 +132,7 @@ import 'package:flutter/painting.dart';
 for (const [type, g] of Object.entries(groups)) {
   const list = approved.filter((t) => t.type === type);
   if (!list.length) continue;
-  dart += `\n/// ${type} tokens of the approved Numaya design (${list.length}).\nabstract final class ${g.cls} {\n`;
+  dart += `\n/// ${type} tokens of the Numaya design system (${list.length}).\nabstract final class ${g.cls} {\n`;
   for (const t of list) {
     const d = docLine(t.description);
     if (d) dart += `  /// ${d}\n`;

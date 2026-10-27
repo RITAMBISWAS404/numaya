@@ -3,7 +3,7 @@
 // draw the same artwork from one source:
 //   - src/design-system/icons/material-symbols.js  -> lib/core/design_system/icons/numaya_icon_data.g.dart
 //   - src/design-system/components/Illustration.jsx -> assets/illustrations/<scene>.svg
-// Illustration colours are resolved from the approved tokens (the web uses .ill__* CSS classes).
+// Illustration colours are resolved from the V16 tokens (the web uses .ill__* CSS classes).
 //
 //   node apps/numaya_mobile/tool/export_assets.mjs
 
@@ -50,21 +50,23 @@ console.log(`Wrote ${Object.keys(GLYPHS).length} icons to ${iconOut}`);
 // 2 · Illustrations ------------------------------------------------------------
 const { tokenByName } = await import(pathToFileURL(resolve(repoRoot, "src/design-system/tokens.js")).href);
 const c = (name) => tokenByName[name].resolved;
+// V16 re-points the roles the .ill__* classes read (theme-withings.css "Roles" block), so the
+// scenes are exported in V16 colours: ink outlines, blue accent, blue-tint wash, warm greys.
 const STYLE = {
-  ill__ink: { stroke: c("--color-text-primary"), "stroke-width": "2.5", "stroke-linecap": "round", "stroke-linejoin": "round" },
+  ill__ink: { stroke: c("--color-withings-ink"), "stroke-width": "2.5", "stroke-linecap": "round", "stroke-linejoin": "round" },
   ill__open: { fill: "none" },
-  "ill__on-brand": { stroke: c("--color-on-brand"), "stroke-width": "3.5", "stroke-linecap": "round", "stroke-linejoin": "round" },
-  ill__paper: { fill: c("--color-surface") },
-  ill__wash: { fill: c("--color-surface-brand") },
-  ill__ground: { fill: c("--color-surface-soft") },
-  ill__soft: { fill: c("--color-surface-sunken") },
-  ill__muted: { fill: c("--color-border-strong") },
-  ill__strong: { fill: c("--color-border-control") },
-  ill__brand: { fill: c("--color-brand") },
+  "ill__on-brand": { stroke: c("--color-withings-accent-foreground"), "stroke-width": "3.5", "stroke-linecap": "round", "stroke-linejoin": "round" },
+  ill__paper: { fill: c("--color-withings-surface") },
+  ill__wash: { fill: c("--color-withings-accent-tint") },
+  ill__ground: { fill: c("--color-withings-fill") },
+  ill__soft: { fill: c("--color-withings-photo") },
+  ill__muted: { fill: c("--color-withings-border-strong") },
+  ill__strong: { fill: c("--color-withings-control") },
+  ill__brand: { fill: c("--color-withings-accent") },
   ill__promo: { fill: c("--color-accent-promo") },
   ill__yellow: { fill: c("--color-accent-yellow") },
-  "ill__on-brand-fill": { fill: c("--color-on-brand") },
-  ill__trail: { fill: "none", stroke: c("--color-border-control"), "stroke-width": "2", "stroke-linecap": "round", "stroke-dasharray": "2 6" },
+  "ill__on-brand-fill": { fill: c("--color-withings-accent-foreground") },
+  ill__trail: { fill: "none", stroke: c("--color-withings-control"), "stroke-width": "2", "stroke-linecap": "round", "stroke-dasharray": "2 6" },
 };
 
 const tmp = resolve(repoRoot, "node_modules/.cache/numaya-mobile-export");

@@ -1,79 +1,86 @@
-# Design system (Flutter)
+# Design system (Flutter): Numaya V16
 
-The Flutter app reproduces the **approved Numaya design** (no `?theme` on the web): Meetup visual system, brand
-purple `#7262C7`, Fraunces + Inter. See [REPOSITORY_AUDIT.md](REPOSITORY_AUDIT.md) for why this one.
+The Flutter app reproduces **Numaya V16**, the Withings Health Mate reconstruction
+(`artifacts/version-16-design-experiment/`, web `?theme=withings`, branch `experiment/numaya-v16-withings` at
+`2c11a6d`). The first Flutter foundation (`75f63e7`) used the default purple design by mistake; branch
+`experiment/numaya-flutter-v16` replaces that visual layer while keeping every screen, rule and test.
 
-## One source of truth
+## Sources of truth
+
+| What | Web source |
+|---|---|
+| Tokens | `tokens/numaya.tokens.json` → `src/design-system/tokens.js` (`color.withings.*`, `component.withings.*`, `shadow.withings-*`) |
+| Role remapping | the "Roles" block of `src/design-system/styles/theme-withings.css` |
+| Component rules | the rest of `theme-withings.css`, `src/flows/theme-withings.css`, `artifacts/version-16-design-experiment/design-system/COMPONENT_RULES.md` and `TOKENS.md` |
+| Inherited layout | V11 (`src/design-system/styles/theme-tiimo.css`): welcome emoji stickers, interest emoji and set marks |
+| Screens | `artifacts/version-16-design-experiment/final-polish/screenshots/states/` (49 final states) |
 
 ```
-tokens/numaya.tokens.json ──npm run tokens──▶ src/design-system/tokens.js ──tool/generate_tokens.mjs──▶
-    apps/numaya_mobile/lib/core/design_system/tokens/numaya_tokens.g.dart  (191 approved tokens)
-src/design-system/icons/material-symbols.js ──tool/export_assets.mjs──▶ icons/numaya_icon_data.g.dart (67 icons)
-src/design-system/components/Illustration.jsx ──tool/export_assets.mjs──▶ assets/illustrations/*.svg (9 scenes)
+tokens/numaya.tokens.json ─npm run tokens─▶ src/design-system/tokens.js ─tool/generate_tokens.mjs─▶ numaya_tokens.g.dart (280 tokens, 89 V16)
+src/design-system/components/Illustration.jsx ─tool/export_assets.mjs─▶ assets/illustrations/*.svg (V16 colours)
+@fontsource-variable/hanken-grotesk ─tool/convert_fonts.py─▶ assets/fonts/HankenGrotesk-Variable.ttf
 ```
 
-Only semantic and component tokens of the approved design are exported; primitives and the V11/V16 experiments stay
-on the web.
+`AppColors` and `AppTypography` re-point the shared roles exactly as theme-withings.css does (`brand` → Withings
+blue, `controlSelected` → ink, `surfacePage` → stone, …), so a widget written against a role gets the V16 value.
 
-### Changing the brand colour (or any token)
+## The system
+
+- **Colour:** stone page `#F5F4F1`; white cards with no border and no shadow; ink `#121212` for text, primary
+  buttons, the step button, selected radios and the active tab; Withings blue `#5066CC` for checked boxes, slider
+  intervals, focus and the mark; blue tint `#E4EBFC` with deep-blue `#3E4A8F` text for selected chips, the toast
+  and links; green `#3C783C` switches; red `#CF3336` for destruction and errors; navy `#203068` initials avatars;
+  pastel holders (yellow, lavender, pink) behind interest-set emoji only.
+- **Type:** one family, Hanken Grotesk. Page titles 30/36 bold; profile name 32/38 bold; flow headings 26/32 medium
+  (balanced wrapping, like CSS `text-wrap: balance`); result titles 24/30 semibold; section headings 22/28 medium;
+  sheet titles 20/26 medium; empty-state titles 18/24 semibold; rows and inputs 16/22 regular; card titles 15/20
+  medium; body 15.5/22; caption 13.5/18. Modal headers in tracked capitals (12.5, bold, 0.16em); field, legend and
+  chip-set labels in small bold capitals (11.5, 0.06em).
+- **Geometry:** tags 6, fields 8, buttons and chips 12, cards 14, photos and sheets 16; pills only for compact
+  buttons and the toast; circles for header buttons, avatars, radios, the step button and switch thumbs. Buttons
+  50 tall, fields 54, rows 56, compact buttons 36 inside the 44 touch area.
+
+## Components
+
+| Flutter | V16 rule |
+|---|---|
+| `NumayaScreen` + `NumayaTopBar` | Stone page; modal and flow headers are a white bar with a hairline (also behind the status bar), bare ink back icon, tracked-capital title or ink progress segments on the fill |
+| `TabHeader`, Home header | 30pt bold title on the page with 40pt white circle buttons (hairline); Home shows the wordmark |
+| `NumayaTabBar` | White, top hairline; current tab ink with filled icon and semibold label; others muted with outline icons |
+| `NumayaButton` | Primary ink · secondary white with 1px ink outline · tint · solid red · text; disabled `#D6D2CE` / `#77736F`; `small` = 36pt outlined pill (ink when primary) |
+| `NumayaFab` | Ink circle with white arrow; disabled warm grey |
+| `NumayaTextField`, `InputSurface`, `FieldLabel` | White, 1px `#6D6C6A` outline, 8 corner, 54 tall; focus 2px blue; invalid 2px red; capital label; text areas show "N characters left" inside |
+| `OptionGroup` + `OptionCard` | One white card, 56pt rows, hairline dividers, no ring on selection; radio 22 grey ring → ink ring + dot; checkbox 22/6 → blue with white tick |
+| `NumayaChip`, `ChipSet` | White 12-corner chip with emoji and 15 medium label (fill on white cards); selected blue tint, deep-blue semibold; set name beside its emoji in a 28pt pastel circle |
+| `PromptCard`, `PromptMark` | White card; blue speech bubble in a 24pt tint circle; 15 medium question; semibold answer |
+| `InfoCard` | Page colour with a hairline, ink icon |
+| `PhotoGrid` | 14 tiles in photo grey, 6-corner order tag, round ink remove; empty slots white with a dashed edge and an ink "+" circle |
+| `EmptyState` | White card, left-aligned: illustration, 18 semibold title, body, compact action |
+| `ListGroup`, `ListRow` | 22 medium heading; white card; 56pt rows, 16 regular label, secondary subtitle, dividers inset 16 |
+| `NumayaSwitch` | 51 × 31, green on, fill off, 27pt white thumb |
+| Sliders (`V16SliderThumb`) | Blue interval on the fill rail, 26pt white thumbs with the soft thumb shadow |
+| `showNumayaSheet` | White, 16 top corners, warm grabber, 20 medium title above a hairline, bare ✕; covers the tab bar |
+| `NumayaToast` | Blue-tint pill, deep-blue text, float shadow |
+| `Wordmark` | Bold ink "numaya", mark in Withings blue with the rose dot |
+| `CodeInput` | (no V16 counterpart) extends the V16 field: white cells, 1px outline, 8 corner, blue active, red wrong, tint verified |
+| `SetupProgress` | (no V16 counterpart) white cards on the page; done on the fill; next ringed in ink with a blue-tint "Up next" |
+
+## Changing a token
 
 ```bash
-# 1. edit tokens/numaya.tokens.json (e.g. primitive.color.purple.600)
-npm run tokens                                        # web
-node apps/numaya_mobile/tool/generate_tokens.mjs      # Flutter
-node apps/numaya_mobile/tool/export_assets.mjs        # only if illustration colours should follow
-node apps/numaya_mobile/tool/generate_tokens.mjs --check   # CI: fails if the Dart file is stale
+# edit tokens/numaya.tokens.json (e.g. primitive.color.withings.blue)
+npm run tokens
+node apps/numaya_mobile/tool/generate_tokens.mjs
+node apps/numaya_mobile/tool/export_assets.mjs          # illustrations follow the palette
+node apps/numaya_mobile/tool/generate_tokens.mjs --check  # CI
 ```
-
-Widgets read roles such as `AppColors.brand`, never hex values, so nothing else changes.
-
-## Foundations (`lib/core/design_system/foundations/`)
-
-| Class | Contents |
-|---|---|
-| `AppColors` | brand, brandTint, brandSubtle, control, accents (marks only, never text), text roles, surfaces, borders, focus, scrim, danger/success/warning |
-| `AppTypography` | hero 34/38 · display 31/35 · headline 26/30 · titleSm 23/28 · title 20/25 (Fraunces 520, SOFT 50, WONK 0, opsz = size) · body 15.5/23 · bodySm 15/21 · input 18/24 w500 · button 16/20 w600 · label 13.5/18 · caption 13/18 · micro 12.5/17 · eyebrow 11/14 (Inter). `weight()` sets any variable weight (e.g. 520, 680). `welcomeTitle(width)` reproduces `clamp(36px, 10.4vw, 42px)`. |
-| `AppSpacing` | 4 pt scale s1…s12, gutter 16, stack 12, field 20, section 28, content max 430 |
-| `AppRadii` | xs 8, sm 12, md 16, lg 20, xl 28, card 24, photo 32, pill |
-| `AppBorders` | hairline 1, selected 1.5, focus 2 |
-| `AppSizes` | control 56, touch min 44, button 54 / sm 40 / quiet 48, fab 56, icon button 40 / 36, chip 36, progress segment 18×8, code cell 60 (radius 18), switch 51×31, tab bar 64, top bar 56 |
-| `AppElevation` | thumb, xs, sm, md, float, lg, button, brand |
-| `AppMotion` | 140 / 220 / 380 / 460 ms; ease-out (0.22,1,0.36,1), emphasized (0.32,0.72,0,1), in-out (0.65,0,0.35,1). `duration(context, d)` returns zero when the system asks to remove animations. |
-| `AppTheme` | Material theme from the tokens (selection colours, dialogs, sheets, Cupertino-style page transitions, no ripple: controls scale on press as on the web) |
-
-## Components (`lib/core/design_system/widgets/`)
-
-| Flutter | Web | States |
-|---|---|---|
-| `NumayaButton` (primary, secondary, quiet, brand, destructive, destructiveSolid; small) | `.btn` | enabled, pressed (0.98), disabled (grey), loading |
-| `NumayaFab` | `.fab` | enabled (purple), disabled (sunken), loading, pressed (0.94) |
-| `NavIconButton` (floating, flat, plain) | `.nav-button` | pressed (0.92), tooltip, label |
-| `TextLink` | `.text-button` | enabled, disabled |
-| `NumayaTopBar`, `StepProgress` | `.topbar`, `.progress` | back, progress (current segment fills in), title |
-| `NumayaScreen`, `StepFooter`, `ScreenHeader`, `NumayaSection` | `.screen`, `.screen-header`, `.section` | page / wash tone |
-| `NumayaTextField` (+ multiline), `InputSurface`, `FieldNote` | `.field`, `.input`, `.field__note` | idle, focused (white, 2pt ring, halo), invalid, disabled, helper/error/success note, counter |
-| `CountryCodeBadge`, `NumayaSearchField` | `.input__code`, `.search` | focus, clear |
-| `CodeInput` | `.code` | empty, active cell with blinking caret, filled, checking (dimmed), error (shake, red), success (purple) |
-| `NumayaChip`, `ChipSet` | `.chip` | default, selected (solid purple, minus), unavailable (quota reached) |
-| `OptionCard`, `OptionGroup` | `.option-card` | radio / checkbox, selected (lavender + 2pt ring), disabled |
-| `InfoCard` | `.info-card` | — |
-| `PromptCard` | `.prompt` | answered, empty call to action, tappable |
-| `PhotoGrid` | `.photo-grid` | filled (order badge, remove), empty (+) |
-| `ResultPanel`, `SetupProgress` | `.result`, `.setup-steps` | done / active ("Up next") / upcoming |
-| `showNumayaSheet` | `.sheet` | standard, tall (80%) |
-| `NumayaToast` | `.pill` | message, busy (three dots), announced to screen readers |
-| `NumayaTabBar`, `NumayaSwitch`, `ListRow`, `ListGroup`, `EmptyState` | `.tab-bar`, `.switch`, `.list-row` | current tab, on/off, chevron/value/switch |
-| `Wordmark`, `BrandMark`, `IllustrationView`, `NumayaIcon` | `Brand.jsx`, `Illustration.jsx`, `Icon.jsx` | — |
-
-All controls share `Pressable`: a 44 pt minimum hit area, press scale, keyboard activation (Enter / Space), a focus
-ring and button semantics.
 
 ## Known differences from the web
 
-| Web | Flutter | Why |
+| Web V16 | Flutter | Why |
 |---|---|---|
-| `text-wrap: balance` on titles | Normal wrapping, so a title can break one word later | Flutter has no balanced wrapping |
-| Inset 1px highlight inside primary buttons | Omitted | `BoxShadow` has no inset |
-| CSS blur radius | Flutter `blurRadius` with the same number | Visually equivalent at these sizes |
-| Fonts: full Fontsource builds | Latin subsets | Other scripts fall back to the platform font until full fonts are bundled |
-| Light theme only | Light theme only | The approved design defines no dark theme |
+| Five tabs (with Activity) | Four tabs | Activity needs real events; not built ([ONBOARDING_FLOW.md](ONBOARDING_FLOW.md)) |
+| Edit / Preview segmented control on Edit profile | Not shown | No preview yet; no control that does nothing |
+| Profile readiness score and badge | Not shown | The score's inputs (bio, etc.) don't exist in the app yet |
+| Likes and Messages filter tabs | Not shown | No data to filter |
+| Fonts: full Fontsource build | Latin subset | Other scripts fall back to the platform font |

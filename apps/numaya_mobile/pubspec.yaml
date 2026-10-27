@@ -36,12 +36,10 @@ flutter:
   assets:
     - assets/illustrations/
 
-  # Variable fonts converted from the web app's Fontsource files (SIL OFL 1.1, Latin subset).
-  # Licences: assets/fonts/OFL-*.txt. Regenerate with tool/convert_fonts.py.
+  # V16 type: one grotesk. Variable font converted from the web app's Fontsource file
+  # (@fontsource-variable/hanken-grotesk, SIL OFL 1.1, Latin subset). Licence: assets/fonts/OFL-HankenGrotesk.txt.
+  # Regenerate with tool/convert_fonts.py.
   fonts:
-    - family: Fraunces
+    - family: Hanken Grotesk
       fonts:
-        - asset: assets/fonts/Fraunces-Variable.ttf
-    - family: Inter
-      fonts:
-        - asset: assets/fonts/Inter-Variable.ttf
+        - asset: assets/fonts/HankenGrotesk-Variable.ttf

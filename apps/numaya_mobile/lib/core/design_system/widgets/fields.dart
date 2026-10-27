@@ -22,7 +22,7 @@ class FieldNote extends StatelessWidget {
     final style = switch (tone) {
       FieldNoteTone.neutral => AppTypography.caption,
       FieldNoteTone.error => AppTypography.caption.copyWith(
-        color: AppColors.danger,
+        color: AppColors.negative,
       ),
       FieldNoteTone.success => AppTypography.weight(
         AppTypography.caption,
@@ -36,8 +36,9 @@ class FieldNote extends StatelessWidget {
   }
 }
 
-/// The shared input surface (`.input`): soft grey, 56 tall, 16 corner. Focused: white with a 2pt
-/// purple ring and a soft halo. Invalid: white with a red ring. Disabled: sunken grey.
+/// The V16 field (`.theme-withings .input`): white, a 1px dark outline, 8pt corners, 54pt tall.
+/// Focused: a 2pt blue outline. Invalid: a 2pt red outline, focused or not. Disabled: the recessed
+/// fill with no outline.
 class InputSurface extends StatelessWidget {
   const InputSurface({
     super.key,
@@ -46,7 +47,7 @@ class InputSurface extends StatelessWidget {
     this.invalid = false,
     this.disabled = false,
     this.padding = const EdgeInsets.symmetric(horizontal: AppSpacing.s4),
-    this.height = AppSizes.control,
+    this.height = AppSizes.field,
   });
 
   final Widget child;
@@ -60,7 +61,13 @@ class InputSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final white = focused || invalid;
+    final (Color edge, double width) = disabled
+        ? (Colors.transparent, AppBorders.hairline)
+        : invalid
+        ? (AppColors.negative, AppBorders.focus)
+        : focused
+        ? (AppColors.focusField, AppBorders.focus)
+        : (AppColors.outline, AppBorders.hairline);
     return AnimatedContainer(
       duration: AppMotion.duration(context, AppMotion.base),
       curve: AppMotion.easeOut,
@@ -68,29 +75,29 @@ class InputSurface extends StatelessWidget {
       constraints: height == null ? const BoxConstraints(minHeight: 120) : null,
       padding: padding,
       decoration: BoxDecoration(
-        color: disabled
-            ? AppColors.surfaceSunken
-            : white
-            ? AppColors.surface
-            : AppColors.surfaceSoft,
-        borderRadius: AppRadii.all(AppRadii.md),
+        color: disabled ? AppColors.fill : AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.field),
         border: Border.all(
-          color: invalid
-              ? AppColors.danger
-              : focused
-              ? AppColors.focusField
-              : Colors.transparent,
-          width: AppBorders.focus,
+          color: edge,
+          width: width,
           strokeAlign: BorderSide.strokeAlignInside,
         ),
-        boxShadow: focused && !invalid
-            ? const [BoxShadow(color: AppColors.focusHalo, spreadRadius: 4)]
-            : const [],
       ),
       alignment: height == null ? Alignment.topLeft : Alignment.centerLeft,
       child: child,
     );
   }
+}
+
+/// Field label in V16's small bold capitals ("FIRST NAME"), ink.
+class FieldLabel extends StatelessWidget {
+  const FieldLabel(this.text, {super.key});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => ExcludeSemantics(
+    child: Text(text.toUpperCase(), style: AppTypography.labelCaps),
+  );
 }
 
 /// Labelled text field (`.field` + `.input`) with an optional helper or error note.
@@ -180,66 +187,70 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ExcludeSemantics(child: Text(widget.label, style: AppTypography.label)),
+        FieldLabel(widget.label),
         const SizedBox(height: AppSpacing.s2),
         InputSurface(
           focused: _focus.hasFocus,
           invalid: invalid,
           disabled: !widget.enabled,
-          height: widget.multiline ? null : AppSizes.control,
+          height: widget.multiline ? null : AppSizes.field,
           padding: widget.multiline
               ? const EdgeInsets.symmetric(
                   horizontal: AppSpacing.s4,
                   vertical: 14,
                 )
               : const EdgeInsets.symmetric(horizontal: AppSpacing.s4),
-          child: Semantics(
-            identifier: widget.semanticsIdentifier,
-            label: widget.label,
-            child: TextField(
-              controller: widget.controller,
-              focusNode: _focus,
-              enabled: widget.enabled,
-              autofocus: widget.autofocus,
-              keyboardType: widget.multiline
-                  ? TextInputType.multiline
-                  : widget.keyboardType,
-              minLines: widget.multiline ? 3 : 1,
-              maxLines: widget.multiline ? 8 : 1,
-              textInputAction: widget.textInputAction,
-              inputFormatters: [
-                ...?widget.inputFormatters,
-                if (widget.maxLength != null)
-                  LengthLimitingTextInputFormatter(widget.maxLength),
-              ],
-              autofillHints: widget.enabled ? widget.autofillHints : null,
-              textCapitalization: widget.textCapitalization,
-              onChanged: widget.onChanged,
-              onSubmitted: widget.onSubmitted,
-              style:
-                  (widget.multiline ? AppTypography.body : AppTypography.input)
-                      .copyWith(
-                        color: widget.enabled
-                            ? AppColors.textPrimary
-                            : AppColors.textSubtle,
-                        fontFeatures: widget.multiline
-                            ? null
-                            : const [FontFeature.tabularFigures()],
-                      ),
-              cursorColor: AppColors.brand,
-              decoration: InputDecoration.collapsed(
-                hintText: widget.placeholder,
-                hintStyle: AppTypography.weight(
-                  widget.multiline ? AppTypography.body : AppTypography.input,
-                  400,
-                ).copyWith(color: AppColors.textSubtle),
+          child: _withInlineCounter(
+            Semantics(
+              identifier: widget.semanticsIdentifier,
+              label: widget.label,
+              child: TextField(
+                controller: widget.controller,
+                focusNode: _focus,
+                enabled: widget.enabled,
+                autofocus: widget.autofocus,
+                keyboardType: widget.multiline
+                    ? TextInputType.multiline
+                    : widget.keyboardType,
+                minLines: widget.multiline ? 3 : 1,
+                maxLines: widget.multiline ? 8 : 1,
+                textInputAction: widget.textInputAction,
+                inputFormatters: [
+                  ...?widget.inputFormatters,
+                  if (widget.maxLength != null)
+                    LengthLimitingTextInputFormatter(widget.maxLength),
+                ],
+                autofillHints: widget.enabled ? widget.autofillHints : null,
+                textCapitalization: widget.textCapitalization,
+                onChanged: widget.onChanged,
+                onSubmitted: widget.onSubmitted,
+                style:
+                    (widget.multiline
+                            ? AppTypography.body
+                            : AppTypography.input)
+                        .copyWith(
+                          color: widget.enabled
+                              ? AppColors.textPrimary
+                              : AppColors.textSubtle,
+                          fontFeatures: widget.multiline
+                              ? null
+                              : const [FontFeature.tabularFigures()],
+                        ),
+                cursorColor: AppColors.accent,
+                decoration: InputDecoration.collapsed(
+                  hintText: widget.placeholder,
+                  hintStyle: AppTypography.weight(
+                    widget.multiline ? AppTypography.body : AppTypography.input,
+                    400,
+                  ).copyWith(color: AppColors.textSubtle),
+                ),
               ),
             ),
           ),
         ),
         if (widget.error != null ||
             widget.hint != null ||
-            widget.trailingNote != null) ...[
+            (widget.trailingNote != null && !widget.multiline)) ...[
           const SizedBox(height: AppSpacing.s2),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,7 +265,7 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
                             : FieldNoteTone.neutral,
                       ),
               ),
-              if (widget.trailingNote != null)
+              if (widget.trailingNote != null && !widget.multiline)
                 Padding(
                   padding: const EdgeInsets.only(left: AppSpacing.s3),
                   child: Text(
@@ -265,6 +276,25 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
             ],
           ),
         ],
+      ],
+    );
+  }
+
+  /// A text area shows its counter inside, bottom-right ("98 characters left"), as V16 does.
+  Widget _withInlineCounter(Widget field) {
+    if (!widget.multiline || widget.trailingNote == null) return field;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        field,
+        const SizedBox(height: AppSpacing.s2),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Semantics(
+            liveRegion: true,
+            child: Text(widget.trailingNote!, style: AppTypography.caption),
+          ),
+        ),
       ],
     );
   }
@@ -284,7 +314,7 @@ class CountryCodeBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: AppRadii.all(AppRadii.xs),
+        borderRadius: AppRadii.all(AppRadii.field),
         border: Border.all(
           color: AppColors.borderStrong,
           width: AppBorders.hairline,
@@ -306,7 +336,7 @@ class CountryCodeBadge extends StatelessWidget {
   }
 }
 
-/// Search field (`.search`): grey pill with a magnifier; focus ring like inputs.
+/// Search field (`.theme-withings .search`): white with a hairline and a magnifier.
 class NumayaSearchField extends StatefulWidget {
   const NumayaSearchField({
     super.key,
@@ -351,19 +381,17 @@ class _NumayaSearchFieldState extends State<NumayaSearchField> {
     final focused = _focus.hasFocus;
     return AnimatedContainer(
       duration: AppMotion.duration(context, AppMotion.base),
-      height: 48,
+      // V16 search: white with a hairline, the control corner; focus a 2pt blue outline.
+      height: AppSizes.search,
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s4),
       decoration: BoxDecoration(
-        color: focused ? AppColors.surface : AppColors.surfaceSoft,
-        borderRadius: AppRadii.all(AppRadii.pill),
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.control),
         border: Border.all(
-          color: focused ? AppColors.focusField : Colors.transparent,
-          width: AppBorders.focus,
+          color: focused ? AppColors.focusField : AppColors.border,
+          width: focused ? AppBorders.focus : AppBorders.hairline,
           strokeAlign: BorderSide.strokeAlignInside,
         ),
-        boxShadow: focused
-            ? const [BoxShadow(color: AppColors.focusHalo, spreadRadius: 4)]
-            : const [],
       ),
       child: Row(
         children: [

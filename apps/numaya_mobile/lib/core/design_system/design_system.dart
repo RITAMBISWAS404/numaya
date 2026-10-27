@@ -15,4 +15,5 @@ export 'widgets/layout.dart';
 export 'widgets/navigation.dart';
 export 'widgets/primitives.dart';
 export 'widgets/selection.dart';
+export 'widgets/slider_thumbs.dart';
 export 'widgets/toast.dart';

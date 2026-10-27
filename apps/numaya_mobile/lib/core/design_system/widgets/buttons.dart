@@ -8,27 +8,28 @@ import '../icons/numaya_icon_data.g.dart';
 import 'primitives.dart';
 
 enum NumayaButtonVariant {
-  /// Purple pill, white label. One per screen.
+  /// Ink, white label ("Done", "Next" in the reference). One per screen.
   primary,
 
-  /// Soft grey pill.
+  /// White with a 1px ink outline ("Share", "Previous"); also the cancel under a primary in sheets.
   secondary,
 
-  /// Text only (48 tall), for the second choice under a primary.
+  /// Text only, for the second choice under a primary on a page.
   quiet,
 
-  /// Lavender pill with deep purple text.
+  /// The blue tint with deep-blue text ("Explore data").
   brand,
 
-  /// Red text (48 tall), for destructive choices.
+  /// Red text, for a destructive choice in a list.
   destructive,
 
   /// Solid red, for confirming a destructive choice.
   destructiveSolid,
 }
 
-/// Full-width pill button (`.btn`). Disabled: grey fill, subtle label. Loading keeps the size and
-/// swaps the label for a spinner.
+/// V16 button (`.theme-withings .btn`): a 50pt rounded rectangle with the 12pt control corner.
+/// [small] is the compact 36pt outlined pill ("Edit profile", "Find your people"); a small primary
+/// stays ink. Disabled: warm grey `#D6D2CE` with `#77736F` text.
 class NumayaButton extends StatelessWidget {
   const NumayaButton({
     super.key,
@@ -52,80 +53,70 @@ class NumayaButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final disabled = onPressed == null && !loading;
-    final quietLike =
+    final textOnly =
         variant == NumayaButtonVariant.quiet ||
         variant == NumayaButtonVariant.destructive;
     final height = small
         ? AppSizes.buttonHeightSm
-        : quietLike
+        : textOnly
         ? AppSizes.buttonHeightQuiet
         : AppSizes.buttonHeight;
+    final radius = small ? AppRadii.pill : AppRadii.control;
 
-    final (
-      Color bg,
-      Color fg,
-      List<BoxShadow> shadow,
-      Color? ring,
-    ) = switch (variant) {
-      _ when disabled && quietLike => (
+    // A small button that isn't primary, tint or solid red is the outlined pill.
+    final effective =
+        small &&
+            (variant == NumayaButtonVariant.quiet ||
+                variant == NumayaButtonVariant.destructive)
+        ? NumayaButtonVariant.secondary
+        : variant;
+
+    final (Color bg, Color fg, Color? ring) = switch (effective) {
+      _ when disabled && textOnly && !small => (
         Colors.transparent,
-        AppColors.textSubtle,
-        const <BoxShadow>[],
+        AppColors.disabledForeground,
         null,
       ),
       _ when disabled => (
-        AppColors.surfaceSunken,
-        AppColors.textSubtle,
-        const <BoxShadow>[],
+        AppColors.disabled,
+        AppColors.disabledForeground,
         null,
       ),
       NumayaButtonVariant.primary => (
-        AppColors.brand,
-        AppColors.onBrand,
-        AppElevation.button,
+        AppColors.ink,
+        AppColors.inkForeground,
         null,
       ),
       NumayaButtonVariant.secondary => (
-        AppColors.surfaceSoft,
-        AppColors.textPrimary,
-        const <BoxShadow>[],
-        null,
+        AppColors.surface,
+        AppColors.ink,
+        AppColors.ink,
       ),
-      NumayaButtonVariant.quiet => (
-        Colors.transparent,
-        AppColors.textPrimary,
-        const <BoxShadow>[],
-        null,
-      ),
+      NumayaButtonVariant.quiet => (Colors.transparent, AppColors.ink, null),
       NumayaButtonVariant.brand => (
-        AppColors.brandTint,
-        AppColors.textBrandDeep,
-        const <BoxShadow>[],
-        AppColors.brandSubtle,
+        AppColors.accentTint,
+        AppColors.accentOnTint,
+        null,
       ),
       NumayaButtonVariant.destructive => (
         Colors.transparent,
-        AppColors.danger,
-        const <BoxShadow>[],
+        AppColors.negative,
         null,
       ),
       NumayaButtonVariant.destructiveSolid => (
-        AppColors.danger,
-        AppColors.onBrand,
-        const <BoxShadow>[],
+        AppColors.negative,
+        AppColors.inkForeground,
         null,
       ),
     };
 
-    final textStyle = small
-        ? AppTypography.weight(AppTypography.label, AppTypography.semibold)
-        : AppTypography.button;
+    final textStyle = small ? AppTypography.buttonSm : AppTypography.button;
 
     final content = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         if (icon != null) ...[
-          NumayaIcon(icon!, size: AppSizes.iconMd, color: fg),
+          NumayaIcon(icon!, size: small ? 18 : AppSizes.iconMd, color: fg),
           const SizedBox(width: AppSpacing.s2),
         ],
         Flexible(
@@ -143,36 +134,44 @@ class NumayaButton extends StatelessWidget {
       onTap: loading ? null : onPressed,
       semanticLabel: label,
       excludeChildSemantics: true,
-      borderRadius: AppRadii.all(AppRadii.pill),
+      borderRadius: AppRadii.all(radius),
       child: AnimatedContainer(
         duration: AppMotion.duration(context, AppMotion.base),
         curve: AppMotion.easeOut,
         height: height,
-        width: expand ? double.infinity : null,
+        width: expand && !small ? double.infinity : null,
         padding: EdgeInsets.symmetric(
           horizontal: small ? AppSpacing.s4 : AppSpacing.s6,
         ),
         decoration: BoxDecoration(
           color: bg,
-          borderRadius: AppRadii.all(AppRadii.pill),
-          boxShadow: shadow,
+          borderRadius: AppRadii.all(radius),
           border: ring == null
               ? null
-              : Border.all(color: ring, width: AppBorders.hairline),
+              : Border.all(
+                  color: ring,
+                  width: AppBorders.hairline,
+                  strokeAlign: BorderSide.strokeAlignInside,
+                ),
         ),
-        alignment: Alignment.center,
-        child: loading
-            ? SizedBox.square(
-                dimension: 20,
-                child: CircularProgressIndicator(strokeWidth: 2.2, color: fg),
-              )
-            : content,
+        // A compact button hugs its label; only full-width buttons fill the row.
+        alignment: expand && !small ? Alignment.center : null,
+        child: Center(
+          widthFactor: 1,
+          child: loading
+              ? SizedBox.square(
+                  dimension: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2.2, color: fg),
+                )
+              : content,
+        ),
       ),
     );
   }
 }
 
-/// Circular "next" button that ends a step (`.fab`): purple with a white arrow; disabled grey.
+/// The step button (`.fab`): an ink circle with a white arrow, like the reference's "Add Logs";
+/// disabled warm grey.
 class NumayaFab extends StatelessWidget {
   const NumayaFab({
     super.key,
@@ -203,8 +202,7 @@ class NumayaFab extends StatelessWidget {
         height: AppSizes.fab,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: enabled ? AppColors.brand : AppColors.surfaceSunken,
-          boxShadow: enabled ? AppElevation.button : const [],
+          color: enabled ? AppColors.ink : AppColors.disabled,
         ),
         alignment: Alignment.center,
         child: loading
@@ -212,12 +210,14 @@ class NumayaFab extends StatelessWidget {
                 dimension: 22,
                 child: CircularProgressIndicator(
                   strokeWidth: 2.2,
-                  color: AppColors.onBrand,
+                  color: AppColors.inkForeground,
                 ),
               )
             : NumayaIcon(
                 icon,
-                color: enabled ? AppColors.onBrand : AppColors.textSubtle,
+                color: enabled
+                    ? AppColors.inkForeground
+                    : AppColors.disabledForeground,
               ),
       ),
     );
@@ -225,13 +225,13 @@ class NumayaFab extends StatelessWidget {
 }
 
 enum NavButtonStyle {
-  /// White circle with a soft shadow (top bars).
+  /// A 40pt white circle with a hairline: page and tab-root headers.
   floating,
 
-  /// Grey circle, 36 (sheet close).
+  /// A grey circle.
   flat,
 
-  /// Bare icon.
+  /// A bare ink icon: modal headers, sheet headers.
   plain,
 }
 
@@ -255,22 +255,10 @@ class NavIconButton extends StatelessWidget {
     final size = style == NavButtonStyle.flat
         ? AppSizes.iconButtonSm
         : AppSizes.iconButton;
-    final (Color bg, Color fg, List<BoxShadow> shadow) = switch (style) {
-      NavButtonStyle.floating => (
-        AppColors.surface,
-        AppColors.textPrimary,
-        AppElevation.sm,
-      ),
-      NavButtonStyle.flat => (
-        AppColors.surfaceSoft,
-        AppColors.textSecondary,
-        const <BoxShadow>[],
-      ),
-      NavButtonStyle.plain => (
-        Colors.transparent,
-        AppColors.textSecondary,
-        const <BoxShadow>[],
-      ),
+    final (Color bg, Color? ring) = switch (style) {
+      NavButtonStyle.floating => (AppColors.surface, AppColors.border),
+      NavButtonStyle.flat => (AppColors.fill, null),
+      NavButtonStyle.plain => (Colors.transparent, null),
     };
     return Tooltip(
       message: label,
@@ -287,7 +275,13 @@ class NavIconButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: bg,
             shape: BoxShape.circle,
-            boxShadow: shadow,
+            border: ring == null
+                ? null
+                : Border.all(
+                    color: ring,
+                    width: AppBorders.hairline,
+                    strokeAlign: BorderSide.strokeAlignInside,
+                  ),
           ),
           alignment: Alignment.center,
           child: NumayaIcon(
@@ -295,7 +289,7 @@ class NavIconButton extends StatelessWidget {
             size: style == NavButtonStyle.flat
                 ? AppSizes.iconMd
                 : AppSizes.iconLg,
-            color: fg,
+            color: AppColors.ink,
           ),
         ),
       ),
@@ -303,7 +297,7 @@ class NavIconButton extends StatelessWidget {
   }
 }
 
-/// Underlined inline action (`.text-button`): brand purple, semibold.
+/// Underlined inline action (`.text-button`): deep blue, semibold.
 class TextLink extends StatelessWidget {
   const TextLink({
     super.key,
@@ -323,19 +317,19 @@ class TextLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = onPressed == null
-        ? AppColors.textSubtle
+        ? AppColors.disabledForeground
         : danger
-        ? AppColors.danger
+        ? AppColors.negative
         : muted
         ? AppColors.textSecondary
-        : AppColors.textBrand;
+        : AppColors.accentOnTint;
     final base = style ?? AppTypography.body;
     return Pressable(
       onTap: onPressed,
       semanticLabel: label,
       excludeChildSemantics: true,
       pressedScale: 1,
-      borderRadius: AppRadii.all(AppRadii.xs),
+      borderRadius: AppRadii.all(AppRadii.tag),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2),
         child: Text(
@@ -346,8 +340,6 @@ class TextLink extends StatelessWidget {
             decorationThickness: 1.5,
             decorationColor: onPressed == null
                 ? Colors.transparent
-                : muted
-                ? AppColors.borderStrong
                 : color.withValues(alpha: 0.32),
           ),
         ),

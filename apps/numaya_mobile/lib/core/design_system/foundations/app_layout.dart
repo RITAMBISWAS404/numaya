@@ -25,16 +25,19 @@ abstract final class AppSpacing {
   static const double contentMax = NumayaSizeTokens.layoutContentMax;
 }
 
-/// Corner radii.
+/// V16 corner radii (`withings.radius.*`): tags 6, fields 8, buttons and chips 12, cards 14, photos and
+/// sheets 16; full pills only for compact actions, view tabs and the toast. A nested corner is its
+/// container's minus the inset.
 abstract final class AppRadii {
-  static const double xs = NumayaSizeTokens.radiusXs;
-  static const double sm = NumayaSizeTokens.radiusSm;
-  static const double md = NumayaSizeTokens.radiusMd;
-  static const double lg = NumayaSizeTokens.radiusLg;
-  static const double xl = NumayaSizeTokens.radiusXl;
-  static const double card = NumayaSizeTokens.radiusCard;
-  static const double photo = NumayaSizeTokens.radiusPhoto;
-  static const double pill = NumayaSizeTokens.radiusPill;
+  static const double tag = NumayaSizeTokens.withingsRadiusTag;
+  static const double field = NumayaSizeTokens.withingsRadiusField;
+  static const double control = NumayaSizeTokens.withingsRadiusControl;
+  static const double card = NumayaSizeTokens.withingsRadiusCard;
+  static const double photo = NumayaSizeTokens.withingsRadiusPhoto;
+  static const double pill = NumayaSizeTokens.withingsRadiusPill;
+
+  /// Segmented track; a segment is this minus the inset.
+  static const double segment = NumayaSizeTokens.withingsSegmentRadius;
 
   static BorderRadius all(double r) => BorderRadius.all(Radius.circular(r));
 }
@@ -46,20 +49,43 @@ abstract final class AppBorders {
   static const double focus = NumayaSizeTokens.borderFocus;
 }
 
-/// Component and control sizes.
+/// Component and control sizes (shared tokens plus V16's `withings.*`).
 abstract final class AppSizes {
-  static const double control = NumayaSizeTokens.sizeControl;
   static const double touchMin = NumayaSizeTokens.sizeTouchMin;
   static const double iconSm = NumayaSizeTokens.sizeIconSm;
   static const double iconMd = NumayaSizeTokens.sizeIconMd;
   static const double iconLg = NumayaSizeTokens.sizeIconLg;
-  static const double buttonHeight = NumayaSizeTokens.buttonHeight;
-  static const double buttonHeightSm = NumayaSizeTokens.buttonHeightSm;
+
+  /// Full-width buttons: 50.
+  static const double buttonHeight = NumayaSizeTokens.withingsButtonHeight;
+
+  /// Compact pill buttons: 36 visible inside the 44 hit area.
+  static const double buttonHeightSm = NumayaSizeTokens.withingsButtonHeightSm;
   static const double buttonHeightQuiet = NumayaSizeTokens.buttonHeightQuiet;
+
+  /// Text fields: 54.
+  static const double field = NumayaSizeTokens.withingsFieldHeight;
+
+  /// Grouped and selection rows: 56 minimum.
+  static const double row = NumayaSizeTokens.withingsRowHeight;
   static const double fab = NumayaSizeTokens.fabSize;
-  static const double iconButton = NumayaSizeTokens.iconButtonSize;
+
+  /// Header buttons: 40 circles.
+  static const double iconButton = NumayaSizeTokens.withingsHeaderButton;
   static const double iconButtonSm = NumayaSizeTokens.iconButtonSizeSm;
   static const double chip = NumayaSizeTokens.chipHeight;
+  static const double search = NumayaSizeTokens.withingsSearchHeight;
+  static const double segmentHeight = NumayaSizeTokens.withingsSegmentHeight;
+  static const double segmentInset = NumayaSizeTokens.withingsSegmentInset;
+
+  /// Radio and checkbox: 22.
+  static const double choice = NumayaSizeTokens.withingsChoiceSize;
+
+  /// Interest-set emoji holder: 28 circle.
+  static const double mark = NumayaSizeTokens.withingsMarkSize;
+
+  /// Prompt-mark holder: 24 circle.
+  static const double promptMark = NumayaSizeTokens.withingsPromptMarkSize;
   static const double progressSegmentWidth =
       NumayaSizeTokens.progressSegmentWidth;
   static const double progressSegmentHeight =
@@ -68,12 +94,22 @@ abstract final class AppSizes {
   static const double codeCellRadius = NumayaSizeTokens.codeCellRadius;
   static const double switchWidth = NumayaSizeTokens.switchWidth;
   static const double switchHeight = NumayaSizeTokens.switchHeight;
+  static const double switchThumb = NumayaSizeTokens.withingsThumbSwitch;
+  static const double sliderThumb = NumayaSizeTokens.withingsThumbSlider;
+  static const double avatar = NumayaSizeTokens.sizeAvatarXl;
   static const double tabBar = NumayaSizeTokens.tabBarHeight;
   static const double topBar = 56;
 }
 
-/// Shadows. Flutter has no inset shadow, so the 1px highlight inside primary buttons is omitted.
+/// Shadows. V16 cards, groups and fields take none; only floating things do.
 abstract final class AppElevation {
+  /// The toast and anything floating over a photo.
+  static const List<BoxShadow> withingsFloat =
+      NumayaShadowTokens.shadowWithingsFloat;
+
+  /// The selected segment.
+  static const List<BoxShadow> segment =
+      NumayaShadowTokens.shadowWithingsSegment;
   static const List<BoxShadow> thumb = NumayaShadowTokens.shadowThumb;
   static const List<BoxShadow> xs = NumayaShadowTokens.shadowXs;
   static const List<BoxShadow> sm = NumayaShadowTokens.shadowSm;

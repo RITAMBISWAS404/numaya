@@ -9,7 +9,10 @@ import '../../home/presentation/home_shell.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/domain/profile_draft.dart';
 
-/// B-23 Profile tab: the member's own profile as others will see it, from what they entered.
+/// B-23 Profile tab in V16's layout (screenshot 099-profile): the page title with a round settings
+/// button, a navy initials avatar, the name on the hero scale, a summary line, interest chips, an
+/// outlined "Edit profile" pill, the prompt card, then grouped rows. Everything shown is what the
+/// member entered; no score or activity is invented.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
@@ -18,102 +21,181 @@ class ProfileScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final draft = ref.watch(onboardingProvider.select((s) => s.draft));
     final age = draft.ageIn(ref.read(onboardingProvider.notifier).currentYear);
-    final looking = [
-      for (final value in LookingFor.values)
-        if (draft.lookingFor.contains(value))
-          switch (value) {
-            LookingFor.longTerm => l10n.lookingLongTerm,
-            LookingFor.open => l10n.lookingOpen,
-            LookingFor.casual => l10n.lookingCasual,
-          },
-    ];
+    final gender = switch (draft.gender) {
+      Gender.woman => l10n.genderWoman,
+      Gender.man => l10n.genderMan,
+      Gender.nonbinary => l10n.genderNonbinary,
+      null => null,
+    };
+    final looking = draft.lookingFor.isEmpty
+        ? null
+        : switch (LookingFor.values.firstWhere(draft.lookingFor.contains)) {
+            LookingFor.longTerm => l10n.profileLookingLongTerm,
+            LookingFor.open => l10n.profileLookingOpen,
+            LookingFor.casual => l10n.profileLookingCasual,
+          };
+    final summary = [?gender, ?looking].join(' · ');
+    final initial = draft.firstName.trim().isEmpty
+        ? '?'
+        : draft.firstName.trim().characters.first.toUpperCase();
 
-    return SafeArea(
-      bottom: false,
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: AppSpacing.contentMax),
-          child: Column(
-            children: [
-              TabHeader(
-                title: l10n.tabProfile,
-                actions: [
-                  NavIconButton(
-                    icon: NumayaIcons.settings,
-                    label: l10n.profileSettings,
-                    onPressed: () => context.push(Routes.settings),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.gutter,
-                    AppSpacing.s2,
-                    AppSpacing.gutter,
-                    AppSizes.tabBar + AppSpacing.s10,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _PhotoPlaceholder(
-                        tone: draft.photos.isEmpty
-                            ? 0
-                            : draft.photos.first.tone,
-                        caption: l10n.profilePhotosPlaceholder,
-                      ),
-                      const SizedBox(height: AppSpacing.s4),
-                      Semantics(
-                        header: true,
-                        child: Text(
-                          age == null
-                              ? draft.firstName
-                              : l10n.profileNameAge(draft.firstName, age),
-                          style: AppTypography.hero,
-                        ),
-                      ),
-                      if (looking.isNotEmpty) ...[
-                        const SizedBox(height: AppSpacing.s1),
-                        Text(
-                          '${l10n.profileLookingFor}: ${looking.join(', ')}',
-                          style: AppTypography.body.copyWith(
-                            color: AppColors.textMuted,
+    return ColoredBox(
+      color: AppColors.canvas,
+      child: SafeArea(
+        bottom: false,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: AppSpacing.contentMax),
+            child: Column(
+              children: [
+                TabHeader(
+                  title: l10n.tabProfile,
+                  actions: [
+                    NavIconButton(
+                      icon: NumayaIcons.settings,
+                      label: l10n.profileSettings,
+                      onPressed: () => context.push(Routes.settings),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppSpacing.gutter,
+                      AppSpacing.s3,
+                      AppSpacing.gutter,
+                      AppSpacing.s8,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Center(
+                          child: Semantics(
+                            label: l10n.profileInitialLabel,
+                            excludeSemantics: true,
+                            child: Container(
+                              width: AppSizes.avatar,
+                              height: AppSizes.avatar,
+                              decoration: const BoxDecoration(
+                                color: AppColors.identity,
+                                shape: BoxShape.circle,
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                initial,
+                                style:
+                                    AppTypography.weight(
+                                      AppTypography.pageTitle,
+                                      AppTypography.semibold,
+                                    ).copyWith(
+                                      fontSize: 40,
+                                      height: 1,
+                                      color: AppColors.inkForeground,
+                                    ),
+                              ),
+                            ),
                           ),
                         ),
-                      ],
-                      const SizedBox(height: AppSpacing.s5),
-                      NumayaButton(
-                        label: l10n.profileEdit,
-                        variant: NumayaButtonVariant.secondary,
-                        icon: NumayaIcons.edit,
-                        onPressed: () => context.push(Routes.editProfile),
-                      ),
-                      if (draft.prompt != null) ...[
-                        const SizedBox(height: AppSpacing.sectionGap),
-                        PromptCard(
-                          question: draft.prompt!.question,
-                          answer: draft.prompt!.answer,
+                        const SizedBox(height: AppSpacing.s4),
+                        Semantics(
+                          header: true,
+                          child: Text(
+                            age == null
+                                ? draft.firstName
+                                : l10n.profileNameAge(draft.firstName, age),
+                            textAlign: TextAlign.center,
+                            style: AppTypography.hero,
+                          ),
                         ),
-                      ],
-                      if (draft.interests.isNotEmpty) ...[
-                        const SizedBox(height: AppSpacing.sectionGap),
-                        NumayaSection(
-                          title: l10n.interestsLabel,
-                          child: Wrap(
+                        if (summary.isNotEmpty) ...[
+                          const SizedBox(height: AppSpacing.s1),
+                          Text(
+                            summary,
+                            textAlign: TextAlign.center,
+                            style: AppTypography.body.copyWith(
+                              color: AppColors.textMuted,
+                            ),
+                          ),
+                        ],
+                        if (draft.interests.isNotEmpty) ...[
+                          const SizedBox(height: AppSpacing.s4),
+                          Wrap(
+                            alignment: WrapAlignment.center,
                             spacing: AppSpacing.s2,
                             runSpacing: AppSpacing.s2,
                             children: [
                               for (final interest in draft.interests)
-                                _StaticChip(interest),
+                                _StaticChip(
+                                  label: interest,
+                                  emoji: kInterestEmoji[interest],
+                                ),
                             ],
                           ),
+                        ],
+                        const SizedBox(height: AppSpacing.s4),
+                        Center(
+                          child: NumayaButton(
+                            label: l10n.profileEdit,
+                            small: true,
+                            variant: NumayaButtonVariant.secondary,
+                            icon: NumayaIcons.edit,
+                            onPressed: () => context.push(Routes.editProfile),
+                          ),
+                        ),
+                        if (draft.prompt != null) ...[
+                          const SizedBox(height: AppSpacing.sectionGap),
+                          NumayaSection(
+                            title: l10n.profilePromptTitle,
+                            child: PromptCard(
+                              question: draft.prompt!.question,
+                              answer: draft.prompt!.answer,
+                              editLabel: l10n.promptEditLabel,
+                              onTap: () => context.push(Routes.editPrompt),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                              AppSpacing.s1,
+                              AppSpacing.s3,
+                              0,
+                              0,
+                            ),
+                            child: Text(
+                              l10n.profilePromptCaption,
+                              style: AppTypography.caption.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: AppSpacing.sectionGap),
+                        ListGroup(
+                          title: l10n.profileAccount,
+                          children: [
+                            ListRow(
+                              leading: NumayaIcons.settings,
+                              label: l10n.profileSettings,
+                              onTap: () => context.push(Routes.settings),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: AppSpacing.sectionGap),
+                        ListGroup(
+                          title: l10n.profileTrust,
+                          children: [
+                            ListRow(
+                              leading: NumayaIcons.shield,
+                              label: l10n.profileVerification,
+                              value: l10n.profilePhoneVerified,
+                            ),
+                          ],
                         ),
                       ],
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -121,59 +203,12 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-class _PhotoPlaceholder extends StatelessWidget {
-  const _PhotoPlaceholder({required this.tone, required this.caption});
-
-  final int tone;
-  final String caption;
-
-  static const _tones = [
-    AppColors.surfacePhoto,
-    AppColors.surfaceSunken,
-    AppColors.brandSubtle,
-    AppColors.brandTintStrong,
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      label: caption,
-      excludeSemantics: true,
-      child: AspectRatio(
-        aspectRatio: 4 / 5,
-        child: Container(
-          decoration: BoxDecoration(
-            color: _tones[tone % _tones.length],
-            borderRadius: AppRadii.all(AppRadii.photo),
-          ),
-          padding: const EdgeInsets.all(AppSpacing.s5),
-          alignment: Alignment.bottomLeft,
-          child: Row(
-            children: [
-              const NumayaIcon(
-                NumayaIcons.image,
-                color: AppColors.textSecondary,
-              ),
-              const SizedBox(width: AppSpacing.s2),
-              Expanded(
-                child: Text(
-                  caption,
-                  style: AppTypography.caption.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
+/// A content chip shown on the page (V16: white, 12pt corner, emoji and medium label).
 class _StaticChip extends StatelessWidget {
-  const _StaticChip(this.label);
+  const _StaticChip({required this.label, this.emoji});
+
   final String label;
+  final String? emoji;
 
   @override
   Widget build(BuildContext context) {
@@ -182,20 +217,17 @@ class _StaticChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s3),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: AppRadii.all(AppRadii.pill),
-        border: Border.all(
-          color: AppColors.borderStrong,
-          width: AppBorders.hairline,
-          strokeAlign: BorderSide.strokeAlignInside,
-        ),
+        borderRadius: AppRadii.all(AppRadii.control),
       ),
-      alignment: Alignment.center,
-      child: Text(
-        label,
-        style: AppTypography.weight(
-          AppTypography.label,
-          AppTypography.medium,
-        ).copyWith(color: AppColors.textPrimary),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (emoji != null) ...[
+            Emoji(emoji!, size: 15.5),
+            const SizedBox(width: 6),
+          ],
+          Text(label, style: AppTypography.card),
+        ],
       ),
     );
   }

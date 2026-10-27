@@ -1,6 +1,7 @@
 # Numaya mobile (Flutter)
 
-Native Android and iOS app for Numaya: the complete onboarding flow in the approved Numaya design, on a layered
+Native Android and iOS app for Numaya: the complete onboarding flow in the **Numaya V16** design (the Withings
+Health Mate reconstruction: stone page, white cards, ink actions, Withings blue accents, Hanken Grotesk), on a layered
 architecture ready for a real backend. **Not production-ready**: sign-in is a demo in development builds and absent in
 release builds until an auth provider is chosen.
 

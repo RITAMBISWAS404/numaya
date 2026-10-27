@@ -69,7 +69,7 @@ class _CountryListState extends State<_CountryList> {
                       selected: isSelected,
                       excludeChildSemantics: true,
                       pressedScale: 1,
-                      borderRadius: AppRadii.all(AppRadii.md),
+                      borderRadius: AppRadii.all(AppRadii.control),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 14,

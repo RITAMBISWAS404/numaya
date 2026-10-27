@@ -26,8 +26,8 @@ used 4 segments on the phone steps and 6 on profile steps; Flutter uses one cons
 | No account sheet | B-03 (Numaya form) | Sign-in found no profile for the number | create, use another number |
 | Setup hub | B-21 (Numaya form) | "You're verified" + three steps; first step not done is "Up next" | 0–3 done, button label and caption follow |
 | Basics | B-10/B-11 | First name; birth year (18–100, digits only); gender (radio); looking for (checkbox, up to 2) | empty, partial, underage error, unrealistic year, complete; edit mode |
-| Interests + prompt | B-17, B-27 | 3–5 interests, taps past 5 ignored (others shown unavailable); one prompt answer up to 150 characters required ("Three interests and one answer") | pick N more, answer prompt, N/5, maximum reached, prompt empty / answered; edit mode |
-| Prompt editor | B-27 | 6 questions, answer counter, save disabled until an answer exists | — |
+| Interests + prompt | B-17, B-27 | 3–5 interests, taps past 5 ignored (others shown unavailable, counter "5/5 SELECTED"); one prompt answer up to 150 characters required ("Three interests and one answer") | pick N more, answer prompt, N/5, maximum reached, prompt empty / answered; edit mode |
+| Prompt editor ("YOUR PROMPT" screen, as V16) | B-27 | 6 questions, "N characters left", Save disabled until an answer exists and something changed | write an answer to save, no changes yet, saved hint |
 | Photos | B-15 | Minimum 2, recommended 4, maximum 6; first is "Main"; remove any | 0–6 photos, captions follow; edit mode |
 | Home shell | B-30, B-42, B-46, B-23 | Four tabs | Home, Likes, Messages: honest empty states; Profile: the member's own data |
 | Filters | B-34 | Age 18–80 range, distance 1–160 km | saved toast, reset |

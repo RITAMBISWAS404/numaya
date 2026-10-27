@@ -676,12 +676,6 @@ abstract class AppLocalizations {
   /// **'Now answer your prompt'**
   String get interestsNeedPrompt;
 
-  /// No description provided for @interestsMaxReached.
-  ///
-  /// In en, this message translates to:
-  /// **'That’s 5. Remove one to pick another.'**
-  String get interestsMaxReached;
-
   /// No description provided for @promptSectionTitle.
   ///
   /// In en, this message translates to:
@@ -741,6 +735,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Write an answer to save.'**
   String get promptWriteToSave;
+
+  /// No description provided for @promptNoChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'No changes yet.'**
+  String get promptNoChanges;
+
+  /// No description provided for @promptSavedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved prompts show on your profile straight away.'**
+  String get promptSavedHint;
+
+  /// No description provided for @promptCharsLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 character left} other{{count} characters left}}'**
+  String promptCharsLeft(int count);
 
   /// No description provided for @photosTitle.
   ///
@@ -862,10 +874,28 @@ abstract class AppLocalizations {
   /// **'Age'**
   String get filtersAge;
 
+  /// No description provided for @filtersAgeHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'How old are they?'**
+  String get filtersAgeHeading;
+
+  /// No description provided for @filtersDistanceHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'How far away are they?'**
+  String get filtersDistanceHeading;
+
+  /// No description provided for @filtersDistanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get filtersDistanceLabel;
+
   /// No description provided for @filtersAgeValue.
   ///
   /// In en, this message translates to:
-  /// **'{min} to {max}'**
+  /// **'{min} - {max}'**
   String filtersAgeValue(int min, int max);
 
   /// No description provided for @filtersDistance.
@@ -877,7 +907,7 @@ abstract class AppLocalizations {
   /// No description provided for @filtersDistanceValue.
   ///
   /// In en, this message translates to:
-  /// **'{km} km'**
+  /// **'Up to {km} km'**
   String filtersDistanceValue(int km);
 
   /// No description provided for @filtersApply.
@@ -898,29 +928,47 @@ abstract class AppLocalizations {
   /// **'Filters saved'**
   String get filtersSaved;
 
+  /// No description provided for @likesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'People who liked you. Like them back to match.'**
+  String get likesSubtitle;
+
   /// No description provided for @likesEmptyTitle.
   ///
   /// In en, this message translates to:
-  /// **'No likes yet'**
+  /// **'No new likes right now'**
   String get likesEmptyTitle;
 
   /// No description provided for @likesEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'When someone likes you, they’ll show up here.'**
+  /// **'When someone likes your profile, they’ll show up here.'**
   String get likesEmptyBody;
+
+  /// No description provided for @goToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Home'**
+  String get goToHome;
 
   /// No description provided for @chatsEmptyTitle.
   ///
   /// In en, this message translates to:
-  /// **'No conversations yet'**
+  /// **'Connections start here'**
   String get chatsEmptyTitle;
 
   /// No description provided for @chatsEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'When you match with someone, you can start chatting here.'**
+  /// **'When you like each other, you’ll match. Here’s where you can chat.'**
   String get chatsEmptyBody;
+
+  /// No description provided for @findYourPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'Find your people'**
+  String get findYourPeople;
 
   /// No description provided for @profileNameAge.
   ///
@@ -952,11 +1000,101 @@ abstract class AppLocalizations {
   /// **'Placeholder photos until upload is connected.'**
   String get profilePhotosPlaceholder;
 
+  /// No description provided for @profilePromptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your prompt'**
+  String get profilePromptTitle;
+
+  /// No description provided for @profilePromptCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches reply to this.'**
+  String get profilePromptCaption;
+
+  /// No description provided for @profileAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get profileAccount;
+
+  /// No description provided for @profileTrust.
+  ///
+  /// In en, this message translates to:
+  /// **'Trust'**
+  String get profileTrust;
+
+  /// No description provided for @profileVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification'**
+  String get profileVerification;
+
+  /// No description provided for @profilePhoneVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone verified'**
+  String get profilePhoneVerified;
+
+  /// No description provided for @profileLookingLongTerm.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for long-term'**
+  String get profileLookingLongTerm;
+
+  /// No description provided for @profileLookingOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open to seeing where it goes'**
+  String get profileLookingOpen;
+
+  /// No description provided for @profileLookingCasual.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for something casual'**
+  String get profileLookingCasual;
+
+  /// No description provided for @profileInitialLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your initial, until photo upload is connected'**
+  String get profileInitialLabel;
+
   /// No description provided for @editTitle.
   ///
   /// In en, this message translates to:
   /// **'Edit profile'**
   String get editTitle;
+
+  /// No description provided for @editPhotosTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get editPhotosTitle;
+
+  /// No description provided for @editPhotosHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep at least 2.'**
+  String get editPhotosHint;
+
+  /// No description provided for @editPhotosNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload isn’t connected yet, so + adds a placeholder tile.'**
+  String get editPhotosNote;
+
+  /// No description provided for @editPromptSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompt'**
+  String get editPromptSection;
+
+  /// No description provided for @editAboutSection.
+  ///
+  /// In en, this message translates to:
+  /// **'About you'**
+  String get editAboutSection;
 
   /// No description provided for @editSaved.
   ///
@@ -1015,8 +1153,14 @@ abstract class AppLocalizations {
   /// No description provided for @settingsSignOut.
   ///
   /// In en, this message translates to:
-  /// **'Sign out'**
+  /// **'Log out'**
   String get settingsSignOut;
+
+  /// No description provided for @settingsDeleteNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting removes your profile, matches and messages.'**
+  String get settingsDeleteNote;
 
   /// No description provided for @settingsDelete.
   ///

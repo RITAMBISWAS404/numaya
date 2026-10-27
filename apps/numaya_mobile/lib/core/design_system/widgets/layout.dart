@@ -6,17 +6,19 @@ import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
 import 'buttons.dart';
+import 'primitives.dart';
 
 enum ScreenTone {
-  /// White.
+  /// The V16 stone page (`.theme-withings .fl-screen`).
   page,
 
-  /// Lavender wash fading to white (`.screen--wash`).
+  /// V16 maps the old wash onto the page colour too (`.theme-withings .screen--wash`).
   wash,
 }
 
-/// One full screen (`.screen`): optional top bar, a scrolling body with the 16pt gutter and an
-/// optional footer pinned above the keyboard. Wider screens centre a 430pt column.
+/// One full screen (`.screen`): an optional top bar, a scrolling body with the 16pt gutter on the
+/// stone page, and an optional footer pinned above the keyboard. Wider screens centre a 430pt
+/// column. A [NumayaTopBar] is a white bar that also fills the status-bar area.
 class NumayaScreen extends StatelessWidget {
   const NumayaScreen({
     super.key,
@@ -56,50 +58,58 @@ class NumayaScreen extends StatelessWidget {
           )
         : Padding(padding: padding, child: body);
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        gradient: tone == ScreenTone.wash
-            ? const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  AppColors.surfaceBrand,
-                  AppColors.surfaceBrand,
-                  AppColors.surface,
-                ],
-                stops: [0, 0.35, 1],
-              )
-            : null,
+    Widget column(Widget child) => Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: AppSpacing.contentMax),
+        child: child,
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        resizeToAvoidBottomInset: true,
-        body: SafeArea(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: AppSpacing.contentMax,
+    );
+
+    final topInset = MediaQuery.paddingOf(context).top;
+    return Scaffold(
+      backgroundColor: AppColors.canvas,
+      resizeToAvoidBottomInset: true,
+      body: Column(
+        children: [
+          if (top != null)
+            DecoratedBox(
+              decoration: const BoxDecoration(
+                color: AppColors.surface,
+                border: Border(
+                  bottom: BorderSide(
+                    color: AppColors.border,
+                    width: AppBorders.hairline,
+                  ),
+                ),
               ),
-              child: Column(
-                children: [
-                  ?top,
-                  Expanded(child: content),
-                  if (footer != null)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSpacing.gutter,
-                        AppSpacing.s3,
-                        AppSpacing.gutter,
-                        AppSpacing.s4,
+              child: Padding(
+                padding: EdgeInsets.only(top: topInset),
+                child: column(top!),
+              ),
+            ),
+          Expanded(
+            child: SafeArea(
+              top: top == null,
+              child: column(
+                Column(
+                  children: [
+                    Expanded(child: content),
+                    if (footer != null)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          AppSpacing.gutter,
+                          AppSpacing.s3,
+                          AppSpacing.gutter,
+                          AppSpacing.s4,
+                        ),
+                        child: footer,
                       ),
-                      child: footer,
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -129,7 +139,9 @@ class StepFooter extends StatelessWidget {
   }
 }
 
-/// Top bar (`.topbar`): back button, centred progress segments or title, optional actions.
+/// Modal and flow header (`.theme-withings .topbar`): a bare ink back icon, centred progress
+/// segments or a title in tracked small capitals ("EDIT PROFILE"), optional actions. [NumayaScreen]
+/// draws it on a white bar with a hairline under it.
 class NumayaTopBar extends StatelessWidget {
   const NumayaTopBar({
     super.key,
@@ -166,11 +178,14 @@ class NumayaTopBar extends StatelessWidget {
             else if (title != null)
               Semantics(
                 header: true,
-                child: Text(
-                  title!,
-                  style: AppTypography.button,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                label: title,
+                child: ExcludeSemantics(
+                  child: Text(
+                    title!.toUpperCase(),
+                    style: AppTypography.headerCaps,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
             Row(
@@ -181,6 +196,7 @@ class NumayaTopBar extends StatelessWidget {
                         ? NumayaIcons.close
                         : NumayaIcons.chevronLeft,
                     label: backLabel,
+                    style: NavButtonStyle.plain,
                     onPressed: onBack,
                   )
                 else
@@ -196,7 +212,8 @@ class NumayaTopBar extends StatelessWidget {
   }
 }
 
-/// Progress segments (`.progress`): done segments filled, the current one fills in on arrival.
+/// Progress segments (`.progress`): ink on the fill (V16); done segments filled, the current one
+/// fills in on arrival.
 class StepProgress extends StatelessWidget {
   const StepProgress({super.key, required this.step, required this.steps});
 
@@ -235,12 +252,12 @@ class _Segment extends StatelessWidget {
       child: Container(
         width: AppSizes.progressSegmentWidth,
         height: AppSizes.progressSegmentHeight,
-        color: AppColors.surfaceSunken,
+        color: AppColors.fill,
         alignment: Alignment.centerLeft,
         child: state == 0
             ? null
             : state == 1
-            ? Container(color: AppColors.brand)
+            ? Container(color: AppColors.ink)
             : TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0, end: 1),
                 duration: AppMotion.reduced(context)
@@ -250,7 +267,7 @@ class _Segment extends StatelessWidget {
                 builder: (context, v, _) => FractionallySizedBox(
                   widthFactor: v,
                   heightFactor: 1,
-                  child: Container(color: AppColors.brand),
+                  child: Container(color: AppColors.ink),
                 ),
               ),
       ),
@@ -259,7 +276,7 @@ class _Segment extends StatelessWidget {
   }
 }
 
-/// Screen heading (`.screen-header`): display title, optional lede and a spot illustration.
+/// Flow heading (`.screen-header`): a 26pt medium statement, optional lede and a spot illustration.
 class ScreenHeader extends StatelessWidget {
   const ScreenHeader({
     super.key,
@@ -280,7 +297,7 @@ class ScreenHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final heading = Semantics(
       header: true,
-      child: Text(title, style: AppTypography.display),
+      child: BalancedText(title, style: AppTypography.flowTitle),
     );
     return Padding(
       padding: const EdgeInsets.only(top: AppSpacing.s3),
@@ -288,7 +305,7 @@ class ScreenHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (eyebrow != null) ...[
-            Text(eyebrow!.toUpperCase(), style: AppTypography.eyebrow),
+            Text(eyebrow!.toUpperCase(), style: AppTypography.labelCaps),
             const SizedBox(height: AppSpacing.s3),
           ],
           if (art == null)
@@ -318,7 +335,7 @@ class ScreenHeader extends StatelessWidget {
   }
 }
 
-/// Titled content section (`.section`).
+/// Titled content section (`.section`): a 22pt medium heading, muted description.
 class NumayaSection extends StatelessWidget {
   const NumayaSection({
     super.key,
@@ -347,7 +364,7 @@ class NumayaSection extends StatelessWidget {
                 children: [
                   Semantics(
                     header: true,
-                    child: Text(title, style: AppTypography.title),
+                    child: Text(title, style: AppTypography.section),
                   ),
                   if (description != null)
                     Padding(
@@ -365,7 +382,7 @@ class NumayaSection extends StatelessWidget {
             ?trailing,
           ],
         ),
-        const SizedBox(height: AppSpacing.s4),
+        const SizedBox(height: AppSpacing.s3),
         child,
       ],
     );

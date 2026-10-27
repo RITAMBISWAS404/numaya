@@ -124,12 +124,7 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    ExcludeSemantics(
-                      child: Text(
-                        l10n.phoneCountryLabel,
-                        style: AppTypography.label,
-                      ),
-                    ),
+                    FieldLabel(l10n.phoneCountryLabel),
                     const SizedBox(height: AppSpacing.s2),
                     _CountryButton(
                       country: country,
@@ -203,7 +198,7 @@ class _CountryButton extends StatelessWidget {
       semanticLabel: label,
       excludeChildSemantics: true,
       pressedScale: 0.98,
-      borderRadius: AppRadii.all(AppRadii.md),
+      borderRadius: AppRadii.all(AppRadii.field),
       child: InputSurface(
         disabled: !enabled,
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s3),

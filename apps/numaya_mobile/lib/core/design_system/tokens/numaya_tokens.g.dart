@@ -6,7 +6,7 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/painting.dart';
 
-/// color tokens of the approved Numaya design (56).
+/// color tokens of the Numaya design system (81).
 abstract final class NumayaColorTokens {
   /// Meetup primary purple: selected pills and chips, outgoing bubbles, progress, links, send and confirm actions, switches' focus. White text and glyphs on it are 4.90:1 (AA).
   static const Color colorBrand = Color(0xFF7262C7);
@@ -127,6 +127,79 @@ abstract final class NumayaColorTokens {
   static const Color colorSuccessTint = Color(0xFFEBF4EE);
   static const Color colorWarning = Color(0xFF9A5B00);
   static const Color colorWarningTint = Color(0xFFFFF6E5);
+
+  /// The page behind every screen (#F5F4F1).
+  static const Color colorWithingsCanvas = Color(0xFFF5F4F1);
+
+  /// Cards, grouped rows, fields, sheets, the tab bar and modal headers (#FFFFFF). No border or shadow on the stone page.
+  static const Color colorWithingsSurface = Color(0xFFFFFFFF);
+
+  /// Segmented-control track, unselected filter and interest pills, recessed placeholders (#EAE9E6).
+  static const Color colorWithingsFill = Color(0xFFEAE9E6);
+
+  /// Row dividers inside cards, modal header and tab bar edges, outlined boxes on the page (#E6E5E2).
+  static const Color colorWithingsBorder = Color(0xFFE6E5E2);
+
+  /// Dashed empty photo slots, the sheet grabber (#D3D0CC). Decorative edges only.
+  static const Color colorWithingsBorderStrong = Color(0xFFD3D0CC);
+
+  /// Photo placeholders and missing activity images (#DFDDD9).
+  static const Color colorWithingsPhoto = Color(0xFFDFDDD9);
+
+  /// Text-field outline (#6D6C6A).
+  static const Color colorWithingsOutline = Color(0xFF6D6C6A);
+
+  /// Unselected radio and checkbox rings (#8A8784).
+  static const Color colorWithingsControl = Color(0xFF8A8784);
+
+  /// Primary text and headings, primary buttons, selected radios and option rings, the active tab (#121212).
+  static const Color colorWithingsInk = Color(0xFF121212);
+
+  /// Text on ink (#FFFFFF, 18.7:1).
+  static const Color colorWithingsInkForeground = Color(0xFFFFFFFF);
+
+  /// Row subtitles, helper text, descriptions (#5E5C59).
+  static const Color colorWithingsTextSecondary = Color(0xFF5E5C59);
+
+  /// Metadata, timestamps, inactive tab labels (#6B6966); 4.5:1 or better on every V16 surface.
+  static const Color colorWithingsTextMuted = Color(0xFF6B6966);
+
+  /// Disabled button fill (#D6D2CE).
+  static const Color colorWithingsDisabled = Color(0xFFD6D2CE);
+
+  /// Disabled button label (#77736F).
+  static const Color colorWithingsDisabledForeground = Color(0xFF77736F);
+
+  /// Withings blue (#5066CC): your message bubbles, the SuperSwipe, checked checkboxes, slider fills, unread counts, links and focus.
+  static const Color colorWithingsAccent = Color(0xFF5066CC);
+  static const Color colorWithingsAccentHover = Color(0xFF4357B8);
+
+  /// Text on Withings blue (#FFFFFF, 5.11:1).
+  static const Color colorWithingsAccentForeground = Color(0xFFFFFFFF);
+
+  /// Selected filter and period pills, selected interests, the tinted action row (#E4EBFC).
+  static const Color colorWithingsAccentTint = Color(0xFFE4EBFC);
+
+  /// Text and icons on the blue tint (#3E4A8F, 6.8:1).
+  static const Color colorWithingsAccentOnTint = Color(0xFF3E4A8F);
+
+  /// Initial avatars and portrait fallbacks (#203068) with white initials.
+  static const Color colorWithingsIdentity = Color(0xFF203068);
+
+  /// Switch on, completion checks (#3C783C).
+  static const Color colorWithingsPositive = Color(0xFF3C783C);
+
+  /// Destructive buttons, notification dots (#CF3336).
+  static const Color colorWithingsNegative = Color(0xFFCF3336);
+
+  /// Round holder behind an emoji mark (category headings). Never text or controls.
+  static const Color colorWithingsMarkYellow = Color(0xFFFCEAB7);
+
+  /// Round holder behind an emoji mark. Never text or controls.
+  static const Color colorWithingsMarkLavender = Color(0xFFE4C9ED);
+
+  /// Round holder behind an emoji mark. Never text or controls.
+  static const Color colorWithingsMarkPink = Color(0xFFFCCCC4);
   static const Color buttonPrimaryBgTop = Color(0xFF7262C7);
   static const Color buttonPrimaryBgBottom = Color(0xFF7262C7);
   static const Color buttonPrimaryBgHoverTop = Color(0xFF5F50B3);
@@ -135,7 +208,7 @@ abstract final class NumayaColorTokens {
   static const Color buttonInkBgBottom = Color(0xFF141316);
 }
 
-/// dimension tokens of the approved Numaya design (92).
+/// dimension tokens of the Numaya design system (153).
 abstract final class NumayaSizeTokens {
   static const double typeHeroSize = 34.0;
   static const double typeHeroLine = 38.0;
@@ -251,9 +324,136 @@ abstract final class NumayaSizeTokens {
   static const double switchWidth = 51.0;
   static const double switchHeight = 31.0;
   static const double tabBarHeight = 64.0;
+
+  /// Outlined labels ('Withings+' badge), status labels, the checkbox.
+  static const double withingsRadiusTag = 6.0;
+
+  /// Text fields, search, the composer (measured ≈8pt).
+  static const double withingsRadiusField = 8.0;
+
+  /// Full-width buttons, tinted action rows, chips and interest pills (measured 10–12pt).
+  static const double withingsRadiusControl = 12.0;
+
+  /// Cards, grouped rows, the prompt, information boxes, photo tiles, message bubbles (measured 12–14pt).
+  static const double withingsRadiusCard = 14.0;
+
+  /// Full-width profile photographs and sheets.
+  static const double withingsRadiusPhoto = 16.0;
+
+  /// Compact outlined actions ('Add a Reminder', 'Share'), period and filter tabs, segmented options, counts.
+  static const double withingsRadiusPill = 999.0;
+
+  /// Full-width buttons (measured 46–49pt).
+  static const double withingsButtonHeight = 50.0;
+
+  /// Text fields (measured 55pt).
+  static const double withingsFieldHeight = 54.0;
+
+  /// Circular header buttons (measured 40pt).
+  static const double withingsHeaderButton = 40.0;
+
+  /// Single-line rows in a grouped card (measured 56pt).
+  static const double withingsRowHeight = 56.0;
+
+  /// Small outlined pills ('Add a Reminder'), visible height inside the 44px target.
+  static const double withingsButtonHeightSm = 36.0;
+
+  /// Segmented-control track corner (Programs / Library).
+  static const double withingsSegmentRadius = 10.0;
+
+  /// Gap between the segmented track and its segments; a segment's corner is the track's minus this.
+  static const double withingsSegmentInset = 2.0;
+
+  /// Segment height (track = this + 2 × inset).
+  static const double withingsSegmentHeight = 32.0;
+
+  /// Search field height.
+  static const double withingsSearchHeight = 46.0;
+
+  /// Composer field corner: half its 44px height, a pill beside the round send button.
+  static const double withingsComposerRadius = 22.0;
+
+  /// Discover action circles and the step button.
+  static const double withingsActionSize = 56.0;
+
+  /// New-match portraits (round).
+  static const double withingsPortraitSize = 72.0;
+
+  /// Round pastel holder behind an interest-set emoji.
+  static const double withingsMarkSize = 28.0;
+
+  /// Round tint holder behind the prompt mark.
+  static const double withingsPromptMarkSize = 24.0;
+
+  /// Radio and checkbox size.
+  static const double withingsChoiceSize = 22.0;
+
+  /// Switch thumb (iOS proportions in a 51 × 31 track).
+  static const double withingsThumbSwitch = 27.0;
+
+  /// Slider thumb.
+  static const double withingsThumbSlider = 26.0;
+  static const double withingsTypeHeroSize = 32.0;
+  static const double withingsTypeHeroLine = 38.0;
+
+  /// Tab-root page titles
+  static const double withingsTypePageSize = 30.0;
+  static const double withingsTypePageLine = 36.0;
+  static const double withingsTypeHeadlineSize = 24.0;
+  static const double withingsTypeHeadlineLine = 30.0;
+
+  /// Onboarding flow headings
+  static const double withingsTypeFlowSize = 26.0;
+  static const double withingsTypeFlowLine = 32.0;
+
+  /// Section and group headings, profile prompt answers
+  static const double withingsTypeSectionSize = 22.0;
+  static const double withingsTypeSectionLine = 28.0;
+
+  /// Sheet titles
+  static const double withingsTypeSheetSize = 20.0;
+  static const double withingsTypeSheetLine = 26.0;
+
+  /// Empty-state card titles
+  static const double withingsTypeEmptySize = 18.0;
+  static const double withingsTypeEmptyLine = 24.0;
+
+  /// Row labels, inputs
+  static const double withingsTypeRowSize = 16.0;
+  static const double withingsTypeRowLine = 22.0;
+
+  /// Card titles, chips
+  static const double withingsTypeCardSize = 15.0;
+  static const double withingsTypeCardLine = 20.0;
+  static const double withingsTypeBodySize = 15.5;
+  static const double withingsTypeBodyLine = 22.0;
+  static const double withingsTypeBodySmSize = 15.0;
+  static const double withingsTypeBodySmLine = 21.0;
+  static const double withingsTypeButtonSmSize = 14.0;
+  static const double withingsTypeLabelSize = 14.0;
+  static const double withingsTypeLabelLine = 18.0;
+  static const double withingsTypeCaptionSize = 13.5;
+  static const double withingsTypeCaptionLine = 18.0;
+  static const double withingsTypeMicroSize = 12.5;
+
+  /// Modal header capitals
+  static const double withingsTypeHeaderCapsSize = 12.5;
+  static const double withingsTypeHeaderCapsLine = 16.0;
+
+  /// Field and legend capitals
+  static const double withingsTypeLabelCapsSize = 11.5;
+  static const double withingsTypeLabelCapsLine = 14.0;
+
+  /// Upper bound of the match title clamp (the lower bound is hero-size).
+  static const double withingsTypeMatchMax = 36.0;
+  static const double withingsTypeTrackingTitle = -0.02;
+  static const double withingsTypeTrackingFlow = -0.015;
+  static const double withingsTypeTrackingHeading = -0.01;
+  static const double withingsTypeTrackingHeaderCaps = 0.16;
+  static const double withingsTypeTrackingLabelCaps = 0.06;
 }
 
-/// fontWeight tokens of the approved Numaya design (17).
+/// fontWeight tokens of the Numaya design system (17).
 abstract final class NumayaWeightTokens {
   static const double fontWeightRegular = 400.0;
   static const double fontWeightMedium = 500.0;
@@ -274,7 +474,7 @@ abstract final class NumayaWeightTokens {
   static const double typeEyebrowWeight = 600.0;
 }
 
-/// number tokens of the approved Numaya design (8).
+/// number tokens of the Numaya design system (8).
 abstract final class NumayaNumberTokens {
   /// Default icon stroke width (24px grid).
   static const double iconStroke = 1.75;
@@ -291,7 +491,7 @@ abstract final class NumayaNumberTokens {
   static const double zToast = 20.0;
 }
 
-/// duration tokens of the approved Numaya design (4).
+/// duration tokens of the Numaya design system (4).
 abstract final class NumayaMotionTokens {
   static const Duration motionDurationFast = Duration(milliseconds: 140);
   static const Duration motionDurationBase = Duration(milliseconds: 220);
@@ -301,7 +501,7 @@ abstract final class NumayaMotionTokens {
   static const Duration motionDurationPush = Duration(milliseconds: 460);
 }
 
-/// cubicBezier tokens of the approved Numaya design (3).
+/// cubicBezier tokens of the Numaya design system (3).
 abstract final class NumayaCurveTokens {
   /// Default for entering and state changes.
   static const Cubic motionEaseOut = Cubic(0.22, 1.0, 0.36, 1.0);
@@ -313,7 +513,7 @@ abstract final class NumayaCurveTokens {
   static const Cubic motionEaseInOut = Cubic(0.65, 0.0, 0.35, 1.0);
 }
 
-/// shadow tokens of the approved Numaya design (8).
+/// shadow tokens of the Numaya design system (10).
 abstract final class NumayaShadowTokens {
   /// White switch and slider thumbs: a barely-there edge and a soft drop so the white thumb reads on ink, purple, grey and white without an outline.
   static const List<BoxShadow> shadowThumb = [
@@ -428,6 +628,38 @@ abstract final class NumayaShadowTokens {
       offset: Offset(0.0, 6.0),
       blurRadius: 16.0,
       spreadRadius: -6.0,
+    ),
+  ];
+
+  /// V16: the one elevation, for controls that float over a photograph (the SuperSwipe) and the toast. Cards on the page never take it.
+  static const List<BoxShadow> shadowWithingsFloat = [
+    BoxShadow(
+      color: Color(0x0F121212),
+      offset: Offset(0.0, 1.0),
+      blurRadius: 2.0,
+      spreadRadius: 0.0,
+    ),
+    BoxShadow(
+      color: Color(0x24121212),
+      offset: Offset(0.0, 4.0),
+      blurRadius: 14.0,
+      spreadRadius: -4.0,
+    ),
+  ];
+
+  /// V16: lifts the selected segment off the segmented control's grey track (the reference's 'Programs / Library').
+  static const List<BoxShadow> shadowWithingsSegment = [
+    BoxShadow(
+      color: Color(0x14121212),
+      offset: Offset(0.0, 1.0),
+      blurRadius: 2.0,
+      spreadRadius: 0.0,
+    ),
+    BoxShadow(
+      color: Color(0x0A121212),
+      offset: Offset(0.0, 0.0),
+      blurRadius: 0.0,
+      spreadRadius: 0.5,
     ),
   ];
 }

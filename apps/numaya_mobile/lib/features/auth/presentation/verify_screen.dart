@@ -288,9 +288,7 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
             ),
           ),
           const SizedBox(height: AppSpacing.s5),
-          ExcludeSemantics(
-            child: Text(l10n.verifyCodeLabel, style: AppTypography.label),
-          ),
+          FieldLabel(l10n.verifyCodeLabel),
           const SizedBox(height: AppSpacing.s2),
           CodeInput(
             controller: _code,
@@ -341,13 +339,13 @@ class _DemoMessageBanner extends StatelessWidget {
                 '${l10n.demoMessageTitle}. ${l10n.demoMessageBody(message.code)}',
             excludeChildSemantics: true,
             pressedScale: 0.99,
-            borderRadius: AppRadii.all(AppRadii.lg),
+            borderRadius: AppRadii.all(AppRadii.card),
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.all(AppSpacing.s3),
               decoration: BoxDecoration(
                 color: AppColors.surface,
-                borderRadius: AppRadii.all(AppRadii.lg),
+                borderRadius: AppRadii.all(AppRadii.card),
                 boxShadow: AppElevation.lg,
               ),
               child: Row(
@@ -363,7 +361,7 @@ class _DemoMessageBanner extends StatelessWidget {
                           style: AppTypography.weight(
                             AppTypography.caption,
                             AppTypography.semibold,
-                          ).copyWith(color: AppColors.warning),
+                          ).copyWith(color: AppColors.textSecondary),
                         ),
                         Text(
                           l10n.demoMessageBody(message.code),

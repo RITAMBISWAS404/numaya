@@ -39,6 +39,90 @@ class NumayaIcon extends StatelessWidget {
   }
 }
 
+/// An emoji glyph, decorative (the adjacent label carries the meaning). Falls back to the platform
+/// colour-emoji font (Noto Color Emoji on Android, Apple Color Emoji on iOS).
+class Emoji extends StatelessWidget {
+  const Emoji(this.emoji, {super.key, this.size = 16});
+
+  final String emoji;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => ExcludeSemantics(
+    child: Text(
+      emoji,
+      style: TextStyle(
+        fontSize: size,
+        height: 1,
+        fontFamilyFallback: const ['Noto Color Emoji', 'Apple Color Emoji'],
+      ),
+    ),
+  );
+}
+
+/// Text that wraps into lines of even length, like CSS `text-wrap: balance` (the web uses it on
+/// titles). It finds the narrowest width that keeps the same number of lines.
+class BalancedText extends StatelessWidget {
+  const BalancedText(
+    this.text, {
+    super.key,
+    required this.style,
+    this.textAlign,
+  });
+
+  final String text;
+  final TextStyle style;
+  final TextAlign? textAlign;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, box) {
+        if (!box.hasBoundedWidth) {
+          return Text(text, style: style, textAlign: textAlign);
+        }
+        final scaler = MediaQuery.textScalerOf(context);
+        final direction = Directionality.of(context);
+        int lines(double width) {
+          final painter = TextPainter(
+            text: TextSpan(text: text, style: style),
+            textDirection: direction,
+            textScaler: scaler,
+          )..layout(maxWidth: width);
+          final count = painter.computeLineMetrics().length;
+          painter.dispose();
+          return count;
+        }
+
+        final target = lines(box.maxWidth);
+        var width = box.maxWidth;
+        if (target > 1) {
+          var lo = box.maxWidth / 2;
+          var hi = box.maxWidth;
+          while (hi - lo > 1) {
+            final mid = (lo + hi) / 2;
+            if (lines(mid) > target) {
+              lo = mid;
+            } else {
+              hi = mid;
+            }
+          }
+          width = hi;
+        }
+        return Align(
+          alignment: textAlign == TextAlign.center
+              ? Alignment.topCenter
+              : AlignmentDirectional.topStart,
+          child: SizedBox(
+            width: width,
+            child: Text(text, style: style, textAlign: textAlign),
+          ),
+        );
+      },
+    );
+  }
+}
+
 /// Tap target with the design system's press feedback (a small scale-down), keyboard activation,
 /// a focus ring and button semantics. The base for every custom control.
 class Pressable extends StatefulWidget {

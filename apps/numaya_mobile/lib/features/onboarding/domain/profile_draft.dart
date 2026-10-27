@@ -14,18 +14,43 @@ const List<String> kPromptQuestions = [
   'I’ll never shut up about',
 ];
 
-/// Interest sets shown during setup (ported from src/flows/data.js).
-const List<({String label, List<String> interests})> kInterestGroups = [
+/// Interest sets shown during setup, with each set's emoji mark and tone (ported from
+/// `INTEREST_GROUPS` in src/flows/data.js). Tones: peach, lilac, mint, butter.
+const List<({String label, String emoji, String tone, List<String> interests})>
+kInterestGroups = [
   (
     label: 'Food and nights in',
+    emoji: '🍝',
+    tone: 'peach',
     interests: ['Natural wine', 'Cooking', 'Board games'],
   ),
   (
     label: 'Culture',
+    emoji: '🎭',
+    tone: 'lilac',
     interests: ['Jazz', 'Museums', 'Poetry', 'Film photography'],
   ),
-  (label: 'Out and about', interests: ['Climbing', 'Running', 'Travel']),
+  (
+    label: 'Out and about',
+    emoji: '🌿',
+    tone: 'mint',
+    interests: ['Climbing', 'Running', 'Travel'],
+  ),
 ];
+
+/// Decorative emoji per interest (`INTEREST_EMOJI` in src/flows/data.js). The name stays the label.
+const Map<String, String> kInterestEmoji = {
+  'Natural wine': '🍷',
+  'Cooking': '🍳',
+  'Board games': '🎲',
+  'Jazz': '🎷',
+  'Museums': '🏛️',
+  'Poetry': '📖',
+  'Film photography': '📷',
+  'Climbing': '🧗',
+  'Running': '🏃',
+  'Travel': '✈️',
+};
 
 @immutable
 class PromptAnswer {

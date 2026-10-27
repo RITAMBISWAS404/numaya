@@ -1,5 +1,36 @@
 # Implementation report
 
+## V16 visual correction (branch `experiment/numaya-flutter-v16`)
+
+The foundation (`75f63e7`, branch `experiment/numaya-flutter-foundation`, unchanged) used the default purple
+design. This branch re-implements the visual layer as **Numaya V16** while keeping the architecture, routing, view
+models, validation, demo auth and tests.
+
+**V16 sources inspected:** `src/design-system/styles/theme-withings.css` (all 1,063 lines),
+`src/flows/theme-withings.css`, the inherited V11 rules in `theme-tiimo.css` and `src/prototype/styles/screens.css`
+(welcome stickers, emoji chips, set marks), `src/flows/data.js` (interest emoji and tones), `src/design-system/tokens.js`
+(the 89 `withings` tokens), `artifacts/version-16-design-experiment/README.md`, `design-system/TOKENS.md`,
+`design-system/COMPONENT_RULES.md`, `final-polish/PASS_2_COMPONENT_GEOMETRY.md`, and the final captures in
+`final-polish/screenshots/states/` (001 welcome, 013/015 basics, 016/017 interests, 018 photos, 019/023/024 discover
+and filters, 037 messages empty, 054/058 likes, 099/100 profile, 102 edit profile, 108 prompt editor, 111/112
+settings, 130 delete sheet).
+
+**Changed:** font (Hanken Grotesk replaces Fraunces + Inter); token generator now exports V16 tokens; every
+foundation (`AppColors`, `AppTypography`, `AppRadii`, `AppSizes`, `AppElevation`, `AppTheme`) and every shared
+component; illustrations re-exported in V16 colours; screens: Welcome (emoji sticker hero), Phone, Country sheet,
+Verify, Setup hub, Basics, Interests, Photos, a new full-screen Prompt editor (was a sheet), Home, Likes, Messages,
+Filters, Profile (rebuilt to V16's layout), Edit profile (photo grid in place, prompt card, rows), Settings (white
+action blocks, delete confirmation sheet). See [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) and
+[VISUAL_COMPARISON.md](VISUAL_COMPARISON.md).
+
+**Checks on this branch:** `dart format` clean · `flutter analyze` no issues · `flutter test` **45 passed**, 1
+opt-in screenshot test (passes when run) · 24 screenshots captured and compared with the V16 web captures ·
+`generate_tokens.mjs --check` up to date. Not run: `flutter test integration_test` (needs a device) and
+`flutter build apk` (no Android SDK; `dl.google.com` is blocked in this environment).
+
+---
+
+
 Branch `experiment/numaya-flutter-foundation`, app in `apps/numaya_mobile/`. Not merged, not deployed, nothing
 published to any store.
 

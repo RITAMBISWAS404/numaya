@@ -25,14 +25,14 @@ apps/numaya_mobile/
 │   │   │                phone, country sheet, verify)
 │   │   ├── onboarding/  domain (ProfileDraft, rules, ProfileRepository) · data (in-memory) ·
 │   │   │                application (OnboardingController) · presentation (setup hub, basics,
-│   │   │                interests + prompt editor, photos, edit guard)
+│   │   │                interests, prompt editor screen, photos, edit guard)
 │   │   ├── home/        application (filters) · presentation (tab shell, Home, Likes, Messages, Filters)
 │   │   ├── profile/     presentation (Profile, Edit profile)
 │   │   └── settings/    presentation (Settings)
 │   └── l10n/            app_en.arb, generated/ (gen-l10n output), l10n.dart (context.l10n)
 ├── assets/
-│   ├── fonts/           Fraunces-Variable.ttf, Inter-Variable.ttf, OFL licences
-│   └── illustrations/   9 SVGs exported from the web
+│   ├── fonts/           HankenGrotesk-Variable.ttf (V16's one family), OFL licence
+│   └── illustrations/   9 SVGs exported from the web in V16 colours
 ├── test/
 │   ├── unit/            domain rules, demo auth, tokens, logger, controllers
 │   ├── widget/          onboarding flows through the real app
