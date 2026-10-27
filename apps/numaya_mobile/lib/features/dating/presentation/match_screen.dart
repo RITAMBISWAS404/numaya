@@ -184,6 +184,17 @@ class _MatchScreenState extends ConsumerState<MatchScreen> {
               ],
             ),
           ],
+          // B-41: their Opening Move, which the first message can answer.
+          if (person.openingMove != null) ...[
+            const SizedBox(height: AppSpacing.s4),
+            Text(
+              l10n.matchTheirMove(person.openingMove!, person.name),
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.bodySm.copyWith(color: AppColors.ink),
+            ),
+          ],
           const SizedBox(height: AppSpacing.s5),
           Text(
             l10n.matchSampleNote(person.name),

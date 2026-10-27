@@ -10,6 +10,7 @@ export 'foundations/app_typography.dart';
 export 'icons/numaya_icon_data.g.dart';
 export 'widgets/buttons.dart';
 export 'widgets/content.dart';
+export 'widgets/extras.dart';
 export 'widgets/fields.dart';
 export 'widgets/layout.dart';
 export 'widgets/navigation.dart';

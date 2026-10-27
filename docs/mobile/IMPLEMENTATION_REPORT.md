@@ -1,5 +1,41 @@
 # Implementation report
 
+## Full app coverage (branch `experiment/numaya-flutter-full-app`)
+
+Based on `experiment/numaya-flutter-v16-complete` at `37a8007` (unchanged). V16 remains the visual direction;
+Bumble (research + Mobbin) informs structure and interactions only.
+
+**Coverage:** [FULL_APP_SCREEN_INVENTORY.md](FULL_APP_SCREEN_INVENTORY.md) maps the 69 reference screen rows
+(B-01–B-77) and 29 flows: **51 done, 4 partial, 9 deferred, 5 out of scope**; 27 of 29 flows implemented, 2 out of
+scope; 10 Numaya-only screens added. Mobbin flows inspected: Discover, Filtering people (2), Chats, Sending a
+chat, Adding an opening move, Settings (2), Activating snooze mode, Completing a profile, Editing my profile,
+Verifying a photo / my profile, Unmatching a user, Pay plan.
+
+**Built in this pass (all simulated, labelled, local):** a full demo world (12 profiles, 7 likes, 7 seeded matches
+with expiry, 3 sample conversations); For you picks; Basic / Advanced filters with fallbacks and verified-only;
+match queue with countdown rings, Extend and Rematch; unread and Your move; Opening Moves; Did you meet?; unmatch
+reasons; report "where"; completion ring and hub; Edit profile with bio, About you, More about you, languages,
+prompts 2–3, photo reorder / replace; profile preview; photo verification; Premium overview, paywall, simulated
+purchase and failure; Incognito, Travel; snooze length and away status; notification categories; profile
+visibility; help centre, articles, contact; safety and wellbeing; log out confirmation; delete with reasons;
+account restore within 28 days; account on hold with appeal; not-found recovery; the development-only Demo hub
+with quick start, worlds, reset and switches. See [ARCHITECTURE.md](ARCHITECTURE.md) for the honesty rules.
+
+**Checks (real results):**
+
+| Check | Result |
+|---|---|
+| `dart format --set-exit-if-changed lib test integration_test` | clean |
+| `flutter analyze` | No issues found |
+| `flutter test` | **115 passed**, 2 skipped (opt-in capture tests) |
+| — unit (69) | + 18 for the full app: seeding, unread, expiry / Extend / Rematch, SuperSwipe credits, filters and fallbacks, For you, simulated purchase, Incognito / Travel, verification, completion, limits, snooze, notification channels |
+| — widget (46) | + 11 journeys (Demo hub and worlds, not-found recovery, tabs and For you, sample conversation, expiry and paywall purchase, filters, profile editing and preview, verification, Did you meet? and report, log out, delete and restore) and 2 accessibility tests over 24 full-app routes |
+| Capture tests (`--tags screenshots --run-skipped`) | 4 passed: 24 + 20 + 7 + 41 renders |
+| `flutter test integration_test` | **Not run**: needs a phone or emulator |
+| `flutter build apk --debug` | **Not run: blocked** (no Android SDK; `dl.google.com` refused by the network policy) |
+
+---
+
 ## Product audit and completion (branch `experiment/numaya-flutter-v16-complete`)
 
 Based on `experiment/numaya-flutter-v16` at `b99edb4` (unchanged). V16 stays the visual direction.

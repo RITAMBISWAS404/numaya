@@ -575,24 +575,27 @@ class _ComposerState extends State<Composer> {
   }
 }
 
-/// One of the member's messages (`.theme-withings .message--me`): Withings blue, white text, 14pt
-/// corners with a 6pt tail corner at the bottom right.
+/// A chat bubble. The member's (`.theme-withings .message--me`): Withings blue, white text, 14pt
+/// corners with a 6pt tail corner at the bottom right. The other person's (`.message--them`):
+/// white with ink text and the tail at the bottom left.
 class MessageBubble extends StatelessWidget {
   const MessageBubble({
     super.key,
     required this.text,
     this.grouped = false,
     this.dimmed = false,
+    this.mine = true,
   });
 
   final String text;
   final bool grouped;
   final bool dimmed;
+  final bool mine;
 
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.centerRight,
+      alignment: mine ? Alignment.centerRight : Alignment.centerLeft,
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: MediaQuery.sizeOf(context).width * 0.75,
@@ -602,19 +605,19 @@ class MessageBubble extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.only(top: grouped ? 4 : AppSpacing.s2),
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            decoration: const BoxDecoration(
-              color: AppColors.accent,
+            decoration: BoxDecoration(
+              color: mine ? AppColors.accent : AppColors.surface,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(AppRadii.card),
-                topRight: Radius.circular(AppRadii.card),
-                bottomLeft: Radius.circular(AppRadii.card),
-                bottomRight: Radius.circular(6),
+                topLeft: const Radius.circular(AppRadii.card),
+                topRight: const Radius.circular(AppRadii.card),
+                bottomLeft: Radius.circular(mine ? AppRadii.card : 6),
+                bottomRight: Radius.circular(mine ? 6 : AppRadii.card),
               ),
             ),
             child: Text(
               text,
               style: AppTypography.body.copyWith(
-                color: AppColors.accentForeground,
+                color: mine ? AppColors.accentForeground : AppColors.ink,
               ),
             ),
           ),
@@ -788,7 +791,8 @@ class ViewTabs extends StatelessWidget {
     required this.label,
   });
 
-  final List<({String label, int count})> options;
+  /// A null count shows the label alone (segmented choices such as Basic / Advanced).
+  final List<({String label, int? count})> options;
   final int selected;
   final ValueChanged<int> onSelect;
 
@@ -807,7 +811,9 @@ class ViewTabs extends StatelessWidget {
             for (var i = 0; i < options.length; i++)
               Pressable(
                 onTap: () => onSelect(i),
-                semanticLabel: '${options[i].label}, ${options[i].count}',
+                semanticLabel: options[i].count == null
+                    ? options[i].label
+                    : '${options[i].label}, ${options[i].count}',
                 selected: i == selected,
                 excludeChildSemantics: true,
                 pressedScale: 0.97,
@@ -827,15 +833,18 @@ class ViewTabs extends StatelessWidget {
                     TextSpan(
                       children: [
                         TextSpan(text: options[i].label),
-                        TextSpan(
-                          text: '  ${options[i].count}',
-                          style: TextStyle(
-                            color: i == selected
-                                ? AppColors.accentOnTint
-                                : AppColors.textMuted,
-                            fontFeatures: const [FontFeature.tabularFigures()],
+                        if (options[i].count != null)
+                          TextSpan(
+                            text: '  ${options[i].count}',
+                            style: TextStyle(
+                              color: i == selected
+                                  ? AppColors.accentOnTint
+                                  : AppColors.textMuted,
+                              fontFeatures: const [
+                                FontFeature.tabularFigures(),
+                              ],
+                            ),
                           ),
-                        ),
                       ],
                     ),
                     style:

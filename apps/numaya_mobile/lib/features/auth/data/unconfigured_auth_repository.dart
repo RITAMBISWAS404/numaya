@@ -32,4 +32,11 @@ class UnconfiguredAuthRepository implements AuthRepository {
 
   @override
   Future<void> signOut() async {}
+
+  @override
+  Future<AuthSession> restoreAccount(AuthSession session) async =>
+      throw const AuthUnavailable();
+
+  @override
+  Future<void> purgeAccount(AuthSession session) async {}
 }

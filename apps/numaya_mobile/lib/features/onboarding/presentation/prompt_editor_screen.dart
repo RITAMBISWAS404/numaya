@@ -4,23 +4,32 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../profile/application/profile_details_controller.dart';
 import '../application/onboarding_controller.dart';
 import '../domain/profile_draft.dart';
 
 /// Prompt editor (B-27), V16 "YOUR PROMPT" screen: a capital legend over one white card of the six
 /// questions, an outlined answer area with the characters left inside it, and Save prompt with a
 /// caption that says why it is disabled. [editing] (from Edit profile) also saves the profile.
+/// [slot] 1 and 2 edit the extra prompts of a fuller profile (up to three, B-24), which can also be
+/// removed.
 class PromptEditorScreen extends ConsumerStatefulWidget {
-  const PromptEditorScreen({super.key, this.editing = false});
+  const PromptEditorScreen({super.key, this.editing = false, this.slot = 0});
 
   final bool editing;
+  final int slot;
 
   @override
   ConsumerState<PromptEditorScreen> createState() => _PromptEditorScreenState();
 }
 
 class _PromptEditorScreenState extends ConsumerState<PromptEditorScreen> {
-  late final PromptAnswer? _saved = ref.read(onboardingProvider).draft.prompt;
+  late final PromptAnswer? _saved = widget.slot == 0
+      ? ref.read(onboardingProvider).draft.prompt
+      : ref
+            .read(profileDetailsProvider)
+            .extraPrompts
+            .elementAtOrNull(widget.slot - 1);
   late String _question = _saved?.question ?? kPromptQuestions.first;
   late final TextEditingController _answer = TextEditingController(
     text: _saved?.answer ?? '',
@@ -34,6 +43,14 @@ class _PromptEditorScreenState extends ConsumerState<PromptEditorScreen> {
   }
 
   Future<void> _save() async {
+    if (widget.slot > 0) {
+      ref
+          .read(profileDetailsProvider.notifier)
+          .setExtraPrompt(widget.slot - 1, _question, _answer.text);
+      NumayaToast.show(context, context.l10n.editSaved);
+      context.pop();
+      return;
+    }
     final controller = ref.read(onboardingProvider.notifier);
     controller.setPrompt(_question, _answer.text);
     if (widget.editing) {
@@ -68,6 +85,20 @@ class _PromptEditorScreenState extends ConsumerState<PromptEditorScreen> {
             loading: _saving,
             onPressed: canSave ? _save : null,
           ),
+          if (widget.slot > 0 && _saved != null) ...[
+            const SizedBox(height: AppSpacing.s3),
+            NumayaButton(
+              label: l10n.promptRemove,
+              variant: NumayaButtonVariant.destructive,
+              onPressed: () {
+                ref
+                    .read(profileDetailsProvider.notifier)
+                    .removeExtraPrompt(widget.slot - 1);
+                NumayaToast.show(context, l10n.promptRemoved);
+                context.pop();
+              },
+            ),
+          ],
           const SizedBox(height: AppSpacing.s3),
           Text(
             answer.isEmpty

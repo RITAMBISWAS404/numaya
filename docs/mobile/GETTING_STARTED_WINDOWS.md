@@ -52,7 +52,7 @@ they're for other platforms.
 cd $HOME
 git clone https://github.com/RITAMBISWAS404/numaya.git
 cd numaya
-git checkout experiment/numaya-flutter-v16-complete
+git checkout experiment/numaya-flutter-full-app
 cd apps\numaya_mobile
 flutter pub get
 ```
@@ -84,16 +84,30 @@ The first build takes several minutes (Gradle downloads its tools). The app open
 States), tap the arrow, and the code appears in a "Demo text message" banner at the top. Tap the banner to fill it.
 No real text message is sent and nothing leaves the phone.
 
-**Try the dating journeys** (all sample data, labelled as such; nothing is sent anywhere):
+**Fastest way in: the Demo hub.** On the Welcome screen, tap the small **Demo build** label (top right). Tap
+**Quick start as Alex (sample account)** to skip sign-up and land on Home with a finished sample profile. The hub
+lists every screen by area and has switches for Premium (simulated), connection problems and the next
+verification result, plus **Reset demo data** and a choice between the **Full demo** (matches, expiring and
+expired matches, sample conversations) and a **Brand-new account**. Later, it's under Profile › Settings ›
+Prototype tools › Demo hub.
 
-1. Finish sign-up (name, birth year 18+, 3 interests and a prompt answer, 2 placeholder photos). Home shows sample
-   profiles.
-2. Pass on Maya, tap the undo arrow (top left) to bring her back, then **Like** her: she already liked you, so it's a
-   match. Type a message and send it: it says "Demo · saved on this device, not sent". No one replies.
-3. **Likes** tab: open Kemi, **Like back**, then **Keep browsing**. **Messages** shows Kemi under New matches.
-4. In a chat, the **⋯** menu offers Unmatch, Block and Report. Settings › **Blocked people** lets you unblock.
-5. Settings › **Prototype tools** › Simulate connection problems shows the error and retry states.
-6. Profile › Edit profile: tap a photo to make it the main one; you can't go below 2.
+**Things to try** (all sample data, labelled as such; nothing is sent anywhere, nothing is charged):
+
+1. **Home:** like and pass (buttons or swipe), undo, SuperSwipe (3 free, then the paywall), the ⋯ menu (report,
+   block), **Filters** (Basic and Advanced) and **✦ For you** (today's picks).
+2. **Likes:** open someone, **Like back** → match → write the first message.
+3. **Messages:** the queue rings show time left (Lina has 1 hour); open her and **Extend 24 hours**. Ollie's match
+   has expired: **Rematch** opens the paywall. Priya's sample conversation has 2 unread messages; your reply says
+   "Demo · saved on this device, not sent", and nobody replies.
+4. **Chat ⋯ menu:** View profile, Did you meet?, Unmatch (with an optional reason), Block, Report (asks where).
+5. **Profile:** the ring shows completion; **Complete profile** opens the hub. **Edit profile**: photos (tap one to
+   make it main, move or replace it), prompts (up to 3), bio, About you, More about you, languages, Opening Moves,
+   and **Preview** (globe icon) to see it as others do. **Verify my profile** runs a simulated photo verification.
+6. **Premium:** choose a plan; the confirmation sheet says no payment is taken (you can also simulate a failed
+   payment).
+7. **Settings:** Snooze (length and away status), Incognito and Travel (Premium), notification categories, profile
+   visibility, blocked people, help centre, log out (with confirmation) and delete account (reason → confirm).
+8. **Restore:** delete the account, then **I have an account** with the same number: you're offered to restore it.
 
 Alternatively, the helper script does steps 5–7 checks for you:
 ```powershell

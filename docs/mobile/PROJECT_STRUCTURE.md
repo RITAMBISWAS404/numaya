@@ -27,12 +27,19 @@ apps/numaya_mobile/
 │   │   ├── onboarding/  domain (ProfileDraft, rules, ProfileRepository) · data (in-memory) ·
 │   │   │                application (OnboardingController) · presentation (setup hub, basics,
 │   │   │                interests, prompt editor screen, photos, photo options, edit guard)
-│   │   ├── dating/      domain (sample people and likes) · application (DatingController) ·
+│   │   ├── dating/      domain (sample people, worlds, seeded matches) · application (DatingController,
+│   │   │                DemoWorldController) · presentation (+ For you, time format) ·
 │   │   │                presentation (Discover, Likes and like profile, Match, Messages and Chat, person
 │   │   │                profile sections, unmatch/block/report sheets)
 │   │   ├── home/        application (filters) · presentation (tab shell with badges, TabPage, Filters sheet)
-│   │   ├── profile/     presentation (Profile, Edit profile)
-│   │   └── settings/    presentation (Settings, Blocked people)
+│   │   ├── profile/     domain (ProfileDetails, completion) · application (details) · presentation (Profile,
+│   │   │                Edit profile, editors, completion hub, preview, Opening Moves)
+│   │   ├── premium/     application (simulated plans) · presentation (Premium, paywall)
+│   │   ├── verification/ application (simulated review) · presentation (photo verification)
+│   │   ├── help/        domain (articles) · presentation (help centre, article, contact, safety)
+│   │   ├── demo/        presentation (Demo hub, development only)
+│   │   └── settings/    application (account prefs) · presentation (Settings, notifications, visibility,
+│   │                    delete, restore, account on hold, Blocked people)
 │   └── l10n/            app_en.arb, generated/ (gen-l10n output), l10n.dart (context.l10n)
 ├── assets/
 │   ├── fonts/           HankenGrotesk-Variable.ttf (V16's one family), OFL licence

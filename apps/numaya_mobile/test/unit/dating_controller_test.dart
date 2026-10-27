@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 import 'package:numaya_mobile/features/home/application/discovery_filters.dart';
 
+import '../helpers/test_app.dart';
+
 void main() {
   late ProviderContainer container;
   DatingController dating() => container.read(datingProvider.notifier);
@@ -11,7 +13,13 @@ void main() {
     for (final p in dating().queue(f)) p.id,
   ];
 
-  setUp(() => container = ProviderContainer());
+  setUp(
+    () => container = ProviderContainer(
+      overrides: [
+        demoWorldProvider.overrideWith(() => FixedWorld(DemoWorld.fresh)),
+      ],
+    ),
+  );
   tearDown(() => container.dispose());
 
   group('Discover', () {

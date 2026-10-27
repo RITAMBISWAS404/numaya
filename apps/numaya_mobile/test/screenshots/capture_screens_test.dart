@@ -53,7 +53,7 @@ void main() {
     await shot('03-phone-complete');
     await tap(find.bySemanticsLabel('Country: United States, plus 1'));
     await shot('04-country-sheet');
-    await tester.tapAt(const Offset(200, 40));
+    await tester.tap(find.bySemanticsLabel('Close').last);
     await tester.pump(const Duration(milliseconds: 600));
 
     await tap(fab);
@@ -135,7 +135,7 @@ void main() {
     await shot('16-home');
     await tap(find.bySemanticsLabel('Filters'));
     await shot('17-filters');
-    await tester.tapAt(const Offset(200, 40));
+    await tester.tap(find.bySemanticsLabel('Close').last);
     await tester.pump(const Duration(seconds: 3));
     await tap(find.text('Likes'));
     await shot('18-likes');
@@ -152,8 +152,11 @@ void main() {
     await tester.pump(const Duration(milliseconds: 600));
     await shot('22-settings');
     await tap(find.text('Delete account'));
+    await tester.pump(const Duration(milliseconds: 600));
+    await tap(find.text('I met someone'));
+    await tap(find.text('Continue'));
     await shot('23-delete-sheet');
-    await tester.tapAt(const Offset(200, 40));
+    await tester.tap(find.bySemanticsLabel('Close').last);
     await tester.pump(const Duration(seconds: 3));
   });
 
@@ -185,7 +188,7 @@ void main() {
     }
 
     Future<void> closeSheet() async {
-      await tester.tapAt(const Offset(200, 40));
+      await tester.tap(find.bySemanticsLabel('Close').last);
       await tester.pumpAndSettle();
     }
 
@@ -273,6 +276,11 @@ void main() {
     await tapOn(tester, find.bySemanticsLabel('Settings').first);
     await tester.pump(const Duration(milliseconds: 600));
     await tapOn(tester, find.bySemanticsLabel(RegExp('^Snooze')));
+    await tester.pumpAndSettle();
+    await tapOn(tester, find.text('Until I turn it off'));
+    await tester.pumpAndSettle();
+    await tapOn(tester, find.text('No thanks'));
+    await tester.pumpAndSettle();
     await shot('113-settings-snooze-on');
     await tapOn(tester, find.text('Blocked people'));
     await tester.pump(const Duration(milliseconds: 600));

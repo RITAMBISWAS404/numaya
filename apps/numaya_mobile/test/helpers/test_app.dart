@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/app.dart';
 import 'package:numaya_mobile/app/providers.dart';
 import 'package:numaya_mobile/features/auth/data/demo_auth_repository.dart';
+import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 
 final testNow = DateTime(2026, 10, 27, 12);
 
@@ -18,13 +19,24 @@ DemoAuthRepository testAuth() => DemoAuthRepository(
   latency: Duration.zero,
 );
 
-/// The real app with deterministic dependencies.
-Widget testApp({DemoAuthRepository? auth}) {
+/// A fixed sample world for tests.
+class FixedWorld extends DemoWorldController {
+  FixedWorld(this.world);
+  final DemoWorld world;
+
+  @override
+  DemoWorld build() => world;
+}
+
+/// The real app with deterministic dependencies. [world] defaults to a brand-new account (no
+/// matches); the full demo world adds seeded matches and conversations.
+Widget testApp({DemoAuthRepository? auth, DemoWorld world = DemoWorld.fresh}) {
   final repo = auth ?? testAuth();
   return ProviderScope(
     overrides: [
       clockProvider.overrideWithValue(() => testNow),
       demoAuthProvider.overrideWithValue(repo),
+      demoWorldProvider.overrideWith(() => FixedWorld(world)),
     ],
     child: const NumayaApp(),
   );

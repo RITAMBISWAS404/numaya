@@ -16,7 +16,8 @@ app architecture are built and tested. Everything that needs a server, a store a
 | No personal data on disk; logs redact numbers and codes | ARCHITECTURE.md (Logging, Data at rest) |
 | Localisation infrastructure | `lib/l10n/app_en.arb` |
 | Accessibility basics: Android 48dp targets and labelled controls (guideline tests), 375 × 667 at 130% text without overflow, live regions, focus rings, reduced motion | `test/widget/accessibility_test.dart` |
-| Static analysis clean, 84 automated tests | IMPLEMENTATION_REPORT.md |
+| Static analysis clean, 115 automated tests | IMPLEMENTATION_REPORT.md |
+| Full-app screens (For you, filters, expiry, Opening Moves, completion, edit, preview, verification, Premium, settings, help, restore) on sample data | FULL_APP_SCREEN_INVENTORY.md |
 
 ## Blocking a real launch
 
@@ -37,4 +38,7 @@ app architecture are built and tested. Everything that needs a server, a store a
 | 13 | **Fonts for non-Latin names** | Bundle full Inter/Fraunces or add fallbacks. |
 | 14 | **Device QA** | Not yet run on a phone or emulator (no Android SDK in the build environment). Widget tests cover small screens, large text and tap targets; still needed on hardware: keyboard behaviour, swipe feel, TalkBack/VoiceOver. |
 | 15 | **Dark mode** | Not defined by the approved design. |
+| 16a | **Premium and billing** | Simulated only. Needs Google Play Billing / StoreKit, server-side receipt validation, restore and refund handling, and the store's subscription rules. |
+| 16b | **Photo verification** | Simulated only. Needs camera capture, liveness / pose matching and a review service. |
+| 16c | **Demo hub and demo data** | Development only (refused in release builds). Remove the sample worlds when real data arrives. |
 | 16 | **iOS** | Project generated, never built (needs macOS). |

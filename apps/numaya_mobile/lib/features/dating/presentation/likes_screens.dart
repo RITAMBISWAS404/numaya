@@ -262,24 +262,72 @@ class LikeProfileScreen extends ConsumerWidget {
   }
 }
 
-/// Another person's profile, opened from a conversation (B-44: the header opens the profile).
+/// Another person's profile, opened from a conversation (B-44: the header opens the profile) or
+/// from For you ([canDecide]: Pass / Like at the bottom, as the expanded profile's action row).
 class PersonProfileScreen extends ConsumerWidget {
-  const PersonProfileScreen({super.key, required this.personId});
+  const PersonProfileScreen({
+    super.key,
+    required this.personId,
+    this.canDecide = false,
+  });
 
   final String personId;
+  final bool canDecide;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final state = ref.watch(datingProvider);
     final person = personById(personId);
+    final decided =
+        state.seen.contains(personId) || state.matches.contains(personId);
+    Widget? footer;
+    if (person != null && canDecide && !decided) {
+      final controller = ref.read(datingProvider.notifier);
+      footer = Row(
+        children: [
+          Expanded(
+            child: NumayaButton(
+              label: l10n.likePass,
+              icon: NumayaIcons.close,
+              variant: NumayaButtonVariant.secondary,
+              onPressed: () {
+                controller.decide(personId, liked: false);
+                context.pop();
+              },
+            ),
+          ),
+          const SizedBox(width: AppSpacing.s3),
+          Expanded(
+            child: NumayaButton(
+              label: l10n.likeAction,
+              icon: NumayaIcons.heart,
+              onPressed: () {
+                final result = controller.decide(personId, liked: true);
+                if (result == DecisionResult.matched) {
+                  context.pushReplacement('${Routes.match}/$personId');
+                } else {
+                  NumayaToast.show(context, l10n.discoverLiked(person.name));
+                  context.pop();
+                }
+              },
+            ),
+          ),
+        ],
+      );
+    }
     return NumayaScreen(
       top: NumayaTopBar(
         onBack: () => context.pop(),
         backLabel: l10n.back,
         title: person?.name,
       ),
+      footer: footer,
       body: person == null
-          ? const SizedBox.shrink()
+          ? EmptyState(
+              title: l10n.personMissingTitle,
+              body: l10n.personMissingBody,
+            )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

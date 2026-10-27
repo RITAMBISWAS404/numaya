@@ -29,6 +29,7 @@ class AuthSession {
     required this.userId,
     required this.phone,
     required this.hasProfile,
+    this.restorableUntil,
   });
 
   /// Opaque account id. Never shown or logged.
@@ -37,6 +38,10 @@ class AuthSession {
 
   /// Whether this account already finished profile setup (a returning member).
   final bool hasProfile;
+
+  /// Set when this number's account was deleted less than 28 days ago and can still be restored
+  /// (B-75, F27).
+  final DateTime? restorableUntil;
 }
 
 /// Typed failures the screens turn into copy. No raw server text reaches the UI.
@@ -95,4 +100,10 @@ abstract interface class AuthRepository {
   Future<void> deleteAccount(AuthSession session);
 
   Future<void> signOut();
+
+  /// Brings back an account deleted within the restore window.
+  Future<AuthSession> restoreAccount(AuthSession session);
+
+  /// Gives up a deleted account for good, so the number starts a new one.
+  Future<void> purgeAccount(AuthSession session);
 }

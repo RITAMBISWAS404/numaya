@@ -8,7 +8,10 @@ import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../home/application/discovery_filters.dart';
+import '../../home/presentation/filters_sheet.dart';
 import '../../home/presentation/tab_screens.dart';
+import '../../premium/application/premium_controller.dart';
+import '../../settings/presentation/settings_screen.dart';
 import '../application/dating_controller.dart';
 import '../domain/sample_people.dart';
 import 'person_profile.dart';
@@ -41,16 +44,29 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
     bool superSwipe = false,
   }) {
     final l10n = context.l10n;
-    final result = ref
-        .read(datingProvider.notifier)
-        .decide(person.id, liked: liked);
+    final controller = ref.read(datingProvider.notifier);
+    final result = superSwipe
+        ? controller.superSwipe(person.id)
+        : controller.decide(person.id, liked: liked);
+    if (result == null) {
+      // No SuperSwipes left: the contextual paywall names what triggered it (D-14).
+      unawaited(
+        context.push(
+          '${Routes.paywall}?feature=${PremiumFeature.superSwipes.name}',
+        ),
+      );
+      return;
+    }
     if (result == DecisionResult.matched) {
       unawaited(context.push('${Routes.match}/${person.id}'));
     } else if (liked) {
       NumayaToast.show(
         context,
         superSwipe
-            ? l10n.discoverSuperSent(person.name)
+            ? l10n.discoverSuperSentLeft(
+                controller.superSwipesLeft,
+                person.name,
+              )
             : l10n.discoverLiked(person.name),
         aboveFooter: false,
       );
@@ -118,13 +134,27 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
           alignment: Alignment.center,
           children: [
             const Wordmark(small: true),
-            if (!state.snoozed && lastPass != null)
+            if (!state.snoozed)
               Align(
                 alignment: Alignment.centerLeft,
-                child: NavIconButton(
-                  icon: NumayaIcons.undo,
-                  label: l10n.discoverUndo(lastPass.name),
-                  onPressed: controller.undo,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // B-33 curated picks, a sub-view of Home (P-08: both formats).
+                    NavIconButton(
+                      icon: NumayaIcons.sparkle,
+                      label: l10n.forYouOpen,
+                      onPressed: () => context.push(Routes.forYou),
+                    ),
+                    if (lastPass != null) ...[
+                      const SizedBox(width: AppSpacing.s2),
+                      NavIconButton(
+                        icon: NumayaIcons.undo,
+                        label: l10n.discoverUndo(lastPass.name),
+                        onPressed: controller.undo,
+                      ),
+                    ],
+                  ],
                 ),
               ),
             if (!state.snoozed)
@@ -167,7 +197,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
             label: l10n.discoverResume,
             small: true,
             variant: NumayaButtonVariant.primary,
-            onPressed: () => controller.setSnoozed(false),
+            onPressed: () => SettingsScreen.endSnooze(context, ref),
           ),
         ),
       );
@@ -243,6 +273,13 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen> {
         key: ValueKey(person.id),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (controller.showingFallback(filters)) ...[
+            StatusBanner(
+              title: l10n.discoverFallbackTitle,
+              body: l10n.discoverFallbackBody,
+            ),
+            const SizedBox(height: AppSpacing.s3),
+          ],
           _SwipeCard(
             person: person,
             onDecide: (liked) => _decide(person, liked: liked),

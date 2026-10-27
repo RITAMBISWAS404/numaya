@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../core/logging/app_logger.dart';
 import '../domain/auth_repository.dart';
+import '../domain/country.dart';
 import '../domain/phone_number.dart';
 
 /// A "text message" the demo service would have sent. Shown in the in-app demo banner, never
@@ -48,6 +49,10 @@ class DemoAuthRepository implements AuthRepository {
 
   /// e164 → account id, for numbers that finished profile setup this session.
   final Map<String, String> _accounts = {};
+
+  /// e164 → (account id, deleted at): deleted accounts can be restored for [restoreWindow].
+  final Map<String, ({String userId, DateTime at})> _deleted = {};
+  static const restoreWindow = Duration(days: 28);
   DemoMessage? _latest;
 
   /// Codes the demo "sent", for the on-screen banner.
@@ -122,6 +127,19 @@ class DemoAuthRepository implements AuthRepository {
     }
     _codes.remove(request.id);
     final existing = _accounts[request.phone.e164];
+    final deleted = _deleted[request.phone.e164];
+    if (existing == null && deleted != null) {
+      final until = deleted.at.add(restoreWindow);
+      if (_clock().isBefore(until)) {
+        return AuthSession(
+          userId: deleted.userId,
+          phone: request.phone,
+          hasProfile: false,
+          restorableUntil: until,
+        );
+      }
+      _deleted.remove(request.phone.e164);
+    }
     return AuthSession(
       userId: existing ?? 'demo-${_newId()}',
       phone: request.phone,
@@ -137,6 +155,35 @@ class DemoAuthRepository implements AuthRepository {
   @override
   Future<void> deleteAccount(AuthSession session) async {
     _accounts.remove(session.phone.e164);
+    _deleted[session.phone.e164] = (userId: session.userId, at: _clock());
+  }
+
+  @override
+  Future<AuthSession> restoreAccount(AuthSession session) async {
+    await _wait();
+    final deleted = _deleted.remove(session.phone.e164);
+    if (deleted == null) throw const CodeExpired();
+    _accounts[session.phone.e164] = deleted.userId;
+    return AuthSession(
+      userId: deleted.userId,
+      phone: session.phone,
+      hasProfile: true,
+    );
+  }
+
+  @override
+  Future<void> purgeAccount(AuthSession session) async {
+    _deleted.remove(session.phone.e164);
+  }
+
+  /// Demo Hub "quick start": a signed-in sample account with a finished profile, so every screen
+  /// can be explored without going through sign-up. Uses a fictional 555 number.
+  AuthSession quickStart() {
+    final phone = PhoneNumber(country: kCountries.first, digits: '4155550100');
+    final id = _accounts[phone.e164] ?? 'demo-${_newId()}';
+    _accounts[phone.e164] = id;
+    _log.info('Demo quick start');
+    return AuthSession(userId: id, phone: phone, hasProfile: true);
   }
 
   @override

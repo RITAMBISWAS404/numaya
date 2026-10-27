@@ -4,20 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/providers.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../home/presentation/home_shell.dart';
 import '../../home/presentation/tab_screens.dart';
+import '../../premium/application/premium_controller.dart';
+import '../../profile/application/profile_details_controller.dart';
 import '../application/dating_controller.dart';
 import '../domain/sample_people.dart';
 import 'safety_sheets.dart';
+import 'time_format.dart';
 
 enum _ConvFilter { all, unread, yourMove }
 
-/// Messages (B-42 / B-43, V16 034 / 037 / 052): search, new matches as round portraits, and
-/// conversations with view tabs. In this demo nobody writes back, so Unread and Your move stay empty
-/// and say so.
+/// Messages (B-42 / B-43, V16 034 / 037 / 052): search, the match queue (countdown rings, the
+/// likes tile, expired matches), an Opening Moves prompt and conversations with view tabs.
 class MessagesScreen extends ConsumerStatefulWidget {
   const MessagesScreen({super.key});
 
@@ -45,23 +48,45 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final state = ref.watch(datingProvider);
+    ref.watch(premiumProvider);
     final controller = ref.read(datingProvider.notifier);
-    final fresh = controller.newMatches();
+    final queued = controller.queuedMatches();
+    final expired = controller.expiredMatches();
     final convs = controller.conversations();
+    final likes = controller.unansweredLikes();
+    final hasMoves = ref.watch(
+      profileDetailsProvider.select((d) => d.openingMoves.isNotEmpty),
+    );
     final header = TabHeader(title: l10n.tabChats);
 
-    if (fresh.isEmpty && convs.isEmpty) {
+    final movesCard = hasMoves
+        ? null
+        : _OpeningMovesCard(onTap: () => context.push(Routes.openingMoves));
+
+    if (queued.isEmpty && expired.isEmpty && convs.isEmpty) {
       return TabPage(
         header: header,
-        child: EmptyState(
-          art: const IllustrationView(NumayaIllustration.noChats, width: 160),
-          title: l10n.chatsEmptyTitle,
-          body: l10n.chatsEmptyBody,
-          action: NumayaButton(
-            label: l10n.findYourPeople,
-            small: true,
-            onPressed: () => context.go(Routes.home),
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            EmptyState(
+              art: const IllustrationView(
+                NumayaIllustration.noChats,
+                width: 160,
+              ),
+              title: l10n.chatsEmptyTitle,
+              body: l10n.chatsEmptyBody,
+              action: NumayaButton(
+                label: l10n.findYourPeople,
+                small: true,
+                onPressed: () => context.go(Routes.home),
+              ),
+            ),
+            if (movesCard != null) ...[
+              const SizedBox(height: AppSpacing.s3),
+              movesCard,
+            ],
+          ],
         ),
       );
     }
@@ -73,12 +98,21 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
         (state.threads[p.id] ?? const []).any(
           (m) => m.text.toLowerCase().contains(q),
         );
-    final freshShown = fresh
+    final queueShown = queued
+        .where((m) => q.isEmpty || m.person.name.toLowerCase().contains(q))
+        .toList();
+    final expiredShown = expired
         .where((p) => q.isEmpty || p.name.toLowerCase().contains(q))
         .toList();
     final all = convs.where(matches).toList();
-    // Nobody replies in the demo: nothing is unread and nothing waits on you.
-    final rows = _filter == _ConvFilter.all ? all : <SamplePerson>[];
+    final unread = all.where((p) => controller.unread(p.id) > 0).toList();
+    final yourMove = all.where((p) => controller.yourMove(p.id)).toList();
+    final rows = switch (_filter) {
+      _ConvFilter.all => all,
+      _ConvFilter.unread => unread,
+      _ConvFilter.yourMove => yourMove,
+    };
+    final now = ref.read(clockProvider)();
 
     final Widget list;
     if (rows.isNotEmpty) {
@@ -94,7 +128,10 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               ),
             _ConversationRow(
               person: rows[i],
-              last: state.threads[rows[i].id]!.last,
+              last: controller.lastMessage(rows[i].id)!,
+              unread: controller.unread(rows[i].id),
+              yourMove: controller.yourMove(rows[i].id),
+              now: now,
               onTap: () => _open(rows[i]),
             ),
           ],
@@ -143,6 +180,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       );
     }
 
+    final queueCount = queueShown.length + expiredShown.length;
     return TabPage(
       header: header,
       child: Column(
@@ -154,12 +192,12 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             clearLabel: l10n.close,
             onChanged: (v) => setState(() => _query = v),
           ),
-          if (freshShown.isNotEmpty) ...[
+          if (queueCount > 0) ...[
             const SizedBox(height: AppSpacing.sectionGap),
             Semantics(
               header: true,
               child: Text(
-                l10n.newMatchesTitle(freshShown.length),
+                l10n.newMatchesTitle(queueShown.length),
                 style: AppTypography.section,
               ),
             ),
@@ -168,36 +206,72 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               scrollDirection: Axis.horizontal,
               clipBehavior: Clip.none,
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  for (final p in freshShown)
-                    Padding(
-                      padding: const EdgeInsets.only(right: AppSpacing.s4),
-                      child: Pressable(
-                        onTap: () => _open(p),
-                        semanticLabel: l10n.chatPlaceholder(p.name),
-                        excludeChildSemantics: true,
+                  if (likes > 0 && q.isEmpty)
+                    _QueueItem(
+                      semanticLabel: l10n.queueLikesLabel(likes),
+                      caption: l10n.queueLikes,
+                      onTap: () => context.go(Routes.likes),
+                      child: Container(
+                        width: 72,
+                        height: 72,
+                        decoration: const BoxDecoration(
+                          color: AppColors.accentTint,
+                          shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.center,
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            InitialsAvatar(
-                              initial: p.initial,
-                              size: 72,
-                              ring: !state.openedMatches.contains(p.id),
+                            const NumayaIcon(
+                              NumayaIcons.heart,
+                              size: 20,
+                              color: AppColors.accentOnTint,
                             ),
-                            const SizedBox(height: AppSpacing.s2),
                             Text(
-                              p.name,
+                              '$likes',
                               style: AppTypography.weight(
-                                AppTypography.bodySm,
-                                AppTypography.medium,
-                              ),
+                                AppTypography.body,
+                                AppTypography.semibold,
+                              ).copyWith(color: AppColors.accentOnTint),
                             ),
                           ],
                         ),
                       ),
                     ),
+                  for (final m in queueShown)
+                    _QueueItem(
+                      semanticLabel: l10n.chatPlaceholder(m.person.name),
+                      caption: m.person.name,
+                      subcaption: timeLeft(l10n, m.remaining),
+                      urgent: m.remaining.inHours < 2,
+                      onTap: () => _open(m.person),
+                      child: CountdownAvatar(
+                        initial: m.person.initial,
+                        fraction: m.fraction,
+                        urgent: m.remaining.inHours < 2,
+                      ),
+                    ),
+                  for (final p in expiredShown)
+                    _QueueItem(
+                      semanticLabel: l10n.queueExpiredLabel(p.name),
+                      caption: p.name,
+                      subcaption: l10n.queueExpired,
+                      onTap: () => context.push('${Routes.chat}/${p.id}'),
+                      child: CountdownAvatar(
+                        initial: p.initial,
+                        fraction: 0,
+                        expired: true,
+                      ),
+                    ),
                 ],
               ),
             ),
+          ],
+          if (movesCard != null && q.isEmpty) ...[
+            const SizedBox(height: AppSpacing.s5),
+            movesCard,
           ],
           const SizedBox(height: AppSpacing.sectionGap),
           Semantics(
@@ -211,8 +285,8 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             onSelect: (i) => setState(() => _filter = _ConvFilter.values[i]),
             options: [
               (label: l10n.convFilterAll, count: all.length),
-              (label: l10n.convFilterUnread, count: 0),
-              (label: l10n.convFilterMove, count: 0),
+              (label: l10n.convFilterUnread, count: unread.length),
+              (label: l10n.convFilterMove, count: yourMove.length),
             ],
           ),
           const SizedBox(height: AppSpacing.s3),
@@ -223,24 +297,140 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   }
 }
 
-class _ConversationRow extends StatelessWidget {
-  const _ConversationRow({
-    required this.person,
-    required this.last,
+class _QueueItem extends StatelessWidget {
+  const _QueueItem({
+    required this.semanticLabel,
+    required this.caption,
     required this.onTap,
+    required this.child,
+    this.subcaption,
+    this.urgent = false,
   });
 
-  final SamplePerson person;
-  final DemoMessage last;
+  final String semanticLabel;
+  final String caption;
+  final String? subcaption;
+  final bool urgent;
+  final VoidCallback onTap;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: AppSpacing.s3),
+      child: Pressable(
+        onTap: onTap,
+        semanticLabel: semanticLabel,
+        excludeChildSemantics: true,
+        child: SizedBox(
+          width: 76,
+          child: Column(
+            children: [
+              child,
+              const SizedBox(height: AppSpacing.s2),
+              Text(
+                caption,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.weight(
+                  AppTypography.bodySm,
+                  AppTypography.medium,
+                ),
+              ),
+              if (subcaption != null)
+                Text(
+                  subcaption!,
+                  maxLines: 1,
+                  style: AppTypography.micro.copyWith(
+                    color: urgent ? AppColors.negative : AppColors.textMuted,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// "Skip the small talk" (B-43 Opening Moves card).
+class _OpeningMovesCard extends StatelessWidget {
+  const _OpeningMovesCard({required this.onTap});
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final preview = l10n.youPrefix(last.text);
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.s4),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.card),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const PromptMark(),
+              const SizedBox(width: AppSpacing.s3),
+              Expanded(
+                child: Text(l10n.movesPromoTitle, style: AppTypography.card),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.s2),
+          Text(
+            l10n.movesPromoBody,
+            style: AppTypography.bodySm.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.s3),
+          NumayaButton(
+            label: l10n.movesPromoAction,
+            small: true,
+            expand: false,
+            variant: NumayaButtonVariant.secondary,
+            onPressed: onTap,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ConversationRow extends StatelessWidget {
+  const _ConversationRow({
+    required this.person,
+    required this.last,
+    required this.unread,
+    required this.yourMove,
+    required this.now,
+    required this.onTap,
+  });
+
+  final SamplePerson person;
+  final DemoMessage last;
+  final int unread;
+  final bool yourMove;
+  final DateTime now;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final preview = last.mine ? l10n.youPrefix(last.text) : last.text;
+    final time = shortTime(l10n, last.at, now);
     return Pressable(
       onTap: onTap,
-      semanticLabel: '${person.name}. $preview',
+      semanticLabel: [
+        person.name,
+        preview,
+        time,
+        if (unread > 0) l10n.unreadCount(unread),
+        if (yourMove) l10n.yourMoveTag,
+      ].join('. '),
       excludeChildSemantics: true,
       pressedScale: 0.99,
       borderRadius: AppRadii.all(AppRadii.card),
@@ -258,21 +448,50 @@ class _ConversationRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    person.name,
-                    style: AppTypography.weight(
-                      AppTypography.row,
-                      AppTypography.semibold,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          person.name,
+                          style: AppTypography.weight(
+                            AppTypography.row,
+                            AppTypography.semibold,
+                          ),
+                        ),
+                      ),
+                      Text(time, style: AppTypography.micro),
+                    ],
                   ),
                   const SizedBox(height: 2),
-                  Text(
-                    preview,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.bodySm.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          preview,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              AppTypography.weight(
+                                AppTypography.bodySm,
+                                unread > 0
+                                    ? AppTypography.semibold
+                                    : AppTypography.regular,
+                              ).copyWith(
+                                color: unread > 0
+                                    ? AppColors.ink
+                                    : AppColors.textSecondary,
+                              ),
+                        ),
+                      ),
+                      if (yourMove && unread == 0) ...[
+                        const SizedBox(width: AppSpacing.s2),
+                        StatusBadge(label: l10n.yourMoveTag),
+                      ],
+                      if (unread > 0) ...[
+                        const SizedBox(width: AppSpacing.s2),
+                        CountBadge(count: unread),
+                      ],
+                    ],
                   ),
                 ],
               ),
@@ -284,9 +503,10 @@ class _ConversationRow extends StatelessWidget {
   }
 }
 
-/// Conversation (B-44, V16 038 / 039 / 042). Before the first message: the person centred with
-/// openers to edit. Messages are the member's own, kept on this device and labelled; a failed send
-/// offers Retry or Delete. The ⋯ menu offers Unmatch, Block and Report.
+/// Conversation (B-44, V16 038 / 039 / 042). Before the first message: the person, time left with
+/// Extend, their Opening Move and openers. Sample conversations show both sides, labelled; the
+/// member's own messages stay on this device. An expired match offers Rematch. The ⋯ menu offers
+/// View profile, Did you meet?, Unmatch, Block and Report.
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key, required this.personId});
 
@@ -335,39 +555,71 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     }
   }
 
-  Future<void> _menu(SamplePerson person) async {
+  Future<void> _menu(SamplePerson person, {required bool talked}) async {
     final l10n = context.l10n;
+    final actions = [
+      (
+        icon: NumayaIcons.user,
+        label: l10n.optionViewProfile,
+        destructive: false,
+      ),
+      if (talked)
+        (
+          icon: NumayaIcons.event,
+          label: l10n.optionDidYouMeet,
+          destructive: false,
+        ),
+      (
+        icon: NumayaIcons.userMinus,
+        label: l10n.optionUnmatch,
+        destructive: false,
+      ),
+      (
+        icon: NumayaIcons.block,
+        label: l10n.optionBlockShort,
+        destructive: true,
+      ),
+      (icon: NumayaIcons.flag, label: l10n.optionReport, destructive: true),
+    ];
     final choice = await showNumayaActionSheet(
       context: context,
       cancelLabel: l10n.cancel,
-      actions: [
-        (
-          icon: NumayaIcons.userMinus,
-          label: l10n.optionUnmatch,
-          destructive: false,
-        ),
-        (
-          icon: NumayaIcons.block,
-          label: l10n.optionBlockShort,
-          destructive: true,
-        ),
-        (icon: NumayaIcons.flag, label: l10n.optionReport, destructive: true),
-      ],
+      actions: actions,
     );
     if (!mounted || choice == null) return;
-    switch (choice) {
-      case 0:
-        final next = await showUnmatchSheet(context, person);
-        if (!mounted) return;
-        if (next == UnmatchChoice.unmatch) {
-          ref.read(datingProvider.notifier).end(person.id, EndReason.unmatched);
-        } else if (next == UnmatchChoice.report) {
-          await showReportSheet(context, ref, person);
-        }
-      case 1:
-        await showBlockSheet(context, ref, person);
-      case 2:
+    final label = actions[choice].label;
+    if (label == l10n.optionViewProfile) {
+      unawaited(context.push('${Routes.person}/${person.id}'));
+    } else if (label == l10n.optionDidYouMeet) {
+      await showDidYouMeetSheet(context, ref, person);
+    } else if (label == l10n.optionUnmatch) {
+      final next = await showUnmatchSheet(context, person);
+      if (!mounted) return;
+      if (next == UnmatchChoice.unmatch) {
+        ref.read(datingProvider.notifier).end(person.id, EndReason.unmatched);
+        await showUnmatchReasonSheet(context, ref, person);
+      } else if (next == UnmatchChoice.report) {
         await showReportSheet(context, ref, person);
+      }
+    } else if (label == l10n.optionBlockShort) {
+      await showBlockSheet(context, ref, person);
+    } else {
+      await showReportSheet(context, ref, person);
+    }
+  }
+
+  Future<void> _extend(SamplePerson person) async {
+    final l10n = context.l10n;
+    final controller = ref.read(datingProvider.notifier);
+    final result = controller.isExpired(person.id)
+        ? controller.rematch(person.id)
+        : controller.extend(person.id);
+    if (result == ExtendResult.extended) {
+      NumayaToast.show(context, l10n.chatExtended);
+    } else if (result == ExtendResult.needsPremium) {
+      await context.push(
+        '${Routes.paywall}?feature=${PremiumFeature.rematch.name}',
+      );
     }
   }
 
@@ -375,6 +627,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final state = ref.watch(datingProvider);
+    final premium = ref.watch(premiumProvider);
     final person = personById(widget.personId);
     if (person == null) return const SizedBox.shrink();
     final ended = state.ended[person.id];
@@ -388,8 +641,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       );
     }
 
-    final messages = state.threads[person.id] ?? const <DemoMessage>[];
     final controller = ref.read(datingProvider.notifier);
+    final messages = state.threads[person.id] ?? const <DemoMessage>[];
+    final expired = controller.isExpired(person.id);
+    final sample = messages.any((m) => m.sample);
+    final now = ref.read(clockProvider)();
 
     // V16 sets the chat header 8pt lower than the flow top bar (centre at 36pt).
     final header = SizedBox(
@@ -440,7 +696,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             NavIconButton(
               icon: NumayaIcons.more,
               label: l10n.conversationOptions,
-              onPressed: () => _menu(person),
+              onPressed: () => _menu(person, talked: messages.isNotEmpty),
             ),
           ],
         ),
@@ -448,7 +704,50 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     );
 
     final Widget body;
-    if (messages.isEmpty) {
+    if (expired) {
+      body = Padding(
+        padding: const EdgeInsets.only(top: AppSpacing.s8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: CountdownAvatar(
+                initial: person.initial,
+                fraction: 0,
+                expired: true,
+                size: 104,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.s4),
+            Semantics(
+              header: true,
+              child: Text(
+                l10n.chatExpiredTitle(person.name),
+                textAlign: TextAlign.center,
+                style: AppTypography.headline,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.s2),
+            Text(
+              l10n.chatExpiredBody,
+              textAlign: TextAlign.center,
+              style: AppTypography.body.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.s6),
+            NumayaButton(
+              label: premium.active
+                  ? l10n.chatRematch
+                  : l10n.chatRematchPremium,
+              icon: premium.active ? null : NumayaIcons.lock,
+              onPressed: () => _extend(person),
+            ),
+          ],
+        ),
+      );
+    } else if (messages.isEmpty) {
+      final left = controller.remaining(person.id);
       body = Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -475,7 +774,33 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             textAlign: TextAlign.center,
             style: AppTypography.caption,
           ),
-          const SizedBox(height: AppSpacing.s8),
+          const SizedBox(height: AppSpacing.s4),
+          StatusBanner(
+            tone: left.inHours < 2 ? BannerTone.pending : BannerTone.info,
+            title: l10n.chatExpiresIn(timeLeft(l10n, left)),
+            body: premium.active
+                ? l10n.chatExtendPremiumNote
+                : l10n.chatExtendFreeNote,
+            action: NumayaButton(
+              label: l10n.chatExtend,
+              small: true,
+              expand: false,
+              variant: NumayaButtonVariant.secondary,
+              onPressed: controller.freeExtendAvailable || premium.active
+                  ? () => _extend(person)
+                  : null,
+            ),
+          ),
+          if (person.openingMove != null) ...[
+            const SizedBox(height: AppSpacing.s4),
+            PromptCard(
+              question: l10n.chatTheirMove(person.name),
+              answer: person.openingMove!,
+              editLabel: l10n.chatReplyToMove,
+              onTap: _focus.requestFocus,
+            ),
+          ],
+          const SizedBox(height: AppSpacing.s6),
           Text(
             l10n.chatOpenersLabel,
             style: AppTypography.weight(
@@ -513,75 +838,118 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       );
     } else {
       final last = messages.last;
-      body = Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: AppSpacing.s4),
-          Text(
-            l10n.chatMatchedWith(person.name),
-            textAlign: TextAlign.center,
-            style: AppTypography.caption,
+      final children = <Widget>[
+        const SizedBox(height: AppSpacing.s4),
+        if (sample)
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.s2),
+              child: StatusBadge(label: l10n.chatSampleBadge),
+            ),
           ),
-          for (var i = 0; i < messages.length; i++)
-            Semantics(
-              label: messages[i].text,
-              child: ExcludeSemantics(
-                child: MessageBubble(
-                  text: messages[i].text,
-                  grouped: i > 0,
-                  dimmed: messages[i].status == MessageStatus.sending,
+        Text(
+          l10n.chatMatchedWith(person.name),
+          textAlign: TextAlign.center,
+          style: AppTypography.caption,
+        ),
+      ];
+      DateTime? day;
+      for (var i = 0; i < messages.length; i++) {
+        final m = messages[i];
+        final d = DateTime(m.at.year, m.at.month, m.at.day);
+        if (sample && day != d) {
+          day = d;
+          children.add(ChatSystemLine(dayLine(l10n, m.at, now)));
+        }
+        final prev = i > 0 ? messages[i - 1] : null;
+        final next = i + 1 < messages.length ? messages[i + 1] : null;
+        final grouped = prev != null && prev.mine == m.mine;
+        final endsGroup = next == null || next.mine != m.mine;
+        children.add(
+          Semantics(
+            label: m.mine
+                ? m.text
+                : l10n.chatTheirMessageLabel(person.name, m.text),
+            child: ExcludeSemantics(
+              child: MessageBubble(
+                text: m.text,
+                mine: m.mine,
+                grouped: grouped,
+                dimmed: m.status == MessageStatus.sending,
+              ),
+            ),
+          ),
+        );
+        if (sample && endsGroup && m != last) {
+          children.add(
+            Align(
+              alignment: m.mine ? Alignment.centerRight : Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  shortTime(l10n, m.at, now),
+                  style: AppTypography.micro,
                 ),
               ),
             ),
-          const SizedBox(height: AppSpacing.s1),
-          Align(
-            alignment: Alignment.centerRight,
-            child: switch (last.status) {
-              MessageStatus.sending => Text(
-                l10n.chatStatusSending,
-                style: AppTypography.micro,
-              ),
-              MessageStatus.onDevice => Text(
-                l10n.chatStatusOnDevice,
-                style: AppTypography.micro,
-              ),
-              MessageStatus.failed => Semantics(
-                liveRegion: true,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const NumayaIcon(
-                      NumayaIcons.alert,
-                      size: 16,
-                      color: AppColors.negative,
+          );
+        }
+      }
+      children.addAll([
+        const SizedBox(height: AppSpacing.s1),
+        Align(
+          alignment: last.mine ? Alignment.centerRight : Alignment.centerLeft,
+          child: !last.mine || last.sample
+              ? Text(shortTime(l10n, last.at, now), style: AppTypography.micro)
+              : switch (last.status) {
+                  MessageStatus.sending => Text(
+                    l10n.chatStatusSending,
+                    style: AppTypography.micro,
+                  ),
+                  MessageStatus.onDevice => Text(
+                    l10n.chatStatusOnDevice,
+                    style: AppTypography.micro,
+                  ),
+                  MessageStatus.failed => Semantics(
+                    liveRegion: true,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const NumayaIcon(
+                          NumayaIcons.alert,
+                          size: 16,
+                          color: AppColors.negative,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          l10n.chatStatusFailed,
+                          style: AppTypography.micro.copyWith(
+                            color: AppColors.negative,
+                          ),
+                        ),
+                        const SizedBox(width: AppSpacing.s2),
+                        TextLink(
+                          label: l10n.chatRetry,
+                          style: AppTypography.micro,
+                          onPressed: () => controller.retry(person.id, last.id),
+                        ),
+                        const SizedBox(width: AppSpacing.s2),
+                        TextLink(
+                          label: l10n.chatDelete,
+                          style: AppTypography.micro,
+                          danger: true,
+                          onPressed: () =>
+                              controller.deleteMessage(person.id, last.id),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 4),
-                    Text(
-                      l10n.chatStatusFailed,
-                      style: AppTypography.micro.copyWith(
-                        color: AppColors.negative,
-                      ),
-                    ),
-                    const SizedBox(width: AppSpacing.s2),
-                    TextLink(
-                      label: l10n.chatRetry,
-                      style: AppTypography.micro,
-                      onPressed: () => controller.retry(person.id, last.id),
-                    ),
-                    const SizedBox(width: AppSpacing.s2),
-                    TextLink(
-                      label: l10n.chatDelete,
-                      style: AppTypography.micro,
-                      danger: true,
-                      onPressed: () =>
-                          controller.deleteMessage(person.id, last.id),
-                    ),
-                  ],
-                ),
-              ),
-            },
-          ),
-        ],
+                  ),
+                },
+        ),
+      ]);
+      body = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: children,
       );
     }
 
@@ -631,31 +999,34 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppSpacing.gutter,
-                      AppSpacing.s2,
-                      AppSpacing.gutter,
-                      AppSpacing.s3,
+                  if (!expired)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.gutter,
+                        AppSpacing.s2,
+                        AppSpacing.gutter,
+                        AppSpacing.s3,
+                      ),
+                      child: Column(
+                        children: [
+                          Composer(
+                            controller: _text,
+                            focusNode: _focus,
+                            placeholder: l10n.chatPlaceholder(person.name),
+                            sendLabel: l10n.chatSend,
+                            onSend: _send,
+                          ),
+                          const SizedBox(height: AppSpacing.s2),
+                          Text(
+                            sample
+                                ? l10n.chatSampleConversationNote(person.name)
+                                : l10n.chatSampleNote(person.name),
+                            textAlign: TextAlign.center,
+                            style: AppTypography.micro,
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Column(
-                      children: [
-                        Composer(
-                          controller: _text,
-                          focusNode: _focus,
-                          placeholder: l10n.chatPlaceholder(person.name),
-                          sendLabel: l10n.chatSend,
-                          onSend: _send,
-                        ),
-                        const SizedBox(height: AppSpacing.s2),
-                        Text(
-                          l10n.chatSampleNote(person.name),
-                          textAlign: TextAlign.center,
-                          style: AppTypography.micro,
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),

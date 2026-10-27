@@ -1180,4 +1180,1333 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noConvBody => 'Say hello to a new match to start one.';
+
+  @override
+  String get timeToday => 'Today';
+
+  @override
+  String get timeYesterday => 'Yesterday';
+
+  @override
+  String hoursLeft(int hours) {
+    return '${hours}h left';
+  }
+
+  @override
+  String minutesLeft(int minutes) {
+    return '${minutes}m left';
+  }
+
+  @override
+  String get queueLikes => 'Likes';
+
+  @override
+  String queueLikesLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people like you. Open Likes',
+      one: '1 person likes you. Open Likes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get queueExpired => 'Expired';
+
+  @override
+  String queueExpiredLabel(Object name) {
+    return '$name. Match expired';
+  }
+
+  @override
+  String get movesPromoTitle => 'Skip the small talk';
+
+  @override
+  String get movesPromoBody =>
+      'Add up to three Opening Moves: questions your new matches can answer to start the conversation.';
+
+  @override
+  String get movesPromoAction => 'Set Opening Moves';
+
+  @override
+  String get yourMoveTag => 'Your move';
+
+  @override
+  String unreadCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count unread messages',
+      one: '1 unread message',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get optionViewProfile => 'View profile';
+
+  @override
+  String get optionDidYouMeet => 'Did you meet?';
+
+  @override
+  String get chatExtended => 'Extended: you have 24 more hours';
+
+  @override
+  String chatExpiredTitle(Object name) {
+    return 'Your match with $name expired';
+  }
+
+  @override
+  String get chatExpiredBody =>
+      'Neither of you wrote within 24 hours, so the match ended. Rematch to get another 24 hours.';
+
+  @override
+  String get chatRematch => 'Rematch';
+
+  @override
+  String get chatRematchPremium => 'Rematch with Premium';
+
+  @override
+  String chatExpiresIn(Object time) {
+    return '$time to start the conversation';
+  }
+
+  @override
+  String get chatExtendFreeNote =>
+      'Need more time? You get one free Extend a day.';
+
+  @override
+  String get chatExtendPremiumNote => 'Premium: extend as often as you like.';
+
+  @override
+  String get chatExtend => 'Extend 24 hours';
+
+  @override
+  String chatTheirMove(Object name) {
+    return '$name’s Opening Move';
+  }
+
+  @override
+  String get chatReplyToMove => 'Reply';
+
+  @override
+  String get chatSampleBadge => 'Sample conversation';
+
+  @override
+  String chatTheirMessageLabel(Object name, Object text) {
+    return '$name: $text';
+  }
+
+  @override
+  String chatSampleConversationNote(Object name) {
+    return '$name’s messages were written for the demo. What you send stays on this device and no one replies.';
+  }
+
+  @override
+  String get reportWhere => 'Where did you see it?';
+
+  @override
+  String didMeetTitle(Object name) {
+    return 'Did you meet $name?';
+  }
+
+  @override
+  String didMeetBody(Object name) {
+    return 'Your answer stays on this device and helps you keep track. $name won’t see it.';
+  }
+
+  @override
+  String get didMeetYes => 'Yes, we met';
+
+  @override
+  String get didMeetNo => 'No, we didn’t meet';
+
+  @override
+  String get didMeetThanks => 'Thanks. Saved on this device.';
+
+  @override
+  String unmatchedReasonTitle(Object name) {
+    return 'You’ve unmatched $name';
+  }
+
+  @override
+  String unmatchedReasonBody(Object name) {
+    return 'Could you tell us why? Your answer stays on this device and $name won’t know.';
+  }
+
+  @override
+  String get unmatchReasonSkip => 'Skip';
+
+  @override
+  String get unmatchReasonThanks =>
+      'Thanks. Your answer is saved on this device.';
+
+  @override
+  String get filtersDone => 'Done';
+
+  @override
+  String get filtersWomen => 'Women';
+
+  @override
+  String get filtersMen => 'Men';
+
+  @override
+  String get filtersNonbinary => 'Nonbinary people';
+
+  @override
+  String get filtersWhoHeading => 'Who do you want to date?';
+
+  @override
+  String get filtersEveryone =>
+      'Showing everyone. Pick one or more to narrow it down.';
+
+  @override
+  String get filtersWhoHint => 'Only the people you picked appear on Home.';
+
+  @override
+  String get filtersAgeFallback =>
+      'See people 2 years either side if I run out';
+
+  @override
+  String get filtersDistanceFallback =>
+      'See people slightly further away if I run out';
+
+  @override
+  String get filtersVerifiedHeading => 'Have they verified themselves?';
+
+  @override
+  String get filtersVerifiedOnly => 'Verified profiles only';
+
+  @override
+  String get filtersVerifiedNote =>
+      'Only people who have verified their photos.';
+
+  @override
+  String get filtersWhatsThis => 'What’s photo verification?';
+
+  @override
+  String get filtersAdvancedLocked => 'Advanced filters are part of Premium';
+
+  @override
+  String get filtersAdvancedLockedBody =>
+      'Narrow down by height, intentions and more. In this demo Premium is simulated: no payment is taken.';
+
+  @override
+  String get premiumSee => 'See Premium';
+
+  @override
+  String get filtersHeightHeading => 'What is their height?';
+
+  @override
+  String get filtersHeight => 'Height';
+
+  @override
+  String get filtersAny => 'Any';
+
+  @override
+  String filtersTallerThan(int cm) {
+    return 'Taller than $cm cm';
+  }
+
+  @override
+  String get filtersIntentionsHeading => 'What do they want from their dates?';
+
+  @override
+  String get filtersMoreHeading => 'More filters';
+
+  @override
+  String get filtersAddFilter => 'Add';
+
+  @override
+  String get filtersAdvancedFallback => 'Show other people if I run out';
+
+  @override
+  String get filtersBasic => 'Basic';
+
+  @override
+  String get filtersAdvanced => 'Advanced';
+
+  @override
+  String get filtersUsingFallback =>
+      'Nobody fits exactly, so people just outside your filters will show.';
+
+  @override
+  String discoverSuperSentLeft(int count, Object name) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'SuperSwipe sent to $name. $count left',
+      one: 'SuperSwipe sent to $name. 1 left',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get forYouOpen => 'For you: today’s picks';
+
+  @override
+  String get discoverFallbackTitle =>
+      'Showing people just outside your filters';
+
+  @override
+  String get discoverFallbackBody =>
+      'Nobody fit exactly, so your “if I run out” settings are on.';
+
+  @override
+  String get forYouTitle => 'For you';
+
+  @override
+  String forYouRefresh(int hours) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: 'New picks in $hours hours',
+      one: 'New picks in 1 hour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get forYouLede =>
+      'People you have the most in common with, picked once a day.';
+
+  @override
+  String get forYouEmptyTitle => 'You’ve seen today’s picks';
+
+  @override
+  String forYouEmptyBody(int hours) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: 'New people arrive in $hours hours.',
+      one: 'New people arrive in 1 hour.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get forYouBackHome => 'Back to Home';
+
+  @override
+  String forYouOpenProfile(Object name) {
+    return 'Open $name’s profile';
+  }
+
+  @override
+  String forYouInCommon(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count things in common',
+      one: '1 thing in common',
+      zero: 'Picked for you',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String forYouLike(Object name) {
+    return 'Like $name';
+  }
+
+  @override
+  String get forYouRationale =>
+      'Based on your interests and who you’ve liked. Sample profiles.';
+
+  @override
+  String get likeAction => 'Like';
+
+  @override
+  String get personMissingTitle => 'This profile isn’t available';
+
+  @override
+  String get personMissingBody =>
+      'It may have been removed. Go back to keep exploring.';
+
+  @override
+  String heightValue(int cm) {
+    return '$cm cm';
+  }
+
+  @override
+  String get appealHint => 'Tell us what happened. Be as specific as you can.';
+
+  @override
+  String get appealLabel => 'Your appeal';
+
+  @override
+  String get appealPlaceholder => 'I think this was a mistake because…';
+
+  @override
+  String get appealSend => 'Send appeal';
+
+  @override
+  String get appealSentTitle => 'Appeal saved';
+
+  @override
+  String get appealSentBody =>
+      'In this demo nothing is sent or reviewed. In the real app a person reviews appeals and replies by email.';
+
+  @override
+  String get blockedAccountTitle => 'Account on hold';
+
+  @override
+  String get blockedAccountHeading => 'Your account has been blocked';
+
+  @override
+  String get blockedAccountBody =>
+      'We found activity that goes against our guidelines. You can appeal within 6 months. This is a preview of a screen the server would show.';
+
+  @override
+  String get completionTitle => 'Complete your profile';
+
+  @override
+  String completionPercent(int percent) {
+    return '$percent% complete';
+  }
+
+  @override
+  String get completionLede =>
+      'Profiles with more to talk about get more matches. Pick up where you like.';
+
+  @override
+  String get completionDone => 'Your profile is complete. Nice work.';
+
+  @override
+  String get completionPhotos => 'Photos';
+
+  @override
+  String get completionPrompts => 'Prompts';
+
+  @override
+  String get completionInterests => 'Interests';
+
+  @override
+  String get completionBio => 'Bio';
+
+  @override
+  String get completionAbout => 'About you';
+
+  @override
+  String get completionMore => 'More about you';
+
+  @override
+  String completionProgress(int done, int total) {
+    return '$done of $total added';
+  }
+
+  @override
+  String get contactTopic => 'What’s it about?';
+
+  @override
+  String get contactTopicAccount => 'My account';
+
+  @override
+  String get contactTopicSafety => 'Safety or someone’s behaviour';
+
+  @override
+  String get contactTopicVerification => 'Photo verification';
+
+  @override
+  String get contactTopicBilling => 'Premium and billing';
+
+  @override
+  String get contactTopicOther => 'Something else';
+
+  @override
+  String get contactMessage => 'Your message';
+
+  @override
+  String get contactSend => 'Send message';
+
+  @override
+  String get contactDemoNote =>
+      'Demo build: your message stays on this device and nobody reads it.';
+
+  @override
+  String get contactSentTitle => 'Message saved';
+
+  @override
+  String get contactSentBody =>
+      'In this demo nothing is sent. In the real app, support replies within a day.';
+
+  @override
+  String get deleteHeading => 'Delete your account?';
+
+  @override
+  String get deleteLede => 'Before you go, tell us why. It helps us improve.';
+
+  @override
+  String get deleteWhy => 'Why are you leaving?';
+
+  @override
+  String get deleteSnoozeTitle => 'Just need a break?';
+
+  @override
+  String get deleteSnoozeBody =>
+      'Snooze hides your profile and keeps your matches and chats.';
+
+  @override
+  String get deleteSnoozeAction => 'Snooze instead';
+
+  @override
+  String get deleteC1 => 'Your profile is hidden from everyone straight away';
+
+  @override
+  String get deleteC2 => 'Your matches and messages are removed';
+
+  @override
+  String get deleteC3 =>
+      'You can restore everything for 28 days by signing in again';
+
+  @override
+  String get deleteSubscriptionTitle => 'Your Premium plan won’t be cancelled';
+
+  @override
+  String get deleteSubscriptionBody =>
+      'Cancel it in your app store first. In this demo there is no real subscription.';
+
+  @override
+  String get deleteContinue => 'Continue';
+
+  @override
+  String get deleteHelp => 'What happens when I delete?';
+
+  @override
+  String get deleteRestoreNote =>
+      'Changed your mind? Sign in with the same number within 28 days to restore it.';
+
+  @override
+  String get demoHubTitle => 'Demo hub';
+
+  @override
+  String get demoHubBanner => 'Development build only';
+
+  @override
+  String get demoHubBody =>
+      'Jump to any screen, switch the sample data and try each state. Everything here is local and simulated.';
+
+  @override
+  String get demoStart => 'Start';
+
+  @override
+  String get demoQuickStart => 'Quick start as Alex (sample account)';
+
+  @override
+  String get demoQuickStartNote =>
+      'Skips sign-up with a finished sample profile and a fictional 555 number.';
+
+  @override
+  String get demoSignedIn =>
+      'You’re signed in. Quick start replaces this session with the sample account.';
+
+  @override
+  String get demoWorld => 'Sample world';
+
+  @override
+  String get demoWorldFull => 'Full demo';
+
+  @override
+  String get demoWorldFullBody =>
+      '12 profiles, 7 likes, matches in the queue (one expiring soon, one expired) and 3 sample conversations';
+
+  @override
+  String get demoWorldFresh => 'Brand-new account';
+
+  @override
+  String get demoWorldFreshBody =>
+      '7 profiles, 5 likes, no matches or conversations';
+
+  @override
+  String get demoReset => 'Reset demo data';
+
+  @override
+  String get demoResetDone => 'Demo data reset';
+
+  @override
+  String get demoSwitches => 'Switches';
+
+  @override
+  String get demoPremium => 'Premium (simulated)';
+
+  @override
+  String get demoPremiumNote => 'Unlocks Premium features without the paywall';
+
+  @override
+  String get demoApproveVerification => 'Approve the next verification';
+
+  @override
+  String get demoApproveOn => 'The next selfie is approved';
+
+  @override
+  String get demoApproveOff => 'The next selfie is declined';
+
+  @override
+  String get demoResetVerification => 'Reset photo verification';
+
+  @override
+  String get demoAreaAccount => 'Account and onboarding';
+
+  @override
+  String get demoAreaDiscover => 'Discover';
+
+  @override
+  String get demoAreaMatching => 'Likes, matches and messages';
+
+  @override
+  String get demoAreaProfile => 'Profile';
+
+  @override
+  String get demoAreaSettings => 'Settings, safety and help';
+
+  @override
+  String get demoWelcome => 'Welcome';
+
+  @override
+  String get demoRestoreHow =>
+      'Account restore: delete the account in Settings, then sign in again with the same number.';
+
+  @override
+  String get demoSampleProfile => 'A sample profile with Like and Pass';
+
+  @override
+  String get demoLikeProfile => 'A like’s profile (Maya)';
+
+  @override
+  String get demoMatchScreen => 'Match celebration (Maya)';
+
+  @override
+  String get demoChatHistory => 'Conversation with history (Priya)';
+
+  @override
+  String get demoChatNew => 'New match, 21 hours left (Jo)';
+
+  @override
+  String get demoChatExpiring => 'Match about to expire (Lina)';
+
+  @override
+  String get demoChatExpired => 'Expired match (Ollie)';
+
+  @override
+  String get demoFullOnly =>
+      'The named matches and conversations exist in the full demo.';
+
+  @override
+  String get demoNeedsSession => 'Sign in or use Quick start first';
+
+  @override
+  String get demoNotFound => 'A link that doesn’t exist';
+
+  @override
+  String get editAdd => 'Add';
+
+  @override
+  String get editAddPrompt => 'Add a prompt';
+
+  @override
+  String get editPromptsSection => 'Prompts';
+
+  @override
+  String editPromptsHint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count of 3 added. Prompts give people something to reply to.',
+      one: '1 of 3 added. Prompts give people something to reply to.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get editBio => 'Bio';
+
+  @override
+  String get editBioHint => 'A short, punchy intro.';
+
+  @override
+  String get editBioAdd => 'Write a short intro';
+
+  @override
+  String get editBioPlaceholder =>
+      'Weekend baker, weekday spreadsheet wrangler…';
+
+  @override
+  String get editBioTipTitle => 'Show your personality';
+
+  @override
+  String get editBioTip =>
+      'Share a quirk, an interest or a bit of humour to help you stand out.';
+
+  @override
+  String get editClear => 'Remove';
+
+  @override
+  String get editGender => 'Gender';
+
+  @override
+  String get editGenderMore => 'Add more about your gender';
+
+  @override
+  String get editGenderLegend => 'Which describes you best?';
+
+  @override
+  String get editGenderShow => 'Show my gender on my profile';
+
+  @override
+  String get editGenderShowNote => 'You can change this any time.';
+
+  @override
+  String get editHeight => 'Height';
+
+  @override
+  String get editLanguages => 'Languages';
+
+  @override
+  String editLanguagesHint(int count, int total) {
+    return '$count of $total chosen';
+  }
+
+  @override
+  String get editMoreAbout => 'More about you';
+
+  @override
+  String get editMoreAboutNote =>
+      'Answer only what you’re comfortable sharing. Some answers help with filters.';
+
+  @override
+  String get editMoreSection => 'More';
+
+  @override
+  String get editPreferNotToSay => 'Prefer not to say';
+
+  @override
+  String get editPreview => 'Preview profile';
+
+  @override
+  String get editVerify => 'Verify my profile';
+
+  @override
+  String get featureLikes => 'Like as many people as you want';
+
+  @override
+  String get featureSeeLikes => 'See who liked you';
+
+  @override
+  String get featureExtend => 'Unlimited Extends';
+
+  @override
+  String get featureRematch => 'Rematch with expired matches';
+
+  @override
+  String get featureAdvancedFilters => 'Advanced filters';
+
+  @override
+  String get featureIncognito => 'Incognito';
+
+  @override
+  String get featureTravel => 'Travel mode';
+
+  @override
+  String get featureSuperSwipes => '5 extra SuperSwipes';
+
+  @override
+  String get helpTitle => 'Help centre';
+
+  @override
+  String get helpSearch => 'Search help';
+
+  @override
+  String get helpTopics => 'Topics';
+
+  @override
+  String get helpNoResults => 'Try another word, or contact us.';
+
+  @override
+  String get helpStillStuck => 'Still stuck?';
+
+  @override
+  String get helpContact => 'Contact support';
+
+  @override
+  String get helpMissing => 'That article doesn’t exist any more.';
+
+  @override
+  String get incognito => 'Incognito';
+
+  @override
+  String get incognitoOn => 'Only people you like can see you';
+
+  @override
+  String get incognitoOff => 'Off';
+
+  @override
+  String get incognitoNote =>
+      'With Incognito, only people you’ve liked can see your profile.';
+
+  @override
+  String get logoutTitle => 'Log out?';
+
+  @override
+  String get logoutBody =>
+      'In this demo, logging out clears your profile and sample data from this device.';
+
+  @override
+  String get yes => 'yes';
+
+  @override
+  String get no => 'no';
+
+  @override
+  String get notFoundTitle => 'This page isn’t here';
+
+  @override
+  String get notFoundBody =>
+      'The link may be old or mistyped. Nothing was lost.';
+
+  @override
+  String get notFoundStart => 'Back to the start';
+
+  @override
+  String get notificationsMore => 'More notification settings';
+
+  @override
+  String get notifMatches => 'New matches';
+
+  @override
+  String get notifExpiring => 'Matches about to expire';
+
+  @override
+  String get notifTips => 'Tips and news';
+
+  @override
+  String get notifPush => 'Push';
+
+  @override
+  String get notifInApp => 'In-app';
+
+  @override
+  String get notifEmail => 'Email';
+
+  @override
+  String get notifNoEmail => 'No email address on file';
+
+  @override
+  String get notifWarning =>
+      'Turning these off might mean you miss alerts from your matches.';
+
+  @override
+  String get notifEmailNote =>
+      'Push isn’t connected in this build, so these are saved as preferences only.';
+
+  @override
+  String get openingMovesTitle => 'Opening Moves';
+
+  @override
+  String get openingMovesHeading => 'Your Opening Moves';
+
+  @override
+  String get openingMovesLede =>
+      'Skip the “hey”. Choose up to three questions your new matches can answer.';
+
+  @override
+  String openingMovesCount(int count) {
+    return '$count of 3';
+  }
+
+  @override
+  String get openingMovesNote =>
+      'Your matches see one Opening Move when you match. They can answer it or start their own way.';
+
+  @override
+  String get openingMoveFirst => 'First Opening Move';
+
+  @override
+  String get openingMoveSecond => 'Second Opening Move';
+
+  @override
+  String get openingMoveThird => 'Third Opening Move';
+
+  @override
+  String get openingMoveEditTitle => 'Write your Opening Move';
+
+  @override
+  String get openingMoveLabel => 'Your question';
+
+  @override
+  String get openingMoveSuggestions => 'Need an idea?';
+
+  @override
+  String get openingMoveRemove => 'Remove Opening Move';
+
+  @override
+  String get openingMoveRemoved => 'Opening Move removed';
+
+  @override
+  String get paywallTitle => 'Get more with Premium';
+
+  @override
+  String get paywallForFilters => 'Advanced filters come with Premium';
+
+  @override
+  String get paywallForRematch => 'Rematch comes with Premium';
+
+  @override
+  String get paywallForExtend => 'Unlimited Extends come with Premium';
+
+  @override
+  String get paywallForIncognito => 'Incognito comes with Premium';
+
+  @override
+  String get paywallForTravel => 'Travel mode comes with Premium';
+
+  @override
+  String get paywallForSuperSwipes => 'You’re out of SuperSwipes';
+
+  @override
+  String get paywallLede =>
+      'Premium in this demo is simulated: no store is connected and no payment is taken.';
+
+  @override
+  String get paywallPlans => 'Choose a plan';
+
+  @override
+  String get paywallChoose => 'Choose a plan to continue';
+
+  @override
+  String paywallContinue(Object plan, Object price) {
+    return 'Continue with $plan · $price';
+  }
+
+  @override
+  String get paywallLegal =>
+      'Demo only. In a real build, plans renew automatically until cancelled in your app store. Prices are illustrative.';
+
+  @override
+  String get paywallConfirmTitle => 'Simulated purchase';
+
+  @override
+  String paywallConfirmBody(Object plan, Object price) {
+    return '$plan for $price. This is a demo: nothing is charged and no store is contacted.';
+  }
+
+  @override
+  String get paywallConfirmBuy => 'Complete demo purchase';
+
+  @override
+  String get paywallConfirmFail => 'Simulate a failed payment';
+
+  @override
+  String get paywallFailedTitle => 'The payment didn’t go through';
+
+  @override
+  String get paywallFailedBody =>
+      'Simulated failure. Nothing was charged and your plan is still selected. Try again when you’re ready.';
+
+  @override
+  String get paywallSuccessTitle => 'You’re all set';
+
+  @override
+  String get paywallAlreadyTitle => 'Premium is active';
+
+  @override
+  String paywallSuccessBody(Object date) {
+    return 'Premium is active until $date. Demo only: no payment was taken.';
+  }
+
+  @override
+  String get paywallRestore => 'Restore purchases';
+
+  @override
+  String get paywallRestoreNone =>
+      'No store is connected in this demo, so there’s nothing to restore.';
+
+  @override
+  String get premiumName => 'Numaya Premium';
+
+  @override
+  String get premiumActive => 'Active';
+
+  @override
+  String premiumActiveUntil(Object date) {
+    return 'Active until $date';
+  }
+
+  @override
+  String premiumActivePlan(Object plan) {
+    return '$plan plan, simulated. Cancel any time below.';
+  }
+
+  @override
+  String get premiumCardBody =>
+      'Advanced filters, Rematch, unlimited Extends, Incognito and Travel.';
+
+  @override
+  String get premiumExplore => 'Explore Premium';
+
+  @override
+  String get premiumManage => 'Manage';
+
+  @override
+  String get premiumHeroTitle => 'More ways to meet the right people';
+
+  @override
+  String get premiumHeroBody =>
+      'Everything in Numaya stays free. Premium adds control and extra time.';
+
+  @override
+  String get premiumYourExtras => 'Your extras';
+
+  @override
+  String get premiumSuperSwipesLeft => 'SuperSwipes left';
+
+  @override
+  String get premiumCompare => 'What you get';
+
+  @override
+  String get premiumFree => 'Free';
+
+  @override
+  String get premiumShort => 'Premium';
+
+  @override
+  String get premiumSeePlans => 'See plans';
+
+  @override
+  String get premiumCancelDemo => 'Cancel demo plan';
+
+  @override
+  String get premiumCancelled => 'Demo plan cancelled';
+
+  @override
+  String get premiumDemoNote =>
+      'Demo build: prices and plans are illustrative and nothing is charged.';
+
+  @override
+  String get premiumHelp => 'Billing and cancelling';
+
+  @override
+  String get premiumOnly => 'Premium';
+
+  @override
+  String get previewTitle => 'Preview';
+
+  @override
+  String get previewBadge => 'Preview';
+
+  @override
+  String get previewInfoTitle => 'This is how others see you';
+
+  @override
+  String get previewInfoBody =>
+      'Only what you’ve added is shown. Hidden fields stay hidden.';
+
+  @override
+  String get previewEdit => 'Back to editing';
+
+  @override
+  String get privacyTitle => 'Profile visibility';
+
+  @override
+  String get privacyShowTitle => 'On your profile';
+
+  @override
+  String get privacyShowAge => 'Show my age';
+
+  @override
+  String get privacyShowDistance => 'Show my distance';
+
+  @override
+  String get privacyShowNote =>
+      'Your age is still used for matching, even when it’s hidden.';
+
+  @override
+  String get privacyWhoSees => 'Who can see you';
+
+  @override
+  String get profileComplete => 'Complete profile';
+
+  @override
+  String profileCompletionLabel(int percent) {
+    return 'Profile $percent% complete';
+  }
+
+  @override
+  String get profileInterestsTitle => 'Interests';
+
+  @override
+  String get profileYourProfile => 'Your profile';
+
+  @override
+  String get profileSafetySupport => 'Safety and support';
+
+  @override
+  String get promptRemove => 'Remove prompt';
+
+  @override
+  String get promptRemoved => 'Prompt removed';
+
+  @override
+  String get restoreTitle => 'Welcome back';
+
+  @override
+  String restoreBody(Object date) {
+    return 'Your account was deleted recently. You can restore it, with your profile, until $date.';
+  }
+
+  @override
+  String get restoreAction => 'Restore my account';
+
+  @override
+  String get restoreStartOver => 'Start a new profile instead';
+
+  @override
+  String get restoreDone => 'Your account is back';
+
+  @override
+  String get safetyTitle => 'Safety and wellbeing';
+
+  @override
+  String get safetyHeading => 'Date with confidence';
+
+  @override
+  String get safetyLede =>
+      'Tips for meeting people, and the tools that keep you in control.';
+
+  @override
+  String get safetyTip1Title => 'Keep it on Numaya at first';
+
+  @override
+  String get safetyTip1Body =>
+      'Chat here until you feel comfortable. Never send money or share financial details.';
+
+  @override
+  String get safetyTip2Title => 'Meet in public';
+
+  @override
+  String get safetyTip2Body =>
+      'Tell a friend your plans and arrange your own way there and back.';
+
+  @override
+  String get safetyTip3Title => 'Report anything that feels off';
+
+  @override
+  String get safetyTip3Body =>
+      'Reports are anonymous. Blocking someone means you won’t see each other again.';
+
+  @override
+  String get safetyTools => 'Your tools';
+
+  @override
+  String get settingsLocation => 'Location';
+
+  @override
+  String get settingsLocationNote =>
+      'Location isn’t read in this build; the sample area stands in for it.';
+
+  @override
+  String get settingsCurrentLocation => 'Current location';
+
+  @override
+  String get settingsSampleLocation => 'Hackney, London (sample)';
+
+  @override
+  String get settingsHelpLegal => 'Help and legal';
+
+  @override
+  String get snoozeTitle => 'Snooze';
+
+  @override
+  String get snoozeBody =>
+      'Hide your profile from new people for a while. You keep your matches and chats.';
+
+  @override
+  String get snoozeHowLong => 'How long?';
+
+  @override
+  String get snooze24h => '24 hours';
+
+  @override
+  String get snooze72h => '72 hours';
+
+  @override
+  String get snoozeWeek => 'A week';
+
+  @override
+  String get snoozeIndefinite => 'Until I turn it off';
+
+  @override
+  String get snoozeNoStatus => 'No thanks';
+
+  @override
+  String snoozeUntil(Object date) {
+    return 'Until $date';
+  }
+
+  @override
+  String get travelTitle => 'Travel';
+
+  @override
+  String get travelBody =>
+      'Planning a trip? Meet people there before you go. Demo: changes the sample location only.';
+
+  @override
+  String get travelPick => 'Where are you going?';
+
+  @override
+  String get travelOff => 'Turn off Travel';
+
+  @override
+  String get travelOffValue => 'Off';
+
+  @override
+  String get travelOnValue => 'On';
+
+  @override
+  String travelSet(Object city) {
+    return 'Travel set to $city';
+  }
+
+  @override
+  String get travelEnded => 'Travel turned off';
+
+  @override
+  String get verifyIntroTitle => 'Show them it’s really you';
+
+  @override
+  String get verifyIntroBody =>
+      'Copy a pose and take a selfie. When it matches your photos, a badge goes on your profile.';
+
+  @override
+  String get verifyDemoTitle => 'Simulated in this demo';
+
+  @override
+  String get verifyDemoBody =>
+      'The camera isn’t used and nobody reviews the photo. The result appears after a few seconds.';
+
+  @override
+  String get verifyStart => 'Let’s get verified';
+
+  @override
+  String get verifyHelp => 'How does verification work?';
+
+  @override
+  String get verifyCopyPose => 'Copy this pose';
+
+  @override
+  String verifyViewfinderLabel(Object pose) {
+    return 'Camera preview. Pose to copy: $pose';
+  }
+
+  @override
+  String get verifyCameraOff =>
+      'The camera isn’t connected in this demo. Take a demo selfie to continue.';
+
+  @override
+  String get verifyTakeSelfie => 'Take demo selfie';
+
+  @override
+  String get verifyOtherPose => 'Show me a different pose';
+
+  @override
+  String get verifyReviewTitle => 'Happy with it?';
+
+  @override
+  String get verifyReviewBody =>
+      'Your selfie is compared with your profile photos. It isn’t shown on your profile.';
+
+  @override
+  String get verifyDemoSelfie => 'Demo selfie (placeholder)';
+
+  @override
+  String get verifyRetake => 'Retake';
+
+  @override
+  String get verifyPendingTitle => 'Checking your selfie';
+
+  @override
+  String get verifyPendingBody =>
+      'Usually a few minutes. In this demo the review is simulated and takes a few seconds.';
+
+  @override
+  String get verifyDoneTitle => 'You’re verified';
+
+  @override
+  String get verifyDoneBody =>
+      'The badge is on your profile. People who filter for verified profiles can now see you.';
+
+  @override
+  String get verifyRejectedTitle => 'We couldn’t verify you';
+
+  @override
+  String verifyRejectedBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'The pose didn’t match. You have $count more tries.',
+      one: 'The pose didn’t match. You have 1 more try.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get verifyRejectedSupport =>
+      'After three tries, a person can help. Contact support and we’ll sort it out.';
+
+  @override
+  String get verifyTipsTitle => 'Tips';
+
+  @override
+  String get verifyTip1 => 'Find good, even light';
+
+  @override
+  String get verifyTip2 => 'Keep your face and hand in the frame';
+
+  @override
+  String get verifyTip3 => 'Copy the pose exactly';
+
+  @override
+  String get verifyTryAgain => 'Try again';
+
+  @override
+  String get verifyStatusNone => 'Not verified';
+
+  @override
+  String get verifyStatusPending => 'In review';
+
+  @override
+  String get verifyStatusRejected => 'Try again';
+
+  @override
+  String get verifyStatusVerified => 'Verified';
+
+  @override
+  String get photoVerifyTitle => 'Photo verification';
+
+  @override
+  String get photoVerifySubmit => 'Submit for review';
+
+  @override
+  String get demoHubOpen => 'Demo build. Open the demo hub';
+
+  @override
+  String matchTheirMove(Object move, Object name) {
+    return '$name’s Opening Move: “$move”';
+  }
+
+  @override
+  String get photoMoveEarlier => 'Move earlier';
+
+  @override
+  String get photoMoveLater => 'Move later';
+
+  @override
+  String get photoReplace => 'Replace with a new placeholder';
+
+  @override
+  String get photoMoved => 'Photo order updated';
+
+  @override
+  String get photoReplaced =>
+      'Photo replaced (placeholder: upload isn’t connected)';
 }

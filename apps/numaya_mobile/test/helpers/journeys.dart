@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:numaya_mobile/app/router.dart';
+import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
+import 'package:numaya_mobile/features/auth/application/session_controller.dart';
 import 'package:numaya_mobile/features/auth/data/demo_auth_repository.dart';
+import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 
 import 'test_app.dart';
 
@@ -95,5 +100,31 @@ Future<void> openTab(WidgetTester tester, String label) async {
   await tester.tap(
     find.descendant(of: find.byType(NumayaTabBar), matching: find.text(label)),
   );
+  await tester.pump(const Duration(milliseconds: 600));
+}
+
+/// Starts the app in the full demo world, signed in through the Demo Hub's quick start, on Home.
+/// Returns the provider container for state checks.
+Future<ProviderContainer> quickStartApp(
+  WidgetTester tester, {
+  DemoWorld world = DemoWorld.full,
+  DemoAuthRepository? auth,
+}) async {
+  await tester.pumpWidget(testApp(world: world, auth: auth));
+  await tester.pump();
+  final container = ProviderScope.containerOf(
+    tester.element(find.byType(MaterialApp)),
+  );
+  await container.read(sessionProvider.notifier).quickStart();
+  container.read(routerProvider).go(Routes.home);
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 600));
+  return container;
+}
+
+/// Goes straight to [path] (as a deep link would).
+Future<void> goTo(ProviderContainer c, WidgetTester tester, String path) async {
+  c.read(routerProvider).go(path);
+  await tester.pump();
   await tester.pump(const Duration(milliseconds: 600));
 }

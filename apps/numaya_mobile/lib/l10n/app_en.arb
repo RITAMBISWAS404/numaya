@@ -698,5 +698,624 @@
     }
   },
   "noConvTitle": "No conversations yet",
-  "noConvBody": "Say hello to a new match to start one."
+  "noConvBody": "Say hello to a new match to start one.",
+  "timeToday": "Today",
+  "timeYesterday": "Yesterday",
+  "hoursLeft": "{hours}h left",
+  "@hoursLeft": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesLeft": "{minutes}m left",
+  "@minutesLeft": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "queueLikes": "Likes",
+  "queueLikesLabel": "{count, plural, =1{1 person likes you. Open Likes} other{{count} people like you. Open Likes}}",
+  "@queueLikesLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "queueExpired": "Expired",
+  "queueExpiredLabel": "{name}. Match expired",
+  "@queueExpiredLabel": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "movesPromoTitle": "Skip the small talk",
+  "movesPromoBody": "Add up to three Opening Moves: questions your new matches can answer to start the conversation.",
+  "movesPromoAction": "Set Opening Moves",
+  "yourMoveTag": "Your move",
+  "unreadCount": "{count, plural, =1{1 unread message} other{{count} unread messages}}",
+  "@unreadCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "optionViewProfile": "View profile",
+  "optionDidYouMeet": "Did you meet?",
+  "chatExtended": "Extended: you have 24 more hours",
+  "chatExpiredTitle": "Your match with {name} expired",
+  "@chatExpiredTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chatExpiredBody": "Neither of you wrote within 24 hours, so the match ended. Rematch to get another 24 hours.",
+  "chatRematch": "Rematch",
+  "chatRematchPremium": "Rematch with Premium",
+  "chatExpiresIn": "{time} to start the conversation",
+  "@chatExpiresIn": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "chatExtendFreeNote": "Need more time? You get one free Extend a day.",
+  "chatExtendPremiumNote": "Premium: extend as often as you like.",
+  "chatExtend": "Extend 24 hours",
+  "chatTheirMove": "{name}’s Opening Move",
+  "@chatTheirMove": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chatReplyToMove": "Reply",
+  "chatSampleBadge": "Sample conversation",
+  "chatTheirMessageLabel": "{name}: {text}",
+  "@chatTheirMessageLabel": {
+    "placeholders": {
+      "name": {},
+      "text": {}
+    }
+  },
+  "chatSampleConversationNote": "{name}’s messages were written for the demo. What you send stays on this device and no one replies.",
+  "@chatSampleConversationNote": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "reportWhere": "Where did you see it?",
+  "didMeetTitle": "Did you meet {name}?",
+  "@didMeetTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "didMeetBody": "Your answer stays on this device and helps you keep track. {name} won’t see it.",
+  "@didMeetBody": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "didMeetYes": "Yes, we met",
+  "didMeetNo": "No, we didn’t meet",
+  "didMeetThanks": "Thanks. Saved on this device.",
+  "unmatchedReasonTitle": "You’ve unmatched {name}",
+  "@unmatchedReasonTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "unmatchedReasonBody": "Could you tell us why? Your answer stays on this device and {name} won’t know.",
+  "@unmatchedReasonBody": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "unmatchReasonSkip": "Skip",
+  "unmatchReasonThanks": "Thanks. Your answer is saved on this device.",
+  "filtersDone": "Done",
+  "filtersWomen": "Women",
+  "filtersMen": "Men",
+  "filtersNonbinary": "Nonbinary people",
+  "filtersWhoHeading": "Who do you want to date?",
+  "filtersEveryone": "Showing everyone. Pick one or more to narrow it down.",
+  "filtersWhoHint": "Only the people you picked appear on Home.",
+  "filtersAgeFallback": "See people 2 years either side if I run out",
+  "filtersDistanceFallback": "See people slightly further away if I run out",
+  "filtersVerifiedHeading": "Have they verified themselves?",
+  "filtersVerifiedOnly": "Verified profiles only",
+  "filtersVerifiedNote": "Only people who have verified their photos.",
+  "filtersWhatsThis": "What’s photo verification?",
+  "filtersAdvancedLocked": "Advanced filters are part of Premium",
+  "filtersAdvancedLockedBody": "Narrow down by height, intentions and more. In this demo Premium is simulated: no payment is taken.",
+  "premiumSee": "See Premium",
+  "filtersHeightHeading": "What is their height?",
+  "filtersHeight": "Height",
+  "filtersAny": "Any",
+  "filtersTallerThan": "Taller than {cm} cm",
+  "@filtersTallerThan": {
+    "placeholders": {
+      "cm": {
+        "type": "int"
+      }
+    }
+  },
+  "filtersIntentionsHeading": "What do they want from their dates?",
+  "filtersMoreHeading": "More filters",
+  "filtersAddFilter": "Add",
+  "filtersAdvancedFallback": "Show other people if I run out",
+  "filtersBasic": "Basic",
+  "filtersAdvanced": "Advanced",
+  "filtersUsingFallback": "Nobody fits exactly, so people just outside your filters will show.",
+  "discoverSuperSentLeft": "{count, plural, =1{SuperSwipe sent to {name}. 1 left} other{SuperSwipe sent to {name}. {count} left}}",
+  "@discoverSuperSentLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "name": {}
+    }
+  },
+  "forYouOpen": "For you: today’s picks",
+  "discoverFallbackTitle": "Showing people just outside your filters",
+  "discoverFallbackBody": "Nobody fit exactly, so your “if I run out” settings are on.",
+  "forYouTitle": "For you",
+  "forYouRefresh": "{hours, plural, =1{New picks in 1 hour} other{New picks in {hours} hours}}",
+  "@forYouRefresh": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "forYouLede": "People you have the most in common with, picked once a day.",
+  "forYouEmptyTitle": "You’ve seen today’s picks",
+  "forYouEmptyBody": "{hours, plural, =1{New people arrive in 1 hour.} other{New people arrive in {hours} hours.}}",
+  "@forYouEmptyBody": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "forYouBackHome": "Back to Home",
+  "forYouOpenProfile": "Open {name}’s profile",
+  "@forYouOpenProfile": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "forYouInCommon": "{count, plural, =0{Picked for you} =1{1 thing in common} other{{count} things in common}}",
+  "@forYouInCommon": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "forYouLike": "Like {name}",
+  "@forYouLike": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "forYouRationale": "Based on your interests and who you’ve liked. Sample profiles.",
+  "likeAction": "Like",
+  "personMissingTitle": "This profile isn’t available",
+  "personMissingBody": "It may have been removed. Go back to keep exploring.",
+  "heightValue": "{cm} cm",
+  "@heightValue": {
+    "placeholders": {
+      "cm": {
+        "type": "int"
+      }
+    }
+  },
+  "appealHint": "Tell us what happened. Be as specific as you can.",
+  "appealLabel": "Your appeal",
+  "appealPlaceholder": "I think this was a mistake because…",
+  "appealSend": "Send appeal",
+  "appealSentTitle": "Appeal saved",
+  "appealSentBody": "In this demo nothing is sent or reviewed. In the real app a person reviews appeals and replies by email.",
+  "blockedAccountTitle": "Account on hold",
+  "blockedAccountHeading": "Your account has been blocked",
+  "blockedAccountBody": "We found activity that goes against our guidelines. You can appeal within 6 months. This is a preview of a screen the server would show.",
+  "completionTitle": "Complete your profile",
+  "completionPercent": "{percent}% complete",
+  "@completionPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "completionLede": "Profiles with more to talk about get more matches. Pick up where you like.",
+  "completionDone": "Your profile is complete. Nice work.",
+  "completionPhotos": "Photos",
+  "completionPrompts": "Prompts",
+  "completionInterests": "Interests",
+  "completionBio": "Bio",
+  "completionAbout": "About you",
+  "completionMore": "More about you",
+  "completionProgress": "{done} of {total} added",
+  "@completionProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "contactTopic": "What’s it about?",
+  "contactTopicAccount": "My account",
+  "contactTopicSafety": "Safety or someone’s behaviour",
+  "contactTopicVerification": "Photo verification",
+  "contactTopicBilling": "Premium and billing",
+  "contactTopicOther": "Something else",
+  "contactMessage": "Your message",
+  "contactSend": "Send message",
+  "contactDemoNote": "Demo build: your message stays on this device and nobody reads it.",
+  "contactSentTitle": "Message saved",
+  "contactSentBody": "In this demo nothing is sent. In the real app, support replies within a day.",
+  "deleteHeading": "Delete your account?",
+  "deleteLede": "Before you go, tell us why. It helps us improve.",
+  "deleteWhy": "Why are you leaving?",
+  "deleteSnoozeTitle": "Just need a break?",
+  "deleteSnoozeBody": "Snooze hides your profile and keeps your matches and chats.",
+  "deleteSnoozeAction": "Snooze instead",
+  "deleteC1": "Your profile is hidden from everyone straight away",
+  "deleteC2": "Your matches and messages are removed",
+  "deleteC3": "You can restore everything for 28 days by signing in again",
+  "deleteSubscriptionTitle": "Your Premium plan won’t be cancelled",
+  "deleteSubscriptionBody": "Cancel it in your app store first. In this demo there is no real subscription.",
+  "deleteContinue": "Continue",
+  "deleteHelp": "What happens when I delete?",
+  "deleteRestoreNote": "Changed your mind? Sign in with the same number within 28 days to restore it.",
+  "demoHubTitle": "Demo hub",
+  "demoHubBanner": "Development build only",
+  "demoHubBody": "Jump to any screen, switch the sample data and try each state. Everything here is local and simulated.",
+  "demoStart": "Start",
+  "demoQuickStart": "Quick start as Alex (sample account)",
+  "demoQuickStartNote": "Skips sign-up with a finished sample profile and a fictional 555 number.",
+  "demoSignedIn": "You’re signed in. Quick start replaces this session with the sample account.",
+  "demoWorld": "Sample world",
+  "demoWorldFull": "Full demo",
+  "demoWorldFullBody": "12 profiles, 7 likes, matches in the queue (one expiring soon, one expired) and 3 sample conversations",
+  "demoWorldFresh": "Brand-new account",
+  "demoWorldFreshBody": "7 profiles, 5 likes, no matches or conversations",
+  "demoReset": "Reset demo data",
+  "demoResetDone": "Demo data reset",
+  "demoSwitches": "Switches",
+  "demoPremium": "Premium (simulated)",
+  "demoPremiumNote": "Unlocks Premium features without the paywall",
+  "demoApproveVerification": "Approve the next verification",
+  "demoApproveOn": "The next selfie is approved",
+  "demoApproveOff": "The next selfie is declined",
+  "demoResetVerification": "Reset photo verification",
+  "demoAreaAccount": "Account and onboarding",
+  "demoAreaDiscover": "Discover",
+  "demoAreaMatching": "Likes, matches and messages",
+  "demoAreaProfile": "Profile",
+  "demoAreaSettings": "Settings, safety and help",
+  "demoWelcome": "Welcome",
+  "demoRestoreHow": "Account restore: delete the account in Settings, then sign in again with the same number.",
+  "demoSampleProfile": "A sample profile with Like and Pass",
+  "demoLikeProfile": "A like’s profile (Maya)",
+  "demoMatchScreen": "Match celebration (Maya)",
+  "demoChatHistory": "Conversation with history (Priya)",
+  "demoChatNew": "New match, 21 hours left (Jo)",
+  "demoChatExpiring": "Match about to expire (Lina)",
+  "demoChatExpired": "Expired match (Ollie)",
+  "demoFullOnly": "The named matches and conversations exist in the full demo.",
+  "demoNeedsSession": "Sign in or use Quick start first",
+  "demoNotFound": "A link that doesn’t exist",
+  "editAdd": "Add",
+  "editAddPrompt": "Add a prompt",
+  "editPromptsSection": "Prompts",
+  "editPromptsHint": "{count, plural, =1{1 of 3 added. Prompts give people something to reply to.} other{{count} of 3 added. Prompts give people something to reply to.}}",
+  "@editPromptsHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editBio": "Bio",
+  "editBioHint": "A short, punchy intro.",
+  "editBioAdd": "Write a short intro",
+  "editBioPlaceholder": "Weekend baker, weekday spreadsheet wrangler…",
+  "editBioTipTitle": "Show your personality",
+  "editBioTip": "Share a quirk, an interest or a bit of humour to help you stand out.",
+  "editClear": "Remove",
+  "editGender": "Gender",
+  "editGenderMore": "Add more about your gender",
+  "editGenderLegend": "Which describes you best?",
+  "editGenderShow": "Show my gender on my profile",
+  "editGenderShowNote": "You can change this any time.",
+  "editHeight": "Height",
+  "editLanguages": "Languages",
+  "editLanguagesHint": "{count} of {total} chosen",
+  "@editLanguagesHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "editMoreAbout": "More about you",
+  "editMoreAboutNote": "Answer only what you’re comfortable sharing. Some answers help with filters.",
+  "editMoreSection": "More",
+  "editPreferNotToSay": "Prefer not to say",
+  "editPreview": "Preview profile",
+  "editVerify": "Verify my profile",
+  "featureLikes": "Like as many people as you want",
+  "featureSeeLikes": "See who liked you",
+  "featureExtend": "Unlimited Extends",
+  "featureRematch": "Rematch with expired matches",
+  "featureAdvancedFilters": "Advanced filters",
+  "featureIncognito": "Incognito",
+  "featureTravel": "Travel mode",
+  "featureSuperSwipes": "5 extra SuperSwipes",
+  "helpTitle": "Help centre",
+  "helpSearch": "Search help",
+  "helpTopics": "Topics",
+  "helpNoResults": "Try another word, or contact us.",
+  "helpStillStuck": "Still stuck?",
+  "helpContact": "Contact support",
+  "helpMissing": "That article doesn’t exist any more.",
+  "incognito": "Incognito",
+  "incognitoOn": "Only people you like can see you",
+  "incognitoOff": "Off",
+  "incognitoNote": "With Incognito, only people you’ve liked can see your profile.",
+  "logoutTitle": "Log out?",
+  "logoutBody": "In this demo, logging out clears your profile and sample data from this device.",
+  "yes": "yes",
+  "no": "no",
+  "notFoundTitle": "This page isn’t here",
+  "notFoundBody": "The link may be old or mistyped. Nothing was lost.",
+  "notFoundStart": "Back to the start",
+  "notificationsMore": "More notification settings",
+  "notifMatches": "New matches",
+  "notifExpiring": "Matches about to expire",
+  "notifTips": "Tips and news",
+  "notifPush": "Push",
+  "notifInApp": "In-app",
+  "notifEmail": "Email",
+  "notifNoEmail": "No email address on file",
+  "notifWarning": "Turning these off might mean you miss alerts from your matches.",
+  "notifEmailNote": "Push isn’t connected in this build, so these are saved as preferences only.",
+  "openingMovesTitle": "Opening Moves",
+  "openingMovesHeading": "Your Opening Moves",
+  "openingMovesLede": "Skip the “hey”. Choose up to three questions your new matches can answer.",
+  "openingMovesCount": "{count} of 3",
+  "@openingMovesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "openingMovesNote": "Your matches see one Opening Move when you match. They can answer it or start their own way.",
+  "openingMoveFirst": "First Opening Move",
+  "openingMoveSecond": "Second Opening Move",
+  "openingMoveThird": "Third Opening Move",
+  "openingMoveEditTitle": "Write your Opening Move",
+  "openingMoveLabel": "Your question",
+  "openingMoveSuggestions": "Need an idea?",
+  "openingMoveRemove": "Remove Opening Move",
+  "openingMoveRemoved": "Opening Move removed",
+  "paywallTitle": "Get more with Premium",
+  "paywallForFilters": "Advanced filters come with Premium",
+  "paywallForRematch": "Rematch comes with Premium",
+  "paywallForExtend": "Unlimited Extends come with Premium",
+  "paywallForIncognito": "Incognito comes with Premium",
+  "paywallForTravel": "Travel mode comes with Premium",
+  "paywallForSuperSwipes": "You’re out of SuperSwipes",
+  "paywallLede": "Premium in this demo is simulated: no store is connected and no payment is taken.",
+  "paywallPlans": "Choose a plan",
+  "paywallChoose": "Choose a plan to continue",
+  "paywallContinue": "Continue with {plan} · {price}",
+  "@paywallContinue": {
+    "placeholders": {
+      "plan": {},
+      "price": {}
+    }
+  },
+  "paywallLegal": "Demo only. In a real build, plans renew automatically until cancelled in your app store. Prices are illustrative.",
+  "paywallConfirmTitle": "Simulated purchase",
+  "paywallConfirmBody": "{plan} for {price}. This is a demo: nothing is charged and no store is contacted.",
+  "@paywallConfirmBody": {
+    "placeholders": {
+      "plan": {},
+      "price": {}
+    }
+  },
+  "paywallConfirmBuy": "Complete demo purchase",
+  "paywallConfirmFail": "Simulate a failed payment",
+  "paywallFailedTitle": "The payment didn’t go through",
+  "paywallFailedBody": "Simulated failure. Nothing was charged and your plan is still selected. Try again when you’re ready.",
+  "paywallSuccessTitle": "You’re all set",
+  "paywallAlreadyTitle": "Premium is active",
+  "paywallSuccessBody": "Premium is active until {date}. Demo only: no payment was taken.",
+  "@paywallSuccessBody": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "paywallRestore": "Restore purchases",
+  "paywallRestoreNone": "No store is connected in this demo, so there’s nothing to restore.",
+  "premiumName": "Numaya Premium",
+  "premiumActive": "Active",
+  "premiumActiveUntil": "Active until {date}",
+  "@premiumActiveUntil": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "premiumActivePlan": "{plan} plan, simulated. Cancel any time below.",
+  "@premiumActivePlan": {
+    "placeholders": {
+      "plan": {}
+    }
+  },
+  "premiumCardBody": "Advanced filters, Rematch, unlimited Extends, Incognito and Travel.",
+  "premiumExplore": "Explore Premium",
+  "premiumManage": "Manage",
+  "premiumHeroTitle": "More ways to meet the right people",
+  "premiumHeroBody": "Everything in Numaya stays free. Premium adds control and extra time.",
+  "premiumYourExtras": "Your extras",
+  "premiumSuperSwipesLeft": "SuperSwipes left",
+  "premiumCompare": "What you get",
+  "premiumFree": "Free",
+  "premiumShort": "Premium",
+  "premiumSeePlans": "See plans",
+  "premiumCancelDemo": "Cancel demo plan",
+  "premiumCancelled": "Demo plan cancelled",
+  "premiumDemoNote": "Demo build: prices and plans are illustrative and nothing is charged.",
+  "premiumHelp": "Billing and cancelling",
+  "premiumOnly": "Premium",
+  "previewTitle": "Preview",
+  "previewBadge": "Preview",
+  "previewInfoTitle": "This is how others see you",
+  "previewInfoBody": "Only what you’ve added is shown. Hidden fields stay hidden.",
+  "previewEdit": "Back to editing",
+  "privacyTitle": "Profile visibility",
+  "privacyShowTitle": "On your profile",
+  "privacyShowAge": "Show my age",
+  "privacyShowDistance": "Show my distance",
+  "privacyShowNote": "Your age is still used for matching, even when it’s hidden.",
+  "privacyWhoSees": "Who can see you",
+  "profileComplete": "Complete profile",
+  "profileCompletionLabel": "Profile {percent}% complete",
+  "@profileCompletionLabel": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "profileInterestsTitle": "Interests",
+  "profileYourProfile": "Your profile",
+  "profileSafetySupport": "Safety and support",
+  "promptRemove": "Remove prompt",
+  "promptRemoved": "Prompt removed",
+  "restoreTitle": "Welcome back",
+  "restoreBody": "Your account was deleted recently. You can restore it, with your profile, until {date}.",
+  "@restoreBody": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "restoreAction": "Restore my account",
+  "restoreStartOver": "Start a new profile instead",
+  "restoreDone": "Your account is back",
+  "safetyTitle": "Safety and wellbeing",
+  "safetyHeading": "Date with confidence",
+  "safetyLede": "Tips for meeting people, and the tools that keep you in control.",
+  "safetyTip1Title": "Keep it on Numaya at first",
+  "safetyTip1Body": "Chat here until you feel comfortable. Never send money or share financial details.",
+  "safetyTip2Title": "Meet in public",
+  "safetyTip2Body": "Tell a friend your plans and arrange your own way there and back.",
+  "safetyTip3Title": "Report anything that feels off",
+  "safetyTip3Body": "Reports are anonymous. Blocking someone means you won’t see each other again.",
+  "safetyTools": "Your tools",
+  "settingsLocation": "Location",
+  "settingsLocationNote": "Location isn’t read in this build; the sample area stands in for it.",
+  "settingsCurrentLocation": "Current location",
+  "settingsSampleLocation": "Hackney, London (sample)",
+  "settingsHelpLegal": "Help and legal",
+  "snoozeTitle": "Snooze",
+  "snoozeBody": "Hide your profile from new people for a while. You keep your matches and chats.",
+  "snoozeHowLong": "How long?",
+  "snooze24h": "24 hours",
+  "snooze72h": "72 hours",
+  "snoozeWeek": "A week",
+  "snoozeIndefinite": "Until I turn it off",
+  "snoozeNoStatus": "No thanks",
+  "snoozeUntil": "Until {date}",
+  "@snoozeUntil": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "travelTitle": "Travel",
+  "travelBody": "Planning a trip? Meet people there before you go. Demo: changes the sample location only.",
+  "travelPick": "Where are you going?",
+  "travelOff": "Turn off Travel",
+  "travelOffValue": "Off",
+  "travelOnValue": "On",
+  "travelSet": "Travel set to {city}",
+  "@travelSet": {
+    "placeholders": {
+      "city": {}
+    }
+  },
+  "travelEnded": "Travel turned off",
+  "verifyIntroTitle": "Show them it’s really you",
+  "verifyIntroBody": "Copy a pose and take a selfie. When it matches your photos, a badge goes on your profile.",
+  "verifyDemoTitle": "Simulated in this demo",
+  "verifyDemoBody": "The camera isn’t used and nobody reviews the photo. The result appears after a few seconds.",
+  "verifyStart": "Let’s get verified",
+  "verifyHelp": "How does verification work?",
+  "verifyCopyPose": "Copy this pose",
+  "verifyViewfinderLabel": "Camera preview. Pose to copy: {pose}",
+  "@verifyViewfinderLabel": {
+    "placeholders": {
+      "pose": {}
+    }
+  },
+  "verifyCameraOff": "The camera isn’t connected in this demo. Take a demo selfie to continue.",
+  "verifyTakeSelfie": "Take demo selfie",
+  "verifyOtherPose": "Show me a different pose",
+  "verifyReviewTitle": "Happy with it?",
+  "verifyReviewBody": "Your selfie is compared with your profile photos. It isn’t shown on your profile.",
+  "verifyDemoSelfie": "Demo selfie (placeholder)",
+  "verifyRetake": "Retake",
+  "verifyPendingTitle": "Checking your selfie",
+  "verifyPendingBody": "Usually a few minutes. In this demo the review is simulated and takes a few seconds.",
+  "verifyDoneTitle": "You’re verified",
+  "verifyDoneBody": "The badge is on your profile. People who filter for verified profiles can now see you.",
+  "verifyRejectedTitle": "We couldn’t verify you",
+  "verifyRejectedBody": "{count, plural, =1{The pose didn’t match. You have 1 more try.} other{The pose didn’t match. You have {count} more tries.}}",
+  "@verifyRejectedBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "verifyRejectedSupport": "After three tries, a person can help. Contact support and we’ll sort it out.",
+  "verifyTipsTitle": "Tips",
+  "verifyTip1": "Find good, even light",
+  "verifyTip2": "Keep your face and hand in the frame",
+  "verifyTip3": "Copy the pose exactly",
+  "verifyTryAgain": "Try again",
+  "verifyStatusNone": "Not verified",
+  "verifyStatusPending": "In review",
+  "verifyStatusRejected": "Try again",
+  "verifyStatusVerified": "Verified",
+  "photoVerifyTitle": "Photo verification",
+  "photoVerifySubmit": "Submit for review",
+  "demoHubOpen": "Demo build. Open the demo hub",
+  "matchTheirMove": "{name}’s Opening Move: “{move}”",
+  "@matchTheirMove": {
+    "placeholders": {
+      "move": {},
+      "name": {}
+    }
+  },
+  "photoMoveEarlier": "Move earlier",
+  "photoMoveLater": "Move later",
+  "photoReplace": "Replace with a new placeholder",
+  "photoMoved": "Photo order updated",
+  "photoReplaced": "Photo replaced (placeholder: upload isn’t connected)"
 }

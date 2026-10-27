@@ -95,6 +95,10 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
 
   Future<void> _handOver(AuthSession session) async {
     final l10n = context.l10n;
+    if (session.restorableUntil != null) {
+      context.go(Routes.restore);
+      return;
+    }
     if (session.hasProfile) {
       await ref.read(onboardingProvider.notifier).restore();
       if (!mounted) return;

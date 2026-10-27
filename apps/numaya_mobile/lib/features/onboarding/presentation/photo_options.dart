@@ -19,9 +19,23 @@ Future<bool> showPhotoOptions(
   final controller = ref.read(onboardingProvider.notifier);
   final photos = ref.read(onboardingProvider).draft.photos;
   final isMain = photos.isNotEmpty && photos.first.id == photoId;
+  final isLast = photos.isNotEmpty && photos.last.id == photoId;
   final actions = [
     if (!isMain)
       (icon: NumayaIcons.star, label: l10n.photoMakeMain, destructive: false),
+    if (!isMain)
+      (
+        icon: NumayaIcons.chevronLeft,
+        label: l10n.photoMoveEarlier,
+        destructive: false,
+      ),
+    if (!isLast)
+      (
+        icon: NumayaIcons.chevronRight,
+        label: l10n.photoMoveLater,
+        destructive: false,
+      ),
+    (icon: NumayaIcons.refresh, label: l10n.photoReplace, destructive: false),
     (icon: NumayaIcons.trash, label: l10n.photoRemove, destructive: true),
   ];
   final choice = await showNumayaActionSheet(
@@ -30,9 +44,20 @@ Future<bool> showPhotoOptions(
     cancelLabel: l10n.cancel,
   );
   if (choice == null || !context.mounted) return false;
-  if (actions[choice].label == l10n.photoMakeMain) {
+  final label = actions[choice].label;
+  if (label == l10n.photoMakeMain) {
     controller.makeMain(photoId);
     NumayaToast.show(context, l10n.photoMadeMain);
+    return true;
+  }
+  if (label == l10n.photoMoveEarlier || label == l10n.photoMoveLater) {
+    controller.movePhoto(photoId, label == l10n.photoMoveEarlier ? -1 : 1);
+    NumayaToast.show(context, l10n.photoMoved);
+    return true;
+  }
+  if (label == l10n.photoReplace) {
+    controller.replacePhoto(photoId);
+    NumayaToast.show(context, l10n.photoReplaced);
     return true;
   }
   if (keepMinimum && photos.length <= ProfileRules.minPhotos) {

@@ -33,6 +33,7 @@ class _ReportForm extends ConsumerStatefulWidget {
 
 class _ReportFormState extends ConsumerState<_ReportForm> {
   String? _reason;
+  String? _part;
   bool _block = true;
   bool _done = false;
   final _details = TextEditingController();
@@ -96,6 +97,21 @@ class _ReportFormState extends ConsumerState<_ReportForm> {
                       ),
                   ],
                 ),
+                // B-51: content reasons ask where it was seen.
+                if (_reason == kReportReasons[1]) ...[
+                  const SizedBox(height: AppSpacing.fieldGap),
+                  OptionGroup(
+                    legend: l10n.reportWhere,
+                    children: [
+                      for (final p in kReportParts)
+                        OptionCard(
+                          label: p,
+                          selected: _part == p,
+                          onTap: () => setState(() => _part = p),
+                        ),
+                    ],
+                  ),
+                ],
                 const SizedBox(height: AppSpacing.fieldGap),
                 NumayaTextField(
                   label: l10n.reportDetails,
@@ -126,7 +142,13 @@ class _ReportFormState extends ConsumerState<_ReportForm> {
               : () {
                   ref
                       .read(datingProvider.notifier)
-                      .report(widget.person.id, _reason!, block: _block);
+                      .report(
+                        widget.person.id,
+                        _reason!,
+                        block: _block,
+                        part: _part,
+                        details: _details.text,
+                      );
                   setState(() => _done = true);
                 },
         ),
@@ -223,4 +245,76 @@ Future<UnmatchChoice?> showUnmatchSheet(
       ],
     ),
   );
+}
+
+/// "Did you meet?" (B-55): kept on this device; the other person never sees it.
+Future<void> showDidYouMeetSheet(
+  BuildContext context,
+  WidgetRef ref,
+  SamplePerson person,
+) async {
+  final l10n = context.l10n;
+  final met = await showNumayaSheet<bool>(
+    context: context,
+    title: l10n.didMeetTitle(person.name),
+    closeLabel: l10n.close,
+    builder: (context) => Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          l10n.didMeetBody(person.name),
+          style: AppTypography.body.copyWith(color: AppColors.textSecondary),
+        ),
+        const SizedBox(height: AppSpacing.s5),
+        NumayaButton(
+          label: l10n.didMeetYes,
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+        const SizedBox(height: AppSpacing.s3),
+        NumayaButton(
+          label: l10n.didMeetNo,
+          variant: NumayaButtonVariant.secondary,
+          onPressed: () => Navigator.of(context).pop(false),
+        ),
+      ],
+    ),
+  );
+  if (met == null || !context.mounted) return;
+  ref.read(datingProvider.notifier).recordMeeting(person.id, met: met);
+  NumayaToast.show(context, l10n.didMeetThanks);
+}
+
+/// After unmatching (B-54): an optional reason, kept on this device.
+Future<void> showUnmatchReasonSheet(
+  BuildContext context,
+  WidgetRef ref,
+  SamplePerson person,
+) async {
+  final l10n = context.l10n;
+  final reason = await showNumayaSheet<String>(
+    context: context,
+    title: l10n.unmatchedReasonTitle(person.name),
+    closeLabel: l10n.unmatchReasonSkip,
+    builder: (context) => Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          l10n.unmatchedReasonBody(person.name),
+          style: AppTypography.body.copyWith(color: AppColors.textSecondary),
+        ),
+        const SizedBox(height: AppSpacing.s4),
+        ListGroup(
+          children: [
+            for (final r in kUnmatchReasons)
+              ListRow(label: r, onTap: () => Navigator.of(context).pop(r)),
+          ],
+        ),
+      ],
+    ),
+  );
+  if (reason == null || !context.mounted) return;
+  ref.read(datingProvider.notifier).recordUnmatchReason(person.id, reason);
+  NumayaToast.show(context, l10n.unmatchReasonThanks);
 }

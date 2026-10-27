@@ -109,6 +109,25 @@ class OnboardingController extends Notifier<OnboardingState> {
     _update(state.draft.copyWith(photos: photos));
   }
 
+  /// Moves a photo one place earlier (-1) or later (+1) ("Hold and drag to reorder", B-15).
+  void movePhoto(int id, int delta) {
+    final photos = [...state.draft.photos];
+    final i = photos.indexWhere((p) => p.id == id);
+    final j = i + delta;
+    if (i < 0 || j < 0 || j >= photos.length) return;
+    photos.insert(j, photos.removeAt(i));
+    _update(state.draft.copyWith(photos: photos));
+  }
+
+  /// Replaces a photo in place with a new placeholder (no upload service in this build).
+  void replacePhoto(int id) {
+    final photos = [...state.draft.photos];
+    final i = photos.indexWhere((p) => p.id == id);
+    if (i < 0) return;
+    photos[i] = DraftPhoto(id: ++_photoIds, tone: (photos[i].tone + 1) % 4);
+    _update(state.draft.copyWith(photos: photos));
+  }
+
   void completeStep(SetupStep step) =>
       state = state.copyWith(completed: {...state.completed, step});
 
@@ -133,6 +152,30 @@ class OnboardingController extends Notifier<OnboardingState> {
   Future<void> saveEdits() async {
     _beforeEdit = null;
     await finish();
+  }
+
+  /// Demo Hub quick start: a finished sample profile (fictional).
+  void loadSample() {
+    _photoIds = 4;
+    state = OnboardingState(
+      draft: const ProfileDraft(
+        firstName: 'Alex',
+        birthYear: '1996',
+        gender: Gender.woman,
+        lookingFor: {LookingFor.longTerm},
+        interests: ['Jazz', 'Cooking', 'Travel'],
+        prompt: PromptAnswer(
+          question: 'A perfect first date',
+          answer: 'A record shop, a long walk, and nowhere to be after.',
+        ),
+        photos: [
+          DraftPhoto(id: 1, tone: 0),
+          DraftPhoto(id: 2, tone: 1),
+          DraftPhoto(id: 3, tone: 2),
+        ],
+      ),
+      completed: SetupStep.values.toSet(),
+    );
   }
 
   /// A returning member signed in: load their saved profile.

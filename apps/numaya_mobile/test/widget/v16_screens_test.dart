@@ -140,12 +140,25 @@ void main() {
     await _tap(tester, find.bySemanticsLabel('Settings'));
     await tester.pump(const Duration(milliseconds: 600));
     await _tap(tester, find.text('Delete account'));
-    await tester.pumpAndSettle();
-    expect(find.text('Delete your account?'), findsOneWidget);
-    await _tap(tester, find.text('Cancel'));
     await tester.pump(const Duration(milliseconds: 600));
-    expect(find.text('Delete your account?'), findsNothing);
-    await _tap(tester, find.text('Delete account'));
+    // B-75: a reason first; Continue waits for one.
+    expect(find.text('I met someone'), findsOneWidget);
+    final cont = find.widgetWithText(NumayaButton, 'Continue');
+    expect(tester.widget<NumayaButton>(cont).onPressed, isNull);
+    await _tap(tester, find.text('I met someone'));
+    await _tap(tester, cont);
+    await tester.pumpAndSettle();
+    expect(
+      find.text(
+        'Changed your mind? Sign in with the same number within 28 days to restore it.',
+      ),
+      findsOneWidget,
+    );
+    await _tap(tester, find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('within 28 days to restore'), findsNothing);
+    expect(find.text('I met someone'), findsOneWidget);
+    await _tap(tester, cont);
     await tester.pumpAndSettle();
     await _tap(tester, find.widgetWithText(NumayaButton, 'Delete account'));
     await settle(tester);

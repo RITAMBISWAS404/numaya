@@ -214,6 +214,19 @@ void main() {
     expect(find.text('Unmatch Maya?'), findsOneWidget);
     await tapOn(tester, find.widgetWithText(NumayaButton, 'Unmatch'));
     await tester.pumpAndSettle();
+    // B-54: an optional reason, kept on this device.
+    expect(
+      find.text(
+        'Could you tell us why? Your answer stays on this device and Maya won’t know.',
+      ),
+      findsOneWidget,
+    );
+    await tapOn(tester, find.text('They didn’t reply'));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('Thanks. Your answer is saved on this device.'),
+      findsOneWidget,
+    );
     expect(find.text('You’ve unmatched Maya'), findsOneWidget);
     await tapOn(tester, find.widgetWithText(NumayaButton, 'Back to messages'));
     await tester.pump(const Duration(milliseconds: 600));
@@ -344,6 +357,16 @@ void main() {
     await tapOn(tester, find.bySemanticsLabel('Settings').first);
     await tester.pump(const Duration(milliseconds: 600));
     await tapOn(tester, find.bySemanticsLabel(RegExp('^Snooze')));
+    await tester.pumpAndSettle();
+    // B-71: how long, then an optional away status.
+    await tapOn(tester, find.text('72 hours'));
+    await tester.pumpAndSettle();
+    await tapOn(tester, find.text('I’m travelling'));
+    await tester.pumpAndSettle();
+    expect(
+      find.bySemanticsLabel(RegExp('Until .*I’m travelling')),
+      findsOneWidget,
+    );
     await tapOn(tester, find.bySemanticsLabel('Back'));
     await tester.pump(const Duration(milliseconds: 600));
     await openTab(tester, 'Home');

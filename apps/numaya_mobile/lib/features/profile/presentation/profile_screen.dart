@@ -8,6 +8,10 @@ import '../../../l10n/l10n.dart';
 import '../../home/presentation/home_shell.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/domain/profile_draft.dart';
+import '../../premium/application/premium_controller.dart';
+import '../../verification/application/verification_controller.dart';
+import '../application/profile_details_controller.dart';
+import '../domain/profile_details.dart';
 
 /// B-23 Profile tab in V16's layout (screenshot 099-profile): the page title with a round settings
 /// button, a navy initials avatar, the name on the hero scale, a summary line, interest chips, an
@@ -20,6 +24,10 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final draft = ref.watch(onboardingProvider.select((s) => s.draft));
+    final details = ref.watch(profileDetailsProvider);
+    final premium = ref.watch(premiumProvider);
+    final verification = ref.watch(photoVerificationProvider).status;
+    final completion = ProfileCompletion.of(draft, details).percent;
     final age = draft.ageIn(ref.read(onboardingProvider.notifier).currentYear);
     final gender = switch (draft.gender) {
       Gender.woman => l10n.genderWoman,
@@ -52,6 +60,12 @@ class ProfileScreen extends ConsumerWidget {
                   title: l10n.tabProfile,
                   actions: [
                     NavIconButton(
+                      icon: NumayaIcons.help,
+                      label: l10n.helpTitle,
+                      onPressed: () => context.push(Routes.help),
+                    ),
+                    const SizedBox(width: AppSpacing.s2),
+                    NavIconButton(
                       icon: NumayaIcons.settings,
                       label: l10n.profileSettings,
                       onPressed: () => context.push(Routes.settings),
@@ -70,9 +84,10 @@ class ProfileScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Center(
-                          child: Semantics(
-                            label: l10n.profileInitialLabel,
-                            excludeSemantics: true,
+                          child: CompletionRing(
+                            percent: completion,
+                            label: l10n.profileCompletionLabel(completion),
+                            size: AppSizes.avatar + 16,
                             child: Container(
                               width: AppSizes.avatar,
                               height: AppSizes.avatar,
@@ -133,14 +148,28 @@ class ProfileScreen extends ConsumerWidget {
                           ),
                         ],
                         const SizedBox(height: AppSpacing.s4),
-                        Center(
-                          child: NumayaButton(
-                            label: l10n.profileEdit,
-                            small: true,
-                            variant: NumayaButtonVariant.secondary,
-                            icon: NumayaIcons.edit,
-                            onPressed: () => context.push(Routes.editProfile),
-                          ),
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: AppSpacing.s2,
+                          runSpacing: AppSpacing.s2,
+                          children: [
+                            if (completion < 100)
+                              NumayaButton(
+                                label: l10n.profileComplete,
+                                small: true,
+                                expand: false,
+                                onPressed: () =>
+                                    context.push(Routes.completion),
+                              ),
+                            NumayaButton(
+                              label: l10n.profileEdit,
+                              small: true,
+                              expand: false,
+                              variant: NumayaButtonVariant.secondary,
+                              icon: NumayaIcons.edit,
+                              onPressed: () => context.push(Routes.editProfile),
+                            ),
+                          ],
                         ),
                         if (draft.prompt != null) ...[
                           const SizedBox(height: AppSpacing.sectionGap),
@@ -168,6 +197,62 @@ class ProfileScreen extends ConsumerWidget {
                             ),
                           ),
                         ],
+                        const SizedBox(height: AppSpacing.sectionGap),
+                        ListGroup(
+                          title: l10n.profileYourProfile,
+                          children: [
+                            ListRow(
+                              leading: NumayaIcons.public,
+                              label: l10n.editPreview,
+                              onTap: () => context.push(Routes.preview),
+                            ),
+                            ListRow(
+                              leading: NumayaIcons.message,
+                              label: l10n.openingMovesTitle,
+                              value: l10n.openingMovesCount(
+                                details.openingMoves.length,
+                              ),
+                              onTap: () => context.push(Routes.openingMoves),
+                            ),
+                            ListRow(
+                              leading: NumayaIcons.verified,
+                              label: l10n.editVerify,
+                              value: switch (verification) {
+                                PhotoVerificationStatus.verified =>
+                                  l10n.verifyStatusVerified,
+                                PhotoVerificationStatus.pending =>
+                                  l10n.verifyStatusPending,
+                                PhotoVerificationStatus.rejected =>
+                                  l10n.verifyStatusRejected,
+                                PhotoVerificationStatus.notStarted =>
+                                  l10n.verifyStatusNone,
+                              },
+                              onTap: () => context.push(Routes.verifyPhoto),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: AppSpacing.sectionGap),
+                        _PremiumCard(
+                          active: premium.active,
+                          until: premium.activeUntil,
+                          onTap: () => context.push(Routes.premium),
+                        ),
+                        const SizedBox(height: AppSpacing.sectionGap),
+                        ListGroup(
+                          title: l10n.profileSafetySupport,
+                          children: [
+                            ListRow(
+                              leading: NumayaIcons.shield,
+                              label: l10n.safetyTitle,
+                              onTap: () => context.push(Routes.safety),
+                            ),
+                            ListRow(
+                              leading: NumayaIcons.help,
+                              label: l10n.helpTitle,
+                              onTap: () => context.push(Routes.help),
+                            ),
+                          ],
+                        ),
                         const SizedBox(height: AppSpacing.sectionGap),
                         ListGroup(
                           title: l10n.profileAccount,
@@ -227,6 +312,72 @@ class _StaticChip extends StatelessWidget {
             const SizedBox(width: 6),
           ],
           Text(label, style: AppTypography.card),
+        ],
+      ),
+    );
+  }
+}
+
+/// The Premium entry (B-23 pay-plan card): what it adds, or until when it's active.
+class _PremiumCard extends StatelessWidget {
+  const _PremiumCard({
+    required this.active,
+    required this.until,
+    required this.onTap,
+  });
+
+  final bool active;
+  final DateTime? until;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.s4),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.card),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const NumayaIcon(
+                NumayaIcons.premium,
+                size: 24,
+                color: AppColors.accent,
+              ),
+              const SizedBox(width: AppSpacing.s2),
+              Expanded(
+                child: Text(l10n.premiumName, style: AppTypography.emptyTitle),
+              ),
+              if (active)
+                StatusBadge(label: l10n.premiumActive, tone: BadgeTone.brand),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.s2),
+          Text(
+            active && until != null
+                ? l10n.premiumActiveUntil(
+                    MaterialLocalizations.of(context).formatMediumDate(until!),
+                  )
+                : l10n.premiumCardBody,
+            style: AppTypography.bodySm.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.s3),
+          NumayaButton(
+            label: active ? l10n.premiumManage : l10n.premiumExplore,
+            small: true,
+            expand: false,
+            variant: active
+                ? NumayaButtonVariant.secondary
+                : NumayaButtonVariant.primary,
+            onPressed: onTap,
+          ),
         ],
       ),
     );

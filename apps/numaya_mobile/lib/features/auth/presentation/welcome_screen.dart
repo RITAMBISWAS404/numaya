@@ -98,7 +98,17 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                       children: [
                         const Wordmark(),
                         const Spacer(),
-                        if (demo) const DemoBadge(),
+                        // Demo builds: the badge opens the Demo Hub (screen catalogue).
+                        if (demo)
+                          Pressable(
+                            onTap: () => context.push(Routes.demo),
+                            semanticLabel: l10n.demoHubOpen,
+                            excludeChildSemantics: true,
+                            child: const SizedBox(
+                              height: kMinInteractiveDimension,
+                              child: Center(child: DemoBadge()),
+                            ),
+                          ),
                       ],
                     ),
                   ),

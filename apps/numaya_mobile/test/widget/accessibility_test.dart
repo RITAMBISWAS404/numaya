@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:numaya_mobile/app/routes.dart';
 
 import '../helpers/journeys.dart';
 import '../helpers/test_app.dart';
@@ -84,5 +85,74 @@ void main() {
     await walkDatingScreens(tester, () async {
       expect(tester.takeException(), isNull);
     });
+  });
+
+  fullAppAccessibilityTests();
+}
+
+/// The full-app screens (Demo Hub, seeded inbox and chats, profile tools, premium, settings, help).
+const fullAppRoutes = [
+  Routes.demo,
+  Routes.messages,
+  '${Routes.chat}/priya',
+  '${Routes.chat}/jo',
+  '${Routes.chat}/ollie',
+  Routes.forYou,
+  Routes.profile,
+  Routes.completion,
+  Routes.editProfile,
+  Routes.preview,
+  Routes.openingMoves,
+  Routes.verifyPhoto,
+  Routes.premium,
+  Routes.paywall,
+  Routes.settings,
+  Routes.notifications,
+  Routes.privacy,
+  Routes.deleteAccount,
+  Routes.help,
+  '${Routes.help}/verification',
+  Routes.helpContact,
+  Routes.safety,
+  Routes.accountBlocked,
+  '/no-such-page',
+];
+
+void fullAppAccessibilityTests() {
+  testWidgets('full-app screens meet tap-target and label guidelines', (
+    tester,
+  ) async {
+    await usePhoneSize(tester);
+    final handle = tester.ensureSemantics();
+    final c = await quickStartApp(tester);
+    for (final route in fullAppRoutes) {
+      await goTo(c, tester, route);
+      await expectLater(
+        tester,
+        meetsGuideline(labeledTapTargetGuideline),
+        reason: route,
+      );
+      await expectLater(
+        tester,
+        meetsGuideline(androidTapTargetGuideline),
+        reason: route,
+      );
+    }
+    await settle(tester);
+    handle.dispose();
+  });
+
+  testWidgets('full-app screens lay out on a 375 × 667 phone at 130% text', (
+    tester,
+  ) async {
+    await usePhoneSize(tester, size: const Size(375, 667));
+    tester.platformDispatcher.textScaleFactorTestValue = 1.3;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    final c = await quickStartApp(tester);
+    for (final route in fullAppRoutes) {
+      await goTo(c, tester, route);
+      expect(tester.takeException(), isNull, reason: route);
+    }
+    await settle(tester);
   });
 }

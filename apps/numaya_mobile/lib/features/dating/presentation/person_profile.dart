@@ -18,11 +18,17 @@ class PersonHeroCard extends StatelessWidget {
     this.action,
     this.stamp,
     this.height,
+    this.own = false,
+    this.showAge = true,
   });
 
   final SamplePerson person;
   final Widget? action;
   final double? height;
+
+  /// The member's own profile in the preview: a "Preview" badge instead of "Sample profile".
+  final bool own;
+  final bool showAge;
 
   /// "Like" / "Pass" while dragging.
   final String? stamp;
@@ -83,7 +89,9 @@ class PersonHeroCard extends StatelessWidget {
                         runSpacing: 6,
                         children: [
                           StatusBadge(
-                            label: l10n.discoverSampleBadge,
+                            label: own
+                                ? l10n.previewBadge
+                                : l10n.discoverSampleBadge,
                             tone: BadgeTone.onDark,
                           ),
                           if (person.verified)
@@ -103,7 +111,9 @@ class PersonHeroCard extends StatelessWidget {
                       Semantics(
                         header: true,
                         child: Text(
-                          l10n.profileNameAge(person.name, person.age),
+                          showAge && person.age > 0
+                              ? l10n.profileNameAge(person.name, person.age)
+                              : person.name,
                           style: AppTypography.hero.copyWith(
                             color: AppColors.inkForeground,
                           ),
@@ -147,44 +157,62 @@ class PersonHeroCard extends StatelessWidget {
 
 /// The sections of a sample profile below the first photo, in the web order: prompt, about me,
 /// photo, you both like, photo, location, remaining photos.
-List<Widget> personSections(BuildContext context, SamplePerson person) {
+List<Widget> personSections(
+  BuildContext context,
+  SamplePerson person, {
+  bool own = false,
+  bool showDistance = true,
+}) {
   final l10n = context.l10n;
+  Widget prompt(({String question, String answer}) p) => ProfileSectionCard(
+    title: p.question,
+    leading: const PromptMark(),
+    child: Text(
+      p.answer,
+      style: AppTypography.weight(
+        AppTypography.section,
+        AppTypography.semibold,
+      ),
+    ),
+  );
   Widget photo(int position) => PhotoPlaceholder(
     label: l10n.discoverPhotoLabel(person.name, position),
     aspectRatio: 4 / 5,
   );
   final facts = [
     if (person.lookingFor != null) (NumayaIcons.heart, person.lookingFor!),
+    if (person.heightCm > 0)
+      (NumayaIcons.user, l10n.heightValue(person.heightCm)),
     if (person.languages != null) (NumayaIcons.message, person.languages!),
+    for (final d in person.details.values) (NumayaIcons.tag, d),
   ];
   final sections = <Widget>[
-    if (person.prompt != null)
-      ProfileSectionCard(
-        title: person.prompt!.question,
-        leading: const PromptMark(),
-        child: Text(
-          person.prompt!.answer,
-          style: AppTypography.weight(
-            AppTypography.section,
-            AppTypography.semibold,
-          ),
-        ),
-      ),
+    if (person.prompt != null) prompt(person.prompt!),
     if (facts.isNotEmpty)
       ProfileSectionCard(
         title: l10n.discoverAboutMe,
-        child: Wrap(
-          spacing: AppSpacing.s2,
-          runSpacing: AppSpacing.s2,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            for (final (icon, text) in facts) InfoChip(label: text, icon: icon),
+            if (person.bio != null) ...[
+              Text(person.bio!, style: AppTypography.body),
+              const SizedBox(height: AppSpacing.s3),
+            ],
+            Wrap(
+              spacing: AppSpacing.s2,
+              runSpacing: AppSpacing.s2,
+              children: [
+                for (final (icon, text) in facts)
+                  InfoChip(label: text, icon: icon),
+              ],
+            ),
           ],
         ),
       ),
     if (person.photoCount > 1) photo(2),
     if (person.shared.isNotEmpty)
       ProfileSectionCard(
-        title: l10n.discoverYouBothLike,
+        title: own ? l10n.profileInterestsTitle : l10n.discoverYouBothLike,
         child: Wrap(
           spacing: AppSpacing.s2,
           runSpacing: AppSpacing.s2,
@@ -195,32 +223,35 @@ List<Widget> personSections(BuildContext context, SamplePerson person) {
         ),
       ),
     if (person.photoCount > 2) photo(3),
-    ProfileSectionCard(
-      title: l10n.discoverLocation,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const NumayaIcon(
-                NumayaIcons.location,
-                size: AppSizes.iconMd,
-                color: AppColors.ink,
+    for (final p in person.morePrompts) prompt(p),
+    if (showDistance || person.livesIn != null)
+      ProfileSectionCard(
+        title: l10n.discoverLocation,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (showDistance)
+              Row(
+                children: [
+                  const NumayaIcon(
+                    NumayaIcons.location,
+                    size: AppSizes.iconMd,
+                    color: AppColors.ink,
+                  ),
+                  const SizedBox(width: AppSpacing.s2),
+                  Text(
+                    l10n.discoverDistance(person.distanceKm),
+                    style: AppTypography.row,
+                  ),
+                ],
               ),
-              const SizedBox(width: AppSpacing.s2),
-              Text(
-                l10n.discoverDistance(person.distanceKm),
-                style: AppTypography.row,
-              ),
+            if (person.livesIn != null) ...[
+              if (showDistance) const SizedBox(height: AppSpacing.s3),
+              InfoChip(label: l10n.discoverLivesIn(person.livesIn!)),
             ],
-          ),
-          if (person.livesIn != null) ...[
-            const SizedBox(height: AppSpacing.s3),
-            InfoChip(label: l10n.discoverLivesIn(person.livesIn!)),
           ],
-        ],
+        ),
       ),
-    ),
     for (var i = 4; i <= person.photoCount; i++) photo(i),
   ];
   return [

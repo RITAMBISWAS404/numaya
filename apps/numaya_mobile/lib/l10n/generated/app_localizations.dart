@@ -2061,6 +2061,2280 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Say hello to a new match to start one.'**
   String get noConvBody;
+
+  /// No description provided for @timeToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get timeToday;
+
+  /// No description provided for @timeYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get timeYesterday;
+
+  /// No description provided for @hoursLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h left'**
+  String hoursLeft(int hours);
+
+  /// No description provided for @minutesLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}m left'**
+  String minutesLeft(int minutes);
+
+  /// No description provided for @queueLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'Likes'**
+  String get queueLikes;
+
+  /// No description provided for @queueLikesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 person likes you. Open Likes} other{{count} people like you. Open Likes}}'**
+  String queueLikesLabel(int count);
+
+  /// No description provided for @queueExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get queueExpired;
+
+  /// No description provided for @queueExpiredLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}. Match expired'**
+  String queueExpiredLabel(Object name);
+
+  /// No description provided for @movesPromoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip the small talk'**
+  String get movesPromoTitle;
+
+  /// No description provided for @movesPromoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Add up to three Opening Moves: questions your new matches can answer to start the conversation.'**
+  String get movesPromoBody;
+
+  /// No description provided for @movesPromoAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Opening Moves'**
+  String get movesPromoAction;
+
+  /// No description provided for @yourMoveTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Your move'**
+  String get yourMoveTag;
+
+  /// No description provided for @unreadCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 unread message} other{{count} unread messages}}'**
+  String unreadCount(int count);
+
+  /// No description provided for @optionViewProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View profile'**
+  String get optionViewProfile;
+
+  /// No description provided for @optionDidYouMeet.
+  ///
+  /// In en, this message translates to:
+  /// **'Did you meet?'**
+  String get optionDidYouMeet;
+
+  /// No description provided for @chatExtended.
+  ///
+  /// In en, this message translates to:
+  /// **'Extended: you have 24 more hours'**
+  String get chatExtended;
+
+  /// No description provided for @chatExpiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your match with {name} expired'**
+  String chatExpiredTitle(Object name);
+
+  /// No description provided for @chatExpiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Neither of you wrote within 24 hours, so the match ended. Rematch to get another 24 hours.'**
+  String get chatExpiredBody;
+
+  /// No description provided for @chatRematch.
+  ///
+  /// In en, this message translates to:
+  /// **'Rematch'**
+  String get chatRematch;
+
+  /// No description provided for @chatRematchPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Rematch with Premium'**
+  String get chatRematchPremium;
+
+  /// No description provided for @chatExpiresIn.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} to start the conversation'**
+  String chatExpiresIn(Object time);
+
+  /// No description provided for @chatExtendFreeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Need more time? You get one free Extend a day.'**
+  String get chatExtendFreeNote;
+
+  /// No description provided for @chatExtendPremiumNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium: extend as often as you like.'**
+  String get chatExtendPremiumNote;
+
+  /// No description provided for @chatExtend.
+  ///
+  /// In en, this message translates to:
+  /// **'Extend 24 hours'**
+  String get chatExtend;
+
+  /// No description provided for @chatTheirMove.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}’s Opening Move'**
+  String chatTheirMove(Object name);
+
+  /// No description provided for @chatReplyToMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply'**
+  String get chatReplyToMove;
+
+  /// No description provided for @chatSampleBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample conversation'**
+  String get chatSampleBadge;
+
+  /// No description provided for @chatTheirMessageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: {text}'**
+  String chatTheirMessageLabel(Object name, Object text);
+
+  /// No description provided for @chatSampleConversationNote.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}’s messages were written for the demo. What you send stays on this device and no one replies.'**
+  String chatSampleConversationNote(Object name);
+
+  /// No description provided for @reportWhere.
+  ///
+  /// In en, this message translates to:
+  /// **'Where did you see it?'**
+  String get reportWhere;
+
+  /// No description provided for @didMeetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Did you meet {name}?'**
+  String didMeetTitle(Object name);
+
+  /// No description provided for @didMeetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your answer stays on this device and helps you keep track. {name} won’t see it.'**
+  String didMeetBody(Object name);
+
+  /// No description provided for @didMeetYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, we met'**
+  String get didMeetYes;
+
+  /// No description provided for @didMeetNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No, we didn’t meet'**
+  String get didMeetNo;
+
+  /// No description provided for @didMeetThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks. Saved on this device.'**
+  String get didMeetThanks;
+
+  /// No description provided for @unmatchedReasonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve unmatched {name}'**
+  String unmatchedReasonTitle(Object name);
+
+  /// No description provided for @unmatchedReasonBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Could you tell us why? Your answer stays on this device and {name} won’t know.'**
+  String unmatchedReasonBody(Object name);
+
+  /// No description provided for @unmatchReasonSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get unmatchReasonSkip;
+
+  /// No description provided for @unmatchReasonThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks. Your answer is saved on this device.'**
+  String get unmatchReasonThanks;
+
+  /// No description provided for @filtersDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get filtersDone;
+
+  /// No description provided for @filtersWomen.
+  ///
+  /// In en, this message translates to:
+  /// **'Women'**
+  String get filtersWomen;
+
+  /// No description provided for @filtersMen.
+  ///
+  /// In en, this message translates to:
+  /// **'Men'**
+  String get filtersMen;
+
+  /// No description provided for @filtersNonbinary.
+  ///
+  /// In en, this message translates to:
+  /// **'Nonbinary people'**
+  String get filtersNonbinary;
+
+  /// No description provided for @filtersWhoHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Who do you want to date?'**
+  String get filtersWhoHeading;
+
+  /// No description provided for @filtersEveryone.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing everyone. Pick one or more to narrow it down.'**
+  String get filtersEveryone;
+
+  /// No description provided for @filtersWhoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the people you picked appear on Home.'**
+  String get filtersWhoHint;
+
+  /// No description provided for @filtersAgeFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'See people 2 years either side if I run out'**
+  String get filtersAgeFallback;
+
+  /// No description provided for @filtersDistanceFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'See people slightly further away if I run out'**
+  String get filtersDistanceFallback;
+
+  /// No description provided for @filtersVerifiedHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Have they verified themselves?'**
+  String get filtersVerifiedHeading;
+
+  /// No description provided for @filtersVerifiedOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified profiles only'**
+  String get filtersVerifiedOnly;
+
+  /// No description provided for @filtersVerifiedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Only people who have verified their photos.'**
+  String get filtersVerifiedNote;
+
+  /// No description provided for @filtersWhatsThis.
+  ///
+  /// In en, this message translates to:
+  /// **'What’s photo verification?'**
+  String get filtersWhatsThis;
+
+  /// No description provided for @filtersAdvancedLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced filters are part of Premium'**
+  String get filtersAdvancedLocked;
+
+  /// No description provided for @filtersAdvancedLockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Narrow down by height, intentions and more. In this demo Premium is simulated: no payment is taken.'**
+  String get filtersAdvancedLockedBody;
+
+  /// No description provided for @premiumSee.
+  ///
+  /// In en, this message translates to:
+  /// **'See Premium'**
+  String get premiumSee;
+
+  /// No description provided for @filtersHeightHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'What is their height?'**
+  String get filtersHeightHeading;
+
+  /// No description provided for @filtersHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get filtersHeight;
+
+  /// No description provided for @filtersAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Any'**
+  String get filtersAny;
+
+  /// No description provided for @filtersTallerThan.
+  ///
+  /// In en, this message translates to:
+  /// **'Taller than {cm} cm'**
+  String filtersTallerThan(int cm);
+
+  /// No description provided for @filtersIntentionsHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'What do they want from their dates?'**
+  String get filtersIntentionsHeading;
+
+  /// No description provided for @filtersMoreHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'More filters'**
+  String get filtersMoreHeading;
+
+  /// No description provided for @filtersAddFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get filtersAddFilter;
+
+  /// No description provided for @filtersAdvancedFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Show other people if I run out'**
+  String get filtersAdvancedFallback;
+
+  /// No description provided for @filtersBasic.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic'**
+  String get filtersBasic;
+
+  /// No description provided for @filtersAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get filtersAdvanced;
+
+  /// No description provided for @filtersUsingFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody fits exactly, so people just outside your filters will show.'**
+  String get filtersUsingFallback;
+
+  /// No description provided for @discoverSuperSentLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{SuperSwipe sent to {name}. 1 left} other{SuperSwipe sent to {name}. {count} left}}'**
+  String discoverSuperSentLeft(int count, Object name);
+
+  /// No description provided for @forYouOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'For you: today’s picks'**
+  String get forYouOpen;
+
+  /// No description provided for @discoverFallbackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing people just outside your filters'**
+  String get discoverFallbackTitle;
+
+  /// No description provided for @discoverFallbackBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody fit exactly, so your “if I run out” settings are on.'**
+  String get discoverFallbackBody;
+
+  /// No description provided for @forYouTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'For you'**
+  String get forYouTitle;
+
+  /// No description provided for @forYouRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours, plural, =1{New picks in 1 hour} other{New picks in {hours} hours}}'**
+  String forYouRefresh(int hours);
+
+  /// No description provided for @forYouLede.
+  ///
+  /// In en, this message translates to:
+  /// **'People you have the most in common with, picked once a day.'**
+  String get forYouLede;
+
+  /// No description provided for @forYouEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve seen today’s picks'**
+  String get forYouEmptyTitle;
+
+  /// No description provided for @forYouEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours, plural, =1{New people arrive in 1 hour.} other{New people arrive in {hours} hours.}}'**
+  String forYouEmptyBody(int hours);
+
+  /// No description provided for @forYouBackHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Home'**
+  String get forYouBackHome;
+
+  /// No description provided for @forYouOpenProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Open {name}’s profile'**
+  String forYouOpenProfile(Object name);
+
+  /// No description provided for @forYouInCommon.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Picked for you} =1{1 thing in common} other{{count} things in common}}'**
+  String forYouInCommon(int count);
+
+  /// No description provided for @forYouLike.
+  ///
+  /// In en, this message translates to:
+  /// **'Like {name}'**
+  String forYouLike(Object name);
+
+  /// No description provided for @forYouRationale.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on your interests and who you’ve liked. Sample profiles.'**
+  String get forYouRationale;
+
+  /// No description provided for @likeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Like'**
+  String get likeAction;
+
+  /// No description provided for @personMissingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This profile isn’t available'**
+  String get personMissingTitle;
+
+  /// No description provided for @personMissingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It may have been removed. Go back to keep exploring.'**
+  String get personMissingBody;
+
+  /// No description provided for @heightValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{cm} cm'**
+  String heightValue(int cm);
+
+  /// No description provided for @appealHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what happened. Be as specific as you can.'**
+  String get appealHint;
+
+  /// No description provided for @appealLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your appeal'**
+  String get appealLabel;
+
+  /// No description provided for @appealPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'I think this was a mistake because…'**
+  String get appealPlaceholder;
+
+  /// No description provided for @appealSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send appeal'**
+  String get appealSend;
+
+  /// No description provided for @appealSentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appeal saved'**
+  String get appealSentTitle;
+
+  /// No description provided for @appealSentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'In this demo nothing is sent or reviewed. In the real app a person reviews appeals and replies by email.'**
+  String get appealSentBody;
+
+  /// No description provided for @blockedAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account on hold'**
+  String get blockedAccountTitle;
+
+  /// No description provided for @blockedAccountHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has been blocked'**
+  String get blockedAccountHeading;
+
+  /// No description provided for @blockedAccountBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We found activity that goes against our guidelines. You can appeal within 6 months. This is a preview of a screen the server would show.'**
+  String get blockedAccountBody;
+
+  /// No description provided for @completionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your profile'**
+  String get completionTitle;
+
+  /// No description provided for @completionPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% complete'**
+  String completionPercent(int percent);
+
+  /// No description provided for @completionLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Profiles with more to talk about get more matches. Pick up where you like.'**
+  String get completionLede;
+
+  /// No description provided for @completionDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile is complete. Nice work.'**
+  String get completionDone;
+
+  /// No description provided for @completionPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get completionPhotos;
+
+  /// No description provided for @completionPrompts.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompts'**
+  String get completionPrompts;
+
+  /// No description provided for @completionInterests.
+  ///
+  /// In en, this message translates to:
+  /// **'Interests'**
+  String get completionInterests;
+
+  /// No description provided for @completionBio.
+  ///
+  /// In en, this message translates to:
+  /// **'Bio'**
+  String get completionBio;
+
+  /// No description provided for @completionAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About you'**
+  String get completionAbout;
+
+  /// No description provided for @completionMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More about you'**
+  String get completionMore;
+
+  /// No description provided for @completionProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} added'**
+  String completionProgress(int done, int total);
+
+  /// No description provided for @contactTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'What’s it about?'**
+  String get contactTopic;
+
+  /// No description provided for @contactTopicAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'My account'**
+  String get contactTopicAccount;
+
+  /// No description provided for @contactTopicSafety.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety or someone’s behaviour'**
+  String get contactTopicSafety;
+
+  /// No description provided for @contactTopicVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo verification'**
+  String get contactTopicVerification;
+
+  /// No description provided for @contactTopicBilling.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium and billing'**
+  String get contactTopicBilling;
+
+  /// No description provided for @contactTopicOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Something else'**
+  String get contactTopicOther;
+
+  /// No description provided for @contactMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your message'**
+  String get contactMessage;
+
+  /// No description provided for @contactSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send message'**
+  String get contactSend;
+
+  /// No description provided for @contactDemoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo build: your message stays on this device and nobody reads it.'**
+  String get contactDemoNote;
+
+  /// No description provided for @contactSentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Message saved'**
+  String get contactSentTitle;
+
+  /// No description provided for @contactSentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'In this demo nothing is sent. In the real app, support replies within a day.'**
+  String get contactSentBody;
+
+  /// No description provided for @deleteHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get deleteHeading;
+
+  /// No description provided for @deleteLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you go, tell us why. It helps us improve.'**
+  String get deleteLede;
+
+  /// No description provided for @deleteWhy.
+  ///
+  /// In en, this message translates to:
+  /// **'Why are you leaving?'**
+  String get deleteWhy;
+
+  /// No description provided for @deleteSnoozeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Just need a break?'**
+  String get deleteSnoozeTitle;
+
+  /// No description provided for @deleteSnoozeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze hides your profile and keeps your matches and chats.'**
+  String get deleteSnoozeBody;
+
+  /// No description provided for @deleteSnoozeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze instead'**
+  String get deleteSnoozeAction;
+
+  /// No description provided for @deleteC1.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile is hidden from everyone straight away'**
+  String get deleteC1;
+
+  /// No description provided for @deleteC2.
+  ///
+  /// In en, this message translates to:
+  /// **'Your matches and messages are removed'**
+  String get deleteC2;
+
+  /// No description provided for @deleteC3.
+  ///
+  /// In en, this message translates to:
+  /// **'You can restore everything for 28 days by signing in again'**
+  String get deleteC3;
+
+  /// No description provided for @deleteSubscriptionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Premium plan won’t be cancelled'**
+  String get deleteSubscriptionTitle;
+
+  /// No description provided for @deleteSubscriptionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel it in your app store first. In this demo there is no real subscription.'**
+  String get deleteSubscriptionBody;
+
+  /// No description provided for @deleteContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get deleteContinue;
+
+  /// No description provided for @deleteHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'What happens when I delete?'**
+  String get deleteHelp;
+
+  /// No description provided for @deleteRestoreNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Changed your mind? Sign in with the same number within 28 days to restore it.'**
+  String get deleteRestoreNote;
+
+  /// No description provided for @demoHubTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo hub'**
+  String get demoHubTitle;
+
+  /// No description provided for @demoHubBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Development build only'**
+  String get demoHubBanner;
+
+  /// No description provided for @demoHubBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Jump to any screen, switch the sample data and try each state. Everything here is local and simulated.'**
+  String get demoHubBody;
+
+  /// No description provided for @demoStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get demoStart;
+
+  /// No description provided for @demoQuickStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick start as Alex (sample account)'**
+  String get demoQuickStart;
+
+  /// No description provided for @demoQuickStartNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Skips sign-up with a finished sample profile and a fictional 555 number.'**
+  String get demoQuickStartNote;
+
+  /// No description provided for @demoSignedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re signed in. Quick start replaces this session with the sample account.'**
+  String get demoSignedIn;
+
+  /// No description provided for @demoWorld.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample world'**
+  String get demoWorld;
+
+  /// No description provided for @demoWorldFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Full demo'**
+  String get demoWorldFull;
+
+  /// No description provided for @demoWorldFullBody.
+  ///
+  /// In en, this message translates to:
+  /// **'12 profiles, 7 likes, matches in the queue (one expiring soon, one expired) and 3 sample conversations'**
+  String get demoWorldFullBody;
+
+  /// No description provided for @demoWorldFresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Brand-new account'**
+  String get demoWorldFresh;
+
+  /// No description provided for @demoWorldFreshBody.
+  ///
+  /// In en, this message translates to:
+  /// **'7 profiles, 5 likes, no matches or conversations'**
+  String get demoWorldFreshBody;
+
+  /// No description provided for @demoReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset demo data'**
+  String get demoReset;
+
+  /// No description provided for @demoResetDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo data reset'**
+  String get demoResetDone;
+
+  /// No description provided for @demoSwitches.
+  ///
+  /// In en, this message translates to:
+  /// **'Switches'**
+  String get demoSwitches;
+
+  /// No description provided for @demoPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium (simulated)'**
+  String get demoPremium;
+
+  /// No description provided for @demoPremiumNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocks Premium features without the paywall'**
+  String get demoPremiumNote;
+
+  /// No description provided for @demoApproveVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve the next verification'**
+  String get demoApproveVerification;
+
+  /// No description provided for @demoApproveOn.
+  ///
+  /// In en, this message translates to:
+  /// **'The next selfie is approved'**
+  String get demoApproveOn;
+
+  /// No description provided for @demoApproveOff.
+  ///
+  /// In en, this message translates to:
+  /// **'The next selfie is declined'**
+  String get demoApproveOff;
+
+  /// No description provided for @demoResetVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset photo verification'**
+  String get demoResetVerification;
+
+  /// No description provided for @demoAreaAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account and onboarding'**
+  String get demoAreaAccount;
+
+  /// No description provided for @demoAreaDiscover.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover'**
+  String get demoAreaDiscover;
+
+  /// No description provided for @demoAreaMatching.
+  ///
+  /// In en, this message translates to:
+  /// **'Likes, matches and messages'**
+  String get demoAreaMatching;
+
+  /// No description provided for @demoAreaProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get demoAreaProfile;
+
+  /// No description provided for @demoAreaSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings, safety and help'**
+  String get demoAreaSettings;
+
+  /// No description provided for @demoWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome'**
+  String get demoWelcome;
+
+  /// No description provided for @demoRestoreHow.
+  ///
+  /// In en, this message translates to:
+  /// **'Account restore: delete the account in Settings, then sign in again with the same number.'**
+  String get demoRestoreHow;
+
+  /// No description provided for @demoSampleProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'A sample profile with Like and Pass'**
+  String get demoSampleProfile;
+
+  /// No description provided for @demoLikeProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'A like’s profile (Maya)'**
+  String get demoLikeProfile;
+
+  /// No description provided for @demoMatchScreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Match celebration (Maya)'**
+  String get demoMatchScreen;
+
+  /// No description provided for @demoChatHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation with history (Priya)'**
+  String get demoChatHistory;
+
+  /// No description provided for @demoChatNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New match, 21 hours left (Jo)'**
+  String get demoChatNew;
+
+  /// No description provided for @demoChatExpiring.
+  ///
+  /// In en, this message translates to:
+  /// **'Match about to expire (Lina)'**
+  String get demoChatExpiring;
+
+  /// No description provided for @demoChatExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired match (Ollie)'**
+  String get demoChatExpired;
+
+  /// No description provided for @demoFullOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'The named matches and conversations exist in the full demo.'**
+  String get demoFullOnly;
+
+  /// No description provided for @demoNeedsSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in or use Quick start first'**
+  String get demoNeedsSession;
+
+  /// No description provided for @demoNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'A link that doesn’t exist'**
+  String get demoNotFound;
+
+  /// No description provided for @editAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get editAdd;
+
+  /// No description provided for @editAddPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a prompt'**
+  String get editAddPrompt;
+
+  /// No description provided for @editPromptsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompts'**
+  String get editPromptsSection;
+
+  /// No description provided for @editPromptsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 of 3 added. Prompts give people something to reply to.} other{{count} of 3 added. Prompts give people something to reply to.}}'**
+  String editPromptsHint(int count);
+
+  /// No description provided for @editBio.
+  ///
+  /// In en, this message translates to:
+  /// **'Bio'**
+  String get editBio;
+
+  /// No description provided for @editBioHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A short, punchy intro.'**
+  String get editBioHint;
+
+  /// No description provided for @editBioAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a short intro'**
+  String get editBioAdd;
+
+  /// No description provided for @editBioPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekend baker, weekday spreadsheet wrangler…'**
+  String get editBioPlaceholder;
+
+  /// No description provided for @editBioTipTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show your personality'**
+  String get editBioTipTitle;
+
+  /// No description provided for @editBioTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Share a quirk, an interest or a bit of humour to help you stand out.'**
+  String get editBioTip;
+
+  /// No description provided for @editClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get editClear;
+
+  /// No description provided for @editGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get editGender;
+
+  /// No description provided for @editGenderMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Add more about your gender'**
+  String get editGenderMore;
+
+  /// No description provided for @editGenderLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'Which describes you best?'**
+  String get editGenderLegend;
+
+  /// No description provided for @editGenderShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show my gender on my profile'**
+  String get editGenderShow;
+
+  /// No description provided for @editGenderShowNote.
+  ///
+  /// In en, this message translates to:
+  /// **'You can change this any time.'**
+  String get editGenderShowNote;
+
+  /// No description provided for @editHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get editHeight;
+
+  /// No description provided for @editLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'Languages'**
+  String get editLanguages;
+
+  /// No description provided for @editLanguagesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {total} chosen'**
+  String editLanguagesHint(int count, int total);
+
+  /// No description provided for @editMoreAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'More about you'**
+  String get editMoreAbout;
+
+  /// No description provided for @editMoreAboutNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer only what you’re comfortable sharing. Some answers help with filters.'**
+  String get editMoreAboutNote;
+
+  /// No description provided for @editMoreSection.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get editMoreSection;
+
+  /// No description provided for @editPreferNotToSay.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefer not to say'**
+  String get editPreferNotToSay;
+
+  /// No description provided for @editPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview profile'**
+  String get editPreview;
+
+  /// No description provided for @editVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify my profile'**
+  String get editVerify;
+
+  /// No description provided for @featureLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'Like as many people as you want'**
+  String get featureLikes;
+
+  /// No description provided for @featureSeeLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'See who liked you'**
+  String get featureSeeLikes;
+
+  /// No description provided for @featureExtend.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited Extends'**
+  String get featureExtend;
+
+  /// No description provided for @featureRematch.
+  ///
+  /// In en, this message translates to:
+  /// **'Rematch with expired matches'**
+  String get featureRematch;
+
+  /// No description provided for @featureAdvancedFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced filters'**
+  String get featureAdvancedFilters;
+
+  /// No description provided for @featureIncognito.
+  ///
+  /// In en, this message translates to:
+  /// **'Incognito'**
+  String get featureIncognito;
+
+  /// No description provided for @featureTravel.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel mode'**
+  String get featureTravel;
+
+  /// No description provided for @featureSuperSwipes.
+  ///
+  /// In en, this message translates to:
+  /// **'5 extra SuperSwipes'**
+  String get featureSuperSwipes;
+
+  /// No description provided for @helpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Help centre'**
+  String get helpTitle;
+
+  /// No description provided for @helpSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search help'**
+  String get helpSearch;
+
+  /// No description provided for @helpTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'Topics'**
+  String get helpTopics;
+
+  /// No description provided for @helpNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Try another word, or contact us.'**
+  String get helpNoResults;
+
+  /// No description provided for @helpStillStuck.
+  ///
+  /// In en, this message translates to:
+  /// **'Still stuck?'**
+  String get helpStillStuck;
+
+  /// No description provided for @helpContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact support'**
+  String get helpContact;
+
+  /// No description provided for @helpMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'That article doesn’t exist any more.'**
+  String get helpMissing;
+
+  /// No description provided for @incognito.
+  ///
+  /// In en, this message translates to:
+  /// **'Incognito'**
+  String get incognito;
+
+  /// No description provided for @incognitoOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Only people you like can see you'**
+  String get incognitoOn;
+
+  /// No description provided for @incognitoOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get incognitoOff;
+
+  /// No description provided for @incognitoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'With Incognito, only people you’ve liked can see your profile.'**
+  String get incognitoNote;
+
+  /// No description provided for @logoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out?'**
+  String get logoutTitle;
+
+  /// No description provided for @logoutBody.
+  ///
+  /// In en, this message translates to:
+  /// **'In this demo, logging out clears your profile and sample data from this device.'**
+  String get logoutBody;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'no'**
+  String get no;
+
+  /// No description provided for @notFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This page isn’t here'**
+  String get notFoundTitle;
+
+  /// No description provided for @notFoundBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The link may be old or mistyped. Nothing was lost.'**
+  String get notFoundBody;
+
+  /// No description provided for @notFoundStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to the start'**
+  String get notFoundStart;
+
+  /// No description provided for @notificationsMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More notification settings'**
+  String get notificationsMore;
+
+  /// No description provided for @notifMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'New matches'**
+  String get notifMatches;
+
+  /// No description provided for @notifExpiring.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches about to expire'**
+  String get notifExpiring;
+
+  /// No description provided for @notifTips.
+  ///
+  /// In en, this message translates to:
+  /// **'Tips and news'**
+  String get notifTips;
+
+  /// No description provided for @notifPush.
+  ///
+  /// In en, this message translates to:
+  /// **'Push'**
+  String get notifPush;
+
+  /// No description provided for @notifInApp.
+  ///
+  /// In en, this message translates to:
+  /// **'In-app'**
+  String get notifInApp;
+
+  /// No description provided for @notifEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get notifEmail;
+
+  /// No description provided for @notifNoEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'No email address on file'**
+  String get notifNoEmail;
+
+  /// No description provided for @notifWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Turning these off might mean you miss alerts from your matches.'**
+  String get notifWarning;
+
+  /// No description provided for @notifEmailNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Push isn’t connected in this build, so these are saved as preferences only.'**
+  String get notifEmailNote;
+
+  /// No description provided for @openingMovesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening Moves'**
+  String get openingMovesTitle;
+
+  /// No description provided for @openingMovesHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Opening Moves'**
+  String get openingMovesHeading;
+
+  /// No description provided for @openingMovesLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip the “hey”. Choose up to three questions your new matches can answer.'**
+  String get openingMovesLede;
+
+  /// No description provided for @openingMovesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 3'**
+  String openingMovesCount(int count);
+
+  /// No description provided for @openingMovesNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your matches see one Opening Move when you match. They can answer it or start their own way.'**
+  String get openingMovesNote;
+
+  /// No description provided for @openingMoveFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'First Opening Move'**
+  String get openingMoveFirst;
+
+  /// No description provided for @openingMoveSecond.
+  ///
+  /// In en, this message translates to:
+  /// **'Second Opening Move'**
+  String get openingMoveSecond;
+
+  /// No description provided for @openingMoveThird.
+  ///
+  /// In en, this message translates to:
+  /// **'Third Opening Move'**
+  String get openingMoveThird;
+
+  /// No description provided for @openingMoveEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Write your Opening Move'**
+  String get openingMoveEditTitle;
+
+  /// No description provided for @openingMoveLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your question'**
+  String get openingMoveLabel;
+
+  /// No description provided for @openingMoveSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Need an idea?'**
+  String get openingMoveSuggestions;
+
+  /// No description provided for @openingMoveRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Opening Move'**
+  String get openingMoveRemove;
+
+  /// No description provided for @openingMoveRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening Move removed'**
+  String get openingMoveRemoved;
+
+  /// No description provided for @paywallTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get more with Premium'**
+  String get paywallTitle;
+
+  /// No description provided for @paywallForFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced filters come with Premium'**
+  String get paywallForFilters;
+
+  /// No description provided for @paywallForRematch.
+  ///
+  /// In en, this message translates to:
+  /// **'Rematch comes with Premium'**
+  String get paywallForRematch;
+
+  /// No description provided for @paywallForExtend.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited Extends come with Premium'**
+  String get paywallForExtend;
+
+  /// No description provided for @paywallForIncognito.
+  ///
+  /// In en, this message translates to:
+  /// **'Incognito comes with Premium'**
+  String get paywallForIncognito;
+
+  /// No description provided for @paywallForTravel.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel mode comes with Premium'**
+  String get paywallForTravel;
+
+  /// No description provided for @paywallForSuperSwipes.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re out of SuperSwipes'**
+  String get paywallForSuperSwipes;
+
+  /// No description provided for @paywallLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium in this demo is simulated: no store is connected and no payment is taken.'**
+  String get paywallLede;
+
+  /// No description provided for @paywallPlans.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a plan'**
+  String get paywallPlans;
+
+  /// No description provided for @paywallChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a plan to continue'**
+  String get paywallChoose;
+
+  /// No description provided for @paywallContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with {plan} · {price}'**
+  String paywallContinue(Object plan, Object price);
+
+  /// No description provided for @paywallLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo only. In a real build, plans renew automatically until cancelled in your app store. Prices are illustrative.'**
+  String get paywallLegal;
+
+  /// No description provided for @paywallConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulated purchase'**
+  String get paywallConfirmTitle;
+
+  /// No description provided for @paywallConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{plan} for {price}. This is a demo: nothing is charged and no store is contacted.'**
+  String paywallConfirmBody(Object plan, Object price);
+
+  /// No description provided for @paywallConfirmBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete demo purchase'**
+  String get paywallConfirmBuy;
+
+  /// No description provided for @paywallConfirmFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulate a failed payment'**
+  String get paywallConfirmFail;
+
+  /// No description provided for @paywallFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The payment didn’t go through'**
+  String get paywallFailedTitle;
+
+  /// No description provided for @paywallFailedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulated failure. Nothing was charged and your plan is still selected. Try again when you’re ready.'**
+  String get paywallFailedBody;
+
+  /// No description provided for @paywallSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re all set'**
+  String get paywallSuccessTitle;
+
+  /// No description provided for @paywallAlreadyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium is active'**
+  String get paywallAlreadyTitle;
+
+  /// No description provided for @paywallSuccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium is active until {date}. Demo only: no payment was taken.'**
+  String paywallSuccessBody(Object date);
+
+  /// No description provided for @paywallRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get paywallRestore;
+
+  /// No description provided for @paywallRestoreNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No store is connected in this demo, so there’s nothing to restore.'**
+  String get paywallRestoreNone;
+
+  /// No description provided for @premiumName.
+  ///
+  /// In en, this message translates to:
+  /// **'Numaya Premium'**
+  String get premiumName;
+
+  /// No description provided for @premiumActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get premiumActive;
+
+  /// No description provided for @premiumActiveUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Active until {date}'**
+  String premiumActiveUntil(Object date);
+
+  /// No description provided for @premiumActivePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'{plan} plan, simulated. Cancel any time below.'**
+  String premiumActivePlan(Object plan);
+
+  /// No description provided for @premiumCardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced filters, Rematch, unlimited Extends, Incognito and Travel.'**
+  String get premiumCardBody;
+
+  /// No description provided for @premiumExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore Premium'**
+  String get premiumExplore;
+
+  /// No description provided for @premiumManage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage'**
+  String get premiumManage;
+
+  /// No description provided for @premiumHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'More ways to meet the right people'**
+  String get premiumHeroTitle;
+
+  /// No description provided for @premiumHeroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything in Numaya stays free. Premium adds control and extra time.'**
+  String get premiumHeroBody;
+
+  /// No description provided for @premiumYourExtras.
+  ///
+  /// In en, this message translates to:
+  /// **'Your extras'**
+  String get premiumYourExtras;
+
+  /// No description provided for @premiumSuperSwipesLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'SuperSwipes left'**
+  String get premiumSuperSwipesLeft;
+
+  /// No description provided for @premiumCompare.
+  ///
+  /// In en, this message translates to:
+  /// **'What you get'**
+  String get premiumCompare;
+
+  /// No description provided for @premiumFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get premiumFree;
+
+  /// No description provided for @premiumShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get premiumShort;
+
+  /// No description provided for @premiumSeePlans.
+  ///
+  /// In en, this message translates to:
+  /// **'See plans'**
+  String get premiumSeePlans;
+
+  /// No description provided for @premiumCancelDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel demo plan'**
+  String get premiumCancelDemo;
+
+  /// No description provided for @premiumCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo plan cancelled'**
+  String get premiumCancelled;
+
+  /// No description provided for @premiumDemoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo build: prices and plans are illustrative and nothing is charged.'**
+  String get premiumDemoNote;
+
+  /// No description provided for @premiumHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Billing and cancelling'**
+  String get premiumHelp;
+
+  /// No description provided for @premiumOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get premiumOnly;
+
+  /// No description provided for @previewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get previewTitle;
+
+  /// No description provided for @previewBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get previewBadge;
+
+  /// No description provided for @previewInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This is how others see you'**
+  String get previewInfoTitle;
+
+  /// No description provided for @previewInfoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Only what you’ve added is shown. Hidden fields stay hidden.'**
+  String get previewInfoBody;
+
+  /// No description provided for @previewEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to editing'**
+  String get previewEdit;
+
+  /// No description provided for @privacyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile visibility'**
+  String get privacyTitle;
+
+  /// No description provided for @privacyShowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'On your profile'**
+  String get privacyShowTitle;
+
+  /// No description provided for @privacyShowAge.
+  ///
+  /// In en, this message translates to:
+  /// **'Show my age'**
+  String get privacyShowAge;
+
+  /// No description provided for @privacyShowDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Show my distance'**
+  String get privacyShowDistance;
+
+  /// No description provided for @privacyShowNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your age is still used for matching, even when it’s hidden.'**
+  String get privacyShowNote;
+
+  /// No description provided for @privacyWhoSees.
+  ///
+  /// In en, this message translates to:
+  /// **'Who can see you'**
+  String get privacyWhoSees;
+
+  /// No description provided for @profileComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete profile'**
+  String get profileComplete;
+
+  /// No description provided for @profileCompletionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile {percent}% complete'**
+  String profileCompletionLabel(int percent);
+
+  /// No description provided for @profileInterestsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Interests'**
+  String get profileInterestsTitle;
+
+  /// No description provided for @profileYourProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile'**
+  String get profileYourProfile;
+
+  /// No description provided for @profileSafetySupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety and support'**
+  String get profileSafetySupport;
+
+  /// No description provided for @promptRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove prompt'**
+  String get promptRemove;
+
+  /// No description provided for @promptRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompt removed'**
+  String get promptRemoved;
+
+  /// No description provided for @restoreTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get restoreTitle;
+
+  /// No description provided for @restoreBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account was deleted recently. You can restore it, with your profile, until {date}.'**
+  String restoreBody(Object date);
+
+  /// No description provided for @restoreAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore my account'**
+  String get restoreAction;
+
+  /// No description provided for @restoreStartOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a new profile instead'**
+  String get restoreStartOver;
+
+  /// No description provided for @restoreDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is back'**
+  String get restoreDone;
+
+  /// No description provided for @safetyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety and wellbeing'**
+  String get safetyTitle;
+
+  /// No description provided for @safetyHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Date with confidence'**
+  String get safetyHeading;
+
+  /// No description provided for @safetyLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Tips for meeting people, and the tools that keep you in control.'**
+  String get safetyLede;
+
+  /// No description provided for @safetyTip1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep it on Numaya at first'**
+  String get safetyTip1Title;
+
+  /// No description provided for @safetyTip1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat here until you feel comfortable. Never send money or share financial details.'**
+  String get safetyTip1Body;
+
+  /// No description provided for @safetyTip2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Meet in public'**
+  String get safetyTip2Title;
+
+  /// No description provided for @safetyTip2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell a friend your plans and arrange your own way there and back.'**
+  String get safetyTip2Body;
+
+  /// No description provided for @safetyTip3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Report anything that feels off'**
+  String get safetyTip3Title;
+
+  /// No description provided for @safetyTip3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports are anonymous. Blocking someone means you won’t see each other again.'**
+  String get safetyTip3Body;
+
+  /// No description provided for @safetyTools.
+  ///
+  /// In en, this message translates to:
+  /// **'Your tools'**
+  String get safetyTools;
+
+  /// No description provided for @settingsLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get settingsLocation;
+
+  /// No description provided for @settingsLocationNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Location isn’t read in this build; the sample area stands in for it.'**
+  String get settingsLocationNote;
+
+  /// No description provided for @settingsCurrentLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Current location'**
+  String get settingsCurrentLocation;
+
+  /// No description provided for @settingsSampleLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Hackney, London (sample)'**
+  String get settingsSampleLocation;
+
+  /// No description provided for @settingsHelpLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Help and legal'**
+  String get settingsHelpLegal;
+
+  /// No description provided for @snoozeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze'**
+  String get snoozeTitle;
+
+  /// No description provided for @snoozeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide your profile from new people for a while. You keep your matches and chats.'**
+  String get snoozeBody;
+
+  /// No description provided for @snoozeHowLong.
+  ///
+  /// In en, this message translates to:
+  /// **'How long?'**
+  String get snoozeHowLong;
+
+  /// No description provided for @snooze24h.
+  ///
+  /// In en, this message translates to:
+  /// **'24 hours'**
+  String get snooze24h;
+
+  /// No description provided for @snooze72h.
+  ///
+  /// In en, this message translates to:
+  /// **'72 hours'**
+  String get snooze72h;
+
+  /// No description provided for @snoozeWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'A week'**
+  String get snoozeWeek;
+
+  /// No description provided for @snoozeIndefinite.
+  ///
+  /// In en, this message translates to:
+  /// **'Until I turn it off'**
+  String get snoozeIndefinite;
+
+  /// No description provided for @snoozeNoStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'No thanks'**
+  String get snoozeNoStatus;
+
+  /// No description provided for @snoozeUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Until {date}'**
+  String snoozeUntil(Object date);
+
+  /// No description provided for @travelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel'**
+  String get travelTitle;
+
+  /// No description provided for @travelBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Planning a trip? Meet people there before you go. Demo: changes the sample location only.'**
+  String get travelBody;
+
+  /// No description provided for @travelPick.
+  ///
+  /// In en, this message translates to:
+  /// **'Where are you going?'**
+  String get travelPick;
+
+  /// No description provided for @travelOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off Travel'**
+  String get travelOff;
+
+  /// No description provided for @travelOffValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get travelOffValue;
+
+  /// No description provided for @travelOnValue.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get travelOnValue;
+
+  /// No description provided for @travelSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel set to {city}'**
+  String travelSet(Object city);
+
+  /// No description provided for @travelEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel turned off'**
+  String get travelEnded;
+
+  /// No description provided for @verifyIntroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show them it’s really you'**
+  String get verifyIntroTitle;
+
+  /// No description provided for @verifyIntroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy a pose and take a selfie. When it matches your photos, a badge goes on your profile.'**
+  String get verifyIntroBody;
+
+  /// No description provided for @verifyDemoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulated in this demo'**
+  String get verifyDemoTitle;
+
+  /// No description provided for @verifyDemoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera isn’t used and nobody reviews the photo. The result appears after a few seconds.'**
+  String get verifyDemoBody;
+
+  /// No description provided for @verifyStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Let’s get verified'**
+  String get verifyStart;
+
+  /// No description provided for @verifyHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'How does verification work?'**
+  String get verifyHelp;
+
+  /// No description provided for @verifyCopyPose.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy this pose'**
+  String get verifyCopyPose;
+
+  /// No description provided for @verifyViewfinderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera preview. Pose to copy: {pose}'**
+  String verifyViewfinderLabel(Object pose);
+
+  /// No description provided for @verifyCameraOff.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera isn’t connected in this demo. Take a demo selfie to continue.'**
+  String get verifyCameraOff;
+
+  /// No description provided for @verifyTakeSelfie.
+  ///
+  /// In en, this message translates to:
+  /// **'Take demo selfie'**
+  String get verifyTakeSelfie;
+
+  /// No description provided for @verifyOtherPose.
+  ///
+  /// In en, this message translates to:
+  /// **'Show me a different pose'**
+  String get verifyOtherPose;
+
+  /// No description provided for @verifyReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Happy with it?'**
+  String get verifyReviewTitle;
+
+  /// No description provided for @verifyReviewBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your selfie is compared with your profile photos. It isn’t shown on your profile.'**
+  String get verifyReviewBody;
+
+  /// No description provided for @verifyDemoSelfie.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo selfie (placeholder)'**
+  String get verifyDemoSelfie;
+
+  /// No description provided for @verifyRetake.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake'**
+  String get verifyRetake;
+
+  /// No description provided for @verifyPendingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking your selfie'**
+  String get verifyPendingTitle;
+
+  /// No description provided for @verifyPendingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Usually a few minutes. In this demo the review is simulated and takes a few seconds.'**
+  String get verifyPendingBody;
+
+  /// No description provided for @verifyDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re verified'**
+  String get verifyDoneTitle;
+
+  /// No description provided for @verifyDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The badge is on your profile. People who filter for verified profiles can now see you.'**
+  String get verifyDoneBody;
+
+  /// No description provided for @verifyRejectedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t verify you'**
+  String get verifyRejectedTitle;
+
+  /// No description provided for @verifyRejectedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{The pose didn’t match. You have 1 more try.} other{The pose didn’t match. You have {count} more tries.}}'**
+  String verifyRejectedBody(int count);
+
+  /// No description provided for @verifyRejectedSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'After three tries, a person can help. Contact support and we’ll sort it out.'**
+  String get verifyRejectedSupport;
+
+  /// No description provided for @verifyTipsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tips'**
+  String get verifyTipsTitle;
+
+  /// No description provided for @verifyTip1.
+  ///
+  /// In en, this message translates to:
+  /// **'Find good, even light'**
+  String get verifyTip1;
+
+  /// No description provided for @verifyTip2.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep your face and hand in the frame'**
+  String get verifyTip2;
+
+  /// No description provided for @verifyTip3.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy the pose exactly'**
+  String get verifyTip3;
+
+  /// No description provided for @verifyTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get verifyTryAgain;
+
+  /// No description provided for @verifyStatusNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Not verified'**
+  String get verifyStatusNone;
+
+  /// No description provided for @verifyStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'In review'**
+  String get verifyStatusPending;
+
+  /// No description provided for @verifyStatusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get verifyStatusRejected;
+
+  /// No description provided for @verifyStatusVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get verifyStatusVerified;
+
+  /// No description provided for @photoVerifyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo verification'**
+  String get photoVerifyTitle;
+
+  /// No description provided for @photoVerifySubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit for review'**
+  String get photoVerifySubmit;
+
+  /// No description provided for @demoHubOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo build. Open the demo hub'**
+  String get demoHubOpen;
+
+  /// No description provided for @matchTheirMove.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}’s Opening Move: “{move}”'**
+  String matchTheirMove(Object move, Object name);
+
+  /// No description provided for @photoMoveEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'Move earlier'**
+  String get photoMoveEarlier;
+
+  /// No description provided for @photoMoveLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Move later'**
+  String get photoMoveLater;
+
+  /// No description provided for @photoReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace with a new placeholder'**
+  String get photoReplace;
+
+  /// No description provided for @photoMoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo order updated'**
+  String get photoMoved;
+
+  /// No description provided for @photoReplaced.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo replaced (placeholder: upload isn’t connected)'**
+  String get photoReplaced;
 }
 
 class _AppLocalizationsDelegate
