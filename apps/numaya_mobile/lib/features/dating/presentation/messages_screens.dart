@@ -541,18 +541,33 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   /// screen or a profile still returns to Messages, where the conversation now lives.
   void _back() => context.go(Routes.messages);
 
+  /// Messages already on screen when the chat opened; anything newer settles in.
+  Set<int>? _known;
+
   Future<void> _send(String text) async {
     _text.clear();
-    await ref.read(datingProvider.notifier).send(widget.personId, text);
-    if (_scroll.hasClients) {
-      unawaited(
-        _scroll.animateTo(
-          _scroll.position.maxScrollExtent,
-          duration: AppMotion.base,
-          curve: AppMotion.easeOut,
-        ),
-      );
-    }
+    AppHaptics.fire(context, HapticMoment.commit);
+    final sending = ref
+        .read(datingProvider.notifier)
+        .send(widget.personId, text);
+    _toLatest();
+    await sending;
+  }
+
+  /// Brings the newest message into view after the frame that lays it out. The list is anchored
+  /// to the bottom, so this only moves when the person had scrolled up to read.
+  void _toLatest() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_scroll.hasClients || _scroll.offset == 0) return;
+      final duration = AppMotion.duration(context, AppMotion.state);
+      if (duration == Duration.zero) {
+        _scroll.jumpTo(0);
+      } else {
+        unawaited(
+          _scroll.animateTo(0, duration: duration, curve: AppMotion.easeOut),
+        );
+      }
+    });
   }
 
   Future<void> _menu(SamplePerson person, {required bool talked}) async {
@@ -643,6 +658,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     final controller = ref.read(datingProvider.notifier);
     final messages = state.threads[person.id] ?? const <DemoMessage>[];
+    final known = _known ??= {for (final m in messages) m.id};
     final expired = controller.isExpired(person.id);
     final sample = messages.any((m) => m.sample);
     final now = ref.read(clockProvider)();
@@ -865,20 +881,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         final next = i + 1 < messages.length ? messages[i + 1] : null;
         final grouped = prev != null && prev.mine == m.mine;
         final endsGroup = next == null || next.mine != m.mine;
-        children.add(
-          Semantics(
-            label: m.mine
-                ? m.text
-                : l10n.chatTheirMessageLabel(person.name, m.text),
-            child: ExcludeSemantics(
-              child: MessageBubble(
-                text: m.text,
-                mine: m.mine,
-                grouped: grouped,
-                dimmed: m.status == MessageStatus.sending,
-              ),
+        final bubble = Semantics(
+          label: m.mine
+              ? m.text
+              : l10n.chatTheirMessageLabel(person.name, m.text),
+          child: ExcludeSemantics(
+            child: MessageBubble(
+              text: m.text,
+              mine: m.mine,
+              grouped: grouped,
+              dimmed: m.status == MessageStatus.sending,
             ),
           ),
+        );
+        children.add(
+          known.contains(m.id)
+              ? bubble
+              : _SettleIn(key: ValueKey(m.id), child: bubble),
         );
         if (sample && endsGroup && m != last) {
           children.add(
@@ -979,6 +998,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       child: LayoutBuilder(
                         builder: (context, box) => SingleChildScrollView(
                           controller: _scroll,
+                          // Anchored to the newest message: the chat opens at the latest, and
+                          // stays there when the keyboard opens.
+                          reverse: messages.isNotEmpty,
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,
                           padding: const EdgeInsets.symmetric(
@@ -1086,4 +1108,24 @@ class _EndedView extends StatelessWidget {
       ),
     );
   }
+}
+
+/// A message sent while the chat is open rises 8 pt and fades in (MOTION_DESIGN_AUDIT "Message
+/// sent"); instant under reduced motion.
+class _SettleIn extends StatelessWidget {
+  const _SettleIn({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => TweenAnimationBuilder<double>(
+    tween: Tween(begin: 0, end: 1),
+    duration: AppMotion.duration(context, AppMotion.state),
+    curve: AppMotion.easeOut,
+    builder: (context, v, child) => Opacity(
+      opacity: v,
+      child: Transform.translate(offset: Offset(0, 8 * (1 - v)), child: child),
+    ),
+    child: child,
+  );
 }

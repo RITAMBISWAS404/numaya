@@ -187,6 +187,13 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         .read(premiumProvider.notifier)
         .purchase(plan, simulate: outcome);
     if (!mounted) return;
+    // Success is felt; a declined payment is acknowledged on screen, not punished.
+    AppHaptics.fire(
+      context,
+      result == PurchaseOutcome.success
+          ? HapticMoment.success
+          : HapticMoment.reject,
+    );
     setState(() {
       _failed = result == PurchaseOutcome.failed;
       _done = result == PurchaseOutcome.success;

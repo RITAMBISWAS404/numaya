@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../foundations/app_colors.dart';
 import '../foundations/app_haptics.dart';
 import '../foundations/app_layout.dart';
+import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
 import 'people.dart';
@@ -120,10 +121,18 @@ class CompletionRing extends StatelessWidget {
           children: [
             SizedBox.square(
               dimension: size,
-              child: CustomPaint(
-                painter: _RingPainter(
-                  fraction: percent / 100,
-                  color: AppColors.accent,
+              // The arc fills from its old value when the percentage changes (no animation on
+              // first show; the number itself changes at once).
+              child: TweenAnimationBuilder<double>(
+                tween: Tween(end: percent / 100),
+                duration: AppMotion.duration(context, AppMotion.progress),
+                curve: AppMotion.easeOut,
+                builder: (context, fraction, child) => CustomPaint(
+                  painter: _RingPainter(
+                    fraction: fraction,
+                    color: AppColors.accent,
+                  ),
+                  child: child,
                 ),
                 child: Center(child: ExcludeSemantics(child: child)),
               ),

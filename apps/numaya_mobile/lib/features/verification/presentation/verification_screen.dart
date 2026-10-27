@@ -30,6 +30,15 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
     final l10n = context.l10n;
     final state = ref.watch(photoVerificationProvider);
     final controller = ref.read(photoVerificationProvider.notifier);
+    // The review result arrives while the screen is open: one haptic for it.
+    ref.listen(photoVerificationProvider.select((s) => s.status), (was, now) {
+      if (was != PhotoVerificationStatus.pending) return;
+      if (now == PhotoVerificationStatus.verified) {
+        AppHaptics.fire(context, HapticMoment.success);
+      } else if (now == PhotoVerificationStatus.rejected) {
+        AppHaptics.fire(context, HapticMoment.reject);
+      }
+    });
     final pose = kVerificationPoses[state.pose];
     final help = TextLink(
       label: l10n.verifyHelp,

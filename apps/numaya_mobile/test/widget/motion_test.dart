@@ -258,6 +258,45 @@ void main() {
     });
   });
 
+  group('Chat', () {
+    testWidgets('opens at the newest message and returns there on send', (
+      tester,
+    ) async {
+      await usePhoneSize(tester, size: const Size(375, 667));
+      tester.platformDispatcher.textScaleFactorTestValue = 1.3;
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      final c = await quickStartApp(tester);
+      await goTo(c, tester, '${Routes.chat}/sasha');
+      await tester.pump(const Duration(milliseconds: 300));
+      final screen = tester.getRect(find.byType(Scaffold).last);
+      bool onScreen(String text) {
+        final r = tester.getRect(find.text(text));
+        return r.top >= screen.top && r.bottom <= screen.bottom;
+      }
+
+      expect(onScreen('Coffee at the market on Saturday, maybe?'), isTrue);
+      expect(onScreen('Parkrun then pancakes is a perfect Sunday.'), isFalse);
+
+      // Scroll up to read, then send: the chat follows to the new message.
+      await tester.drag(
+        find.text('Coffee at the market on Saturday, maybe?'),
+        const Offset(0, 400),
+      );
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(onScreen('Coffee at the market on Saturday, maybe?'), isFalse);
+      final log = recordHaptics(tester);
+      await tester.enterText(find.byType(TextField), 'Saturday works');
+      await tester.pump();
+      await tester.tap(find.bySemanticsLabel('Send'));
+      await tester.pump();
+      await tester.pump(); // the scroll starts after the new message is laid out
+      await tester.pump(AppMotion.state);
+      expect(onScreen('Saturday works'), isTrue);
+      expect(log, ['HapticFeedbackType.lightImpact']);
+      await settle(tester);
+    });
+  });
+
   group('Transitions', () {
     testWidgets(
       'a page push slides in on the tokens, and is instant when reduced',
