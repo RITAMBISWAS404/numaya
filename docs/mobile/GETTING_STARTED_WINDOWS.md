@@ -52,7 +52,7 @@ they're for other platforms.
 cd $HOME
 git clone https://github.com/RITAMBISWAS404/numaya.git
 cd numaya
-git checkout experiment/numaya-flutter-foundation
+git checkout experiment/numaya-flutter-v16-complete
 cd apps\numaya_mobile
 flutter pub get
 ```
@@ -84,10 +84,38 @@ The first build takes several minutes (Gradle downloads its tools). The app open
 States), tap the arrow, and the code appears in a "Demo text message" banner at the top. Tap the banner to fill it.
 No real text message is sent and nothing leaves the phone.
 
+**Try the dating journeys** (all sample data, labelled as such; nothing is sent anywhere):
+
+1. Finish sign-up (name, birth year 18+, 3 interests and a prompt answer, 2 placeholder photos). Home shows sample
+   profiles.
+2. Pass on Maya, tap the undo arrow (top left) to bring her back, then **Like** her: she already liked you, so it's a
+   match. Type a message and send it: it says "Demo · saved on this device, not sent". No one replies.
+3. **Likes** tab: open Kemi, **Like back**, then **Keep browsing**. **Messages** shows Kemi under New matches.
+4. In a chat, the **⋯** menu offers Unmatch, Block and Report. Settings › **Blocked people** lets you unblock.
+5. Settings › **Prototype tools** › Simulate connection problems shows the error and retry states.
+6. Profile › Edit profile: tap a photo to make it the main one; you can't go below 2.
+
 Alternatively, the helper script does steps 5–7 checks for you:
 ```powershell
 powershell -ExecutionPolicy Bypass -File tool\windows\run-on-phone.ps1
 ```
+
+## 7b. No phone? Use the Android emulator
+
+1. In Android Studio: **More Actions → Virtual Device Manager → Create device**. Pick **Pixel 7** (or any phone),
+   then a system image marked **x86_64** with the newest API level, click **Download**, then **Finish**.
+   (If the wizard says virtualisation is off, enable "Intel VT-x"/"AMD-V"/"SVM" in your PC's BIOS, or turn on
+   "Windows Hypervisor Platform" in *Turn Windows features on or off*.)
+2. In PowerShell, list and start it:
+   ```powershell
+   flutter emulators
+   flutter emulators --launch Pixel_7_API_35   # use the id printed by the previous command
+   ```
+3. Wait until the Android home screen shows, then from `apps\numaya_mobile`:
+   ```powershell
+   flutter devices
+   flutter run
+   ```
 
 ## 8. Make an installable APK (optional)
 
@@ -104,7 +132,8 @@ The file is `apps\numaya_mobile\build\app\outputs\flutter-apk\app-debug.apk`. Co
 ```powershell
 flutter analyze
 flutter test
-flutter test integration_test   # with the phone connected
+flutter test integration_test   # with the phone or emulator connected
+flutter test --tags screenshots --run-skipped --update-goldens test/screenshots   # regenerate the review renders
 ```
 
 ## Troubleshooting

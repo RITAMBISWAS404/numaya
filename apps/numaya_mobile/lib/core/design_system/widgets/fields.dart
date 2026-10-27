@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -76,6 +78,10 @@ class InputSurface extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: disabled ? AppColors.fill : AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.field),
+      ),
+      // The outline is drawn on top, so the focus border (2pt) doesn't shift the text.
+      foregroundDecoration: BoxDecoration(
         borderRadius: AppRadii.all(AppRadii.field),
         border: Border.all(
           color: edge,
@@ -237,7 +243,13 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
                               : const [FontFeature.tabularFigures()],
                         ),
                 cursorColor: AppColors.accent,
-                decoration: InputDecoration.collapsed(
+                decoration: InputDecoration(
+                  isCollapsed: true,
+                  border: InputBorder.none,
+                  // A single line is padded to a 48dp tap target inside the 54pt field.
+                  contentPadding: widget.multiline
+                      ? EdgeInsets.zero
+                      : const EdgeInsets.symmetric(vertical: 13),
                   hintText: widget.placeholder,
                   hintStyle: AppTypography.weight(
                     widget.multiline ? AppTypography.body : AppTypography.input,
@@ -381,11 +393,16 @@ class _NumayaSearchFieldState extends State<NumayaSearchField> {
     final focused = _focus.hasFocus;
     return AnimatedContainer(
       duration: AppMotion.duration(context, AppMotion.base),
-      // V16 search: white with a hairline, the control corner; focus a 2pt blue outline.
-      height: AppSizes.search,
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s4),
+      // V16 search: white with a hairline, the control corner; focus a 2pt blue outline. V16 is
+      // 46pt; on Android the field itself is the tap target, so it is at least 48dp.
+      height: math.max(AppSizes.search, kMinInteractiveDimension),
+      padding: const EdgeInsets.only(left: AppSpacing.s4),
       decoration: BoxDecoration(
         color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.control),
+      ),
+      // The outline is drawn on top so it doesn't take height from the field.
+      foregroundDecoration: BoxDecoration(
         borderRadius: AppRadii.all(AppRadii.control),
         border: Border.all(
           color: focused ? AppColors.focusField : AppColors.border,
@@ -394,11 +411,14 @@ class _NumayaSearchFieldState extends State<NumayaSearchField> {
         ),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const NumayaIcon(
-            NumayaIcons.search,
-            size: AppSizes.iconMd,
-            color: AppColors.textMuted,
+          const Center(
+            child: NumayaIcon(
+              NumayaIcons.search,
+              size: AppSizes.iconMd,
+              color: AppColors.textMuted,
+            ),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -407,9 +427,16 @@ class _NumayaSearchFieldState extends State<NumayaSearchField> {
               focusNode: _focus,
               autofocus: widget.autofocus,
               onChanged: widget.onChanged,
+              // Fills the field's height so the whole field is the tap target.
+              expands: true,
+              maxLines: null,
+              keyboardType: TextInputType.text,
+              textAlignVertical: TextAlignVertical.center,
               textInputAction: TextInputAction.search,
               style: AppTypography.body.copyWith(fontSize: 16),
-              decoration: InputDecoration.collapsed(
+              decoration: InputDecoration(
+                isCollapsed: true,
+                border: InputBorder.none,
                 hintText: widget.placeholder,
                 hintStyle: AppTypography.body.copyWith(
                   fontSize: 16,
@@ -426,21 +453,31 @@ class _NumayaSearchFieldState extends State<NumayaSearchField> {
                 _controller.clear();
                 widget.onChanged('');
               },
-              child: Container(
-                width: 22,
-                height: 22,
-                decoration: const BoxDecoration(
-                  color: AppColors.textSubtle,
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: const NumayaIcon(
-                  NumayaIcons.close,
-                  size: 14,
-                  color: AppColors.textOnInverse,
+              // The 22pt V16 circle, 16pt from the edge, in a 48dp tap target.
+              child: SizedBox(
+                width: kMinInteractiveDimension,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    width: 22,
+                    height: 22,
+                    margin: const EdgeInsets.only(right: AppSpacing.s4),
+                    decoration: const BoxDecoration(
+                      color: AppColors.textSubtle,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: const NumayaIcon(
+                      NumayaIcons.close,
+                      size: 14,
+                      color: AppColors.textOnInverse,
+                    ),
+                  ),
                 ),
               ),
-            ),
+            )
+          else
+            const SizedBox(width: AppSpacing.s4),
         ],
       ),
     );

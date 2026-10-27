@@ -1,119 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../dating/application/dating_controller.dart';
 import '../application/discovery_filters.dart';
-import 'home_shell.dart';
-
-/// Home (B-30 position), V16 header: the wordmark with a round filter button. No matching service
-/// exists yet, so instead of sample people a V16 empty-state card says so plainly. Filters work and
-/// are kept for the session.
-class DiscoverScreen extends ConsumerWidget {
-  const DiscoverScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
-    return _TabPage(
-      header: SizedBox(
-        height: AppSizes.topBar,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              const Wordmark(small: true),
-              Align(
-                alignment: Alignment.centerRight,
-                child: NavIconButton(
-                  icon: NumayaIcons.filter,
-                  label: l10n.discoverFilters,
-                  onPressed: () => showFiltersSheet(context, ref),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      centered: true,
-      child: EmptyState(
-        art: const IllustrationView(
-          NumayaIllustration.seenEveryone,
-          width: 132,
-        ),
-        title: l10n.discoverEmptyTitle,
-        body: l10n.discoverEmptyBody,
-      ),
-    );
-  }
-}
-
-/// Likes (B-46): the page title, its subtitle and a V16 empty-state card until a backend delivers
-/// likes.
-class LikesScreen extends StatelessWidget {
-  const LikesScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return _TabPage(
-      header: TabHeader(title: l10n.tabLikes),
-      subtitle: l10n.likesSubtitle,
-      child: EmptyState(
-        art: const IllustrationView(NumayaIllustration.noMatch, width: 132),
-        title: l10n.likesEmptyTitle,
-        body: l10n.likesEmptyBody,
-        action: NumayaButton(
-          label: l10n.goToHome,
-          small: true,
-          onPressed: () => context.go(Routes.home),
-        ),
-      ),
-    );
-  }
-}
-
-/// Messages (B-42): the page title and a V16 empty-state card until matching and chat exist.
-class MessagesScreen extends StatelessWidget {
-  const MessagesScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return _TabPage(
-      header: TabHeader(title: l10n.tabChats),
-      child: EmptyState(
-        art: const IllustrationView(NumayaIllustration.noChats, width: 132),
-        title: l10n.chatsEmptyTitle,
-        body: l10n.chatsEmptyBody,
-        action: NumayaButton(
-          label: l10n.findYourPeople,
-          small: true,
-          onPressed: () => context.go(Routes.home),
-        ),
-      ),
-    );
-  }
-}
 
 /// A tab root on the stone page: its header, an optional subtitle, then the content column.
-class _TabPage extends StatelessWidget {
-  const _TabPage({
+class TabPage extends StatelessWidget {
+  const TabPage({
+    super.key,
     required this.header,
     required this.child,
     this.subtitle,
     this.centered = false,
+    this.scrollController,
+    this.topGap = true,
+    this.gutter = AppSpacing.gutter,
   });
 
   final Widget header;
   final String? subtitle;
   final Widget child;
 
-  /// Centre the content vertically (Home's empty state).
+  /// Centre the content vertically (empty states on Home).
   final bool centered;
+  final ScrollController? scrollController;
+
+  /// A 16pt gap under the header when there is no subtitle.
+  final bool topGap;
+
+  /// Side margin: 16pt, or 8pt on Discover.
+  final double gutter;
+
+  /// The height of the scrolling area below the header, for content that fills it (Discover's
+  /// photo card, V16 `100cqh`).
+  static double viewportOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_TabViewport>()!.height;
 
   @override
   Widget build(BuildContext context) {
@@ -130,37 +53,41 @@ class _TabPage extends StatelessWidget {
                 header,
                 Expanded(
                   child: LayoutBuilder(
-                    builder: (context, box) => SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSpacing.gutter,
-                        0,
-                        AppSpacing.gutter,
-                        AppSpacing.s6,
-                      ),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: centered
-                              ? box.maxHeight - AppSpacing.s6
-                              : 0,
+                    builder: (context, box) => _TabViewport(
+                      height: box.maxHeight,
+                      child: SingleChildScrollView(
+                        controller: scrollController,
+                        padding: EdgeInsets.fromLTRB(
+                          gutter,
+                          0,
+                          gutter,
+                          AppSpacing.s6,
                         ),
-                        child: Column(
-                          mainAxisAlignment: centered
-                              ? MainAxisAlignment.center
-                              : MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            if (subtitle != null) ...[
-                              Text(
-                                subtitle!,
-                                style: AppTypography.bodySm.copyWith(
-                                  color: AppColors.textSecondary,
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minHeight: centered
+                                ? box.maxHeight - AppSpacing.s6
+                                : 0,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: centered
+                                ? MainAxisAlignment.center
+                                : MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (subtitle != null) ...[
+                                Text(
+                                  subtitle!,
+                                  style: AppTypography.bodySm.copyWith(
+                                    color: AppColors.textSecondary,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: AppSpacing.s4),
-                            ] else if (!centered)
-                              const SizedBox(height: AppSpacing.s4),
-                            child,
-                          ],
+                                const SizedBox(height: AppSpacing.s4),
+                              ] else if (!centered && topGap)
+                                const SizedBox(height: AppSpacing.s4),
+                              child,
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -201,6 +128,8 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    ref.watch(datingProvider);
+    final count = ref.read(datingProvider.notifier).queue(_draft).length;
     final sliderTheme = SliderTheme.of(context).copyWith(
       activeTrackColor: AppColors.accent,
       inactiveTrackColor: AppColors.fill,
@@ -279,13 +208,22 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
           ),
           const SizedBox(height: AppSpacing.s6),
           NumayaButton(
-            label: l10n.filtersApply,
+            // Like the web sheet: how many sample profiles the draft lets through.
+            label: l10n.filtersShowCount(count),
             onPressed: () {
               ref.read(discoveryFiltersProvider.notifier).save(_draft);
               NumayaToast.show(context, l10n.filtersSaved, aboveFooter: false);
               Navigator.of(context).pop();
             },
           ),
+          if (count == 0) ...[
+            const SizedBox(height: AppSpacing.s2),
+            Text(
+              l10n.filtersNoneFit,
+              textAlign: TextAlign.center,
+              style: AppTypography.caption,
+            ),
+          ],
           const SizedBox(height: AppSpacing.s3),
           // In a sheet, the second action is V16's outlined secondary ("Previous" under "Next").
           NumayaButton(
@@ -297,4 +235,13 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
       ),
     );
   }
+}
+
+class _TabViewport extends InheritedWidget {
+  const _TabViewport({required this.height, required super.child});
+
+  final double height;
+
+  @override
+  bool updateShouldNotify(_TabViewport old) => old.height != height;
 }

@@ -189,8 +189,9 @@ void main() {
       await tester.tap(fab());
       await tester.pumpAndSettle();
 
-      // Home
-      expect(find.text('No profiles to show yet'), findsOneWidget);
+      // Home: the first sample profile.
+      expect(find.text('Maya, 29'), findsOneWidget);
+      expect(find.text('Sample profile'), findsOneWidget);
       await tester.tap(find.text('Profile'));
       await tester.pumpAndSettle();
       expect(find.text('Sam, 31'), findsOneWidget);

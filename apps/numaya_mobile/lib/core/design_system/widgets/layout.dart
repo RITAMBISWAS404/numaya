@@ -93,7 +93,17 @@ class NumayaScreen extends StatelessWidget {
               child: column(
                 Column(
                   children: [
-                    Expanded(child: content),
+                    // Tapping outside a field dismisses the keyboard. Not a control, so screen
+                    // readers don't see a screen-sized button.
+                    Expanded(
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        excludeFromSemantics: true,
+                        onTap: () =>
+                            FocusManager.instance.primaryFocus?.unfocus(),
+                        child: content,
+                      ),
+                    ),
                     if (footer != null)
                       Padding(
                         padding: const EdgeInsets.fromLTRB(

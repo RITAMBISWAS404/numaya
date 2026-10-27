@@ -38,7 +38,8 @@ blue, `controlSelected` → ink, `surfacePage` → stone, …), so a widget writ
   chip-set labels in small bold capitals (11.5, 0.06em).
 - **Geometry:** tags 6, fields 8, buttons and chips 12, cards 14, photos and sheets 16; pills only for compact
   buttons and the toast; circles for header buttons, avatars, radios, the step button and switch thumbs. Buttons
-  50 tall, fields 54, rows 56, compact buttons 36 inside the 44 touch area.
+  50 tall, fields 54, rows 56, compact buttons 36 inside the 44 touch area. On Android, text inputs, the search field
+  (V16 46) and the composer (V16 44) are 48dp tap targets ([VISUAL_QA_REPORT.md](VISUAL_QA_REPORT.md) A-2, A-3).
 
 ## Components
 
@@ -49,19 +50,32 @@ blue, `controlSelected` → ink, `surfacePage` → stone, …), so a widget writ
 | `NumayaTabBar` | White, top hairline; current tab ink with filled icon and semibold label; others muted with outline icons |
 | `NumayaButton` | Primary ink · secondary white with 1px ink outline · tint · solid red · text; disabled `#D6D2CE` / `#77736F`; `small` = 36pt outlined pill (ink when primary) |
 | `NumayaFab` | Ink circle with white arrow; disabled warm grey |
-| `NumayaTextField`, `InputSurface`, `FieldLabel` | White, 1px `#6D6C6A` outline, 8 corner, 54 tall; focus 2px blue; invalid 2px red; capital label; text areas show "N characters left" inside |
+| `NumayaTextField`, `InputSurface`, `FieldLabel` | White, 1px `#6D6C6A` outline, 8 corner, 54 tall; focus 2px blue; invalid 2px red; capital label; text areas show "N characters left" inside. The outline is a foreground decoration, so focus doesn't move the text; single-line inputs are 48dp targets |
 | `OptionGroup` + `OptionCard` | One white card, 56pt rows, hairline dividers, no ring on selection; radio 22 grey ring → ink ring + dot; checkbox 22/6 → blue with white tick |
 | `NumayaChip`, `ChipSet` | White 12-corner chip with emoji and 15 medium label (fill on white cards); selected blue tint, deep-blue semibold; set name beside its emoji in a 28pt pastel circle |
 | `PromptCard`, `PromptMark` | White card; blue speech bubble in a 24pt tint circle; 15 medium question; semibold answer |
 | `InfoCard` | Page colour with a hairline, ink icon |
 | `PhotoGrid` | 14 tiles in photo grey, 6-corner order tag, round ink remove; empty slots white with a dashed edge and an ink "+" circle |
-| `EmptyState` | White card, left-aligned: illustration, 18 semibold title, body, compact action |
+| `EmptyState` | White card 16pt below what precedes it, left-aligned: illustration (160 wide), 12pt gap, 18 semibold title, body, compact action |
 | `ListGroup`, `ListRow` | 22 medium heading; white card; 56pt rows, 16 regular label, secondary subtitle, dividers inset 16 |
 | `NumayaSwitch` | 51 × 31, green on, fill off, 27pt white thumb |
 | Sliders (`V16SliderThumb`) | Blue interval on the fill rail, 26pt white thumbs with the soft thumb shadow |
-| `showNumayaSheet` | White, 16 top corners, warm grabber, 20 medium title above a hairline, bare ✕; covers the tab bar |
+| `showNumayaSheet` | White, 16 top corners, warm grabber, 20 medium title above a hairline, bare ✕; covers the tab bar; as tall as its content, at most the screen less 8pt |
+| `showNumayaActionSheet` | V16 action sheet: a white group of icon rows (destructive ones red) and a separate white Cancel block |
 | `NumayaToast` | Blue-tint pill, deep-blue text, float shadow |
 | `Wordmark` | Bold ink "numaya", mark in Withings blue with the rose dot |
+| `InitialsAvatar`, `VerifiedMark` | Navy circle with a white initial (no invented photos); optional blue ring for an unopened match; blue verified badge |
+| `PhotoPlaceholder` | Photo-grey stand-in with an image glyph; fixed ratio or fills its box |
+| `StatusBadge` | 6-corner tag: outlined, blue tint ("New"), white on a photo, translucent on the dark band |
+| `ProfileSectionCard`, `InfoChip` | White profile section card with a 15 medium title; fill chips with an icon or emoji |
+| `RoundAction` | Pass (white, ink outline), SuperSwipe (blue), Like (ink), 56pt; SuperSwipe also floats on the photo band |
+| `ConsequenceList` | Icon + secondary-text lines in unmatch and block sheets |
+| `Composer` | White pill field (48dp) and a 44pt ink send circle in a 48dp target; disabled grey when empty |
+| `MessageBubble` | Withings blue, white text, 14 corners with a 6pt tail corner |
+| `ScallopPortrait` | V16 organic frame `scallop(10, 46.5, 3)` in photo grey with the initial at 88/264 scale |
+| `ViewTabs` | Segmented filter tabs with counts ("All 5 · New 3 · Nearby 2"); selected on the blue tint |
+| `PersonTile` | Likes grid tile: photo stand-in, badge, name + verified, caption |
+| `BalancedText` / `.rich` | Even line lengths, like CSS `text-wrap: balance` (flow titles, the match sentence) |
 | `CodeInput` | (no V16 counterpart) extends the V16 field: white cells, 1px outline, 8 corner, blue active, red wrong, tint verified |
 | `SetupProgress` | (no V16 counterpart) white cards on the page; done on the fill; next ringed in ink with a blue-tint "Up next" |
 
@@ -82,5 +96,6 @@ node apps/numaya_mobile/tool/generate_tokens.mjs --check  # CI
 | Five tabs (with Activity) | Four tabs | Activity needs real events; not built ([ONBOARDING_FLOW.md](ONBOARDING_FLOW.md)) |
 | Edit / Preview segmented control on Edit profile | Not shown | No preview yet; no control that does nothing |
 | Profile readiness score and badge | Not shown | The score's inputs (bio, etc.) don't exist in the app yet |
-| Likes and Messages filter tabs | Not shown | No data to filter |
+| Profile options "Share profile" | Not shown | No real profile links |
+| Settings repeats age and distance | In the Filters sheet only | One place to change them |
 | Fonts: full Fontsource build | Latin subset | Other scripts fall back to the platform font |

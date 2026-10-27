@@ -102,14 +102,29 @@ void main() {
     await settle(tester);
   });
 
-  testWidgets('Likes empty state sends people to Home', (tester) async {
+  testWidgets('Likes empty state (every like answered) sends people to Home', (
+    tester,
+  ) async {
     await usePhoneSize(tester);
     await _toInterests(tester, testAuth());
     await _toHome(tester);
     await _tap(tester, find.text('Likes'));
+    for (final name in [
+      'Maya, 29',
+      'Kemi, 27',
+      'Noor, 28',
+      'Inés, 24',
+      'Tomás, 41',
+    ]) {
+      await _tap(tester, find.bySemanticsLabel(RegExp('^$name')));
+      await tester.pump(const Duration(milliseconds: 600));
+      await _tap(tester, find.widgetWithText(NumayaButton, 'Pass'));
+      await tester.pump(const Duration(milliseconds: 600));
+    }
     expect(find.text('No new likes right now'), findsOneWidget);
     await _tap(tester, find.text('Go to Home'));
-    expect(find.text('No profiles to show yet'), findsOneWidget);
+    // Passing on Likes also passes them in Discover, so Home starts with Sam.
+    expect(find.text('Sam, 31'), findsOneWidget);
     await settle(tester);
   });
 

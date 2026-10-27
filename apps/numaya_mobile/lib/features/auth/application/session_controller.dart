@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/logging/app_logger.dart';
+import '../../dating/application/dating_controller.dart';
+import '../../home/application/discovery_filters.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../domain/auth_repository.dart';
 import 'phone_entry_controller.dart';
@@ -60,6 +62,8 @@ class SessionController extends Notifier<AuthSession?> {
     ref.invalidate(phoneEntryProvider);
     ref.invalidate(verificationProvider);
     ref.invalidate(onboardingProvider);
+    ref.invalidate(datingProvider);
+    ref.invalidate(discoveryFiltersProvider);
   }
 }
 

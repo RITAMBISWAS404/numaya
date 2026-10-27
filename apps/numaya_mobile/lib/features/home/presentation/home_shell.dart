@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../dating/application/dating_controller.dart';
 
 /// Signed-in shell: four tabs (Home, Likes, Messages, Profile) on the stone page, each keeping its
 /// own stack, above V16's white tab bar.
-class HomeShell extends StatelessWidget {
+class HomeShell extends ConsumerWidget {
   const HomeShell({super.key, required this.shell});
 
   final StatefulNavigationShell shell;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    ref.watch(datingProvider);
+    final dating = ref.read(datingProvider.notifier);
+    final newLikes = dating.unansweredLikes();
+    final newMatches = dating.unopenedMatches();
     return Scaffold(
       backgroundColor: AppColors.canvas,
       body: shell,
@@ -23,8 +29,18 @@ class HomeShell extends StatelessWidget {
             shell.goBranch(i, initialLocation: i == shell.currentIndex),
         items: [
           TabItem(label: l10n.tabDiscover, icon: NumayaIcons.home),
-          TabItem(label: l10n.tabLikes, icon: NumayaIcons.heart),
-          TabItem(label: l10n.tabChats, icon: NumayaIcons.message),
+          TabItem(
+            label: l10n.tabLikes,
+            icon: NumayaIcons.heart,
+            badgeCount: newLikes,
+            badgeLabel: l10n.tabNewCount(l10n.tabLikes, newLikes),
+          ),
+          TabItem(
+            label: l10n.tabChats,
+            icon: NumayaIcons.message,
+            badgeCount: newMatches,
+            badgeLabel: l10n.tabNewCount(l10n.tabChats, newMatches),
+          ),
           TabItem(label: l10n.tabProfile, icon: NumayaIcons.user),
         ],
       ),

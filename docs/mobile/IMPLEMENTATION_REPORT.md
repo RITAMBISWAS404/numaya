@@ -1,5 +1,50 @@
 # Implementation report
 
+## Product audit and completion (branch `experiment/numaya-flutter-v16-complete`)
+
+Based on `experiment/numaya-flutter-v16` at `b99edb4` (unchanged). V16 stays the visual direction.
+
+**Audit:** [SCREEN_INVENTORY.md](SCREEN_INVENTORY.md) lists 55 screens or state groups with requirement, route,
+reference, before/after, tests and next action, and the 7 conflicts between sources with how each was resolved.
+Before this branch the onboarding was complete, but the dating loop was empty cards: no profiles, likes, matches,
+chat or safety actions.
+
+**Built (on labelled sample data, in memory, deterministic):** Discover (profile card, sections, like / pass /
+SuperSwipe buttons and swipe, one-step undo, report or block from the card, filters with a live count, "no one fits"
+→ widen, "seen everyone" → show again, paused, load error with retry); Likes (grid, All / New / Nearby with counts,
+empty states, like-back profile); match screen (V16 organic frame, shared interests, composer, keep browsing);
+Messages (new-match queue, search, conversation filters, empty states); chat (openers, bubbles, "Demo · saved on this
+device, not sent", failed → retry / delete, unmatch / block / report with consequences and result screens); another
+person's profile; Settings (snooze, blocked people with unblock, prototype tool to simulate connection problems);
+tab badges; photo options (make main, remove, keep at least 2 when editing); tap outside to dismiss the keyboard.
+Nothing is sent anywhere, no replies are generated, and every surface says it is a sample
+([ARCHITECTURE.md](ARCHITECTURE.md), "Dating demo").
+
+**Visual QA:** 27 new Flutter renders compared with the V16 captures; 11 visual defects and 4 accessibility defects
+fixed ([VISUAL_QA_REPORT.md](VISUAL_QA_REPORT.md)).
+
+**Checks on this branch (real results):**
+
+| Check | Result |
+|---|---|
+| `dart format lib test integration_test` | 0 files changed |
+| `flutter analyze` | No issues found |
+| `flutter test` | **84 passed**, 1 skipped (the opt-in capture test) |
+| — unit (51) | dating controller (16: matching, undo, filters and hidden count, likes filters, like back, message on device / failed / retry / delete, unmatch, report with and without block, unblock, snooze), make main photo, plus the earlier auth, rules, tokens and contrast tests |
+| — widget (33) | 12 dating journeys, 4 onboarding edge cases (under 18 corrected, back keeps answers, Android back, keyboard dismissal), 2 photo options, 4 accessibility (tap targets and labels on every onboarding and dating screen; 375 × 667 at 130% text), and the earlier onboarding and V16 screen tests |
+| Capture tests (`--tags screenshots --run-skipped`) | 3 passed: 24 + 20 + 7 renders |
+| `node tool/generate_tokens.mjs --check` | Up to date |
+| `flutter test integration_test` | **Not run**: needs a phone or emulator |
+| `flutter build apk --debug` | **Not run: blocked.** No Android SDK; `dl.google.com` returns 403 at this environment's proxy |
+
+The app has **not** been run on a phone or emulator. Android config checked: application id
+`com.numaya.numaya_mobile`, label "Numaya", no permissions in the main manifest (debug and profile builds add
+INTERNET for hot reload, the Flutter default; the app itself uses no network, camera or storage), Hanken Grotesk
+and illustrations declared in `pubspec.yaml`, release builds still signed with the debug key (see
+[BUILD_AND_RELEASE.md](BUILD_AND_RELEASE.md)).
+
+---
+
 ## V16 visual correction (branch `experiment/numaya-flutter-v16`)
 
 The foundation (`75f63e7`, branch `experiment/numaya-flutter-foundation`, unchanged) used the default purple

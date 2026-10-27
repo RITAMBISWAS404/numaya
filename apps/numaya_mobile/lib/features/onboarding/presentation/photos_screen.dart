@@ -9,6 +9,7 @@ import '../../auth/presentation/auth_copy.dart';
 import '../application/onboarding_controller.dart';
 import '../domain/profile_draft.dart';
 import 'edit_guard.dart';
+import 'photo_options.dart';
 
 /// B-15 photos: at least 2, ideally 4, up to 6. Image upload is not connected yet, so "+" adds a
 /// clearly labelled placeholder tile (never a stock photo of a person).
@@ -92,6 +93,9 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
               mainLabel: l10n.photosMain,
               addLabel: l10n.photosAdd,
               removeLabel: l10n.photosRemove,
+              onOpen: (id) =>
+                  showPhotoOptions(context, ref, id, keepMinimum: false),
+              openLabel: l10n.photoOptionsLabel,
             ),
             const SizedBox(height: AppSpacing.s5),
             InfoCard(

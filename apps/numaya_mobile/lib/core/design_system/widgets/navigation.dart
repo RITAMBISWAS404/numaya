@@ -8,9 +8,20 @@ import '../icons/numaya_icon_data.g.dart';
 import 'primitives.dart';
 
 class TabItem {
-  const TabItem({required this.label, required this.icon});
+  const TabItem({
+    required this.label,
+    required this.icon,
+    this.badgeCount = 0,
+    this.badgeLabel,
+  });
   final String label;
   final NumayaIcons icon;
+
+  /// Shows V16's red notification dot when above zero.
+  final int badgeCount;
+
+  /// Accessible label when badged, e.g. "Likes, 2 new".
+  final String? badgeLabel;
 }
 
 /// Bottom navigation (`.theme-withings .tab-bar`): white with a top hairline; the current tab ink
@@ -67,7 +78,9 @@ class NumayaTabBar extends StatelessWidget {
       selected: current,
       child: Pressable(
         onTap: () => onSelect(i),
-        semanticLabel: item.label,
+        semanticLabel: item.badgeCount > 0
+            ? (item.badgeLabel ?? item.label)
+            : item.label,
         excludeChildSemantics: true,
         pressedScale: 0.96,
         child: SizedBox(
@@ -76,7 +89,29 @@ class NumayaTabBar extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              NumayaIcon(item.icon, outline: !current, color: color),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  NumayaIcon(item.icon, outline: !current, color: color),
+                  if (item.badgeCount > 0)
+                    Positioned(
+                      right: -3,
+                      top: -2,
+                      child: Container(
+                        width: 9,
+                        height: 9,
+                        decoration: BoxDecoration(
+                          color: AppColors.negative,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.surface,
+                            width: 1.5,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
               const SizedBox(height: 3),
               Text(
                 item.label,
@@ -338,8 +373,10 @@ class EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // V16 `.theme-withings .empty-state`: 16pt below what precedes it.
     return Container(
       width: double.infinity,
+      margin: const EdgeInsets.only(top: AppSpacing.s4),
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.s5,
         AppSpacing.s8,
@@ -354,8 +391,10 @@ class EmptyState extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (art != null) ExcludeSemantics(child: art!),
-          const SizedBox(height: AppSpacing.s5),
+          if (art != null) ...[
+            ExcludeSemantics(child: art!),
+            const SizedBox(height: AppSpacing.s3),
+          ],
           Semantics(
             header: true,
             child: Text(title, style: AppTypography.emptyTitle),

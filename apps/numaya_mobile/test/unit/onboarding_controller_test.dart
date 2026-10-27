@@ -65,4 +65,21 @@ void main() {
     controller().cancelEdit();
     expect(draft().firstName, 'Sam');
   });
+
+  test(
+    'make main photo moves a photo to the front; the main photo stays put',
+    () {
+      controller()
+        ..addPhoto()
+        ..addPhoto()
+        ..addPhoto();
+      final ids = [for (final p in draft().photos) p.id];
+      controller().makeMain(ids[2]);
+      expect([for (final p in draft().photos) p.id], [ids[2], ids[0], ids[1]]);
+      controller().makeMain(ids[2]);
+      expect(draft().photos.first.id, ids[2]);
+      controller().removePhoto(ids[2]);
+      expect([for (final p in draft().photos) p.id], [ids[0], ids[1]]);
+    },
+  );
 }

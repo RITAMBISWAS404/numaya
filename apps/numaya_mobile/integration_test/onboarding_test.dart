@@ -81,6 +81,6 @@ void main() {
     await wait(300);
     await tester.tap(fab);
     await wait(3500);
-    expect(find.text('No profiles to show yet'), findsOneWidget);
+    expect(find.text('Maya, 29'), findsOneWidget);
   });
 }

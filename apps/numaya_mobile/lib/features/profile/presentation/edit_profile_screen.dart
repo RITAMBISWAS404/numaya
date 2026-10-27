@@ -7,6 +7,7 @@ import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/domain/profile_draft.dart';
+import '../../onboarding/presentation/photo_options.dart';
 
 /// B-24 Edit profile in V16's layout (screenshot 102-edit-profile): an "EDIT PROFILE" header, the
 /// photo grid in place (changes save straight away), the prompt card, then rows for the basics and
@@ -53,9 +54,23 @@ class EditProfileScreen extends ConsumerWidget {
                   onAdd: () => changePhotos(controller.addPhoto),
                   onRemove: (id) {
                     // Keep the minimum: the last two photos can't be removed here.
-                    if (draft.photos.length <= ProfileRules.minPhotos) return;
+                    if (draft.photos.length <= ProfileRules.minPhotos) {
+                      NumayaToast.show(context, l10n.photoKeepTwo);
+                      return;
+                    }
                     changePhotos(() => controller.removePhoto(id));
                   },
+                  onOpen: (id) async {
+                    if (await showPhotoOptions(
+                      context,
+                      ref,
+                      id,
+                      keepMinimum: true,
+                    )) {
+                      await controller.saveEdits();
+                    }
+                  },
+                  openLabel: l10n.photoOptionsLabel,
                   mainLabel: l10n.photosMain,
                   addLabel: l10n.photosAdd,
                   removeLabel: l10n.photosRemove,

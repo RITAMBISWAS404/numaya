@@ -1,6 +1,5 @@
 {
   "@@locale": "en",
-
   "appName": "Numaya",
   "back": "Back",
   "close": "Close",
@@ -11,7 +10,6 @@
   "errorNetwork": "We couldn’t reach Numaya. Check your connection and try again.",
   "errorAuthUnavailable": "Sign-in isn’t available in this build yet.",
   "errorGeneric": "Something went wrong. Try again.",
-
   "welcomeTitle": "Fewer swipes.\nBetter first dates.",
   "welcomeLede": "Profiles built around conversation, so the right person knows what to say.",
   "welcomeCreateAccount": "Create an account",
@@ -24,7 +22,6 @@
   "legalTermsTitle": "Terms of Service",
   "legalPrivacyTitle": "Privacy Policy",
   "legalPending": "The final document isn’t published yet. It will open here before Numaya launches.",
-
   "phoneTitleSignUp": "Can we get your number, please?",
   "phoneLedeSignUp": "We only use phone numbers to make sure everyone on Numaya is real.",
   "phoneTitleSignIn": "Welcome back. What’s your number?",
@@ -32,22 +29,33 @@
   "phoneCountryLabel": "Country",
   "phoneNumberLabel": "Phone number",
   "phoneCountryButton": "Country: {name}, plus {dialCode}",
-  "@phoneCountryButton": { "placeholders": { "name": {}, "dialCode": {} } },
+  "@phoneCountryButton": {
+    "placeholders": {
+      "name": {},
+      "dialCode": {}
+    }
+  },
   "phonePrivacyTitle": "Your number stays private",
   "phonePrivacyBody": "We never share it, and it won’t be on your profile.",
   "phoneSendCode": "Send code",
   "phoneSending": "Sending code",
   "phoneInvalid": "That number can’t be used. Check it and try again.",
-
   "countrySheetTitle": "Country or region",
   "countrySearch": "Search",
   "countryNoResults": "No countries match “{query}”.",
-  "@countryNoResults": { "placeholders": { "query": {} } },
+  "@countryNoResults": {
+    "placeholders": {
+      "query": {}
+    }
+  },
   "countrySelected": "Selected",
-
   "verifyTitle": "Verify your number",
   "verifyLede": "Enter the code we’ve sent by text to {number}.",
-  "@verifyLede": { "placeholders": { "number": {} } },
+  "@verifyLede": {
+    "placeholders": {
+      "number": {}
+    }
+  },
   "verifyChangeNumber": "Change number",
   "verifyCodeLabel": "Code",
   "verifyChecking": "Verifying",
@@ -56,25 +64,45 @@
   "verifySuccess": "Number verified",
   "verifyDidntGet": "Didn’t get a code?",
   "verifyResendIn": "Resend in {time}",
-  "@verifyResendIn": { "placeholders": { "time": {} } },
+  "@verifyResendIn": {
+    "placeholders": {
+      "time": {}
+    }
+  },
   "verifyResend": "Resend code",
   "verifyResent": "New code sent",
   "verifySubmit": "Verify code",
   "demoMessageTitle": "Demo text message",
   "demoMessageBody": "Your Numaya code is {code}. This build doesn’t send real texts.",
-  "@demoMessageBody": { "placeholders": { "code": {} } },
+  "@demoMessageBody": {
+    "placeholders": {
+      "code": {}
+    }
+  },
   "noAccountTitle": "No account for this number yet",
   "noAccountBody": "Create one now. It takes about two minutes.",
   "noAccountCreate": "Create an account",
   "noAccountOtherNumber": "Use a different number",
   "signedIn": "You’re signed in",
-
   "setupVerifiedTitle": "You’re verified",
   "setupVerifiedBody": "{number} is confirmed. Now let’s make a profile people actually want to reply to.",
-  "@setupVerifiedBody": { "placeholders": { "number": {} } },
+  "@setupVerifiedBody": {
+    "placeholders": {
+      "number": {}
+    }
+  },
   "setupProfileTitle": "Your profile",
   "setupCount": "{done} of {total} done",
-  "@setupCount": { "placeholders": { "done": { "type": "int" }, "total": { "type": "int" } } },
+  "@setupCount": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "setupUpNext": "Up next",
   "setupStepDone": "Done",
   "setupBasicsLabel": "The basics",
@@ -88,7 +116,6 @@
   "setupGoHome": "Go to Home",
   "setupCaptionTime": "About two minutes. You can finish later.",
   "setupCaptionReady": "Your profile is ready.",
-
   "basicsTitle": "Let’s start with the basics",
   "basicsFirstName": "First name",
   "basicsBirthYear": "Year you were born",
@@ -104,16 +131,33 @@
   "lookingOpen": "Open to seeing where it goes",
   "lookingCasual": "Something casual",
   "basicsFooter": "Shown on your profile: first name and age",
-
   "interestsTitle": "What are you into?",
   "interestsLede": "Pick 3 to 5. They start conversations and help us find people like you.",
   "interestsLabel": "Interests",
   "interestsSelected": "{count}/5 selected",
-  "@interestsSelected": { "placeholders": { "count": { "type": "int" } } },
+  "@interestsSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "interestsPickMore": "{count, plural, =1{Pick 1 more} other{Pick {count} more}}",
-  "@interestsPickMore": { "placeholders": { "count": { "type": "int" } } },
+  "@interestsPickMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "interestsCount": "{count}/5 interests",
-  "@interestsCount": { "placeholders": { "count": { "type": "int" } } },
+  "@interestsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "interestsNeedPrompt": "Now answer your prompt",
   "promptSectionTitle": "Your prompt",
   "promptSectionBody": "Matches reply to this. You can change it any time from your profile.",
@@ -124,33 +168,56 @@
   "promptAnswerPlaceholder": "Be specific. It gives people something to reply to.",
   "promptSave": "Save prompt",
   "promptCounter": "{count}/{max}",
-  "@promptCounter": { "placeholders": { "count": { "type": "int" }, "max": { "type": "int" } } },
+  "@promptCounter": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
   "promptWriteToSave": "Write an answer to save.",
   "promptNoChanges": "No changes yet.",
   "promptSavedHint": "Saved prompts show on your profile straight away.",
   "promptCharsLeft": "{count, plural, =1{1 character left} other{{count} characters left}}",
-  "@promptCharsLeft": { "placeholders": { "count": { "type": "int" } } },
-
+  "@promptCharsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "photosTitle": "Add your photos",
   "photosLede": "At least 2, ideally 4. Clear, recent, and just you in the first one.",
   "photosAddMore": "{count, plural, =1{Add 1 more for the best results} other{Add {count} more for the best results}}",
-  "@photosAddMore": { "placeholders": { "count": { "type": "int" } } },
+  "@photosAddMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "photosLookingGreat": "Looking great",
   "photosMain": "Main",
   "photosAdd": "Add a photo",
   "photosRemove": "Remove photo {position}",
-  "@photosRemove": { "placeholders": { "position": { "type": "int" } } },
+  "@photosRemove": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      }
+    }
+  },
   "photosInfoTitle": "Your first photo leads your profile",
   "photosInfoBody": "Photo upload isn’t connected in this build, so + adds a placeholder tile. You can choose a different main photo later in Edit profile.",
   "photosFinish": "Finish profile",
-
   "tabDiscover": "Home",
   "tabLikes": "Likes",
   "tabChats": "Messages",
   "tabProfile": "Profile",
   "profileReady": "Your profile is ready",
-  "discoverEmptyTitle": "No profiles to show yet",
-  "discoverEmptyBody": "People appear here once matching is connected. This demo build doesn’t include it.",
   "discoverFilters": "Filters",
   "filtersTitle": "Filters",
   "filtersAge": "Age",
@@ -158,10 +225,25 @@
   "filtersDistanceHeading": "How far away are they?",
   "filtersDistanceLabel": "Distance",
   "filtersAgeValue": "{min} - {max}",
-  "@filtersAgeValue": { "placeholders": { "min": { "type": "int" }, "max": { "type": "int" } } },
+  "@filtersAgeValue": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
   "filtersDistance": "Maximum distance",
   "filtersDistanceValue": "Up to {km} km",
-  "@filtersDistanceValue": { "placeholders": { "km": { "type": "int" } } },
+  "@filtersDistanceValue": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
   "filtersApply": "Save filters",
   "filtersReset": "Reset",
   "filtersSaved": "Filters saved",
@@ -172,9 +254,15 @@
   "chatsEmptyTitle": "Connections start here",
   "chatsEmptyBody": "When you like each other, you’ll match. Here’s where you can chat.",
   "findYourPeople": "Find your people",
-
   "profileNameAge": "{name}, {age}",
-  "@profileNameAge": { "placeholders": { "name": {}, "age": { "type": "int" } } },
+  "@profileNameAge": {
+    "placeholders": {
+      "name": {},
+      "age": {
+        "type": "int"
+      }
+    }
+  },
   "profileEdit": "Edit profile",
   "profileSettings": "Settings",
   "profileLookingFor": "Looking for",
@@ -191,19 +279,20 @@
   "profileInitialLabel": "Your initial, until photo upload is connected",
   "editTitle": "Edit profile",
   "editPhotosTitle": "Photos",
-  "editPhotosHint": "Keep at least 2.",
+  "editPhotosHint": "Tap a photo to make it your main one. Keep at least 2.",
   "editPhotosNote": "Upload isn’t connected yet, so + adds a placeholder tile.",
   "editPromptSection": "Prompt",
   "editAboutSection": "About you",
   "editSaved": "Saved",
   "editPromptTitle": "Your prompt",
-
   "settingsTitle": "Settings",
   "settingsAccount": "Account",
   "settingsPhone": "Phone number",
   "settingsNotifications": "Notifications",
-  "settingsNewMatches": "New matches",
+  "settingsNewLikes": "New likes",
   "settingsMessages": "New messages",
+  "settingsSwitchOn": "On",
+  "settingsSwitchOff": "Off",
   "settingsNotificationsNote": "Push notifications aren’t connected in this build. These choices are kept for this session.",
   "settingsSignOut": "Log out",
   "settingsDeleteNote": "Deleting removes your profile, matches and messages.",
@@ -215,5 +304,399 @@
   "settingsAbout": "About",
   "settingsDemoNote": "Demo build: nothing is sent to a server, and your profile is cleared when the app closes.",
   "settingsVersion": "Version {version}",
-  "@settingsVersion": { "placeholders": { "version": {} } }
+  "@settingsVersion": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "done": "Done",
+  "discoverSampleNote": "Sample profiles. Photos are placeholders; distances are illustrative.",
+  "discoverSampleBadge": "Sample profile",
+  "discoverVerified": "Verified",
+  "discoverNewHere": "New here",
+  "discoverPhotoLabel": "{name}, photo {position} (placeholder)",
+  "@discoverPhotoLabel": {
+    "placeholders": {
+      "name": {},
+      "position": {
+        "type": "int"
+      }
+    }
+  },
+  "discoverAboutMe": "About me",
+  "discoverYouBothLike": "You both like",
+  "discoverLocation": "My location",
+  "discoverDistance": "~{km} km away",
+  "@discoverDistance": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "discoverLivesIn": "Lives in {place}",
+  "@discoverLivesIn": {
+    "placeholders": {
+      "place": {}
+    }
+  },
+  "discoverPass": "Pass",
+  "discoverLike": "Like",
+  "discoverSuperSwipe": "SuperSwipe",
+  "discoverLiked": "You liked {name}",
+  "@discoverLiked": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "discoverSuperSent": "SuperSwipe sent to {name}",
+  "@discoverSuperSent": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "discoverUndo": "Undo: bring back {name}",
+  "@discoverUndo": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "discoverOptions": "Profile options",
+  "discoverSwipeHint": "{name}. Swipe right to like, left to pass, or use the buttons at the end of the profile.",
+  "@discoverSwipeHint": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "discoverNoFitTitle": "No one fits your filters",
+  "discoverNoFitBody": "{count, plural, =1{1 person is just outside ages {min}–{max} or {km} km.} other{{count} people are just outside ages {min}–{max} or {km} km.}}",
+  "@discoverNoFitBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      },
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "discoverWiden": "Widen age and distance",
+  "discoverSeenAllTitle": "You’ve seen everyone for now",
+  "discoverSeenAllBody": "That’s every sample profile. People you passed on can come back around.",
+  "discoverShowAgain": "Show them again",
+  "discoverPausedTitle": "Home is paused",
+  "discoverPausedBody": "You’re snoozed, so you won’t see new people and they won’t see you. Your matches and chats are still here.",
+  "discoverResume": "Resume",
+  "discoverErrorTitle": "We couldn’t load profiles",
+  "discoverErrorBody": "This is a simulated connection problem. Try again, or turn it off in Settings › Prototype tools.",
+  "discoverRetry": "Try again",
+  "filtersShowCount": "{count, plural, =0{Apply filters} =1{Show 1 person} other{Show {count} people}}",
+  "@filtersShowCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filtersNoneFit": "No one new fits these filters yet.",
+  "optionReport": "Report",
+  "optionBlock": "Block {name}",
+  "@optionBlock": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "optionBlockShort": "Block",
+  "optionUnmatch": "Unmatch",
+  "blockTitle": "Block {name}?",
+  "@blockTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "blockC1": "{name} can’t message you or see you",
+  "@blockC1": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "blockC2": "You won’t see their profile again",
+  "blockC3": "{name} isn’t told",
+  "@blockC3": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "blockedToast": "{name} is blocked",
+  "@blockedToast": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "reportTitle": "Report {name}",
+  "@reportTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "reportWhat": "What’s wrong?",
+  "reportDetails": "Anything else? (optional)",
+  "reportAlsoBlock": "Also block {name}",
+  "@reportAlsoBlock": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "reportAlsoBlockDetail": "You won’t see each other again",
+  "reportSend": "Send report",
+  "reportDoneTitle": "Report saved",
+  "reportDoneBody": "Thanks for telling us. In this demo the report is kept on this device only; nothing is sent or reviewed.",
+  "reportDoneBlocked": "{name} is blocked.",
+  "@reportDoneBlocked": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "unmatchTitle": "Unmatch {name}?",
+  "@unmatchTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "unmatchC1": "You won’t see each other again",
+  "unmatchC2": "This conversation will be closed",
+  "unmatchNoteTitle": "Think they’ve broken our guidelines?",
+  "unmatchNoteBody": "Report them instead. You can block them at the same time.",
+  "conversationOptions": "Conversation options",
+  "endedUnmatchedTitle": "You’ve unmatched {name}",
+  "@endedUnmatchedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "endedUnmatchedBody": "The conversation is closed and {name} won’t appear in Home.",
+  "@endedUnmatchedBody": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "endedBlockedTitle": "You’ve blocked {name}",
+  "@endedBlockedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "endedBlockedBody": "{name} isn’t told. You won’t see each other again. Unblock any time in Settings › Blocked people.",
+  "@endedBlockedBody": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "endedReportedTitle": "You’ve reported and blocked {name}",
+  "@endedReportedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "endedReportedBody": "{name} isn’t told. In this demo the report is kept on this device only; nothing is sent or reviewed.",
+  "@endedReportedBody": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "backToMessages": "Back to messages",
+  "matchTitle": "It’s a match!",
+  "matchBody": "You and {name} liked each other. Now say hello.",
+  "@matchBody": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "matchKeepBrowsing": "Keep browsing",
+  "matchClose": "Close and keep browsing",
+  "matchSayHello": "Say hello to {name}",
+  "@matchSayHello": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "matchSampleNote": "{name} is a sample profile: messages stay on this device.",
+  "@matchSampleNote": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "likesFilterAll": "All",
+  "likesFilterNew": "New",
+  "likesFilterNearby": "Nearby",
+  "likeTileCaption": "Liked your profile · about {km} km",
+  "@likeTileCaption": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "likeNew": "New",
+  "likeMatched": "Matched",
+  "likesNewEmptyTitle": "No new likes",
+  "likesNewEmptyBody": "Likes from the last day show here.",
+  "likesNearbyEmptyTitle": "No one nearby yet",
+  "likesNearbyEmptyBody": "Likes from within {km} km show here.",
+  "@likesNearbyEmptyBody": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "showAll": "Show all",
+  "likeInfoTitle": "Liked your profile",
+  "likeInfoBody": "Like them back to match and start chatting, or pass and they won’t be told.",
+  "likeInfoMatched": "You’ve already matched, so this like is handled.",
+  "likeBack": "Like back",
+  "likePass": "Pass",
+  "likePassed": "You passed on {name}",
+  "@likePassed": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "messageName": "Message {name}",
+  "@messageName": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "likesSampleNote": "Sample profiles. Photos are placeholders.",
+  "tileLabel": "{name}, {age}. {caption}",
+  "@tileLabel": {
+    "placeholders": {
+      "name": {},
+      "age": {
+        "type": "int"
+      },
+      "caption": {}
+    }
+  },
+  "messagesSearch": "Search names and messages",
+  "newMatchesTitle": "New matches ({count})",
+  "@newMatchesTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "conversationsTitle": "Conversations",
+  "convFilterAll": "All",
+  "convFilterUnread": "Unread",
+  "convFilterMove": "Your move",
+  "searchEmptyTitle": "Nothing matches “{query}”",
+  "@searchEmptyTitle": {
+    "placeholders": {
+      "query": {}
+    }
+  },
+  "searchEmptyBody": "Search looks at names and messages.",
+  "searchAgain": "Search everything again",
+  "caughtUpTitle": "You’re all caught up",
+  "caughtUpBody": "Conversations show here when they need you.",
+  "noOneWaitingTitle": "No one is waiting on you",
+  "youPrefix": "You: {text}",
+  "@youPrefix": {
+    "placeholders": {
+      "text": {}
+    }
+  },
+  "chatIntro": "You matched. Say hello and make it personal.",
+  "chatOpenersLabel": "Need an opener? Tap one to edit it first.",
+  "chatMatchedWith": "You matched with {name}",
+  "@chatMatchedWith": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chatPlaceholder": "Message {name}",
+  "@chatPlaceholder": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chatSend": "Send",
+  "chatStatusSending": "Sending…",
+  "chatStatusOnDevice": "Demo · saved on this device, not sent",
+  "chatStatusFailed": "Not sent",
+  "chatRetry": "Retry",
+  "chatDelete": "Delete",
+  "chatSampleNote": "{name} is a sample profile. Messages stay on this device and no one replies.",
+  "@chatSampleNote": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "viewProfile": "View {name}’s profile",
+  "@viewProfile": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "settingsVisibility": "Visibility",
+  "settingsSnooze": "Snooze",
+  "settingsSnoozeOff": "Take a break without losing matches",
+  "settingsSnoozeOn": "You’re hidden. Resume any time.",
+  "settingsSnoozeNote": "Snooze hides your profile and pauses Home. Matches and chats stay.",
+  "snoozedToast": "Snoozed. Home is paused.",
+  "resumedToast": "Welcome back. Home is on.",
+  "settingsPrivacy": "Privacy and safety",
+  "settingsBlocked": "Blocked people",
+  "blockedEmptyTitle": "No one is blocked",
+  "blockedEmptyBody": "People you block or report show here.",
+  "unblock": "Unblock",
+  "unblockName": "Unblock {name}",
+  "@unblockName": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "unblockedToast": "{name} is unblocked",
+  "@unblockedToast": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "settingsPrototype": "Prototype tools",
+  "settingsSimulate": "Simulate connection problems",
+  "settingsSimulateOn": "On: loading Home and sending messages fail",
+  "settingsSimulateOff": "Off",
+  "settingsPrototypeNote": "For trying failure states in this demo build. Real Numaya has no such switch.",
+  "photoMakeMain": "Make main photo",
+  "photoRemove": "Remove photo",
+  "photoKeepTwo": "Keep at least 2 photos",
+  "photoOptionsLabel": "Photo {position} options",
+  "@photoOptionsLabel": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      }
+    }
+  },
+  "photoMadeMain": "Main photo updated",
+  "tabNewCount": "{label}, {count} new",
+  "@tabNewCount": {
+    "placeholders": {
+      "label": {},
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noConvTitle": "No conversations yet",
+  "noConvBody": "Say hello to a new match to start one."
 }

@@ -17,6 +17,9 @@ abstract final class AppSpacing {
 
   /// Screen side margin.
   static const double gutter = NumayaSizeTokens.layoutGutter;
+
+  /// Discover's photo card sits 8pt from the edges.
+  static const double gutterTight = NumayaSizeTokens.layoutGutterTight;
   static const double stackGap = NumayaSizeTokens.layoutStackGap;
   static const double sectionGap = NumayaSizeTokens.layoutSectionGap;
   static const double fieldGap = NumayaSizeTokens.layoutFieldGap;

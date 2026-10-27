@@ -40,6 +40,13 @@ class DiscoveryFiltersController extends Notifier<DiscoveryFilters> {
   @override
   DiscoveryFilters build() => const DiscoveryFilters();
 
+  /// "Widen age and distance": the full range.
+  void broaden() => state = const DiscoveryFilters(
+    minAge: DiscoveryFilters.ageFloor,
+    maxAge: DiscoveryFilters.ageCeiling,
+    maxDistanceKm: DiscoveryFilters.distanceCeilingKm,
+  );
+
   void save(DiscoveryFilters filters) {
     final minAge = filters.minAge.clamp(
       DiscoveryFilters.ageFloor,

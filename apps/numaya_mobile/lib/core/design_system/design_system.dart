@@ -13,6 +13,7 @@ export 'widgets/content.dart';
 export 'widgets/fields.dart';
 export 'widgets/layout.dart';
 export 'widgets/navigation.dart';
+export 'widgets/people.dart';
 export 'widgets/primitives.dart';
 export 'widgets/selection.dart';
 export 'widgets/slider_thumbs.dart';

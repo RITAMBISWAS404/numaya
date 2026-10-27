@@ -100,6 +100,15 @@ class OnboardingController extends Notifier<OnboardingState> {
     ),
   );
 
+  /// Moves a photo to the front ("Make main photo").
+  void makeMain(int id) {
+    final photos = [...state.draft.photos];
+    final i = photos.indexWhere((p) => p.id == id);
+    if (i <= 0) return;
+    photos.insert(0, photos.removeAt(i));
+    _update(state.draft.copyWith(photos: photos));
+  }
+
   void completeStep(SetupStep step) =>
       state = state.copyWith(completed: {...state.completed, step});
 

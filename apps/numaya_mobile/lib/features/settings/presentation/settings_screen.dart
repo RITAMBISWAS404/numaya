@@ -3,25 +3,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/providers.dart';
+import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../auth/application/session_controller.dart';
+import '../../dating/application/dating_controller.dart';
 
 /// Notification choices for this session (push is not connected yet).
 class NotificationPrefs {
-  const NotificationPrefs({this.matches = true, this.messages = true});
-  final bool matches;
+  const NotificationPrefs({this.messages = true, this.likes = true});
   final bool messages;
+  final bool likes;
 }
 
 class NotificationPrefsController extends Notifier<NotificationPrefs> {
   @override
   NotificationPrefs build() => const NotificationPrefs();
 
-  void setMatches(bool v) =>
-      state = NotificationPrefs(matches: v, messages: state.messages);
   void setMessages(bool v) =>
-      state = NotificationPrefs(matches: state.matches, messages: v);
+      state = NotificationPrefs(messages: v, likes: state.likes);
+  void setLikes(bool v) =>
+      state = NotificationPrefs(messages: state.messages, likes: v);
 }
 
 final notificationPrefsProvider =
@@ -78,6 +80,8 @@ class SettingsScreen extends ConsumerWidget {
     final session = ref.watch(sessionProvider);
     final prefs = ref.watch(notificationPrefsProvider);
     final demo = ref.watch(demoAuthProvider) != null;
+    final dating = ref.watch(datingProvider);
+    final datingController = ref.read(datingProvider.notifier);
 
     return NumayaScreen(
       top: NumayaTopBar(
@@ -100,26 +104,82 @@ class SettingsScreen extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.sectionGap),
           ListGroup(
+            title: l10n.settingsVisibility,
+            footnote: l10n.settingsSnoozeNote,
+            children: [
+              ListRow(
+                label: l10n.settingsSnooze,
+                detail: dating.snoozed
+                    ? l10n.settingsSnoozeOn
+                    : l10n.settingsSnoozeOff,
+                switchValue: dating.snoozed,
+                onSwitch: (v) {
+                  datingController.setSnoozed(v);
+                  NumayaToast.show(
+                    context,
+                    v ? l10n.snoozedToast : l10n.resumedToast,
+                    aboveFooter: false,
+                  );
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sectionGap),
+          ListGroup(
             title: l10n.settingsNotifications,
             footnote: l10n.settingsNotificationsNote,
             children: [
-              ListRow(
-                label: l10n.settingsNewMatches,
-                switchValue: prefs.matches,
-                onSwitch: ref
-                    .read(notificationPrefsProvider.notifier)
-                    .setMatches,
-              ),
+              // V16 113: New messages, New likes, each with its state underneath.
               ListRow(
                 label: l10n.settingsMessages,
+                detail: prefs.messages
+                    ? l10n.settingsSwitchOn
+                    : l10n.settingsSwitchOff,
                 switchValue: prefs.messages,
                 onSwitch: ref
                     .read(notificationPrefsProvider.notifier)
                     .setMessages,
               ),
+              ListRow(
+                label: l10n.settingsNewLikes,
+                detail: prefs.likes
+                    ? l10n.settingsSwitchOn
+                    : l10n.settingsSwitchOff,
+                switchValue: prefs.likes,
+                onSwitch: ref.read(notificationPrefsProvider.notifier).setLikes,
+              ),
             ],
           ),
           const SizedBox(height: AppSpacing.sectionGap),
+          ListGroup(
+            title: l10n.settingsPrivacy,
+            children: [
+              ListRow(
+                leading: NumayaIcons.shield,
+                label: l10n.settingsBlocked,
+                value: '${datingController.blocked().length}',
+                onTap: () => context.push(Routes.blocked),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sectionGap),
+          if (demo) ...[
+            ListGroup(
+              title: l10n.settingsPrototype,
+              footnote: l10n.settingsPrototypeNote,
+              children: [
+                ListRow(
+                  label: l10n.settingsSimulate,
+                  detail: dating.simulateErrors
+                      ? l10n.settingsSimulateOn
+                      : l10n.settingsSimulateOff,
+                  switchValue: dating.simulateErrors,
+                  onSwitch: datingController.setSimulateErrors,
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.sectionGap),
+          ],
           ListGroup(
             title: l10n.settingsAbout,
             footnote: demo ? l10n.settingsDemoNote : null,

@@ -64,28 +64,38 @@ class Emoji extends StatelessWidget {
 /// titles). It finds the narrowest width that keeps the same number of lines.
 class BalancedText extends StatelessWidget {
   const BalancedText(
-    this.text, {
+    String this.text, {
     super.key,
     required this.style,
     this.textAlign,
-  });
+  }) : span = null;
 
-  final String text;
+  /// Balanced rich text ([span]'s own styles apply on top of [style]).
+  const BalancedText.rich(
+    InlineSpan this.span, {
+    super.key,
+    required this.style,
+    this.textAlign,
+  }) : text = null;
+
+  final String? text;
+  final InlineSpan? span;
   final TextStyle style;
   final TextAlign? textAlign;
 
   @override
   Widget build(BuildContext context) {
+    final content = TextSpan(text: text, style: style, children: [?span]);
     return LayoutBuilder(
       builder: (context, box) {
         if (!box.hasBoundedWidth) {
-          return Text(text, style: style, textAlign: textAlign);
+          return Text.rich(content, textAlign: textAlign);
         }
         final scaler = MediaQuery.textScalerOf(context);
         final direction = Directionality.of(context);
         int lines(double width) {
           final painter = TextPainter(
-            text: TextSpan(text: text, style: style),
+            text: content,
             textDirection: direction,
             textScaler: scaler,
           )..layout(maxWidth: width);
@@ -115,7 +125,7 @@ class BalancedText extends StatelessWidget {
               : AlignmentDirectional.topStart,
           child: SizedBox(
             width: width,
-            child: Text(text, style: style, textAlign: textAlign),
+            child: Text.rich(content, textAlign: textAlign),
           ),
         );
       },

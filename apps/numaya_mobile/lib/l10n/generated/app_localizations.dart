@@ -844,18 +844,6 @@ abstract class AppLocalizations {
   /// **'Your profile is ready'**
   String get profileReady;
 
-  /// No description provided for @discoverEmptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No profiles to show yet'**
-  String get discoverEmptyTitle;
-
-  /// No description provided for @discoverEmptyBody.
-  ///
-  /// In en, this message translates to:
-  /// **'People appear here once matching is connected. This demo build doesn’t include it.'**
-  String get discoverEmptyBody;
-
   /// No description provided for @discoverFilters.
   ///
   /// In en, this message translates to:
@@ -1075,7 +1063,7 @@ abstract class AppLocalizations {
   /// No description provided for @editPhotosHint.
   ///
   /// In en, this message translates to:
-  /// **'Keep at least 2.'**
+  /// **'Tap a photo to make it your main one. Keep at least 2.'**
   String get editPhotosHint;
 
   /// No description provided for @editPhotosNote.
@@ -1132,17 +1120,29 @@ abstract class AppLocalizations {
   /// **'Notifications'**
   String get settingsNotifications;
 
-  /// No description provided for @settingsNewMatches.
+  /// No description provided for @settingsNewLikes.
   ///
   /// In en, this message translates to:
-  /// **'New matches'**
-  String get settingsNewMatches;
+  /// **'New likes'**
+  String get settingsNewLikes;
 
   /// No description provided for @settingsMessages.
   ///
   /// In en, this message translates to:
   /// **'New messages'**
   String get settingsMessages;
+
+  /// No description provided for @settingsSwitchOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get settingsSwitchOn;
+
+  /// No description provided for @settingsSwitchOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settingsSwitchOff;
 
   /// No description provided for @settingsNotificationsNote.
   ///
@@ -1209,6 +1209,858 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Version {version}'**
   String settingsVersion(Object version);
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// No description provided for @discoverSampleNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample profiles. Photos are placeholders; distances are illustrative.'**
+  String get discoverSampleNote;
+
+  /// No description provided for @discoverSampleBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample profile'**
+  String get discoverSampleBadge;
+
+  /// No description provided for @discoverVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get discoverVerified;
+
+  /// No description provided for @discoverNewHere.
+  ///
+  /// In en, this message translates to:
+  /// **'New here'**
+  String get discoverNewHere;
+
+  /// No description provided for @discoverPhotoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, photo {position} (placeholder)'**
+  String discoverPhotoLabel(Object name, int position);
+
+  /// No description provided for @discoverAboutMe.
+  ///
+  /// In en, this message translates to:
+  /// **'About me'**
+  String get discoverAboutMe;
+
+  /// No description provided for @discoverYouBothLike.
+  ///
+  /// In en, this message translates to:
+  /// **'You both like'**
+  String get discoverYouBothLike;
+
+  /// No description provided for @discoverLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'My location'**
+  String get discoverLocation;
+
+  /// No description provided for @discoverDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'~{km} km away'**
+  String discoverDistance(int km);
+
+  /// No description provided for @discoverLivesIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Lives in {place}'**
+  String discoverLivesIn(Object place);
+
+  /// No description provided for @discoverPass.
+  ///
+  /// In en, this message translates to:
+  /// **'Pass'**
+  String get discoverPass;
+
+  /// No description provided for @discoverLike.
+  ///
+  /// In en, this message translates to:
+  /// **'Like'**
+  String get discoverLike;
+
+  /// No description provided for @discoverSuperSwipe.
+  ///
+  /// In en, this message translates to:
+  /// **'SuperSwipe'**
+  String get discoverSuperSwipe;
+
+  /// No description provided for @discoverLiked.
+  ///
+  /// In en, this message translates to:
+  /// **'You liked {name}'**
+  String discoverLiked(Object name);
+
+  /// No description provided for @discoverSuperSent.
+  ///
+  /// In en, this message translates to:
+  /// **'SuperSwipe sent to {name}'**
+  String discoverSuperSent(Object name);
+
+  /// No description provided for @discoverUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo: bring back {name}'**
+  String discoverUndo(Object name);
+
+  /// No description provided for @discoverOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile options'**
+  String get discoverOptions;
+
+  /// No description provided for @discoverSwipeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}. Swipe right to like, left to pass, or use the buttons at the end of the profile.'**
+  String discoverSwipeHint(Object name);
+
+  /// No description provided for @discoverNoFitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No one fits your filters'**
+  String get discoverNoFitTitle;
+
+  /// No description provided for @discoverNoFitBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 person is just outside ages {min}–{max} or {km} km.} other{{count} people are just outside ages {min}–{max} or {km} km.}}'**
+  String discoverNoFitBody(int count, int min, int max, int km);
+
+  /// No description provided for @discoverWiden.
+  ///
+  /// In en, this message translates to:
+  /// **'Widen age and distance'**
+  String get discoverWiden;
+
+  /// No description provided for @discoverSeenAllTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve seen everyone for now'**
+  String get discoverSeenAllTitle;
+
+  /// No description provided for @discoverSeenAllBody.
+  ///
+  /// In en, this message translates to:
+  /// **'That’s every sample profile. People you passed on can come back around.'**
+  String get discoverSeenAllBody;
+
+  /// No description provided for @discoverShowAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Show them again'**
+  String get discoverShowAgain;
+
+  /// No description provided for @discoverPausedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Home is paused'**
+  String get discoverPausedTitle;
+
+  /// No description provided for @discoverPausedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re snoozed, so you won’t see new people and they won’t see you. Your matches and chats are still here.'**
+  String get discoverPausedBody;
+
+  /// No description provided for @discoverResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get discoverResume;
+
+  /// No description provided for @discoverErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t load profiles'**
+  String get discoverErrorTitle;
+
+  /// No description provided for @discoverErrorBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a simulated connection problem. Try again, or turn it off in Settings › Prototype tools.'**
+  String get discoverErrorBody;
+
+  /// No description provided for @discoverRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get discoverRetry;
+
+  /// No description provided for @filtersShowCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Apply filters} =1{Show 1 person} other{Show {count} people}}'**
+  String filtersShowCount(int count);
+
+  /// No description provided for @filtersNoneFit.
+  ///
+  /// In en, this message translates to:
+  /// **'No one new fits these filters yet.'**
+  String get filtersNoneFit;
+
+  /// No description provided for @optionReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get optionReport;
+
+  /// No description provided for @optionBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Block {name}'**
+  String optionBlock(Object name);
+
+  /// No description provided for @optionBlockShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Block'**
+  String get optionBlockShort;
+
+  /// No description provided for @optionUnmatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmatch'**
+  String get optionUnmatch;
+
+  /// No description provided for @blockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Block {name}?'**
+  String blockTitle(Object name);
+
+  /// No description provided for @blockC1.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} can’t message you or see you'**
+  String blockC1(Object name);
+
+  /// No description provided for @blockC2.
+  ///
+  /// In en, this message translates to:
+  /// **'You won’t see their profile again'**
+  String get blockC2;
+
+  /// No description provided for @blockC3.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} isn’t told'**
+  String blockC3(Object name);
+
+  /// No description provided for @blockedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is blocked'**
+  String blockedToast(Object name);
+
+  /// No description provided for @reportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report {name}'**
+  String reportTitle(Object name);
+
+  /// No description provided for @reportWhat.
+  ///
+  /// In en, this message translates to:
+  /// **'What’s wrong?'**
+  String get reportWhat;
+
+  /// No description provided for @reportDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Anything else? (optional)'**
+  String get reportDetails;
+
+  /// No description provided for @reportAlsoBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Also block {name}'**
+  String reportAlsoBlock(Object name);
+
+  /// No description provided for @reportAlsoBlockDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'You won’t see each other again'**
+  String get reportAlsoBlockDetail;
+
+  /// No description provided for @reportSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send report'**
+  String get reportSend;
+
+  /// No description provided for @reportDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report saved'**
+  String get reportDoneTitle;
+
+  /// No description provided for @reportDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for telling us. In this demo the report is kept on this device only; nothing is sent or reviewed.'**
+  String get reportDoneBody;
+
+  /// No description provided for @reportDoneBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is blocked.'**
+  String reportDoneBlocked(Object name);
+
+  /// No description provided for @unmatchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmatch {name}?'**
+  String unmatchTitle(Object name);
+
+  /// No description provided for @unmatchC1.
+  ///
+  /// In en, this message translates to:
+  /// **'You won’t see each other again'**
+  String get unmatchC1;
+
+  /// No description provided for @unmatchC2.
+  ///
+  /// In en, this message translates to:
+  /// **'This conversation will be closed'**
+  String get unmatchC2;
+
+  /// No description provided for @unmatchNoteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Think they’ve broken our guidelines?'**
+  String get unmatchNoteTitle;
+
+  /// No description provided for @unmatchNoteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Report them instead. You can block them at the same time.'**
+  String get unmatchNoteBody;
+
+  /// No description provided for @conversationOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation options'**
+  String get conversationOptions;
+
+  /// No description provided for @endedUnmatchedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve unmatched {name}'**
+  String endedUnmatchedTitle(Object name);
+
+  /// No description provided for @endedUnmatchedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The conversation is closed and {name} won’t appear in Home.'**
+  String endedUnmatchedBody(Object name);
+
+  /// No description provided for @endedBlockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve blocked {name}'**
+  String endedBlockedTitle(Object name);
+
+  /// No description provided for @endedBlockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} isn’t told. You won’t see each other again. Unblock any time in Settings › Blocked people.'**
+  String endedBlockedBody(Object name);
+
+  /// No description provided for @endedReportedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve reported and blocked {name}'**
+  String endedReportedTitle(Object name);
+
+  /// No description provided for @endedReportedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} isn’t told. In this demo the report is kept on this device only; nothing is sent or reviewed.'**
+  String endedReportedBody(Object name);
+
+  /// No description provided for @backToMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to messages'**
+  String get backToMessages;
+
+  /// No description provided for @matchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'It’s a match!'**
+  String get matchTitle;
+
+  /// No description provided for @matchBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You and {name} liked each other. Now say hello.'**
+  String matchBody(Object name);
+
+  /// No description provided for @matchKeepBrowsing.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep browsing'**
+  String get matchKeepBrowsing;
+
+  /// No description provided for @matchClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close and keep browsing'**
+  String get matchClose;
+
+  /// No description provided for @matchSayHello.
+  ///
+  /// In en, this message translates to:
+  /// **'Say hello to {name}'**
+  String matchSayHello(Object name);
+
+  /// No description provided for @matchSampleNote.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is a sample profile: messages stay on this device.'**
+  String matchSampleNote(Object name);
+
+  /// No description provided for @likesFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get likesFilterAll;
+
+  /// No description provided for @likesFilterNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get likesFilterNew;
+
+  /// No description provided for @likesFilterNearby.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby'**
+  String get likesFilterNearby;
+
+  /// No description provided for @likeTileCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Liked your profile · about {km} km'**
+  String likeTileCaption(int km);
+
+  /// No description provided for @likeNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get likeNew;
+
+  /// No description provided for @likeMatched.
+  ///
+  /// In en, this message translates to:
+  /// **'Matched'**
+  String get likeMatched;
+
+  /// No description provided for @likesNewEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No new likes'**
+  String get likesNewEmptyTitle;
+
+  /// No description provided for @likesNewEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Likes from the last day show here.'**
+  String get likesNewEmptyBody;
+
+  /// No description provided for @likesNearbyEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No one nearby yet'**
+  String get likesNearbyEmptyTitle;
+
+  /// No description provided for @likesNearbyEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Likes from within {km} km show here.'**
+  String likesNearbyEmptyBody(int km);
+
+  /// No description provided for @showAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Show all'**
+  String get showAll;
+
+  /// No description provided for @likeInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Liked your profile'**
+  String get likeInfoTitle;
+
+  /// No description provided for @likeInfoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Like them back to match and start chatting, or pass and they won’t be told.'**
+  String get likeInfoBody;
+
+  /// No description provided for @likeInfoMatched.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve already matched, so this like is handled.'**
+  String get likeInfoMatched;
+
+  /// No description provided for @likeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Like back'**
+  String get likeBack;
+
+  /// No description provided for @likePass.
+  ///
+  /// In en, this message translates to:
+  /// **'Pass'**
+  String get likePass;
+
+  /// No description provided for @likePassed.
+  ///
+  /// In en, this message translates to:
+  /// **'You passed on {name}'**
+  String likePassed(Object name);
+
+  /// No description provided for @messageName.
+  ///
+  /// In en, this message translates to:
+  /// **'Message {name}'**
+  String messageName(Object name);
+
+  /// No description provided for @likesSampleNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample profiles. Photos are placeholders.'**
+  String get likesSampleNote;
+
+  /// No description provided for @tileLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, {age}. {caption}'**
+  String tileLabel(Object name, int age, Object caption);
+
+  /// No description provided for @messagesSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search names and messages'**
+  String get messagesSearch;
+
+  /// No description provided for @newMatchesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New matches ({count})'**
+  String newMatchesTitle(int count);
+
+  /// No description provided for @conversationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversations'**
+  String get conversationsTitle;
+
+  /// No description provided for @convFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get convFilterAll;
+
+  /// No description provided for @convFilterUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get convFilterUnread;
+
+  /// No description provided for @convFilterMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Your move'**
+  String get convFilterMove;
+
+  /// No description provided for @searchEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing matches “{query}”'**
+  String searchEmptyTitle(Object query);
+
+  /// No description provided for @searchEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Search looks at names and messages.'**
+  String get searchEmptyBody;
+
+  /// No description provided for @searchAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Search everything again'**
+  String get searchAgain;
+
+  /// No description provided for @caughtUpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re all caught up'**
+  String get caughtUpTitle;
+
+  /// No description provided for @caughtUpBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversations show here when they need you.'**
+  String get caughtUpBody;
+
+  /// No description provided for @noOneWaitingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No one is waiting on you'**
+  String get noOneWaitingTitle;
+
+  /// No description provided for @youPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'You: {text}'**
+  String youPrefix(Object text);
+
+  /// No description provided for @chatIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'You matched. Say hello and make it personal.'**
+  String get chatIntro;
+
+  /// No description provided for @chatOpenersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Need an opener? Tap one to edit it first.'**
+  String get chatOpenersLabel;
+
+  /// No description provided for @chatMatchedWith.
+  ///
+  /// In en, this message translates to:
+  /// **'You matched with {name}'**
+  String chatMatchedWith(Object name);
+
+  /// No description provided for @chatPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Message {name}'**
+  String chatPlaceholder(Object name);
+
+  /// No description provided for @chatSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get chatSend;
+
+  /// No description provided for @chatStatusSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending…'**
+  String get chatStatusSending;
+
+  /// No description provided for @chatStatusOnDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo · saved on this device, not sent'**
+  String get chatStatusOnDevice;
+
+  /// No description provided for @chatStatusFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sent'**
+  String get chatStatusFailed;
+
+  /// No description provided for @chatRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get chatRetry;
+
+  /// No description provided for @chatDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get chatDelete;
+
+  /// No description provided for @chatSampleNote.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is a sample profile. Messages stay on this device and no one replies.'**
+  String chatSampleNote(Object name);
+
+  /// No description provided for @viewProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View {name}’s profile'**
+  String viewProfile(Object name);
+
+  /// No description provided for @settingsVisibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Visibility'**
+  String get settingsVisibility;
+
+  /// No description provided for @settingsSnooze.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze'**
+  String get settingsSnooze;
+
+  /// No description provided for @settingsSnoozeOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a break without losing matches'**
+  String get settingsSnoozeOff;
+
+  /// No description provided for @settingsSnoozeOn.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re hidden. Resume any time.'**
+  String get settingsSnoozeOn;
+
+  /// No description provided for @settingsSnoozeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze hides your profile and pauses Home. Matches and chats stay.'**
+  String get settingsSnoozeNote;
+
+  /// No description provided for @snoozedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Snoozed. Home is paused.'**
+  String get snoozedToast;
+
+  /// No description provided for @resumedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back. Home is on.'**
+  String get resumedToast;
+
+  /// No description provided for @settingsPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy and safety'**
+  String get settingsPrivacy;
+
+  /// No description provided for @settingsBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked people'**
+  String get settingsBlocked;
+
+  /// No description provided for @blockedEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No one is blocked'**
+  String get blockedEmptyTitle;
+
+  /// No description provided for @blockedEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'People you block or report show here.'**
+  String get blockedEmptyBody;
+
+  /// No description provided for @unblock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock'**
+  String get unblock;
+
+  /// No description provided for @unblockName.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock {name}'**
+  String unblockName(Object name);
+
+  /// No description provided for @unblockedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is unblocked'**
+  String unblockedToast(Object name);
+
+  /// No description provided for @settingsPrototype.
+  ///
+  /// In en, this message translates to:
+  /// **'Prototype tools'**
+  String get settingsPrototype;
+
+  /// No description provided for @settingsSimulate.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulate connection problems'**
+  String get settingsSimulate;
+
+  /// No description provided for @settingsSimulateOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On: loading Home and sending messages fail'**
+  String get settingsSimulateOn;
+
+  /// No description provided for @settingsSimulateOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get settingsSimulateOff;
+
+  /// No description provided for @settingsPrototypeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'For trying failure states in this demo build. Real Numaya has no such switch.'**
+  String get settingsPrototypeNote;
+
+  /// No description provided for @photoMakeMain.
+  ///
+  /// In en, this message translates to:
+  /// **'Make main photo'**
+  String get photoMakeMain;
+
+  /// No description provided for @photoRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get photoRemove;
+
+  /// No description provided for @photoKeepTwo.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep at least 2 photos'**
+  String get photoKeepTwo;
+
+  /// No description provided for @photoOptionsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {position} options'**
+  String photoOptionsLabel(int position);
+
+  /// No description provided for @photoMadeMain.
+  ///
+  /// In en, this message translates to:
+  /// **'Main photo updated'**
+  String get photoMadeMain;
+
+  /// No description provided for @tabNewCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{label}, {count} new'**
+  String tabNewCount(Object label, int count);
+
+  /// No description provided for @noConvTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations yet'**
+  String get noConvTitle;
+
+  /// No description provided for @noConvBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Say hello to a new match to start one.'**
+  String get noConvBody;
 }
 
 class _AppLocalizationsDelegate

@@ -446,13 +446,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileReady => 'Your profile is ready';
 
   @override
-  String get discoverEmptyTitle => 'No profiles to show yet';
-
-  @override
-  String get discoverEmptyBody =>
-      'People appear here once matching is connected. This demo build doesn’t include it.';
-
-  @override
   String get discoverFilters => 'Filters';
 
   @override
@@ -571,7 +564,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editPhotosTitle => 'Photos';
 
   @override
-  String get editPhotosHint => 'Keep at least 2.';
+  String get editPhotosHint =>
+      'Tap a photo to make it your main one. Keep at least 2.';
 
   @override
   String get editPhotosNote =>
@@ -602,10 +596,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsNotifications => 'Notifications';
 
   @override
-  String get settingsNewMatches => 'New matches';
+  String get settingsNewLikes => 'New likes';
 
   @override
   String get settingsMessages => 'New messages';
+
+  @override
+  String get settingsSwitchOn => 'On';
+
+  @override
+  String get settingsSwitchOff => 'Off';
 
   @override
   String get settingsNotificationsNote =>
@@ -645,4 +645,539 @@ class AppLocalizationsEn extends AppLocalizations {
   String settingsVersion(Object version) {
     return 'Version $version';
   }
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get discoverSampleNote =>
+      'Sample profiles. Photos are placeholders; distances are illustrative.';
+
+  @override
+  String get discoverSampleBadge => 'Sample profile';
+
+  @override
+  String get discoverVerified => 'Verified';
+
+  @override
+  String get discoverNewHere => 'New here';
+
+  @override
+  String discoverPhotoLabel(Object name, int position) {
+    return '$name, photo $position (placeholder)';
+  }
+
+  @override
+  String get discoverAboutMe => 'About me';
+
+  @override
+  String get discoverYouBothLike => 'You both like';
+
+  @override
+  String get discoverLocation => 'My location';
+
+  @override
+  String discoverDistance(int km) {
+    return '~$km km away';
+  }
+
+  @override
+  String discoverLivesIn(Object place) {
+    return 'Lives in $place';
+  }
+
+  @override
+  String get discoverPass => 'Pass';
+
+  @override
+  String get discoverLike => 'Like';
+
+  @override
+  String get discoverSuperSwipe => 'SuperSwipe';
+
+  @override
+  String discoverLiked(Object name) {
+    return 'You liked $name';
+  }
+
+  @override
+  String discoverSuperSent(Object name) {
+    return 'SuperSwipe sent to $name';
+  }
+
+  @override
+  String discoverUndo(Object name) {
+    return 'Undo: bring back $name';
+  }
+
+  @override
+  String get discoverOptions => 'Profile options';
+
+  @override
+  String discoverSwipeHint(Object name) {
+    return '$name. Swipe right to like, left to pass, or use the buttons at the end of the profile.';
+  }
+
+  @override
+  String get discoverNoFitTitle => 'No one fits your filters';
+
+  @override
+  String discoverNoFitBody(int count, int min, int max, int km) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people are just outside ages $min–$max or $km km.',
+      one: '1 person is just outside ages $min–$max or $km km.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get discoverWiden => 'Widen age and distance';
+
+  @override
+  String get discoverSeenAllTitle => 'You’ve seen everyone for now';
+
+  @override
+  String get discoverSeenAllBody =>
+      'That’s every sample profile. People you passed on can come back around.';
+
+  @override
+  String get discoverShowAgain => 'Show them again';
+
+  @override
+  String get discoverPausedTitle => 'Home is paused';
+
+  @override
+  String get discoverPausedBody =>
+      'You’re snoozed, so you won’t see new people and they won’t see you. Your matches and chats are still here.';
+
+  @override
+  String get discoverResume => 'Resume';
+
+  @override
+  String get discoverErrorTitle => 'We couldn’t load profiles';
+
+  @override
+  String get discoverErrorBody =>
+      'This is a simulated connection problem. Try again, or turn it off in Settings › Prototype tools.';
+
+  @override
+  String get discoverRetry => 'Try again';
+
+  @override
+  String filtersShowCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Show $count people',
+      one: 'Show 1 person',
+      zero: 'Apply filters',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get filtersNoneFit => 'No one new fits these filters yet.';
+
+  @override
+  String get optionReport => 'Report';
+
+  @override
+  String optionBlock(Object name) {
+    return 'Block $name';
+  }
+
+  @override
+  String get optionBlockShort => 'Block';
+
+  @override
+  String get optionUnmatch => 'Unmatch';
+
+  @override
+  String blockTitle(Object name) {
+    return 'Block $name?';
+  }
+
+  @override
+  String blockC1(Object name) {
+    return '$name can’t message you or see you';
+  }
+
+  @override
+  String get blockC2 => 'You won’t see their profile again';
+
+  @override
+  String blockC3(Object name) {
+    return '$name isn’t told';
+  }
+
+  @override
+  String blockedToast(Object name) {
+    return '$name is blocked';
+  }
+
+  @override
+  String reportTitle(Object name) {
+    return 'Report $name';
+  }
+
+  @override
+  String get reportWhat => 'What’s wrong?';
+
+  @override
+  String get reportDetails => 'Anything else? (optional)';
+
+  @override
+  String reportAlsoBlock(Object name) {
+    return 'Also block $name';
+  }
+
+  @override
+  String get reportAlsoBlockDetail => 'You won’t see each other again';
+
+  @override
+  String get reportSend => 'Send report';
+
+  @override
+  String get reportDoneTitle => 'Report saved';
+
+  @override
+  String get reportDoneBody =>
+      'Thanks for telling us. In this demo the report is kept on this device only; nothing is sent or reviewed.';
+
+  @override
+  String reportDoneBlocked(Object name) {
+    return '$name is blocked.';
+  }
+
+  @override
+  String unmatchTitle(Object name) {
+    return 'Unmatch $name?';
+  }
+
+  @override
+  String get unmatchC1 => 'You won’t see each other again';
+
+  @override
+  String get unmatchC2 => 'This conversation will be closed';
+
+  @override
+  String get unmatchNoteTitle => 'Think they’ve broken our guidelines?';
+
+  @override
+  String get unmatchNoteBody =>
+      'Report them instead. You can block them at the same time.';
+
+  @override
+  String get conversationOptions => 'Conversation options';
+
+  @override
+  String endedUnmatchedTitle(Object name) {
+    return 'You’ve unmatched $name';
+  }
+
+  @override
+  String endedUnmatchedBody(Object name) {
+    return 'The conversation is closed and $name won’t appear in Home.';
+  }
+
+  @override
+  String endedBlockedTitle(Object name) {
+    return 'You’ve blocked $name';
+  }
+
+  @override
+  String endedBlockedBody(Object name) {
+    return '$name isn’t told. You won’t see each other again. Unblock any time in Settings › Blocked people.';
+  }
+
+  @override
+  String endedReportedTitle(Object name) {
+    return 'You’ve reported and blocked $name';
+  }
+
+  @override
+  String endedReportedBody(Object name) {
+    return '$name isn’t told. In this demo the report is kept on this device only; nothing is sent or reviewed.';
+  }
+
+  @override
+  String get backToMessages => 'Back to messages';
+
+  @override
+  String get matchTitle => 'It’s a match!';
+
+  @override
+  String matchBody(Object name) {
+    return 'You and $name liked each other. Now say hello.';
+  }
+
+  @override
+  String get matchKeepBrowsing => 'Keep browsing';
+
+  @override
+  String get matchClose => 'Close and keep browsing';
+
+  @override
+  String matchSayHello(Object name) {
+    return 'Say hello to $name';
+  }
+
+  @override
+  String matchSampleNote(Object name) {
+    return '$name is a sample profile: messages stay on this device.';
+  }
+
+  @override
+  String get likesFilterAll => 'All';
+
+  @override
+  String get likesFilterNew => 'New';
+
+  @override
+  String get likesFilterNearby => 'Nearby';
+
+  @override
+  String likeTileCaption(int km) {
+    return 'Liked your profile · about $km km';
+  }
+
+  @override
+  String get likeNew => 'New';
+
+  @override
+  String get likeMatched => 'Matched';
+
+  @override
+  String get likesNewEmptyTitle => 'No new likes';
+
+  @override
+  String get likesNewEmptyBody => 'Likes from the last day show here.';
+
+  @override
+  String get likesNearbyEmptyTitle => 'No one nearby yet';
+
+  @override
+  String likesNearbyEmptyBody(int km) {
+    return 'Likes from within $km km show here.';
+  }
+
+  @override
+  String get showAll => 'Show all';
+
+  @override
+  String get likeInfoTitle => 'Liked your profile';
+
+  @override
+  String get likeInfoBody =>
+      'Like them back to match and start chatting, or pass and they won’t be told.';
+
+  @override
+  String get likeInfoMatched =>
+      'You’ve already matched, so this like is handled.';
+
+  @override
+  String get likeBack => 'Like back';
+
+  @override
+  String get likePass => 'Pass';
+
+  @override
+  String likePassed(Object name) {
+    return 'You passed on $name';
+  }
+
+  @override
+  String messageName(Object name) {
+    return 'Message $name';
+  }
+
+  @override
+  String get likesSampleNote => 'Sample profiles. Photos are placeholders.';
+
+  @override
+  String tileLabel(Object name, int age, Object caption) {
+    return '$name, $age. $caption';
+  }
+
+  @override
+  String get messagesSearch => 'Search names and messages';
+
+  @override
+  String newMatchesTitle(int count) {
+    return 'New matches ($count)';
+  }
+
+  @override
+  String get conversationsTitle => 'Conversations';
+
+  @override
+  String get convFilterAll => 'All';
+
+  @override
+  String get convFilterUnread => 'Unread';
+
+  @override
+  String get convFilterMove => 'Your move';
+
+  @override
+  String searchEmptyTitle(Object query) {
+    return 'Nothing matches “$query”';
+  }
+
+  @override
+  String get searchEmptyBody => 'Search looks at names and messages.';
+
+  @override
+  String get searchAgain => 'Search everything again';
+
+  @override
+  String get caughtUpTitle => 'You’re all caught up';
+
+  @override
+  String get caughtUpBody => 'Conversations show here when they need you.';
+
+  @override
+  String get noOneWaitingTitle => 'No one is waiting on you';
+
+  @override
+  String youPrefix(Object text) {
+    return 'You: $text';
+  }
+
+  @override
+  String get chatIntro => 'You matched. Say hello and make it personal.';
+
+  @override
+  String get chatOpenersLabel => 'Need an opener? Tap one to edit it first.';
+
+  @override
+  String chatMatchedWith(Object name) {
+    return 'You matched with $name';
+  }
+
+  @override
+  String chatPlaceholder(Object name) {
+    return 'Message $name';
+  }
+
+  @override
+  String get chatSend => 'Send';
+
+  @override
+  String get chatStatusSending => 'Sending…';
+
+  @override
+  String get chatStatusOnDevice => 'Demo · saved on this device, not sent';
+
+  @override
+  String get chatStatusFailed => 'Not sent';
+
+  @override
+  String get chatRetry => 'Retry';
+
+  @override
+  String get chatDelete => 'Delete';
+
+  @override
+  String chatSampleNote(Object name) {
+    return '$name is a sample profile. Messages stay on this device and no one replies.';
+  }
+
+  @override
+  String viewProfile(Object name) {
+    return 'View $name’s profile';
+  }
+
+  @override
+  String get settingsVisibility => 'Visibility';
+
+  @override
+  String get settingsSnooze => 'Snooze';
+
+  @override
+  String get settingsSnoozeOff => 'Take a break without losing matches';
+
+  @override
+  String get settingsSnoozeOn => 'You’re hidden. Resume any time.';
+
+  @override
+  String get settingsSnoozeNote =>
+      'Snooze hides your profile and pauses Home. Matches and chats stay.';
+
+  @override
+  String get snoozedToast => 'Snoozed. Home is paused.';
+
+  @override
+  String get resumedToast => 'Welcome back. Home is on.';
+
+  @override
+  String get settingsPrivacy => 'Privacy and safety';
+
+  @override
+  String get settingsBlocked => 'Blocked people';
+
+  @override
+  String get blockedEmptyTitle => 'No one is blocked';
+
+  @override
+  String get blockedEmptyBody => 'People you block or report show here.';
+
+  @override
+  String get unblock => 'Unblock';
+
+  @override
+  String unblockName(Object name) {
+    return 'Unblock $name';
+  }
+
+  @override
+  String unblockedToast(Object name) {
+    return '$name is unblocked';
+  }
+
+  @override
+  String get settingsPrototype => 'Prototype tools';
+
+  @override
+  String get settingsSimulate => 'Simulate connection problems';
+
+  @override
+  String get settingsSimulateOn => 'On: loading Home and sending messages fail';
+
+  @override
+  String get settingsSimulateOff => 'Off';
+
+  @override
+  String get settingsPrototypeNote =>
+      'For trying failure states in this demo build. Real Numaya has no such switch.';
+
+  @override
+  String get photoMakeMain => 'Make main photo';
+
+  @override
+  String get photoRemove => 'Remove photo';
+
+  @override
+  String get photoKeepTwo => 'Keep at least 2 photos';
+
+  @override
+  String photoOptionsLabel(int position) {
+    return 'Photo $position options';
+  }
+
+  @override
+  String get photoMadeMain => 'Main photo updated';
+
+  @override
+  String tabNewCount(Object label, int count) {
+    return '$label, $count new';
+  }
+
+  @override
+  String get noConvTitle => 'No conversations yet';
+
+  @override
+  String get noConvBody => 'Say hello to a new match to start one.';
 }

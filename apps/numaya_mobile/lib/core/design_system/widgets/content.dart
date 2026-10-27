@@ -290,6 +290,8 @@ class PhotoGrid extends StatelessWidget {
     required this.photos,
     required this.onAdd,
     required this.onRemove,
+    this.onOpen,
+    this.openLabel,
     required this.mainLabel,
     required this.addLabel,
     required this.removeLabel,
@@ -299,6 +301,12 @@ class PhotoGrid extends StatelessWidget {
   final List<GridPhoto> photos;
   final VoidCallback onAdd;
   final ValueChanged<int> onRemove;
+
+  /// Tapping a filled photo (photo options: make main, remove). Receives the photo id.
+  final ValueChanged<int>? onOpen;
+
+  /// Accessible label for that action, by 1-based position.
+  final String Function(int position)? openLabel;
   final String mainLabel;
   final String addLabel;
   final String Function(int position) removeLabel;
@@ -333,12 +341,28 @@ class PhotoGrid extends StatelessWidget {
       child: Stack(
         children: [
           Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: AppColors.photo,
-                borderRadius: AppRadii.all(AppRadii.card),
-              ),
-            ),
+            child: onOpen == null
+                ? DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: AppColors.photo,
+                      borderRadius: AppRadii.all(AppRadii.card),
+                    ),
+                  )
+                : Pressable(
+                    onTap: () => onOpen!(photo.id),
+                    semanticLabel: openLabel?.call(i + 1),
+                    excludeChildSemantics: true,
+                    pressedScale: 0.97,
+                    borderRadius: AppRadii.all(AppRadii.card),
+                    child: SizedBox.expand(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: AppColors.photo,
+                          borderRadius: AppRadii.all(AppRadii.card),
+                        ),
+                      ),
+                    ),
+                  ),
           ),
           Positioned(
             left: 8,
@@ -733,6 +757,13 @@ Future<T?> showNumayaSheet<T>({
     useSafeArea: true,
     // Sheets cover the tab bar, as on the web.
     useRootNavigator: true,
+    // V16 `.sheet__panel`: as tall as its content, at most the screen less 8pt.
+    constraints: BoxConstraints(
+      maxHeight:
+          MediaQuery.sizeOf(context).height -
+          MediaQuery.paddingOf(context).top -
+          AppSpacing.s2,
+    ),
     backgroundColor: AppColors.surface,
     barrierColor: AppColors.scrim,
     shape: const RoundedRectangleBorder(
