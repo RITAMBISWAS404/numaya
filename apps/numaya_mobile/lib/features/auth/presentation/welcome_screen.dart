@@ -1,5 +1,8 @@
+import 'dart:math' as math;
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -62,6 +65,8 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
     final demo = ref.watch(demoAuthProvider) != null;
     final width = MediaQuery.sizeOf(context).width
         .clamp(0.0, AppSpacing.contentMax);
+    // The text column inside the gutters.
+    final text = width - 2 * AppSpacing.gutter;
     final linkStyle =
         AppTypography.weight(
           AppTypography.micro,
@@ -84,111 +89,128 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
               constraints: const BoxConstraints(
                 maxWidth: AppSpacing.contentMax,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppSpacing.gutter,
-                      AppSpacing.s4,
-                      AppSpacing.gutter,
-                      0,
-                    ),
-                    child: Row(
-                      children: [
-                        const Wordmark(),
-                        const Spacer(),
-                        // Demo builds: the badge opens the Demo Hub (screen catalogue).
-                        if (demo)
-                          Pressable(
-                            onTap: () => context.push(Routes.demo),
-                            semanticLabel: l10n.demoHubOpen,
-                            excludeChildSemantics: true,
-                            child: const SizedBox(
-                              height: kMinInteractiveDimension,
-                              child: Center(child: DemoBadge()),
+              // Large text can need more than the screen: then the page scrolls and the sticker
+              // hero gives up its space first.
+              child: LayoutBuilder(
+                builder: (context, viewport) => SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: viewport.maxHeight),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                              AppSpacing.gutter,
+                              AppSpacing.s4,
+                              AppSpacing.gutter,
+                              0,
+                            ),
+                            // Wraps under very large text rather than overflowing.
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                const Wordmark(),
+                                // Demo builds: the badge opens the Demo Hub (screen catalogue).
+                                if (demo)
+                                  Pressable(
+                                    onTap: () => context.push(Routes.demo),
+                                    semanticLabel: l10n.demoHubOpen,
+                                    excludeChildSemantics: true,
+                                    child: const SizedBox(
+                                      height: kMinInteractiveDimension,
+                                      child: Center(
+                                        widthFactor: 1,
+                                        child: DemoBadge(),
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
-                      ],
-                    ),
-                  ),
-                  // V16 keeps V11's hero: interests as tilted emoji stickers.
-                  const Expanded(child: _StickerHero()),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppSpacing.gutter,
-                      AppSpacing.s4,
-                      AppSpacing.gutter,
-                      AppSpacing.s2,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Semantics(
-                          header: true,
-                          child: Text(
-                            l10n.welcomeTitle,
-                            style: AppTypography.welcomeTitle(width),
+                          // V16 keeps V11's hero: interests as tilted emoji stickers.
+                          const Expanded(
+                            child: _ZeroIntrinsicHeight(child: _StickerHero()),
                           ),
-                        ),
-                        const SizedBox(height: AppSpacing.s4),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: ConstrainedBox(
-                            // `.welcome__lede { max-width: 31ch }`.
-                            constraints: const BoxConstraints(maxWidth: 272),
-                            child: Text(
-                              l10n.welcomeLede,
-                              style: AppTypography.input.copyWith(
-                                color: AppColors.textMuted,
-                              ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                              AppSpacing.gutter,
+                              AppSpacing.s4,
+                              AppSpacing.gutter,
+                              AppSpacing.s2,
                             ),
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.s8),
-                        NumayaButton(
-                          label: l10n.welcomeCreateAccount,
-                          onPressed: () => _start(AuthIntent.signUp),
-                        ),
-                        const SizedBox(height: 6),
-                        NumayaButton(
-                          label: l10n.welcomeHaveAccount,
-                          variant: NumayaButtonVariant.quiet,
-                          onPressed: () => _start(AuthIntent.signIn),
-                        ),
-                        const SizedBox(height: AppSpacing.s3),
-                        Center(
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 300),
-                            child: Text.rich(
-                              TextSpan(
-                                style: AppTypography.micro.copyWith(
-                                  height: 18 / 12.5,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Semantics(
+                                  header: true,
+                                  child: Text(
+                                    l10n.welcomeTitle,
+                                    style: AppTypography.welcomeTitle(width),
+                                  ),
                                 ),
-                                children: [
-                                  TextSpan(text: l10n.welcomeLegalPrefix),
-                                  TextSpan(
-                                    text: l10n.welcomeLegalTerms,
-                                    style: linkStyle,
-                                    recognizer: _terms,
+                                const SizedBox(height: AppSpacing.s4),
+                                // `.welcome__lede { max-width: 31ch }`, as padding so the page can measure it.
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    right: math.max(0, text - 272),
                                   ),
-                                  TextSpan(text: l10n.welcomeLegalMiddle),
-                                  TextSpan(
-                                    text: l10n.welcomeLegalPrivacy,
-                                    style: linkStyle,
-                                    recognizer: _privacy,
+                                  child: Text(
+                                    l10n.welcomeLede,
+                                    style: AppTypography.input.copyWith(
+                                      color: AppColors.textMuted,
+                                    ),
                                   ),
-                                  TextSpan(text: l10n.welcomeLegalSuffix),
-                                ],
-                              ),
-                              textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: AppSpacing.s8),
+                                NumayaButton(
+                                  label: l10n.welcomeCreateAccount,
+                                  onPressed: () => _start(AuthIntent.signUp),
+                                ),
+                                const SizedBox(height: 6),
+                                NumayaButton(
+                                  label: l10n.welcomeHaveAccount,
+                                  variant: NumayaButtonVariant.quiet,
+                                  onPressed: () => _start(AuthIntent.signIn),
+                                ),
+                                const SizedBox(height: AppSpacing.s3),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: math.max(0, (text - 300) / 2),
+                                  ),
+                                  child: Text.rich(
+                                    TextSpan(
+                                      style: AppTypography.micro.copyWith(
+                                        height: 18 / 12.5,
+                                      ),
+                                      children: [
+                                        TextSpan(text: l10n.welcomeLegalPrefix),
+                                        TextSpan(
+                                          text: l10n.welcomeLegalTerms,
+                                          style: linkStyle,
+                                          recognizer: _terms,
+                                        ),
+                                        TextSpan(text: l10n.welcomeLegalMiddle),
+                                        TextSpan(
+                                          text: l10n.welcomeLegalPrivacy,
+                                          style: linkStyle,
+                                          recognizer: _privacy,
+                                        ),
+                                        TextSpan(text: l10n.welcomeLegalSuffix),
+                                      ],
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -196,6 +218,30 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
       ),
     );
   }
+}
+
+/// Lets the sticker hero take whatever height is left without asking it how tall it wants to be
+/// (it lays itself out from the space it gets).
+class _ZeroIntrinsicHeight extends SingleChildRenderObjectWidget {
+  const _ZeroIntrinsicHeight({required super.child});
+
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _RenderZeroIntrinsicHeight();
+}
+
+class _RenderZeroIntrinsicHeight extends RenderProxyBox {
+  @override
+  double computeMinIntrinsicHeight(double width) => 0;
+
+  @override
+  double computeMaxIntrinsicHeight(double width) => 0;
+
+  @override
+  double computeMinIntrinsicWidth(double height) => 0;
+
+  @override
+  double computeMaxIntrinsicWidth(double height) => 0;
 }
 
 /// Small label marking a development build that uses demo sign-in: V16's neutral status label

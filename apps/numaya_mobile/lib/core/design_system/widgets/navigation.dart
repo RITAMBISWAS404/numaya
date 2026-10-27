@@ -199,6 +199,11 @@ class ListRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final isSwitch = switchValue != null;
     final chevron = showChevron ?? (onTap != null && !isSwitch && !danger);
+    // 60% of the row (rows fill their group, so the screen's content width stands in).
+    final valueMax =
+        (MediaQuery.sizeOf(context).width.clamp(0.0, AppSpacing.contentMax) -
+            2 * AppSpacing.gutter) *
+        0.6;
     final row = Container(
       constraints: const BoxConstraints(minHeight: AppSizes.row),
       padding: const EdgeInsets.symmetric(
@@ -234,12 +239,20 @@ class ListRow extends StatelessWidget {
               ],
             ),
           ),
+          // A value is a preview of what the row opens (the whole answer is one tap away): its
+          // natural width up to 60% of the row and two lines; the label keeps the rest.
           if (value != null)
-            Padding(
-              padding: const EdgeInsets.only(left: AppSpacing.s3),
-              child: Text(
-                value!,
-                style: AppTypography.row.copyWith(color: AppColors.textMuted),
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: valueMax),
+              child: Padding(
+                padding: const EdgeInsets.only(left: AppSpacing.s3),
+                child: Text(
+                  value!,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.end,
+                  style: AppTypography.row.copyWith(color: AppColors.textMuted),
+                ),
               ),
             ),
           if (isSwitch)
@@ -277,9 +290,13 @@ class ListRow extends StatelessWidget {
         child: row,
       );
     }
+    // The value and detail are read out with the label, as they are seen with it.
     return Pressable(
       onTap: onTap,
-      semanticLabel: label,
+      semanticLabel: [
+        [label, ?value].join(', '),
+        if (detail != null && detail!.isNotEmpty) detail!,
+      ].join('. '),
       excludeChildSemantics: true,
       pressedScale: 1,
       child: row,

@@ -37,119 +37,127 @@ class PersonHeroCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return LayoutBuilder(
-      builder: (context, box) => SizedBox(
-        height: height ?? math.max(420, box.maxWidth * 4 / 3),
+      // At least this tall; taller only when large text needs more room for the name band.
+      builder: (context, box) => ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: height ?? math.max(420, box.maxWidth * 4 / 3),
+          minWidth: box.maxWidth,
+        ),
         child: _card(l10n),
       ),
     );
   }
 
   Widget _card(AppLocalizations l10n) {
+    // The card is at least its design height; a name band that grows with large text makes the
+    // card taller (IntrinsicHeight measures it) rather than squeezing the photo to nothing.
     return ClipRRect(
       borderRadius: AppRadii.all(AppRadii.photo),
-      child: Column(
-        children: [
-          Expanded(
-            child: PhotoPlaceholder(
-              label: l10n.discoverPhotoLabel(person.name, 1),
-              aspectRatio: null,
-              radius: 0,
-              child: stamp == null
-                  ? null
-                  : Align(
-                      alignment: Alignment.topCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: AppSpacing.s6),
-                        child: StatusBadge(
-                          label: stamp!,
-                          tone: BadgeTone.onPhoto,
-                        ),
-                      ),
-                    ),
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            color: AppColors.textSecondary,
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.s5,
-              AppSpacing.s4,
-              AppSpacing.s4,
-              AppSpacing.s4,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: [
-                          StatusBadge(
-                            label: own
-                                ? l10n.previewBadge
-                                : l10n.discoverSampleBadge,
-                            tone: BadgeTone.onDark,
-                          ),
-                          if (person.verified)
-                            StatusBadge(
-                              label: l10n.discoverVerified,
-                              icon: NumayaIcons.verified,
-                              tone: BadgeTone.onDark,
-                            ),
-                          if (person.isNew)
-                            StatusBadge(
-                              label: l10n.discoverNewHere,
-                              tone: BadgeTone.onDark,
-                            ),
-                        ],
-                      ),
-                      const SizedBox(height: AppSpacing.s2),
-                      Semantics(
-                        header: true,
-                        child: Text(
-                          showAge && person.age > 0
-                              ? l10n.profileNameAge(person.name, person.age)
-                              : person.name,
-                          style: AppTypography.hero.copyWith(
-                            color: AppColors.inkForeground,
+      child: IntrinsicHeight(
+        child: Column(
+          children: [
+            Expanded(
+              child: PhotoPlaceholder(
+                label: l10n.discoverPhotoLabel(person.name, 1),
+                aspectRatio: null,
+                radius: 0,
+                child: stamp == null
+                    ? null
+                    : Align(
+                        alignment: Alignment.topCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: AppSpacing.s6),
+                          child: StatusBadge(
+                            label: stamp!,
+                            tone: BadgeTone.onPhoto,
                           ),
                         ),
                       ),
-                      if (person.job != null)
-                        Row(
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              color: AppColors.textSecondary,
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.s5,
+                AppSpacing.s4,
+                AppSpacing.s4,
+                AppSpacing.s4,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
                           children: [
-                            const NumayaIcon(
-                              NumayaIcons.user,
-                              size: 16,
-                              color: AppColors.inkForeground,
+                            StatusBadge(
+                              label: own
+                                  ? l10n.previewBadge
+                                  : l10n.discoverSampleBadge,
+                              tone: BadgeTone.onDark,
                             ),
-                            const SizedBox(width: 6),
-                            Flexible(
-                              child: Text(
-                                person.job!,
-                                style: AppTypography.weight(
-                                  AppTypography.body,
-                                  AppTypography.medium,
-                                ).copyWith(color: AppColors.inkForeground),
+                            if (person.verified)
+                              StatusBadge(
+                                label: l10n.discoverVerified,
+                                icon: NumayaIcons.verified,
+                                tone: BadgeTone.onDark,
                               ),
-                            ),
+                            if (person.isNew)
+                              StatusBadge(
+                                label: l10n.discoverNewHere,
+                                tone: BadgeTone.onDark,
+                              ),
                           ],
                         ),
-                    ],
+                        const SizedBox(height: AppSpacing.s2),
+                        Semantics(
+                          header: true,
+                          child: Text(
+                            showAge && person.age > 0
+                                ? l10n.profileNameAge(person.name, person.age)
+                                : person.name,
+                            style: AppTypography.hero.copyWith(
+                              color: AppColors.inkForeground,
+                            ),
+                          ),
+                        ),
+                        if (person.job != null)
+                          Row(
+                            children: [
+                              const NumayaIcon(
+                                NumayaIcons.user,
+                                size: 16,
+                                color: AppColors.inkForeground,
+                              ),
+                              const SizedBox(width: 6),
+                              Flexible(
+                                child: Text(
+                                  person.job!,
+                                  style: AppTypography.weight(
+                                    AppTypography.body,
+                                    AppTypography.medium,
+                                  ).copyWith(color: AppColors.inkForeground),
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-                if (action != null) ...[
-                  const SizedBox(width: AppSpacing.s3),
-                  action!,
+                  if (action != null) ...[
+                    const SizedBox(width: AppSpacing.s3),
+                    action!,
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -239,9 +247,11 @@ List<Widget> personSections(
                     color: AppColors.ink,
                   ),
                   const SizedBox(width: AppSpacing.s2),
-                  Text(
-                    l10n.discoverDistance(person.distanceKm),
-                    style: AppTypography.row,
+                  Flexible(
+                    child: Text(
+                      l10n.discoverDistance(person.distanceKm),
+                      style: AppTypography.row,
+                    ),
                   ),
                 ],
               ),

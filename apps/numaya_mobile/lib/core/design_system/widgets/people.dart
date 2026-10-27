@@ -198,9 +198,10 @@ class StatusBadge extends StatelessWidget {
         AppTypography.semibold,
       ),
     };
+    // 26 tall at normal sizes; grows and wraps under large text instead of overflowing.
     return Container(
-      height: 26,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      constraints: const BoxConstraints(minHeight: 26),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: bg ?? Colors.transparent,
         borderRadius: AppRadii.all(AppRadii.tag),
@@ -215,12 +216,14 @@ class StatusBadge extends StatelessWidget {
             NumayaIcon(icon!, size: 14, color: fg),
             const SizedBox(width: 4),
           ],
-          Text(
-            label,
-            style: AppTypography.weight(
-              AppTypography.caption,
-              weight,
-            ).copyWith(color: fg, height: 1),
+          Flexible(
+            child: Text(
+              label,
+              style: AppTypography.weight(
+                AppTypography.caption,
+                weight,
+              ).copyWith(color: fg, height: 1.1),
+            ),
           ),
         ],
       ),

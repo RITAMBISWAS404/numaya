@@ -289,7 +289,8 @@ void main() {
       await tester.pump();
       await tester.tap(find.bySemanticsLabel('Send'));
       await tester.pump();
-      await tester.pump(); // the scroll starts after the new message is laid out
+      await tester
+          .pump(); // the scroll starts after the new message is laid out
       await tester.pump(AppMotion.state);
       expect(onScreen('Saturday works'), isTrue);
       expect(log, ['HapticFeedbackType.lightImpact']);
