@@ -1072,6 +1072,122 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatStatusOnDevice => 'Demo · saved on this device, not sent';
 
   @override
+  String get optionShareDate => 'Share date details';
+
+  @override
+  String get optionShareDateEdit => 'Date details shared';
+
+  @override
+  String get shareDateTitle => 'Share your date';
+
+  @override
+  String get shareDateBody =>
+      'Let someone you trust know where you’ll be. Meet somewhere public, and keep your own way home.';
+
+  @override
+  String get shareDateWhere => 'Where';
+
+  @override
+  String get shareDateWhereHint => 'e.g. Violet Cakes, Wilton Way';
+
+  @override
+  String get shareDateWhen => 'When';
+
+  @override
+  String get shareDateWhenHint => 'e.g. Saturday, 7pm';
+
+  @override
+  String get shareDatePreviewLabel => 'What your friend will see';
+
+  @override
+  String shareDatePreview(String name, int age, String where, String when) {
+    return 'I’m meeting $name, $age, from Numaya at $where, $when. I’ll check in afterwards.';
+  }
+
+  @override
+  String get shareDateDemo =>
+      'Sharing isn’t connected in this build: the details stay on this device and nothing is sent.';
+
+  @override
+  String get shareDateShare => 'Share';
+
+  @override
+  String get shareDateDone =>
+      'Date details saved. Nothing was sent from this demo.';
+
+  @override
+  String get recoveryEmailLabel => 'Recovery email';
+
+  @override
+  String get recoveryEmailAdd => 'Add';
+
+  @override
+  String get recoveryEmailBody =>
+      'If you ever lose access to your number, an email on file lets support help you back into your account.';
+
+  @override
+  String get recoveryEmailDemo =>
+      'In this build the address stays on this device. No email is sent and it isn’t verified.';
+
+  @override
+  String get recoveryEmailInvalid =>
+      'Enter an email address like name@example.com';
+
+  @override
+  String get recoveryEmailSaved => 'Recovery email saved';
+
+  @override
+  String get recoveryEmailRemoved => 'Recovery email removed';
+
+  @override
+  String get recoveryEmailRemove => 'Remove email';
+
+  @override
+  String get recoveryEmailUnverified =>
+      'Not verified: no email service in this build';
+
+  @override
+  String get reauthTitle => 'Please sign in again';
+
+  @override
+  String reauthBody(String phone) {
+    return 'For your security, this session has ended. Confirm it’s you with a code sent to $phone and you’ll be back where you were.';
+  }
+
+  @override
+  String get reauthSend => 'Send code';
+
+  @override
+  String get reauthSignOut => 'Sign out instead';
+
+  @override
+  String get reauthDone => 'You’re signed in again';
+
+  @override
+  String get demoExpireSession => 'Expire my session';
+
+  @override
+  String get demoExpireSessionNote =>
+      'As if the server ended it: asks you to sign in again over this screen';
+
+  @override
+  String get chatStatusWaiting =>
+      'Waiting for a connection. It’ll send when you’re back online.';
+
+  @override
+  String get offlineBanner => 'You’re offline. We’ll keep trying.';
+
+  @override
+  String get offlineBannerDemo => 'Simulated in the Demo Hub';
+
+  @override
+  String get demoOffline => 'Simulate being offline';
+
+  @override
+  String get demoOfflineNote =>
+      'Shows the offline banner; messages wait and send when you switch it off; joining events fails';
+
+  @override
   String get chatStatusFailed => 'Not sent';
 
   @override

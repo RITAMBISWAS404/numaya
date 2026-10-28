@@ -61,6 +61,9 @@ abstract final class Routes {
   /// A deleted account found at sign-in (F27).
   static const restore = '/restore';
 
+  /// Session expired: sign in again over the current screen (states-and-recovery §3).
+  static const reauth = '/sign-in-again';
+
   /// Moderation block with appeal (B-59). Shown when the server says so; the demo previews it
   /// from the Demo Hub.
   static const accountBlocked = '/account-blocked';
@@ -95,7 +98,8 @@ abstract final class Routes {
       path.startsWith(event) ||
       path.startsWith(forYou) ||
       path.startsWith(paywall) ||
-      path.startsWith(restore);
+      path.startsWith(restore) ||
+      path == reauth;
 
   static bool isSignedOutOnly(String path) =>
       path == welcome || path.startsWith(phone) || path.startsWith(verify);

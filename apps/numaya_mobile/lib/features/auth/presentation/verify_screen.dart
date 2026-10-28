@@ -258,7 +258,7 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (demo != null)
-            _DemoMessageBanner(
+            DemoMessageBanner(
               demo: demo,
               requestId: request.id,
               onTap: locked ? null : _fillFromDemo,
@@ -313,8 +313,9 @@ class _VerifyScreenState extends ConsumerState<VerifyScreen> {
 
 /// Development builds only: shows the code the demo service "texted", like an SMS notification.
 /// Tapping it fills the code, as SMS autofill would.
-class _DemoMessageBanner extends StatelessWidget {
-  const _DemoMessageBanner({
+class DemoMessageBanner extends StatelessWidget {
+  const DemoMessageBanner({
+    super.key,
     required this.demo,
     required this.requestId,
     required this.onTap,

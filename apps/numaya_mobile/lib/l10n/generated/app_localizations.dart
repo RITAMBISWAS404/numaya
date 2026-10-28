@@ -1870,6 +1870,210 @@ abstract class AppLocalizations {
   /// **'Demo · saved on this device, not sent'**
   String get chatStatusOnDevice;
 
+  /// No description provided for @optionShareDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Share date details'**
+  String get optionShareDate;
+
+  /// No description provided for @optionShareDateEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Date details shared'**
+  String get optionShareDateEdit;
+
+  /// No description provided for @shareDateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your date'**
+  String get shareDateTitle;
+
+  /// No description provided for @shareDateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Let someone you trust know where you’ll be. Meet somewhere public, and keep your own way home.'**
+  String get shareDateBody;
+
+  /// No description provided for @shareDateWhere.
+  ///
+  /// In en, this message translates to:
+  /// **'Where'**
+  String get shareDateWhere;
+
+  /// No description provided for @shareDateWhereHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Violet Cakes, Wilton Way'**
+  String get shareDateWhereHint;
+
+  /// No description provided for @shareDateWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'When'**
+  String get shareDateWhen;
+
+  /// No description provided for @shareDateWhenHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Saturday, 7pm'**
+  String get shareDateWhenHint;
+
+  /// No description provided for @shareDatePreviewLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What your friend will see'**
+  String get shareDatePreviewLabel;
+
+  /// No description provided for @shareDatePreview.
+  ///
+  /// In en, this message translates to:
+  /// **'I’m meeting {name}, {age}, from Numaya at {where}, {when}. I’ll check in afterwards.'**
+  String shareDatePreview(String name, int age, String where, String when);
+
+  /// No description provided for @shareDateDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing isn’t connected in this build: the details stay on this device and nothing is sent.'**
+  String get shareDateDemo;
+
+  /// No description provided for @shareDateShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get shareDateShare;
+
+  /// No description provided for @shareDateDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Date details saved. Nothing was sent from this demo.'**
+  String get shareDateDone;
+
+  /// No description provided for @recoveryEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery email'**
+  String get recoveryEmailLabel;
+
+  /// No description provided for @recoveryEmailAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get recoveryEmailAdd;
+
+  /// No description provided for @recoveryEmailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If you ever lose access to your number, an email on file lets support help you back into your account.'**
+  String get recoveryEmailBody;
+
+  /// No description provided for @recoveryEmailDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'In this build the address stays on this device. No email is sent and it isn’t verified.'**
+  String get recoveryEmailDemo;
+
+  /// No description provided for @recoveryEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an email address like name@example.com'**
+  String get recoveryEmailInvalid;
+
+  /// No description provided for @recoveryEmailSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery email saved'**
+  String get recoveryEmailSaved;
+
+  /// No description provided for @recoveryEmailRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery email removed'**
+  String get recoveryEmailRemoved;
+
+  /// No description provided for @recoveryEmailRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove email'**
+  String get recoveryEmailRemove;
+
+  /// No description provided for @recoveryEmailUnverified.
+  ///
+  /// In en, this message translates to:
+  /// **'Not verified: no email service in this build'**
+  String get recoveryEmailUnverified;
+
+  /// No description provided for @reauthTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in again'**
+  String get reauthTitle;
+
+  /// No description provided for @reauthBody.
+  ///
+  /// In en, this message translates to:
+  /// **'For your security, this session has ended. Confirm it’s you with a code sent to {phone} and you’ll be back where you were.'**
+  String reauthBody(String phone);
+
+  /// No description provided for @reauthSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send code'**
+  String get reauthSend;
+
+  /// No description provided for @reauthSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out instead'**
+  String get reauthSignOut;
+
+  /// No description provided for @reauthDone.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re signed in again'**
+  String get reauthDone;
+
+  /// No description provided for @demoExpireSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Expire my session'**
+  String get demoExpireSession;
+
+  /// No description provided for @demoExpireSessionNote.
+  ///
+  /// In en, this message translates to:
+  /// **'As if the server ended it: asks you to sign in again over this screen'**
+  String get demoExpireSessionNote;
+
+  /// No description provided for @chatStatusWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for a connection. It’ll send when you’re back online.'**
+  String get chatStatusWaiting;
+
+  /// No description provided for @offlineBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re offline. We’ll keep trying.'**
+  String get offlineBanner;
+
+  /// No description provided for @offlineBannerDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulated in the Demo Hub'**
+  String get offlineBannerDemo;
+
+  /// No description provided for @demoOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulate being offline'**
+  String get demoOffline;
+
+  /// No description provided for @demoOfflineNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Shows the offline banner; messages wait and send when you switch it off; joining events fails'**
+  String get demoOfflineNote;
+
   /// No description provided for @chatStatusFailed.
   ///
   /// In en, this message translates to:

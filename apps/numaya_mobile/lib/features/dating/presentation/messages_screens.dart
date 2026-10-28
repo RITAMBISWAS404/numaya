@@ -578,6 +578,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         label: l10n.optionViewProfile,
         destructive: false,
       ),
+      (
+        icon: NumayaIcons.share,
+        label: ref.read(datingProvider).datePlans.containsKey(person.id)
+            ? l10n.optionShareDateEdit
+            : l10n.optionShareDate,
+        destructive: false,
+      ),
       if (talked)
         (
           icon: NumayaIcons.event,
@@ -605,6 +612,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final label = actions[choice].label;
     if (label == l10n.optionViewProfile) {
       unawaited(context.push('${Routes.person}/${person.id}'));
+    } else if (label == l10n.optionShareDate ||
+        label == l10n.optionShareDateEdit) {
+      await showShareDateSheet(context, ref, person);
     } else if (label == l10n.optionDidYouMeet) {
       await showDidYouMeetSheet(context, ref, person);
     } else if (label == l10n.optionUnmatch) {
@@ -890,7 +900,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               text: m.text,
               mine: m.mine,
               grouped: grouped,
-              dimmed: m.status == MessageStatus.sending,
+              dimmed:
+                  m.status == MessageStatus.sending ||
+                  m.status == MessageStatus.waiting,
             ),
           ),
         );
@@ -928,6 +940,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   MessageStatus.onDevice => Text(
                     l10n.chatStatusOnDevice,
                     style: AppTypography.micro,
+                  ),
+                  MessageStatus.waiting => Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      l10n.chatStatusWaiting,
+                      style: AppTypography.micro,
+                    ),
                   ),
                   MessageStatus.failed => Semantics(
                     liveRegion: true,

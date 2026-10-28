@@ -318,3 +318,128 @@ Future<void> showUnmatchReasonSheet(
   ref.read(datingProvider.notifier).recordUnmatchReason(person.id, reason);
   NumayaToast.show(context, l10n.unmatchReasonThanks);
 }
+
+/// Share Date (B-45): write down where and when you're meeting [person], and see exactly what a
+/// friend would receive. There is no sharing service in this build, so Share says that nothing
+/// left the device; the details stay with the conversation for next time.
+Future<void> showShareDateSheet(
+  BuildContext context,
+  WidgetRef ref,
+  SamplePerson person,
+) async {
+  final l10n = context.l10n;
+  final existing = ref.read(datingProvider).datePlans[person.id];
+  final plan = await showNumayaSheet<DatePlan>(
+    context: context,
+    title: l10n.shareDateTitle,
+    closeLabel: l10n.cancel,
+    builder: (context) => _ShareDateForm(person: person, initial: existing),
+  );
+  if (plan == null || !context.mounted) return;
+  ref.read(datingProvider.notifier).setDatePlan(person.id, plan);
+  NumayaToast.show(context, l10n.shareDateDone);
+}
+
+class _ShareDateForm extends StatefulWidget {
+  const _ShareDateForm({required this.person, this.initial});
+
+  final SamplePerson person;
+  final DatePlan? initial;
+
+  @override
+  State<_ShareDateForm> createState() => _ShareDateFormState();
+}
+
+class _ShareDateFormState extends State<_ShareDateForm> {
+  late final _where = TextEditingController(text: widget.initial?.where)
+    ..addListener(_changed);
+  late final _when = TextEditingController(text: widget.initial?.when)
+    ..addListener(_changed);
+
+  void _changed() => setState(() {});
+
+  @override
+  void dispose() {
+    _where.dispose();
+    _when.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final p = widget.person;
+    final where = _where.text.trim();
+    final when = _when.text.trim();
+    final ready = where.isNotEmpty && when.isNotEmpty;
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            l10n.shareDateBody,
+            style: AppTypography.body.copyWith(color: AppColors.textSecondary),
+          ),
+          const SizedBox(height: AppLayout.fieldGap),
+          NumayaTextField(
+            label: l10n.shareDateWhere,
+            controller: _where,
+            placeholder: l10n.shareDateWhereHint,
+            textCapitalization: TextCapitalization.sentences,
+            textInputAction: TextInputAction.next,
+            maxLength: 80,
+          ),
+          const SizedBox(height: AppLayout.fieldGap),
+          NumayaTextField(
+            label: l10n.shareDateWhen,
+            controller: _when,
+            placeholder: l10n.shareDateWhenHint,
+            textCapitalization: TextCapitalization.sentences,
+            textInputAction: TextInputAction.done,
+            maxLength: 40,
+          ),
+          if (ready) ...[
+            const SizedBox(height: AppLayout.fieldGap),
+            Text(
+              l10n.shareDatePreviewLabel,
+              style: AppTypography.weight(
+                AppTypography.caption,
+                AppTypography.semibold,
+              ).copyWith(color: AppColors.textSecondary),
+            ),
+            const SizedBox(height: AppSpacing.s2),
+            Container(
+              padding: const EdgeInsets.all(AppLayout.cardPadding),
+              decoration: BoxDecoration(
+                color: AppColors.canvas,
+                borderRadius: AppRadii.all(AppRadii.card),
+              ),
+              child: Text(
+                l10n.shareDatePreview(p.name, p.age, where, when),
+                style: AppTypography.bodySm,
+              ),
+            ),
+          ],
+          const SizedBox(height: AppSpacing.s3),
+          Text(
+            l10n.shareDateDemo,
+            style: AppTypography.caption.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.s5),
+          NumayaButton(
+            label: l10n.shareDateShare,
+            icon: NumayaIcons.share,
+            onPressed: ready
+                ? () =>
+                      Navigator.of(context)
+                          .pop(DatePlan(where: where, when: when))
+                : null,
+          ),
+        ],
+      ),
+    );
+  }
+}

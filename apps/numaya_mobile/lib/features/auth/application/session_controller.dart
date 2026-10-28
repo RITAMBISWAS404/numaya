@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
+import '../../../core/connectivity/connectivity.dart';
 import '../../../core/logging/app_logger.dart';
 import '../../account_health/application/visibility_report.dart';
 import '../../dating/application/dating_controller.dart';
@@ -14,6 +15,7 @@ import '../../settings/application/account_prefs.dart';
 import '../../verification/application/verification_controller.dart';
 import '../domain/auth_repository.dart';
 import 'phone_entry_controller.dart';
+import 'session_expiry.dart';
 import 'verification_controller.dart';
 
 /// The signed-in session, or null when signed out. Held in memory: a real build stores the
@@ -121,11 +123,13 @@ class SessionController extends Notifier<AuthSession?> {
     ref.invalidate(devicePermissionsProvider);
     ref.invalidate(eventsProvider);
     ref.invalidate(accountSignalsProvider);
+    ref.invalidate(connectivityProvider);
     _log.info('Demo data reset');
   }
 
   void _clear() {
     state = null;
+    ref.invalidate(sessionExpiryProvider);
     ref.invalidate(phoneEntryProvider);
     ref.invalidate(verificationProvider);
     ref.invalidate(onboardingProvider);

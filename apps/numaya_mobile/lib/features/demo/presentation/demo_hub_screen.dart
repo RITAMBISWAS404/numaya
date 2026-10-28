@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/routes.dart';
+import '../../../core/connectivity/connectivity.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../account_health/application/visibility_report.dart';
 import '../../auth/application/session_controller.dart';
+import '../../auth/application/session_expiry.dart';
 import '../../dating/application/dating_controller.dart';
 import '../../events/application/events_controller.dart';
 import '../../home/presentation/filters_sheet.dart';
@@ -157,6 +159,13 @@ class DemoHubScreen extends ConsumerWidget {
                 onSwitch: ref.read(datingProvider.notifier).setSimulateErrors,
               ),
               ListRow(
+                label: l10n.demoOffline,
+                detail: l10n.demoOfflineNote,
+                switchValue: !ref.watch(connectivityProvider),
+                onSwitch: (offline) =>
+                    ref.read(connectivityProvider.notifier).setOnline(!offline),
+              ),
+              ListRow(
                 label: l10n.demoApproveVerification,
                 detail: verification.approveNext
                     ? l10n.demoApproveOn
@@ -190,6 +199,13 @@ class DemoHubScreen extends ConsumerWidget {
                 l10n.blockedAccountTitle,
                 Routes.accountBlocked,
                 session: false,
+              ),
+              ListRow(
+                label: l10n.demoExpireSession,
+                detail: signedIn ? l10n.demoExpireSessionNote : needsSession,
+                onTap: signedIn
+                    ? ref.read(sessionExpiryProvider.notifier).expire
+                    : null,
               ),
             ],
           ),

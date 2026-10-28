@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/config/app_config.dart';
+import '../../../core/connectivity/connectivity.dart';
 import '../../../core/logging/app_logger.dart';
 import '../../home/application/discovery_filters.dart';
 import '../../premium/application/premium_controller.dart';
@@ -10,7 +11,7 @@ import '../domain/sample_people.dart';
 
 enum EndReason { unmatched, blocked, reported }
 
-enum MessageStatus { sending, onDevice, failed }
+enum MessageStatus { sending, onDevice, failed, waiting }
 
 /// Which sample world the demo starts in.
 enum DemoWorld {
@@ -68,6 +69,14 @@ class DemoMessage {
   String toString() => 'DemoMessage($id, ${status.name})';
 }
 
+/// Where and when a date is, to share with someone you trust (B-45).
+@immutable
+class DatePlan {
+  const DatePlan({required this.where, required this.when});
+  final String where;
+  final String when;
+}
+
 /// A report kept on this device only (nothing is sent or reviewed).
 @immutable
 class DemoReport {
@@ -114,6 +123,7 @@ class DatingState {
     this.superSwipes = 3,
     this.superSwiped = const {},
     this.dateFeedback = const {},
+    this.datePlans = const {},
     this.unmatchReasons = const {},
     this.nextMessageId = 1,
   });
@@ -172,6 +182,10 @@ class DatingState {
   /// "Did you meet?" answers (B-55).
   final Map<String, bool> dateFeedback;
 
+  /// Date details written to share with a friend (B-45 "Share Date"), per match. Kept on this
+  /// device: there is no sharing service in this build.
+  final Map<String, DatePlan> datePlans;
+
   /// Optional reasons after unmatching (B-54), kept on this device.
   final Map<String, String> unmatchReasons;
   final int nextMessageId;
@@ -201,6 +215,7 @@ class DatingState {
     int? superSwipes,
     Set<String>? superSwiped,
     Map<String, bool>? dateFeedback,
+    Map<String, DatePlan>? datePlans,
     Map<String, String>? unmatchReasons,
     int? nextMessageId,
   }) {
@@ -225,6 +240,7 @@ class DatingState {
       superSwipes: superSwipes ?? this.superSwipes,
       superSwiped: superSwiped ?? this.superSwiped,
       dateFeedback: dateFeedback ?? this.dateFeedback,
+      datePlans: datePlans ?? this.datePlans,
       unmatchReasons: unmatchReasons ?? this.unmatchReasons,
       nextMessageId: nextMessageId ?? this.nextMessageId,
     );
@@ -260,6 +276,10 @@ class DatingController extends Notifier<DatingState> {
 
   @override
   DatingState build() {
+    // Back online: messages written while offline go out, oldest first.
+    ref.listen(connectivityProvider, (was, online) {
+      if (online && was == false) _sendWaiting();
+    });
     final world = ref.watch(demoWorldProvider);
     if (world == DemoWorld.fresh) return const DatingState();
     return _seed(ref.read(clockProvider)());
@@ -651,19 +671,23 @@ class DatingController extends Notifier<DatingState> {
     lastRead: {...state.lastRead, id: _now},
   );
 
+  bool get _online => ref.read(connectivityProvider);
+
   /// Adds a message to the thread. It stays on this device ([MessageStatus.onDevice]); with the
-  /// "simulate connection problems" tool on, it fails so the retry path can be tried.
+  /// "simulate connection problems" tool on, it fails so the retry path can be tried. Offline, it
+  /// waits ([MessageStatus.waiting]) and goes out when the connection is back.
   Future<void> send(String id, String text) async {
     final body = text.trim();
     if (body.isEmpty || !state.isActive(id)) return;
     final message = DemoMessage(
       id: state.nextMessageId,
       text: body,
-      status: MessageStatus.sending,
+      status: _online ? MessageStatus.sending : MessageStatus.waiting,
       at: _now,
     );
     state = state.copyWith(nextMessageId: state.nextMessageId + 1);
     _put(id, message);
+    if (!_online) return;
     await Future<void>.delayed(const Duration(milliseconds: 400));
     if (!ref.mounted) return;
     _put(
@@ -677,6 +701,10 @@ class DatingController extends Notifier<DatingState> {
   Future<void> retry(String id, int messageId) async {
     final message = state.threads[id]?.firstWhere((m) => m.id == messageId);
     if (message == null) return;
+    if (!_online) {
+      _put(id, message.withStatus(MessageStatus.waiting));
+      return;
+    }
     _put(id, message.withStatus(MessageStatus.sending));
     await Future<void>.delayed(const Duration(milliseconds: 400));
     if (!ref.mounted) return;
@@ -686,6 +714,19 @@ class DatingController extends Notifier<DatingState> {
         state.simulateErrors ? MessageStatus.failed : MessageStatus.onDevice,
       ),
     );
+  }
+
+  /// Sends every waiting message, in the order they were written.
+  Future<void> _sendWaiting() async {
+    final waiting = [
+      for (final MapEntry(key: id, value: thread) in state.threads.entries)
+        for (final m in thread)
+          if (m.status == MessageStatus.waiting) (id, m.id),
+    ];
+    for (final (id, messageId) in waiting) {
+      if (!ref.mounted || !_online) return;
+      await retry(id, messageId);
+    }
   }
 
   void deleteMessage(String id, int messageId) {
@@ -723,6 +764,15 @@ class DatingController extends Notifier<DatingState> {
   }
 
   /// Optional reason after unmatching (B-54).
+  /// Saves (or with null, removes) the date details for match [id].
+  void setDatePlan(String id, DatePlan? plan) => state = state.copyWith(
+    datePlans: {
+      for (final e in state.datePlans.entries)
+        if (e.key != id) e.key: e.value,
+      id: ?plan,
+    },
+  );
+
   void recordUnmatchReason(String id, String reason) => state = state.copyWith(
     unmatchReasons: {...state.unmatchReasons, id: reason},
   );

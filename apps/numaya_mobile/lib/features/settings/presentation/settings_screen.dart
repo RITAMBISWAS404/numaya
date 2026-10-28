@@ -12,6 +12,7 @@ import '../../onboarding/presentation/permission_prompt.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../profile/application/profile_details_controller.dart';
 import '../application/account_prefs.dart';
+import 'recovery_email_sheet.dart';
 
 /// B-70 Settings in V16's layout (screenshots 111–113): grouped white rows on the stone page,
 /// switch rows with their state underneath, and Log out / Delete account as white blocks. Extended
@@ -210,6 +211,16 @@ class SettingsScreen extends ConsumerWidget {
               ListRow(
                 label: l10n.settingsPhone,
                 value: session?.phone.display ?? '',
+              ),
+              ListRow(
+                label: l10n.recoveryEmailLabel,
+                value:
+                    ref.watch(accountPrefsProvider).recoveryEmail ??
+                    l10n.recoveryEmailAdd,
+                detail: ref.watch(accountPrefsProvider).recoveryEmail == null
+                    ? null
+                    : l10n.recoveryEmailUnverified,
+                onTap: () => showRecoveryEmailSheet(context, ref),
               ),
             ],
           ),

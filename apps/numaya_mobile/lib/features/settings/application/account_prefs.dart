@@ -27,6 +27,7 @@ class AccountPrefs {
     this.snoozedAt,
     this.awayStatus,
     this.haptics = true,
+    this.recoveryEmail,
   });
 
   /// Channels turned off per category; everything is on by default except email (no email on
@@ -38,6 +39,10 @@ class AccountPrefs {
 
   /// Whether the app vibrates on selections, decisions and successes (the one haptics gate).
   final bool haptics;
+
+  /// An email for account recovery (B-09; U-11: a lost number needs a second way in). Kept on
+  /// this device only: no email is sent or verified in this build.
+  final String? recoveryEmail;
 
   static const Set<NotificationChannel> defaults = {
     NotificationChannel.push,
@@ -68,8 +73,10 @@ class AccountPrefs {
     DateTime? snoozedAt,
     String? awayStatus,
     bool? haptics,
+    String? recoveryEmail,
     bool clearSnooze = false,
     bool clearStatus = false,
+    bool clearEmail = false,
   }) => AccountPrefs(
     channels: channels ?? this.channels,
     snoozeLength: clearSnooze ? null : (snoozeLength ?? this.snoozeLength),
@@ -78,8 +85,14 @@ class AccountPrefs {
         ? null
         : (awayStatus ?? this.awayStatus),
     haptics: haptics ?? this.haptics,
+    recoveryEmail: clearEmail ? null : (recoveryEmail ?? this.recoveryEmail),
   );
 }
+
+/// A plausible email address: something@domain.tld, no spaces. The real check is the
+/// confirmation email a service would send.
+bool isValidEmail(String value) =>
+    RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s.]{2,}$').hasMatch(value.trim());
 
 /// Settings choices for this session. Push and email are not connected in this build, so the
 /// switches only record a preference (the screens say so).
@@ -117,6 +130,23 @@ class AccountPrefsController extends Notifier<AccountPrefs> {
   void endSnooze() => state = state.copyWith(clearSnooze: true);
 
   void setHaptics(bool on) => state = state.copyWith(haptics: on);
+
+  /// Saves [email] (trimmed), or removes it when null. Removing it also turns email
+  /// notifications off, since there is nowhere to send them.
+  void setRecoveryEmail(String? email) {
+    if (email == null) {
+      state = state.copyWith(
+        clearEmail: true,
+        channels: {
+          for (final MapEntry(key: c, value: on) in state.channels.entries)
+            c: {...on}..remove(NotificationChannel.email),
+        },
+      );
+      return;
+    }
+    assert(isValidEmail(email));
+    state = state.copyWith(recoveryEmail: email.trim());
+  }
 }
 
 final accountPrefsProvider =

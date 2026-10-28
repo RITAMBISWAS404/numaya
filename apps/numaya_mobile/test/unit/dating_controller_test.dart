@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:numaya_mobile/core/connectivity/connectivity.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 import 'package:numaya_mobile/features/home/application/discovery_filters.dart';
 
@@ -241,6 +242,39 @@ void main() {
       dating().deleteMessage('maya', failed.id);
       expect(state().threads['maya'], isEmpty);
     });
+
+    test(
+      'offline, messages wait in order and go out when the connection is back',
+      () async {
+        dating().decide('maya', liked: true);
+        container.read(connectivityProvider.notifier).setOnline(false);
+        await dating().send('maya', 'First');
+        await dating().send('maya', 'Second');
+        expect(state().threads['maya']!.map((m) => m.status), [
+          MessageStatus.waiting,
+          MessageStatus.waiting,
+        ]);
+        // Nothing goes out while still offline, even on retry.
+        await dating().retry('maya', state().threads['maya']!.first.id);
+        expect(state().threads['maya']!.first.status, MessageStatus.waiting);
+
+        container.read(connectivityProvider.notifier).setOnline(true);
+        // The first goes out before the second.
+        expect(state().threads['maya']!.map((m) => m.status), [
+          MessageStatus.sending,
+          MessageStatus.waiting,
+        ]);
+        await Future<void>.delayed(const Duration(seconds: 1));
+        expect(state().threads['maya']!.map((m) => m.text), [
+          'First',
+          'Second',
+        ]);
+        expect(
+          state().threads['maya']!.map((m) => m.status),
+          everyElement(MessageStatus.onDevice),
+        );
+      },
+    );
   });
 
   group('Safety', () {

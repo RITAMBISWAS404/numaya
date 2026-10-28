@@ -632,6 +632,55 @@
   "chatSend": "Send",
   "chatStatusSending": "Sending…",
   "chatStatusOnDevice": "Demo · saved on this device, not sent",
+  "optionShareDate": "Share date details",
+  "optionShareDateEdit": "Date details shared",
+  "shareDateTitle": "Share your date",
+  "shareDateBody": "Let someone you trust know where you’ll be. Meet somewhere public, and keep your own way home.",
+  "shareDateWhere": "Where",
+  "shareDateWhereHint": "e.g. Violet Cakes, Wilton Way",
+  "shareDateWhen": "When",
+  "shareDateWhenHint": "e.g. Saturday, 7pm",
+  "shareDatePreviewLabel": "What your friend will see",
+  "shareDatePreview": "I’m meeting {name}, {age}, from Numaya at {where}, {when}. I’ll check in afterwards.",
+  "@shareDatePreview": {
+    "placeholders": {
+      "name": {"type": "String"},
+      "age": {"type": "int"},
+      "where": {"type": "String"},
+      "when": {"type": "String"}
+    }
+  },
+  "shareDateDemo": "Sharing isn’t connected in this build: the details stay on this device and nothing is sent.",
+  "shareDateShare": "Share",
+  "shareDateDone": "Date details saved. Nothing was sent from this demo.",
+  "recoveryEmailLabel": "Recovery email",
+  "recoveryEmailAdd": "Add",
+  "recoveryEmailBody": "If you ever lose access to your number, an email on file lets support help you back into your account.",
+  "recoveryEmailDemo": "In this build the address stays on this device. No email is sent and it isn’t verified.",
+  "recoveryEmailInvalid": "Enter an email address like name@example.com",
+  "recoveryEmailSaved": "Recovery email saved",
+  "recoveryEmailRemoved": "Recovery email removed",
+  "recoveryEmailRemove": "Remove email",
+  "recoveryEmailUnverified": "Not verified: no email service in this build",
+  "reauthTitle": "Please sign in again",
+  "reauthBody": "For your security, this session has ended. Confirm it’s you with a code sent to {phone} and you’ll be back where you were.",
+  "@reauthBody": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "reauthSend": "Send code",
+  "reauthSignOut": "Sign out instead",
+  "reauthDone": "You’re signed in again",
+  "demoExpireSession": "Expire my session",
+  "demoExpireSessionNote": "As if the server ended it: asks you to sign in again over this screen",
+  "chatStatusWaiting": "Waiting for a connection. It’ll send when you’re back online.",
+  "offlineBanner": "You’re offline. We’ll keep trying.",
+  "offlineBannerDemo": "Simulated in the Demo Hub",
+  "demoOffline": "Simulate being offline",
+  "demoOfflineNote": "Shows the offline banner; messages wait and send when you switch it off; joining events fails",
   "chatStatusFailed": "Not sent",
   "chatRetry": "Retry",
   "chatDelete": "Delete",

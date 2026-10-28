@@ -100,9 +100,17 @@ class _NotificationSettingsScreenState
                   ),
                   ListRow(
                     label: l10n.notifEmail,
-                    detail: l10n.notifNoEmail,
-                    switchValue: false,
-                    onSwitch: null,
+                    detail: prefs.recoveryEmail ?? l10n.notifNoEmail,
+                    switchValue:
+                        prefs.recoveryEmail != null &&
+                        prefs.isOn(open, NotificationChannel.email),
+                    onSwitch: prefs.recoveryEmail == null
+                        ? null
+                        : (v) => controller.setChannel(
+                            open,
+                            NotificationChannel.email,
+                            v,
+                          ),
                   ),
                 ],
               ),

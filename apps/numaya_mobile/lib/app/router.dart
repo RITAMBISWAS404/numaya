@@ -6,9 +6,11 @@ import 'package:go_router/go_router.dart';
 import '../core/design_system/design_system.dart';
 import '../features/account_health/presentation/visibility_screen.dart';
 import '../features/auth/application/session_controller.dart';
+import '../features/auth/application/session_expiry.dart';
 import '../features/auth/application/verification_controller.dart';
 import '../features/auth/domain/auth_repository.dart';
 import '../features/auth/presentation/phone_screen.dart';
+import '../features/auth/presentation/reauth_screen.dart';
 import '../features/auth/presentation/verify_screen.dart';
 import '../features/auth/presentation/welcome_screen.dart';
 import '../features/dating/presentation/discover_screen.dart';
@@ -89,6 +91,9 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path == Routes.demo
             ? null
             : Routes.restore;
+      }
+      if (path == Routes.reauth && !ref.read(sessionExpiryProvider)) {
+        return Routes.home;
       }
       if (path == Routes.restore && session.restorableUntil == null) {
         return Routes.home;
@@ -320,6 +325,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: Routes.restore,
         builder: (_, _) => const RestoreAccountScreen(),
       ),
+      _route(path: Routes.reauth, builder: (_, _) => const ReauthScreen()),
       _route(
         path: Routes.accountBlocked,
         builder: (_, _) => const AccountBlockedScreen(),

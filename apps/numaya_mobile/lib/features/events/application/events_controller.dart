@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
+import '../../../core/connectivity/connectivity.dart';
 import '../../../core/logging/app_logger.dart';
 import '../../dating/application/dating_controller.dart';
 import '../../dating/domain/sample_people.dart';
@@ -142,10 +143,13 @@ class EventsState {
 /// What a join attempt led to.
 enum JoinResult { going, waitlisted, closed, failed }
 
-/// The events repository: the demo one, failing when "Simulate connection problems" is on.
+/// The events repository: the demo one, failing when "Simulate connection problems" is on or the
+/// app is offline (a join needs the service's answer, so it is not queued).
 final eventsRepositoryProvider = Provider<EventsRepository>(
   (ref) => DemoEventsRepository(
-    failing: () => ref.read(datingProvider).simulateErrors,
+    failing: () =>
+        ref.read(datingProvider).simulateErrors ||
+        !ref.read(connectivityProvider),
     fullWorld: ref.watch(demoWorldProvider) == DemoWorld.full,
   ),
 );

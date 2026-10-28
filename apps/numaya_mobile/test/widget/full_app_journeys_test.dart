@@ -328,6 +328,48 @@ void main() {
     await settle(tester);
   });
 
+  testWidgets('chat menu: share date details, preview them, edit them later', (
+    tester,
+  ) async {
+    await usePhoneSize(tester);
+    final c = await quickStartApp(tester);
+    await goTo(c, tester, '${Routes.chat}/sasha');
+    await tapOn(tester, find.bySemanticsLabel('Conversation options'));
+    await sheetUp(tester);
+    await tapOn(tester, find.text('Share date details'));
+    await sheetUp(tester);
+    final share = find.widgetWithText(NumayaButton, 'Share');
+    expect(tester.widget<NumayaButton>(share).onPressed, isNull);
+    // The sheet's two fields (Where, When), not the composer under it.
+    Finder field(int i) => find.descendant(
+      of: find.byType(NumayaTextField).at(i),
+      matching: find.byType(TextField),
+    );
+    await tester.enterText(field(0), 'Violet Cakes');
+    await tester.enterText(field(1), 'Saturday, 7pm');
+    await tester.pump();
+    expect(
+      find.textContaining('at Violet Cakes, Saturday, 7pm'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('nothing is sent'), findsOneWidget);
+    await tapOn(tester, share);
+    await sheetUp(tester);
+    expect(c.read(datingProvider).datePlans['sasha']!.where, 'Violet Cakes');
+    expect(
+      find.text('Date details saved. Nothing was sent from this demo.'),
+      findsOneWidget,
+    );
+
+    // The menu now says the details exist and opens them filled in.
+    await tapOn(tester, find.bySemanticsLabel('Conversation options'));
+    await sheetUp(tester);
+    await tapOn(tester, find.text('Date details shared'));
+    await sheetUp(tester);
+    expect(find.text('Violet Cakes'), findsOneWidget);
+    await settle(tester);
+  });
+
   testWidgets('settings: log out can be cancelled, then confirmed', (
     tester,
   ) async {

@@ -537,3 +537,63 @@ class CountBadge extends StatelessWidget {
     ),
   );
 }
+
+/// The app-wide connection strip (states-and-recovery §3, "Offline"): sits above every screen
+/// while the app is offline, under the status bar. [note] labels a simulated state.
+class ConnectionBanner extends StatelessWidget {
+  const ConnectionBanner({super.key, required this.message, this.note});
+
+  final String message;
+  final String? note;
+
+  @override
+  Widget build(BuildContext context) {
+    final top = MediaQuery.paddingOf(context).top;
+    return Material(
+      color: AppColors.surfaceInverse,
+      child: Semantics(
+        liveRegion: true,
+        container: true,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            AppLayout.screenGutter,
+            top + AppSpacing.s2,
+            AppLayout.screenGutter,
+            AppSpacing.s2,
+          ),
+          child: Row(
+            children: [
+              const NumayaIcon(
+                NumayaIcons.wifiOff,
+                size: AppSizes.iconSm,
+                color: AppColors.textOnInverse,
+              ),
+              const SizedBox(width: AppLayout.iconLabelGap),
+              Expanded(
+                child: Text.rich(
+                  TextSpan(
+                    text: message,
+                    children: [
+                      if (note != null)
+                        TextSpan(
+                          text: ' · $note',
+                          style: AppTypography.weight(
+                            AppTypography.bodySm,
+                            AppTypography.regular,
+                          ).copyWith(color: AppColors.textOnInverse),
+                        ),
+                    ],
+                  ),
+                  style: AppTypography.weight(
+                    AppTypography.bodySm,
+                    AppTypography.semibold,
+                  ).copyWith(color: AppColors.textOnInverse),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
