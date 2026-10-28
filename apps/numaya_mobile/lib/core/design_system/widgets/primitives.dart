@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../foundations/app_colors.dart';
 import '../foundations/app_haptics.dart';
 import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
+import '../icons/material_icons.dart';
 import '../icons/numaya_icon_data.g.dart';
 
-/// A Material Symbol from the shared icon set, filled by default (outline where the unfilled
-/// drawing carries a different state). Decorative: icon-only controls carry their own label.
+/// A standard Material icon (Flutter's Material Icons, rounded), named by the shared icon set and
+/// mapped in [kMaterialIcons]: filled by default, outline where the unfilled drawing carries a
+/// different state. Decorative: icon-only controls carry their own label.
 class NumayaIcon extends StatelessWidget {
   const NumayaIcon(
     this.icon, {
@@ -26,16 +27,10 @@ class NumayaIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (filled, open) = icon.paths;
+    final (filled, open) = kMaterialIcons[icon]!;
     final tint = color ?? IconTheme.of(context).color ?? AppColors.textPrimary;
     return ExcludeSemantics(
-      child: SvgPicture.string(
-        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">'
-        '<path d="${outline ? open : filled}"/></svg>',
-        width: size,
-        height: size,
-        colorFilter: ColorFilter.mode(tint, BlendMode.srcIn),
-      ),
+      child: Icon(outline ? open : filled, size: size, color: tint),
     );
   }
 }

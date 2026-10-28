@@ -28,6 +28,53 @@ abstract final class AppSpacing {
   static const double contentMax = NumayaSizeTokens.layoutContentMax;
 }
 
+/// Semantic layout roles built on the spacing scale (docs/mobile/UI_REFINEMENT_DECISIONS.md RD-01).
+/// Screens use these instead of picking scale steps one by one.
+abstract final class AppLayout {
+  /// Side margin of every screen, Discover included.
+  static const double screenGutter = AppSpacing.gutter;
+
+  /// Space under a top bar or tab header before the first content.
+  static const double screenTop = AppSpacing.s4;
+
+  /// Space after the last content before the screen ends.
+  static const double screenBottom = AppSpacing.s6;
+
+  /// Between sections of a page (a heading starts a new section).
+  static const double sectionGap = AppSpacing.sectionGap;
+
+  /// Between a section heading and its content.
+  static const double headingGap = AppSpacing.s3;
+
+  /// Between related items (cards in a list, rows of chips).
+  static const double itemGap = AppSpacing.s3;
+
+  /// Inside cards.
+  static const double cardPadding = AppSpacing.s4;
+
+  /// Between a leading icon and its text.
+  static const double iconLabelGap = AppSpacing.s2;
+
+  /// Between metadata lines (date, place, attendance).
+  static const double metaGap = AppSpacing.s1;
+
+  /// Between form fields.
+  static const double fieldGap = AppSpacing.fieldGap;
+
+  /// Top bars and tab headers: side padding so their buttons line up with the gutter.
+  static const double barPadding = AppSpacing.gutter;
+}
+
+/// Media proportions, width ÷ height (RD-10, RD-12).
+abstract final class AppMedia {
+  /// Person photos (Discover card, photo viewer, previews): 4:3 width to height, as specified
+  /// for this pass. V16 drew a portrait 3:4 card; the conflict is recorded in RD-10.
+  static const double personPhoto = 4 / 3;
+
+  /// Event covers in lists.
+  static const double eventCover = 16 / 9;
+}
+
 /// V16 corner radii (`withings.radius.*`): tags 6, fields 8, buttons and chips 12, cards 14, photos and
 /// sheets 16; full pills only for compact actions, view tabs and the toast. A nested corner is its
 /// container's minus the inset.
@@ -73,7 +120,7 @@ abstract final class AppSizes {
   static const double row = NumayaSizeTokens.withingsRowHeight;
   static const double fab = NumayaSizeTokens.fabSize;
 
-  /// Header buttons: 40 circles.
+  /// Header buttons: 40 rounded squares (12 corner) inside a 44 hit area.
   static const double iconButton = NumayaSizeTokens.withingsHeaderButton;
   static const double iconButtonSm = NumayaSizeTokens.iconButtonSizeSm;
   static const double chip = NumayaSizeTokens.chipHeight;

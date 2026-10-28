@@ -61,7 +61,8 @@ class NumayaButton extends StatelessWidget {
         : textOnly
         ? AppSizes.buttonHeightQuiet
         : AppSizes.buttonHeight;
-    final radius = small ? AppRadii.pill : AppRadii.control;
+    // Every button is a pill (RD-02: pills for actions, rounded rectangles for surfaces).
+    const radius = AppRadii.pill;
 
     // A small button that isn't primary, tint or solid red is the outlined pill.
     final effective =
@@ -87,10 +88,11 @@ class NumayaButton extends StatelessWidget {
         AppColors.inkForeground,
         null,
       ),
+      // A quiet outline (ink at 30%) that still reads as a control (RD-07).
       NumayaButtonVariant.secondary => (
         AppColors.surface,
         AppColors.ink,
-        AppColors.ink,
+        AppColors.outlineSoft,
       ),
       NumayaButtonVariant.quiet => (Colors.transparent, AppColors.ink, null),
       NumayaButtonVariant.brand => (
@@ -260,7 +262,8 @@ class NavIconButton extends StatelessWidget {
         ? AppSizes.iconButtonSm
         : AppSizes.iconButton;
     final (Color bg, Color? ring) = switch (style) {
-      NavButtonStyle.floating => (AppColors.surface, AppColors.border),
+      // A white rounded square on the stone page, without an outline (RD-02).
+      NavButtonStyle.floating => (AppColors.surface, null),
       NavButtonStyle.flat => (AppColors.fill, null),
       NavButtonStyle.plain => (Colors.transparent, null),
     };
@@ -272,13 +275,13 @@ class NavIconButton extends StatelessWidget {
         semanticLabel: label,
         excludeChildSemantics: true,
         pressedScale: 0.92,
-        borderRadius: AppRadii.all(AppRadii.pill),
+        borderRadius: AppRadii.all(AppRadii.control),
         child: Container(
           width: size,
           height: size,
           decoration: BoxDecoration(
             color: bg,
-            shape: BoxShape.circle,
+            borderRadius: AppRadii.all(AppRadii.control),
             border: ring == null
                 ? null
                 : Border.all(

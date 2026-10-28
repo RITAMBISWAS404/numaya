@@ -301,8 +301,9 @@ class NumayaChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final unavailable = !available && !selected;
+    // Selected chips are solid accent with white text (RD-05); unselected stay neutral.
     final fg = selected
-        ? AppColors.accentOnTint
+        ? AppColors.accentForeground
         : unavailable
         ? AppColors.disabledForeground
         : AppColors.ink;
@@ -313,19 +314,19 @@ class NumayaChip extends StatelessWidget {
       selected: selected,
       excludeChildSemantics: true,
       pressedScale: 0.97,
-      borderRadius: AppRadii.all(AppRadii.control),
+      borderRadius: AppRadii.all(AppRadii.pill),
       child: AnimatedContainer(
         duration: AppMotion.duration(context, AppMotion.base),
         curve: AppMotion.easeOut,
         constraints: const BoxConstraints(minHeight: AppSizes.chip),
-        padding: const EdgeInsets.fromLTRB(AppSpacing.s3, 5, AppSpacing.s3, 5),
+        padding: const EdgeInsets.fromLTRB(14, 5, AppSpacing.s3, 5),
         decoration: BoxDecoration(
           color: selected
-              ? AppColors.accentTint
+              ? AppColors.accent
               : onCard
-              ? AppColors.fill
+              ? AppColors.canvas
               : AppColors.surface,
-          borderRadius: AppRadii.all(AppRadii.control),
+          borderRadius: AppRadii.all(AppRadii.pill),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -348,7 +349,7 @@ class NumayaChip extends StatelessWidget {
               selected ? NumayaIcons.minus : NumayaIcons.plus,
               size: 18,
               color: selected
-                  ? AppColors.accentOnTint
+                  ? AppColors.accentForeground
                   : unavailable
                   ? AppColors.borderStrong
                   : AppColors.textMuted,
@@ -384,19 +385,9 @@ class ChipSet extends StatelessWidget {
         Row(
           children: [
             if (emoji != null) ...[
-              ExcludeSemantics(
-                child: Container(
-                  width: AppSizes.mark,
-                  height: AppSizes.mark,
-                  decoration: BoxDecoration(
-                    color: tone.color,
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: Emoji(emoji!, size: 13),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.s2),
+              // The emoji stands on its own beside the heading (RD-08: no passive holders).
+              Emoji(emoji!, size: 17),
+              const SizedBox(width: AppLayout.iconLabelGap),
             ],
             Text(
               label,

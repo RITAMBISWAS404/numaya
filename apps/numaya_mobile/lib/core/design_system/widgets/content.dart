@@ -258,19 +258,11 @@ class PromptMark extends StatelessWidget {
   const PromptMark({super.key});
 
   @override
-  Widget build(BuildContext context) => Container(
-    width: AppSizes.promptMark,
-    height: AppSizes.promptMark,
-    decoration: const BoxDecoration(
-      color: AppColors.accentTint,
-      shape: BoxShape.circle,
-    ),
-    alignment: Alignment.center,
-    child: const NumayaIcon(
-      NumayaIcons.message,
-      size: 14,
-      color: AppColors.accent,
-    ),
+  Widget build(BuildContext context) => const NumayaIcon(
+    // The icon on its own beside the heading (RD-08); no holder.
+    NumayaIcons.message,
+    size: AppSizes.iconSm,
+    color: AppColors.accent,
   );
 }
 

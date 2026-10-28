@@ -59,8 +59,18 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
   void _onScroll() {
     if (!_scroll.hasClients) return;
     final p = _scroll.position;
-    _reading.value = p.pixels > p.viewportDimension * 0.6;
-    _nearEnd.value = p.maxScrollExtent - p.pixels < 200;
+    // Past the photo card and its decision row: the floating row takes over (RD-12).
+    _reading.value = p.pixels > _detailsOffset() - AppSpacing.s4;
+  }
+
+  /// Where the profile below the card and its decision row starts.
+  double _detailsOffset() {
+    final width =
+        math.min(MediaQuery.sizeOf(context).width, AppSpacing.contentMax) -
+        2 * AppLayout.screenGutter;
+    return width / AppMedia.personPhoto +
+        AppLayout.itemGap +
+        DecisionBar.height;
   }
 
   void _toTop() {
@@ -82,7 +92,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
   void _toDetails() {
     if (!_scroll.hasClients) return;
     final target = math.min(
-      _scroll.position.viewportDimension - AppSpacing.s4,
+      _detailsOffset() + AppLayout.itemGap,
       _scroll.position.maxScrollExtent,
     );
     if (AppMotion.reduced(context)) {
@@ -432,7 +442,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
       header: header,
       scrollController: _scroll,
       topGap: false,
-      gutter: AppSpacing.gutterTight,
+      gutter: AppLayout.screenGutter,
       overlay: _FloatingActions(
         visible: _reading,
         nearEnd: _nearEnd,
@@ -458,48 +468,25 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
               person: person,
               onOpenPhotos: () => openPhotos(1),
               onMore: _toDetails,
-              hint: state.coachDone
-                  ? null
-                  : _CoachHint(onDismiss: controller.dismissCoach),
               onDecide: (liked) => unawaited(_decide(person, liked: liked)),
-              superAction: RoundAction(
-                kind: ActionKind.superSwipe,
-                label: l10n.discoverSuperSwipe,
-                floating: true,
-                onPressed: () =>
-                    unawaited(_decide(person, liked: true, superSwipe: true)),
-              ),
             ),
-            const SizedBox(height: AppSpacing.s3),
+            const SizedBox(height: AppLayout.itemGap),
+            // One decision row right under the card (RD-12); it floats once scrolled past.
+            DecisionBar(
+              passLabel: l10n.discoverPass,
+              superLabel: l10n.discoverSuperSwipe,
+              likeLabel: l10n.discoverLike,
+              onPass: () => decide(liked: false),
+              onSuper: () => decide(liked: true, superSwipe: true),
+              onLike: () => decide(liked: true),
+            ),
+            if (!state.coachDone) ...[
+              const SizedBox(height: AppLayout.itemGap),
+              _CoachHint(onDismiss: controller.dismissCoach),
+            ],
+            const SizedBox(height: AppLayout.itemGap),
             ...personSections(context, person, onPhoto: openPhotos),
-            const SizedBox(height: AppSpacing.s6),
-            // V16 `.fl-pf .action-bar`: 8pt more inset than the photo cards.
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  RoundAction(
-                    kind: ActionKind.pass,
-                    label: l10n.discoverPass,
-                    onPressed: () => unawaited(_decide(person, liked: false)),
-                  ),
-                  RoundAction(
-                    kind: ActionKind.superSwipe,
-                    label: l10n.discoverSuperSwipe,
-                    onPressed: () => unawaited(
-                      _decide(person, liked: true, superSwipe: true),
-                    ),
-                  ),
-                  RoundAction(
-                    kind: ActionKind.like,
-                    label: l10n.discoverLike,
-                    onPressed: () => unawaited(_decide(person, liked: true)),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: AppSpacing.s5),
+            const SizedBox(height: AppLayout.sectionGap),
             // happn's "Report & block" and Bumble's "Hide and Report" close the profile.
             Center(
               child: TextLink(
@@ -514,6 +501,8 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
               textAlign: TextAlign.center,
               style: AppTypography.caption,
             ),
+            // Room for the floating decision row over the end of the profile.
+            const SizedBox(height: DecisionBar.height + AppSpacing.s4),
           ],
         ),
       ),
@@ -710,31 +699,20 @@ class _FloatingActionsState extends State<_FloatingActions> {
                   if (!_show && mounted) setState(() => _mounted = false);
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: AppSpacing.s4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      RoundAction(
-                        kind: ActionKind.pass,
-                        label: l10n.discoverPass,
-                        floating: true,
-                        onPressed: widget.onPass,
-                      ),
-                      const SizedBox(width: AppSpacing.s5),
-                      RoundAction(
-                        kind: ActionKind.superSwipe,
-                        label: l10n.discoverSuperSwipe,
-                        floating: true,
-                        onPressed: widget.onSuper,
-                      ),
-                      const SizedBox(width: AppSpacing.s5),
-                      RoundAction(
-                        kind: ActionKind.like,
-                        label: l10n.discoverLike,
-                        floating: true,
-                        onPressed: widget.onLike,
-                      ),
-                    ],
+                  padding: const EdgeInsets.fromLTRB(
+                    AppLayout.screenGutter,
+                    0,
+                    AppLayout.screenGutter,
+                    AppSpacing.s4,
+                  ),
+                  child: DecisionBar(
+                    passLabel: l10n.discoverPass,
+                    superLabel: l10n.discoverSuperSwipe,
+                    likeLabel: l10n.discoverLike,
+                    floating: true,
+                    onPass: widget.onPass,
+                    onSuper: widget.onSuper,
+                    onLike: widget.onLike,
                   ),
                 ),
               ),
@@ -841,18 +819,14 @@ class _SwipeCard extends StatefulWidget {
   const _SwipeCard({
     required this.person,
     required this.onDecide,
-    required this.superAction,
     required this.onOpenPhotos,
     required this.onMore,
-    this.hint,
   });
 
   final SamplePerson person;
   final VoidCallback onOpenPhotos;
   final VoidCallback onMore;
-  final Widget? hint;
   final ValueChanged<bool> onDecide;
-  final Widget superAction;
 
   @override
   State<_SwipeCard> createState() => _SwipeCardState();
@@ -908,15 +882,11 @@ class _SwipeCardState extends State<_SwipeCard> {
           transform: Matrix4.translationValues(_dx, 0, 0)
             ..rotateZ(_dx / 24 * 3.1415926535 / 180),
           transformAlignment: Alignment.bottomCenter,
-          // Fills the screen above the tab bar, as V16 (16pt left under it).
           child: PersonHeroCard(
             person: widget.person,
-            action: widget.superAction,
             stamp: stamp,
             onOpenPhotos: widget.onOpenPhotos,
             onMore: widget.onMore,
-            hint: widget.hint,
-            height: TabPage.viewportOf(context) - AppSpacing.s4,
           ),
         ),
       ),
@@ -944,7 +914,7 @@ class _ProfileSkeleton extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AspectRatio(
-            aspectRatio: 4 / 5,
+            aspectRatio: AppMedia.personPhoto,
             child: Container(
               decoration: BoxDecoration(
                 color: AppColors.fill,

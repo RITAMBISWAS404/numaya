@@ -59,6 +59,9 @@ abstract final class AppColors {
   static const Color identity = _T.colorWithingsIdentity;
 
   /// Switch on.
+  /// Outline of secondary buttons and other quiet controls: ink at 30% (RD-07).
+  static const Color outlineSoft = Color(0x4D121212);
+
   static const Color positive = _T.colorWithingsPositive;
 
   /// Destructive buttons, notification dots, errors.

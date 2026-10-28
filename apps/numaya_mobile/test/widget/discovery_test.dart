@@ -12,12 +12,20 @@ import '../helpers/test_app.dart';
 
 Finder _action(String label) => find.bySemanticsLabel(label);
 
-/// Round Pass / Like / SuperSwipe buttons that can be tapped right now (on screen and not hidden).
-Finder _tappable(String label) => find
-    .byWidgetPredicate((w) => w is RoundAction && w.label == label)
+/// A Pass / Like / SuperSwipe pill of the inline or the floating decision bar that can be
+/// tapped right now (on screen and not hidden).
+Finder _tappable(String label, {required bool floating}) => find
+    .descendant(
+      of: find.byWidgetPredicate(
+        (w) => w is DecisionBar && w.floating == floating,
+      ),
+      matching: find.byWidgetPredicate(
+        (w) => w is Pressable && w.semanticLabel == label,
+      ),
+    )
     .hitTestable();
 
-/// The Pass / Like / SuperSwipe circles at the end of the profile.
+/// The Pass / Like / SuperSwipe pills of the decision bar under the photo card.
 Future<void> _decide(WidgetTester tester, String label) async {
   await tapOn(tester, _action(label).last);
   await tester.pump(const Duration(milliseconds: 300));
@@ -110,27 +118,30 @@ void main() {
       await usePhoneSize(tester);
       await signUpToHome(tester, testAuth());
       await _tapHere(tester, _action('Hide tip'));
-      // Over the photo card no Pass can be tapped: the inline row is far below, the floating
-      // one hidden.
-      expect(_tappable('Pass'), findsNothing);
+      // Over the photo card the inline bar sits right under it; the floating one is hidden.
+      expect(_tappable('Pass', floating: false), findsOneWidget);
+      expect(_tappable('Pass', floating: true), findsNothing);
 
       // "Show more about Maya" on the name band scrolls to the profile.
       await _tapHere(
         tester,
         find.bySemanticsLabel(RegExp('^Show more about Maya')),
       );
-      expect(_tappable('Pass'), findsOneWidget); // floating over the profile
-      await _tapHere(tester, _tappable('Pass'));
+      // Reading: the inline bar has scrolled away and the floating one is over the profile.
+      expect(_tappable('Pass', floating: true), findsOneWidget);
+      expect(_tappable('Pass', floating: false), findsNothing);
+      await _tapHere(tester, _tappable('Pass', floating: true));
       // The next person starts at their photo, with the floating bar hidden again.
       expect(find.text('Sam, 31'), findsOneWidget);
-      expect(_tappable('Pass'), findsNothing);
+      expect(_tappable('Pass', floating: true), findsNothing);
+      expect(_tappable('Pass', floating: false), findsOneWidget);
 
       // Android back deep in a profile returns to the top first; at the top Home stays put
       // (the shell, not Discover, decides to leave the app).
       await _scrollProfile(tester, 600);
-      expect(_tappable('Pass'), findsOneWidget);
+      expect(_tappable('Pass', floating: true), findsOneWidget);
       await _systemBack(tester);
-      expect(_tappable('Pass'), findsNothing);
+      expect(_tappable('Pass', floating: true), findsNothing);
       expect(find.text('Sam, 31'), findsOneWidget);
       await settle(tester);
     },

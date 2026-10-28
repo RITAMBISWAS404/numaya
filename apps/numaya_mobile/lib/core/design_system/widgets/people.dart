@@ -102,7 +102,7 @@ class PhotoPlaceholder extends StatelessWidget {
   const PhotoPlaceholder({
     super.key,
     required this.label,
-    this.aspectRatio = 4 / 5,
+    this.aspectRatio = AppMedia.personPhoto,
     this.radius = AppRadii.photo,
     this.child,
   });
@@ -191,8 +191,9 @@ class StatusBadge extends StatelessWidget {
         null,
         AppTypography.semibold,
       ),
+      // Over the photo scrim: a translucent white pill (RD-11).
       BadgeTone.onDark => (
-        const Color(0x33121212),
+        const Color(0x33FFFFFF),
         AppColors.inkForeground,
         null,
         AppTypography.semibold,
@@ -204,7 +205,7 @@ class StatusBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: bg ?? Colors.transparent,
-        borderRadius: AppRadii.all(AppRadii.tag),
+        borderRadius: AppRadii.all(AppRadii.pill),
         border: edge == null
             ? null
             : Border.all(color: edge, width: AppBorders.hairline),
@@ -301,9 +302,11 @@ class InfoChip extends StatelessWidget {
     return Container(
       height: AppSizes.chip,
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s3),
+      // On a white card the chip takes the stone page colour, a step lighter than the fill
+      // (RD-05); on the page it's white.
       decoration: BoxDecoration(
-        color: onPage ? AppColors.surface : AppColors.fill,
-        borderRadius: AppRadii.all(AppRadii.control),
+        color: onPage ? AppColors.surface : AppColors.canvas,
+        borderRadius: AppRadii.all(AppRadii.pill),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -331,23 +334,95 @@ class InfoChip extends StatelessWidget {
 
 enum ActionKind { pass, superSwipe, like }
 
-/// Discover actions (`.theme-withings .action-bar`): 56pt circles: Pass outlined, SuperSwipe
-/// Withings blue, Like ink.
-class RoundAction extends StatelessWidget {
-  const RoundAction({
+/// Discover's decision row (UI_REFINEMENT_DECISIONS RD-12): one full-width group of pills,
+/// Pass (outlined), SuperSwipe (accent, compact, star only) and Like (ink, the primary). Pass and
+/// Like carry their labels when there is room; under large text or on narrow screens every pill
+/// shows its icon only, keeping its spoken label. [floating] lifts the row over content with the
+/// float shadow (the only place it needs depth).
+class DecisionBar extends StatelessWidget {
+  const DecisionBar({
     super.key,
+    required this.passLabel,
+    required this.superLabel,
+    required this.likeLabel,
+    required this.onPass,
+    required this.onSuper,
+    required this.onLike,
+    this.floating = false,
+  });
+
+  final String passLabel;
+  final String superLabel;
+  final String likeLabel;
+  final VoidCallback? onPass;
+  final VoidCallback? onSuper;
+  final VoidCallback? onLike;
+  final bool floating;
+
+  static const double height = 52;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, box) {
+        // Labels need about 112pt per wide pill at the current text size.
+        final scale = MediaQuery.textScalerOf(context).scale(16) / 16;
+        final wide = (box.maxWidth - 2 * AppSpacing.s2) * 2 / 5;
+        final labels = wide >= 112 * scale;
+        return Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: _DecisionPill(
+                kind: ActionKind.pass,
+                label: passLabel,
+                showLabel: labels,
+                floating: floating,
+                onPressed: onPass,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.s2),
+            Expanded(
+              child: _DecisionPill(
+                kind: ActionKind.superSwipe,
+                label: superLabel,
+                showLabel: false,
+                floating: floating,
+                onPressed: onSuper,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.s2),
+            Expanded(
+              flex: 2,
+              child: _DecisionPill(
+                kind: ActionKind.like,
+                label: likeLabel,
+                showLabel: labels,
+                floating: floating,
+                onPressed: onLike,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _DecisionPill extends StatelessWidget {
+  const _DecisionPill({
     required this.kind,
     required this.label,
+    required this.showLabel,
+    required this.floating,
     required this.onPressed,
-    this.floating = false,
   });
 
   final ActionKind kind;
   final String label;
-  final VoidCallback? onPressed;
-
-  /// Over a photo the SuperSwipe floats (float shadow).
+  final bool showLabel;
   final bool floating;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -355,7 +430,7 @@ class RoundAction extends StatelessWidget {
       ActionKind.pass => (
         AppColors.surface,
         AppColors.ink,
-        AppColors.ink,
+        AppColors.outlineSoft,
         NumayaIcons.close,
       ),
       ActionKind.superSwipe => (
@@ -378,21 +453,39 @@ class RoundAction extends StatelessWidget {
         onTap: onPressed,
         semanticLabel: label,
         excludeChildSemantics: true,
-        pressedScale: 0.92,
+        pressedScale: 0.96,
         borderRadius: AppRadii.all(AppRadii.pill),
         child: Container(
-          width: 56,
-          height: 56,
+          height: DecisionBar.height,
           decoration: BoxDecoration(
             color: bg,
-            shape: BoxShape.circle,
+            borderRadius: AppRadii.all(AppRadii.pill),
             border: edge == null
                 ? null
-                : Border.all(color: edge, width: AppBorders.hairline),
+                : Border.all(
+                    color: edge,
+                    width: AppBorders.hairline,
+                    strokeAlign: BorderSide.strokeAlignInside,
+                  ),
             boxShadow: floating ? AppElevation.withingsFloat : const [],
           ),
           alignment: Alignment.center,
-          child: NumayaIcon(icon, size: 26, color: fg),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              NumayaIcon(icon, size: AppSizes.iconLg, color: fg),
+              if (showLabel) ...[
+                const SizedBox(width: AppLayout.iconLabelGap),
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    style: AppTypography.button.copyWith(color: fg, height: 1),
+                  ),
+                ),
+              ],
+            ],
+          ),
         ),
       ),
     );
@@ -829,8 +922,9 @@ class ViewTabs extends StatelessWidget {
                   height: AppSizes.chip,
                   padding: const EdgeInsets.symmetric(horizontal: 14),
                   decoration: BoxDecoration(
+                    // Solid accent when selected (RD-05), neutral otherwise.
                     color: i == selected
-                        ? AppColors.accentTint
+                        ? AppColors.accent
                         : Colors.transparent,
                     borderRadius: AppRadii.all(AppRadii.pill),
                   ),
@@ -844,7 +938,7 @@ class ViewTabs extends StatelessWidget {
                             text: '  ${options[i].count}',
                             style: TextStyle(
                               color: i == selected
-                                  ? AppColors.accentOnTint
+                                  ? AppColors.accentForeground
                                   : AppColors.textMuted,
                               fontFeatures: const [
                                 FontFeature.tabularFigures(),
@@ -859,7 +953,7 @@ class ViewTabs extends StatelessWidget {
                           AppTypography.medium,
                         ).copyWith(
                           color: i == selected
-                              ? AppColors.accentOnTint
+                              ? AppColors.accentForeground
                               : AppColors.ink,
                         ),
                   ),

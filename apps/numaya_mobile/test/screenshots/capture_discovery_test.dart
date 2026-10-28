@@ -42,8 +42,11 @@ void main() {
       await tester.pump(const Duration(milliseconds: 600));
     }
 
-    Finder inline(String label) => find.byWidgetPredicate(
-      (w) => w is RoundAction && w.label == label && !w.floating,
+    Finder inline(String label) => find.descendant(
+      of: find.byWidgetPredicate((w) => w is DecisionBar && !w.floating),
+      matching: find.byWidgetPredicate(
+        (w) => w is Pressable && w.semanticLabel == label,
+      ),
     );
 
     Future<void> scroll(double dy) async {

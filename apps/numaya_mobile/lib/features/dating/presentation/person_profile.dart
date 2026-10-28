@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/design_system.dart';
@@ -7,36 +5,31 @@ import '../../../l10n/l10n.dart';
 import '../../onboarding/domain/profile_draft.dart';
 import '../domain/sample_people.dart';
 
-/// The first photo of a sample profile with V16's dark band (screenshot 019): badges, the name on
-/// the hero scale in white, the job, and an optional floating action (the SuperSwipe). As V16's
-/// `.profile-card`, the band sits inside a 3:4 photo box at least 420pt tall; Discover passes
-/// [height] so the card fills the screen.
+/// The first photo of a sample profile (UI_REFINEMENT_DECISIONS RD-10, RD-11): a 4:3 photo with a
+/// gradient scrim rising from the bottom, so badges, the name on the hero scale and the job sit on
+/// the photo itself rather than on a solid band. An optional [action] sits beside the name; the
+/// photo count and the drag stamp sit on top. When large text needs more room than the 4:3 photo
+/// gives, the card grows taller instead of squeezing the text.
 class PersonHeroCard extends StatelessWidget {
   const PersonHeroCard({
     super.key,
     required this.person,
     this.action,
     this.stamp,
-    this.height,
     this.own = false,
     this.showAge = true,
     this.onOpenPhotos,
     this.onMore,
-    this.hint,
   });
 
   /// Tapping the photo opens the photo viewer; a photo count shows on the photo.
   final VoidCallback? onOpenPhotos;
 
-  /// Tapping the name band shows the rest of the profile.
+  /// Tapping the name shows the rest of the profile.
   final VoidCallback? onMore;
-
-  /// Shown over the bottom of the photo (Discover's first-visit swipe tip).
-  final Widget? hint;
 
   final SamplePerson person;
   final Widget? action;
-  final double? height;
 
   /// The member's own profile in the preview: a "Preview" badge instead of "Sample profile".
   final bool own;
@@ -45,122 +38,148 @@ class PersonHeroCard extends StatelessWidget {
   /// "Like" / "Pass" while dragging.
   final String? stamp;
 
+  /// The scrim: clear over the top of the photo, darkening towards the bottom.
+  static const _scrim = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    stops: [0.3, 0.62, 1],
+    colors: [Color(0x00121212), Color(0x59121212), Color(0xC7121212)],
+  );
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return LayoutBuilder(
-      // At least this tall; taller only when large text needs more room for the name band.
-      builder: (context, box) => ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: height ?? math.max(420, box.maxWidth * 4 / 3),
-          minWidth: box.maxWidth,
-        ),
-        child: _card(l10n),
-      ),
-    );
-  }
-
-  Widget _card(AppLocalizations l10n) {
-    // The card is at least its design height; a name band that grows with large text makes the
-    // card taller (IntrinsicHeight measures it) rather than squeezing the photo to nothing.
-    return ClipRRect(
-      borderRadius: AppRadii.all(AppRadii.photo),
-      child: IntrinsicHeight(
-        child: Column(
-          children: [
-            Expanded(child: _photo(l10n)),
-            Container(
-              width: double.infinity,
-              color: AppColors.textSecondary,
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.s5,
-                AppSpacing.s4,
-                AppSpacing.s4,
-                AppSpacing.s4,
+      builder: (context, box) {
+        final width = box.maxWidth;
+        final photoHeight = width / AppMedia.personPhoto;
+        return ClipRRect(
+          borderRadius: AppRadii.all(AppRadii.photo),
+          child: Stack(
+            children: [
+              Positioned.fill(child: _photo(l10n)),
+              const Positioned.fill(
+                child: IgnorePointer(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(gradient: _scrim),
+                  ),
+                ),
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: _more(
-                      l10n,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Wrap(
-                            spacing: 6,
-                            runSpacing: 6,
-                            children: [
-                              StatusBadge(
-                                label: own
-                                    ? l10n.previewBadge
-                                    : l10n.discoverSampleBadge,
-                                tone: BadgeTone.onDark,
-                              ),
-                              if (person.verified)
-                                StatusBadge(
-                                  label: l10n.discoverVerified,
-                                  icon: NumayaIcons.verified,
-                                  tone: BadgeTone.onDark,
-                                ),
-                              if (person.isNew)
-                                StatusBadge(
-                                  label: l10n.discoverNewHere,
-                                  tone: BadgeTone.onDark,
-                                ),
-                            ],
-                          ),
-                          const SizedBox(height: AppSpacing.s2),
-                          Semantics(
-                            header: true,
-                            child: Text(
-                              showAge && person.age > 0
-                                  ? l10n.profileNameAge(person.name, person.age)
-                                  : person.name,
-                              style: AppTypography.hero.copyWith(
-                                color: AppColors.inkForeground,
-                              ),
-                            ),
-                          ),
-                          if (person.job != null)
-                            Row(
-                              children: [
-                                const NumayaIcon(
-                                  NumayaIcons.user,
-                                  size: 16,
-                                  color: AppColors.inkForeground,
-                                ),
-                                const SizedBox(width: 6),
-                                Flexible(
-                                  child: Text(
-                                    person.job!,
-                                    style: AppTypography.weight(
-                                      AppTypography.body,
-                                      AppTypography.medium,
-                                    ).copyWith(color: AppColors.inkForeground),
-                                  ),
-                                ),
-                              ],
-                            ),
+              // Sizes the card: the 4:3 photo, or taller when the text needs it.
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: photoHeight,
+                  minWidth: width,
+                  maxWidth: width,
+                ),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      AppLayout.cardPadding,
+                      AppSpacing.s12,
+                      AppLayout.cardPadding,
+                      AppLayout.cardPadding,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(child: _more(l10n, _identity(l10n))),
+                        if (action != null) ...[
+                          const SizedBox(width: AppSpacing.s3),
+                          action!,
                         ],
-                      ),
+                      ],
                     ),
                   ),
-                  if (action != null) ...[
-                    const SizedBox(width: AppSpacing.s3),
-                    action!,
-                  ],
-                ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+              if (stamp != null)
+                Positioned(
+                  top: AppSpacing.s6,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: StatusBadge(label: stamp!, tone: BadgeTone.onPhoto),
+                  ),
+                ),
+              if (onOpenPhotos != null && person.photoCount > 1)
+                Positioned(
+                  top: AppSpacing.s3,
+                  right: AppSpacing.s3,
+                  child: IgnorePointer(
+                    child: StatusBadge(
+                      label: l10n.discoverPhotoCount(person.photoCount),
+                      icon: NumayaIcons.image,
+                      tone: BadgeTone.onPhoto,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
-}
 
-extension on PersonHeroCard {
+  Widget _identity(AppLocalizations l10n) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Wrap(
+        spacing: 6,
+        runSpacing: 6,
+        children: [
+          StatusBadge(
+            label: own ? l10n.previewBadge : l10n.discoverSampleBadge,
+            tone: BadgeTone.onDark,
+          ),
+          if (person.verified)
+            StatusBadge(
+              label: l10n.discoverVerified,
+              icon: NumayaIcons.verified,
+              tone: BadgeTone.onDark,
+            ),
+          if (person.isNew)
+            StatusBadge(label: l10n.discoverNewHere, tone: BadgeTone.onDark),
+        ],
+      ),
+      const SizedBox(height: AppSpacing.s2),
+      Semantics(
+        header: true,
+        child: Text(
+          showAge && person.age > 0
+              ? l10n.profileNameAge(person.name, person.age)
+              : person.name,
+          style: AppTypography.hero.copyWith(color: AppColors.inkForeground),
+        ),
+      ),
+      if (person.job != null)
+        Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: Row(
+            children: [
+              const NumayaIcon(
+                NumayaIcons.user,
+                size: AppSizes.iconSm,
+                color: AppColors.inkForeground,
+              ),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  person.job!,
+                  style: AppTypography.weight(
+                    AppTypography.body,
+                    AppTypography.medium,
+                  ).copyWith(color: AppColors.inkForeground),
+                ),
+              ),
+            ],
+          ),
+        ),
+    ],
+  );
+
   Widget _more(AppLocalizations l10n, Widget child) => onMore == null
       ? child
       : Pressable(
@@ -175,56 +194,14 @@ extension on PersonHeroCard {
       label: l10n.discoverPhotoLabel(person.name, 1),
       aspectRatio: null,
       radius: 0,
-      child: Stack(
-        children: [
-          if (stamp != null)
-            Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(top: AppSpacing.s6),
-                child: StatusBadge(label: stamp!, tone: BadgeTone.onPhoto),
-              ),
-            ),
-          if (onOpenPhotos != null && person.photoCount > 1)
-            Positioned(
-              top: AppSpacing.s3,
-              right: AppSpacing.s3,
-              child: StatusBadge(
-                label: l10n.discoverPhotoCount(person.photoCount),
-                icon: NumayaIcons.image,
-                tone: BadgeTone.onPhoto,
-              ),
-            ),
-          if (hint != null && onOpenPhotos == null)
-            Positioned(
-              left: AppSpacing.s3,
-              right: AppSpacing.s3,
-              bottom: AppSpacing.s3,
-              child: hint!,
-            ),
-        ],
-      ),
     );
     if (onOpenPhotos == null) return photo;
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Pressable(
-          onTap: onOpenPhotos,
-          semanticLabel: l10n.discoverOpenPhotos(person.name),
-          pressedScale: 1,
-          excludeChildSemantics: true,
-          child: photo,
-        ),
-        // The tip stays reachable on its own (its button is not part of the photo's tap).
-        if (hint != null)
-          Positioned(
-            left: AppSpacing.s3,
-            right: AppSpacing.s3,
-            bottom: AppSpacing.s3,
-            child: hint!,
-          ),
-      ],
+    return Pressable(
+      onTap: onOpenPhotos,
+      semanticLabel: l10n.discoverOpenPhotos(person.name),
+      pressedScale: 1,
+      excludeChildSemantics: true,
+      child: photo,
     );
   }
 }
@@ -253,7 +230,7 @@ List<Widget> personSections(
   Widget photo(int position) {
     final tile = PhotoPlaceholder(
       label: l10n.discoverPhotoLabel(person.name, position),
-      aspectRatio: 4 / 5,
+      aspectRatio: AppMedia.personPhoto,
     );
     return onPhoto == null
         ? tile

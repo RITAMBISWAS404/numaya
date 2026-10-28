@@ -18,8 +18,9 @@ enum ScreenTone {
 
 /// One full screen (`.screen`): an optional top bar, a scrolling body with the 16pt gutter on the
 /// stone page, and an optional footer pinned above the keyboard. Wider screens centre a 430pt
-/// column. A [NumayaTopBar] is a white bar that also fills the status-bar area.
-class NumayaScreen extends StatelessWidget {
+/// column. The top bar sits on the same stone as the page (RD-03); a hairline appears under it
+/// only once content has scrolled beneath it.
+class NumayaScreen extends StatefulWidget {
   const NumayaScreen({
     super.key,
     required this.body,
@@ -40,7 +41,28 @@ class NumayaScreen extends StatelessWidget {
   final ScrollController? scrollController;
 
   @override
+  State<NumayaScreen> createState() => _NumayaScreenState();
+}
+
+class _NumayaScreenState extends State<NumayaScreen> {
+  /// Content has scrolled under the top bar: show its hairline.
+  bool _scrolled = false;
+
+  bool _onScroll(ScrollNotification n) {
+    if (n.depth != 0 || n.metrics.axis != Axis.vertical) return false;
+    final scrolled = n.metrics.pixels > 0.5;
+    if (scrolled != _scrolled) setState(() => _scrolled = scrolled);
+    return false;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final bodyPadding = widget.bodyPadding;
+    final scrollable = widget.scrollable;
+    final scrollController = widget.scrollController;
+    final body = widget.body;
+    final top = widget.top;
+    final footer = widget.footer;
     final padding =
         bodyPadding ??
         const EdgeInsets.fromLTRB(
@@ -72,19 +94,20 @@ class NumayaScreen extends StatelessWidget {
       body: Column(
         children: [
           if (top != null)
-            DecoratedBox(
-              decoration: const BoxDecoration(
-                color: AppColors.surface,
+            AnimatedContainer(
+              duration: AppMotion.duration(context, AppMotion.state),
+              decoration: BoxDecoration(
+                color: AppColors.canvas,
                 border: Border(
                   bottom: BorderSide(
-                    color: AppColors.border,
+                    color: _scrolled ? AppColors.border : AppColors.canvas,
                     width: AppBorders.hairline,
                   ),
                 ),
               ),
               child: Padding(
                 padding: EdgeInsets.only(top: topInset),
-                child: column(top!),
+                child: column(top),
               ),
             ),
           Expanded(
@@ -96,12 +119,15 @@ class NumayaScreen extends StatelessWidget {
                     // Tapping outside a field dismisses the keyboard. Not a control, so screen
                     // readers don't see a screen-sized button.
                     Expanded(
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        excludeFromSemantics: true,
-                        onTap: () =>
-                            FocusManager.instance.primaryFocus?.unfocus(),
-                        child: content,
+                      child: NotificationListener<ScrollNotification>(
+                        onNotification: _onScroll,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          excludeFromSemantics: true,
+                          onTap: () =>
+                              FocusManager.instance.primaryFocus?.unfocus(),
+                          child: content,
+                        ),
                       ),
                     ),
                     if (footer != null)
@@ -179,7 +205,12 @@ class NumayaTopBar extends StatelessWidget {
     return SizedBox(
       height: AppSizes.topBar,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s3),
+        // The plain back icon sits 8pt in, so its glyph lines up with the 16pt gutter; action
+        // buttons (rounded squares) end on the gutter itself.
+        padding: const EdgeInsets.only(
+          left: AppSpacing.s2,
+          right: AppLayout.barPadding,
+        ),
         child: Stack(
           alignment: Alignment.center,
           children: [

@@ -131,7 +131,7 @@ class _PickCard extends StatelessWidget {
               excludeChildSemantics: true,
               child: PhotoPlaceholder(
                 label: l10n.discoverPhotoLabel(person.name, 1),
-                aspectRatio: 4 / 5,
+                aspectRatio: AppMedia.personPhoto,
                 radius: AppRadii.control,
               ),
             ),

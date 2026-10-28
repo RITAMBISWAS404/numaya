@@ -62,6 +62,12 @@ Future<void> loadAppFonts() async {
   for (final (family, file) in [
     ('Hanken Grotesk', 'assets/fonts/HankenGrotesk-Variable.ttf'),
     ('Noto Color Emoji', '/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf'),
+    // Flutter's Material Icons (the app's icons, RD-04), from the SDK running the tests.
+    (
+      'MaterialIcons',
+      '${Platform.environment['FLUTTER_ROOT'] ?? '/opt/flutter-sdk/flutter'}'
+          '/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
+    ),
   ]) {
     if (!File(file).existsSync()) continue;
     final bytes = File(file).readAsBytesSync();

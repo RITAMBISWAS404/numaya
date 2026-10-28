@@ -131,8 +131,8 @@ class NumayaTabBar extends StatelessWidget {
   }
 }
 
-/// Switch (`.theme-withings .switch`): iOS proportions (51 × 31), a round 27pt white thumb, green
-/// when on, the fill when off.
+/// Switch (`.theme-withings .switch`): iOS proportions (51 × 31), a flat round 27pt white thumb
+/// (no shadow, RD-06), green when on, the stronger border grey when off so the thumb still reads.
 class NumayaSwitch extends StatelessWidget {
   const NumayaSwitch({super.key, required this.value, required this.onChanged});
 
@@ -148,7 +148,7 @@ class NumayaSwitch extends StatelessWidget {
       height: AppSizes.switchHeight,
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        color: value ? AppColors.positive : AppColors.fill,
+        color: value ? AppColors.positive : AppColors.borderStrong,
         borderRadius: AppRadii.all(AppRadii.pill),
       ),
       child: AnimatedAlign(
@@ -161,7 +161,6 @@ class NumayaSwitch extends StatelessWidget {
           decoration: const BoxDecoration(
             color: AppColors.surface,
             shape: BoxShape.circle,
-            boxShadow: AppElevation.thumb,
           ),
         ),
       ),
