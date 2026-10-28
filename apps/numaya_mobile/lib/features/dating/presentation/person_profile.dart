@@ -38,12 +38,18 @@ class PersonHeroCard extends StatelessWidget {
   /// "Like" / "Pass" while dragging.
   final String? stamp;
 
-  /// The scrim: clear over the top of the photo, darkening towards the bottom.
-  static const _scrim = LinearGradient(
+  /// The scrim travels with the text (RD-11): a fade above it, then a gradient behind it that
+  /// never drops below 65% ink, so white text stays readable however tall a long name, job or
+  /// large text makes the block. The rest of the photo stays clear.
+  static const _fade = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    stops: [0.3, 0.62, 1],
-    colors: [Color(0x00121212), Color(0x59121212), Color(0xC7121212)],
+    colors: [Color(0x00121212), Color(0xA6121212)],
+  );
+  static const _behindText = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xA6121212), Color(0xCC121212)],
   );
 
   @override
@@ -58,13 +64,6 @@ class PersonHeroCard extends StatelessWidget {
           child: Stack(
             children: [
               Positioned.fill(child: _photo(l10n)),
-              const Positioned.fill(
-                child: IgnorePointer(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(gradient: _scrim),
-                  ),
-                ),
-              ),
               // Sizes the card: the 4:3 photo, or taller when the text needs it.
               ConstrainedBox(
                 constraints: BoxConstraints(
@@ -74,21 +73,41 @@ class PersonHeroCard extends StatelessWidget {
                 ),
                 child: Align(
                   alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppLayout.cardPadding,
-                      AppSpacing.s12,
-                      AppLayout.cardPadding,
-                      AppLayout.cardPadding,
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                  child: SizedBox(
+                    width: width,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Expanded(child: _more(l10n, _identity(l10n))),
-                        if (action != null) ...[
-                          const SizedBox(width: AppSpacing.s3),
-                          action!,
-                        ],
+                        const IgnorePointer(
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(gradient: _fade),
+                            child: SizedBox(height: AppSpacing.s12),
+                          ),
+                        ),
+                        DecoratedBox(
+                          decoration: const BoxDecoration(
+                            gradient: _behindText,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                              AppLayout.cardPadding,
+                              0,
+                              AppLayout.cardPadding,
+                              AppLayout.cardPadding,
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Expanded(child: _more(l10n, _identity(l10n))),
+                                if (action != null) ...[
+                                  const SizedBox(width: AppSpacing.s3),
+                                  action!,
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
