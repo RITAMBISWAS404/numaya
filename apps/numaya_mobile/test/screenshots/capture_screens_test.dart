@@ -83,56 +83,11 @@ void main() {
     await tester.pump(const Duration(milliseconds: 600));
     await shot('08-setup-hub');
 
+    // The setup steps themselves are captured in capture_onboarding_test (oNN).
     await tap(find.text('Build my profile'));
     await tester.pump(const Duration(milliseconds: 600));
-    await shot('09-basics-empty');
-    final fields = find.byType(TextField);
-    await tester.enterText(fields.at(0), 'Sam');
-    await tester.enterText(fields.at(1), '2012');
-    await shot('10-basics-underage');
-    await tester.enterText(fields.at(1), '1995');
-    await tap(find.text('Nonbinary'));
-    await tap(find.text('A long-term relationship'));
-    FocusManager.instance.primaryFocus?.unfocus();
-    await shot('11-basics-complete');
-    await tap(fab);
-    await tester.pump(const Duration(milliseconds: 600));
-
-    await shot('12-interests-empty');
-    for (final i in ['Natural wine', 'Cooking', 'Jazz', 'Poetry', 'Climbing']) {
-      await tap(find.text(i));
-    }
-    await shot('12b-interests-max');
-    for (final i in ['Poetry', 'Climbing']) {
-      await tap(find.text(i));
-    }
-    for (final i in <String>[]) {
-      await tap(find.text(i));
-    }
-    await tap(find.text('Tap to write your answer'));
-    await tester.pump(const Duration(milliseconds: 600));
-    await tester.enterText(
-      find.byType(TextField).last,
-      'A record shop, a long walk, and nowhere to be after.',
-    );
-    FocusManager.instance.primaryFocus?.unfocus();
-    await shot('13-prompt-editor');
-    await tap(find.text('Save prompt'));
-    await tester.pump(const Duration(milliseconds: 600));
-    await tester.drag(
-      find.byType(SingleChildScrollView).first,
-      const Offset(0, 600),
-    );
-    await shot('14-interests-complete');
-    await tap(fab);
-    await tester.pump(const Duration(milliseconds: 600));
-
-    await tap(find.bySemanticsLabel('Add a photo').first);
-    await tap(find.bySemanticsLabel('Add a photo').first);
-    await tap(find.bySemanticsLabel('Add a photo').first);
-    await shot('15-photos');
-    await tap(fab);
-    await tester.pump(const Duration(milliseconds: 800));
+    await setupFromNameToInterests(tester);
+    await finishProfileToHome(tester);
     await tester.pump(const Duration(seconds: 3));
     await shot('16-home');
     await tap(find.bySemanticsLabel('Filters'));

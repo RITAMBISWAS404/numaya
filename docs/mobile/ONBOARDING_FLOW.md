@@ -1,10 +1,15 @@
 # Onboarding flow
 
+> **Superseded for the profile steps** on `experiment/numaya-onboarding-complete`: Basics, Interests + prompt and
+> Photos were replaced by 13 setup steps, a review and an All set screen. The current order, screens and states are in
+> [ONBOARDING_MASTER_INVENTORY.md](ONBOARDING_MASTER_INVENTORY.md); edge cases in
+> [ONBOARDING_EDGE_CASES.md](ONBOARDING_EDGE_CASES.md). Welcome, Phone, Country, Verify and the sign-in rows below still apply.
+
 Source of truth: `docs/research/screen-specs.md` (Bumble reference, B-xx ids), `decision-log.md`, and the approved web
 screens (`src/prototype/screens/*.jsx`, `src/flows/screens.jsx`), whose copy is reused word for word.
 
 ```
-Welcome ──Create an account──▶ Phone ──▶ Verify ──▶ Setup hub ──▶ Basics ──▶ Interests + prompt ──▶ Photos ──▶ Home
+Welcome ──Create an account──▶ Phone ──▶ Verify ──▶ Setup hub ──▶ 13 steps ──▶ Review ──▶ All set ──▶ Home
    │                             ▲  │        │
    │                             │  └ Country sheet
    │                             └── Change number (number kept)
@@ -12,7 +17,7 @@ Welcome ──Create an account──▶ Phone ──▶ Verify ──▶ Setup 
                                                              └─ no account ──▶ sheet: Create an account │ Use a different number
 ```
 
-Progress in the top bar (sign-up only): Phone 1 · Verify 2 · Basics 3 · Interests 4 · Photos 5 of 5. The web prototype
+Progress in the top bar (sign-up only): Phone and Verify 1 · About you 2 · Looking for 3 · Your profile 4 · Finish 5 of 5. The web prototype
 used 4 segments on the phone steps and 6 on profile steps; Flutter uses one consistent count.
 
 ## Screens and states

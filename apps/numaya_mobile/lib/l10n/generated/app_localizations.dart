@@ -4783,7 +4783,7 @@ abstract class AppLocalizations {
   /// No description provided for @obLocationDemo.
   ///
   /// In en, this message translates to:
-  /// **'Demo build: the phone’s location is never read. Allowing sets a sample area.'**
+  /// **'The phone’s location is never read in this build. Allowing sets a sample area.'**
   String get obLocationDemo;
 
   /// No description provided for @obLocationSetDevice.
@@ -5475,6 +5475,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start a sign-up first'**
   String get demoNeedsAccount;
+
+  /// No description provided for @obMeetLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'Show me'**
+  String get obMeetLegend;
+
+  /// No description provided for @obNotifFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'You can change this in Settings'**
+  String get obNotifFooter;
+
+  /// No description provided for @obVerifyFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional · you can verify later'**
+  String get obVerifyFooter;
+
+  /// No description provided for @obDemoBuild.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo build'**
+  String get obDemoBuild;
 }
 
 class _AppLocalizationsDelegate

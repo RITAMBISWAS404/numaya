@@ -1440,7 +1440,7 @@
   "obLocationLede": "Numaya uses your area to show you people nearby. Only the area appears on your profile, never your exact location.",
   "obLocationUse": "Use my location",
   "obLocationChoose": "Choose my area instead",
-  "obLocationDemo": "Demo build: the phone’s location is never read. Allowing sets a sample area.",
+  "obLocationDemo": "The phone’s location is never read in this build. Allowing sets a sample area.",
   "obLocationSetDevice": "{area} (sample area)",
   "@obLocationSetDevice": {
     "placeholders": {
@@ -1638,5 +1638,9 @@
   "demoPermissionsResetDone": "Permission answers reset",
   "demoOnboardingStart": "Start a new sign-up (skips the code)",
   "demoOnboardingNote": "Opens profile setup for a new demo account. Each step can also be opened directly once an account exists.",
-  "demoNeedsAccount": "Start a sign-up first"
+  "demoNeedsAccount": "Start a sign-up first",
+  "obMeetLegend": "Show me",
+  "obNotifFooter": "You can change this in Settings",
+  "obVerifyFooter": "Optional · you can verify later",
+  "obDemoBuild": "Demo build"
 }

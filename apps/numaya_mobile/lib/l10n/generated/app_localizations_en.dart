@@ -2760,7 +2760,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get obLocationDemo =>
-      'Demo build: the phone’s location is never read. Allowing sets a sample area.';
+      'The phone’s location is never read in this build. Allowing sets a sample area.';
 
   @override
   String obLocationSetDevice(String area) {
@@ -3155,4 +3155,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get demoNeedsAccount => 'Start a sign-up first';
+
+  @override
+  String get obMeetLegend => 'Show me';
+
+  @override
+  String get obNotifFooter => 'You can change this in Settings';
+
+  @override
+  String get obVerifyFooter => 'Optional · you can verify later';
+
+  @override
+  String get obDemoBuild => 'Demo build';
 }

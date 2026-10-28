@@ -250,9 +250,10 @@ Columns:
 - **States:** 0, 1, 2, 3 answered.
 - **Tests:** `onboarding_complete_test`.
 
-**OB-17 Question picker** · R (supporting) · N · sheet
-- **Fields and controls:** the six questions; questions already used are marked "Already answered" and
-  unavailable.
+**OB-17 Question picker** · merged into OB-18
+- The answer editor already listed the six questions, so the picker is that list rather than a separate
+  sheet. Questions used in another slot show "Already answered" and are unavailable.
+- Not counted as a screen.
 
 **OB-18 Answer editor** · R (supporting) · I · `/setup/prompt?slot=` (and `/profile/edit/prompt`)
 - **Fields and controls:** question (change), answer (multiline, 150 characters), counter, Save, back.
@@ -308,9 +309,15 @@ Columns:
 | | Count | IDs |
 |---|---|---|
 | Required screens | 14 | OB-01, 02, 04, 05, 06, 07, 08, 09, 10, 14, 15, 16, 22, 23 |
-| Required supporting sheets / editors | 6 | OB-03, 08a, 14a, 17, 18, 24 |
-| Optional or recommended screens | 6 | OB-11, 12, 19, 20, 21, 14b |
-| Optional sheets | 1 | OB-13 |
-| **Total screens** | **27** | |
-| Post-onboarding (in the app, not in sign-up) | — | Edit profile, completion hub, Opening Moves, more details, settings (unchanged) |
-| States across the screens above | 108 | Counted from the "States" lists |
+| Required supporting sheets and editors | 4 | OB-03, 14a, 18, 24 |
+| Optional or recommended screens | 6 | OB-11, 12, 14b, 19, 20, 21 |
+| Optional sheets | 2 | OB-08a, OB-13 |
+| **Total screens** | **26** | OB-17 is part of OB-18 |
+| Post-onboarding (in the app, not in sign-up) | — | Edit profile (Basics now edit-only, with the birthday read-only), completion hub, Opening Moves, more details, Settings |
+| **States** across the screens above | **109** | Counted from each screen's States list |
+
+Status, as built on this branch:
+- **New:** 16 screens (OB-06, 07, 08, 09, 10, 11, 12, 13, 14a, 14b, 16, 19, 20, 21, 22, 23), plus the
+  merged OB-17 behaviour.
+- **Improved:** 5 (OB-01, 05, 14, 15, 18).
+- **Unchanged:** 5 (OB-02, 03, 04, 08a, 24). OB-08a's sheet existed in Edit profile and is reused.

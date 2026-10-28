@@ -27,7 +27,7 @@ data (`test/helpers/worst_case.dart`), 200% text, the captures, and the motion a
 
 | # | P | Area | Item | Why it's open |
 |---|---|---|---|---|
-| O-01 | P3 | Basics | The first-name field has no length limit. A 25-character hyphenated name works everywhere tested; something far longer would wrap to three lines on the profile card | A limit is a product decision (Bumble's isn't documented in the research). Recommendation: 30 characters |
+| O-01 | P3 | Basics | The first-name field has no length limit. A 25-character hyphenated name works everywhere tested; something far longer would wrap to three lines on the profile card | Resolved on `experiment/numaya-onboarding-complete`: 30 characters, letters only (OD-3 in ONBOARDING_MASTER_INVENTORY.md) |
 | O-02 | P3 | Names | "Mary-Elizabeth Anne-Marie" wraps at the hyphen ("Anne-" / "Marie") | Correct typographically; the alternative (no break) would overflow. No change |
 | O-03 | P3 | Badges | Their text line height is 1.1 instead of 1, so badge text sits 1 pt lower than in the V16 captures | Needed so wrapped badge text doesn't collide; within the 1 pt tolerance used elsewhere |
 | O-04 | P2 | Device | Keyboard insets, real gesture velocity, haptic strength, TalkBack order, notch safe areas | Need a phone or emulator; the Android SDK can't be downloaded here |

@@ -90,8 +90,16 @@ Future<void> signUpToInterests(
   DemoAuthRepository auth, {
   Future<void> Function()? onScreen,
 }) async {
-  final check = onScreen ?? () async {};
   await signUpToSetup(tester, auth, onScreen: onScreen);
+  await setupFromNameToInterests(tester, onScreen: onScreen);
+}
+
+/// From Name and birthday to Interests (see [signUpToInterests]).
+Future<void> setupFromNameToInterests(
+  WidgetTester tester, {
+  Future<void> Function()? onScreen,
+}) async {
+  final check = onScreen ?? () async {};
   await enterNameAndBirthday(tester);
   await check(); // Gender
   await tapOn(tester, find.text('Woman'));

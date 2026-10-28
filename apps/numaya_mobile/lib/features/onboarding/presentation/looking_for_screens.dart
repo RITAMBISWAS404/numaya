@@ -83,7 +83,7 @@ class _MeetScreenState extends ConsumerState<MeetScreen> {
       onContinue: () => _continue(openTo!),
       children: [
         OptionGroup(
-          legend: l10n.filtersWhoHeading,
+          legend: l10n.obMeetLegend,
           children: [
             for (final (g, label) in [
               (Gender.woman, l10n.filtersWomen),
@@ -301,19 +301,16 @@ class LocationScreen extends ConsumerWidget {
   const LocationScreen({super.key});
 
   Future<void> _useLocation(BuildContext context, WidgetRef ref) async {
-    final l10n = context.l10n;
     final status = await requestPermission(
       context,
       ref,
       DevicePermission.location,
     );
+    // A denial shows its banner; a second one shows the blocked banner with Settings.
     if (status.isGranted) {
       ref
           .read(profileDetailsProvider.notifier)
           .setArea(kSampleDeviceArea, fromDevice: true);
-    } else if (status == PermissionStatus.permanentlyDenied &&
-        context.mounted) {
-      NumayaToast.show(context, l10n.obOpenSettingsDemo);
     }
   }
 
@@ -336,7 +333,6 @@ class LocationScreen extends ConsumerWidget {
       step: SetupStep.location,
       title: l10n.obLocationTitle,
       lede: l10n.obLocationLede,
-      art: const IllustrationView(NumayaIllustration.interests, width: 72),
       caption: area == null ? l10n.obLocationFooterNone : l10n.obLocationFooter,
       canContinue: true,
       onContinue: () => continueFrom(context, ref, SetupStep.location),
@@ -347,10 +343,10 @@ class LocationScreen extends ConsumerWidget {
             children: [
               ListRow(
                 leading: NumayaIcons.location,
-                label: l10n.obLocationAreaLabel,
-                value: details.areaFromDevice
+                label: details.areaFromDevice
                     ? l10n.obLocationSetDevice(area)
                     : area,
+                detail: l10n.obLocationAreaLabel,
                 onTap: () => _chooseArea(context, ref),
               ),
             ],
@@ -398,7 +394,7 @@ class LocationScreen extends ConsumerWidget {
         const SizedBox(height: AppSpacing.s5),
         InfoCard(
           icon: NumayaIcons.info,
-          title: l10n.permDemoTag,
+          title: l10n.obDemoBuild,
           body: l10n.obLocationDemo,
         ),
       ],
