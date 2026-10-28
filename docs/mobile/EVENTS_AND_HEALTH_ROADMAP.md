@@ -21,7 +21,7 @@ Baseline on `02e5907`:
 | 6 | Profile & visibility model and metrics | Done | `lib/features/account_health/application/visibility_report.dart`: pure `VisibilityReport.of`, demo notice and insights sources, live provider | `visibility_report_test` (15) | see git log |
 | 7 | Overview, suggestions, How this works | Done | `/profile/visibility`, `/profile/visibility/about` | `visibility_test` (7) | with 6 |
 | 8 | Integration (profile, settings, Demo Hub) | Done | Profile tab row with status; Settings › Visibility row; Demo Hub Events and Profile & visibility groups; sign-out and demo reset clear both; Settings location no longer shows a sample area as yours | 221 passed, 7 skipped | with 6 |
-| 9 | Visual QA, accessibility, regression, reports | Pending | | | |
+| 9 | Visual QA, accessibility, regression, reports | Done | EVENTS_QA_REPORT, ACCOUNT_HEALTH_QA_REPORT; captures v01–v13, h01–h10 reviewed; 9 defects fixed (EQ-1–6, HQ-1–3); existing captures re-reviewed for the fifth tab | 221 passed, 7 skipped; captures 9 passed | see git log |
 
 ## Blocked or limited
 

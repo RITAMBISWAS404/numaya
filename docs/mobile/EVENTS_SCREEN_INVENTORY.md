@@ -30,14 +30,14 @@ in [EVENTS_RESEARCH.md](EVENTS_RESEARCH.md); QA is in [EVENTS_QA_REPORT.md](EVEN
 |---|---|---|---|---|---|
 | EV-01 | Events: Explore | Required | `/events` (tab) | list · recommendations row ("Picked for your interests") · search results · no results (clear) · filter count badge · loading skeleton · error · error after retry · no area for distance (choose area) · Demo data note | Built |
 | EV-02 | Events: My events | Required | `/events?view=mine` (second view of the tab) | Going · Waitlist · Saved · Hosting (published, drafts, cancelled) · Past · each empty with its own action | Built |
-| EV-03 | Filters sheet | Required | Events › Filters | categories · date (any, today, this weekend, next 7 days) · free only · format (any, in person, online) · distance (needs an area) · sort (relevance, date) · live count · reset | Built |
+| EV-03 | Filters sheet | Required | Events › Filters (date is the row of tabs on Explore itself) | categories · free only · format (any, in person, online) · distance (needs an area; choose one here) · sort (relevance, date) · live count · reset | Built |
 | EV-04 | Event details | Required | `/event/:id` | open · few spots left · full · going · waitlisted (position) · saved · registration closed · happening now · past · cancelled (with host note) · changed (with note) · online · cost note · host view · draft (Publish) · unknown event | Built |
 | EV-05 | Join sheet (registration question) | Supporting | details › Join, when the host asked a question | answer required · sending · failed (retry) | Built |
 | EV-06 | Leave / leave waitlist confirmation | Supporting | details › Leave | confirm · cancel | Built |
 | EV-07 | Who's going (attendees) | Required | `/event/:id/people` | host first with badge · you · named attendees · "and N more" · empty · host: remove attendee · host: waitlist with Move to going | Built |
-| EV-08 | Create / edit event | Required | `/event/new`, `/event/:id/edit` | empty · validation errors (title, description, date in the past, venue or link, capacity below current attendees) · draft saved · discard changes sheet · editing a published event | Built |
+| EV-08 | Create / edit event | Required | `/event/new`, `/event/:id/edit` | empty · validation errors (title, category, description, date missing or past, venue or online note, capacity too small or below people going) · draft saved · discard changes sheet (save draft / discard / keep editing) · editing a published event (attendees told of time or place changes) | Built |
 | EV-09 | Event preview | Supporting | create › Preview | details as attendees will see them, labelled Preview | Built |
-| EV-10 | Published confirmation | Supporting | create › Publish | "Your event is live" · View event · Back to Events | Built |
+| EV-10 | Published confirmation | Supporting | create › Publish → details with `?published=1` | "Your event is live" banner on the event's own page (back returns to Events) | Built, as a state of EV-04 rather than a separate page |
 | EV-11 | Cancel event | Supporting | host details › Cancel event | note to attendees (optional) · confirm · cancelled details | Built |
 | EV-12 | Report event / block host | Required | details › Report this event | reasons · sent (kept on this device) · block host (existing block sheet) | Built |
 | EV-13 | Area sheet | Supporting | Filters › distance, when no area | search · pick · no results (existing onboarding sheet) | Reused |

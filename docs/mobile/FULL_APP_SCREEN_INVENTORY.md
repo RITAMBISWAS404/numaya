@@ -62,7 +62,7 @@ block and appeal.
 ```
 Welcome ─ Create an account / I have an account ─▶ Phone ─▶ Verify ─▶ Setup hub ─▶ Basics ─▶ Interests ─▶ Photos ─▶ Home
    └ Demo build badge ─▶ Demo hub (development builds only)            └ deleted < 28 days ─▶ Restore account
-Tabs: Home (Discover) · Likes · Messages · Profile
+Tabs: Home (Discover) · Events · Likes · Messages · Profile (Events: EVENTS_SCREEN_INVENTORY.md; Profile › Profile & visibility: ACCOUNT_HEALTH_METRICS.md)
   Home ─ ★ For you · undo · Filters (Basic / Advanced) · ⋯ (Report, Block) · Like ─▶ Match ─▶ Chat
   Likes ─ tile ─▶ Like profile ─▶ Match / Pass
   Messages ─ queue (likes tile, countdown rings, expired) · Opening Moves card · conversations ─▶ Chat ─ ⋯ menu

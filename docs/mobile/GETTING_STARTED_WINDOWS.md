@@ -52,7 +52,7 @@ they're for other platforms.
 cd $HOME
 git clone https://github.com/RITAMBISWAS404/numaya.git
 cd numaya
-git checkout experiment/numaya-discovery-complete
+git checkout experiment/numaya-events-account-health
 cd apps\numaya_mobile
 flutter pub get
 ```

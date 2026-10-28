@@ -93,7 +93,7 @@ node apps/numaya_mobile/tool/generate_tokens.mjs --check  # CI
 
 | Web V16 | Flutter | Why |
 |---|---|---|
-| Five tabs (with Activity) | Four tabs | Activity needs real events; not built ([ONBOARDING_FLOW.md](ONBOARDING_FLOW.md)) |
+| Five tabs (with Activity) | Five tabs: Home, Events, Likes, Messages, Profile | Events built on local sample data ([EVENTS_SCREEN_INVENTORY.md](EVENTS_SCREEN_INVENTORY.md) EN-1) |
 | Edit / Preview segmented control on Edit profile | Not shown | No preview yet; no control that does nothing |
 | Profile readiness score and badge | Not shown | The score's inputs (bio, etc.) don't exist in the app yet |
 | Profile options "Share profile" | Not shown | No real profile links |

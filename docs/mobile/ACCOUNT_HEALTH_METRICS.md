@@ -99,7 +99,7 @@ who you want to meet, filters, settings and anything private. Every incomplete p
 |---|---|---|---|
 | Area | `details.area != null` | Set / Not set ("people won't see a distance, and event distance filters can't work") | Choose area |
 | Who you want to meet | answered in setup (`draft.openTo != null`) | Set / Not set | Edit in setup |
-| Filters | `n = queue(filters).length` out of `m = candidates` (sample profiles not yet decided) | "Your filters fit n of m sample profiles" | Review filters |
+| Filters | `n = queue(filters).length` (what Discover would show, including people from "if I run out" fallbacks) out of `m = candidateCount()` (sample profiles not yet decided) | "Fits n of m" | Review filters |
 
 These describe **who you see**, not who sees you; the section says so. A filter is only flagged
 ("Worth a look") when **n = 0**, because only then is the effect certain: Discover would be empty.
