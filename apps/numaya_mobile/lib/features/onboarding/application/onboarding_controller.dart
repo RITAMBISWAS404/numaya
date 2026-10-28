@@ -5,21 +5,68 @@ import '../../../app/providers.dart';
 import '../../auth/application/session_controller.dart';
 import '../domain/profile_draft.dart';
 
-enum SetupStep { basics, interests, photos }
+/// Every onboarding step after the code, in flow order (ONBOARDING_MASTER_INVENTORY "Final order").
+enum SetupStep {
+  name,
+  gender,
+  meet,
+  intentions,
+  height,
+  location,
+  photos,
+  interests,
+  prompts,
+  bio,
+  verify,
+  notifications,
+  review;
+
+  SetupSection get section => switch (this) {
+    name || gender => SetupSection.aboutYou,
+    meet || intentions || height || location => SetupSection.lookingFor,
+    photos || interests || prompts || bio => SetupSection.profile,
+    verify || notifications || review => SetupSection.finish,
+  };
+
+  /// Whether the member may move on without answering.
+  bool get optional => switch (this) {
+    height || location || bio || verify || notifications => true,
+    _ => false,
+  };
+}
+
+/// The setup hub's groups, which are also the top bar's progress segments (OD-14).
+enum SetupSection {
+  aboutYou,
+  lookingFor,
+  profile,
+  finish;
+
+  List<SetupStep> get steps =>
+      SetupStep.values.where((s) => s.section == this).toList();
+}
 
 @immutable
 class OnboardingState {
   const OnboardingState({
     this.draft = const ProfileDraft(),
     this.completed = const {},
+    this.ageLocked = false,
+    this.creating = false,
   });
 
   final ProfileDraft draft;
 
-  /// Steps whose next button has been pressed.
+  /// Steps continued past (answered or skipped).
   final Set<SetupStep> completed;
 
-  /// First step not done yet, or null when the profile is ready.
+  /// The member confirmed an age under 18: nothing but sign-out is open (OD-3).
+  final bool ageLocked;
+
+  /// The profile is being created (OB-22): repeated taps are ignored.
+  final bool creating;
+
+  /// First step not done yet, or null when every step has been passed.
   SetupStep? get nextStep {
     for (final step in SetupStep.values) {
       if (!completed.contains(step)) return step;
@@ -27,11 +74,25 @@ class OnboardingState {
     return null;
   }
 
-  OnboardingState copyWith({ProfileDraft? draft, Set<SetupStep>? completed}) =>
-      OnboardingState(
-        draft: draft ?? this.draft,
-        completed: completed ?? this.completed,
-      );
+  bool sectionDone(SetupSection section) =>
+      section.steps.every(completed.contains);
+
+  OnboardingState copyWith({
+    ProfileDraft? draft,
+    Set<SetupStep>? completed,
+    bool? ageLocked,
+    bool? creating,
+  }) => OnboardingState(
+    draft: draft ?? this.draft,
+    completed: completed ?? this.completed,
+    ageLocked: ageLocked ?? this.ageLocked,
+    creating: creating ?? this.creating,
+  );
+}
+
+/// Creating the profile failed (simulated connection problem); the screen offers a retry.
+class ProfileCreationFailed implements Exception {
+  const ProfileCreationFailed();
 }
 
 /// View model for profile setup and editing.
@@ -42,18 +103,49 @@ class OnboardingController extends Notifier<OnboardingState> {
   @override
   OnboardingState build() => const OnboardingState();
 
-  int get currentYear => ref.read(clockProvider)().year;
+  DateTime get today => ref.read(clockProvider)();
 
   void _update(ProfileDraft draft) => state = state.copyWith(draft: draft);
 
   void setFirstName(String value) =>
       _update(state.draft.copyWith(firstName: value));
 
-  void setBirthYear(String value) => _update(
-    state.draft.copyWith(birthYear: value.replaceAll(RegExp(r'\D'), '')),
-  );
+  void setBirthDate(DateTime value) =>
+      _update(state.draft.copyWith(birthDate: value));
+
+  /// Confirming an age under 18 locks setup for this session; there is no way round it (OD-3).
+  void confirmUnderage() => state = state.copyWith(ageLocked: true);
 
   void setGender(Gender value) => _update(state.draft.copyWith(gender: value));
+
+  /// Toggles a pronoun; taps past the maximum are ignored.
+  void togglePronoun(String pronoun) {
+    final next = [...state.draft.pronouns];
+    if (!next.remove(pronoun)) {
+      if (next.length >= ProfileRules.maxPronouns) return;
+      next.add(pronoun);
+    }
+    _update(state.draft.copyWith(pronouns: next));
+  }
+
+  void setShowPronouns(bool value) =>
+      _update(state.draft.copyWith(showPronouns: value));
+
+  /// Toggles one group of people the member wants to meet ("Everyone" is [setOpenToEveryone]).
+  void toggleOpenTo(Gender value) {
+    final next = {...?state.draft.openTo};
+    if (!next.remove(value)) next.add(value);
+    // Every group picked is the same as everyone; none picked is no answer yet.
+    _update(
+      next.isEmpty
+          ? state.draft.copyWith(clearOpenTo: true)
+          : state.draft.copyWith(
+              openTo: next.length == Gender.values.length ? <Gender>{} : next,
+            ),
+    );
+  }
+
+  void setOpenToEveryone() => _update(state.draft.copyWith(openTo: <Gender>{}));
 
   /// Toggles an intention; ignores the tap when the maximum is reached.
   void toggleLookingFor(LookingFor value) {
@@ -139,6 +231,22 @@ class OnboardingController extends Notifier<OnboardingState> {
     await ref.read(sessionProvider.notifier).markProfileComplete();
   }
 
+  /// OB-22 "Create my profile": once at a time, only when nothing required is missing. Throws
+  /// [ProfileCreationFailed] when the Demo Hub simulates connection problems.
+  Future<bool> create({required bool simulateFailure}) async {
+    if (state.creating || state.draft.missing(today).isNotEmpty) return false;
+    state = state.copyWith(creating: true);
+    try {
+      await Future<void>.delayed(const Duration(milliseconds: 600));
+      if (simulateFailure) throw const ProfileCreationFailed();
+      completeStep(SetupStep.review);
+      await finish();
+      return true;
+    } finally {
+      if (ref.mounted) state = state.copyWith(creating: false);
+    }
+  }
+
   /// Edit profile: remember the saved profile so leaving without saving restores it.
   void beginEdit() => _beforeEdit = state.draft;
 
@@ -158,17 +266,18 @@ class OnboardingController extends Notifier<OnboardingState> {
   void loadSample() {
     _photoIds = 4;
     state = OnboardingState(
-      draft: const ProfileDraft(
+      draft: ProfileDraft(
         firstName: 'Alex',
-        birthYear: '1996',
+        birthDate: DateTime(1996, 4, 12),
         gender: Gender.woman,
-        lookingFor: {LookingFor.longTerm},
-        interests: ['Jazz', 'Cooking', 'Travel'],
-        prompt: PromptAnswer(
+        openTo: const {Gender.man},
+        lookingFor: const {LookingFor.longTerm},
+        interests: const ['Jazz', 'Cooking', 'Travel'],
+        prompt: const PromptAnswer(
           question: 'A perfect first date',
           answer: 'A record shop, a long walk, and nowhere to be after.',
         ),
-        photos: [
+        photos: const [
           DraftPhoto(id: 1, tone: 0),
           DraftPhoto(id: 2, tone: 1),
           DraftPhoto(id: 3, tone: 2),

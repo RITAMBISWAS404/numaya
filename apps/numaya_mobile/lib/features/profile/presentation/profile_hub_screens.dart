@@ -156,7 +156,7 @@ class ProfilePreviewScreen extends ConsumerWidget {
     final me = memberAsPerson(
       draft: draft,
       details: details,
-      currentYear: ref.read(onboardingProvider.notifier).currentYear,
+      today: ref.read(onboardingProvider.notifier).today,
       verified: verified,
     );
     return NumayaScreen(

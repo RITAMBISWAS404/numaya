@@ -28,10 +28,18 @@ Future<void> tapOn(WidgetTester tester, Finder f) async {
   await tester.pump(const Duration(milliseconds: 500));
 }
 
-/// Signs up through the real screens (phone, code, setup hub, basics) and stops on Interests.
-///
-/// [onScreen] runs on each screen once it has settled (for accessibility checks).
-Future<void> signUpToInterests(
+/// Taps the round next button and lets the next step slide in.
+Future<void> tapNext(WidgetTester tester) async {
+  await tester.ensureVisible(fab);
+  await tester.pump();
+  await tester.tap(fab);
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 600));
+}
+
+/// Signs up through the real screens (phone, code, setup hub) and stops on the first setup step,
+/// Name and birthday (OB-06).
+Future<void> signUpToSetup(
   WidgetTester tester,
   DemoAuthRepository auth, {
   Future<void> Function()? onScreen,
@@ -53,19 +61,70 @@ Future<void> signUpToInterests(
   await check(); // Setup hub
   await tapOn(tester, find.text('Build my profile'));
   await tester.pump(const Duration(milliseconds: 600));
-  await check(); // Basics
+  await check(); // Name and birthday
+}
+
+/// Fills Name and birthday (Sam, 12 April 1995) and confirms the age; stops on Gender.
+Future<void> enterNameAndBirthday(
+  WidgetTester tester, {
+  String name = 'Sam',
+  String day = '12',
+  String month = '04',
+  String year = '1995',
+}) async {
   final fields = find.byType(TextField);
-  await tester.enterText(fields.at(0), 'Sam');
-  await tester.enterText(fields.at(1), '1995');
-  await tapOn(tester, find.text('Woman'));
-  await tapOn(tester, find.text('Something casual'));
-  await tester.tap(fab);
+  await tester.enterText(fields.at(0), name);
+  await tester.enterText(fields.at(1), day);
+  await tester.enterText(fields.at(2), month);
+  await tester.enterText(fields.at(3), year);
   await tester.pump();
+  await tapNext(tester);
+  await tapOn(tester, find.text('Confirm'));
   await tester.pump(const Duration(milliseconds: 600));
+}
+
+/// Signs up and answers About you and Looking for (woman, everyone, something casual, no height,
+/// no location), then adds two photos; stops on Interests.
+Future<void> signUpToInterests(
+  WidgetTester tester,
+  DemoAuthRepository auth, {
+  Future<void> Function()? onScreen,
+}) async {
+  final check = onScreen ?? () async {};
+  await signUpToSetup(tester, auth, onScreen: onScreen);
+  await enterNameAndBirthday(tester);
+  await check(); // Gender
+  await tapOn(tester, find.text('Woman'));
+  await tapNext(tester);
+  await check(); // Who you want to meet
+  await tapOn(tester, find.text('Everyone'));
+  await tapNext(tester);
+  await check(); // Intentions
+  await tapOn(tester, find.text('Something casual'));
+  await tapNext(tester);
+  await check(); // Height
+  await tapOn(tester, find.text('Skip'));
+  await tester.pump(const Duration(milliseconds: 600));
+  await check(); // Location
+  await tapOn(tester, find.text('Skip'));
+  await tester.pump(const Duration(milliseconds: 600));
+  await addLibraryPhoto(tester);
+  await addLibraryPhoto(tester);
+  await check(); // Photos
+  await tapNext(tester);
   await check(); // Interests
 }
 
-/// Continues from Interests to Home with three interests, a prompt and two photos.
+/// "+" on the photo grid, then "Choose from library" (adds a placeholder tile).
+Future<void> addLibraryPhoto(WidgetTester tester) async {
+  await tapOn(tester, find.bySemanticsLabel('Add a photo'));
+  await tester.pump(const Duration(milliseconds: 400));
+  await tapOn(tester, find.text('Choose from library'));
+  await tester.pump(const Duration(milliseconds: 400));
+}
+
+/// From Interests to Home: three interests, one prompt, then skips bio, verification and
+/// notifications, creates the profile on the review and starts discovering.
 Future<void> finishProfileToHome(
   WidgetTester tester, {
   Future<void> Function()? onScreen,
@@ -74,9 +133,11 @@ Future<void> finishProfileToHome(
   for (final i in ['Jazz', 'Poetry', 'Travel']) {
     await tapOn(tester, find.text(i));
   }
-  await tapOn(tester, find.text('Tap to write your answer'));
+  await tapNext(tester);
+  await check(); // Prompts
+  await tapOn(tester, find.text('Add a prompt'));
   await tester.pump(const Duration(milliseconds: 600));
-  await check(); // Prompt editor sheet
+  await check(); // Answer editor
   await tester.enterText(
     find.byType(TextField).last,
     'Reads the menu out loud.',
@@ -84,13 +145,22 @@ Future<void> finishProfileToHome(
   await tester.pump();
   await tapOn(tester, find.text('Save prompt'));
   await tester.pump(const Duration(milliseconds: 600));
-  await tester.tap(fab);
-  await tester.pump();
+  await tapNext(tester);
+  await check(); // Bio
+  await tapOn(tester, find.text('Skip'));
   await tester.pump(const Duration(milliseconds: 600));
-  await tapOn(tester, find.bySemanticsLabel('Add a photo'));
-  await tapOn(tester, find.bySemanticsLabel('Add a photo'));
-  await check(); // Photos
-  await tester.tap(fab);
+  await check(); // Verify your photos
+  await tapOn(tester, find.text('Skip'));
+  await tester.pump(const Duration(milliseconds: 600));
+  await check(); // Notifications
+  await tapOn(tester, find.text('Skip'));
+  await tester.pump(const Duration(milliseconds: 600));
+  await check(); // Review
+  await tapOn(tester, find.text('Create my profile'));
+  await tester.pump(const Duration(milliseconds: 800));
+  await tester.pump(const Duration(milliseconds: 600));
+  await check(); // All set
+  await tapOn(tester, find.text('Start discovering'));
   await settle(tester);
 }
 

@@ -28,7 +28,7 @@ class ProfileScreen extends ConsumerWidget {
     final premium = ref.watch(premiumProvider);
     final verification = ref.watch(photoVerificationProvider).status;
     final completion = ProfileCompletion.of(draft, details).percent;
-    final age = draft.ageIn(ref.read(onboardingProvider.notifier).currentYear);
+    final age = draft.ageOn(ref.read(onboardingProvider.notifier).today);
     final gender = switch (draft.gender) {
       Gender.woman => l10n.genderWoman,
       Gender.man => l10n.genderMan,

@@ -9,6 +9,7 @@ import '../../../l10n/l10n.dart';
 import '../../auth/application/session_controller.dart';
 import '../../dating/application/dating_controller.dart';
 import '../../premium/application/premium_controller.dart';
+import '../../profile/application/profile_details_controller.dart';
 import '../application/account_prefs.dart';
 
 /// B-70 Settings in V16's layout (screenshots 111–113): grouped white rows on the stone page,
@@ -245,7 +246,10 @@ class SettingsScreen extends ConsumerWidget {
               ListRow(
                 leading: NumayaIcons.location,
                 label: l10n.settingsCurrentLocation,
-                value: premium.travelCity ?? l10n.settingsSampleLocation,
+                value:
+                    premium.travelCity ??
+                    ref.watch(profileDetailsProvider.select((d) => d.area)) ??
+                    l10n.settingsSampleLocation,
               ),
               ListRow(
                 leading: premium.active ? NumayaIcons.public : NumayaIcons.lock,

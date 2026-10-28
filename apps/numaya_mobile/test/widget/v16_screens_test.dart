@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/auth/data/demo_auth_repository.dart';
 
+import '../helpers/journeys.dart'
+    show finishProfileToHome, signUpToInterests, tapNext;
 import '../helpers/test_app.dart';
-
-Finder get _fab => find.byType(NumayaFab);
 
 Future<void> _tap(WidgetTester tester, Finder f) async {
   await tester.ensureVisible(f.first);
@@ -15,51 +15,11 @@ Future<void> _tap(WidgetTester tester, Finder f) async {
 }
 
 /// Signs up through the real screens and stops on the Interests step.
-Future<void> _toInterests(WidgetTester tester, DemoAuthRepository auth) async {
-  await tester.pumpWidget(testApp(auth: auth));
-  await tester.pump();
-  await _tap(tester, find.text('Create an account'));
-  await tester.enterText(find.byType(TextField), '4155550132');
-  await tester.pump();
-  await tester.tap(_fab);
-  await tester.pump();
-  await tester.pump(const Duration(milliseconds: 600));
-  await tester.enterText(find.byType(TextField), auth.latestMessage!.code);
-  await settle(tester);
-  await _tap(tester, find.text('Build my profile'));
-  await tester.pump(const Duration(milliseconds: 600));
-  final fields = find.byType(TextField);
-  await tester.enterText(fields.at(0), 'Sam');
-  await tester.enterText(fields.at(1), '1995');
-  await _tap(tester, find.text('Woman'));
-  await _tap(tester, find.text('Something casual'));
-  await tester.tap(_fab);
-  await tester.pump();
-  await tester.pump(const Duration(milliseconds: 600));
-}
+Future<void> _toInterests(WidgetTester tester, DemoAuthRepository auth) =>
+    signUpToInterests(tester, auth);
 
 /// Continues from Interests to Home.
-Future<void> _toHome(WidgetTester tester) async {
-  for (final i in ['Jazz', 'Poetry', 'Travel']) {
-    await _tap(tester, find.text(i));
-  }
-  await _tap(tester, find.text('Tap to write your answer'));
-  await tester.pump(const Duration(milliseconds: 600));
-  await tester.enterText(
-    find.byType(TextField).last,
-    'Reads the menu out loud.',
-  );
-  await tester.pump();
-  await _tap(tester, find.text('Save prompt'));
-  await tester.pump(const Duration(milliseconds: 600));
-  await tester.tap(_fab);
-  await tester.pump();
-  await tester.pump(const Duration(milliseconds: 600));
-  await _tap(tester, find.bySemanticsLabel('Add a photo'));
-  await _tap(tester, find.bySemanticsLabel('Add a photo'));
-  await tester.tap(_fab);
-  await settle(tester);
-}
+Future<void> _toHome(WidgetTester tester) => finishProfileToHome(tester);
 
 void main() {
   setUpAll(loadAppFonts);
@@ -83,7 +43,11 @@ void main() {
   testWidgets('prompt editor explains why Save is disabled', (tester) async {
     await usePhoneSize(tester);
     await _toInterests(tester, testAuth());
-    await _tap(tester, find.text('Tap to write your answer'));
+    for (final i in ['Jazz', 'Poetry', 'Travel']) {
+      await _tap(tester, find.text(i));
+    }
+    await tapNext(tester);
+    await _tap(tester, find.text('Add a prompt'));
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.text('YOUR PROMPT'), findsOneWidget);
     expect(find.text('Write an answer to save.'), findsOneWidget);

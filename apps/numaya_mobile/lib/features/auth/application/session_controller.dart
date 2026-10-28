@@ -4,6 +4,7 @@ import '../../../app/providers.dart';
 import '../../../core/logging/app_logger.dart';
 import '../../dating/application/dating_controller.dart';
 import '../../home/application/discovery_filters.dart';
+import '../../onboarding/application/device_permissions.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../profile/application/profile_details_controller.dart';
@@ -98,6 +99,14 @@ class SessionController extends Notifier<AuthSession?> {
     await ref.read(onboardingProvider.notifier).finish();
   }
 
+  /// Demo Hub: a new account at the start of profile setup (onboarding without the code step).
+  void quickStartOnboarding() {
+    final demo = ref.read(demoAuthProvider);
+    if (demo == null) return;
+    _clear();
+    state = demo.quickStartNewAccount();
+  }
+
   /// Demo Hub: back to the starting demo data (matches, messages, filters, premium, verification,
   /// profile details, settings) without signing out.
   void resetDemoData() {
@@ -107,6 +116,7 @@ class SessionController extends Notifier<AuthSession?> {
     ref.invalidate(profileDetailsProvider);
     ref.invalidate(accountPrefsProvider);
     ref.invalidate(photoVerificationProvider);
+    ref.invalidate(devicePermissionsProvider);
     _log.info('Demo data reset');
   }
 
@@ -121,6 +131,7 @@ class SessionController extends Notifier<AuthSession?> {
     ref.invalidate(profileDetailsProvider);
     ref.invalidate(accountPrefsProvider);
     ref.invalidate(photoVerificationProvider);
+    ref.invalidate(devicePermissionsProvider);
   }
 }
 

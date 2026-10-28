@@ -18,9 +18,14 @@ import '../features/dating/presentation/messages_screens.dart';
 import '../features/demo/presentation/demo_hub_screen.dart';
 import '../features/help/presentation/help_screens.dart';
 import '../features/home/presentation/home_shell.dart';
+import '../features/onboarding/application/onboarding_controller.dart';
+import '../features/onboarding/presentation/about_you_screens.dart';
 import '../features/onboarding/presentation/basics_screen.dart';
+import '../features/onboarding/presentation/finish_screens.dart';
 import '../features/onboarding/presentation/interests_screen.dart';
+import '../features/onboarding/presentation/looking_for_screens.dart';
 import '../features/onboarding/presentation/photos_screen.dart';
+import '../features/onboarding/presentation/profile_steps_screens.dart';
 import '../features/onboarding/presentation/prompt_editor_screen.dart';
 import '../features/onboarding/presentation/setup_hub_screen.dart';
 import '../features/premium/application/premium_controller.dart';
@@ -82,6 +87,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (path == Routes.restore && session.restorableUntil == null) {
         return Routes.home;
       }
+      // A confirmed age under 18 ends setup: only the explanation and help stay open (OD-3).
+      if (ref.read(onboardingProvider).ageLocked) {
+        return path == Routes.setupUnderage || path.startsWith(Routes.help)
+            ? null
+            : Routes.setupUnderage;
+      }
       if (!verifying &&
           (path == Routes.welcome || path.startsWith(Routes.phone))) {
         return session.hasProfile ? Routes.home : Routes.setup;
@@ -103,10 +114,34 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: Routes.setup,
         builder: (_, _) => const SetupHubScreen(),
         routes: [
-          _route(path: 'basics', builder: (_, _) => const BasicsScreen()),
-          _route(path: 'interests', builder: (_, _) => const InterestsScreen()),
+          _route(path: 'name', builder: (_, _) => const NameBirthdayScreen()),
+          _route(path: 'underage', builder: (_, _) => const UnderageScreen()),
+          _route(path: 'gender', builder: (_, _) => const GenderScreen()),
+          _route(path: 'meet', builder: (_, _) => const MeetScreen()),
+          _route(
+            path: 'intentions',
+            builder: (_, _) => const IntentionsScreen(),
+          ),
+          _route(path: 'height', builder: (_, _) => const HeightScreen()),
+          _route(path: 'location', builder: (_, _) => const LocationScreen()),
           _route(path: 'photos', builder: (_, _) => const PhotosScreen()),
-          _route(path: 'prompt', builder: (_, _) => const PromptEditorScreen()),
+          _route(path: 'interests', builder: (_, _) => const InterestsScreen()),
+          _route(path: 'prompts', builder: (_, _) => const PromptsScreen()),
+          _route(
+            path: 'prompt',
+            builder: (_, state) => PromptEditorScreen(
+              slot: (int.tryParse(state.uri.queryParameters['slot'] ?? '') ?? 0)
+                  .clamp(0, 2),
+            ),
+          ),
+          _route(path: 'bio', builder: (_, _) => const BioScreen()),
+          _route(path: 'verify', builder: (_, _) => const VerifyOfferScreen()),
+          _route(
+            path: 'notifications',
+            builder: (_, _) => const NotificationsPrimerScreen(),
+          ),
+          _route(path: 'review', builder: (_, _) => const ReviewScreen()),
+          _route(path: 'done', builder: (_, _) => const AllSetScreen()),
         ],
       ),
       StatefulShellRoute.indexedStack(
@@ -151,10 +186,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: Routes.editProfile,
         builder: (_, _) => const EditProfileScreen(),
         routes: [
-          _route(
-            path: 'basics',
-            builder: (_, _) => const BasicsScreen(editing: true),
-          ),
+          _route(path: 'basics', builder: (_, _) => const BasicsScreen()),
           _route(
             path: 'interests',
             builder: (_, _) => const InterestsScreen(editing: true),

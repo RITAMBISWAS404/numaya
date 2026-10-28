@@ -137,23 +137,20 @@ void main() {
   ) async {
     await usePhoneSize(tester);
     await signUpToHome(tester, testAuth());
-    // Default filters 24–38 within 25 km leave Tomás (41, 38 km) out.
-    for (final name in [
-      'Maya, 29',
-      'Sam, 31',
-      'Noor, 28',
-      'Inés, 24',
-      'Léa, 35',
-    ]) {
+    // Onboarding set ages 26–38 around the member's own age (31, OB-09); with 25 km that leaves
+    // Inés (24) and Tomás (41, 38 km) out.
+    for (final name in ['Maya, 29', 'Sam, 31', 'Noor, 28', 'Léa, 35']) {
       expect(find.text(name), findsOneWidget);
       await _decide(tester, 'Pass');
     }
     expect(find.text('No one fits your filters'), findsOneWidget);
     expect(
-      find.text('1 person is just outside ages 24–38 or 25 km.'),
+      find.text('2 people are just outside ages 26–38 or 25 km.'),
       findsOneWidget,
     );
     await tapOn(tester, find.text('Widen age and distance'));
+    expect(find.text('Inés, 24'), findsOneWidget);
+    await _decide(tester, 'Pass');
     expect(find.text('Tomás, 41'), findsOneWidget);
     await _decide(tester, 'Pass');
     expect(find.text('You’ve seen everyone for now'), findsOneWidget);

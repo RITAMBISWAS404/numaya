@@ -97,6 +97,11 @@ class ProfileDetailsController extends Notifier<ProfileDetails> {
   void setShowGender(bool v) => state = state.copyWith(showGender: v);
   void setShowAge(bool v) => state = state.copyWith(showAge: v);
   void setShowDistance(bool v) => state = state.copyWith(showDistance: v);
+
+  /// Sets the area (OD-7). [fromDevice] when it came from the location prompt.
+  void setArea(String? area, {bool fromDevice = false}) => state = area == null
+      ? state.copyWith(clearArea: true, areaFromDevice: false)
+      : state.copyWith(area: area, areaFromDevice: fromDevice);
 }
 
 final profileDetailsProvider =

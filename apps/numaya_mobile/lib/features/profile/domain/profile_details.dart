@@ -161,6 +161,25 @@ const List<String> kOpeningMoveSuggestions = [
   'What are you looking forward to this month?',
 ];
 
+/// Areas offered when location isn't used (OD-7). Sample list for the demo build.
+const List<String> kSampleAreas = [
+  'Hackney, London',
+  'Islington, London',
+  'Peckham, London',
+  'Brixton, London',
+  'Camden, London',
+  'Manchester',
+  'Bristol',
+  'Leeds',
+  'Brighton',
+  'Glasgow',
+  'Edinburgh',
+  'Cardiff',
+];
+
+/// The area the simulated location prompt sets (the demo never reads the phone's location).
+const String kSampleDeviceArea = 'Hackney, London';
+
 abstract final class DetailRules {
   static const int maxPrompts = 3;
   static const int maxOpeningMoves = 3;
@@ -187,6 +206,8 @@ class ProfileDetails {
     this.showGender = true,
     this.showAge = true,
     this.showDistance = true,
+    this.area,
+    this.areaFromDevice = false,
   });
 
   final String bio;
@@ -203,6 +224,12 @@ class ProfileDetails {
   final bool showAge;
   final bool showDistance;
 
+  /// Where the member meets people: an area name only, never coordinates (OD-7).
+  final String? area;
+
+  /// Whether [area] came from the (simulated) location prompt rather than the member's choice.
+  final bool areaFromDevice;
+
   ProfileDetails copyWith({
     String? bio,
     Map<AboutKey, String>? about,
@@ -217,6 +244,9 @@ class ProfileDetails {
     bool? showGender,
     bool? showAge,
     bool? showDistance,
+    String? area,
+    bool clearArea = false,
+    bool? areaFromDevice,
   }) => ProfileDetails(
     bio: bio ?? this.bio,
     about: about ?? this.about,
@@ -231,6 +261,8 @@ class ProfileDetails {
     showGender: showGender ?? this.showGender,
     showAge: showAge ?? this.showAge,
     showDistance: showDistance ?? this.showDistance,
+    area: clearArea ? null : (area ?? this.area),
+    areaFromDevice: areaFromDevice ?? this.areaFromDevice,
   );
 
   /// Personal data stays out of logs.

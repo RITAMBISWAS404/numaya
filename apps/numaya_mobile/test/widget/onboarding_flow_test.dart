@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 
+import '../helpers/journeys.dart' show addLibraryPhoto, tapNext;
 import '../helpers/test_app.dart';
 
 Finder fab() => find.byType(NumayaFab);
@@ -91,7 +92,7 @@ void main() {
   );
 
   testWidgets(
-    'full sign-up: phone, wrong code, right code, basics, interests, prompt, photos',
+    'full sign-up: phone, wrong code, right code, every setup step, review, Home',
     (tester) async {
       await usePhoneSize(tester);
       final auth = testAuth();
@@ -128,40 +129,75 @@ void main() {
       await tester.pump(const Duration(milliseconds: 700));
       await tester.pumpAndSettle();
 
-      // Setup hub
+      // Setup hub: four sections, none done.
       expect(find.text('You’re verified'), findsOneWidget);
-      expect(find.text('0 of 3 done'), findsOneWidget);
+      expect(find.text('0 of 4 done'), findsOneWidget);
       await tapText(tester, 'Build my profile');
       await tester.pumpAndSettle();
 
-      // Basics: underage is refused.
-      expect(find.text('Let’s start with the basics'), findsOneWidget);
+      // Name and birthday: only the age is shown; the confirm card states it.
+      expect(find.text('Let’s start with an intro'), findsOneWidget);
       final fields = find.byType(TextField);
       await tester.enterText(fields.at(0), 'Sam');
-      await tester.enterText(fields.at(1), '2012');
+      await tester.enterText(fields.at(1), '12');
+      await tester.enterText(fields.at(2), '04');
+      await tester.enterText(fields.at(3), '1995');
       await tester.pump();
-      expect(
-        find.text('You need to be 18 or older to use Numaya.'),
-        findsOneWidget,
-      );
-      await tester.enterText(fields.at(1), '1995');
-      await tester.pump();
-      await tapText(tester, 'Nonbinary');
-      expect(fabEnabled(tester), isFalse);
-      await tapText(tester, 'Open to seeing where it goes');
-      expect(fabEnabled(tester), isTrue);
-      await tester.tap(fab());
+      expect(find.text('You’re 31'), findsOneWidget);
+      await tapNext(tester);
+      expect(find.text('Born April 12, 1995'), findsOneWidget);
+      await tapText(tester, 'Confirm');
       await tester.pumpAndSettle();
 
-      // Interests: three picks, then the prompt.
+      // Gender (required) with optional pronouns.
+      expect(find.text('How do you identify?'), findsOneWidget);
+      expect(fabEnabled(tester), isFalse);
+      await tapText(tester, 'Nonbinary');
+      await tapText(tester, 'they');
+      await tapText(tester, 'them');
+      expect(fabEnabled(tester), isTrue);
+      await tapNext(tester);
+
+      // Who you want to meet, then intentions.
+      expect(find.text('Who do you want to meet?'), findsOneWidget);
+      expect(fabEnabled(tester), isFalse);
+      await tapText(tester, 'Everyone');
+      await tapNext(tester);
+      expect(find.text('What are you hoping to find?'), findsOneWidget);
+      await tapText(tester, 'Open to seeing where it goes');
+      await tapNext(tester);
+
+      // Height (added) and location (skipped).
+      expect(find.text('How tall are you?'), findsOneWidget);
+      await tapText(tester, 'Add my height');
+      expect(find.text('170 cm'), findsOneWidget);
+      await tapNext(tester);
+      expect(find.text('Where do you want to meet people?'), findsOneWidget);
+      await tapText(tester, 'Skip');
+      await tester.pumpAndSettle();
+
+      // Photos: two minimum, from the library.
+      expect(find.text('Add your photos'), findsOneWidget);
+      expect(fabEnabled(tester), isFalse);
+      await addLibraryPhoto(tester);
+      expect(fabEnabled(tester), isFalse);
+      await addLibraryPhoto(tester);
+      expect(find.text('Add 2 more for the best results'), findsOneWidget);
+      await tapNext(tester);
+
+      // Interests: three picks.
       expect(find.text('What are you into?'), findsOneWidget);
       expect(find.text('Pick 3 more'), findsOneWidget);
       await tapText(tester, 'Jazz');
       await tapText(tester, 'Cooking');
       await tapText(tester, 'Climbing');
-      expect(find.text('Now answer your prompt'), findsOneWidget);
+      expect(find.text('3/5 interests'), findsOneWidget);
+      await tapNext(tester);
+
+      // Prompts: one required.
+      expect(find.text('Pick prompts to share your story'), findsOneWidget);
       expect(fabEnabled(tester), isFalse);
-      await tapText(tester, 'Tap to write your answer');
+      await tapText(tester, 'Add a prompt');
       await tester.pumpAndSettle();
       await tapText(tester, 'My Sunday ritual');
       await tester.enterText(
@@ -172,27 +208,38 @@ void main() {
       await tapText(tester, 'Save prompt');
       await tester.pumpAndSettle();
       expect(find.text('Pastries, then a very long walk.'), findsOneWidget);
-      expect(find.text('3/5 interests'), findsOneWidget);
-      expect(fabEnabled(tester), isTrue);
-      await tester.tap(fab());
+      expect(find.text('1 of 3 answered'), findsOneWidget);
+      await tapNext(tester);
+
+      // Bio (written), verification and notifications (later).
+      expect(find.text('Write a short bio'), findsOneWidget);
+      await tester.enterText(find.byType(TextField), '  Weekend baker.  ');
+      await tester.pump();
+      await tapNext(tester);
+      expect(find.text('Verify your photos?'), findsOneWidget);
+      await tapText(tester, 'Maybe later');
+      await tester.pumpAndSettle();
+      expect(find.text('Don’t miss a match'), findsOneWidget);
+      await tapText(tester, 'Not now');
       await tester.pumpAndSettle();
 
-      // Photos: two minimum.
-      expect(find.text('Add your photos'), findsOneWidget);
-      expect(fabEnabled(tester), isFalse);
-      await tester.tap(find.bySemanticsLabel('Add a photo').first);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
-      expect(fabEnabled(tester), isFalse);
-      await tester.tap(find.bySemanticsLabel('Add a photo').first);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
-      expect(find.text('Add 2 more for the best results'), findsOneWidget);
-      expect(fabEnabled(tester), isTrue);
-      await tester.tap(fab());
+      // Review: the profile as others see it, the private choices, then create.
+      expect(find.text('Your profile'), findsWidgets);
+      expect(find.text('Before you can finish'), findsNothing);
+      expect(find.text('Sam, 31'), findsOneWidget);
+      expect(find.text('Nonbinary · they/them'), findsOneWidget);
+      expect(find.text('170 cm'), findsOneWidget);
+      expect(find.text('Weekend baker.'), findsOneWidget);
+      expect(find.text('Pastries, then a very long walk.'), findsOneWidget);
+      await tester.ensureVisible(find.text('Wants to meet'));
+      expect(find.text('Everyone'), findsOneWidget);
+      await tapText(tester, 'Create my profile');
       await tester.pumpAndSettle();
 
-      // Home: the first sample profile.
+      // All set, then Home and the member's own profile.
+      expect(find.text('You’re all set, Sam'), findsOneWidget);
+      await tapText(tester, 'Start discovering');
+      await tester.pumpAndSettle();
       expect(find.text('Maya, 29'), findsOneWidget);
       expect(find.text('Sample profile'), findsOneWidget);
       await tester.tap(find.text('Profile'));

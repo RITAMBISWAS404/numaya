@@ -7,17 +7,12 @@ import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../auth/application/session_controller.dart';
 import '../application/onboarding_controller.dart';
+import 'step_scaffold.dart';
 
-/// B-21 (Numaya form): "You're verified" and the three setup steps. Each step's next button marks
-/// it done; the first step not done is "Up next".
+/// OB-05 (B-21, Numaya form): "You're verified" and the four setup sections. Continue opens the
+/// first step not passed yet, so leaving setup and coming back resumes where the member stopped.
 class SetupHubScreen extends ConsumerWidget {
   const SetupHubScreen({super.key});
-
-  static String routeFor(SetupStep step) => switch (step) {
-    SetupStep.basics => Routes.basics,
-    SetupStep.interests => Routes.interests,
-    SetupStep.photos => Routes.photos,
-  };
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,33 +20,47 @@ class SetupHubScreen extends ConsumerWidget {
     final state = ref.watch(onboardingProvider);
     final session = ref.watch(sessionProvider);
     final next = state.nextStep;
-    final done = state.completed.length;
+    final done = SetupSection.values.where(state.sectionDone).length;
 
-    SetupStepStatus status(SetupStep step) => state.completed.contains(step)
+    SetupStepStatus status(SetupSection section) => state.sectionDone(section)
         ? SetupStepStatus.done
-        : step == next
+        : section == next?.section
         ? SetupStepStatus.active
         : SetupStepStatus.upcoming;
 
     final steps = [
-      SetupStepData(
-        label: l10n.setupBasicsLabel,
-        detail: l10n.setupBasicsDetail,
-        icon: NumayaIcons.user,
-        status: status(SetupStep.basics),
-      ),
-      SetupStepData(
-        label: l10n.setupInterestsLabel,
-        detail: l10n.setupInterestsDetail,
-        icon: NumayaIcons.interests,
-        status: status(SetupStep.interests),
-      ),
-      SetupStepData(
-        label: l10n.setupPhotosLabel,
-        detail: l10n.setupPhotosDetail,
-        icon: NumayaIcons.camera,
-        status: status(SetupStep.photos),
-      ),
+      for (final (section, label, detail, icon) in [
+        (
+          SetupSection.aboutYou,
+          l10n.setupSectionAboutLabel,
+          l10n.setupSectionAboutDetail,
+          NumayaIcons.user,
+        ),
+        (
+          SetupSection.lookingFor,
+          l10n.setupSectionLookingLabel,
+          l10n.setupSectionLookingDetail,
+          NumayaIcons.heart,
+        ),
+        (
+          SetupSection.profile,
+          l10n.setupSectionProfileLabel,
+          l10n.setupSectionProfileDetail,
+          NumayaIcons.camera,
+        ),
+        (
+          SetupSection.finish,
+          l10n.setupSectionFinishLabel,
+          l10n.setupSectionFinishDetail,
+          NumayaIcons.verified,
+        ),
+      ])
+        SetupStepData(
+          label: label,
+          detail: detail,
+          icon: icon,
+          status: status(section),
+        ),
     ];
 
     return NumayaScreen(
@@ -59,13 +68,13 @@ class SetupHubScreen extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           NumayaButton(
-            label: done == 0
+            label: state.completed.isEmpty
                 ? l10n.setupBuild
                 : next != null
                 ? l10n.setupContinue
                 : l10n.setupGoHome,
             onPressed: () => next != null
-                ? context.push(routeFor(next))
+                ? context.push(routeForStep(next))
                 : context.go(Routes.home),
           ),
           const SizedBox(height: AppSpacing.s3),
@@ -91,7 +100,7 @@ class SetupHubScreen extends ConsumerWidget {
           const SizedBox(height: AppSpacing.s6),
           SetupProgress(
             title: l10n.setupProfileTitle,
-            countLabel: l10n.setupCount(done, SetupStep.values.length),
+            countLabel: l10n.setupCount(done, SetupSection.values.length),
             steps: steps,
             upNextLabel: l10n.setupUpNext,
             doneLabel: l10n.setupStepDone,

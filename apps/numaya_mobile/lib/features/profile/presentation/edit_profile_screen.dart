@@ -28,7 +28,7 @@ class EditProfileScreen extends ConsumerWidget {
     final details = ref.watch(profileDetailsProvider);
     final detailsController = ref.read(profileDetailsProvider.notifier);
     final verification = ref.watch(photoVerificationProvider).status;
-    final age = draft.ageIn(controller.currentYear);
+    final age = draft.ageOn(controller.today);
 
     Future<void> changePhotos(VoidCallback change) async {
       change();

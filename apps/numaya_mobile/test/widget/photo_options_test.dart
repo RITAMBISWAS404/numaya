@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../helpers/journeys.dart';
@@ -12,24 +11,11 @@ void main() {
   testWidgets('photos step: make main, remove, cancel', (tester) async {
     await usePhoneSize(tester);
     await signUpToInterests(tester, testAuth());
-    for (final i in ['Jazz', 'Poetry', 'Travel']) {
-      await tapOn(tester, find.text(i));
-    }
-    await tapOn(tester, find.text('Tap to write your answer'));
-    await tester.pump(const Duration(milliseconds: 600));
-    await tester.enterText(
-      find.byType(TextField).last,
-      'Reads the menu out loud.',
-    );
-    await tester.pump();
-    await tapOn(tester, find.text('Save prompt'));
-    await tester.pump(const Duration(milliseconds: 600));
-    await tester.tap(fab);
+    // Back from Interests to Photos, which already has two.
+    await tester.binding.handlePopRoute();
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
-    for (var i = 0; i < 3; i++) {
-      await tapOn(tester, find.bySemanticsLabel('Add a photo'));
-    }
+    await addLibraryPhoto(tester);
     expect(tile(3), findsOneWidget);
 
     // The main photo offers only Remove.

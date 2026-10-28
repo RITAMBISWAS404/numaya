@@ -8,6 +8,9 @@ import '../../../l10n/l10n.dart';
 import '../../auth/application/session_controller.dart';
 import '../../dating/application/dating_controller.dart';
 import '../../home/presentation/filters_sheet.dart';
+import '../../onboarding/application/device_permissions.dart';
+import '../../onboarding/application/onboarding_controller.dart';
+import '../../onboarding/presentation/step_scaffold.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../verification/application/verification_controller.dart';
 import '../application/demo_motion.dart';
@@ -70,6 +73,36 @@ class DemoHubScreen extends ConsumerWidget {
                     if (context.mounted) context.go(Routes.demo);
                   },
                 ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sectionGap),
+          ListGroup(
+            title: l10n.demoAreaOnboarding,
+            footnote: l10n.demoOnboardingNote,
+            children: [
+              ListRow(
+                leading: NumayaIcons.userAdd,
+                label: l10n.demoOnboardingStart,
+                onTap: () {
+                  ref.read(sessionProvider.notifier).quickStartOnboarding();
+                  context.go(Routes.setup);
+                },
+              ),
+              for (final step in SetupStep.values)
+                ListRow(
+                  label: demoStepLabel(l10n, step),
+                  detail: session == null ? l10n.demoNeedsAccount : null,
+                  onTap: session == null
+                      ? null
+                      : () => context.push(routeForStep(step)),
+                ),
+              ListRow(
+                label: l10n.demoPermissionsReset,
+                onTap: () {
+                  ref.read(devicePermissionsProvider.notifier).reset();
+                  NumayaToast.show(context, l10n.demoPermissionsResetDone);
+                },
+              ),
             ],
           ),
           const SizedBox(height: AppSpacing.sectionGap),
@@ -243,3 +276,20 @@ class DemoHubScreen extends ConsumerWidget {
     );
   }
 }
+
+/// The Demo Hub's name for an onboarding step.
+String demoStepLabel(AppLocalizations l10n, SetupStep step) => switch (step) {
+  SetupStep.name => l10n.obNameTitle,
+  SetupStep.gender => l10n.obGenderTitle,
+  SetupStep.meet => l10n.obMeetTitle,
+  SetupStep.intentions => l10n.obIntentTitle,
+  SetupStep.height => l10n.obHeightTitle,
+  SetupStep.location => l10n.obLocationTitle,
+  SetupStep.photos => l10n.setupPhotosLabel,
+  SetupStep.interests => l10n.setupInterestsLabel,
+  SetupStep.prompts => l10n.obPromptsTitle,
+  SetupStep.bio => l10n.obBioTitle,
+  SetupStep.verify => l10n.obVerifyTitle,
+  SetupStep.notifications => l10n.obNotifTitle,
+  SetupStep.review => l10n.obReviewTitle,
+};

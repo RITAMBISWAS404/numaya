@@ -1322,5 +1322,321 @@
   "settingsVibration": "Vibration",
   "settingsVibrationNote": "A short tap when you choose an option, like, match or send. Your phone’s own vibration setting still applies.",
   "demoReduceMotion": "Reduce motion",
-  "demoReduceMotionNote": "Acts as if the phone’s Remove animations setting were on"
+  "demoReduceMotionNote": "Acts as if the phone’s Remove animations setting were on",
+  "setupSectionAboutLabel": "About you",
+  "setupSectionAboutDetail": "Your name, birthday and gender",
+  "setupSectionLookingLabel": "Who you’re looking for",
+  "setupSectionLookingDetail": "Who you want to meet, what for and where",
+  "setupSectionProfileLabel": "Your profile",
+  "setupSectionProfileDetail": "Photos, interests, prompts and a bio",
+  "setupSectionFinishLabel": "Finish",
+  "setupSectionFinishDetail": "Verification, notifications and a last look",
+  "obSkip": "Skip",
+  "obContinue": "Continue",
+  "obNameTitle": "Let’s start with an intro",
+  "obNameLede": "Your first name and age appear on your profile. Your birthday doesn’t.",
+  "obNameEmpty": "Enter your first name.",
+  "obNameCharacters": "Use letters only, without numbers or emoji.",
+  "obBirthdayLegend": "Birthday",
+  "obDay": "Day",
+  "obMonth": "Month",
+  "obYear": "Year",
+  "obBirthdayInvalid": "That date doesn’t exist. Check the day and month.",
+  "obBirthdayFuture": "That date is in the future.",
+  "obBirthdayUnrealistic": "Check the year: that’s more than 100 years ago.",
+  "obBirthdayUnderage": "You need to be 18 or over to use Numaya.",
+  "obAgeHint": "You’re {age}",
+  "@obAgeHint": {
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "obNameFooter": "Only your age is shown",
+  "obNameFooterMissing": "Add your name and birthday",
+  "obConfirmAgeTitle": "You’re {age}",
+  "@obConfirmAgeTitle": {
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "obConfirmAgeBorn": "Born {date}",
+  "@obConfirmAgeBorn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "obConfirmAgeBody": "Make sure this is right. You can’t change your birthday later.",
+  "obConfirmEdit": "Edit",
+  "obConfirm": "Confirm",
+  "obUnderageTitle": "Numaya is for adults",
+  "obUnderageBody": "You need to be 18 or over to use Numaya, so we can’t create a profile for you. Nothing you entered has been saved to a profile.",
+  "obUnderageSignOut": "Sign out",
+  "obUnderageHelp": "Read about our age rules",
+  "obGenderTitle": "How do you identify?",
+  "obGenderLede": "Add more detail if you like, and choose what your profile shows.",
+  "obGenderMore": "Add more about your gender",
+  "obPronounsLabel": "Pronouns · optional",
+  "obPronounsCount": "{count}/{max}",
+  "@obPronounsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "obShowGender": "Show gender on profile",
+  "obShowPronouns": "Show pronouns on profile",
+  "obGenderFooter": "Pronouns are optional",
+  "obGenderFooterMissing": "Choose one to continue",
+  "obMeetTitle": "Who do you want to meet?",
+  "obMeetLede": "Pick all that apply. This is private: it’s never shown on your profile.",
+  "obEveryone": "Everyone",
+  "obAgesLabel": "Their age",
+  "obMeetFooter": "Hidden on your profile",
+  "obMeetFooterMissing": "Pick at least one",
+  "obIntentTitle": "What are you hoping to find?",
+  "obIntentLede": "Pick one or two. This shows on your profile.",
+  "obIntentFooter": "{count} of 2 picked",
+  "@obIntentFooter": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "obIntentFooterMissing": "Pick at least one",
+  "obHeightTitle": "How tall are you?",
+  "obHeightLede": "Optional. If you add it, it shows on your profile.",
+  "obHeightCm": "cm",
+  "obHeightFtIn": "ft / in",
+  "obHeightFeet": "{feet}′ {inches}″",
+  "@obHeightFeet": {
+    "placeholders": {
+      "feet": {
+        "type": "int"
+      },
+      "inches": {
+        "type": "int"
+      }
+    }
+  },
+  "obHeightShorter": "Shorter",
+  "obHeightTaller": "Taller",
+  "obHeightUnitLegend": "Units",
+  "obHeightAdd": "Add my height",
+  "obHeightFooter": "Shown on your profile",
+  "obHeightFooterNone": "You can skip this",
+  "obHeightRemove": "Remove height",
+  "obLocationTitle": "Where do you want to meet people?",
+  "obLocationLede": "Numaya uses your area to show you people nearby. Only the area appears on your profile, never your exact location.",
+  "obLocationUse": "Use my location",
+  "obLocationChoose": "Choose my area instead",
+  "obLocationDemo": "Demo build: the phone’s location is never read. Allowing sets a sample area.",
+  "obLocationSetDevice": "{area} (sample area)",
+  "@obLocationSetDevice": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "obLocationAreaLabel": "Your area",
+  "obLocationChange": "Change area",
+  "obLocationDeniedTitle": "Location is off",
+  "obLocationDeniedBody": "That’s fine. Choose your area instead, or try again.",
+  "obLocationTryAgain": "Try again",
+  "obLocationBlockedTitle": "Location is blocked for Numaya",
+  "obLocationBlockedBody": "Android won’t ask again. Turn location on in Settings, or choose your area.",
+  "obOpenSettings": "Open settings",
+  "obOpenSettingsDemo": "Demo build: this would open Numaya’s Android settings.",
+  "obLocationFooter": "Only your area is shown",
+  "obLocationFooterNone": "You can set this later",
+  "obAreaSheetTitle": "Choose your area",
+  "obAreaSearch": "Search areas",
+  "obAreaNone": "No areas match “{query}”",
+  "@obAreaNone": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "permDemoTag": "Demo · stands in for Android’s prompt",
+  "permLocationTitle": "Allow Numaya to access this device’s location?",
+  "permAllowApproximate": "While using the app · approximate",
+  "permAllowPrecise": "While using the app · precise",
+  "permCameraTitle": "Allow Numaya to take pictures and record video?",
+  "permNotificationsTitle": "Allow Numaya to send you notifications?",
+  "permAllow": "Allow",
+  "permDeny": "Don’t allow",
+  "photoSourceTitle": "Add a photo",
+  "photoSourceCamera": "Take a photo",
+  "photoSourceLibrary": "Choose from library",
+  "photoSourceNote": "Demo build: no camera or photo picker is connected, so either choice adds a placeholder tile.",
+  "photoCameraDeniedTitle": "Camera is off for Numaya",
+  "photoCameraDeniedBody": "Choose from your library instead, or allow the camera next time.",
+  "photoCameraBlockedBody": "Android won’t ask again. Turn the camera on in Settings, or use your library.",
+  "photoTipsLink": "Photo tips",
+  "photoTipsTitle": "Photo tips",
+  "photoTip1": "Make your main photo just you, with your face clearly visible.",
+  "photoTip2": "Use recent photos taken in good light.",
+  "photoTip3": "Show something you love doing.",
+  "photoTip4": "Skip heavy filters, sunglasses in every shot and group photos as your main one.",
+  "photoTipsNote": "These are tips. Numaya doesn’t scan your photos.",
+  "interestsSearch": "Search interests",
+  "interestsNoResults": "No interests match “{query}”",
+  "@interestsNoResults": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "interestsClearSearch": "Clear search",
+  "obPromptsTitle": "Pick prompts to share your story",
+  "obPromptsLede": "Answer at least one, up to three. People can reply to any of them.",
+  "obPromptSlot": "Prompt {n}",
+  "@obPromptSlot": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "obPromptAdd": "Add a prompt",
+  "obPromptRequired": "Required",
+  "obPromptOptional": "Optional",
+  "obPromptsFooter": "{count} of 3 answered",
+  "@obPromptsFooter": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "obPromptsFooterMissing": "Answer one to continue",
+  "promptAlreadyUsed": "Already answered",
+  "obBioTitle": "Write a short bio",
+  "obBioLede": "Optional. A few lines about you, in your own words.",
+  "obBioLabel": "Bio",
+  "obBioPlaceholder": "Weekday baker, weekend hill walker…",
+  "obBioTip": "Something specific says more than a list of adjectives.",
+  "obBioPreview": "How it reads on your profile",
+  "obBioFooter": "Shown on your profile",
+  "obBioFooterNone": "You can skip this",
+  "obBioClear": "Clear",
+  "obVerifyTitle": "Verify your photos?",
+  "obVerifyLede": "A quick selfie shows people your photos are really you. Verified profiles get a badge.",
+  "obVerifyPrivacy": "The selfie is only used to check your photos. It isn’t shown on your profile.",
+  "obVerifyDemo": "Demo build: verification is simulated. No selfie is taken, sent or checked, and the result isn’t a real verification.",
+  "obVerifyNow": "Verify now",
+  "obVerifyLater": "Maybe later",
+  "obVerifyPending": "In review (simulated)",
+  "obVerifyDone": "Verified (simulated)",
+  "obVerifyFailed": "Not approved (simulated). You can try again from your profile.",
+  "obVerifyStatus": "Status: {status}",
+  "@obVerifyStatus": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "obNotifTitle": "Don’t miss a match",
+  "obNotifLede": "Get told about new matches, messages and matches about to expire.",
+  "obNotifAllow": "Allow notifications",
+  "obNotifLater": "Not now",
+  "obNotifDemo": "Demo build: no notifications are sent. Your answer sets the switches in Settings.",
+  "obNotifAllowed": "Notifications are on.",
+  "obNotifDenied": "Notifications are off. You can turn them on in Settings.",
+  "obNotifBlocked": "Android won’t ask again. Turn notifications on in Android’s settings.",
+  "obReviewTitle": "Your profile",
+  "obReviewLede": "This is how other people will see you. Check it, then create your profile.",
+  "obReviewMissingTitle": "Before you can finish",
+  "obMissingName": "Add your first name",
+  "obMissingBirthday": "Add your birthday",
+  "obMissingGender": "Choose your gender",
+  "obMissingOpenTo": "Choose who you want to meet",
+  "obMissingIntentions": "Choose what you’re hoping to find",
+  "obMissingPhotos": "Add at least {min} photos",
+  "@obMissingPhotos": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "obMissingInterests": "Pick {min} to {max} interests",
+  "@obMissingInterests": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "obMissingPrompt": "Answer a prompt",
+  "obReviewPrivateTitle": "Only you see this",
+  "obReviewMeet": "Wants to meet",
+  "obReviewAges": "Ages {min}–{max}",
+  "@obReviewAges": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "obReviewArea": "Area",
+  "obReviewNotSet": "Not set",
+  "obReviewVerification": "Photo verification",
+  "obReviewNotVerified": "Not verified",
+  "obReviewNotifications": "Notifications",
+  "obReviewOn": "On",
+  "obReviewOff": "Off",
+  "obReviewEdit": "Edit",
+  "obReviewEditItem": "Edit {item}",
+  "@obReviewEditItem": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "obReviewCreate": "Create my profile",
+  "obReviewFailed": "Couldn’t create your profile. Check your connection and try again.",
+  "obReviewSaved": "Your profile is kept on this device only.",
+  "obReviewPublicTitle": "On your profile",
+  "obDoneTitle": "You’re all set, {name}",
+  "@obDoneTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "obDoneBody": "Your profile is ready. Start with today’s people, or keep adding to your profile any time.",
+  "obDoneStart": "Start discovering",
+  "obDoneSample": "Everyone you’ll see is a sample profile.",
+  "editBirthday": "Birthday",
+  "editBirthdayLocked": "Your birthday can’t be changed after setup.",
+  "demoAreaOnboarding": "Onboarding",
+  "demoPermissionsReset": "Reset permission answers",
+  "demoPermissionsResetDone": "Permission answers reset",
+  "demoOnboardingStart": "Start a new sign-up (skips the code)",
+  "demoOnboardingNote": "Opens profile setup for a new demo account. Each step can also be opened directly once an account exists.",
+  "demoNeedsAccount": "Start a sign-up first"
 }

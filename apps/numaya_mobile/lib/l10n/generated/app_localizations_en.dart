@@ -2526,4 +2526,633 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get demoReduceMotionNote =>
       'Acts as if the phone’s Remove animations setting were on';
+
+  @override
+  String get setupSectionAboutLabel => 'About you';
+
+  @override
+  String get setupSectionAboutDetail => 'Your name, birthday and gender';
+
+  @override
+  String get setupSectionLookingLabel => 'Who you’re looking for';
+
+  @override
+  String get setupSectionLookingDetail =>
+      'Who you want to meet, what for and where';
+
+  @override
+  String get setupSectionProfileLabel => 'Your profile';
+
+  @override
+  String get setupSectionProfileDetail =>
+      'Photos, interests, prompts and a bio';
+
+  @override
+  String get setupSectionFinishLabel => 'Finish';
+
+  @override
+  String get setupSectionFinishDetail =>
+      'Verification, notifications and a last look';
+
+  @override
+  String get obSkip => 'Skip';
+
+  @override
+  String get obContinue => 'Continue';
+
+  @override
+  String get obNameTitle => 'Let’s start with an intro';
+
+  @override
+  String get obNameLede =>
+      'Your first name and age appear on your profile. Your birthday doesn’t.';
+
+  @override
+  String get obNameEmpty => 'Enter your first name.';
+
+  @override
+  String get obNameCharacters => 'Use letters only, without numbers or emoji.';
+
+  @override
+  String get obBirthdayLegend => 'Birthday';
+
+  @override
+  String get obDay => 'Day';
+
+  @override
+  String get obMonth => 'Month';
+
+  @override
+  String get obYear => 'Year';
+
+  @override
+  String get obBirthdayInvalid =>
+      'That date doesn’t exist. Check the day and month.';
+
+  @override
+  String get obBirthdayFuture => 'That date is in the future.';
+
+  @override
+  String get obBirthdayUnrealistic =>
+      'Check the year: that’s more than 100 years ago.';
+
+  @override
+  String get obBirthdayUnderage => 'You need to be 18 or over to use Numaya.';
+
+  @override
+  String obAgeHint(int age) {
+    return 'You’re $age';
+  }
+
+  @override
+  String get obNameFooter => 'Only your age is shown';
+
+  @override
+  String get obNameFooterMissing => 'Add your name and birthday';
+
+  @override
+  String obConfirmAgeTitle(int age) {
+    return 'You’re $age';
+  }
+
+  @override
+  String obConfirmAgeBorn(String date) {
+    return 'Born $date';
+  }
+
+  @override
+  String get obConfirmAgeBody =>
+      'Make sure this is right. You can’t change your birthday later.';
+
+  @override
+  String get obConfirmEdit => 'Edit';
+
+  @override
+  String get obConfirm => 'Confirm';
+
+  @override
+  String get obUnderageTitle => 'Numaya is for adults';
+
+  @override
+  String get obUnderageBody =>
+      'You need to be 18 or over to use Numaya, so we can’t create a profile for you. Nothing you entered has been saved to a profile.';
+
+  @override
+  String get obUnderageSignOut => 'Sign out';
+
+  @override
+  String get obUnderageHelp => 'Read about our age rules';
+
+  @override
+  String get obGenderTitle => 'How do you identify?';
+
+  @override
+  String get obGenderLede =>
+      'Add more detail if you like, and choose what your profile shows.';
+
+  @override
+  String get obGenderMore => 'Add more about your gender';
+
+  @override
+  String get obPronounsLabel => 'Pronouns · optional';
+
+  @override
+  String obPronounsCount(int count, int max) {
+    return '$count/$max';
+  }
+
+  @override
+  String get obShowGender => 'Show gender on profile';
+
+  @override
+  String get obShowPronouns => 'Show pronouns on profile';
+
+  @override
+  String get obGenderFooter => 'Pronouns are optional';
+
+  @override
+  String get obGenderFooterMissing => 'Choose one to continue';
+
+  @override
+  String get obMeetTitle => 'Who do you want to meet?';
+
+  @override
+  String get obMeetLede =>
+      'Pick all that apply. This is private: it’s never shown on your profile.';
+
+  @override
+  String get obEveryone => 'Everyone';
+
+  @override
+  String get obAgesLabel => 'Their age';
+
+  @override
+  String get obMeetFooter => 'Hidden on your profile';
+
+  @override
+  String get obMeetFooterMissing => 'Pick at least one';
+
+  @override
+  String get obIntentTitle => 'What are you hoping to find?';
+
+  @override
+  String get obIntentLede => 'Pick one or two. This shows on your profile.';
+
+  @override
+  String obIntentFooter(int count) {
+    return '$count of 2 picked';
+  }
+
+  @override
+  String get obIntentFooterMissing => 'Pick at least one';
+
+  @override
+  String get obHeightTitle => 'How tall are you?';
+
+  @override
+  String get obHeightLede =>
+      'Optional. If you add it, it shows on your profile.';
+
+  @override
+  String get obHeightCm => 'cm';
+
+  @override
+  String get obHeightFtIn => 'ft / in';
+
+  @override
+  String obHeightFeet(int feet, int inches) {
+    return '$feet′ $inches″';
+  }
+
+  @override
+  String get obHeightShorter => 'Shorter';
+
+  @override
+  String get obHeightTaller => 'Taller';
+
+  @override
+  String get obHeightUnitLegend => 'Units';
+
+  @override
+  String get obHeightAdd => 'Add my height';
+
+  @override
+  String get obHeightFooter => 'Shown on your profile';
+
+  @override
+  String get obHeightFooterNone => 'You can skip this';
+
+  @override
+  String get obHeightRemove => 'Remove height';
+
+  @override
+  String get obLocationTitle => 'Where do you want to meet people?';
+
+  @override
+  String get obLocationLede =>
+      'Numaya uses your area to show you people nearby. Only the area appears on your profile, never your exact location.';
+
+  @override
+  String get obLocationUse => 'Use my location';
+
+  @override
+  String get obLocationChoose => 'Choose my area instead';
+
+  @override
+  String get obLocationDemo =>
+      'Demo build: the phone’s location is never read. Allowing sets a sample area.';
+
+  @override
+  String obLocationSetDevice(String area) {
+    return '$area (sample area)';
+  }
+
+  @override
+  String get obLocationAreaLabel => 'Your area';
+
+  @override
+  String get obLocationChange => 'Change area';
+
+  @override
+  String get obLocationDeniedTitle => 'Location is off';
+
+  @override
+  String get obLocationDeniedBody =>
+      'That’s fine. Choose your area instead, or try again.';
+
+  @override
+  String get obLocationTryAgain => 'Try again';
+
+  @override
+  String get obLocationBlockedTitle => 'Location is blocked for Numaya';
+
+  @override
+  String get obLocationBlockedBody =>
+      'Android won’t ask again. Turn location on in Settings, or choose your area.';
+
+  @override
+  String get obOpenSettings => 'Open settings';
+
+  @override
+  String get obOpenSettingsDemo =>
+      'Demo build: this would open Numaya’s Android settings.';
+
+  @override
+  String get obLocationFooter => 'Only your area is shown';
+
+  @override
+  String get obLocationFooterNone => 'You can set this later';
+
+  @override
+  String get obAreaSheetTitle => 'Choose your area';
+
+  @override
+  String get obAreaSearch => 'Search areas';
+
+  @override
+  String obAreaNone(String query) {
+    return 'No areas match “$query”';
+  }
+
+  @override
+  String get permDemoTag => 'Demo · stands in for Android’s prompt';
+
+  @override
+  String get permLocationTitle =>
+      'Allow Numaya to access this device’s location?';
+
+  @override
+  String get permAllowApproximate => 'While using the app · approximate';
+
+  @override
+  String get permAllowPrecise => 'While using the app · precise';
+
+  @override
+  String get permCameraTitle =>
+      'Allow Numaya to take pictures and record video?';
+
+  @override
+  String get permNotificationsTitle =>
+      'Allow Numaya to send you notifications?';
+
+  @override
+  String get permAllow => 'Allow';
+
+  @override
+  String get permDeny => 'Don’t allow';
+
+  @override
+  String get photoSourceTitle => 'Add a photo';
+
+  @override
+  String get photoSourceCamera => 'Take a photo';
+
+  @override
+  String get photoSourceLibrary => 'Choose from library';
+
+  @override
+  String get photoSourceNote =>
+      'Demo build: no camera or photo picker is connected, so either choice adds a placeholder tile.';
+
+  @override
+  String get photoCameraDeniedTitle => 'Camera is off for Numaya';
+
+  @override
+  String get photoCameraDeniedBody =>
+      'Choose from your library instead, or allow the camera next time.';
+
+  @override
+  String get photoCameraBlockedBody =>
+      'Android won’t ask again. Turn the camera on in Settings, or use your library.';
+
+  @override
+  String get photoTipsLink => 'Photo tips';
+
+  @override
+  String get photoTipsTitle => 'Photo tips';
+
+  @override
+  String get photoTip1 =>
+      'Make your main photo just you, with your face clearly visible.';
+
+  @override
+  String get photoTip2 => 'Use recent photos taken in good light.';
+
+  @override
+  String get photoTip3 => 'Show something you love doing.';
+
+  @override
+  String get photoTip4 =>
+      'Skip heavy filters, sunglasses in every shot and group photos as your main one.';
+
+  @override
+  String get photoTipsNote =>
+      'These are tips. Numaya doesn’t scan your photos.';
+
+  @override
+  String get interestsSearch => 'Search interests';
+
+  @override
+  String interestsNoResults(String query) {
+    return 'No interests match “$query”';
+  }
+
+  @override
+  String get interestsClearSearch => 'Clear search';
+
+  @override
+  String get obPromptsTitle => 'Pick prompts to share your story';
+
+  @override
+  String get obPromptsLede =>
+      'Answer at least one, up to three. People can reply to any of them.';
+
+  @override
+  String obPromptSlot(int n) {
+    return 'Prompt $n';
+  }
+
+  @override
+  String get obPromptAdd => 'Add a prompt';
+
+  @override
+  String get obPromptRequired => 'Required';
+
+  @override
+  String get obPromptOptional => 'Optional';
+
+  @override
+  String obPromptsFooter(int count) {
+    return '$count of 3 answered';
+  }
+
+  @override
+  String get obPromptsFooterMissing => 'Answer one to continue';
+
+  @override
+  String get promptAlreadyUsed => 'Already answered';
+
+  @override
+  String get obBioTitle => 'Write a short bio';
+
+  @override
+  String get obBioLede => 'Optional. A few lines about you, in your own words.';
+
+  @override
+  String get obBioLabel => 'Bio';
+
+  @override
+  String get obBioPlaceholder => 'Weekday baker, weekend hill walker…';
+
+  @override
+  String get obBioTip =>
+      'Something specific says more than a list of adjectives.';
+
+  @override
+  String get obBioPreview => 'How it reads on your profile';
+
+  @override
+  String get obBioFooter => 'Shown on your profile';
+
+  @override
+  String get obBioFooterNone => 'You can skip this';
+
+  @override
+  String get obBioClear => 'Clear';
+
+  @override
+  String get obVerifyTitle => 'Verify your photos?';
+
+  @override
+  String get obVerifyLede =>
+      'A quick selfie shows people your photos are really you. Verified profiles get a badge.';
+
+  @override
+  String get obVerifyPrivacy =>
+      'The selfie is only used to check your photos. It isn’t shown on your profile.';
+
+  @override
+  String get obVerifyDemo =>
+      'Demo build: verification is simulated. No selfie is taken, sent or checked, and the result isn’t a real verification.';
+
+  @override
+  String get obVerifyNow => 'Verify now';
+
+  @override
+  String get obVerifyLater => 'Maybe later';
+
+  @override
+  String get obVerifyPending => 'In review (simulated)';
+
+  @override
+  String get obVerifyDone => 'Verified (simulated)';
+
+  @override
+  String get obVerifyFailed =>
+      'Not approved (simulated). You can try again from your profile.';
+
+  @override
+  String obVerifyStatus(String status) {
+    return 'Status: $status';
+  }
+
+  @override
+  String get obNotifTitle => 'Don’t miss a match';
+
+  @override
+  String get obNotifLede =>
+      'Get told about new matches, messages and matches about to expire.';
+
+  @override
+  String get obNotifAllow => 'Allow notifications';
+
+  @override
+  String get obNotifLater => 'Not now';
+
+  @override
+  String get obNotifDemo =>
+      'Demo build: no notifications are sent. Your answer sets the switches in Settings.';
+
+  @override
+  String get obNotifAllowed => 'Notifications are on.';
+
+  @override
+  String get obNotifDenied =>
+      'Notifications are off. You can turn them on in Settings.';
+
+  @override
+  String get obNotifBlocked =>
+      'Android won’t ask again. Turn notifications on in Android’s settings.';
+
+  @override
+  String get obReviewTitle => 'Your profile';
+
+  @override
+  String get obReviewLede =>
+      'This is how other people will see you. Check it, then create your profile.';
+
+  @override
+  String get obReviewMissingTitle => 'Before you can finish';
+
+  @override
+  String get obMissingName => 'Add your first name';
+
+  @override
+  String get obMissingBirthday => 'Add your birthday';
+
+  @override
+  String get obMissingGender => 'Choose your gender';
+
+  @override
+  String get obMissingOpenTo => 'Choose who you want to meet';
+
+  @override
+  String get obMissingIntentions => 'Choose what you’re hoping to find';
+
+  @override
+  String obMissingPhotos(int min) {
+    return 'Add at least $min photos';
+  }
+
+  @override
+  String obMissingInterests(int min, int max) {
+    return 'Pick $min to $max interests';
+  }
+
+  @override
+  String get obMissingPrompt => 'Answer a prompt';
+
+  @override
+  String get obReviewPrivateTitle => 'Only you see this';
+
+  @override
+  String get obReviewMeet => 'Wants to meet';
+
+  @override
+  String obReviewAges(int min, int max) {
+    return 'Ages $min–$max';
+  }
+
+  @override
+  String get obReviewArea => 'Area';
+
+  @override
+  String get obReviewNotSet => 'Not set';
+
+  @override
+  String get obReviewVerification => 'Photo verification';
+
+  @override
+  String get obReviewNotVerified => 'Not verified';
+
+  @override
+  String get obReviewNotifications => 'Notifications';
+
+  @override
+  String get obReviewOn => 'On';
+
+  @override
+  String get obReviewOff => 'Off';
+
+  @override
+  String get obReviewEdit => 'Edit';
+
+  @override
+  String obReviewEditItem(String item) {
+    return 'Edit $item';
+  }
+
+  @override
+  String get obReviewCreate => 'Create my profile';
+
+  @override
+  String get obReviewFailed =>
+      'Couldn’t create your profile. Check your connection and try again.';
+
+  @override
+  String get obReviewSaved => 'Your profile is kept on this device only.';
+
+  @override
+  String get obReviewPublicTitle => 'On your profile';
+
+  @override
+  String obDoneTitle(String name) {
+    return 'You’re all set, $name';
+  }
+
+  @override
+  String get obDoneBody =>
+      'Your profile is ready. Start with today’s people, or keep adding to your profile any time.';
+
+  @override
+  String get obDoneStart => 'Start discovering';
+
+  @override
+  String get obDoneSample => 'Everyone you’ll see is a sample profile.';
+
+  @override
+  String get editBirthday => 'Birthday';
+
+  @override
+  String get editBirthdayLocked =>
+      'Your birthday can’t be changed after setup.';
+
+  @override
+  String get demoAreaOnboarding => 'Onboarding';
+
+  @override
+  String get demoPermissionsReset => 'Reset permission answers';
+
+  @override
+  String get demoPermissionsResetDone => 'Permission answers reset';
+
+  @override
+  String get demoOnboardingStart => 'Start a new sign-up (skips the code)';
+
+  @override
+  String get demoOnboardingNote =>
+      'Opens profile setup for a new demo account. Each step can also be opened directly once an account exists.';
+
+  @override
+  String get demoNeedsAccount => 'Start a sign-up first';
 }

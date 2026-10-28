@@ -188,6 +188,7 @@ List<Widget> personSections(
     aspectRatio: 4 / 5,
   );
   final facts = [
+    if (person.identity != null) (NumayaIcons.user, person.identity!),
     if (person.lookingFor != null) (NumayaIcons.heart, person.lookingFor!),
     if (person.heightCm > 0)
       (NumayaIcons.user, l10n.heightValue(person.heightCm)),

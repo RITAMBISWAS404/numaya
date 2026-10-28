@@ -7,7 +7,7 @@ import '../domain/profile_details.dart';
 SamplePerson memberAsPerson({
   required ProfileDraft draft,
   required ProfileDetails details,
-  required int currentYear,
+  required DateTime today,
   required bool verified,
 }) {
   final looking = draft.lookingFor.isEmpty
@@ -26,13 +26,14 @@ SamplePerson memberAsPerson({
   return SamplePerson(
     id: 'me',
     name: draft.firstName.trim().isEmpty ? '?' : draft.firstName.trim(),
-    age: draft.ageIn(currentYear) ?? 0,
+    age: draft.ageOn(today) ?? 0,
     job: details.about[AboutKey.work],
     distanceKm: 0,
     prompt: prompts.isEmpty ? null : prompts.first,
     morePrompts: prompts.skip(1).toList(),
     lookingFor: looking,
-    livesIn: details.about[AboutKey.location],
+    livesIn: details.area ?? details.about[AboutKey.location],
+    identity: _identity(draft, details),
     verified: verified,
     photoCount: draft.photos.length,
     shared: draft.interests,
@@ -45,4 +46,21 @@ SamplePerson memberAsPerson({
         : details.openingMoves.first,
     bio: details.bio.isEmpty ? null : details.bio,
   );
+}
+
+/// "Woman · she/her", from what the member chose to show.
+String? _identity(ProfileDraft draft, ProfileDetails details) {
+  final gender = draft.gender;
+  final parts = [
+    if (details.showGender && gender != null)
+      details.genderDetail ??
+          switch (gender) {
+            Gender.woman => 'Woman',
+            Gender.man => 'Man',
+            Gender.nonbinary => 'Nonbinary',
+          },
+    if (draft.showPronouns && draft.pronouns.isNotEmpty)
+      draft.pronouns.join('/'),
+  ];
+  return parts.isEmpty ? null : parts.join(' · ');
 }

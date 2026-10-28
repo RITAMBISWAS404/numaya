@@ -4365,6 +4365,1116 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Acts as if the phone’s Remove animations setting were on'**
   String get demoReduceMotionNote;
+
+  /// No description provided for @setupSectionAboutLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'About you'**
+  String get setupSectionAboutLabel;
+
+  /// No description provided for @setupSectionAboutDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name, birthday and gender'**
+  String get setupSectionAboutDetail;
+
+  /// No description provided for @setupSectionLookingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Who you’re looking for'**
+  String get setupSectionLookingLabel;
+
+  /// No description provided for @setupSectionLookingDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Who you want to meet, what for and where'**
+  String get setupSectionLookingDetail;
+
+  /// No description provided for @setupSectionProfileLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile'**
+  String get setupSectionProfileLabel;
+
+  /// No description provided for @setupSectionProfileDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos, interests, prompts and a bio'**
+  String get setupSectionProfileDetail;
+
+  /// No description provided for @setupSectionFinishLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish'**
+  String get setupSectionFinishLabel;
+
+  /// No description provided for @setupSectionFinishDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification, notifications and a last look'**
+  String get setupSectionFinishDetail;
+
+  /// No description provided for @obSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get obSkip;
+
+  /// No description provided for @obContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get obContinue;
+
+  /// No description provided for @obNameTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Let’s start with an intro'**
+  String get obNameTitle;
+
+  /// No description provided for @obNameLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Your first name and age appear on your profile. Your birthday doesn’t.'**
+  String get obNameLede;
+
+  /// No description provided for @obNameEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your first name.'**
+  String get obNameEmpty;
+
+  /// No description provided for @obNameCharacters.
+  ///
+  /// In en, this message translates to:
+  /// **'Use letters only, without numbers or emoji.'**
+  String get obNameCharacters;
+
+  /// No description provided for @obBirthdayLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'Birthday'**
+  String get obBirthdayLegend;
+
+  /// No description provided for @obDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get obDay;
+
+  /// No description provided for @obMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get obMonth;
+
+  /// No description provided for @obYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get obYear;
+
+  /// No description provided for @obBirthdayInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'That date doesn’t exist. Check the day and month.'**
+  String get obBirthdayInvalid;
+
+  /// No description provided for @obBirthdayFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'That date is in the future.'**
+  String get obBirthdayFuture;
+
+  /// No description provided for @obBirthdayUnrealistic.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the year: that’s more than 100 years ago.'**
+  String get obBirthdayUnrealistic;
+
+  /// No description provided for @obBirthdayUnderage.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to be 18 or over to use Numaya.'**
+  String get obBirthdayUnderage;
+
+  /// No description provided for @obAgeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re {age}'**
+  String obAgeHint(int age);
+
+  /// No description provided for @obNameFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Only your age is shown'**
+  String get obNameFooter;
+
+  /// No description provided for @obNameFooterMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your name and birthday'**
+  String get obNameFooterMissing;
+
+  /// No description provided for @obConfirmAgeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re {age}'**
+  String obConfirmAgeTitle(int age);
+
+  /// No description provided for @obConfirmAgeBorn.
+  ///
+  /// In en, this message translates to:
+  /// **'Born {date}'**
+  String obConfirmAgeBorn(String date);
+
+  /// No description provided for @obConfirmAgeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Make sure this is right. You can’t change your birthday later.'**
+  String get obConfirmAgeBody;
+
+  /// No description provided for @obConfirmEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get obConfirmEdit;
+
+  /// No description provided for @obConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get obConfirm;
+
+  /// No description provided for @obUnderageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Numaya is for adults'**
+  String get obUnderageTitle;
+
+  /// No description provided for @obUnderageBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to be 18 or over to use Numaya, so we can’t create a profile for you. Nothing you entered has been saved to a profile.'**
+  String get obUnderageBody;
+
+  /// No description provided for @obUnderageSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get obUnderageSignOut;
+
+  /// No description provided for @obUnderageHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Read about our age rules'**
+  String get obUnderageHelp;
+
+  /// No description provided for @obGenderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How do you identify?'**
+  String get obGenderTitle;
+
+  /// No description provided for @obGenderLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Add more detail if you like, and choose what your profile shows.'**
+  String get obGenderLede;
+
+  /// No description provided for @obGenderMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Add more about your gender'**
+  String get obGenderMore;
+
+  /// No description provided for @obPronounsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pronouns · optional'**
+  String get obPronounsLabel;
+
+  /// No description provided for @obPronounsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}/{max}'**
+  String obPronounsCount(int count, int max);
+
+  /// No description provided for @obShowGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Show gender on profile'**
+  String get obShowGender;
+
+  /// No description provided for @obShowPronouns.
+  ///
+  /// In en, this message translates to:
+  /// **'Show pronouns on profile'**
+  String get obShowPronouns;
+
+  /// No description provided for @obGenderFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Pronouns are optional'**
+  String get obGenderFooter;
+
+  /// No description provided for @obGenderFooterMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose one to continue'**
+  String get obGenderFooterMissing;
+
+  /// No description provided for @obMeetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Who do you want to meet?'**
+  String get obMeetTitle;
+
+  /// No description provided for @obMeetLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick all that apply. This is private: it’s never shown on your profile.'**
+  String get obMeetLede;
+
+  /// No description provided for @obEveryone.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone'**
+  String get obEveryone;
+
+  /// No description provided for @obAgesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Their age'**
+  String get obAgesLabel;
+
+  /// No description provided for @obMeetFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden on your profile'**
+  String get obMeetFooter;
+
+  /// No description provided for @obMeetFooterMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick at least one'**
+  String get obMeetFooterMissing;
+
+  /// No description provided for @obIntentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What are you hoping to find?'**
+  String get obIntentTitle;
+
+  /// No description provided for @obIntentLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick one or two. This shows on your profile.'**
+  String get obIntentLede;
+
+  /// No description provided for @obIntentFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 2 picked'**
+  String obIntentFooter(int count);
+
+  /// No description provided for @obIntentFooterMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick at least one'**
+  String get obIntentFooterMissing;
+
+  /// No description provided for @obHeightTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How tall are you?'**
+  String get obHeightTitle;
+
+  /// No description provided for @obHeightLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. If you add it, it shows on your profile.'**
+  String get obHeightLede;
+
+  /// No description provided for @obHeightCm.
+  ///
+  /// In en, this message translates to:
+  /// **'cm'**
+  String get obHeightCm;
+
+  /// No description provided for @obHeightFtIn.
+  ///
+  /// In en, this message translates to:
+  /// **'ft / in'**
+  String get obHeightFtIn;
+
+  /// No description provided for @obHeightFeet.
+  ///
+  /// In en, this message translates to:
+  /// **'{feet}′ {inches}″'**
+  String obHeightFeet(int feet, int inches);
+
+  /// No description provided for @obHeightShorter.
+  ///
+  /// In en, this message translates to:
+  /// **'Shorter'**
+  String get obHeightShorter;
+
+  /// No description provided for @obHeightTaller.
+  ///
+  /// In en, this message translates to:
+  /// **'Taller'**
+  String get obHeightTaller;
+
+  /// No description provided for @obHeightUnitLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'Units'**
+  String get obHeightUnitLegend;
+
+  /// No description provided for @obHeightAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add my height'**
+  String get obHeightAdd;
+
+  /// No description provided for @obHeightFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown on your profile'**
+  String get obHeightFooter;
+
+  /// No description provided for @obHeightFooterNone.
+  ///
+  /// In en, this message translates to:
+  /// **'You can skip this'**
+  String get obHeightFooterNone;
+
+  /// No description provided for @obHeightRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove height'**
+  String get obHeightRemove;
+
+  /// No description provided for @obLocationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where do you want to meet people?'**
+  String get obLocationTitle;
+
+  /// No description provided for @obLocationLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Numaya uses your area to show you people nearby. Only the area appears on your profile, never your exact location.'**
+  String get obLocationLede;
+
+  /// No description provided for @obLocationUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Use my location'**
+  String get obLocationUse;
+
+  /// No description provided for @obLocationChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose my area instead'**
+  String get obLocationChoose;
+
+  /// No description provided for @obLocationDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo build: the phone’s location is never read. Allowing sets a sample area.'**
+  String get obLocationDemo;
+
+  /// No description provided for @obLocationSetDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'{area} (sample area)'**
+  String obLocationSetDevice(String area);
+
+  /// No description provided for @obLocationAreaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your area'**
+  String get obLocationAreaLabel;
+
+  /// No description provided for @obLocationChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change area'**
+  String get obLocationChange;
+
+  /// No description provided for @obLocationDeniedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Location is off'**
+  String get obLocationDeniedTitle;
+
+  /// No description provided for @obLocationDeniedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'That’s fine. Choose your area instead, or try again.'**
+  String get obLocationDeniedBody;
+
+  /// No description provided for @obLocationTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get obLocationTryAgain;
+
+  /// No description provided for @obLocationBlockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Location is blocked for Numaya'**
+  String get obLocationBlockedTitle;
+
+  /// No description provided for @obLocationBlockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Android won’t ask again. Turn location on in Settings, or choose your area.'**
+  String get obLocationBlockedBody;
+
+  /// No description provided for @obOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get obOpenSettings;
+
+  /// No description provided for @obOpenSettingsDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo build: this would open Numaya’s Android settings.'**
+  String get obOpenSettingsDemo;
+
+  /// No description provided for @obLocationFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Only your area is shown'**
+  String get obLocationFooter;
+
+  /// No description provided for @obLocationFooterNone.
+  ///
+  /// In en, this message translates to:
+  /// **'You can set this later'**
+  String get obLocationFooterNone;
+
+  /// No description provided for @obAreaSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your area'**
+  String get obAreaSheetTitle;
+
+  /// No description provided for @obAreaSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search areas'**
+  String get obAreaSearch;
+
+  /// No description provided for @obAreaNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No areas match “{query}”'**
+  String obAreaNone(String query);
+
+  /// No description provided for @permDemoTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo · stands in for Android’s prompt'**
+  String get permDemoTag;
+
+  /// No description provided for @permLocationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Numaya to access this device’s location?'**
+  String get permLocationTitle;
+
+  /// No description provided for @permAllowApproximate.
+  ///
+  /// In en, this message translates to:
+  /// **'While using the app · approximate'**
+  String get permAllowApproximate;
+
+  /// No description provided for @permAllowPrecise.
+  ///
+  /// In en, this message translates to:
+  /// **'While using the app · precise'**
+  String get permAllowPrecise;
+
+  /// No description provided for @permCameraTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Numaya to take pictures and record video?'**
+  String get permCameraTitle;
+
+  /// No description provided for @permNotificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Numaya to send you notifications?'**
+  String get permNotificationsTitle;
+
+  /// No description provided for @permAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get permAllow;
+
+  /// No description provided for @permDeny.
+  ///
+  /// In en, this message translates to:
+  /// **'Don’t allow'**
+  String get permDeny;
+
+  /// No description provided for @photoSourceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a photo'**
+  String get photoSourceTitle;
+
+  /// No description provided for @photoSourceCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get photoSourceCamera;
+
+  /// No description provided for @photoSourceLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from library'**
+  String get photoSourceLibrary;
+
+  /// No description provided for @photoSourceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo build: no camera or photo picker is connected, so either choice adds a placeholder tile.'**
+  String get photoSourceNote;
+
+  /// No description provided for @photoCameraDeniedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera is off for Numaya'**
+  String get photoCameraDeniedTitle;
+
+  /// No description provided for @photoCameraDeniedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from your library instead, or allow the camera next time.'**
+  String get photoCameraDeniedBody;
+
+  /// No description provided for @photoCameraBlockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Android won’t ask again. Turn the camera on in Settings, or use your library.'**
+  String get photoCameraBlockedBody;
+
+  /// No description provided for @photoTipsLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo tips'**
+  String get photoTipsLink;
+
+  /// No description provided for @photoTipsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo tips'**
+  String get photoTipsTitle;
+
+  /// No description provided for @photoTip1.
+  ///
+  /// In en, this message translates to:
+  /// **'Make your main photo just you, with your face clearly visible.'**
+  String get photoTip1;
+
+  /// No description provided for @photoTip2.
+  ///
+  /// In en, this message translates to:
+  /// **'Use recent photos taken in good light.'**
+  String get photoTip2;
+
+  /// No description provided for @photoTip3.
+  ///
+  /// In en, this message translates to:
+  /// **'Show something you love doing.'**
+  String get photoTip3;
+
+  /// No description provided for @photoTip4.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip heavy filters, sunglasses in every shot and group photos as your main one.'**
+  String get photoTip4;
+
+  /// No description provided for @photoTipsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'These are tips. Numaya doesn’t scan your photos.'**
+  String get photoTipsNote;
+
+  /// No description provided for @interestsSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search interests'**
+  String get interestsSearch;
+
+  /// No description provided for @interestsNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No interests match “{query}”'**
+  String interestsNoResults(String query);
+
+  /// No description provided for @interestsClearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get interestsClearSearch;
+
+  /// No description provided for @obPromptsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick prompts to share your story'**
+  String get obPromptsTitle;
+
+  /// No description provided for @obPromptsLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer at least one, up to three. People can reply to any of them.'**
+  String get obPromptsLede;
+
+  /// No description provided for @obPromptSlot.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompt {n}'**
+  String obPromptSlot(int n);
+
+  /// No description provided for @obPromptAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a prompt'**
+  String get obPromptAdd;
+
+  /// No description provided for @obPromptRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get obPromptRequired;
+
+  /// No description provided for @obPromptOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get obPromptOptional;
+
+  /// No description provided for @obPromptsFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of 3 answered'**
+  String obPromptsFooter(int count);
+
+  /// No description provided for @obPromptsFooterMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer one to continue'**
+  String get obPromptsFooterMissing;
+
+  /// No description provided for @promptAlreadyUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Already answered'**
+  String get promptAlreadyUsed;
+
+  /// No description provided for @obBioTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a short bio'**
+  String get obBioTitle;
+
+  /// No description provided for @obBioLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. A few lines about you, in your own words.'**
+  String get obBioLede;
+
+  /// No description provided for @obBioLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bio'**
+  String get obBioLabel;
+
+  /// No description provided for @obBioPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekday baker, weekend hill walker…'**
+  String get obBioPlaceholder;
+
+  /// No description provided for @obBioTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Something specific says more than a list of adjectives.'**
+  String get obBioTip;
+
+  /// No description provided for @obBioPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'How it reads on your profile'**
+  String get obBioPreview;
+
+  /// No description provided for @obBioFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown on your profile'**
+  String get obBioFooter;
+
+  /// No description provided for @obBioFooterNone.
+  ///
+  /// In en, this message translates to:
+  /// **'You can skip this'**
+  String get obBioFooterNone;
+
+  /// No description provided for @obBioClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get obBioClear;
+
+  /// No description provided for @obVerifyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your photos?'**
+  String get obVerifyTitle;
+
+  /// No description provided for @obVerifyLede.
+  ///
+  /// In en, this message translates to:
+  /// **'A quick selfie shows people your photos are really you. Verified profiles get a badge.'**
+  String get obVerifyLede;
+
+  /// No description provided for @obVerifyPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'The selfie is only used to check your photos. It isn’t shown on your profile.'**
+  String get obVerifyPrivacy;
+
+  /// No description provided for @obVerifyDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo build: verification is simulated. No selfie is taken, sent or checked, and the result isn’t a real verification.'**
+  String get obVerifyDemo;
+
+  /// No description provided for @obVerifyNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify now'**
+  String get obVerifyNow;
+
+  /// No description provided for @obVerifyLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Maybe later'**
+  String get obVerifyLater;
+
+  /// No description provided for @obVerifyPending.
+  ///
+  /// In en, this message translates to:
+  /// **'In review (simulated)'**
+  String get obVerifyPending;
+
+  /// No description provided for @obVerifyDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified (simulated)'**
+  String get obVerifyDone;
+
+  /// No description provided for @obVerifyFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not approved (simulated). You can try again from your profile.'**
+  String get obVerifyFailed;
+
+  /// No description provided for @obVerifyStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status: {status}'**
+  String obVerifyStatus(String status);
+
+  /// No description provided for @obNotifTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Don’t miss a match'**
+  String get obNotifTitle;
+
+  /// No description provided for @obNotifLede.
+  ///
+  /// In en, this message translates to:
+  /// **'Get told about new matches, messages and matches about to expire.'**
+  String get obNotifLede;
+
+  /// No description provided for @obNotifAllow.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications'**
+  String get obNotifAllow;
+
+  /// No description provided for @obNotifLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get obNotifLater;
+
+  /// No description provided for @obNotifDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo build: no notifications are sent. Your answer sets the switches in Settings.'**
+  String get obNotifDemo;
+
+  /// No description provided for @obNotifAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are on.'**
+  String get obNotifAllowed;
+
+  /// No description provided for @obNotifDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are off. You can turn them on in Settings.'**
+  String get obNotifDenied;
+
+  /// No description provided for @obNotifBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Android won’t ask again. Turn notifications on in Android’s settings.'**
+  String get obNotifBlocked;
+
+  /// No description provided for @obReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile'**
+  String get obReviewTitle;
+
+  /// No description provided for @obReviewLede.
+  ///
+  /// In en, this message translates to:
+  /// **'This is how other people will see you. Check it, then create your profile.'**
+  String get obReviewLede;
+
+  /// No description provided for @obReviewMissingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you can finish'**
+  String get obReviewMissingTitle;
+
+  /// No description provided for @obMissingName.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first name'**
+  String get obMissingName;
+
+  /// No description provided for @obMissingBirthday.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your birthday'**
+  String get obMissingBirthday;
+
+  /// No description provided for @obMissingGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your gender'**
+  String get obMissingGender;
+
+  /// No description provided for @obMissingOpenTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose who you want to meet'**
+  String get obMissingOpenTo;
+
+  /// No description provided for @obMissingIntentions.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose what you’re hoping to find'**
+  String get obMissingIntentions;
+
+  /// No description provided for @obMissingPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least {min} photos'**
+  String obMissingPhotos(int min);
+
+  /// No description provided for @obMissingInterests.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick {min} to {max} interests'**
+  String obMissingInterests(int min, int max);
+
+  /// No description provided for @obMissingPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer a prompt'**
+  String get obMissingPrompt;
+
+  /// No description provided for @obReviewPrivateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Only you see this'**
+  String get obReviewPrivateTitle;
+
+  /// No description provided for @obReviewMeet.
+  ///
+  /// In en, this message translates to:
+  /// **'Wants to meet'**
+  String get obReviewMeet;
+
+  /// No description provided for @obReviewAges.
+  ///
+  /// In en, this message translates to:
+  /// **'Ages {min}–{max}'**
+  String obReviewAges(int min, int max);
+
+  /// No description provided for @obReviewArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Area'**
+  String get obReviewArea;
+
+  /// No description provided for @obReviewNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get obReviewNotSet;
+
+  /// No description provided for @obReviewVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo verification'**
+  String get obReviewVerification;
+
+  /// No description provided for @obReviewNotVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Not verified'**
+  String get obReviewNotVerified;
+
+  /// No description provided for @obReviewNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get obReviewNotifications;
+
+  /// No description provided for @obReviewOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get obReviewOn;
+
+  /// No description provided for @obReviewOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get obReviewOff;
+
+  /// No description provided for @obReviewEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get obReviewEdit;
+
+  /// No description provided for @obReviewEditItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {item}'**
+  String obReviewEditItem(String item);
+
+  /// No description provided for @obReviewCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create my profile'**
+  String get obReviewCreate;
+
+  /// No description provided for @obReviewFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t create your profile. Check your connection and try again.'**
+  String get obReviewFailed;
+
+  /// No description provided for @obReviewSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile is kept on this device only.'**
+  String get obReviewSaved;
+
+  /// No description provided for @obReviewPublicTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'On your profile'**
+  String get obReviewPublicTitle;
+
+  /// No description provided for @obDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re all set, {name}'**
+  String obDoneTitle(String name);
+
+  /// No description provided for @obDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile is ready. Start with today’s people, or keep adding to your profile any time.'**
+  String get obDoneBody;
+
+  /// No description provided for @obDoneStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start discovering'**
+  String get obDoneStart;
+
+  /// No description provided for @obDoneSample.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone you’ll see is a sample profile.'**
+  String get obDoneSample;
+
+  /// No description provided for @editBirthday.
+  ///
+  /// In en, this message translates to:
+  /// **'Birthday'**
+  String get editBirthday;
+
+  /// No description provided for @editBirthdayLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Your birthday can’t be changed after setup.'**
+  String get editBirthdayLocked;
+
+  /// No description provided for @demoAreaOnboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Onboarding'**
+  String get demoAreaOnboarding;
+
+  /// No description provided for @demoPermissionsReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset permission answers'**
+  String get demoPermissionsReset;
+
+  /// No description provided for @demoPermissionsResetDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission answers reset'**
+  String get demoPermissionsResetDone;
+
+  /// No description provided for @demoOnboardingStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a new sign-up (skips the code)'**
+  String get demoOnboardingStart;
+
+  /// No description provided for @demoOnboardingNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens profile setup for a new demo account. Each step can also be opened directly once an account exists.'**
+  String get demoOnboardingNote;
+
+  /// No description provided for @demoNeedsAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a sign-up first'**
+  String get demoNeedsAccount;
 }
 
 class _AppLocalizationsDelegate

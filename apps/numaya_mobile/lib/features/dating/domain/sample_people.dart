@@ -30,6 +30,7 @@ class SamplePerson {
     this.openingMove,
     this.bio,
     this.morePrompts = const [],
+    this.identity,
   });
 
   final String id;
@@ -69,6 +70,9 @@ class SamplePerson {
 
   /// Further prompts (a profile can have up to three).
   final List<({String question, String answer})> morePrompts;
+
+  /// Gender and pronouns as the profile shows them ("Woman · she/her"), when shown at all.
+  final String? identity;
 
   String get initial => name.characters.first.toUpperCase();
 

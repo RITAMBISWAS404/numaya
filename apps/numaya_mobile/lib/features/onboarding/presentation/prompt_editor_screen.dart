@@ -30,7 +30,21 @@ class _PromptEditorScreenState extends ConsumerState<PromptEditorScreen> {
             .read(profileDetailsProvider)
             .extraPrompts
             .elementAtOrNull(widget.slot - 1);
-  late String _question = _saved?.question ?? kPromptQuestions.first;
+
+  /// Questions answered in the other slots: not offered again (OD-10).
+  late final Set<String> _usedElsewhere = {
+    for (final (i, p) in [
+      ref.read(onboardingProvider).draft.prompt,
+      ...ref.read(profileDetailsProvider).extraPrompts,
+    ].indexed)
+      if (p != null && i != widget.slot) p.question,
+  };
+  late String _question =
+      _saved?.question ??
+      kPromptQuestions.firstWhere(
+        (q) => !_usedElsewhere.contains(q),
+        orElse: () => kPromptQuestions.first,
+      );
   late final TextEditingController _answer = TextEditingController(
     text: _saved?.answer ?? '',
   )..addListener(() => setState(() {}));
@@ -121,7 +135,11 @@ class _PromptEditorScreenState extends ConsumerState<PromptEditorScreen> {
               for (final q in kPromptQuestions)
                 OptionCard(
                   label: q,
+                  description: _usedElsewhere.contains(q)
+                      ? l10n.promptAlreadyUsed
+                      : null,
                   selected: q == _question,
+                  enabled: !_usedElsewhere.contains(q),
                   onTap: () => setState(() => _question = q),
                 ),
             ],

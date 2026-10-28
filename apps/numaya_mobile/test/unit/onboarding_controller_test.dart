@@ -44,18 +44,43 @@ void main() {
     expect(draft().photos.length, 5);
   });
 
-  test('birth year keeps digits only', () {
-    controller().setBirthYear('19a9-5');
-    expect(draft().birthYear, '1995');
+  test('pronouns cap at four; who-to-meet maps every group to everyone', () {
+    for (final p in kPronouns.take(6)) {
+      controller().togglePronoun(p);
+    }
+    expect(draft().pronouns, kPronouns.take(4).toList());
+    expect(draft().openTo, isNull);
+    controller().toggleOpenTo(Gender.woman);
+    expect(draft().openTo, {Gender.woman});
+    controller().toggleOpenTo(Gender.man);
+    controller().toggleOpenTo(Gender.nonbinary);
+    expect(draft().openTo, isEmpty); // everyone
+    controller().toggleOpenTo(Gender.man);
+    expect(draft().openTo, {Gender.man});
+    controller().toggleOpenTo(Gender.man);
+    expect(draft().openTo, isNull); // nothing picked is no answer
+    controller().setOpenToEveryone();
+    expect(draft().openTo, isEmpty);
   });
 
-  test('next step follows completed steps', () {
-    expect(container.read(onboardingProvider).nextStep, SetupStep.basics);
-    controller().completeStep(SetupStep.basics);
-    expect(container.read(onboardingProvider).nextStep, SetupStep.interests);
-    controller().completeStep(SetupStep.interests);
-    controller().completeStep(SetupStep.photos);
-    expect(container.read(onboardingProvider).nextStep, isNull);
+  test('confirming an age under 18 locks setup', () {
+    expect(container.read(onboardingProvider).ageLocked, isFalse);
+    controller().confirmUnderage();
+    expect(container.read(onboardingProvider).ageLocked, isTrue);
+  });
+
+  test('next step follows the flow; sections finish with their last step', () {
+    OnboardingState state() => container.read(onboardingProvider);
+    expect(state().nextStep, SetupStep.name);
+    controller().completeStep(SetupStep.name);
+    expect(state().nextStep, SetupStep.gender);
+    expect(state().sectionDone(SetupSection.aboutYou), isFalse);
+    controller().completeStep(SetupStep.gender);
+    expect(state().sectionDone(SetupSection.aboutYou), isTrue);
+    for (final s in SetupStep.values) {
+      controller().completeStep(s);
+    }
+    expect(state().nextStep, isNull);
   });
 
   test('cancelling an edit restores the profile', () {

@@ -186,6 +186,16 @@ class DemoAuthRepository implements AuthRepository {
     return AuthSession(userId: id, phone: phone, hasProfile: true);
   }
 
+  /// Demo Hub: a new verified account with no profile yet, to walk onboarding without the code
+  /// step. Uses a fixed fictional number that never receives a text.
+  AuthSession quickStartNewAccount() {
+    final phone = PhoneNumber(country: kCountries.first, digits: '4155550199');
+    final id = 'demo-${_newId()}';
+    _accounts[phone.e164] = id;
+    _log.info('Demo onboarding start');
+    return AuthSession(userId: id, phone: phone, hasProfile: false);
+  }
+
   @override
   Future<void> signOut() async {}
 
