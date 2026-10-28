@@ -18,9 +18,9 @@ Baseline on `02e5907`:
 | 3 | Event discovery and detail | Done | `lib/features/events/` (model, demo repository, controller), Events tab (5th tab), Explore, filters sheet, details | `events_controller_test` (20), `events_test` (12) | see git log |
 | 4 | RSVP, saved, My events | Done | Join / waitlist / leave / question sheet / failure + retry; My events (Going, Waitlist, Saved, Hosting, Past) | as above | with 3 |
 | 5 | Create, edit, host management | Done | Create / edit / draft / preview / publish / cancel; Who's going with remove and move up | as above; 199 passed, 6 skipped | with 3 |
-| 6 | Profile & visibility model and metrics | Pending | | | |
-| 7 | Overview, suggestions, How this works | Pending | | | |
-| 8 | Integration (profile, settings, Demo Hub) | Pending | | | |
+| 6 | Profile & visibility model and metrics | Done | `lib/features/account_health/application/visibility_report.dart`: pure `VisibilityReport.of`, demo notice and insights sources, live provider | `visibility_report_test` (15) | see git log |
+| 7 | Overview, suggestions, How this works | Done | `/profile/visibility`, `/profile/visibility/about` | `visibility_test` (7) | with 6 |
+| 8 | Integration (profile, settings, Demo Hub) | Done | Profile tab row with status; Settings › Visibility row; Demo Hub Events and Profile & visibility groups; sign-out and demo reset clear both; Settings location no longer shows a sample area as yours | 221 passed, 7 skipped | with 6 |
 | 9 | Visual QA, accessibility, regression, reports | Pending | | | |
 
 ## Blocked or limited

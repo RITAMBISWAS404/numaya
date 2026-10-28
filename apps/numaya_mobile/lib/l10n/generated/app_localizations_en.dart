@@ -4131,4 +4131,472 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get eventFilterWhen => 'When';
+
+  @override
+  String get visTitle => 'Profile & visibility';
+
+  @override
+  String get visLede =>
+      'What Numaya knows about whether people can see your profile, what you can change, and what it can’t tell you.';
+
+  @override
+  String get visVisibility => 'Visibility';
+
+  @override
+  String get visStatusVisible => 'Visible';
+
+  @override
+  String get visStatusPaused => 'Paused';
+
+  @override
+  String get visStatusLimited => 'Limited';
+
+  @override
+  String get visStatusAction => 'Action needed';
+
+  @override
+  String get visStatusCantCheck => 'Can’t check right now';
+
+  @override
+  String get visVisibleBody => 'Your profile can appear in Discover.';
+
+  @override
+  String get visVisibleLimits =>
+      'Based on your settings and a demo notice source. How often a profile is shown also depends on who is nearby and what they’re looking for, which this page can’t see.';
+
+  @override
+  String get visSourceNote =>
+      'Based on your own settings and a demo notice source.';
+
+  @override
+  String get visPausedBody =>
+      'New people can’t see you while you’re paused. Your matches and chats are still here.';
+
+  @override
+  String visPausedUntil(Object date) {
+    return 'New people can’t see you while you’re paused. It ends $date.';
+  }
+
+  @override
+  String get visResume => 'Resume';
+
+  @override
+  String get visLimitedBody =>
+      'Incognito is on: only people you like can see you.';
+
+  @override
+  String get visPrivacySettings => 'Privacy settings';
+
+  @override
+  String get visCantCheckBody =>
+      'We couldn’t check for account notices, so we can’t confirm your visibility. Your own settings are shown below.';
+
+  @override
+  String get visRestrictedTitle => 'Hidden from Discover';
+
+  @override
+  String get visRestrictedBody =>
+      'Numaya has hidden your profile from Discover while a notice is reviewed.';
+
+  @override
+  String get visReviewNotice => 'Review and appeal';
+
+  @override
+  String get visMissingBody =>
+      'Your profile is missing something Discover needs:';
+
+  @override
+  String get visReqProfile => 'Finish setting up your profile';
+
+  @override
+  String get visReqPhotos => 'At least 2 photos';
+
+  @override
+  String get visReqInterests => 'At least 3 interests';
+
+  @override
+  String get visReqPrompt => 'One prompt answered';
+
+  @override
+  String get visCompleteness => 'Profile completeness';
+
+  @override
+  String get visCompletenessNote =>
+      'Six parts with equal weight, from what you’ve entered. Verification and private settings aren’t counted.';
+
+  @override
+  String get visComplete => 'Complete';
+
+  @override
+  String get visIncomplete => 'Incomplete';
+
+  @override
+  String get visDone => 'Done';
+
+  @override
+  String get visDiscovery => 'Discovery setup';
+
+  @override
+  String get visDiscoveryNote => 'These shape who you see, not who sees you.';
+
+  @override
+  String get visArea => 'Your area';
+
+  @override
+  String get visAreaMissing =>
+      'Without one, people see no distance and event distances can’t work.';
+
+  @override
+  String get visNotSet => 'Not set';
+
+  @override
+  String get visSet => 'Set';
+
+  @override
+  String get visOpenTo => 'Who you want to meet';
+
+  @override
+  String get visFilters => 'Discover filters';
+
+  @override
+  String visFiltersFit(int fit, int total) {
+    return 'Fits $fit of $total';
+  }
+
+  @override
+  String get visFiltersEmpty =>
+      'Nobody in the sample fits: Discover would be empty.';
+
+  @override
+  String get visVerification => 'Verification';
+
+  @override
+  String get visVerificationNote =>
+      'Shown on its own and never counted in completeness.';
+
+  @override
+  String get visPhone => 'Phone number';
+
+  @override
+  String get visPhoto => 'Photo verification';
+
+  @override
+  String get visPhotoNotStarted => 'Not started';
+
+  @override
+  String get visPhotoPending => 'In review';
+
+  @override
+  String get visPhotoVerified => 'Verified';
+
+  @override
+  String visPhotoRejected(int left) {
+    String _temp0 = intl.Intl.pluralLogic(
+      left,
+      locale: localeName,
+      other: 'Not approved, $left tries left',
+      one: 'Not approved, 1 try left',
+      zero: 'Not approved',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get visNotices => 'Account notices';
+
+  @override
+  String get visNoNotices => 'No notices';
+
+  @override
+  String get visDemoNoticeSource =>
+      'From the demo notice source. A real account would check Numaya’s safety team.';
+
+  @override
+  String get visNoticeTitle => 'A notice about your profile';
+
+  @override
+  String get visNoticeBody =>
+      'A photo was removed because it didn’t follow the community guidelines. Your profile is still visible.';
+
+  @override
+  String get visReadNotice => 'Read notice';
+
+  @override
+  String get visNoticeSheetTitle => 'About this notice';
+
+  @override
+  String get visNoticeSheetBody =>
+      'One of your photos was removed because it didn’t follow the community guidelines. Nothing else on your account has changed. You can read the guidelines, or contact support if you think this was a mistake.';
+
+  @override
+  String get visDemoNoticeNote =>
+      'Demo: this notice was set from the Demo Hub. No review took place.';
+
+  @override
+  String get visGuidelines => 'Community guidelines';
+
+  @override
+  String get visContactSupport => 'Contact support';
+
+  @override
+  String get visNoticesUnavailable =>
+      'We couldn’t reach the notice source. This doesn’t mean anything is wrong.';
+
+  @override
+  String get visActivity => 'Your activity, last 7 days';
+
+  @override
+  String get visActivityNote =>
+      'Counted from your likes, matches and messages.';
+
+  @override
+  String get visSampleData => 'Sample data';
+
+  @override
+  String get visLikes => 'Likes received';
+
+  @override
+  String get visMatches => 'New matches';
+
+  @override
+  String get visConversations => 'Conversations with messages';
+
+  @override
+  String get visViews => 'Profile views';
+
+  @override
+  String get visNotMeasured => 'Not measured';
+
+  @override
+  String get visActivityUpdated => 'Updated just now.';
+
+  @override
+  String get visActivityStale =>
+      'Last updated 3 days ago: these may be out of date.';
+
+  @override
+  String get visActivityUnavailable =>
+      'Activity counts aren’t available right now';
+
+  @override
+  String get visActivityUnavailableBody =>
+      'Nothing about your account changes while they’re missing.';
+
+  @override
+  String get visActivityEmpty => 'Not enough activity yet';
+
+  @override
+  String get visActivityEmptyBody =>
+      'There’s nothing useful to show for the last 7 days.';
+
+  @override
+  String get visActivityMeaning =>
+      'Counts depend on who is nearby, their preferences and the time of year. They don’t measure you, and a quiet week isn’t a penalty.';
+
+  @override
+  String get visSuggestions => 'Suggestions';
+
+  @override
+  String get visSuggestionsNote => 'Each one says why it’s here.';
+
+  @override
+  String get visNoSuggestions => 'Nothing to suggest';
+
+  @override
+  String get visNoSuggestionsBody =>
+      'Your profile is complete and nothing needs your attention.';
+
+  @override
+  String get visSugRestriction => 'Review the notice';
+
+  @override
+  String get visSugNotice => 'Read the notice';
+
+  @override
+  String get visSugResume => 'Resume Discover';
+
+  @override
+  String get visSugFinish => 'Finish your profile';
+
+  @override
+  String get visSugReqPhotos => 'Add photos';
+
+  @override
+  String get visSugReqInterests => 'Add interests';
+
+  @override
+  String get visSugReqPrompt => 'Answer a prompt';
+
+  @override
+  String get visSugVerify => 'Verify your photos';
+
+  @override
+  String get visSugPhotos => 'Add more photos';
+
+  @override
+  String get visSugPrompts => 'Answer another prompt';
+
+  @override
+  String get visSugBio => 'Write a bio';
+
+  @override
+  String get visSugInterests => 'Add more interests';
+
+  @override
+  String get visSugAbout => 'Fill in About you';
+
+  @override
+  String get visSugMore => 'Add more about you';
+
+  @override
+  String get visSugArea => 'Choose your area';
+
+  @override
+  String get visSugFilters => 'Review your filters';
+
+  @override
+  String get visWhyRestriction => 'Your profile is hidden while it’s reviewed.';
+
+  @override
+  String get visWhyNotice => 'There’s a notice on your account.';
+
+  @override
+  String get visWhyResume => 'You’re paused, so new people can’t see you.';
+
+  @override
+  String get visWhyRequired =>
+      'Discover needs this before your profile can appear.';
+
+  @override
+  String get visWhyVerify =>
+      'Verification is optional; it shows people your photos are you.';
+
+  @override
+  String get visWhyIncomplete => 'This part of your profile isn’t complete.';
+
+  @override
+  String get visWhyArea => 'No area is set.';
+
+  @override
+  String get visWhyFilters => 'Your filters fit nobody in the sample.';
+
+  @override
+  String get visHowItWorks => 'How this works';
+
+  @override
+  String visCheckedAt(Object time) {
+    return 'Checked at $time, on this device.';
+  }
+
+  @override
+  String get visSettingsDetail => 'Visibility, completeness and notices';
+
+  @override
+  String get visAboutMeasuredTitle => 'What is measured';
+
+  @override
+  String get visAboutMeasuredBody =>
+      'Whether your profile can appear in Discover, how complete it is, how Discover is set up for you, your verification, any account notices, and counts of your likes, matches and conversations.';
+
+  @override
+  String get visAboutHowTitle => 'How it’s worked out';
+
+  @override
+  String get visAboutHowBody =>
+      'Visibility is the first of these that applies: a notice hiding your profile, being paused, something Discover needs, the notice source not answering, Incognito; otherwise visible. Completeness is the average of six parts. There is no combined score.';
+
+  @override
+  String get visAboutDataTitle => 'What information is used';
+
+  @override
+  String get visAboutDataBody =>
+      'Your profile entries, your settings (Snooze, Incognito, filters, area), your verification status, the account-notice source and your likes, matches and messages.';
+
+  @override
+  String get visAboutWhenTitle => 'When it updates';
+
+  @override
+  String get visAboutWhenBody =>
+      'Immediately, every time something changes, on this device.';
+
+  @override
+  String get visAboutChangeTitle => 'What you can change';
+
+  @override
+  String get visAboutChangeBody =>
+      'Your profile, Snooze, Incognito, your area, your filters and verification. Each suggestion opens the place to change it.';
+
+  @override
+  String get visAboutCantTitle => 'What this page can’t tell you';
+
+  @override
+  String get visAboutCantBody =>
+      'How other people’s Discover orders profiles, how many people saw yours, or why someone did or didn’t like you. A drop in likes isn’t a sign of a penalty: who is nearby and what they’re looking for change all the time.';
+
+  @override
+  String get visAboutDemoTitle => 'Demo sources';
+
+  @override
+  String get visAboutDemoBody =>
+      'In this build the account notices and the activity counts come from sample data and the Demo Hub. A real account would use Numaya’s services instead.';
+
+  @override
+  String get demoAreaEvents => 'Events';
+
+  @override
+  String get demoEventsNote =>
+      'Sample events relative to today. Joining, hosting and reports stay on this device.';
+
+  @override
+  String get demoEventOpen => 'An open event (Late jazz)';
+
+  @override
+  String get demoEventFull => 'A full event with a waitlist';
+
+  @override
+  String get demoEventCancelled => 'A cancelled event';
+
+  @override
+  String get demoEventOpenSpot => 'Open a spot at board games';
+
+  @override
+  String get demoEventOpenSpotDetail =>
+      'Someone going drops out; the waitlist moves up';
+
+  @override
+  String get demoEventSpotYou => 'A spot opened: you’re going';
+
+  @override
+  String get demoEventSpotOpened => 'A spot opened; the waitlist moved up';
+
+  @override
+  String get demoEventReset => 'Reset events';
+
+  @override
+  String get demoEventResetDone => 'Events back to the sample data';
+
+  @override
+  String get demoVisNote =>
+      'Sets the demo notice and activity sources. Nothing is reviewed or measured.';
+
+  @override
+  String get demoVisNoticeNone => 'Notices: none';
+
+  @override
+  String get demoVisNotice => 'Notices: a photo was removed';
+
+  @override
+  String get demoVisRestricted => 'Notices: hidden while reviewed';
+
+  @override
+  String get demoVisUnavailable => 'Notices: source not answering';
+
+  @override
+  String get demoVisInsightsLive => 'Activity: up to date';
+
+  @override
+  String get demoVisInsightsStale => 'Activity: out of date';
+
+  @override
+  String get demoVisInsightsOff => 'Activity: unavailable';
 }

@@ -2,7 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/logging/app_logger.dart';
+import '../../account_health/application/visibility_report.dart';
 import '../../dating/application/dating_controller.dart';
+import '../../events/application/events_controller.dart';
 import '../../home/application/discovery_filters.dart';
 import '../../onboarding/application/device_permissions.dart';
 import '../../onboarding/application/onboarding_controller.dart';
@@ -117,6 +119,8 @@ class SessionController extends Notifier<AuthSession?> {
     ref.invalidate(accountPrefsProvider);
     ref.invalidate(photoVerificationProvider);
     ref.invalidate(devicePermissionsProvider);
+    ref.invalidate(eventsProvider);
+    ref.invalidate(accountSignalsProvider);
     _log.info('Demo data reset');
   }
 
@@ -132,6 +136,8 @@ class SessionController extends Notifier<AuthSession?> {
     ref.invalidate(accountPrefsProvider);
     ref.invalidate(photoVerificationProvider);
     ref.invalidate(devicePermissionsProvider);
+    ref.invalidate(eventsProvider);
+    ref.invalidate(accountSignalsProvider);
   }
 }
 

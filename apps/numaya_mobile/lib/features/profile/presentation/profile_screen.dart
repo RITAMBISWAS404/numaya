@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../account_health/application/visibility_report.dart';
+import '../../account_health/presentation/visibility_screen.dart';
 import '../../home/presentation/home_shell.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/domain/profile_draft.dart';
@@ -201,6 +203,15 @@ class ProfileScreen extends ConsumerWidget {
                         ListGroup(
                           title: l10n.profileYourProfile,
                           children: [
+                            ListRow(
+                              leading: NumayaIcons.explore,
+                              label: l10n.visTitle,
+                              value: VisibilityScreen.statusLabel(
+                                l10n,
+                                ref.watch(visibilityReportProvider).status,
+                              ),
+                              onTap: () => context.push(Routes.visibility),
+                            ),
                             ListRow(
                               leading: NumayaIcons.public,
                               label: l10n.editPreview,

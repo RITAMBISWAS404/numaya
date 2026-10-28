@@ -496,6 +496,30 @@ class DatingController extends Notifier<DatingState> {
     return out;
   }
 
+  /// Likes received within [window] of now, answered or not (Profile & visibility's activity
+  /// count, from the sample likes).
+  int likesReceivedWithin(Duration window) => [
+    for (final l in _likeEntries)
+      if (Duration(hours: l.hoursAgo) < window) l,
+  ].length;
+
+  /// Matches made within [window] of now.
+  int matchesWithin(Duration window) => [
+    for (final id in state.matches)
+      if (state.matchedAt[id] case final at?
+          when _now.difference(at) < window && state.isActive(id))
+        id,
+  ].length;
+
+  /// Active conversations with a message within [window] of now.
+  int conversationsWithin(Duration window) => [
+    for (final p in conversations())
+      if (_now.difference(lastMessage(p.id)!.at) < window) p,
+  ].length;
+
+  /// Sample profiles not yet decided on (the deck Discover draws from).
+  int candidateCount() => _candidates().length;
+
   /// Likes not yet answered (the tab badge).
   int unansweredLikes() => likes()
       .where((l) => !l.matched && !state.likesHandled.containsKey(l.person.id))

@@ -8,6 +8,7 @@ import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../auth/application/session_controller.dart';
 import '../../dating/application/dating_controller.dart';
+import '../../onboarding/presentation/permission_prompt.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../profile/application/profile_details_controller.dart';
 import '../application/account_prefs.dart';
@@ -218,6 +219,11 @@ class SettingsScreen extends ConsumerWidget {
             footnote: l10n.settingsSnoozeNote,
             children: [
               ListRow(
+                label: l10n.visTitle,
+                detail: l10n.visSettingsDetail,
+                onTap: () => context.push(Routes.visibility),
+              ),
+              ListRow(
                 label: l10n.settingsSnooze,
                 detail: snoozeDetail,
                 switchValue: dating.snoozed,
@@ -246,10 +252,25 @@ class SettingsScreen extends ConsumerWidget {
               ListRow(
                 leading: NumayaIcons.location,
                 label: l10n.settingsCurrentLocation,
+                // The member's own choice; nothing stands in for an area never set (the
+                // same value Profile & visibility shows).
                 value:
                     premium.travelCity ??
                     ref.watch(profileDetailsProvider.select((d) => d.area)) ??
-                    l10n.settingsSampleLocation,
+                    l10n.visNotSet,
+                onTap: premium.travelCity != null
+                    ? null
+                    : () async {
+                        final area = await showAreaSheet(
+                          context,
+                          selected: ref.read(profileDetailsProvider).area,
+                        );
+                        if (area != null) {
+                          ref
+                              .read(profileDetailsProvider.notifier)
+                              .setArea(area);
+                        }
+                      },
               ),
               ListRow(
                 leading: premium.active ? NumayaIcons.public : NumayaIcons.lock,

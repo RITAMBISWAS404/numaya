@@ -161,10 +161,10 @@ Built from the checks above, in this order, at most five:
 2. a notice → Read the notice;
 3. paused → Resume;
 4. a missing Discover requirement → that editor;
-5. photo verification not started or not approved → Verify your photos;
-6. incomplete completeness parts, in the order Photos, Prompts, Bio, Interests, About you, More about you → that editor;
-7. area not set → Choose area;
-8. filters fit 0 → Review filters.
+5. filters fit 0 → Review filters (Discover would be empty, so it comes before optional items);
+6. photo verification not started or not approved → Verify your photos;
+7. incomplete completeness parts, in the order Photos, Prompts, Bio, Interests, About you, More about you → that editor;
+8. area not set → Choose area.
 
 Each shows **why it appears** (the rule that triggered it). There are no suggestions to like, swipe,
 message or use the app more.

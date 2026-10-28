@@ -7065,6 +7065,840 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'When'**
   String get eventFilterWhen;
+
+  /// No description provided for @visTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile & visibility'**
+  String get visTitle;
+
+  /// No description provided for @visLede.
+  ///
+  /// In en, this message translates to:
+  /// **'What Numaya knows about whether people can see your profile, what you can change, and what it can’t tell you.'**
+  String get visLede;
+
+  /// No description provided for @visVisibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Visibility'**
+  String get visVisibility;
+
+  /// No description provided for @visStatusVisible.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible'**
+  String get visStatusVisible;
+
+  /// No description provided for @visStatusPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get visStatusPaused;
+
+  /// No description provided for @visStatusLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Limited'**
+  String get visStatusLimited;
+
+  /// No description provided for @visStatusAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Action needed'**
+  String get visStatusAction;
+
+  /// No description provided for @visStatusCantCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Can’t check right now'**
+  String get visStatusCantCheck;
+
+  /// No description provided for @visVisibleBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile can appear in Discover.'**
+  String get visVisibleBody;
+
+  /// No description provided for @visVisibleLimits.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on your settings and a demo notice source. How often a profile is shown also depends on who is nearby and what they’re looking for, which this page can’t see.'**
+  String get visVisibleLimits;
+
+  /// No description provided for @visSourceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on your own settings and a demo notice source.'**
+  String get visSourceNote;
+
+  /// No description provided for @visPausedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'New people can’t see you while you’re paused. Your matches and chats are still here.'**
+  String get visPausedBody;
+
+  /// No description provided for @visPausedUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'New people can’t see you while you’re paused. It ends {date}.'**
+  String visPausedUntil(Object date);
+
+  /// No description provided for @visResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get visResume;
+
+  /// No description provided for @visLimitedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Incognito is on: only people you like can see you.'**
+  String get visLimitedBody;
+
+  /// No description provided for @visPrivacySettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy settings'**
+  String get visPrivacySettings;
+
+  /// No description provided for @visCantCheckBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t check for account notices, so we can’t confirm your visibility. Your own settings are shown below.'**
+  String get visCantCheckBody;
+
+  /// No description provided for @visRestrictedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden from Discover'**
+  String get visRestrictedTitle;
+
+  /// No description provided for @visRestrictedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Numaya has hidden your profile from Discover while a notice is reviewed.'**
+  String get visRestrictedBody;
+
+  /// No description provided for @visReviewNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Review and appeal'**
+  String get visReviewNotice;
+
+  /// No description provided for @visMissingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile is missing something Discover needs:'**
+  String get visMissingBody;
+
+  /// No description provided for @visReqProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish setting up your profile'**
+  String get visReqProfile;
+
+  /// No description provided for @visReqPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 2 photos'**
+  String get visReqPhotos;
+
+  /// No description provided for @visReqInterests.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 3 interests'**
+  String get visReqInterests;
+
+  /// No description provided for @visReqPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'One prompt answered'**
+  String get visReqPrompt;
+
+  /// No description provided for @visCompleteness.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile completeness'**
+  String get visCompleteness;
+
+  /// No description provided for @visCompletenessNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Six parts with equal weight, from what you’ve entered. Verification and private settings aren’t counted.'**
+  String get visCompletenessNote;
+
+  /// No description provided for @visComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get visComplete;
+
+  /// No description provided for @visIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Incomplete'**
+  String get visIncomplete;
+
+  /// No description provided for @visDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get visDone;
+
+  /// No description provided for @visDiscovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Discovery setup'**
+  String get visDiscovery;
+
+  /// No description provided for @visDiscoveryNote.
+  ///
+  /// In en, this message translates to:
+  /// **'These shape who you see, not who sees you.'**
+  String get visDiscoveryNote;
+
+  /// No description provided for @visArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Your area'**
+  String get visArea;
+
+  /// No description provided for @visAreaMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Without one, people see no distance and event distances can’t work.'**
+  String get visAreaMissing;
+
+  /// No description provided for @visNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get visNotSet;
+
+  /// No description provided for @visSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Set'**
+  String get visSet;
+
+  /// No description provided for @visOpenTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Who you want to meet'**
+  String get visOpenTo;
+
+  /// No description provided for @visFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover filters'**
+  String get visFilters;
+
+  /// No description provided for @visFiltersFit.
+  ///
+  /// In en, this message translates to:
+  /// **'Fits {fit} of {total}'**
+  String visFiltersFit(int fit, int total);
+
+  /// No description provided for @visFiltersEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody in the sample fits: Discover would be empty.'**
+  String get visFiltersEmpty;
+
+  /// No description provided for @visVerification.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification'**
+  String get visVerification;
+
+  /// No description provided for @visVerificationNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown on its own and never counted in completeness.'**
+  String get visVerificationNote;
+
+  /// No description provided for @visPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get visPhone;
+
+  /// No description provided for @visPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo verification'**
+  String get visPhoto;
+
+  /// No description provided for @visPhotoNotStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Not started'**
+  String get visPhotoNotStarted;
+
+  /// No description provided for @visPhotoPending.
+  ///
+  /// In en, this message translates to:
+  /// **'In review'**
+  String get visPhotoPending;
+
+  /// No description provided for @visPhotoVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get visPhotoVerified;
+
+  /// No description provided for @visPhotoRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'{left, plural, =0{Not approved} =1{Not approved, 1 try left} other{Not approved, {left} tries left}}'**
+  String visPhotoRejected(int left);
+
+  /// No description provided for @visNotices.
+  ///
+  /// In en, this message translates to:
+  /// **'Account notices'**
+  String get visNotices;
+
+  /// No description provided for @visNoNotices.
+  ///
+  /// In en, this message translates to:
+  /// **'No notices'**
+  String get visNoNotices;
+
+  /// No description provided for @visDemoNoticeSource.
+  ///
+  /// In en, this message translates to:
+  /// **'From the demo notice source. A real account would check Numaya’s safety team.'**
+  String get visDemoNoticeSource;
+
+  /// No description provided for @visNoticeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A notice about your profile'**
+  String get visNoticeTitle;
+
+  /// No description provided for @visNoticeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A photo was removed because it didn’t follow the community guidelines. Your profile is still visible.'**
+  String get visNoticeBody;
+
+  /// No description provided for @visReadNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Read notice'**
+  String get visReadNotice;
+
+  /// No description provided for @visNoticeSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About this notice'**
+  String get visNoticeSheetTitle;
+
+  /// No description provided for @visNoticeSheetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'One of your photos was removed because it didn’t follow the community guidelines. Nothing else on your account has changed. You can read the guidelines, or contact support if you think this was a mistake.'**
+  String get visNoticeSheetBody;
+
+  /// No description provided for @visDemoNoticeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo: this notice was set from the Demo Hub. No review took place.'**
+  String get visDemoNoticeNote;
+
+  /// No description provided for @visGuidelines.
+  ///
+  /// In en, this message translates to:
+  /// **'Community guidelines'**
+  String get visGuidelines;
+
+  /// No description provided for @visContactSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact support'**
+  String get visContactSupport;
+
+  /// No description provided for @visNoticesUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t reach the notice source. This doesn’t mean anything is wrong.'**
+  String get visNoticesUnavailable;
+
+  /// No description provided for @visActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Your activity, last 7 days'**
+  String get visActivity;
+
+  /// No description provided for @visActivityNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Counted from your likes, matches and messages.'**
+  String get visActivityNote;
+
+  /// No description provided for @visSampleData.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample data'**
+  String get visSampleData;
+
+  /// No description provided for @visLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'Likes received'**
+  String get visLikes;
+
+  /// No description provided for @visMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'New matches'**
+  String get visMatches;
+
+  /// No description provided for @visConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversations with messages'**
+  String get visConversations;
+
+  /// No description provided for @visViews.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile views'**
+  String get visViews;
+
+  /// No description provided for @visNotMeasured.
+  ///
+  /// In en, this message translates to:
+  /// **'Not measured'**
+  String get visNotMeasured;
+
+  /// No description provided for @visActivityUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated just now.'**
+  String get visActivityUpdated;
+
+  /// No description provided for @visActivityStale.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated 3 days ago: these may be out of date.'**
+  String get visActivityStale;
+
+  /// No description provided for @visActivityUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity counts aren’t available right now'**
+  String get visActivityUnavailable;
+
+  /// No description provided for @visActivityUnavailableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing about your account changes while they’re missing.'**
+  String get visActivityUnavailableBody;
+
+  /// No description provided for @visActivityEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough activity yet'**
+  String get visActivityEmpty;
+
+  /// No description provided for @visActivityEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'There’s nothing useful to show for the last 7 days.'**
+  String get visActivityEmptyBody;
+
+  /// No description provided for @visActivityMeaning.
+  ///
+  /// In en, this message translates to:
+  /// **'Counts depend on who is nearby, their preferences and the time of year. They don’t measure you, and a quiet week isn’t a penalty.'**
+  String get visActivityMeaning;
+
+  /// No description provided for @visSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions'**
+  String get visSuggestions;
+
+  /// No description provided for @visSuggestionsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Each one says why it’s here.'**
+  String get visSuggestionsNote;
+
+  /// No description provided for @visNoSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to suggest'**
+  String get visNoSuggestions;
+
+  /// No description provided for @visNoSuggestionsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile is complete and nothing needs your attention.'**
+  String get visNoSuggestionsBody;
+
+  /// No description provided for @visSugRestriction.
+  ///
+  /// In en, this message translates to:
+  /// **'Review the notice'**
+  String get visSugRestriction;
+
+  /// No description provided for @visSugNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the notice'**
+  String get visSugNotice;
+
+  /// No description provided for @visSugResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume Discover'**
+  String get visSugResume;
+
+  /// No description provided for @visSugFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish your profile'**
+  String get visSugFinish;
+
+  /// No description provided for @visSugReqPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photos'**
+  String get visSugReqPhotos;
+
+  /// No description provided for @visSugReqInterests.
+  ///
+  /// In en, this message translates to:
+  /// **'Add interests'**
+  String get visSugReqInterests;
+
+  /// No description provided for @visSugReqPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer a prompt'**
+  String get visSugReqPrompt;
+
+  /// No description provided for @visSugVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your photos'**
+  String get visSugVerify;
+
+  /// No description provided for @visSugPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Add more photos'**
+  String get visSugPhotos;
+
+  /// No description provided for @visSugPrompts.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer another prompt'**
+  String get visSugPrompts;
+
+  /// No description provided for @visSugBio.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a bio'**
+  String get visSugBio;
+
+  /// No description provided for @visSugInterests.
+  ///
+  /// In en, this message translates to:
+  /// **'Add more interests'**
+  String get visSugInterests;
+
+  /// No description provided for @visSugAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in About you'**
+  String get visSugAbout;
+
+  /// No description provided for @visSugMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Add more about you'**
+  String get visSugMore;
+
+  /// No description provided for @visSugArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your area'**
+  String get visSugArea;
+
+  /// No description provided for @visSugFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Review your filters'**
+  String get visSugFilters;
+
+  /// No description provided for @visWhyRestriction.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile is hidden while it’s reviewed.'**
+  String get visWhyRestriction;
+
+  /// No description provided for @visWhyNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'There’s a notice on your account.'**
+  String get visWhyNotice;
+
+  /// No description provided for @visWhyResume.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re paused, so new people can’t see you.'**
+  String get visWhyResume;
+
+  /// No description provided for @visWhyRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover needs this before your profile can appear.'**
+  String get visWhyRequired;
+
+  /// No description provided for @visWhyVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification is optional; it shows people your photos are you.'**
+  String get visWhyVerify;
+
+  /// No description provided for @visWhyIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'This part of your profile isn’t complete.'**
+  String get visWhyIncomplete;
+
+  /// No description provided for @visWhyArea.
+  ///
+  /// In en, this message translates to:
+  /// **'No area is set.'**
+  String get visWhyArea;
+
+  /// No description provided for @visWhyFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Your filters fit nobody in the sample.'**
+  String get visWhyFilters;
+
+  /// No description provided for @visHowItWorks.
+  ///
+  /// In en, this message translates to:
+  /// **'How this works'**
+  String get visHowItWorks;
+
+  /// No description provided for @visCheckedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked at {time}, on this device.'**
+  String visCheckedAt(Object time);
+
+  /// No description provided for @visSettingsDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Visibility, completeness and notices'**
+  String get visSettingsDetail;
+
+  /// No description provided for @visAboutMeasuredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What is measured'**
+  String get visAboutMeasuredTitle;
+
+  /// No description provided for @visAboutMeasuredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Whether your profile can appear in Discover, how complete it is, how Discover is set up for you, your verification, any account notices, and counts of your likes, matches and conversations.'**
+  String get visAboutMeasuredBody;
+
+  /// No description provided for @visAboutHowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How it’s worked out'**
+  String get visAboutHowTitle;
+
+  /// No description provided for @visAboutHowBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Visibility is the first of these that applies: a notice hiding your profile, being paused, something Discover needs, the notice source not answering, Incognito; otherwise visible. Completeness is the average of six parts. There is no combined score.'**
+  String get visAboutHowBody;
+
+  /// No description provided for @visAboutDataTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What information is used'**
+  String get visAboutDataTitle;
+
+  /// No description provided for @visAboutDataBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile entries, your settings (Snooze, Incognito, filters, area), your verification status, the account-notice source and your likes, matches and messages.'**
+  String get visAboutDataBody;
+
+  /// No description provided for @visAboutWhenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When it updates'**
+  String get visAboutWhenTitle;
+
+  /// No description provided for @visAboutWhenBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Immediately, every time something changes, on this device.'**
+  String get visAboutWhenBody;
+
+  /// No description provided for @visAboutChangeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What you can change'**
+  String get visAboutChangeTitle;
+
+  /// No description provided for @visAboutChangeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile, Snooze, Incognito, your area, your filters and verification. Each suggestion opens the place to change it.'**
+  String get visAboutChangeBody;
+
+  /// No description provided for @visAboutCantTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What this page can’t tell you'**
+  String get visAboutCantTitle;
+
+  /// No description provided for @visAboutCantBody.
+  ///
+  /// In en, this message translates to:
+  /// **'How other people’s Discover orders profiles, how many people saw yours, or why someone did or didn’t like you. A drop in likes isn’t a sign of a penalty: who is nearby and what they’re looking for change all the time.'**
+  String get visAboutCantBody;
+
+  /// No description provided for @visAboutDemoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo sources'**
+  String get visAboutDemoTitle;
+
+  /// No description provided for @visAboutDemoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'In this build the account notices and the activity counts come from sample data and the Demo Hub. A real account would use Numaya’s services instead.'**
+  String get visAboutDemoBody;
+
+  /// No description provided for @demoAreaEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Events'**
+  String get demoAreaEvents;
+
+  /// No description provided for @demoEventsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample events relative to today. Joining, hosting and reports stay on this device.'**
+  String get demoEventsNote;
+
+  /// No description provided for @demoEventOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'An open event (Late jazz)'**
+  String get demoEventOpen;
+
+  /// No description provided for @demoEventFull.
+  ///
+  /// In en, this message translates to:
+  /// **'A full event with a waitlist'**
+  String get demoEventFull;
+
+  /// No description provided for @demoEventCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'A cancelled event'**
+  String get demoEventCancelled;
+
+  /// No description provided for @demoEventOpenSpot.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a spot at board games'**
+  String get demoEventOpenSpot;
+
+  /// No description provided for @demoEventOpenSpotDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone going drops out; the waitlist moves up'**
+  String get demoEventOpenSpotDetail;
+
+  /// No description provided for @demoEventSpotYou.
+  ///
+  /// In en, this message translates to:
+  /// **'A spot opened: you’re going'**
+  String get demoEventSpotYou;
+
+  /// No description provided for @demoEventSpotOpened.
+  ///
+  /// In en, this message translates to:
+  /// **'A spot opened; the waitlist moved up'**
+  String get demoEventSpotOpened;
+
+  /// No description provided for @demoEventReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset events'**
+  String get demoEventReset;
+
+  /// No description provided for @demoEventResetDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Events back to the sample data'**
+  String get demoEventResetDone;
+
+  /// No description provided for @demoVisNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Sets the demo notice and activity sources. Nothing is reviewed or measured.'**
+  String get demoVisNote;
+
+  /// No description provided for @demoVisNoticeNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Notices: none'**
+  String get demoVisNoticeNone;
+
+  /// No description provided for @demoVisNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Notices: a photo was removed'**
+  String get demoVisNotice;
+
+  /// No description provided for @demoVisRestricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Notices: hidden while reviewed'**
+  String get demoVisRestricted;
+
+  /// No description provided for @demoVisUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Notices: source not answering'**
+  String get demoVisUnavailable;
+
+  /// No description provided for @demoVisInsightsLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity: up to date'**
+  String get demoVisInsightsLive;
+
+  /// No description provided for @demoVisInsightsStale.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity: out of date'**
+  String get demoVisInsightsStale;
+
+  /// No description provided for @demoVisInsightsOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity: unavailable'**
+  String get demoVisInsightsOff;
 }
 
 class _AppLocalizationsDelegate

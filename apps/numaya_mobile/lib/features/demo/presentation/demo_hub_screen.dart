@@ -5,8 +5,10 @@ import 'package:go_router/go_router.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../account_health/application/visibility_report.dart';
 import '../../auth/application/session_controller.dart';
 import '../../dating/application/dating_controller.dart';
+import '../../events/application/events_controller.dart';
 import '../../home/presentation/filters_sheet.dart';
 import '../../onboarding/application/device_permissions.dart';
 import '../../onboarding/application/onboarding_controller.dart';
@@ -25,6 +27,7 @@ class DemoHubScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final signals = ref.watch(accountSignalsProvider);
     final session = ref.watch(sessionProvider);
     final signedIn = session != null && session.hasProfile;
     final world = ref.watch(demoWorldProvider);
@@ -209,6 +212,87 @@ class DemoHubScreen extends ConsumerWidget {
               ),
               link(l10n.demoSampleProfile, '${Routes.person}/ben?decide=1'),
               link(l10n.paywallTitle, Routes.paywall),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sectionGap),
+          ListGroup(
+            title: l10n.demoAreaEvents,
+            footnote: l10n.demoEventsNote,
+            children: [
+              ListRow(
+                label: l10n.eventsExplore,
+                detail: signedIn ? null : needsSession,
+                onTap: signedIn ? () => context.go(Routes.events) : null,
+              ),
+              ListRow(
+                label: l10n.eventsMine,
+                detail: signedIn ? null : needsSession,
+                onTap: signedIn
+                    ? () => context.go('${Routes.events}?view=mine')
+                    : null,
+              ),
+              link(l10n.demoEventOpen, '${Routes.event}/e-jazz'),
+              link(l10n.demoEventFull, '${Routes.event}/e-board'),
+              link(l10n.demoEventCancelled, '${Routes.event}/e-poetry'),
+              link(l10n.eventCreate, Routes.eventNew),
+              ListRow(
+                label: l10n.demoEventOpenSpot,
+                detail: l10n.demoEventOpenSpotDetail,
+                onTap: signedIn
+                    ? () {
+                        final moved = ref
+                            .read(eventsProvider.notifier)
+                            .openSpot('e-board');
+                        NumayaToast.show(
+                          context,
+                          moved
+                              ? l10n.demoEventSpotYou
+                              : l10n.demoEventSpotOpened,
+                        );
+                      }
+                    : null,
+              ),
+              ListRow(
+                label: l10n.demoEventReset,
+                onTap: () {
+                  ref.read(eventsProvider.notifier).reset();
+                  NumayaToast.show(context, l10n.demoEventResetDone);
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sectionGap),
+          ListGroup(
+            title: l10n.visTitle,
+            footnote: l10n.demoVisNote,
+            children: [
+              link(l10n.visTitle, Routes.visibility),
+              link(l10n.visHowItWorks, Routes.visibilityAbout),
+              for (final (state, label) in [
+                (NoticeState.none, l10n.demoVisNoticeNone),
+                (NoticeState.notice, l10n.demoVisNotice),
+                (NoticeState.restricted, l10n.demoVisRestricted),
+                (NoticeState.unavailable, l10n.demoVisUnavailable),
+              ])
+                ListRow(
+                  label: label,
+                  value: signals.notice == state ? l10n.eventSelected : null,
+                  onTap: () => ref
+                      .read(accountSignalsProvider.notifier)
+                      .setNotice(state),
+                ),
+              for (final (state, label) in [
+                (InsightsState.live, l10n.demoVisInsightsLive),
+                (InsightsState.stale, l10n.demoVisInsightsStale),
+                (InsightsState.unavailable, l10n.demoVisInsightsOff),
+              ])
+                ListRow(
+                  label: label,
+                  value: signals.insights == state ? l10n.eventSelected : null,
+                  onTap: () => ref
+                      .read(accountSignalsProvider.notifier)
+                      .setInsights(state),
+                ),
             ],
           ),
           const SizedBox(height: AppSpacing.sectionGap),

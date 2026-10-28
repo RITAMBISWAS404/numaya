@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/design_system/design_system.dart';
+import '../features/account_health/presentation/visibility_screen.dart';
 import '../features/auth/application/session_controller.dart';
 import '../features/auth/application/verification_controller.dart';
 import '../features/auth/domain/auth_repository.dart';
@@ -256,6 +257,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const SafetyCentreScreen(),
       ),
       _route(path: Routes.forYou, builder: (_, _) => const ForYouScreen()),
+      _route(
+        path: Routes.visibility,
+        builder: (_, _) => const VisibilityScreen(),
+        routes: [
+          _route(
+            path: 'about',
+            builder: (_, _) => const VisibilityAboutScreen(),
+          ),
+        ],
+      ),
       _route(path: Routes.eventNew, builder: (_, _) => const EventFormScreen()),
       _route(
         path: '${Routes.event}/:id',
