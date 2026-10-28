@@ -5499,6 +5499,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Demo build'**
   String get obDemoBuild;
+
+  /// No description provided for @discoverUndone.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is back'**
+  String discoverUndone(Object name);
+
+  /// No description provided for @discoverCoach.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe right to like, left to pass. Scroll for more about them.'**
+  String get discoverCoach;
+
+  /// No description provided for @discoverCoachDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide tip'**
+  String get discoverCoachDismiss;
+
+  /// No description provided for @discoverMoreAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'Show more about {name}'**
+  String discoverMoreAbout(Object name);
+
+  /// No description provided for @discoverPhotoCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 photo} other{{count} photos}}'**
+  String discoverPhotoCount(int count);
+
+  /// No description provided for @discoverOpenPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'See {name}’s photos'**
+  String discoverOpenPhotos(Object name);
+
+  /// No description provided for @discoverReportBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Report or block {name}'**
+  String discoverReportBlock(Object name);
+
+  /// No description provided for @discoverSeenAllLikedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You liked everyone you saw. New people don’t arrive in this demo, so check who likes you instead.'**
+  String get discoverSeenAllLikedBody;
+
+  /// No description provided for @discoverSeeLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'See who likes you'**
+  String get discoverSeeLikes;
+
+  /// No description provided for @discoverErrorStillTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Still can’t load profiles'**
+  String get discoverErrorStillTitle;
+
+  /// No description provided for @discoverFiltersChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters, changed from your preferences'**
+  String get discoverFiltersChanged;
+
+  /// No description provided for @photoViewerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}’s photos'**
+  String photoViewerTitle(Object name);
+
+  /// No description provided for @photoViewerPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {position} of {count}'**
+  String photoViewerPosition(int position, int count);
+
+  /// No description provided for @photoViewerNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next photo'**
+  String get photoViewerNext;
+
+  /// No description provided for @photoViewerPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous photo'**
+  String get photoViewerPrevious;
+
+  /// No description provided for @photoViewerNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Placeholders. Sample profiles have no real photos.'**
+  String get photoViewerNote;
 }
 
 class _AppLocalizationsDelegate

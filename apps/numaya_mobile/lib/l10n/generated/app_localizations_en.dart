@@ -3167,4 +3167,75 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get obDemoBuild => 'Demo build';
+
+  @override
+  String discoverUndone(Object name) {
+    return '$name is back';
+  }
+
+  @override
+  String get discoverCoach =>
+      'Swipe right to like, left to pass. Scroll for more about them.';
+
+  @override
+  String get discoverCoachDismiss => 'Hide tip';
+
+  @override
+  String discoverMoreAbout(Object name) {
+    return 'Show more about $name';
+  }
+
+  @override
+  String discoverPhotoCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count photos',
+      one: '1 photo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String discoverOpenPhotos(Object name) {
+    return 'See $name’s photos';
+  }
+
+  @override
+  String discoverReportBlock(Object name) {
+    return 'Report or block $name';
+  }
+
+  @override
+  String get discoverSeenAllLikedBody =>
+      'You liked everyone you saw. New people don’t arrive in this demo, so check who likes you instead.';
+
+  @override
+  String get discoverSeeLikes => 'See who likes you';
+
+  @override
+  String get discoverErrorStillTitle => 'Still can’t load profiles';
+
+  @override
+  String get discoverFiltersChanged => 'Filters, changed from your preferences';
+
+  @override
+  String photoViewerTitle(Object name) {
+    return '$name’s photos';
+  }
+
+  @override
+  String photoViewerPosition(int position, int count) {
+    return 'Photo $position of $count';
+  }
+
+  @override
+  String get photoViewerNext => 'Next photo';
+
+  @override
+  String get photoViewerPrevious => 'Previous photo';
+
+  @override
+  String get photoViewerNote =>
+      'Placeholders. Sample profiles have no real photos.';
 }

@@ -157,7 +157,8 @@ void main() {
     await tapOn(tester, find.text('Show them again'));
     expect(find.text('Maya, 29'), findsOneWidget);
 
-    await tapOn(tester, _action('Filters'));
+    // Widened filters differ from the sign-up preferences, and the button says so.
+    await tapOn(tester, _action('Filters, changed from your preferences'));
     await tester.pumpAndSettle();
     expect(find.text('Show 6 people'), findsOneWidget);
     await settle(tester);
@@ -334,7 +335,8 @@ void main() {
       await tapOn(tester, find.text('Try again'));
       expect(find.bySemanticsLabel('Loading'), findsOneWidget);
       await tester.pump(const Duration(milliseconds: 800));
-      expect(find.text('We couldn’t load profiles'), findsOneWidget);
+      // The retry failed again, and the error says so.
+      expect(find.text('Still can’t load profiles'), findsOneWidget);
 
       await openTab(tester, 'Messages');
       await tapOn(tester, _action('Message Maya'));

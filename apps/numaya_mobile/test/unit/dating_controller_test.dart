@@ -87,6 +87,84 @@ void main() {
     });
   });
 
+  group('Discover: undo, show again, coach', () {
+    test('undo returns a pass made out of deck order to the front', () {
+      // Passed from For you or a profile page: Léa sits last in the deck.
+      dating().decide('lea', liked: false);
+      expect(dating().undo()?.id, 'lea');
+      expect(queueIds().first, 'lea');
+      // Deciding on them clears the priority.
+      dating().decide('lea', liked: true);
+      expect(state().front, isNull);
+    });
+
+    test('undo is only for a pass, and returns who came back', () {
+      dating().decide('maya', liked: true);
+      expect(dating().undo(), isNull);
+      dating().decide('sam', liked: false);
+      expect(dating().undo()?.name, 'Sam');
+      expect(dating().undo(), isNull);
+    });
+
+    test('show them again brings back passes, never people already liked', () {
+      dating().decide('sam', liked: true);
+      dating().superSwipe('noor');
+      dating().decide('ines', liked: false);
+      dating().decide('lea', liked: false);
+      expect(dating().passedCount(), 2);
+      dating().resetDiscovery();
+      expect(queueIds(), isNot(contains('sam')));
+      expect(queueIds(), isNot(contains('noor')));
+      expect(queueIds(), containsAll(['ines', 'lea']));
+      expect(dating().passedCount(), 0);
+    });
+
+    test('the swipe tip ends with the first decision or when hidden', () {
+      expect(state().coachDone, isFalse);
+      dating().decide('sam', liked: false);
+      expect(state().coachDone, isTrue);
+      container.invalidate(datingProvider);
+      dating().dismissCoach();
+      expect(state().coachDone, isTrue);
+    });
+  });
+
+  group('Filters: sign-up preferences', () {
+    DiscoveryFiltersController filters() =>
+        container.read(discoveryFiltersProvider.notifier);
+
+    test(
+      'reset returns to the preferences set at sign-up, not app defaults',
+      () {
+        filters().save(
+          const DiscoveryFilters(minAge: 26, maxAge: 38),
+          asDefaults: true,
+        );
+        expect(filters().narrowed, isFalse);
+        filters().save(
+          container
+              .read(discoveryFiltersProvider)
+              .copyWith(verifiedOnly: true, maxDistanceKm: 5),
+        );
+        expect(filters().narrowed, isTrue);
+        filters().reset();
+        final f = container.read(discoveryFiltersProvider);
+        expect(
+          (f.minAge, f.maxAge, f.verifiedOnly, f.maxDistanceKm),
+          (26, 38, false, 25),
+        );
+        expect(filters().narrowed, isFalse);
+      },
+    );
+
+    test('filters change who Discover shows', () {
+      expect(queueIds(), contains('sam'));
+      filters().save(const DiscoveryFilters(minAge: 24, maxAge: 30));
+      expect(queueIds(), isNot(contains('sam'))); // 31
+      expect(queueIds(), contains('maya')); // 29
+    });
+  });
+
   group('Likes', () {
     test(
       'lists the sample likes, newest first, with new and nearby filters',

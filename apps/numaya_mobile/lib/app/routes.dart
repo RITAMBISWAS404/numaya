@@ -65,6 +65,10 @@ abstract final class Routes {
   static const chat = '/chat';
   static const person = '/person';
 
+  /// A sample person's photos, opened at photo [start] (1-based).
+  static String personPhotos(String id, {int start = 1}) =>
+      '$person/$id/photos?start=$start';
+
   /// Query parameter on [phone]: `?intent=signin` for returning members.
   static const intentSignIn = 'signin';
 

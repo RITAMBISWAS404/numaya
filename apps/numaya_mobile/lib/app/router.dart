@@ -15,6 +15,7 @@ import '../features/dating/presentation/for_you_screen.dart';
 import '../features/dating/presentation/likes_screens.dart';
 import '../features/dating/presentation/match_screen.dart';
 import '../features/dating/presentation/messages_screens.dart';
+import '../features/dating/presentation/photo_viewer_screen.dart';
 import '../features/demo/presentation/demo_hub_screen.dart';
 import '../features/help/presentation/help_screens.dart';
 import '../features/home/presentation/home_shell.dart';
@@ -299,6 +300,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, state) => PersonProfileScreen(
           personId: state.pathParameters['id']!,
           canDecide: state.uri.queryParameters['decide'] == '1',
+        ),
+      ),
+      _route(
+        path: '${Routes.person}/:id/photos',
+        builder: (_, state) => PhotoViewerScreen(
+          personId: state.pathParameters['id']!,
+          start: int.tryParse(state.uri.queryParameters['start'] ?? '') ?? 1,
         ),
       ),
       _route(path: Routes.blocked, builder: (_, _) => const BlockedScreen()),

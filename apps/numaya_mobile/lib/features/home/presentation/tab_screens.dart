@@ -13,7 +13,12 @@ class TabPage extends StatelessWidget {
     this.scrollController,
     this.topGap = true,
     this.gutter = AppSpacing.gutter,
+    this.overlay,
   });
+
+  /// Floats over the bottom of the scrolling area (Discover's action bar while reading a
+  /// profile).
+  final Widget? overlay;
 
   final Widget header;
   final String? subtitle;
@@ -51,38 +56,40 @@ class TabPage extends StatelessWidget {
                   child: LayoutBuilder(
                     builder: (context, box) => _TabViewport(
                       height: box.maxHeight,
-                      child: SingleChildScrollView(
-                        controller: scrollController,
-                        padding: EdgeInsets.fromLTRB(
-                          gutter,
-                          0,
-                          gutter,
-                          AppSpacing.s6,
-                        ),
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minHeight: centered
-                                ? box.maxHeight - AppSpacing.s6
-                                : 0,
+                      child: _withOverlay(
+                        SingleChildScrollView(
+                          controller: scrollController,
+                          padding: EdgeInsets.fromLTRB(
+                            gutter,
+                            0,
+                            gutter,
+                            AppSpacing.s6,
                           ),
-                          child: Column(
-                            mainAxisAlignment: centered
-                                ? MainAxisAlignment.center
-                                : MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              if (subtitle != null) ...[
-                                Text(
-                                  subtitle!,
-                                  style: AppTypography.bodySm.copyWith(
-                                    color: AppColors.textSecondary,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minHeight: centered
+                                  ? box.maxHeight - AppSpacing.s6
+                                  : 0,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: centered
+                                  ? MainAxisAlignment.center
+                                  : MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                if (subtitle != null) ...[
+                                  Text(
+                                    subtitle!,
+                                    style: AppTypography.bodySm.copyWith(
+                                      color: AppColors.textSecondary,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: AppSpacing.s4),
-                              ] else if (!centered && topGap)
-                                const SizedBox(height: AppSpacing.s4),
-                              child,
-                            ],
+                                  const SizedBox(height: AppSpacing.s4),
+                                ] else if (!centered && topGap)
+                                  const SizedBox(height: AppSpacing.s4),
+                                child,
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -96,6 +103,15 @@ class TabPage extends StatelessWidget {
       ),
     );
   }
+
+  Widget _withOverlay(Widget scroll) => overlay == null
+      ? scroll
+      : Stack(
+          children: [
+            Positioned.fill(child: scroll),
+            Positioned(left: 0, right: 0, bottom: 0, child: overlay!),
+          ],
+        );
 }
 
 class _TabViewport extends InheritedWidget {

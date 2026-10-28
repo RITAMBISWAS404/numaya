@@ -121,7 +121,7 @@ Tabs: Home (Discover) · Likes · Messages · Profile
 | ID | Screen | Req | Flutter route | Status | States covered | Tests | Dependency / note |
 |---|---|---|---|---|---|---|---|
 | B-30 | People stack | Core | `/home` | Done | like, pass, swipe, undo, SuperSwipe (credits → paywall), fallback banner, retry skeleton, error, snoozed | `dating_test`, `full_app_test` | Real profiles need a backend |
-| B-31 | Swipe coach mark | Optional | — | Deferred | — | — | Would cover the card on first run and change Home's V16-matched first screen; the swipe is explained by the card's screen-reader hint and the buttons below it. Re-checked in the quality pass: still low priority |
+| B-31 | Swipe coach mark | Optional | `/home` first card | Done | tip on the first card; hidden by ✕ or the first decision | `discovery_test` | A small card on the photo instead of a dimmed overlay, so the profile stays visible (DISCOVERY_SCREEN_INVENTORY DD-9) |
 | B-32 | Expanded profile | Core | `/home` scroll, `/person/:id?decide=1` | Done | prompts (up to 3), about me with bio and details, shared interests, location, photos, Like / Pass | `dating_test`, `full_app_journeys_test` | — |
 | B-33 | Curated Discover ("For you") | Supporting | `/for-you` | Done | picks, refresh countdown, empty | `full_app_journeys_test`, unit | P-08: both formats offered |
 | B-34 | Filters: basic | Core | sheet | Done | who to date, age + fallback, distance + fallback, verified only, live count, none fit, reset | `dating_test`, `full_app_journeys_test` | — |
@@ -194,9 +194,9 @@ Reference screen IDs in the catalogue: **69 rows** (B-01–B-77 as listed, with 
 
 | Status | Rows | IDs |
 |---|---|---|
-| Done | 51 | B-02–B-06, B-07a, B-10–B-13, B-15, B-17, B-20, B-21, B-23–B-27, B-30, B-32–B-35, B-37, B-40–B-43, B-45–B-47, B-50–B-56, B-58–B-64, B-70–B-72, B-74, B-75 |
+| Done | 52 | B-02–B-06, B-07a, B-10–B-13, B-15, B-17, B-20, B-21, B-23–B-27, B-30, B-31, B-32–B-35, B-37, B-40–B-43, B-45–B-47, B-50–B-56, B-58–B-64, B-70–B-72, B-74, B-75 |
 | Partial | 4 | B-44 (text only), B-57 (no camera), B-65 (no store), B-77 (no real network) |
-| Deferred | 9 | B-01, B-07b, B-09, B-16, B-18, B-28, B-31, B-73, B-76 |
+| Deferred | 8 | B-01, B-07b, B-09, B-16, B-18, B-28, B-73, B-76 |
 | Out of scope | 5 | B-08, B-14, B-19, B-22, B-36 |
 
 Flows F1–F29: **27 implemented** (F1–F5, F7–F23, F25–F29), of which F15 is text-only, F20 and F21 are

@@ -359,7 +359,7 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
           label: l10n.filtersShowCount(count),
           onPressed: () {
             ref.read(discoveryFiltersProvider.notifier).save(_draft);
-            NumayaToast.show(context, l10n.filtersSaved, aboveFooter: false);
+            NumayaToast.show(context, l10n.filtersSaved, belowHeader: true);
             Navigator.of(context).pop();
           },
         ),
@@ -376,7 +376,8 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
         NumayaButton(
           label: l10n.filtersReset,
           variant: NumayaButtonVariant.secondary,
-          onPressed: () => _set(const DiscoveryFilters()),
+          onPressed: () =>
+              _set(ref.read(discoveryFiltersProvider.notifier).defaults),
         ),
       ],
     );

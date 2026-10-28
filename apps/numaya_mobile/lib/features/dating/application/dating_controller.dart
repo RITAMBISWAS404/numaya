@@ -95,8 +95,11 @@ enum LikeFilter { all, newLikes, nearby }
 class DatingState {
   const DatingState({
     this.seen = const {},
+    this.liked = const {},
     this.matches = const [],
     this.lastPass,
+    this.front,
+    this.coachDone = false,
     this.likesHandled = const {},
     this.threads = const {},
     this.openedMatches = const {},
@@ -117,6 +120,16 @@ class DatingState {
 
   /// Sample profiles already liked or passed in Discover.
   final Set<String> seen;
+
+  /// The people in [seen] who were liked (or SuperSwiped). A like is sent, so they never come back
+  /// round when the passed people are shown again.
+  final Set<String> liked;
+
+  /// Someone brought back by Undo: shown first, wherever they sit in the deck.
+  final String? front;
+
+  /// The swipe hint on the first card has been read or acted on (B-31).
+  final bool coachDone;
 
   /// Matched people, newest last.
   final List<String> matches;
@@ -167,9 +180,13 @@ class DatingState {
 
   DatingState copyWith({
     Set<String>? seen,
+    Set<String>? liked,
     List<String>? matches,
     String? lastPass,
     bool clearLastPass = false,
+    String? front,
+    bool clearFront = false,
+    bool? coachDone,
     Map<String, bool>? likesHandled,
     Map<String, List<DemoMessage>>? threads,
     Set<String>? openedMatches,
@@ -189,8 +206,11 @@ class DatingState {
   }) {
     return DatingState(
       seen: seen ?? this.seen,
+      liked: liked ?? this.liked,
       matches: matches ?? this.matches,
       lastPass: clearLastPass ? null : (lastPass ?? this.lastPass),
+      front: clearFront ? null : (front ?? this.front),
+      coachDone: coachDone ?? this.coachDone,
       likesHandled: likesHandled ?? this.likesHandled,
       threads: threads ?? this.threads,
       openedMatches: openedMatches ?? this.openedMatches,
@@ -336,11 +356,16 @@ class DatingController extends Notifier<DatingState> {
       for (final p in _candidates())
         if (_fits(f, p)) p,
     ];
-    if (strict.isNotEmpty) return strict;
-    return [
-      for (final p in _candidates())
-        if (_fits(f, p, relaxed: true)) p,
-    ];
+    final out = strict.isNotEmpty
+        ? strict
+        : [
+            for (final p in _candidates())
+              if (_fits(f, p, relaxed: true)) p,
+          ];
+    // Someone brought back by Undo comes first, as they were before the pass.
+    final i = out.indexWhere((p) => p.id == state.front);
+    if (i > 0) out.insert(0, out.removeAt(i));
+    return out;
   }
 
   /// True when the queue is showing people outside the filters because of a fallback.
@@ -359,8 +384,11 @@ class DatingController extends Notifier<DatingState> {
     final isMatch = liked && person.likesYou && !state.matches.contains(id);
     state = state.copyWith(
       seen: {...state.seen, id},
+      liked: liked ? {...state.liked, id} : null,
       lastPass: liked ? null : id,
       clearLastPass: liked,
+      clearFront: state.front == id,
+      coachDone: true,
       likesHandled: liked && person.likesYou
           ? {...state.likesHandled, id: true}
           : null,
@@ -390,19 +418,40 @@ class DatingController extends Notifier<DatingState> {
   int get superSwipesLeft =>
       state.superSwipes + ref.read(premiumProvider).extraSuperSwipes;
 
-  /// Bring back the last person passed.
-  void undo() {
+  /// Bring back the last person passed, at the front of the queue. One step only, and only for a
+  /// pass: a like has been sent (Bumble's Backtrack works the same way). Returns who came back.
+  SamplePerson? undo() {
     final id = state.lastPass;
-    if (id == null) return;
+    if (id == null) return null;
     state = state.copyWith(
       seen: {...state.seen}..remove(id),
       clearLastPass: true,
+      front: id,
     );
+    return personById(id);
   }
 
-  /// "Show them again": everyone passed comes back around.
-  void resetDiscovery() =>
-      state = state.copyWith(seen: {}, clearLastPass: true);
+  /// People passed in Discover who could be shown again (not liked, matched or ended).
+  int passedCount() => [
+    for (final id in state.seen)
+      if (!state.liked.contains(id) &&
+          !state.matches.contains(id) &&
+          state.isActive(id))
+        id,
+  ].length;
+
+  /// "Show them again": everyone passed comes back around. People liked stay liked.
+  void resetDiscovery() => state = state.copyWith(
+    seen: {
+      for (final id in state.seen)
+        if (state.liked.contains(id)) id,
+    },
+    clearLastPass: true,
+    clearFront: true,
+  );
+
+  /// The first-card swipe hint was dismissed.
+  void dismissCoach() => state = state.copyWith(coachDone: true);
 
   /// "For you" (B-33): up to four undecided people with the most in common, regardless of the
   /// filters, refreshed daily.

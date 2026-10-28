@@ -98,6 +98,7 @@ const fullAppRoutes = [
   '${Routes.chat}/jo',
   '${Routes.chat}/ollie',
   Routes.forYou,
+  '${Routes.person}/maya/photos?start=2',
   Routes.profile,
   Routes.completion,
   Routes.editProfile,

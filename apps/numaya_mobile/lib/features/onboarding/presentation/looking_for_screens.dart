@@ -63,6 +63,7 @@ class _MeetScreenState extends ConsumerState<MeetScreen> {
             minAge: _ages.start.round(),
             maxAge: _ages.end.round(),
           ),
+      asDefaults: true,
     );
     continueFrom(context, ref, SetupStep.meet);
   }

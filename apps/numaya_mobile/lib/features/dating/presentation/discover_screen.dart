@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:math' as math;
+
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +23,11 @@ import 'safety_sheets.dart';
 /// Home (B-30 / B-32, V16 019–024): one sample profile at a time as a scroll (photo card, prompt,
 /// about me, shared interests, location, photos) ending in Pass / SuperSwipe / Like. Swipe the first
 /// photo right to like, left to pass. Liking someone who already liked you opens the match.
+///
+/// Reading a profile (docs/mobile/DISCOVERY_SCREEN_INVENTORY.md): a bar under the header shows how
+/// far through it you are (Bumble); once the photo card has scrolled away, Pass / SuperSwipe / Like
+/// float over the profile (Hinge, happn) until the inline row comes into view; Android back
+/// returns to the top before it leaves Home. Any photo opens the photo viewer.
 class DiscoverScreen extends ConsumerStatefulWidget {
   const DiscoverScreen({super.key});
 
@@ -33,6 +41,63 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
   bool _retrying = false;
   String? _shownId;
 
+  /// Retries that failed again (the error then says so).
+  int _failedRetries = 0;
+
+  /// Scrolled past most of the photo card: the floating actions show and back returns to the top.
+  final _reading = ValueNotifier(false);
+
+  /// The inline action row at the end is close enough to use instead of the floating one.
+  final _nearEnd = ValueNotifier(false);
+
+  @override
+  void initState() {
+    super.initState();
+    _scroll.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (!_scroll.hasClients) return;
+    final p = _scroll.position;
+    _reading.value = p.pixels > p.viewportDimension * 0.6;
+    _nearEnd.value = p.maxScrollExtent - p.pixels < 200;
+  }
+
+  void _toTop() {
+    if (!_scroll.hasClients) return;
+    if (AppMotion.reduced(context)) {
+      _scroll.jumpTo(0);
+    } else {
+      unawaited(
+        _scroll.animateTo(
+          0,
+          duration: AppMotion.push,
+          curve: AppMotion.emphasized,
+        ),
+      );
+    }
+  }
+
+  /// "Show more about …": the profile below the photo card.
+  void _toDetails() {
+    if (!_scroll.hasClients) return;
+    final target = math.min(
+      _scroll.position.viewportDimension - AppSpacing.s4,
+      _scroll.position.maxScrollExtent,
+    );
+    if (AppMotion.reduced(context)) {
+      _scroll.jumpTo(target);
+    } else {
+      unawaited(
+        _scroll.animateTo(
+          target,
+          duration: AppMotion.push,
+          curve: AppMotion.emphasized,
+        ),
+      );
+    }
+  }
+
   /// The decided profile leaving (MOTION_DESIGN_AUDIT "Decide"): right for a like, left for a
   /// pass, up for a SuperSwipe. The decision itself is applied when it has left.
   late final AnimationController _exit = AnimationController(
@@ -45,6 +110,8 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
   void dispose() {
     _exit.dispose();
     _scroll.dispose();
+    _reading.dispose();
+    _nearEnd.dispose();
     super.dispose();
   }
 
@@ -113,7 +180,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
                 person.name,
               )
             : l10n.discoverLiked(person.name),
-        aboveFooter: false,
+        belowHeader: true,
       );
     }
   }
@@ -139,7 +206,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
       NumayaToast.show(
         context,
         l10n.blockedToast(person.name),
-        aboveFooter: false,
+        belowHeader: true,
       );
     }
   }
@@ -147,7 +214,22 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
   Future<void> _retry() async {
     setState(() => _retrying = true);
     await Future<void>.delayed(const Duration(milliseconds: 700));
-    if (mounted) setState(() => _retrying = false);
+    if (!mounted) return;
+    setState(() {
+      _retrying = false;
+      if (ref.read(datingProvider).simulateErrors) _failedRetries++;
+    });
+  }
+
+  void _undo() {
+    final back = ref.read(datingProvider.notifier).undo();
+    if (back == null) return;
+    AppHaptics.fire(context, HapticMoment.selection);
+    NumayaToast.show(
+      context,
+      context.l10n.discoverUndone(back.name),
+      belowHeader: true,
+    );
   }
 
   @override
@@ -162,12 +244,15 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
         ? null
         : personById(state.lastPass!);
     final failing = state.simulateErrors && !_retrying;
+    if (!state.simulateErrors) _failedRetries = 0;
+    final narrowed = ref.read(discoveryFiltersProvider.notifier).narrowed;
 
     // The next person starts at their photo, not mid-scroll.
     if (person?.id != _shownId) {
       _shownId = person?.id;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_scroll.hasClients) _scroll.jumpTo(0);
+        _reading.value = false;
       });
     }
 
@@ -196,7 +281,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
                       NavIconButton(
                         icon: NumayaIcons.undo,
                         label: l10n.discoverUndo(lastPass.name),
-                        onPressed: controller.undo,
+                        onPressed: _undo,
                       ),
                     ],
                   ],
@@ -208,9 +293,11 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    NavIconButton(
-                      icon: NumayaIcons.filter,
-                      label: l10n.discoverFilters,
+                    _FiltersButton(
+                      label: narrowed
+                          ? l10n.discoverFiltersChanged
+                          : l10n.discoverFilters,
+                      changed: narrowed,
                       onPressed: () => showFiltersSheet(context, ref),
                     ),
                     if (person != null && !failing) ...[
@@ -223,6 +310,13 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
                     ],
                   ],
                 ),
+              ),
+            if (person != null && !failing && !_retrying && !state.snoozed)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: _ReadProgress(scroll: _scroll),
               ),
           ],
         ),
@@ -256,7 +350,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
             size: 36,
             color: AppColors.ink,
           ),
-          title: l10n.discoverErrorTitle,
+          title: _failedRetries > 0
+              ? l10n.discoverErrorStillTitle
+              : l10n.discoverErrorTitle,
           body: l10n.discoverErrorBody,
           action: NumayaButton(
             label: l10n.discoverRetry,
@@ -292,7 +388,8 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
                       .broaden,
                 ),
               )
-            : EmptyState(
+            : controller.passedCount() > 0
+            ? EmptyState(
                 art: const IllustrationView(
                   NumayaIllustration.seenEveryone,
                   width: 132,
@@ -305,15 +402,44 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
                   variant: NumayaButtonVariant.secondary,
                   onPressed: controller.resetDiscovery,
                 ),
+              )
+            // Everyone seen was liked: nothing can come back round, and the demo adds nobody new.
+            : EmptyState(
+                art: const IllustrationView(
+                  NumayaIllustration.seenEveryone,
+                  width: 132,
+                ),
+                title: l10n.discoverSeenAllTitle,
+                body: l10n.discoverSeenAllLikedBody,
+                action: controller.unansweredLikes() > 0
+                    ? NumayaButton(
+                        label: l10n.discoverSeeLikes,
+                        small: true,
+                        variant: NumayaButtonVariant.secondary,
+                        onPressed: () => context.go(Routes.likes),
+                      )
+                    : null,
               ),
       );
     }
 
-    return TabPage(
+    void decide({required bool liked, bool superSwipe = false}) =>
+        unawaited(_decide(person, liked: liked, superSwipe: superSwipe));
+    void openPhotos(int start) =>
+        unawaited(context.push(Routes.personPhotos(person.id, start: start)));
+
+    final page = TabPage(
       header: header,
       scrollController: _scroll,
       topGap: false,
       gutter: AppSpacing.gutterTight,
+      overlay: _FloatingActions(
+        visible: _reading,
+        nearEnd: _nearEnd,
+        onPass: () => decide(liked: false),
+        onSuper: () => decide(liked: true, superSwipe: true),
+        onLike: () => decide(liked: true),
+      ),
       child: _DecisionMotion(
         key: ValueKey(person.id),
         exit: _exit,
@@ -330,6 +456,11 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
             ],
             _SwipeCard(
               person: person,
+              onOpenPhotos: () => openPhotos(1),
+              onMore: _toDetails,
+              hint: state.coachDone
+                  ? null
+                  : _CoachHint(onDismiss: controller.dismissCoach),
               onDecide: (liked) => unawaited(_decide(person, liked: liked)),
               superAction: RoundAction(
                 kind: ActionKind.superSwipe,
@@ -340,7 +471,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
               ),
             ),
             const SizedBox(height: AppSpacing.s3),
-            ...personSections(context, person),
+            ...personSections(context, person, onPhoto: openPhotos),
             const SizedBox(height: AppSpacing.s6),
             // V16 `.fl-pf .action-bar`: 8pt more inset than the photo cards.
             Padding(
@@ -368,6 +499,15 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
                 ],
               ),
             ),
+            const SizedBox(height: AppSpacing.s5),
+            // happn's "Report & block" and Bumble's "Hide and Report" close the profile.
+            Center(
+              child: TextLink(
+                label: l10n.discoverReportBlock(person.name),
+                muted: true,
+                onPressed: () => _options(person),
+              ),
+            ),
             const SizedBox(height: AppSpacing.s4),
             Text(
               l10n.discoverSampleNote,
@@ -376,6 +516,275 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
             ),
           ],
         ),
+      ),
+    );
+
+    // Deep in a profile, Android back returns to its photo first; at the top it leaves Home.
+    return ValueListenableBuilder<bool>(
+      valueListenable: _reading,
+      builder: (context, reading, child) => PopScope(
+        canPop: !reading,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) _toTop();
+        },
+        child: child!,
+      ),
+      child: page,
+    );
+  }
+}
+
+/// The filters header button, with a small purple mark when the filters differ from the member's
+/// preferences (the label says so too).
+class _FiltersButton extends StatelessWidget {
+  const _FiltersButton({
+    required this.label,
+    required this.changed,
+    required this.onPressed,
+  });
+
+  final String label;
+  final bool changed;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        NavIconButton(
+          icon: NumayaIcons.filter,
+          label: label,
+          onPressed: onPressed,
+        ),
+        if (changed)
+          Positioned(
+            top: 2,
+            right: 2,
+            child: IgnorePointer(
+              child: Container(
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                  color: AppColors.accent,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.surface,
+                    width: AppBorders.selected,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// How far through the current profile the member has read (Bumble's bar under the header).
+/// Decorative: the profile itself is the content.
+class _ReadProgress extends StatelessWidget {
+  const _ReadProgress({required this.scroll});
+
+  final ScrollController scroll;
+
+  @override
+  Widget build(BuildContext context) {
+    return ExcludeSemantics(
+      child: AnimatedBuilder(
+        animation: scroll,
+        builder: (context, _) {
+          var t = 0.0;
+          if (scroll.hasClients && scroll.position.hasContentDimensions) {
+            final max = scroll.position.maxScrollExtent;
+            t = max <= 0 ? 0 : (scroll.position.pixels / max).clamp(0.0, 1.0);
+          }
+          return Container(
+            height: 3,
+            decoration: BoxDecoration(
+              color: AppColors.fill,
+              borderRadius: AppRadii.all(AppRadii.pill),
+            ),
+            alignment: Alignment.centerLeft,
+            child: FractionallySizedBox(
+              widthFactor: t,
+              heightFactor: 1,
+              child: const DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColors.ink,
+                  borderRadius: BorderRadius.all(Radius.circular(2)),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// Pass / SuperSwipe / Like floating over a profile being read, so a decision never needs a
+/// scroll back (Hinge's floating ×, happn's action bar). Hidden over the photo card, which has
+/// its own, and near the end, where the inline row takes over.
+class _FloatingActions extends StatefulWidget {
+  const _FloatingActions({
+    required this.visible,
+    required this.nearEnd,
+    required this.onPass,
+    required this.onSuper,
+    required this.onLike,
+  });
+
+  final ValueListenable<bool> visible;
+  final ValueListenable<bool> nearEnd;
+  final VoidCallback onPass;
+  final VoidCallback onSuper;
+  final VoidCallback onLike;
+
+  @override
+  State<_FloatingActions> createState() => _FloatingActionsState();
+}
+
+class _FloatingActionsState extends State<_FloatingActions> {
+  late final Listenable _changes = Listenable.merge([
+    widget.visible,
+    widget.nearEnd,
+  ]);
+
+  /// In the tree: showing, or still fading out. Once gone it is removed entirely, so nothing
+  /// hidden lingers for screen readers or hit tests.
+  bool _mounted = false;
+
+  bool get _show => widget.visible.value && !widget.nearEnd.value;
+
+  @override
+  void initState() {
+    super.initState();
+    _changes.addListener(_changed);
+  }
+
+  @override
+  void dispose() {
+    _changes.removeListener(_changed);
+    super.dispose();
+  }
+
+  /// False for the first frame after mounting, so the bar rises in from its hidden position.
+  bool _entered = false;
+
+  void _changed() {
+    if (_show && !_mounted) {
+      _entered = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() => _entered = true);
+      });
+    }
+    setState(() {
+      if (_show) _mounted = true;
+    });
+    // Under reduced motion there is no fade to wait for.
+    if (!_show && AppMotion.reduced(context)) setState(() => _mounted = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final show = _show && (_entered || AppMotion.reduced(context));
+    if (!_mounted) return const SizedBox.shrink();
+    final duration = AppMotion.duration(context, AppMotion.state);
+    return Builder(
+      builder: (context) {
+        return IgnorePointer(
+          ignoring: !show,
+          child: ExcludeSemantics(
+            excluding: !show,
+            child: AnimatedSlide(
+              offset: show ? Offset.zero : const Offset(0, 0.6),
+              duration: duration,
+              curve: AppMotion.easeOut,
+              child: AnimatedOpacity(
+                opacity: show ? 1 : 0,
+                duration: duration,
+                curve: AppMotion.easeOut,
+                onEnd: () {
+                  if (!_show && mounted) setState(() => _mounted = false);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.s4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RoundAction(
+                        kind: ActionKind.pass,
+                        label: l10n.discoverPass,
+                        floating: true,
+                        onPressed: widget.onPass,
+                      ),
+                      const SizedBox(width: AppSpacing.s5),
+                      RoundAction(
+                        kind: ActionKind.superSwipe,
+                        label: l10n.discoverSuperSwipe,
+                        floating: true,
+                        onPressed: widget.onSuper,
+                      ),
+                      const SizedBox(width: AppSpacing.s5),
+                      RoundAction(
+                        kind: ActionKind.like,
+                        label: l10n.discoverLike,
+                        floating: true,
+                        onPressed: widget.onLike,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// First-visit tip on the photo card (B-31, as a small card rather than a dimmed overlay, so the
+/// profile stays visible). Gone after the first decision or when hidden.
+class _CoachHint extends StatelessWidget {
+  const _CoachHint({required this.onDismiss});
+
+  final VoidCallback onDismiss;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.s4,
+        AppSpacing.s2,
+        AppSpacing.s1,
+        AppSpacing.s2,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.card),
+      ),
+      child: Row(
+        children: [
+          const NumayaIcon(
+            NumayaIcons.cards,
+            size: AppSizes.iconMd,
+            color: AppColors.ink,
+          ),
+          const SizedBox(width: AppSpacing.s3),
+          Expanded(
+            child: Text(l10n.discoverCoach, style: AppTypography.bodySm),
+          ),
+          NavIconButton(
+            icon: NumayaIcons.close,
+            label: l10n.discoverCoachDismiss,
+            style: NavButtonStyle.plain,
+            onPressed: onDismiss,
+          ),
+        ],
       ),
     );
   }
@@ -433,9 +842,15 @@ class _SwipeCard extends StatefulWidget {
     required this.person,
     required this.onDecide,
     required this.superAction,
+    required this.onOpenPhotos,
+    required this.onMore,
+    this.hint,
   });
 
   final SamplePerson person;
+  final VoidCallback onOpenPhotos;
+  final VoidCallback onMore;
+  final Widget? hint;
   final ValueChanged<bool> onDecide;
   final Widget superAction;
 
@@ -498,6 +913,9 @@ class _SwipeCardState extends State<_SwipeCard> {
             person: widget.person,
             action: widget.superAction,
             stamp: stamp,
+            onOpenPhotos: widget.onOpenPhotos,
+            onMore: widget.onMore,
+            hint: widget.hint,
             height: TabPage.viewportOf(context) - AppSpacing.s4,
           ),
         ),

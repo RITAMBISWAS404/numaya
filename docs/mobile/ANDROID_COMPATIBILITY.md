@@ -55,7 +55,7 @@ because the APK that failed is on your PC. The check is step 2 below.
 ```powershell
 cd <repo>
 git fetch origin
-git checkout experiment/numaya-onboarding-complete
+git checkout experiment/numaya-discovery-complete
 cd apps\numaya_mobile
 flutter pub get
 flutter analyze

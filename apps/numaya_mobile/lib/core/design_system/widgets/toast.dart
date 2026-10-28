@@ -18,6 +18,7 @@ abstract final class NumayaToast {
     bool busy = false,
     Duration? duration = const Duration(milliseconds: 2200),
     bool aboveFooter = true,
+    bool belowHeader = false,
   }) {
     final overlay = Overlay.of(context, rootOverlay: true);
     late final OverlayEntry entry;
@@ -27,6 +28,7 @@ abstract final class NumayaToast {
         message: message,
         busy: busy,
         aboveFooter: aboveFooter,
+        belowHeader: belowHeader,
         handle: handle,
       ),
     );
@@ -66,11 +68,16 @@ class _ToastView extends StatefulWidget {
     required this.busy,
     required this.aboveFooter,
     required this.handle,
+    this.belowHeader = false,
   });
 
   final String message;
   final bool busy;
   final bool aboveFooter;
+
+  /// Just under a 56pt top bar, for screens whose content runs down to the tab bar (Discover's
+  /// photo card), where a bottom toast would cover the name or the tabs.
+  final bool belowHeader;
   final ToastHandle handle;
 
   @override
@@ -132,7 +139,10 @@ class _ToastViewState extends State<_ToastView> with TickerProviderStateMixin {
     return Positioned(
       left: 0,
       right: 0,
-      bottom: bottom,
+      top: widget.belowHeader
+          ? media.padding.top + AppSizes.topBar + AppSpacing.s4
+          : null,
+      bottom: widget.belowHeader ? null : bottom,
       child: IgnorePointer(
         child: Center(
           child: FadeTransition(
@@ -141,7 +151,7 @@ class _ToastViewState extends State<_ToastView> with TickerProviderStateMixin {
               position: reduced
                   ? const AlwaysStoppedAnimation(Offset.zero)
                   : Tween(
-                      begin: const Offset(0, 0.4),
+                      begin: Offset(0, widget.belowHeader ? -0.4 : 0.4),
                       end: Offset.zero,
                     ).animate(curved),
               child: Material(

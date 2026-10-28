@@ -289,7 +289,10 @@ class NavIconButton extends StatelessWidget {
             size: style == NavButtonStyle.flat
                 ? AppSizes.iconMd
                 : AppSizes.iconLg,
-            color: AppColors.ink,
+            // Unavailable (no handler): the icon greys out, the button keeps its place.
+            color: onPressed == null
+                ? AppColors.disabledForeground
+                : AppColors.ink,
           ),
         ),
       ),

@@ -1642,5 +1642,63 @@
   "obMeetLegend": "Show me",
   "obNotifFooter": "You can change this in Settings",
   "obVerifyFooter": "Optional · you can verify later",
-  "obDemoBuild": "Demo build"
+  "obDemoBuild": "Demo build",
+  "discoverUndone": "{name} is back",
+  "@discoverUndone": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "discoverCoach": "Swipe right to like, left to pass. Scroll for more about them.",
+  "discoverCoachDismiss": "Hide tip",
+  "discoverMoreAbout": "Show more about {name}",
+  "@discoverMoreAbout": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "discoverPhotoCount": "{count, plural, =1{1 photo} other{{count} photos}}",
+  "@discoverPhotoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "discoverOpenPhotos": "See {name}’s photos",
+  "@discoverOpenPhotos": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "discoverReportBlock": "Report or block {name}",
+  "@discoverReportBlock": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "discoverSeenAllLikedBody": "You liked everyone you saw. New people don’t arrive in this demo, so check who likes you instead.",
+  "discoverSeeLikes": "See who likes you",
+  "discoverErrorStillTitle": "Still can’t load profiles",
+  "discoverFiltersChanged": "Filters, changed from your preferences",
+  "photoViewerTitle": "{name}’s photos",
+  "@photoViewerTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "photoViewerPosition": "Photo {position} of {count}",
+  "@photoViewerPosition": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "photoViewerNext": "Next photo",
+  "photoViewerPrevious": "Previous photo",
+  "photoViewerNote": "Placeholders. Sample profiles have no real photos."
 }

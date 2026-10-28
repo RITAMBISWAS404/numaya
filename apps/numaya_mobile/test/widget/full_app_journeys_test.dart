@@ -202,8 +202,12 @@ void main() {
         isTrue,
       );
       expect(find.text('Sam, 31'), findsNothing);
-      // Reset brings everyone back.
-      await tapOn(tester, find.bySemanticsLabel('Filters'));
+      // The saved filters now differ from the sign-up preferences; Reset returns to those
+      // (not to app defaults that would show people the member never asked for).
+      await tapOn(
+        tester,
+        find.bySemanticsLabel('Filters, changed from your preferences'),
+      );
       await sheetUp(tester);
       await tapOn(tester, find.text('Reset'));
       expect(find.text('Show 10 people'), findsOneWidget);

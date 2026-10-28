@@ -127,7 +127,20 @@ const List<String> kIntentionFilters = [
 /// Discovery preferences for this session. A backend sends them with discovery requests later.
 class DiscoveryFiltersController extends Notifier<DiscoveryFilters> {
   @override
-  DiscoveryFilters build() => const DiscoveryFilters();
+  DiscoveryFilters build() {
+    defaults = const DiscoveryFilters();
+    return defaults;
+  }
+
+  /// The member's own preferences from sign-up (who to meet, age range). Reset returns here rather
+  /// than to app-wide defaults that may show people the member never asked to see.
+  DiscoveryFilters defaults = const DiscoveryFilters();
+
+  /// The saved filters differ from the member's preferences (the filters button shows a mark).
+  bool get narrowed => state != defaults;
+
+  /// Back to the member's preferences.
+  void reset() => state = defaults;
 
   /// "Widen age and distance": the full range.
   void broaden() => state = state.copyWith(
@@ -136,13 +149,16 @@ class DiscoveryFiltersController extends Notifier<DiscoveryFilters> {
     maxDistanceKm: DiscoveryFilters.distanceCeilingKm,
   );
 
-  void save(DiscoveryFilters filters) {
+  /// Saves [filters]; with [asDefaults] (sign-up's "Who do you want to meet?") they also become
+  /// what Reset returns to.
+  void save(DiscoveryFilters filters, {bool asDefaults = false}) {
     final minAge = filters.minAge.clamp(
       DiscoveryFilters.ageFloor,
       DiscoveryFilters.ageCeiling,
     );
     final maxAge = filters.maxAge.clamp(minAge, DiscoveryFilters.ageCeiling);
     state = filters.copyWith(minAge: minAge, maxAge: maxAge);
+    if (asDefaults) defaults = state;
   }
 }
 
