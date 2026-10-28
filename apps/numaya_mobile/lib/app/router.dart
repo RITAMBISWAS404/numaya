@@ -17,6 +17,10 @@ import '../features/dating/presentation/match_screen.dart';
 import '../features/dating/presentation/messages_screens.dart';
 import '../features/dating/presentation/photo_viewer_screen.dart';
 import '../features/demo/presentation/demo_hub_screen.dart';
+import '../features/events/presentation/event_detail_screen.dart';
+import '../features/events/presentation/event_form_screen.dart';
+import '../features/events/presentation/event_people_screen.dart';
+import '../features/events/presentation/events_screen.dart';
 import '../features/help/presentation/help_screens.dart';
 import '../features/home/presentation/home_shell.dart';
 import '../features/onboarding/application/onboarding_controller.dart';
@@ -160,6 +164,16 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
+                path: Routes.events,
+                builder: (_, state) => EventsScreen(
+                  mine: state.uri.queryParameters['view'] == 'mine',
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
                 path: Routes.likes,
                 builder: (_, _) => const LikesScreen(),
               ),
@@ -242,6 +256,26 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const SafetyCentreScreen(),
       ),
       _route(path: Routes.forYou, builder: (_, _) => const ForYouScreen()),
+      _route(path: Routes.eventNew, builder: (_, _) => const EventFormScreen()),
+      _route(
+        path: '${Routes.event}/:id',
+        builder: (_, state) => EventDetailScreen(
+          eventId: state.pathParameters['id']!,
+          published: state.uri.queryParameters['published'] == '1',
+        ),
+        routes: [
+          _route(
+            path: 'people',
+            builder: (_, state) =>
+                EventPeopleScreen(eventId: state.pathParameters['id']!),
+          ),
+          _route(
+            path: 'edit',
+            builder: (_, state) =>
+                EventFormScreen(eventId: state.pathParameters['id']!),
+          ),
+        ],
+      ),
       GoRoute(
         path: Routes.paywall,
         pageBuilder: (_, state) {

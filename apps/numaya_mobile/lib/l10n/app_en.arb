@@ -1700,5 +1700,462 @@
   },
   "photoViewerNext": "Next photo",
   "photoViewerPrevious": "Previous photo",
-  "photoViewerNote": "Placeholders. Sample profiles have no real photos."
+  "photoViewerNote": "Placeholders. Sample profiles have no real photos.",
+  "tabEvents": "Events",
+  "eventAbout": "about {km} km",
+  "@eventAbout": {
+    "placeholders": {
+      "km": {}
+    }
+  },
+  "eventAbout2": "About this event",
+  "eventAndMore": "{count, plural, =1{and 1 more} other{and {count} more}}",
+  "@eventAndMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventAnswerHint": "Only the host sees this.",
+  "eventAreaNote": "Shown as an area and a rough distance, never as an address.",
+  "eventAttendees": "Attendees",
+  "eventBadgeCancelled": "Cancelled",
+  "eventBadgeChanged": "Changed",
+  "eventBadgeClosed": "Registration closed",
+  "eventBadgeDraft": "Draft",
+  "eventBadgeFewSpots": "Few spots left",
+  "eventBadgeGoing": "Going",
+  "eventBadgeHosting": "Hosting",
+  "eventBadgeLive": "Happening now",
+  "eventBadgePast": "Ended",
+  "eventBadgeWaitlist": "Waitlist",
+  "eventCancel": "Cancel event",
+  "eventCancelBody": "Everyone going and waiting will see that it’s cancelled. The event stays visible with its status.",
+  "eventCancelConfirm": "Cancel event",
+  "eventCancelKeep": "Keep event",
+  "eventCancelNoteHint": "Optional, for example why, or when you’ll run it again.",
+  "eventCancelNoteLabel": "Note to attendees",
+  "eventCancelTitle": "Cancel this event?",
+  "eventCancelledBody": "The host cancelled this event.",
+  "eventCancelledFooter": "Nobody can join a cancelled event.",
+  "eventCancelledNote": "The host cancelled this event: “{note}”",
+  "@eventCancelledNote": {
+    "placeholders": {
+      "note": {}
+    }
+  },
+  "eventCancelledTitle": "Cancelled",
+  "eventCancelledToast": "Event cancelled",
+  "eventCapacityValue": "{count, plural, =1{1 person} other{{count} people}}",
+  "@eventCapacityValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventCatArts": "Arts",
+  "eventCatFood": "Food and drink",
+  "eventCatGames": "Games",
+  "eventCatMusic": "Music",
+  "eventCatOutdoors": "Outdoors",
+  "eventCatSport": "Sport",
+  "eventChangedByYou": "You changed the time or place. People going see this note.",
+  "eventChangedTitle": "Changed since people joined",
+  "eventChangesSaved": "Changes saved",
+  "eventChoose": "Choose",
+  "eventClosedDetail": "Joining closes 2 hours before the start.",
+  "eventClosedToast": "You can’t join this event any more",
+  "eventCostAtVenue": "Cost paid at the venue",
+  "eventCostHint": "Leave empty if it’s free. Numaya never takes payment.",
+  "eventCostNote": "Any cost is paid to the venue or host. Numaya doesn’t sell tickets.",
+  "eventCoverNote": "Cover colour. Photos come later.",
+  "eventCoverOption": "Cover colour {option}",
+  "@eventCoverOption": {
+    "placeholders": {
+      "option": {
+        "type": "int"
+      }
+    }
+  },
+  "eventCreate": "Create an event",
+  "eventDateAny": "Any day",
+  "eventDateToday": "Today",
+  "eventDateWeek": "Next 7 days",
+  "eventDateWeekend": "This weekend",
+  "eventDeleteDraft": "Delete draft",
+  "eventDeleteDraftBody": "This draft will be gone. Nobody else has seen it.",
+  "eventDeleteDraftTitle": "Delete this draft?",
+  "eventDemoRsvp": "Saved on this device (demo)",
+  "eventDescriptionHint": "What you’ll do, who it’s for, anything to bring.",
+  "eventDiscard": "Discard changes",
+  "eventDiscardBody": "You have changes that aren’t saved.",
+  "eventDiscardTitle": "Leave without saving?",
+  "eventDistanceAny": "Any distance",
+  "eventDistanceWithin": "Within {km} km",
+  "@eventDistanceWithin": {
+    "placeholders": {
+      "km": {
+        "type": "int"
+      }
+    }
+  },
+  "eventDraftBody": "Only you can see this. Publish when it’s ready.",
+  "eventDraftDeleted": "Draft deleted",
+  "eventDraftIncomplete": "Finish the missing details to publish",
+  "eventDraftNeedsTitle": "Add a title to save a draft",
+  "eventDraftSaved": "Draft saved",
+  "eventDraftTitle": "Draft",
+  "eventDuration": "{hours, plural, =0{{minutes} min} =1{1 h {minutes} min} other{{hours} h {minutes} min}}",
+  "@eventDuration": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "eventEdit": "Edit",
+  "eventEditTitle": "Edit event",
+  "eventEditingPublished": "This event is live",
+  "eventEditingPublishedBody": "If you change the time or place, people going see a note.",
+  "eventErrCapacity": "Allow at least {min} people.",
+  "@eventErrCapacity": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "eventErrCapacityGoing": "{going} people are already going. Remove someone first or keep the limit higher.",
+  "@eventErrCapacityGoing": {
+    "placeholders": {
+      "going": {
+        "type": "int"
+      }
+    }
+  },
+  "eventErrCategory": "Choose a category.",
+  "eventErrDate": "Choose a date and a start time.",
+  "eventErrDescription": "Describe it in at least {min} characters.",
+  "@eventErrDescription": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "eventErrOnline": "Say how people will get the link.",
+  "eventErrPast": "Choose a time in the future.",
+  "eventErrTitle": "Add a title of at least {min} characters.",
+  "@eventErrTitle": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "eventErrTitleLong": "Keep the title under {max} characters.",
+  "@eventErrTitleLong": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "eventErrVenue": "Add the public place you’ll meet.",
+  "eventFailedBody": "Nothing changed. This is the demo’s simulated connection problem.",
+  "eventFailedTitle": "Couldn’t save that",
+  "eventFewer": "Fewer people",
+  "eventFieldArea": "Area",
+  "eventFieldCategory": "Category",
+  "eventFieldCost": "Cost note (optional)",
+  "eventFieldCover": "Cover colour",
+  "eventFieldDate": "Date",
+  "eventFieldDescription": "Description",
+  "eventFieldLimit": "Limit attendees",
+  "eventFieldOnline": "How people join",
+  "eventFieldPeople": "People",
+  "eventFieldQuestion": "Question for people joining (optional)",
+  "eventFieldTime": "Start time",
+  "eventFieldTitle": "Title",
+  "eventFieldVenue": "Venue",
+  "eventFieldWhen": "When",
+  "eventFieldWhere": "Where",
+  "eventFilterAreaBody": "Distance uses the area you choose. Your device location isn’t read.",
+  "eventFilterAreaOutside": "Events in this demo are in London, not {area}",
+  "@eventFilterAreaOutside": {
+    "placeholders": {
+      "area": {}
+    }
+  },
+  "eventFilterCategories": "Categories",
+  "eventFilterChooseArea": "Choose area",
+  "eventFilterDistance": "Distance",
+  "eventFilterFormat": "Format",
+  "eventFilterFree": "Free only",
+  "eventFilterFreeNote": "Events with no cost note from the host.",
+  "eventFilterFromArea": "From {area}",
+  "@eventFilterFromArea": {
+    "placeholders": {
+      "area": {}
+    }
+  },
+  "eventFilterNoArea": "No area chosen",
+  "eventFilters": "Filters",
+  "eventFiltersCount": "{count, plural, =1{Filters, 1 on} other{Filters, {count} on}}",
+  "@eventFiltersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventFixErrors": "Some details need fixing",
+  "eventFormNote": "Your event is kept on this device in the demo. Nothing is published to other people.",
+  "eventFormatAny": "Any",
+  "eventFormatInPerson": "In person",
+  "eventFormatOnline": "Online",
+  "eventFree": "Free",
+  "eventFull": "Full",
+  "eventGoingCount": "{count, plural, =1{1 going} other{{count} going}}",
+  "@eventGoingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventGoingHeading": "Going",
+  "eventHostBadge": "Host",
+  "eventHostPeopleNote": "Tap someone to remove them. The first person waiting takes the place.",
+  "eventHostSample": "Sample host",
+  "eventHostUnknown": "Someone",
+  "eventHostYou": "That’s you",
+  "eventHostedBy": "Hosted by {name}",
+  "@eventHostedBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "eventJoin": "Join",
+  "eventJoinWaitlist": "Join waitlist",
+  "eventJoinedToast": "You’re going",
+  "eventKeepDraft": "Keep draft",
+  "eventKeepEditing": "Keep editing",
+  "eventLeave": "Leave",
+  "eventLeaveBody": "Your place goes to the first person waiting, if there is one.",
+  "eventLeaveTitle": "Leave this event?",
+  "eventLeaveWaitlist": "Leave waitlist",
+  "eventLeaveWaitlistBody": "You’ll lose your place in the queue.",
+  "eventLeaveWaitlistTitle": "Leave the waitlist?",
+  "eventLeftToast": "You’re not going any more",
+  "eventLeftWaitlistToast": "You left the waitlist",
+  "eventLimitNote": "When it’s full, people can join a waitlist.",
+  "eventLiveBody": "Joining is closed while it’s on.",
+  "eventLiveTitle": "Happening now",
+  "eventMissingBody": "It may have been deleted, or the link is wrong.",
+  "eventMissingTitle": "Event not found",
+  "eventMore": "More people",
+  "eventMoveToGoing": "Move to going",
+  "eventMovedToast": "{name} is going",
+  "@eventMovedToast": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "eventNewTitle": "New event",
+  "eventNobodyYet": "Nobody else yet",
+  "eventOnWaitlist": "On the waitlist, number {position}",
+  "@eventOnWaitlist": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      }
+    }
+  },
+  "eventOnline": "Online",
+  "eventOnlineHint": "For example: I’ll send the video link to people going an hour before.",
+  "eventOwnNote": "Your event, kept on this device in the demo.",
+  "eventPastTitle": "This event has ended",
+  "eventPeopleNote": "First names only. Open someone to see their profile, report or block.",
+  "eventPickedBecause": "Because you like {interest}",
+  "@eventPickedBecause": {
+    "placeholders": {
+      "interest": {}
+    }
+  },
+  "eventPreview": "Preview",
+  "eventPreviewBody": "This is how people will see your event. Nothing is published yet.",
+  "eventPreviewTitle": "Preview",
+  "eventPublish": "Publish",
+  "eventPublishedBody": "It’s in Hosting under My events. In the demo nobody else can see it.",
+  "eventPublishedTitle": "Your event is live",
+  "eventQuestionHint": "For example: any dietary needs?",
+  "eventQuestionTitle": "A question from the host",
+  "eventRemove": "Remove",
+  "eventRemoveBody": "They’ll no longer be going. The first person waiting takes the place.",
+  "eventRemoveTitle": "Remove {name}?",
+  "@eventRemoveTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "eventRemovedToast": "{name} removed",
+  "@eventRemovedToast": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "eventReport": "Report this event",
+  "eventReportDone": "Done",
+  "eventReportLegend": "What’s wrong?",
+  "eventReportNote": "Reports stay on this device in the demo; nothing is sent or reviewed.",
+  "eventReportSend": "Send report",
+  "eventReportTitle": "Report event",
+  "eventReportedToast": "Report saved on this device",
+  "eventSafetyBody": "Meet at the listed public place, tell a friend where you’re going, and leave whenever you like. Numaya never shows anyone’s home address or live location.",
+  "eventSafetyTitle": "Meeting safely",
+  "eventSave": "Save {title}",
+  "@eventSave": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "eventSaveChanges": "Save changes",
+  "eventSaveDraft": "Save draft",
+  "eventSaved": "Saved",
+  "eventSelected": "Selected",
+  "eventShare": "Share",
+  "eventShareToast": "Sharing isn’t available in the demo. Nothing leaves this device.",
+  "eventShowCount": "{count, plural, =0{No events} =1{Show 1 event} other{Show {count} events}}",
+  "@eventShowCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventSortBy": "Sort by",
+  "eventSortDate": "Date",
+  "eventSortNote": "Relevance puts events matching your interests first, then by date.",
+  "eventSortRelevance": "Relevance",
+  "eventSpotsLeft": "{count, plural, =1{1 spot left} other{{count} spots left}}",
+  "@eventSpotsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventStay": "Stay",
+  "eventTimeRange": "{start}–{end} ({zone})",
+  "@eventTimeRange": {
+    "placeholders": {
+      "start": {},
+      "end": {},
+      "zone": {}
+    }
+  },
+  "eventTitle": "Event",
+  "eventUnsave": "Unsave {title}",
+  "@eventUnsave": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "eventUnsaved": "Removed from saved",
+  "eventUntitled": "Untitled event",
+  "eventVenueDistance": "{venue} · about {km} km",
+  "@eventVenueDistance": {
+    "placeholders": {
+      "venue": {},
+      "km": {}
+    }
+  },
+  "eventVenueHint": "A public place, for example a café or a park entrance.",
+  "eventWaitingCount": "{count, plural, =0{Nobody waiting} =1{1 waiting} other{{count} waiting}}",
+  "@eventWaitingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventWaitlistDetail": "If someone drops out, you move up.",
+  "eventWaitlistFullNote": "Moving someone up needs a free place.",
+  "eventWaitlistHeading": "{count, plural, =1{Waitlist (1)} other{Waitlist ({count})}}",
+  "@eventWaitlistHeading": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventWaitlistPlace": "Number {place}",
+  "@eventWaitlistPlace": {
+    "placeholders": {
+      "place": {
+        "type": "int"
+      }
+    }
+  },
+  "eventWaitlistRoomNote": "There’s room: tap someone to move them to going.",
+  "eventWaitlistToast": "You’re on the waitlist, number {position}",
+  "@eventWaitlistToast": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      }
+    }
+  },
+  "eventWhoGoing": "Who’s going",
+  "eventYou": "You",
+  "eventYouWent": "You went",
+  "eventYourAnswer": "Your answer",
+  "eventYoureGoing": "You’re going",
+  "eventsAll": "All events",
+  "eventsClear": "Clear search and filters",
+  "eventsErrorBody": "This is a simulated connection problem. Try again, or turn it off in the Demo Hub.",
+  "eventsErrorStillTitle": "Still can’t load events",
+  "eventsErrorTitle": "We couldn’t load events",
+  "eventsExplore": "Explore",
+  "eventsFind": "Find events",
+  "eventsGoing": "Going",
+  "eventsGoingEmptyBody": "Events you join appear here.",
+  "eventsGoingEmptyTitle": "Nothing planned yet",
+  "eventsHosting": "Hosting",
+  "eventsHostingEmptyBody": "Host a walk, a dinner, a game night. Drafts stay private until you publish.",
+  "eventsHostingEmptyTitle": "You’re not hosting anything",
+  "eventsListCount": "{label} {count}",
+  "@eventsListCount": {
+    "placeholders": {
+      "label": {},
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "eventsLoading": "Loading events",
+  "eventsMine": "My events",
+  "eventsNoAreaBody": "Distance needs an area. Choose one in Filters, or clear the distance filter.",
+  "eventsNoResultsBody": "Try other words, or clear the filters.",
+  "eventsNoResultsTitle": "No events match",
+  "eventsPast": "Past",
+  "eventsPastEmptyBody": "Events you went to or hosted appear here afterwards.",
+  "eventsPastEmptyTitle": "No past events",
+  "eventsPicked": "Picked for your interests",
+  "eventsPickedNote": "Events in a category linked to an interest on your profile.",
+  "eventsSampleNote": "Sample events. Hosts, places and attendees are invented; joining is saved on this device only.",
+  "eventsSaved": "Saved",
+  "eventsSavedEmptyBody": "Tap the heart on an event to keep it here.",
+  "eventsSavedEmptyTitle": "Nothing saved",
+  "eventsSearch": "Search events",
+  "eventsWaitlist": "Waitlist",
+  "eventsWaitlistEmptyBody": "When an event is full you can join its waitlist.",
+  "eventsWaitlistEmptyTitle": "No waitlists",
+  "eventFilterWhen": "When"
 }

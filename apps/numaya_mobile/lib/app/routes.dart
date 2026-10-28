@@ -42,6 +42,15 @@ abstract final class Routes {
   static const safety = '/profile/safety';
   static const forYou = '/for-you';
 
+  /// The Events tab (`?view=mine` opens My events) and full-screen event pages.
+  static const events = '/events';
+  static const event = '/event';
+  static const eventNew = '/event/new';
+
+  /// Profile & visibility (account health) and its explanation page.
+  static const visibility = '/profile/visibility';
+  static const visibilityAbout = '/profile/visibility/about';
+
   /// Paywall, with `?feature=` naming what triggered it (D-14).
   static const paywall = '/paywall';
 
@@ -82,6 +91,8 @@ abstract final class Routes {
       path.startsWith(match) ||
       path.startsWith(chat) ||
       path.startsWith(person) ||
+      path.startsWith(events) ||
+      path.startsWith(event) ||
       path.startsWith(forYou) ||
       path.startsWith(paywall) ||
       path.startsWith(restore);

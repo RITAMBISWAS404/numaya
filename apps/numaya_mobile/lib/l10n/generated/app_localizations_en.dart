@@ -3238,4 +3238,897 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get photoViewerNote =>
       'Placeholders. Sample profiles have no real photos.';
+
+  @override
+  String get tabEvents => 'Events';
+
+  @override
+  String eventAbout(Object km) {
+    return 'about $km km';
+  }
+
+  @override
+  String get eventAbout2 => 'About this event';
+
+  @override
+  String eventAndMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'and $count more',
+      one: 'and 1 more',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get eventAnswerHint => 'Only the host sees this.';
+
+  @override
+  String get eventAreaNote =>
+      'Shown as an area and a rough distance, never as an address.';
+
+  @override
+  String get eventAttendees => 'Attendees';
+
+  @override
+  String get eventBadgeCancelled => 'Cancelled';
+
+  @override
+  String get eventBadgeChanged => 'Changed';
+
+  @override
+  String get eventBadgeClosed => 'Registration closed';
+
+  @override
+  String get eventBadgeDraft => 'Draft';
+
+  @override
+  String get eventBadgeFewSpots => 'Few spots left';
+
+  @override
+  String get eventBadgeGoing => 'Going';
+
+  @override
+  String get eventBadgeHosting => 'Hosting';
+
+  @override
+  String get eventBadgeLive => 'Happening now';
+
+  @override
+  String get eventBadgePast => 'Ended';
+
+  @override
+  String get eventBadgeWaitlist => 'Waitlist';
+
+  @override
+  String get eventCancel => 'Cancel event';
+
+  @override
+  String get eventCancelBody =>
+      'Everyone going and waiting will see that it’s cancelled. The event stays visible with its status.';
+
+  @override
+  String get eventCancelConfirm => 'Cancel event';
+
+  @override
+  String get eventCancelKeep => 'Keep event';
+
+  @override
+  String get eventCancelNoteHint =>
+      'Optional, for example why, or when you’ll run it again.';
+
+  @override
+  String get eventCancelNoteLabel => 'Note to attendees';
+
+  @override
+  String get eventCancelTitle => 'Cancel this event?';
+
+  @override
+  String get eventCancelledBody => 'The host cancelled this event.';
+
+  @override
+  String get eventCancelledFooter => 'Nobody can join a cancelled event.';
+
+  @override
+  String eventCancelledNote(Object note) {
+    return 'The host cancelled this event: “$note”';
+  }
+
+  @override
+  String get eventCancelledTitle => 'Cancelled';
+
+  @override
+  String get eventCancelledToast => 'Event cancelled';
+
+  @override
+  String eventCapacityValue(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people',
+      one: '1 person',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get eventCatArts => 'Arts';
+
+  @override
+  String get eventCatFood => 'Food and drink';
+
+  @override
+  String get eventCatGames => 'Games';
+
+  @override
+  String get eventCatMusic => 'Music';
+
+  @override
+  String get eventCatOutdoors => 'Outdoors';
+
+  @override
+  String get eventCatSport => 'Sport';
+
+  @override
+  String get eventChangedByYou =>
+      'You changed the time or place. People going see this note.';
+
+  @override
+  String get eventChangedTitle => 'Changed since people joined';
+
+  @override
+  String get eventChangesSaved => 'Changes saved';
+
+  @override
+  String get eventChoose => 'Choose';
+
+  @override
+  String get eventClosedDetail => 'Joining closes 2 hours before the start.';
+
+  @override
+  String get eventClosedToast => 'You can’t join this event any more';
+
+  @override
+  String get eventCostAtVenue => 'Cost paid at the venue';
+
+  @override
+  String get eventCostHint =>
+      'Leave empty if it’s free. Numaya never takes payment.';
+
+  @override
+  String get eventCostNote =>
+      'Any cost is paid to the venue or host. Numaya doesn’t sell tickets.';
+
+  @override
+  String get eventCoverNote => 'Cover colour. Photos come later.';
+
+  @override
+  String eventCoverOption(int option) {
+    return 'Cover colour $option';
+  }
+
+  @override
+  String get eventCreate => 'Create an event';
+
+  @override
+  String get eventDateAny => 'Any day';
+
+  @override
+  String get eventDateToday => 'Today';
+
+  @override
+  String get eventDateWeek => 'Next 7 days';
+
+  @override
+  String get eventDateWeekend => 'This weekend';
+
+  @override
+  String get eventDeleteDraft => 'Delete draft';
+
+  @override
+  String get eventDeleteDraftBody =>
+      'This draft will be gone. Nobody else has seen it.';
+
+  @override
+  String get eventDeleteDraftTitle => 'Delete this draft?';
+
+  @override
+  String get eventDemoRsvp => 'Saved on this device (demo)';
+
+  @override
+  String get eventDescriptionHint =>
+      'What you’ll do, who it’s for, anything to bring.';
+
+  @override
+  String get eventDiscard => 'Discard changes';
+
+  @override
+  String get eventDiscardBody => 'You have changes that aren’t saved.';
+
+  @override
+  String get eventDiscardTitle => 'Leave without saving?';
+
+  @override
+  String get eventDistanceAny => 'Any distance';
+
+  @override
+  String eventDistanceWithin(int km) {
+    return 'Within $km km';
+  }
+
+  @override
+  String get eventDraftBody =>
+      'Only you can see this. Publish when it’s ready.';
+
+  @override
+  String get eventDraftDeleted => 'Draft deleted';
+
+  @override
+  String get eventDraftIncomplete => 'Finish the missing details to publish';
+
+  @override
+  String get eventDraftNeedsTitle => 'Add a title to save a draft';
+
+  @override
+  String get eventDraftSaved => 'Draft saved';
+
+  @override
+  String get eventDraftTitle => 'Draft';
+
+  @override
+  String eventDuration(int hours, int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: '$hours h $minutes min',
+      one: '1 h $minutes min',
+      zero: '$minutes min',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get eventEdit => 'Edit';
+
+  @override
+  String get eventEditTitle => 'Edit event';
+
+  @override
+  String get eventEditingPublished => 'This event is live';
+
+  @override
+  String get eventEditingPublishedBody =>
+      'If you change the time or place, people going see a note.';
+
+  @override
+  String eventErrCapacity(int min) {
+    return 'Allow at least $min people.';
+  }
+
+  @override
+  String eventErrCapacityGoing(int going) {
+    return '$going people are already going. Remove someone first or keep the limit higher.';
+  }
+
+  @override
+  String get eventErrCategory => 'Choose a category.';
+
+  @override
+  String get eventErrDate => 'Choose a date and a start time.';
+
+  @override
+  String eventErrDescription(int min) {
+    return 'Describe it in at least $min characters.';
+  }
+
+  @override
+  String get eventErrOnline => 'Say how people will get the link.';
+
+  @override
+  String get eventErrPast => 'Choose a time in the future.';
+
+  @override
+  String eventErrTitle(int min) {
+    return 'Add a title of at least $min characters.';
+  }
+
+  @override
+  String eventErrTitleLong(int max) {
+    return 'Keep the title under $max characters.';
+  }
+
+  @override
+  String get eventErrVenue => 'Add the public place you’ll meet.';
+
+  @override
+  String get eventFailedBody =>
+      'Nothing changed. This is the demo’s simulated connection problem.';
+
+  @override
+  String get eventFailedTitle => 'Couldn’t save that';
+
+  @override
+  String get eventFewer => 'Fewer people';
+
+  @override
+  String get eventFieldArea => 'Area';
+
+  @override
+  String get eventFieldCategory => 'Category';
+
+  @override
+  String get eventFieldCost => 'Cost note (optional)';
+
+  @override
+  String get eventFieldCover => 'Cover colour';
+
+  @override
+  String get eventFieldDate => 'Date';
+
+  @override
+  String get eventFieldDescription => 'Description';
+
+  @override
+  String get eventFieldLimit => 'Limit attendees';
+
+  @override
+  String get eventFieldOnline => 'How people join';
+
+  @override
+  String get eventFieldPeople => 'People';
+
+  @override
+  String get eventFieldQuestion => 'Question for people joining (optional)';
+
+  @override
+  String get eventFieldTime => 'Start time';
+
+  @override
+  String get eventFieldTitle => 'Title';
+
+  @override
+  String get eventFieldVenue => 'Venue';
+
+  @override
+  String get eventFieldWhen => 'When';
+
+  @override
+  String get eventFieldWhere => 'Where';
+
+  @override
+  String get eventFilterAreaBody =>
+      'Distance uses the area you choose. Your device location isn’t read.';
+
+  @override
+  String eventFilterAreaOutside(Object area) {
+    return 'Events in this demo are in London, not $area';
+  }
+
+  @override
+  String get eventFilterCategories => 'Categories';
+
+  @override
+  String get eventFilterChooseArea => 'Choose area';
+
+  @override
+  String get eventFilterDistance => 'Distance';
+
+  @override
+  String get eventFilterFormat => 'Format';
+
+  @override
+  String get eventFilterFree => 'Free only';
+
+  @override
+  String get eventFilterFreeNote => 'Events with no cost note from the host.';
+
+  @override
+  String eventFilterFromArea(Object area) {
+    return 'From $area';
+  }
+
+  @override
+  String get eventFilterNoArea => 'No area chosen';
+
+  @override
+  String get eventFilters => 'Filters';
+
+  @override
+  String eventFiltersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Filters, $count on',
+      one: 'Filters, 1 on',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get eventFixErrors => 'Some details need fixing';
+
+  @override
+  String get eventFormNote =>
+      'Your event is kept on this device in the demo. Nothing is published to other people.';
+
+  @override
+  String get eventFormatAny => 'Any';
+
+  @override
+  String get eventFormatInPerson => 'In person';
+
+  @override
+  String get eventFormatOnline => 'Online';
+
+  @override
+  String get eventFree => 'Free';
+
+  @override
+  String get eventFull => 'Full';
+
+  @override
+  String eventGoingCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count going',
+      one: '1 going',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get eventGoingHeading => 'Going';
+
+  @override
+  String get eventHostBadge => 'Host';
+
+  @override
+  String get eventHostPeopleNote =>
+      'Tap someone to remove them. The first person waiting takes the place.';
+
+  @override
+  String get eventHostSample => 'Sample host';
+
+  @override
+  String get eventHostUnknown => 'Someone';
+
+  @override
+  String get eventHostYou => 'That’s you';
+
+  @override
+  String eventHostedBy(Object name) {
+    return 'Hosted by $name';
+  }
+
+  @override
+  String get eventJoin => 'Join';
+
+  @override
+  String get eventJoinWaitlist => 'Join waitlist';
+
+  @override
+  String get eventJoinedToast => 'You’re going';
+
+  @override
+  String get eventKeepDraft => 'Keep draft';
+
+  @override
+  String get eventKeepEditing => 'Keep editing';
+
+  @override
+  String get eventLeave => 'Leave';
+
+  @override
+  String get eventLeaveBody =>
+      'Your place goes to the first person waiting, if there is one.';
+
+  @override
+  String get eventLeaveTitle => 'Leave this event?';
+
+  @override
+  String get eventLeaveWaitlist => 'Leave waitlist';
+
+  @override
+  String get eventLeaveWaitlistBody => 'You’ll lose your place in the queue.';
+
+  @override
+  String get eventLeaveWaitlistTitle => 'Leave the waitlist?';
+
+  @override
+  String get eventLeftToast => 'You’re not going any more';
+
+  @override
+  String get eventLeftWaitlistToast => 'You left the waitlist';
+
+  @override
+  String get eventLimitNote => 'When it’s full, people can join a waitlist.';
+
+  @override
+  String get eventLiveBody => 'Joining is closed while it’s on.';
+
+  @override
+  String get eventLiveTitle => 'Happening now';
+
+  @override
+  String get eventMissingBody =>
+      'It may have been deleted, or the link is wrong.';
+
+  @override
+  String get eventMissingTitle => 'Event not found';
+
+  @override
+  String get eventMore => 'More people';
+
+  @override
+  String get eventMoveToGoing => 'Move to going';
+
+  @override
+  String eventMovedToast(Object name) {
+    return '$name is going';
+  }
+
+  @override
+  String get eventNewTitle => 'New event';
+
+  @override
+  String get eventNobodyYet => 'Nobody else yet';
+
+  @override
+  String eventOnWaitlist(int position) {
+    return 'On the waitlist, number $position';
+  }
+
+  @override
+  String get eventOnline => 'Online';
+
+  @override
+  String get eventOnlineHint =>
+      'For example: I’ll send the video link to people going an hour before.';
+
+  @override
+  String get eventOwnNote => 'Your event, kept on this device in the demo.';
+
+  @override
+  String get eventPastTitle => 'This event has ended';
+
+  @override
+  String get eventPeopleNote =>
+      'First names only. Open someone to see their profile, report or block.';
+
+  @override
+  String eventPickedBecause(Object interest) {
+    return 'Because you like $interest';
+  }
+
+  @override
+  String get eventPreview => 'Preview';
+
+  @override
+  String get eventPreviewBody =>
+      'This is how people will see your event. Nothing is published yet.';
+
+  @override
+  String get eventPreviewTitle => 'Preview';
+
+  @override
+  String get eventPublish => 'Publish';
+
+  @override
+  String get eventPublishedBody =>
+      'It’s in Hosting under My events. In the demo nobody else can see it.';
+
+  @override
+  String get eventPublishedTitle => 'Your event is live';
+
+  @override
+  String get eventQuestionHint => 'For example: any dietary needs?';
+
+  @override
+  String get eventQuestionTitle => 'A question from the host';
+
+  @override
+  String get eventRemove => 'Remove';
+
+  @override
+  String get eventRemoveBody =>
+      'They’ll no longer be going. The first person waiting takes the place.';
+
+  @override
+  String eventRemoveTitle(Object name) {
+    return 'Remove $name?';
+  }
+
+  @override
+  String eventRemovedToast(Object name) {
+    return '$name removed';
+  }
+
+  @override
+  String get eventReport => 'Report this event';
+
+  @override
+  String get eventReportDone => 'Done';
+
+  @override
+  String get eventReportLegend => 'What’s wrong?';
+
+  @override
+  String get eventReportNote =>
+      'Reports stay on this device in the demo; nothing is sent or reviewed.';
+
+  @override
+  String get eventReportSend => 'Send report';
+
+  @override
+  String get eventReportTitle => 'Report event';
+
+  @override
+  String get eventReportedToast => 'Report saved on this device';
+
+  @override
+  String get eventSafetyBody =>
+      'Meet at the listed public place, tell a friend where you’re going, and leave whenever you like. Numaya never shows anyone’s home address or live location.';
+
+  @override
+  String get eventSafetyTitle => 'Meeting safely';
+
+  @override
+  String eventSave(Object title) {
+    return 'Save $title';
+  }
+
+  @override
+  String get eventSaveChanges => 'Save changes';
+
+  @override
+  String get eventSaveDraft => 'Save draft';
+
+  @override
+  String get eventSaved => 'Saved';
+
+  @override
+  String get eventSelected => 'Selected';
+
+  @override
+  String get eventShare => 'Share';
+
+  @override
+  String get eventShareToast =>
+      'Sharing isn’t available in the demo. Nothing leaves this device.';
+
+  @override
+  String eventShowCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Show $count events',
+      one: 'Show 1 event',
+      zero: 'No events',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get eventSortBy => 'Sort by';
+
+  @override
+  String get eventSortDate => 'Date';
+
+  @override
+  String get eventSortNote =>
+      'Relevance puts events matching your interests first, then by date.';
+
+  @override
+  String get eventSortRelevance => 'Relevance';
+
+  @override
+  String eventSpotsLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count spots left',
+      one: '1 spot left',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get eventStay => 'Stay';
+
+  @override
+  String eventTimeRange(Object start, Object end, Object zone) {
+    return '$start–$end ($zone)';
+  }
+
+  @override
+  String get eventTitle => 'Event';
+
+  @override
+  String eventUnsave(Object title) {
+    return 'Unsave $title';
+  }
+
+  @override
+  String get eventUnsaved => 'Removed from saved';
+
+  @override
+  String get eventUntitled => 'Untitled event';
+
+  @override
+  String eventVenueDistance(Object venue, Object km) {
+    return '$venue · about $km km';
+  }
+
+  @override
+  String get eventVenueHint =>
+      'A public place, for example a café or a park entrance.';
+
+  @override
+  String eventWaitingCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count waiting',
+      one: '1 waiting',
+      zero: 'Nobody waiting',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get eventWaitlistDetail => 'If someone drops out, you move up.';
+
+  @override
+  String get eventWaitlistFullNote => 'Moving someone up needs a free place.';
+
+  @override
+  String eventWaitlistHeading(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Waitlist ($count)',
+      one: 'Waitlist (1)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String eventWaitlistPlace(int place) {
+    return 'Number $place';
+  }
+
+  @override
+  String get eventWaitlistRoomNote =>
+      'There’s room: tap someone to move them to going.';
+
+  @override
+  String eventWaitlistToast(int position) {
+    return 'You’re on the waitlist, number $position';
+  }
+
+  @override
+  String get eventWhoGoing => 'Who’s going';
+
+  @override
+  String get eventYou => 'You';
+
+  @override
+  String get eventYouWent => 'You went';
+
+  @override
+  String get eventYourAnswer => 'Your answer';
+
+  @override
+  String get eventYoureGoing => 'You’re going';
+
+  @override
+  String get eventsAll => 'All events';
+
+  @override
+  String get eventsClear => 'Clear search and filters';
+
+  @override
+  String get eventsErrorBody =>
+      'This is a simulated connection problem. Try again, or turn it off in the Demo Hub.';
+
+  @override
+  String get eventsErrorStillTitle => 'Still can’t load events';
+
+  @override
+  String get eventsErrorTitle => 'We couldn’t load events';
+
+  @override
+  String get eventsExplore => 'Explore';
+
+  @override
+  String get eventsFind => 'Find events';
+
+  @override
+  String get eventsGoing => 'Going';
+
+  @override
+  String get eventsGoingEmptyBody => 'Events you join appear here.';
+
+  @override
+  String get eventsGoingEmptyTitle => 'Nothing planned yet';
+
+  @override
+  String get eventsHosting => 'Hosting';
+
+  @override
+  String get eventsHostingEmptyBody =>
+      'Host a walk, a dinner, a game night. Drafts stay private until you publish.';
+
+  @override
+  String get eventsHostingEmptyTitle => 'You’re not hosting anything';
+
+  @override
+  String eventsListCount(Object label, int count) {
+    return '$label $count';
+  }
+
+  @override
+  String get eventsLoading => 'Loading events';
+
+  @override
+  String get eventsMine => 'My events';
+
+  @override
+  String get eventsNoAreaBody =>
+      'Distance needs an area. Choose one in Filters, or clear the distance filter.';
+
+  @override
+  String get eventsNoResultsBody => 'Try other words, or clear the filters.';
+
+  @override
+  String get eventsNoResultsTitle => 'No events match';
+
+  @override
+  String get eventsPast => 'Past';
+
+  @override
+  String get eventsPastEmptyBody =>
+      'Events you went to or hosted appear here afterwards.';
+
+  @override
+  String get eventsPastEmptyTitle => 'No past events';
+
+  @override
+  String get eventsPicked => 'Picked for your interests';
+
+  @override
+  String get eventsPickedNote =>
+      'Events in a category linked to an interest on your profile.';
+
+  @override
+  String get eventsSampleNote =>
+      'Sample events. Hosts, places and attendees are invented; joining is saved on this device only.';
+
+  @override
+  String get eventsSaved => 'Saved';
+
+  @override
+  String get eventsSavedEmptyBody =>
+      'Tap the heart on an event to keep it here.';
+
+  @override
+  String get eventsSavedEmptyTitle => 'Nothing saved';
+
+  @override
+  String get eventsSearch => 'Search events';
+
+  @override
+  String get eventsWaitlist => 'Waitlist';
+
+  @override
+  String get eventsWaitlistEmptyBody =>
+      'When an event is full you can join its waitlist.';
+
+  @override
+  String get eventsWaitlistEmptyTitle => 'No waitlists';
+
+  @override
+  String get eventFilterWhen => 'When';
 }

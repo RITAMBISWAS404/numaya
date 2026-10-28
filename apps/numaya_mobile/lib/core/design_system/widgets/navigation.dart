@@ -183,6 +183,7 @@ class ListRow extends StatelessWidget {
     this.danger = false,
     this.showChevron,
     this.leading,
+    this.avatar,
   });
 
   final String label;
@@ -194,6 +195,9 @@ class ListRow extends StatelessWidget {
   final bool danger;
   final bool? showChevron;
   final NumayaIcons? leading;
+
+  /// A person's avatar in place of [leading] (people lists).
+  final Widget? avatar;
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +216,10 @@ class ListRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          if (leading != null) ...[
+          if (avatar != null) ...[
+            avatar!,
+            const SizedBox(width: AppSpacing.s3),
+          ] else if (leading != null) ...[
             NumayaIcon(leading!, size: AppSizes.iconMd, color: AppColors.ink),
             const SizedBox(width: AppSpacing.s3),
           ],

@@ -243,12 +243,16 @@ class NavIconButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.style = NavButtonStyle.floating,
+    this.outline = false,
   });
 
   final NumayaIcons icon;
   final String label;
   final VoidCallback? onPressed;
   final NavButtonStyle style;
+
+  /// The unfilled drawing (a toggle that is off, such as an unsaved heart).
+  final bool outline;
 
   @override
   Widget build(BuildContext context) {
@@ -289,6 +293,7 @@ class NavIconButton extends StatelessWidget {
             size: style == NavButtonStyle.flat
                 ? AppSizes.iconMd
                 : AppSizes.iconLg,
+            outline: outline,
             // Unavailable (no handler): the icon greys out, the button keeps its place.
             color: onPressed == null
                 ? AppColors.disabledForeground

@@ -5595,6 +5595,1476 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Placeholders. Sample profiles have no real photos.'**
   String get photoViewerNote;
+
+  /// No description provided for @tabEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Events'**
+  String get tabEvents;
+
+  /// No description provided for @eventAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'about {km} km'**
+  String eventAbout(Object km);
+
+  /// No description provided for @eventAbout2.
+  ///
+  /// In en, this message translates to:
+  /// **'About this event'**
+  String get eventAbout2;
+
+  /// No description provided for @eventAndMore.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{and 1 more} other{and {count} more}}'**
+  String eventAndMore(int count);
+
+  /// No description provided for @eventAnswerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the host sees this.'**
+  String get eventAnswerHint;
+
+  /// No description provided for @eventAreaNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown as an area and a rough distance, never as an address.'**
+  String get eventAreaNote;
+
+  /// No description provided for @eventAttendees.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendees'**
+  String get eventAttendees;
+
+  /// No description provided for @eventBadgeCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get eventBadgeCancelled;
+
+  /// No description provided for @eventBadgeChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Changed'**
+  String get eventBadgeChanged;
+
+  /// No description provided for @eventBadgeClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration closed'**
+  String get eventBadgeClosed;
+
+  /// No description provided for @eventBadgeDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get eventBadgeDraft;
+
+  /// No description provided for @eventBadgeFewSpots.
+  ///
+  /// In en, this message translates to:
+  /// **'Few spots left'**
+  String get eventBadgeFewSpots;
+
+  /// No description provided for @eventBadgeGoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Going'**
+  String get eventBadgeGoing;
+
+  /// No description provided for @eventBadgeHosting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hosting'**
+  String get eventBadgeHosting;
+
+  /// No description provided for @eventBadgeLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Happening now'**
+  String get eventBadgeLive;
+
+  /// No description provided for @eventBadgePast.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended'**
+  String get eventBadgePast;
+
+  /// No description provided for @eventBadgeWaitlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Waitlist'**
+  String get eventBadgeWaitlist;
+
+  /// No description provided for @eventCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel event'**
+  String get eventCancel;
+
+  /// No description provided for @eventCancelBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone going and waiting will see that it’s cancelled. The event stays visible with its status.'**
+  String get eventCancelBody;
+
+  /// No description provided for @eventCancelConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel event'**
+  String get eventCancelConfirm;
+
+  /// No description provided for @eventCancelKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep event'**
+  String get eventCancelKeep;
+
+  /// No description provided for @eventCancelNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional, for example why, or when you’ll run it again.'**
+  String get eventCancelNoteHint;
+
+  /// No description provided for @eventCancelNoteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Note to attendees'**
+  String get eventCancelNoteLabel;
+
+  /// No description provided for @eventCancelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel this event?'**
+  String get eventCancelTitle;
+
+  /// No description provided for @eventCancelledBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The host cancelled this event.'**
+  String get eventCancelledBody;
+
+  /// No description provided for @eventCancelledFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody can join a cancelled event.'**
+  String get eventCancelledFooter;
+
+  /// No description provided for @eventCancelledNote.
+  ///
+  /// In en, this message translates to:
+  /// **'The host cancelled this event: “{note}”'**
+  String eventCancelledNote(Object note);
+
+  /// No description provided for @eventCancelledTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get eventCancelledTitle;
+
+  /// No description provided for @eventCancelledToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Event cancelled'**
+  String get eventCancelledToast;
+
+  /// No description provided for @eventCapacityValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 person} other{{count} people}}'**
+  String eventCapacityValue(int count);
+
+  /// No description provided for @eventCatArts.
+  ///
+  /// In en, this message translates to:
+  /// **'Arts'**
+  String get eventCatArts;
+
+  /// No description provided for @eventCatFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Food and drink'**
+  String get eventCatFood;
+
+  /// No description provided for @eventCatGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Games'**
+  String get eventCatGames;
+
+  /// No description provided for @eventCatMusic.
+  ///
+  /// In en, this message translates to:
+  /// **'Music'**
+  String get eventCatMusic;
+
+  /// No description provided for @eventCatOutdoors.
+  ///
+  /// In en, this message translates to:
+  /// **'Outdoors'**
+  String get eventCatOutdoors;
+
+  /// No description provided for @eventCatSport.
+  ///
+  /// In en, this message translates to:
+  /// **'Sport'**
+  String get eventCatSport;
+
+  /// No description provided for @eventChangedByYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You changed the time or place. People going see this note.'**
+  String get eventChangedByYou;
+
+  /// No description provided for @eventChangedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Changed since people joined'**
+  String get eventChangedTitle;
+
+  /// No description provided for @eventChangesSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes saved'**
+  String get eventChangesSaved;
+
+  /// No description provided for @eventChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose'**
+  String get eventChoose;
+
+  /// No description provided for @eventClosedDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Joining closes 2 hours before the start.'**
+  String get eventClosedDetail;
+
+  /// No description provided for @eventClosedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'You can’t join this event any more'**
+  String get eventClosedToast;
+
+  /// No description provided for @eventCostAtVenue.
+  ///
+  /// In en, this message translates to:
+  /// **'Cost paid at the venue'**
+  String get eventCostAtVenue;
+
+  /// No description provided for @eventCostHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave empty if it’s free. Numaya never takes payment.'**
+  String get eventCostHint;
+
+  /// No description provided for @eventCostNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Any cost is paid to the venue or host. Numaya doesn’t sell tickets.'**
+  String get eventCostNote;
+
+  /// No description provided for @eventCoverNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Cover colour. Photos come later.'**
+  String get eventCoverNote;
+
+  /// No description provided for @eventCoverOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Cover colour {option}'**
+  String eventCoverOption(int option);
+
+  /// No description provided for @eventCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an event'**
+  String get eventCreate;
+
+  /// No description provided for @eventDateAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Any day'**
+  String get eventDateAny;
+
+  /// No description provided for @eventDateToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get eventDateToday;
+
+  /// No description provided for @eventDateWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Next 7 days'**
+  String get eventDateWeek;
+
+  /// No description provided for @eventDateWeekend.
+  ///
+  /// In en, this message translates to:
+  /// **'This weekend'**
+  String get eventDateWeekend;
+
+  /// No description provided for @eventDeleteDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete draft'**
+  String get eventDeleteDraft;
+
+  /// No description provided for @eventDeleteDraftBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This draft will be gone. Nobody else has seen it.'**
+  String get eventDeleteDraftBody;
+
+  /// No description provided for @eventDeleteDraftTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this draft?'**
+  String get eventDeleteDraftTitle;
+
+  /// No description provided for @eventDemoRsvp.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved on this device (demo)'**
+  String get eventDemoRsvp;
+
+  /// No description provided for @eventDescriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'What you’ll do, who it’s for, anything to bring.'**
+  String get eventDescriptionHint;
+
+  /// No description provided for @eventDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard changes'**
+  String get eventDiscard;
+
+  /// No description provided for @eventDiscardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have changes that aren’t saved.'**
+  String get eventDiscardBody;
+
+  /// No description provided for @eventDiscardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave without saving?'**
+  String get eventDiscardTitle;
+
+  /// No description provided for @eventDistanceAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Any distance'**
+  String get eventDistanceAny;
+
+  /// No description provided for @eventDistanceWithin.
+  ///
+  /// In en, this message translates to:
+  /// **'Within {km} km'**
+  String eventDistanceWithin(int km);
+
+  /// No description provided for @eventDraftBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Only you can see this. Publish when it’s ready.'**
+  String get eventDraftBody;
+
+  /// No description provided for @eventDraftDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft deleted'**
+  String get eventDraftDeleted;
+
+  /// No description provided for @eventDraftIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish the missing details to publish'**
+  String get eventDraftIncomplete;
+
+  /// No description provided for @eventDraftNeedsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a title to save a draft'**
+  String get eventDraftNeedsTitle;
+
+  /// No description provided for @eventDraftSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft saved'**
+  String get eventDraftSaved;
+
+  /// No description provided for @eventDraftTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get eventDraftTitle;
+
+  /// No description provided for @eventDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours, plural, =0{{minutes} min} =1{1 h {minutes} min} other{{hours} h {minutes} min}}'**
+  String eventDuration(int hours, int minutes);
+
+  /// No description provided for @eventEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get eventEdit;
+
+  /// No description provided for @eventEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit event'**
+  String get eventEditTitle;
+
+  /// No description provided for @eventEditingPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'This event is live'**
+  String get eventEditingPublished;
+
+  /// No description provided for @eventEditingPublishedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If you change the time or place, people going see a note.'**
+  String get eventEditingPublishedBody;
+
+  /// No description provided for @eventErrCapacity.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow at least {min} people.'**
+  String eventErrCapacity(int min);
+
+  /// No description provided for @eventErrCapacityGoing.
+  ///
+  /// In en, this message translates to:
+  /// **'{going} people are already going. Remove someone first or keep the limit higher.'**
+  String eventErrCapacityGoing(int going);
+
+  /// No description provided for @eventErrCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a category.'**
+  String get eventErrCategory;
+
+  /// No description provided for @eventErrDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a date and a start time.'**
+  String get eventErrDate;
+
+  /// No description provided for @eventErrDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe it in at least {min} characters.'**
+  String eventErrDescription(int min);
+
+  /// No description provided for @eventErrOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Say how people will get the link.'**
+  String get eventErrOnline;
+
+  /// No description provided for @eventErrPast.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a time in the future.'**
+  String get eventErrPast;
+
+  /// No description provided for @eventErrTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a title of at least {min} characters.'**
+  String eventErrTitle(int min);
+
+  /// No description provided for @eventErrTitleLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the title under {max} characters.'**
+  String eventErrTitleLong(int max);
+
+  /// No description provided for @eventErrVenue.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the public place you’ll meet.'**
+  String get eventErrVenue;
+
+  /// No description provided for @eventFailedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing changed. This is the demo’s simulated connection problem.'**
+  String get eventFailedBody;
+
+  /// No description provided for @eventFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t save that'**
+  String get eventFailedTitle;
+
+  /// No description provided for @eventFewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Fewer people'**
+  String get eventFewer;
+
+  /// No description provided for @eventFieldArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Area'**
+  String get eventFieldArea;
+
+  /// No description provided for @eventFieldCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get eventFieldCategory;
+
+  /// No description provided for @eventFieldCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Cost note (optional)'**
+  String get eventFieldCost;
+
+  /// No description provided for @eventFieldCover.
+  ///
+  /// In en, this message translates to:
+  /// **'Cover colour'**
+  String get eventFieldCover;
+
+  /// No description provided for @eventFieldDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get eventFieldDate;
+
+  /// No description provided for @eventFieldDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get eventFieldDescription;
+
+  /// No description provided for @eventFieldLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Limit attendees'**
+  String get eventFieldLimit;
+
+  /// No description provided for @eventFieldOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'How people join'**
+  String get eventFieldOnline;
+
+  /// No description provided for @eventFieldPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'People'**
+  String get eventFieldPeople;
+
+  /// No description provided for @eventFieldQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Question for people joining (optional)'**
+  String get eventFieldQuestion;
+
+  /// No description provided for @eventFieldTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Start time'**
+  String get eventFieldTime;
+
+  /// No description provided for @eventFieldTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get eventFieldTitle;
+
+  /// No description provided for @eventFieldVenue.
+  ///
+  /// In en, this message translates to:
+  /// **'Venue'**
+  String get eventFieldVenue;
+
+  /// No description provided for @eventFieldWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'When'**
+  String get eventFieldWhen;
+
+  /// No description provided for @eventFieldWhere.
+  ///
+  /// In en, this message translates to:
+  /// **'Where'**
+  String get eventFieldWhere;
+
+  /// No description provided for @eventFilterAreaBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance uses the area you choose. Your device location isn’t read.'**
+  String get eventFilterAreaBody;
+
+  /// No description provided for @eventFilterAreaOutside.
+  ///
+  /// In en, this message translates to:
+  /// **'Events in this demo are in London, not {area}'**
+  String eventFilterAreaOutside(Object area);
+
+  /// No description provided for @eventFilterCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get eventFilterCategories;
+
+  /// No description provided for @eventFilterChooseArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose area'**
+  String get eventFilterChooseArea;
+
+  /// No description provided for @eventFilterDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get eventFilterDistance;
+
+  /// No description provided for @eventFilterFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Format'**
+  String get eventFilterFormat;
+
+  /// No description provided for @eventFilterFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free only'**
+  String get eventFilterFree;
+
+  /// No description provided for @eventFilterFreeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Events with no cost note from the host.'**
+  String get eventFilterFreeNote;
+
+  /// No description provided for @eventFilterFromArea.
+  ///
+  /// In en, this message translates to:
+  /// **'From {area}'**
+  String eventFilterFromArea(Object area);
+
+  /// No description provided for @eventFilterNoArea.
+  ///
+  /// In en, this message translates to:
+  /// **'No area chosen'**
+  String get eventFilterNoArea;
+
+  /// No description provided for @eventFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get eventFilters;
+
+  /// No description provided for @eventFiltersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Filters, 1 on} other{Filters, {count} on}}'**
+  String eventFiltersCount(int count);
+
+  /// No description provided for @eventFixErrors.
+  ///
+  /// In en, this message translates to:
+  /// **'Some details need fixing'**
+  String get eventFixErrors;
+
+  /// No description provided for @eventFormNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your event is kept on this device in the demo. Nothing is published to other people.'**
+  String get eventFormNote;
+
+  /// No description provided for @eventFormatAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Any'**
+  String get eventFormatAny;
+
+  /// No description provided for @eventFormatInPerson.
+  ///
+  /// In en, this message translates to:
+  /// **'In person'**
+  String get eventFormatInPerson;
+
+  /// No description provided for @eventFormatOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get eventFormatOnline;
+
+  /// No description provided for @eventFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get eventFree;
+
+  /// No description provided for @eventFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Full'**
+  String get eventFull;
+
+  /// No description provided for @eventGoingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 going} other{{count} going}}'**
+  String eventGoingCount(int count);
+
+  /// No description provided for @eventGoingHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Going'**
+  String get eventGoingHeading;
+
+  /// No description provided for @eventHostBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Host'**
+  String get eventHostBadge;
+
+  /// No description provided for @eventHostPeopleNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap someone to remove them. The first person waiting takes the place.'**
+  String get eventHostPeopleNote;
+
+  /// No description provided for @eventHostSample.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample host'**
+  String get eventHostSample;
+
+  /// No description provided for @eventHostUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone'**
+  String get eventHostUnknown;
+
+  /// No description provided for @eventHostYou.
+  ///
+  /// In en, this message translates to:
+  /// **'That’s you'**
+  String get eventHostYou;
+
+  /// No description provided for @eventHostedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Hosted by {name}'**
+  String eventHostedBy(Object name);
+
+  /// No description provided for @eventJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Join'**
+  String get eventJoin;
+
+  /// No description provided for @eventJoinWaitlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Join waitlist'**
+  String get eventJoinWaitlist;
+
+  /// No description provided for @eventJoinedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re going'**
+  String get eventJoinedToast;
+
+  /// No description provided for @eventKeepDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep draft'**
+  String get eventKeepDraft;
+
+  /// No description provided for @eventKeepEditing.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep editing'**
+  String get eventKeepEditing;
+
+  /// No description provided for @eventLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave'**
+  String get eventLeave;
+
+  /// No description provided for @eventLeaveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your place goes to the first person waiting, if there is one.'**
+  String get eventLeaveBody;
+
+  /// No description provided for @eventLeaveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave this event?'**
+  String get eventLeaveTitle;
+
+  /// No description provided for @eventLeaveWaitlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave waitlist'**
+  String get eventLeaveWaitlist;
+
+  /// No description provided for @eventLeaveWaitlistBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ll lose your place in the queue.'**
+  String get eventLeaveWaitlistBody;
+
+  /// No description provided for @eventLeaveWaitlistTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave the waitlist?'**
+  String get eventLeaveWaitlistTitle;
+
+  /// No description provided for @eventLeftToast.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re not going any more'**
+  String get eventLeftToast;
+
+  /// No description provided for @eventLeftWaitlistToast.
+  ///
+  /// In en, this message translates to:
+  /// **'You left the waitlist'**
+  String get eventLeftWaitlistToast;
+
+  /// No description provided for @eventLimitNote.
+  ///
+  /// In en, this message translates to:
+  /// **'When it’s full, people can join a waitlist.'**
+  String get eventLimitNote;
+
+  /// No description provided for @eventLiveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Joining is closed while it’s on.'**
+  String get eventLiveBody;
+
+  /// No description provided for @eventLiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Happening now'**
+  String get eventLiveTitle;
+
+  /// No description provided for @eventMissingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It may have been deleted, or the link is wrong.'**
+  String get eventMissingBody;
+
+  /// No description provided for @eventMissingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Event not found'**
+  String get eventMissingTitle;
+
+  /// No description provided for @eventMore.
+  ///
+  /// In en, this message translates to:
+  /// **'More people'**
+  String get eventMore;
+
+  /// No description provided for @eventMoveToGoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to going'**
+  String get eventMoveToGoing;
+
+  /// No description provided for @eventMovedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is going'**
+  String eventMovedToast(Object name);
+
+  /// No description provided for @eventNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New event'**
+  String get eventNewTitle;
+
+  /// No description provided for @eventNobodyYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Nobody else yet'**
+  String get eventNobodyYet;
+
+  /// No description provided for @eventOnWaitlist.
+  ///
+  /// In en, this message translates to:
+  /// **'On the waitlist, number {position}'**
+  String eventOnWaitlist(int position);
+
+  /// No description provided for @eventOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get eventOnline;
+
+  /// No description provided for @eventOnlineHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For example: I’ll send the video link to people going an hour before.'**
+  String get eventOnlineHint;
+
+  /// No description provided for @eventOwnNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your event, kept on this device in the demo.'**
+  String get eventOwnNote;
+
+  /// No description provided for @eventPastTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This event has ended'**
+  String get eventPastTitle;
+
+  /// No description provided for @eventPeopleNote.
+  ///
+  /// In en, this message translates to:
+  /// **'First names only. Open someone to see their profile, report or block.'**
+  String get eventPeopleNote;
+
+  /// No description provided for @eventPickedBecause.
+  ///
+  /// In en, this message translates to:
+  /// **'Because you like {interest}'**
+  String eventPickedBecause(Object interest);
+
+  /// No description provided for @eventPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get eventPreview;
+
+  /// No description provided for @eventPreviewBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This is how people will see your event. Nothing is published yet.'**
+  String get eventPreviewBody;
+
+  /// No description provided for @eventPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get eventPreviewTitle;
+
+  /// No description provided for @eventPublish.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish'**
+  String get eventPublish;
+
+  /// No description provided for @eventPublishedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'It’s in Hosting under My events. In the demo nobody else can see it.'**
+  String get eventPublishedBody;
+
+  /// No description provided for @eventPublishedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your event is live'**
+  String get eventPublishedTitle;
+
+  /// No description provided for @eventQuestionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For example: any dietary needs?'**
+  String get eventQuestionHint;
+
+  /// No description provided for @eventQuestionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A question from the host'**
+  String get eventQuestionTitle;
+
+  /// No description provided for @eventRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get eventRemove;
+
+  /// No description provided for @eventRemoveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'They’ll no longer be going. The first person waiting takes the place.'**
+  String get eventRemoveBody;
+
+  /// No description provided for @eventRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {name}?'**
+  String eventRemoveTitle(Object name);
+
+  /// No description provided for @eventRemovedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} removed'**
+  String eventRemovedToast(Object name);
+
+  /// No description provided for @eventReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report this event'**
+  String get eventReport;
+
+  /// No description provided for @eventReportDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get eventReportDone;
+
+  /// No description provided for @eventReportLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'What’s wrong?'**
+  String get eventReportLegend;
+
+  /// No description provided for @eventReportNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports stay on this device in the demo; nothing is sent or reviewed.'**
+  String get eventReportNote;
+
+  /// No description provided for @eventReportSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send report'**
+  String get eventReportSend;
+
+  /// No description provided for @eventReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report event'**
+  String get eventReportTitle;
+
+  /// No description provided for @eventReportedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Report saved on this device'**
+  String get eventReportedToast;
+
+  /// No description provided for @eventSafetyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Meet at the listed public place, tell a friend where you’re going, and leave whenever you like. Numaya never shows anyone’s home address or live location.'**
+  String get eventSafetyBody;
+
+  /// No description provided for @eventSafetyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Meeting safely'**
+  String get eventSafetyTitle;
+
+  /// No description provided for @eventSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save {title}'**
+  String eventSave(Object title);
+
+  /// No description provided for @eventSaveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get eventSaveChanges;
+
+  /// No description provided for @eventSaveDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Save draft'**
+  String get eventSaveDraft;
+
+  /// No description provided for @eventSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get eventSaved;
+
+  /// No description provided for @eventSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get eventSelected;
+
+  /// No description provided for @eventShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get eventShare;
+
+  /// No description provided for @eventShareToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing isn’t available in the demo. Nothing leaves this device.'**
+  String get eventShareToast;
+
+  /// No description provided for @eventShowCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No events} =1{Show 1 event} other{Show {count} events}}'**
+  String eventShowCount(int count);
+
+  /// No description provided for @eventSortBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get eventSortBy;
+
+  /// No description provided for @eventSortDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get eventSortDate;
+
+  /// No description provided for @eventSortNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Relevance puts events matching your interests first, then by date.'**
+  String get eventSortNote;
+
+  /// No description provided for @eventSortRelevance.
+  ///
+  /// In en, this message translates to:
+  /// **'Relevance'**
+  String get eventSortRelevance;
+
+  /// No description provided for @eventSpotsLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 spot left} other{{count} spots left}}'**
+  String eventSpotsLeft(int count);
+
+  /// No description provided for @eventStay.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay'**
+  String get eventStay;
+
+  /// No description provided for @eventTimeRange.
+  ///
+  /// In en, this message translates to:
+  /// **'{start}–{end} ({zone})'**
+  String eventTimeRange(Object start, Object end, Object zone);
+
+  /// No description provided for @eventTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Event'**
+  String get eventTitle;
+
+  /// No description provided for @eventUnsave.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsave {title}'**
+  String eventUnsave(Object title);
+
+  /// No description provided for @eventUnsaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from saved'**
+  String get eventUnsaved;
+
+  /// No description provided for @eventUntitled.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled event'**
+  String get eventUntitled;
+
+  /// No description provided for @eventVenueDistance.
+  ///
+  /// In en, this message translates to:
+  /// **'{venue} · about {km} km'**
+  String eventVenueDistance(Object venue, Object km);
+
+  /// No description provided for @eventVenueHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A public place, for example a café or a park entrance.'**
+  String get eventVenueHint;
+
+  /// No description provided for @eventWaitingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Nobody waiting} =1{1 waiting} other{{count} waiting}}'**
+  String eventWaitingCount(int count);
+
+  /// No description provided for @eventWaitlistDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'If someone drops out, you move up.'**
+  String get eventWaitlistDetail;
+
+  /// No description provided for @eventWaitlistFullNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving someone up needs a free place.'**
+  String get eventWaitlistFullNote;
+
+  /// No description provided for @eventWaitlistHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Waitlist (1)} other{Waitlist ({count})}}'**
+  String eventWaitlistHeading(int count);
+
+  /// No description provided for @eventWaitlistPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Number {place}'**
+  String eventWaitlistPlace(int place);
+
+  /// No description provided for @eventWaitlistRoomNote.
+  ///
+  /// In en, this message translates to:
+  /// **'There’s room: tap someone to move them to going.'**
+  String get eventWaitlistRoomNote;
+
+  /// No description provided for @eventWaitlistToast.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re on the waitlist, number {position}'**
+  String eventWaitlistToast(int position);
+
+  /// No description provided for @eventWhoGoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Who’s going'**
+  String get eventWhoGoing;
+
+  /// No description provided for @eventYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get eventYou;
+
+  /// No description provided for @eventYouWent.
+  ///
+  /// In en, this message translates to:
+  /// **'You went'**
+  String get eventYouWent;
+
+  /// No description provided for @eventYourAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Your answer'**
+  String get eventYourAnswer;
+
+  /// No description provided for @eventYoureGoing.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re going'**
+  String get eventYoureGoing;
+
+  /// No description provided for @eventsAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All events'**
+  String get eventsAll;
+
+  /// No description provided for @eventsClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search and filters'**
+  String get eventsClear;
+
+  /// No description provided for @eventsErrorBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a simulated connection problem. Try again, or turn it off in the Demo Hub.'**
+  String get eventsErrorBody;
+
+  /// No description provided for @eventsErrorStillTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Still can’t load events'**
+  String get eventsErrorStillTitle;
+
+  /// No description provided for @eventsErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t load events'**
+  String get eventsErrorTitle;
+
+  /// No description provided for @eventsExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get eventsExplore;
+
+  /// No description provided for @eventsFind.
+  ///
+  /// In en, this message translates to:
+  /// **'Find events'**
+  String get eventsFind;
+
+  /// No description provided for @eventsGoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Going'**
+  String get eventsGoing;
+
+  /// No description provided for @eventsGoingEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Events you join appear here.'**
+  String get eventsGoingEmptyBody;
+
+  /// No description provided for @eventsGoingEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing planned yet'**
+  String get eventsGoingEmptyTitle;
+
+  /// No description provided for @eventsHosting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hosting'**
+  String get eventsHosting;
+
+  /// No description provided for @eventsHostingEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Host a walk, a dinner, a game night. Drafts stay private until you publish.'**
+  String get eventsHostingEmptyBody;
+
+  /// No description provided for @eventsHostingEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re not hosting anything'**
+  String get eventsHostingEmptyTitle;
+
+  /// No description provided for @eventsListCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} {count}'**
+  String eventsListCount(Object label, int count);
+
+  /// No description provided for @eventsLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading events'**
+  String get eventsLoading;
+
+  /// No description provided for @eventsMine.
+  ///
+  /// In en, this message translates to:
+  /// **'My events'**
+  String get eventsMine;
+
+  /// No description provided for @eventsNoAreaBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance needs an area. Choose one in Filters, or clear the distance filter.'**
+  String get eventsNoAreaBody;
+
+  /// No description provided for @eventsNoResultsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Try other words, or clear the filters.'**
+  String get eventsNoResultsBody;
+
+  /// No description provided for @eventsNoResultsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No events match'**
+  String get eventsNoResultsTitle;
+
+  /// No description provided for @eventsPast.
+  ///
+  /// In en, this message translates to:
+  /// **'Past'**
+  String get eventsPast;
+
+  /// No description provided for @eventsPastEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Events you went to or hosted appear here afterwards.'**
+  String get eventsPastEmptyBody;
+
+  /// No description provided for @eventsPastEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No past events'**
+  String get eventsPastEmptyTitle;
+
+  /// No description provided for @eventsPicked.
+  ///
+  /// In en, this message translates to:
+  /// **'Picked for your interests'**
+  String get eventsPicked;
+
+  /// No description provided for @eventsPickedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Events in a category linked to an interest on your profile.'**
+  String get eventsPickedNote;
+
+  /// No description provided for @eventsSampleNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample events. Hosts, places and attendees are invented; joining is saved on this device only.'**
+  String get eventsSampleNote;
+
+  /// No description provided for @eventsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get eventsSaved;
+
+  /// No description provided for @eventsSavedEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the heart on an event to keep it here.'**
+  String get eventsSavedEmptyBody;
+
+  /// No description provided for @eventsSavedEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing saved'**
+  String get eventsSavedEmptyTitle;
+
+  /// No description provided for @eventsSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search events'**
+  String get eventsSearch;
+
+  /// No description provided for @eventsWaitlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Waitlist'**
+  String get eventsWaitlist;
+
+  /// No description provided for @eventsWaitlistEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'When an event is full you can join its waitlist.'**
+  String get eventsWaitlistEmptyBody;
+
+  /// No description provided for @eventsWaitlistEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No waitlists'**
+  String get eventsWaitlistEmptyTitle;
+
+  /// No description provided for @eventFilterWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'When'**
+  String get eventFilterWhen;
 }
 
 class _AppLocalizationsDelegate
