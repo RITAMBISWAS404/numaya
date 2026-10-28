@@ -8,6 +8,7 @@ import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
+import 'buttons.dart';
 import 'people.dart';
 import 'primitives.dart';
 
@@ -93,74 +94,105 @@ class _RingPainter extends CustomPainter {
       old.fraction != fraction || old.color != color;
 }
 
-/// Profile completion ring (B-23): a progress ring around the avatar with a percentage tag below.
-class CompletionRing extends StatelessWidget {
-  const CompletionRing({
+/// Profile completion (B-23, refined in RD-15): a card with the percentage, a progress bar and,
+/// while anything is missing, one action. Replaces the ring around the avatar, which said only a
+/// number. [title] is read as the card's label ("Profile 28% complete").
+class CompletionCard extends StatelessWidget {
+  const CompletionCard({
     super.key,
     required this.percent,
-    required this.child,
-    required this.label,
-    this.size = 112,
+    required this.title,
+    required this.body,
+    this.actionLabel,
+    this.onAction,
   });
 
   final int percent;
-  final Widget child;
-  final String label;
-  final double size;
+  final String title;
+  final String body;
+  final String? actionLabel;
+  final VoidCallback? onAction;
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      label: label,
-      child: SizedBox(
-        width: size,
-        height: size + 12,
-        child: Stack(
-          clipBehavior: Clip.none,
-          alignment: Alignment.topCenter,
-          children: [
-            SizedBox.square(
-              dimension: size,
-              // The arc fills from its old value when the percentage changes (no animation on
-              // first show; the number itself changes at once).
-              child: TweenAnimationBuilder<double>(
-                tween: Tween(end: percent / 100),
-                duration: AppMotion.duration(context, AppMotion.progress),
-                curve: AppMotion.easeOut,
-                builder: (context, fraction, child) => CustomPaint(
-                  painter: _RingPainter(
-                    fraction: fraction,
-                    color: AppColors.accent,
-                  ),
-                  child: child,
+    final done = percent >= 100;
+    return Container(
+      padding: const EdgeInsets.all(AppLayout.cardPadding),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.card),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              if (done) ...[
+                const NumayaIcon(
+                  NumayaIcons.check,
+                  size: AppSizes.iconMd,
+                  color: AppColors.accent,
                 ),
-                child: Center(child: ExcludeSemantics(child: child)),
+                const SizedBox(width: AppLayout.iconLabelGap),
+              ],
+              Expanded(
+                child: Text(
+                  title,
+                  style: AppTypography.weight(
+                    AppTypography.body,
+                    AppTypography.semibold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.s3),
+          // The bar fills from its old value when the percentage changes (the number changes at
+          // once; the title already says it, so the bar is not read).
+          ExcludeSemantics(
+            child: ClipRRect(
+              borderRadius: AppRadii.all(AppRadii.pill),
+              child: SizedBox(
+                height: 6,
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween(end: (percent / 100).clamp(0, 1)),
+                  duration: AppMotion.duration(context, AppMotion.progress),
+                  curve: AppMotion.easeOut,
+                  builder: (context, fraction, _) => Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      const ColoredBox(color: AppColors.fill),
+                      FractionallySizedBox(
+                        alignment: AlignmentDirectional.centerStart,
+                        widthFactor: fraction,
+                        child: const ColoredBox(color: AppColors.accent),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-            Positioned(
-              bottom: 0,
-              child: ExcludeSemantics(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.s2,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.ink,
-                    borderRadius: AppRadii.all(AppRadii.tag),
-                  ),
-                  child: Text(
-                    '$percent%',
-                    style: AppTypography.labelCaps.copyWith(
-                      color: AppColors.inkForeground,
-                      letterSpacing: 0,
-                    ),
-                  ),
-                ),
+          ),
+          const SizedBox(height: AppSpacing.s3),
+          Text(
+            body,
+            style: AppTypography.bodySm.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+          if (actionLabel != null && !done) ...[
+            const SizedBox(height: AppSpacing.s4),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: NumayaButton(
+                label: actionLabel!,
+                small: true,
+                expand: false,
+                onPressed: onAction,
               ),
             ),
           ],
-        ),
+        ],
       ),
     );
   }

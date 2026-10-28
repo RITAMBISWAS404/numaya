@@ -268,7 +268,6 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
         EventCover(
           event: e,
           badges: eventBadges(l10n, e, now),
-          height: 168,
           radius: AppRadii.photo,
         ),
         const SizedBox(height: AppSpacing.s4),

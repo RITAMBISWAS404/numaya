@@ -227,10 +227,10 @@ class NumayaFab extends StatelessWidget {
 }
 
 enum NavButtonStyle {
-  /// A 40pt white circle with a hairline: page and tab-root headers.
+  /// A white rounded square: page and tab-root headers, and over photos.
   floating,
 
-  /// A grey circle.
+  /// A grey rounded square.
   flat,
 
   /// A bare ink icon: modal headers, sheet headers.

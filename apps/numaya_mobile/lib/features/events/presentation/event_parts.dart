@@ -128,56 +128,70 @@ List<StatusBadge> eventBadges(
   return out;
 }
 
-/// The cover band: the event's tone with its category mark, and badges on top.
+/// The event's cover at 16:9 ([AppMedia.eventCover]): its tone with the category mark, status
+/// badges top left and an optional [action] top right. [radius] is 0 inside a card, which clips
+/// it flush to its own corners (docs/mobile/UI_REFINEMENT_DECISIONS.md, RD-13).
 class EventCover extends StatelessWidget {
   const EventCover({
     super.key,
     required this.event,
     required this.badges,
-    this.height = 120,
     this.radius = AppRadii.card,
+    this.action,
   });
 
   final DemoEvent event;
   final List<Widget> badges;
-  final double height;
   final double radius;
+  final Widget? action;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: AppRadii.all(radius),
-      child: SizedBox(
-        height: height,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            ColoredBox(color: kEventTones[event.tone % kEventTones.length]),
-            Center(
-              child: ExcludeSemantics(
-                child: NumayaIcon(
-                  eventCategoryIcon(event.category),
-                  size: height > 140 ? 56 : 40,
-                  color: AppColors.ink,
+      child: AspectRatio(
+        aspectRatio: AppMedia.eventCover,
+        child: LayoutBuilder(
+          builder: (context, box) => Stack(
+            fit: StackFit.expand,
+            children: [
+              ColoredBox(color: kEventTones[event.tone % kEventTones.length]),
+              Center(
+                child: ExcludeSemantics(
+                  child: NumayaIcon(
+                    eventCategoryIcon(event.category),
+                    size: box.maxWidth > 360 ? 56 : 44,
+                    color: AppColors.ink,
+                  ),
                 ),
               ),
-            ),
-            if (badges.isNotEmpty)
-              Positioned(
-                left: AppSpacing.s3,
-                top: AppSpacing.s3,
-                right: AppSpacing.s3,
-                child: Wrap(spacing: 6, runSpacing: 6, children: badges),
-              ),
-          ],
+              if (badges.isNotEmpty)
+                Positioned(
+                  left: AppSpacing.s3,
+                  top: AppSpacing.s3,
+                  // Clear of the action in the other corner.
+                  right: action == null
+                      ? AppSpacing.s3
+                      : AppSpacing.s3 + AppSizes.iconButton + AppSpacing.s2,
+                  child: Wrap(spacing: 6, runSpacing: 6, children: badges),
+                ),
+              if (action != null)
+                Positioned(
+                  top: AppSpacing.s2,
+                  right: AppSpacing.s2,
+                  child: action!,
+                ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-/// An event in a list (Meetup / Eventbrite card [O]): cover with status badges, title, when,
-/// where, who's going, and a save button. [reason] is the "picked for you" rule, when there is one.
+/// An event in a list (Meetup / Eventbrite card [O]): a flush 16:9 cover with status badges and
+/// the save button, then title, when, where and who's going. [reason] is the "picked for you"
+/// rule, when there is one.
 class EventCard extends StatelessWidget {
   const EventCard({
     super.key,
@@ -206,37 +220,43 @@ class EventCard extends StatelessWidget {
     final when = eventWhen(e.start);
     final where = eventPlace(l10n, e, area);
     final going = eventGoing(l10n, e);
-    return Container(
-      decoration: BoxDecoration(
+    return ClipRRect(
+      borderRadius: AppRadii.all(AppRadii.card),
+      child: ColoredBox(
         color: AppColors.surface,
-        borderRadius: AppRadii.all(AppRadii.card),
-      ),
-      child: Stack(
-        children: [
-          Pressable(
-            onTap: onOpen,
-            pressedScale: 0.99,
-            borderRadius: AppRadii.all(AppRadii.card),
-            semanticLabel: [
-              e.title,
-              for (final b in badges) b.label,
-              when,
-              where,
-              going,
-              ?reason,
-            ].join('. '),
-            excludeChildSemantics: true,
-            child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.s3),
+        child: Stack(
+          children: [
+            Pressable(
+              onTap: onOpen,
+              pressedScale: 0.99,
+              borderRadius: AppRadii.all(AppRadii.card),
+              semanticLabel: [
+                e.title,
+                for (final b in badges) b.label,
+                when,
+                where,
+                going,
+                ?reason,
+              ].join('. '),
+              excludeChildSemantics: true,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  EventCover(event: e, badges: badges),
-                  const SizedBox(height: AppSpacing.s3),
-                  // Text stays clear of the save button in the corner.
+                  EventCover(
+                    event: e,
+                    badges: badges,
+                    radius: 0,
+                    // Keeps the badges clear of the save button laid over this corner.
+                    action: onToggleSave == null
+                        ? null
+                        : const SizedBox.square(dimension: AppSizes.iconButton),
+                  ),
                   Padding(
-                    padding: EdgeInsets.only(
-                      right: onToggleSave == null ? 0 : AppSpacing.s8,
+                    padding: const EdgeInsets.fromLTRB(
+                      AppLayout.cardPadding,
+                      AppSpacing.s3,
+                      AppLayout.cardPadding,
+                      AppLayout.cardPadding,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -248,17 +268,17 @@ class EventCard extends StatelessWidget {
                             AppTypography.semibold,
                           ),
                         ),
-                        const SizedBox(height: AppSpacing.s1),
-                        _Line(icon: NumayaIcons.calendar, text: when),
-                        _Line(
+                        const SizedBox(height: AppLayout.metaGap),
+                        EventMetaRow(icon: NumayaIcons.calendar, text: when),
+                        EventMetaRow(
                           icon: e.format == EventFormat.online
                               ? NumayaIcons.public
                               : NumayaIcons.location,
                           text: where,
                         ),
-                        _Line(icon: NumayaIcons.groups, text: going),
+                        EventMetaRow(icon: NumayaIcons.groups, text: going),
                         if (reason != null) ...[
-                          const SizedBox(height: AppSpacing.s1),
+                          const SizedBox(height: AppSpacing.s2),
                           Text(
                             l10n.eventPickedBecause(reason!),
                             style: AppTypography.caption.copyWith(
@@ -272,29 +292,29 @@ class EventCard extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-          if (onToggleSave != null)
-            Positioned(
-              right: AppSpacing.s1,
-              bottom: AppSpacing.s1,
-              child: NavIconButton(
-                icon: NumayaIcons.heart,
-                label: saved
-                    ? l10n.eventUnsave(e.title)
-                    : l10n.eventSave(e.title),
-                style: NavButtonStyle.plain,
-                outline: !saved,
-                onPressed: onToggleSave,
+            if (onToggleSave != null)
+              Positioned(
+                top: AppSpacing.s2,
+                right: AppSpacing.s2,
+                child: NavIconButton(
+                  icon: NumayaIcons.heart,
+                  label: saved
+                      ? l10n.eventUnsave(e.title)
+                      : l10n.eventSave(e.title),
+                  outline: !saved,
+                  onPressed: onToggleSave,
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
-class _Line extends StatelessWidget {
-  const _Line({required this.icon, required this.text});
+/// One metadata line of an event: an inline icon and secondary text.
+class EventMetaRow extends StatelessWidget {
+  const EventMetaRow({super.key, required this.icon, required this.text});
 
   final NumayaIcons icon;
   final String text;
@@ -302,7 +322,7 @@ class _Line extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: AppSpacing.s1),
+      padding: const EdgeInsets.only(top: AppLayout.metaGap),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -314,7 +334,7 @@ class _Line extends StatelessWidget {
               color: AppColors.textSecondary,
             ),
           ),
-          const SizedBox(width: AppSpacing.s2),
+          const SizedBox(width: AppLayout.iconLabelGap),
           Expanded(
             child: Text(
               text,

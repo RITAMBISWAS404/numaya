@@ -63,12 +63,14 @@ class ProfileScreen extends ConsumerWidget {
                   actions: [
                     NavIconButton(
                       icon: NumayaIcons.help,
+                      outline: true,
                       label: l10n.helpTitle,
                       onPressed: () => context.push(Routes.help),
                     ),
                     const SizedBox(width: AppSpacing.s2),
                     NavIconButton(
                       icon: NumayaIcons.settings,
+                      outline: true,
                       label: l10n.profileSettings,
                       onPressed: () => context.push(Routes.settings),
                     ),
@@ -77,22 +79,19 @@ class ProfileScreen extends ConsumerWidget {
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(
-                      AppSpacing.gutter,
-                      AppSpacing.s3,
-                      AppSpacing.gutter,
+                      AppLayout.screenGutter,
+                      AppLayout.screenTop,
+                      AppLayout.screenGutter,
                       AppSpacing.s8,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Center(
-                          child: CompletionRing(
-                            percent: completion,
-                            label: l10n.profileCompletionLabel(completion),
-                            size: AppSizes.avatar + 16,
+                          child: ExcludeSemantics(
                             child: Container(
-                              width: AppSizes.avatar,
-                              height: AppSizes.avatar,
+                              width: AppSizes.avatarProfile,
+                              height: AppSizes.avatarProfile,
                               decoration: const BoxDecoration(
                                 color: AppColors.identity,
                                 shape: BoxShape.circle,
@@ -105,7 +104,7 @@ class ProfileScreen extends ConsumerWidget {
                                       AppTypography.pageTitle,
                                       AppTypography.semibold,
                                     ).copyWith(
-                                      fontSize: 40,
+                                      fontSize: 72,
                                       height: 1,
                                       color: AppColors.inkForeground,
                                     ),
@@ -150,28 +149,25 @@ class ProfileScreen extends ConsumerWidget {
                           ),
                         ],
                         const SizedBox(height: AppSpacing.s4),
-                        Wrap(
-                          alignment: WrapAlignment.center,
-                          spacing: AppSpacing.s2,
-                          runSpacing: AppSpacing.s2,
-                          children: [
-                            if (completion < 100)
-                              NumayaButton(
-                                label: l10n.profileComplete,
-                                small: true,
-                                expand: false,
-                                onPressed: () =>
-                                    context.push(Routes.completion),
-                              ),
-                            NumayaButton(
-                              label: l10n.profileEdit,
-                              small: true,
-                              expand: false,
-                              variant: NumayaButtonVariant.secondary,
-                              icon: NumayaIcons.edit,
-                              onPressed: () => context.push(Routes.editProfile),
-                            ),
-                          ],
+                        Center(
+                          child: NumayaButton(
+                            label: l10n.profileEdit,
+                            small: true,
+                            expand: false,
+                            variant: NumayaButtonVariant.secondary,
+                            icon: NumayaIcons.edit,
+                            onPressed: () => context.push(Routes.editProfile),
+                          ),
+                        ),
+                        const SizedBox(height: AppLayout.sectionGap),
+                        CompletionCard(
+                          percent: completion,
+                          title: l10n.profileCompletionLabel(completion),
+                          body: completion < 100
+                              ? l10n.completionLede
+                              : l10n.completionDone,
+                          actionLabel: l10n.profileComplete,
+                          onAction: () => context.push(Routes.completion),
                         ),
                         if (draft.prompt != null) ...[
                           const SizedBox(height: AppSpacing.sectionGap),

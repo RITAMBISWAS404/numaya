@@ -147,6 +147,9 @@ abstract final class AppSizes {
   static const double switchThumb = NumayaSizeTokens.withingsThumbSwitch;
   static const double sliderThumb = NumayaSizeTokens.withingsThumbSlider;
   static const double avatar = NumayaSizeTokens.sizeAvatarXl;
+
+  /// The member's own avatar on the Profile tab: about twice [avatar] (RD-15).
+  static const double avatarProfile = 176;
   static const double tabBar = NumayaSizeTokens.tabBarHeight;
   static const double topBar = 56;
 }
