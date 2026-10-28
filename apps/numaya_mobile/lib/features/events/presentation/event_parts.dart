@@ -156,25 +156,44 @@ class EventCover extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               ColoredBox(color: kEventTones[event.tone % kEventTones.length]),
-              Center(
-                child: ExcludeSemantics(
-                  child: NumayaIcon(
-                    eventCategoryIcon(event.category),
-                    size: box.maxWidth > 360 ? 56 : 44,
-                    color: AppColors.ink,
-                  ),
+              // Badges first, then the category mark centred in the space left below them, so
+              // the two never overlap however large the text (RR-2).
+              Padding(
+                padding: const EdgeInsets.all(AppSpacing.s3),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (badges.isNotEmpty)
+                      Padding(
+                        // Clear of the action in the other corner.
+                        padding: EdgeInsets.only(
+                          right: action == null
+                              ? 0
+                              : AppSizes.iconButton + AppSpacing.s1,
+                        ),
+                        child: Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: badges,
+                        ),
+                      ),
+                    Expanded(
+                      child: Center(
+                        child: ExcludeSemantics(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: NumayaIcon(
+                              eventCategoryIcon(event.category),
+                              size: box.maxWidth > 360 ? 56 : 44,
+                              color: AppColors.ink,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              if (badges.isNotEmpty)
-                Positioned(
-                  left: AppSpacing.s3,
-                  top: AppSpacing.s3,
-                  // Clear of the action in the other corner.
-                  right: action == null
-                      ? AppSpacing.s3
-                      : AppSpacing.s3 + AppSizes.iconButton + AppSpacing.s2,
-                  child: Wrap(spacing: 6, runSpacing: 6, children: badges),
-                ),
               if (action != null)
                 Positioned(
                   top: AppSpacing.s2,

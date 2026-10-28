@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show OverflowBoxFit;
 
 import '../foundations/app_colors.dart';
 import '../foundations/app_haptics.dart';
@@ -887,7 +888,13 @@ class ViewTabs extends StatelessWidget {
     required this.selected,
     required this.onSelect,
     required this.label,
+    this.bleed = 0,
   });
+
+  /// How far the row scrolls past its own edges: the page gutter for a row that sits in a padded
+  /// page, so options scroll to the screen edge instead of being cut at the gutter (RR-1). The
+  /// first option still lines up with the gutter.
+  final double bleed;
 
   /// A null count shows the label alone (segmented choices such as Basic / Advanced).
   final List<({String label, int? count})> options;
@@ -902,64 +909,68 @@ class ViewTabs extends StatelessWidget {
     return Semantics(
       container: true,
       label: label,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            for (var i = 0; i < options.length; i++)
-              Pressable(
-                onTap: () => onSelect(i),
-                haptic: HapticMoment.selection,
-                semanticLabel: options[i].count == null
-                    ? options[i].label
-                    : '${options[i].label}, ${options[i].count}',
-                selected: i == selected,
-                excludeChildSemantics: true,
-                pressedScale: 0.97,
-                borderRadius: AppRadii.all(AppRadii.pill),
-                child: AnimatedContainer(
-                  duration: AppMotion.duration(context, AppMotion.base),
-                  height: AppSizes.chip,
-                  padding: const EdgeInsets.symmetric(horizontal: 14),
-                  decoration: BoxDecoration(
-                    // Solid accent when selected (RD-05), neutral otherwise.
-                    color: i == selected
-                        ? AppColors.accent
-                        : Colors.transparent,
-                    borderRadius: AppRadii.all(AppRadii.pill),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(text: options[i].label),
-                        if (options[i].count != null)
-                          TextSpan(
-                            text: '  ${options[i].count}',
-                            style: TextStyle(
-                              color: i == selected
-                                  ? AppColors.accentForeground
-                                  : AppColors.textMuted,
-                              fontFeatures: const [
-                                FontFeature.tabularFigures(),
-                              ],
-                            ),
-                          ),
-                      ],
+      child: _Bleed(
+        bleed: bleed,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.symmetric(horizontal: bleed),
+          child: Row(
+            children: [
+              for (var i = 0; i < options.length; i++)
+                Pressable(
+                  onTap: () => onSelect(i),
+                  haptic: HapticMoment.selection,
+                  semanticLabel: options[i].count == null
+                      ? options[i].label
+                      : '${options[i].label}, ${options[i].count}',
+                  selected: i == selected,
+                  excludeChildSemantics: true,
+                  pressedScale: 0.97,
+                  borderRadius: AppRadii.all(AppRadii.pill),
+                  child: AnimatedContainer(
+                    duration: AppMotion.duration(context, AppMotion.base),
+                    height: AppSizes.chip,
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    decoration: BoxDecoration(
+                      // Solid accent when selected (RD-05), neutral otherwise.
+                      color: i == selected
+                          ? AppColors.accent
+                          : Colors.transparent,
+                      borderRadius: AppRadii.all(AppRadii.pill),
                     ),
-                    style:
-                        AppTypography.weight(
-                          AppTypography.card,
-                          AppTypography.medium,
-                        ).copyWith(
-                          color: i == selected
-                              ? AppColors.accentForeground
-                              : AppColors.ink,
-                        ),
+                    alignment: Alignment.center,
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(text: options[i].label),
+                          if (options[i].count != null)
+                            TextSpan(
+                              text: '  ${options[i].count}',
+                              style: TextStyle(
+                                color: i == selected
+                                    ? AppColors.accentForeground
+                                    : AppColors.textMuted,
+                                fontFeatures: const [
+                                  FontFeature.tabularFigures(),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                      style:
+                          AppTypography.weight(
+                            AppTypography.card,
+                            AppTypography.medium,
+                          ).copyWith(
+                            color: i == selected
+                                ? AppColors.accentForeground
+                                : AppColors.ink,
+                          ),
+                    ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -1037,6 +1048,27 @@ class PersonTile extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Lets a horizontal scroller extend [bleed] past both sides of its slot (ViewTabs.bleed).
+class _Bleed extends StatelessWidget {
+  const _Bleed({required this.bleed, required this.child});
+
+  final double bleed;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (bleed == 0) return child;
+    return LayoutBuilder(
+      builder: (context, box) => OverflowBox(
+        fit: OverflowBoxFit.deferToChild,
+        minWidth: box.maxWidth + 2 * bleed,
+        maxWidth: box.maxWidth + 2 * bleed,
+        child: child,
       ),
     );
   }

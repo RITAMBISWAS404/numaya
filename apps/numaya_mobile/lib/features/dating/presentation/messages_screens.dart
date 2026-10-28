@@ -281,6 +281,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
           const SizedBox(height: AppSpacing.s3),
           ViewTabs(
             label: l10n.conversationsTitle,
+            bleed: AppLayout.screenGutter,
             selected: _filter.index,
             onSelect: (i) => setState(() => _filter = _ConvFilter.values[i]),
             options: [

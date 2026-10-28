@@ -110,6 +110,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
 
     final tabs = ViewTabs(
       label: l10n.tabEvents,
+      bleed: AppLayout.screenGutter,
       selected: _view,
       onSelect: (i) => setState(() => _view = i),
       options: [
@@ -200,6 +201,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
         const SizedBox(height: AppSpacing.s3),
         ViewTabs(
           label: l10n.eventFilterWhen,
+          bleed: AppLayout.screenGutter,
           selected: dates.indexWhere((d) => d.$1 == state.filters.date),
           onSelect: (i) =>
               events.setFilters(state.filters.copyWith(date: dates[i].$1)),
@@ -314,6 +316,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
       children: [
         ViewTabs(
           label: l10n.eventsMine,
+          bleed: AppLayout.screenGutter,
           selected: _mine.index,
           onSelect: (i) => setState(() => _mine = _MineList.values[i]),
           options: [

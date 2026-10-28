@@ -135,6 +135,7 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
         children: [
           ViewTabs(
             label: l10n.tabLikes,
+            bleed: AppLayout.screenGutter,
             selected: _filter.index,
             onSelect: (i) => setState(() => _filter = LikeFilter.values[i]),
             options: [
