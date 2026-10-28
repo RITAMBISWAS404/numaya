@@ -1,5 +1,7 @@
 # Full app screen inventory (Flutter V16)
 
+> Status is now kept in [MASTER_PRODUCT_COMPLETION_MATRIX.md](MASTER_PRODUCT_COMPLETION_MATRIX.md), which corrects B-09, B-45 (Share Date), B-76 and B-77 below. This file keeps the per-screen states.
+
 Branch `experiment/numaya-flutter-full-app` (from `experiment/numaya-flutter-v16-complete` at `37a8007`).
 This maps every flow (F1–F29) and reference screen (B-01–B-77) in
 [`docs/research/flow-catalogue.md`](../research/flow-catalogue.md) to the Flutter app, plus the screens
