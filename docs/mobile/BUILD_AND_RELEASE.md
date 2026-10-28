@@ -15,7 +15,7 @@
 | Regenerate icons / illustrations | `node apps/numaya_mobile/tool/export_assets.mjs` |
 | Regenerate strings | `flutter gen-l10n` (also runs on `pub get` / build) |
 | Run, development | `flutter run` |
-| Debug APK | `flutter build apk --debug` → `build/app/outputs/flutter-apk/app-debug.apk` |
+| Debug APK | `flutter build apk --debug` → `build/app/outputs/flutter-apk/app-debug.apk` (universal: arm, arm64, x86_64). `flutter run` overwrites this file with a single-architecture build; see [ANDROID_COMPATIBILITY.md](ANDROID_COMPATIBILITY.md) |
 | Production-mode build | `flutter build appbundle --release --dart-define=NUMAYA_ENV=production` |
 
 ## Environments

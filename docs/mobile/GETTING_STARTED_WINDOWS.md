@@ -142,7 +142,12 @@ flutter build apk --debug
 ```
 
 The file is `apps\numaya_mobile\build\app\outputs\flutter-apk\app-debug.apk`. Copy it to a phone and open it to install
-(the phone will ask you to allow installs from that source). A debug APK is for testing only; see
+(the phone will ask you to allow installs from that source).
+
+**Build it right before you copy it.** `flutter run` (and Android Studio's Run button) writes the same file, but
+with only the running device's architecture: run on the x86_64 emulator and the file only works on emulators,
+and a phone says "App not compatible". `tool\windows\run-on-phone.ps1 -Apk` builds the APK and refuses one
+without ARM libraries. Details and checks: [ANDROID_COMPATIBILITY.md](ANDROID_COMPATIBILITY.md). A debug APK is for testing only; see
 [BUILD_AND_RELEASE.md](BUILD_AND_RELEASE.md) for real releases.
 
 ## 9. Run the tests (optional)

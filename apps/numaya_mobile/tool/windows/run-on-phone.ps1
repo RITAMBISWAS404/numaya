@@ -29,8 +29,26 @@ flutter pub get
 
 if ($Apk) {
   Step "Building a debug APK"
+  # No --target-platform and no --split-per-abi: one APK for ARM phones and x86_64 emulators.
   flutter build apk --debug
-  Write-Host "`nAPK: $app\build\app\outputs\flutter-apk\app-debug.apk" -ForegroundColor Green
+  if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+  $apkPath = "$app\build\app\outputs\flutter-apk\app-debug.apk"
+
+  # `flutter run` writes the same file with only the running device's architecture, which an ARM
+  # phone rejects as "not compatible". Check the libraries before the file is copied anywhere.
+  Step "Checking the APK's native libraries"
+  Add-Type -AssemblyName System.IO.Compression.FileSystem
+  $zip = [System.IO.Compression.ZipFile]::OpenRead($apkPath)
+  $abis = $zip.Entries | Where-Object { $_.FullName -like "lib/*/libflutter.so" } |
+    ForEach-Object { $_.FullName.Split("/")[1] } | Sort-Object -Unique
+  $zip.Dispose()
+  Write-Host "ABIs: $($abis -join ', ')"
+  if (-not ($abis -contains "arm64-v8a")) {
+    Write-Host "This APK has no arm64-v8a library, so most phones will refuse it. Run the script again." -ForegroundColor Red
+    exit 1
+  }
+  Write-Host "`nAPK: $apkPath" -ForegroundColor Green
+  Write-Host "SHA-256: $((Get-FileHash $apkPath -Algorithm SHA256).Hash)"
   exit 0
 }
 
