@@ -642,8 +642,8 @@ class _ComposerState extends State<Composer> {
           semanticLabel: widget.sendLabel,
           excludeChildSemantics: true,
           pressedScale: 0.92,
-          borderRadius: AppRadii.all(AppRadii.pill),
-          // The V16 44pt circle inside a 48dp tap target.
+          borderRadius: AppRadii.all(AppRadii.control),
+          // A 44pt rounded square (RD-02) inside a 48dp tap target.
           child: SizedBox.square(
             dimension: kMinInteractiveDimension,
             child: Center(
@@ -653,7 +653,7 @@ class _ComposerState extends State<Composer> {
                 height: 44,
                 decoration: BoxDecoration(
                   color: canSend ? AppColors.ink : AppColors.disabled,
-                  shape: BoxShape.circle,
+                  borderRadius: AppRadii.all(AppRadii.control),
                 ),
                 alignment: Alignment.center,
                 child: NumayaIcon(

@@ -66,7 +66,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
     final width = MediaQuery.sizeOf(context).width
         .clamp(0.0, AppSpacing.contentMax);
     // The text column inside the gutters.
-    final text = width - 2 * AppSpacing.gutter;
+    final text = width - 2 * AppLayout.screenGutter;
     final linkStyle =
         AppTypography.weight(
           AppTypography.micro,
@@ -101,9 +101,9 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.fromLTRB(
-                              AppSpacing.gutter,
+                              AppLayout.screenGutter,
                               AppSpacing.s4,
-                              AppSpacing.gutter,
+                              AppLayout.screenGutter,
                               0,
                             ),
                             // Wraps under very large text rather than overflowing.
@@ -135,9 +135,9 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(
-                              AppSpacing.gutter,
+                              AppLayout.screenGutter,
                               AppSpacing.s4,
-                              AppSpacing.gutter,
+                              AppLayout.screenGutter,
                               AppSpacing.s2,
                             ),
                             child: Column(

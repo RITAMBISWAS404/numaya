@@ -381,13 +381,13 @@ class PhotoGrid extends StatelessWidget {
               onTap: () => onRemove(photo.id),
               semanticLabel: removeLabel(i + 1),
               excludeChildSemantics: true,
-              borderRadius: AppRadii.all(AppRadii.pill),
+              borderRadius: AppRadii.all(AppRadii.tag),
               child: Container(
                 width: 26,
                 height: 26,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: AppColors.surfaceInverse,
-                  shape: BoxShape.circle,
+                  borderRadius: AppRadii.all(AppRadii.tag),
                 ),
                 alignment: Alignment.center,
                 child: const NumayaIcon(
@@ -417,19 +417,10 @@ class PhotoGrid extends StatelessWidget {
           borderRadius: AppRadii.all(AppRadii.card),
         ),
         alignment: Alignment.center,
-        child: Container(
-          width: 32,
-          height: 32,
-          decoration: const BoxDecoration(
-            color: AppColors.ink,
-            shape: BoxShape.circle,
-          ),
-          alignment: Alignment.center,
-          child: const NumayaIcon(
-            NumayaIcons.plus,
-            size: 20,
-            color: AppColors.inkForeground,
-          ),
+        child: const NumayaIcon(
+          NumayaIcons.plus,
+          size: AppSizes.iconLg,
+          color: AppColors.ink,
         ),
       ),
     );

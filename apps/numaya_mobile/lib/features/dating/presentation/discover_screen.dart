@@ -269,7 +269,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
     final header = SizedBox(
       height: AppSizes.topBar,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
+        padding: const EdgeInsets.symmetric(horizontal: AppLayout.screenGutter),
         child: Stack(
           alignment: Alignment.center,
           children: [

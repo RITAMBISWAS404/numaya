@@ -196,14 +196,15 @@ class NumayaFab extends StatelessWidget {
       semanticLabel: semanticLabel,
       excludeChildSemantics: true,
       pressedScale: 0.94,
-      borderRadius: AppRadii.all(AppRadii.pill),
+      borderRadius: AppRadii.all(AppRadii.control),
       child: AnimatedContainer(
         duration: AppMotion.duration(context, AppMotion.base),
         curve: AppMotion.easeOut,
         width: AppSizes.fab,
         height: AppSizes.fab,
+        // A rounded square like every other icon button (RD-02).
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
+          borderRadius: AppRadii.all(AppRadii.control),
           color: enabled ? AppColors.ink : AppColors.disabled,
         ),
         alignment: Alignment.center,

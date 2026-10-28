@@ -12,7 +12,7 @@ class TabPage extends StatelessWidget {
     this.centered = false,
     this.scrollController,
     this.topGap = true,
-    this.gutter = AppSpacing.gutter,
+    this.gutter = AppLayout.screenGutter,
     this.overlay,
   });
 

@@ -668,9 +668,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       height: AppSizes.topBar + AppSpacing.s2,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(
-          AppSpacing.gutter,
+          AppLayout.screenGutter,
           AppSpacing.s2,
-          AppSpacing.gutter,
+          AppLayout.screenGutter,
           0,
         ),
         child: Row(
@@ -1004,7 +1004,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,
                           padding: const EdgeInsets.symmetric(
-                            horizontal: AppSpacing.gutter,
+                            horizontal: AppLayout.screenGutter,
                           ),
                           child: ConstrainedBox(
                             constraints: BoxConstraints(
@@ -1024,9 +1024,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   if (!expired)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(
-                        AppSpacing.gutter,
+                        AppLayout.screenGutter,
                         AppSpacing.s2,
-                        AppSpacing.gutter,
+                        AppLayout.screenGutter,
                         AppSpacing.s3,
                       ),
                       child: Column(

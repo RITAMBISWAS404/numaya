@@ -70,7 +70,7 @@ class TabHeader extends StatelessWidget {
     return SizedBox(
       height: 64,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
+        padding: const EdgeInsets.symmetric(horizontal: AppLayout.screenGutter),
         child: Row(
           children: [
             Expanded(

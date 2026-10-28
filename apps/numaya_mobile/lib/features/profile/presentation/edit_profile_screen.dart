@@ -85,6 +85,7 @@ class EditProfileScreen extends ConsumerWidget {
         actions: [
           NavIconButton(
             icon: NumayaIcons.public,
+            outline: true,
             label: l10n.editPreview,
             style: NavButtonStyle.plain,
             onPressed: () => context.push(Routes.preview),

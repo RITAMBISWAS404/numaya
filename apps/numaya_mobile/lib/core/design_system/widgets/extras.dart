@@ -234,19 +234,10 @@ class CompletionTile extends StatelessWidget {
           children: [
             Row(
               children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: done ? AppColors.accentTint : AppColors.fill,
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: NumayaIcon(
-                    done ? NumayaIcons.check : icon,
-                    size: 20,
-                    color: done ? AppColors.accentOnTint : AppColors.ink,
-                  ),
+                NumayaIcon(
+                  done ? NumayaIcons.check : icon,
+                  size: AppSizes.iconMd,
+                  color: done ? AppColors.accent : AppColors.ink,
                 ),
                 const Spacer(),
                 const NumayaIcon(
