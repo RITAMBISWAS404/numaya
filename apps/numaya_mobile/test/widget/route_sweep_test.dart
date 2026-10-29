@@ -74,4 +74,24 @@ void main() {
     'every route lays out on a 393 × 852 phone at 200% text',
     (tester) => _sweep(tester, const Size(393, 852), 2),
   );
+
+  for (final (size, text) in [
+    (const Size(393, 852), 2.0),
+    (const Size(320, 568), 1.5),
+  ]) {
+    testWidgets('sign-up, every step, lays out on ${size.width.toInt()} × '
+        '${size.height.toInt()} at ${(text * 100).toInt()}% text', (
+      tester,
+    ) async {
+      tester.view.physicalSize = size * 2;
+      tester.view.devicePixelRatio = 2;
+      tester.platformDispatcher.textScaleFactorTestValue = text;
+      addTearDown(tester.view.reset);
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      Future<void> check() async => expect(tester.takeException(), isNull);
+      await signUpToInterests(tester, testAuth(), onScreen: check);
+      await finishProfileToHome(tester, onScreen: check);
+      await settle(tester);
+    });
+  }
 }
