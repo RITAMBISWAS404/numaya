@@ -228,10 +228,9 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
           Padding(
             padding: const EdgeInsets.only(top: AppSpacing.s4),
             child: EmptyState(
-              art: const NumayaIcon(
-                NumayaIcons.search,
-                size: 36,
-                color: AppColors.ink,
+              art: const IllustrationView(
+                NumayaIllustration.noEvents,
+                width: 144,
               ),
               title: l10n.eventsNoResultsTitle,
               body: state.filters.maxKm != null && area == null
@@ -329,10 +328,11 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
           Padding(
             padding: const EdgeInsets.only(top: AppSpacing.s4),
             child: EmptyState(
-              art: const NumayaIcon(
-                NumayaIcons.event,
-                size: 36,
-                color: AppColors.ink,
+              art: IllustrationView(
+                _mine == _MineList.going
+                    ? NumayaIllustration.eventGoing
+                    : NumayaIllustration.noEvents,
+                width: 144,
               ),
               title: empty.$1,
               body: empty.$2,

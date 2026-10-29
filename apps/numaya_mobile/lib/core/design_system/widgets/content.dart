@@ -79,13 +79,21 @@ enum NumayaIllustration {
   seenEveryone,
   paused,
   unmatched,
-  blocked;
+  blocked,
+
+  /// Mobile-only scenes drawn in the same style (assets/illustrations/mobile/, not the web export).
+  noEvents,
+  eventGoing,
+  notEnoughData;
 
   String get asset {
     final file = switch (this) {
       noChats => 'no-chats',
       noMatch => 'no-match',
       seenEveryone => 'seen-everyone',
+      noEvents => 'mobile/no-events',
+      eventGoing => 'mobile/event-going',
+      notEnoughData => 'mobile/not-enough-data',
       _ => name,
     };
     return 'assets/illustrations/$file.svg';

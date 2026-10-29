@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
+import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 import 'package:numaya_mobile/features/dating/data/media_picker.dart';
 
 import '../helpers/journeys.dart';
 import '../helpers/test_app.dart';
 
-/// Chat media states from the overnight pass, into goldens/oNN-*.png, for
+/// Chat media states from the overnight pass, into goldens/nNN-*.png, for
 /// docs/mobile/OVERNIGHT_QA_REPORT.md. Opt-in: `--tags screenshots --run-skipped`.
 void main() {
   setUpAll(loadAppFonts);
@@ -33,7 +34,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 700));
       await expectLater(
         find.byType(MaterialApp),
-        matchesGoldenFile('goldens/o$name.png'),
+        matchesGoldenFile('goldens/n$name.png'),
       );
     }
 
@@ -43,7 +44,7 @@ void main() {
         find.bySemanticsLabel('Add a photo, video or voice note'),
       );
       await tester.pump(const Duration(milliseconds: 600));
-      await shot('01-attach-menu');
+      if (option == 'Photo') await shot('01-attach-menu');
       await tester.tap(find.text(option).last);
       await tester.pump(const Duration(milliseconds: 600));
       await tester.pump(const Duration(milliseconds: 600));
@@ -77,6 +78,36 @@ void main() {
 
     await goTo(c, tester, Routes.messages);
     await shot('06-inbox-preview');
+    await settle(tester);
+  });
+
+  testWidgets('capture illustrated empty states', (tester) async {
+    tester.view.physicalSize = const Size(786, 1704);
+    tester.view.devicePixelRatio = 2;
+    addTearDown(tester.view.reset);
+    final c = await quickStartApp(tester, world: DemoWorld.fresh);
+
+    Future<void> shot(String name) async {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 300)),
+      );
+      await tester.pump(const Duration(milliseconds: 700));
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/n$name.png'),
+      );
+    }
+
+    await goTo(c, tester, '${Routes.events}?view=mine');
+    await shot('07-my-events-going');
+    await tester.tap(find.bySemanticsLabel(RegExp('^Hosting')));
+    await tester.pump(const Duration(milliseconds: 400));
+    await shot('08-my-events-hosting-empty');
+    await goTo(c, tester, Routes.events);
+    await tester.enterText(find.byType(TextField), 'zzzz');
+    await tester.pump(const Duration(milliseconds: 600));
+    FocusManager.instance.primaryFocus?.unfocus();
+    await shot('09-events-no-results');
     await settle(tester);
   });
 }

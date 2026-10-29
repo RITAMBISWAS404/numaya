@@ -202,7 +202,11 @@ class VisibilityScreen extends ConsumerWidget {
         tone: BannerTone.pending,
       );
     } else if (activity.empty) {
-      activityBody = StatusBanner(
+      activityBody = EmptyState(
+        art: const IllustrationView(
+          NumayaIllustration.notEnoughData,
+          width: 128,
+        ),
         title: l10n.visActivityEmpty,
         body: l10n.visActivityEmptyBody,
       );

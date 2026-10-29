@@ -36,6 +36,8 @@ flutter:
 
   assets:
     - assets/illustrations/
+    # Mobile-only scenes in the same style (not part of the web export); see docs/mobile/ILLUSTRATION_BACKLOG.md.
+    - assets/illustrations/mobile/
     # Sample media for the demo chat attachments (fictional, generated for this repo).
     - assets/demo/
 
