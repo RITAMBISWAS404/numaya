@@ -44,9 +44,7 @@ void main() {
     await _setUp(tester);
     final c = await quickStartApp(
       tester,
-      overrides: [
-        mediaPickerProvider.overrideWithValue(const SampleMediaPicker()),
-      ],
+      mediaPicker: const SampleMediaPicker(),
     );
     await goTo(c, tester, '${Routes.chat}/priya');
     await tapOn(

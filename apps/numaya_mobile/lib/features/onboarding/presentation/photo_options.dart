@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../dating/data/media_picker.dart';
+import '../../dating/presentation/chat_attachments.dart'
+    show mediaFailureMessage;
 import '../application/onboarding_controller.dart';
 import '../domain/profile_draft.dart';
 
@@ -56,7 +59,9 @@ Future<bool> showPhotoOptions(
     return true;
   }
   if (label == l10n.photoReplace) {
-    controller.replacePhoto(photoId);
+    final picked = await pickProfilePhoto(context, ref);
+    if (picked == null || !context.mounted) return false;
+    controller.replacePhoto(photoId, source: picked.source);
     NumayaToast.show(context, l10n.photoReplaced);
     return true;
   }
@@ -66,4 +71,29 @@ Future<bool> showPhotoOptions(
   }
   controller.removePhoto(photoId);
   return true;
+}
+
+/// The outcome of choosing a profile photo: the chosen file, or no source when the phone has no
+/// picker (desktop runs, tests), which keeps the placeholder tile working.
+typedef PickedPhoto = ({String? source});
+
+/// Opens the phone's photo picker ([camera]: the camera) for a profile photo. Returns null when
+/// the person cancels or the pick fails (the reason is shown).
+Future<PickedPhoto?> pickProfilePhoto(
+  BuildContext context,
+  WidgetRef ref, {
+  bool camera = false,
+}) async {
+  final picker = ref.read(mediaPickerProvider);
+  try {
+    final picked = camera ? await picker.takePhoto() : await picker.pickPhoto();
+    if (picked == null) return null;
+    return (source: picked.source);
+  } on MediaPickException catch (e) {
+    if (e.reason == MediaFailure.unavailable) return (source: null);
+    if (context.mounted) {
+      NumayaToast.show(context, mediaFailureMessage(context.l10n, e.reason));
+    }
+    return null;
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/design_system/design_system.dart';
+import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
 import '../../onboarding/domain/profile_draft.dart';
 import '../domain/sample_people.dart';
@@ -213,6 +214,7 @@ class PersonHeroCard extends StatelessWidget {
       label: l10n.discoverPhotoLabel(person.name, 1),
       aspectRatio: null,
       radius: 0,
+      child: _real(person.photoAt(1)),
     );
     if (onOpenPhotos == null) return photo;
     return Pressable(
@@ -250,6 +252,7 @@ List<Widget> personSections(
     final tile = PhotoPlaceholder(
       label: l10n.discoverPhotoLabel(person.name, position),
       aspectRatio: AppMedia.personPhoto,
+      child: _real(person.photoAt(position)),
     );
     return onPhoto == null
         ? tile
@@ -347,3 +350,13 @@ List<Widget> personSections(
     ],
   ];
 }
+
+/// The member's own photo over the placeholder, when they chose one on this phone.
+Widget? _real(String? source) => source == null
+    ? null
+    : Image(
+        image: localImage(source, width: 1080),
+        fit: BoxFit.cover,
+        gaplessPlayback: true,
+        errorBuilder: (_, _, _) => const SizedBox.shrink(),
+      );

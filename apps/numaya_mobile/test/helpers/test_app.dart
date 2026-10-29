@@ -10,6 +10,7 @@ import 'package:numaya_mobile/app/app.dart';
 import 'package:numaya_mobile/app/providers.dart';
 import 'package:numaya_mobile/features/auth/data/demo_auth_repository.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
+import 'package:numaya_mobile/features/dating/data/media_picker.dart';
 
 final testNow = DateTime(2026, 10, 27, 12);
 
@@ -35,6 +36,7 @@ Widget testApp({
   DemoAuthRepository? auth,
   DemoWorld world = DemoWorld.fresh,
   List<Override> overrides = const [],
+  MediaPicker mediaPicker = const NoPicker(),
 }) {
   final repo = auth ?? testAuth();
   return ProviderScope(
@@ -42,6 +44,7 @@ Widget testApp({
       clockProvider.overrideWithValue(() => testNow),
       demoAuthProvider.overrideWithValue(repo),
       demoWorldProvider.overrideWith(() => FixedWorld(world)),
+      mediaPickerProvider.overrideWithValue(mediaPicker),
       ...overrides,
     ],
     child: const NumayaApp(),
@@ -88,4 +91,20 @@ Future<void> settle(WidgetTester tester) async {
   for (var i = 0; i < 6; i++) {
     await tester.pump(const Duration(milliseconds: 500));
   }
+}
+
+/// A phone with no photo picker (as on the test host): picking reports "unavailable", so adding a
+/// profile photo falls back to a placeholder tile. Tests that need media pass a picker.
+class NoPicker implements MediaPicker {
+  const NoPicker();
+
+  static Never _none() =>
+      throw const MediaPickException(MediaFailure.unavailable);
+
+  @override
+  Future<MessageAttachment?> pickPhoto() async => _none();
+  @override
+  Future<MessageAttachment?> pickVideo() async => _none();
+  @override
+  Future<MessageAttachment?> takePhoto() async => _none();
 }

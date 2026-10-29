@@ -22,9 +22,7 @@ void main() {
     addTearDown(tester.view.reset);
     final c = await quickStartApp(
       tester,
-      overrides: [
-        mediaPickerProvider.overrideWithValue(const SampleMediaPicker()),
-      ],
+      mediaPicker: const SampleMediaPicker(),
     );
 
     Future<void> shot(String name) async {
@@ -108,6 +106,42 @@ void main() {
     await tester.pump(const Duration(milliseconds: 600));
     FocusManager.instance.primaryFocus?.unfocus();
     await shot('09-events-no-results');
+    await settle(tester);
+  });
+
+  testWidgets('capture profile photos from the phone', (tester) async {
+    tester.view.physicalSize = const Size(786, 1704);
+    tester.view.devicePixelRatio = 2;
+    addTearDown(tester.view.reset);
+    final c = await quickStartApp(
+      tester,
+      mediaPicker: const SampleMediaPicker(),
+    );
+
+    Future<void> shot(String name) async {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 300)),
+      );
+      await tester.pump(const Duration(milliseconds: 700));
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/n$name.png'),
+      );
+    }
+
+    await goTo(c, tester, Routes.editProfile);
+    await tapOn(tester, find.bySemanticsLabel('Add a photo').first);
+    await tester.pump(const Duration(milliseconds: 600));
+    await tapOn(tester, find.bySemanticsLabel('Photo 4 options'));
+    await tester.pump(const Duration(milliseconds: 600));
+    await tester.tap(find.text('Make main photo'));
+    await tester.pump(const Duration(seconds: 3));
+    await tester.drag(find.byType(Scrollable).first, const Offset(0, 400));
+    await shot('10-edit-profile-real-photo');
+    await goTo(c, tester, Routes.profile);
+    await shot('11-profile-real-avatar');
+    await goTo(c, tester, Routes.preview);
+    await shot('12-preview-real-photo');
     await settle(tester);
   });
 }

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
+import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
 import '../../account_health/application/visibility_report.dart';
 import '../../account_health/presentation/visibility_screen.dart';
@@ -45,6 +46,7 @@ class ProfileScreen extends ConsumerWidget {
             LookingFor.casual => l10n.profileLookingCasual,
           };
     final summary = [?gender, ?looking].join(' · ');
+    final mainPhoto = draft.photos.isEmpty ? null : draft.photos.first.source;
     final initial = draft.firstName.trim().isEmpty
         ? '?'
         : draft.firstName.trim().characters.first.toUpperCase();
@@ -97,18 +99,26 @@ class ProfileScreen extends ConsumerWidget {
                                 shape: BoxShape.circle,
                               ),
                               alignment: Alignment.center,
-                              child: Text(
-                                initial,
-                                style:
-                                    AppTypography.weight(
-                                      AppTypography.pageTitle,
-                                      AppTypography.semibold,
-                                    ).copyWith(
-                                      fontSize: 72,
-                                      height: 1,
-                                      color: AppColors.inkForeground,
+                              clipBehavior: Clip.antiAlias,
+                              child: mainPhoto != null
+                                  ? Image(
+                                      image: localImage(mainPhoto, width: 540),
+                                      width: AppSizes.avatarProfile,
+                                      height: AppSizes.avatarProfile,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Text(
+                                      initial,
+                                      style:
+                                          AppTypography.weight(
+                                            AppTypography.pageTitle,
+                                            AppTypography.semibold,
+                                          ).copyWith(
+                                            fontSize: 72,
+                                            height: 1,
+                                            color: AppColors.inkForeground,
+                                          ),
                                     ),
-                              ),
                             ),
                           ),
                         ),

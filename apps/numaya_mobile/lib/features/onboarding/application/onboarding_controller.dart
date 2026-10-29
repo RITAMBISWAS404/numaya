@@ -173,14 +173,16 @@ class OnboardingController extends Notifier<OnboardingState> {
     ),
   );
 
-  void addPhoto() {
+  /// Adds a photo at the end: the one chosen on the phone ([source]), or a placeholder tile when
+  /// there is no picker (desktop runs, tests).
+  void addPhoto({String? source}) {
     final photos = state.draft.photos;
     if (photos.length >= ProfileRules.maxPhotos) return;
     _update(
       state.draft.copyWith(
         photos: [
           ...photos,
-          DraftPhoto(id: ++_photoIds, tone: photos.length % 4),
+          DraftPhoto(id: ++_photoIds, tone: photos.length % 4, source: source),
         ],
       ),
     );
@@ -211,12 +213,16 @@ class OnboardingController extends Notifier<OnboardingState> {
     _update(state.draft.copyWith(photos: photos));
   }
 
-  /// Replaces a photo in place with a new placeholder (no upload service in this build).
-  void replacePhoto(int id) {
+  /// Replaces a photo in place with [source], or a new placeholder when there is no picker.
+  void replacePhoto(int id, {String? source}) {
     final photos = [...state.draft.photos];
     final i = photos.indexWhere((p) => p.id == id);
     if (i < 0) return;
-    photos[i] = DraftPhoto(id: ++_photoIds, tone: (photos[i].tone + 1) % 4);
+    photos[i] = DraftPhoto(
+      id: ++_photoIds,
+      tone: (photos[i].tone + 1) % 4,
+      source: source,
+    );
     _update(state.draft.copyWith(photos: photos));
   }
 

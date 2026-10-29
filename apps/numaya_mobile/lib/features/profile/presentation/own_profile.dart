@@ -36,6 +36,7 @@ SamplePerson memberAsPerson({
     identity: _identity(draft, details),
     verified: verified,
     photoCount: draft.photos.length,
+    photoSources: [for (final p in draft.photos) p.source],
     shared: draft.interests,
     languages: details.languages.isEmpty ? null : details.languages.join(', '),
     gender: draft.gender ?? Gender.woman,

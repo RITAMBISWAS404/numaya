@@ -569,7 +569,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get editPhotosNote =>
-      'Upload isn’t connected yet, so + adds a placeholder tile.';
+      'Photos stay on this phone: nothing is uploaded in this build.';
 
   @override
   String get editPromptSection => 'Prompt';
@@ -2729,14 +2729,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get photoMoveLater => 'Move later';
 
   @override
-  String get photoReplace => 'Replace with a new placeholder';
+  String get photoReplace => 'Replace photo';
 
   @override
   String get photoMoved => 'Photo order updated';
 
   @override
-  String get photoReplaced =>
-      'Photo replaced (placeholder: upload isn’t connected)';
+  String get photoReplaced => 'Photo replaced';
 
   @override
   String get settingsApp => 'App';

@@ -26,6 +26,9 @@ class _FakePicker implements MediaPicker {
 
   @override
   Future<MessageAttachment?> pickVideo() => _go();
+
+  @override
+  Future<MessageAttachment?> takePhoto() => _go();
 }
 
 Future<void> _openMenu(WidgetTester tester) async {
@@ -57,9 +60,7 @@ void main() {
       await usePhoneSize(tester);
       final c = await quickStartApp(
         tester,
-        overrides: [
-          mediaPickerProvider.overrideWithValue(const SampleMediaPicker()),
-        ],
+        mediaPicker: const SampleMediaPicker(),
       );
       await goTo(c, tester, '${Routes.chat}/priya');
 
@@ -114,9 +115,7 @@ void main() {
       await usePhoneSize(tester);
       final c = await quickStartApp(
         tester,
-        overrides: [
-          mediaPickerProvider.overrideWithValue(const SampleMediaPicker()),
-        ],
+        mediaPicker: const SampleMediaPicker(),
       );
       await goTo(c, tester, '${Routes.chat}/priya');
       await _choose(tester, 'Video');
@@ -179,11 +178,7 @@ void main() {
       await usePhoneSize(tester);
       final c = await quickStartApp(
         tester,
-        overrides: [
-          mediaPickerProvider.overrideWithValue(
-            _FakePicker(failure: MediaFailure.permissionDenied),
-          ),
-        ],
+        mediaPicker: _FakePicker(failure: MediaFailure.permissionDenied),
       );
       await goTo(c, tester, '${Routes.chat}/priya');
       await _choose(tester, 'Photo');
@@ -204,9 +199,7 @@ void main() {
       await usePhoneSize(tester);
       final c = await quickStartApp(
         tester,
-        overrides: [
-          mediaPickerProvider.overrideWithValue(_FakePicker(result: null)),
-        ],
+        mediaPicker: _FakePicker(result: null),
       );
       await goTo(c, tester, '${Routes.chat}/priya');
       // Cancelling the picker attaches nothing.

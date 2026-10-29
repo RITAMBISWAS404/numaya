@@ -20,6 +20,7 @@ class SamplePerson {
     this.verified = false,
     this.isNew = false,
     this.photoCount = 3,
+    this.photoSources = const [],
     this.shared = const [],
     this.languages,
     this.likesYou = false,
@@ -46,6 +47,13 @@ class SamplePerson {
   final bool verified;
   final bool isNew;
   final int photoCount;
+
+  /// Real photos by position (the member's own, chosen on this phone); null or missing entries are
+  /// placeholders. Sample people have none.
+  final List<String?> photoSources;
+
+  String? photoAt(int position) =>
+      position <= photoSources.length ? photoSources[position - 1] : null;
 
   /// Interests shared with the member (the web prototype's fixed "You both like").
   final List<String> shared;

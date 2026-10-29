@@ -8,6 +8,7 @@ import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/auth/application/session_controller.dart';
 import 'package:numaya_mobile/features/auth/data/demo_auth_repository.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
+import 'package:numaya_mobile/features/dating/data/media_picker.dart';
 
 import 'test_app.dart';
 
@@ -194,9 +195,15 @@ Future<ProviderContainer> quickStartApp(
   DemoWorld world = DemoWorld.full,
   DemoAuthRepository? auth,
   List<Override> overrides = const [],
+  MediaPicker mediaPicker = const NoPicker(),
 }) async {
   await tester.pumpWidget(
-    testApp(world: world, auth: auth, overrides: overrides),
+    testApp(
+      world: world,
+      auth: auth,
+      overrides: overrides,
+      mediaPicker: mediaPicker,
+    ),
   );
   await tester.pump();
   final container = ProviderScope.containerOf(

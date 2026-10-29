@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/design_system/design_system.dart';
+import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
 import '../application/device_permissions.dart';
 import '../application/onboarding_controller.dart';
@@ -78,7 +79,14 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
       );
       if (!status.isGranted) return;
     }
-    ref.read(onboardingProvider.notifier).addPhoto();
+    if (!mounted) return;
+    final picked = await pickProfilePhoto(
+      context,
+      ref,
+      camera: source == _PhotoSource.camera,
+    );
+    if (picked == null || !mounted) return;
+    ref.read(onboardingProvider.notifier).addPhoto(source: picked.source);
   }
 
   Future<void> _tips() {
@@ -144,7 +152,16 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
         const SizedBox(height: AppSpacing.s4),
       ],
       PhotoGrid(
-        photos: [for (final p in photos) GridPhoto(id: p.id, tone: p.tone)],
+        photos: [
+          for (final p in photos)
+            GridPhoto(
+              id: p.id,
+              tone: p.tone,
+              image: p.source == null
+                  ? null
+                  : localImage(p.source!, width: 360),
+            ),
+        ],
         slots: ProfileRules.maxPhotos,
         onAdd: _add,
         onRemove: controller.removePhoto,

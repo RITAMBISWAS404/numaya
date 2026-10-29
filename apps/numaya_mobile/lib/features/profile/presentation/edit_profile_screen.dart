@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
+import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/domain/profile_draft.dart';
@@ -106,10 +107,22 @@ class EditProfileScreen extends ConsumerWidget {
                 PhotoGrid(
                   photos: [
                     for (final p in draft.photos)
-                      GridPhoto(id: p.id, tone: p.tone),
+                      GridPhoto(
+                        id: p.id,
+                        tone: p.tone,
+                        image: p.source == null
+                            ? null
+                            : localImage(p.source!, width: 360),
+                      ),
                   ],
                   slots: ProfileRules.maxPhotos,
-                  onAdd: () => changePhotos(controller.addPhoto),
+                  onAdd: () async {
+                    final picked = await pickProfilePhoto(context, ref);
+                    if (picked == null) return;
+                    await changePhotos(
+                      () => controller.addPhoto(source: picked.source),
+                    );
+                  },
                   onRemove: (id) {
                     // Keep the minimum: the last two photos can't be removed here.
                     if (draft.photos.length <= ProfileRules.minPhotos) {

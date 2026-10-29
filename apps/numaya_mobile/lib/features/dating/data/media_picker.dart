@@ -55,6 +55,9 @@ class MediaPickException implements Exception {
 abstract interface class MediaPicker {
   Future<MessageAttachment?> pickPhoto();
   Future<MessageAttachment?> pickVideo();
+
+  /// A new photo from the camera (profile photos).
+  Future<MessageAttachment?> takePhoto();
 }
 
 /// The phone's own picker (Android's Photo Picker through `image_picker`). Needs no storage
@@ -84,6 +87,18 @@ class DeviceMediaPicker implements MediaPicker {
   Future<MessageAttachment?> pickPhoto() => _pick(
     () => _picker.pickImage(
       source: ImageSource.gallery,
+      maxWidth: 2048,
+      maxHeight: 2048,
+      imageQuality: 85,
+    ),
+    AttachmentKind.photo,
+    _photoTypes,
+  );
+
+  @override
+  Future<MessageAttachment?> takePhoto() => _pick(
+    () => _picker.pickImage(
+      source: ImageSource.camera,
       maxWidth: 2048,
       maxHeight: 2048,
       imageQuality: 85,
@@ -168,6 +183,9 @@ class SampleMediaPicker implements MediaPicker {
 
   @override
   Future<MessageAttachment?> pickVideo() async => video;
+
+  @override
+  Future<MessageAttachment?> takePhoto() async => photo;
 }
 
 /// Demo Hub switch: use [SampleMediaPicker] instead of the phone's gallery.

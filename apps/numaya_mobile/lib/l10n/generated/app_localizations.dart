@@ -1069,7 +1069,7 @@ abstract class AppLocalizations {
   /// No description provided for @editPhotosNote.
   ///
   /// In en, this message translates to:
-  /// **'Upload isn’t connected yet, so + adds a placeholder tile.'**
+  /// **'Photos stay on this phone: nothing is uploaded in this build.'**
   String get editPhotosNote;
 
   /// No description provided for @editPromptSection.
@@ -4723,7 +4723,7 @@ abstract class AppLocalizations {
   /// No description provided for @photoReplace.
   ///
   /// In en, this message translates to:
-  /// **'Replace with a new placeholder'**
+  /// **'Replace photo'**
   String get photoReplace;
 
   /// No description provided for @photoMoved.
@@ -4735,7 +4735,7 @@ abstract class AppLocalizations {
   /// No description provided for @photoReplaced.
   ///
   /// In en, this message translates to:
-  /// **'Photo replaced (placeholder: upload isn’t connected)'**
+  /// **'Photo replaced'**
   String get photoReplaced;
 
   /// No description provided for @settingsApp.

@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/design_system/design_system.dart';
+import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
 import '../data/media_picker.dart';
 
@@ -76,12 +76,7 @@ String formatBytes(int bytes) {
   return '${(bytes / 1024).ceil()} KB';
 }
 
-ImageProvider _imageFor(MessageAttachment a) {
-  final source = a.source!;
-  return source.startsWith('asset:')
-      ? AssetImage(source.substring('asset:'.length))
-      : FileImage(File(source));
-}
+ImageProvider _imageFor(MessageAttachment a) => localImage(a.source!);
 
 /// A photo from the device or the sample, decoded at the size it is shown.
 class AttachmentImage extends StatelessWidget {

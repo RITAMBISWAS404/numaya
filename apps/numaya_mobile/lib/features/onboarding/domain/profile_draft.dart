@@ -78,11 +78,15 @@ class PromptAnswer {
 
 @immutable
 class DraftPhoto {
-  const DraftPhoto({required this.id, required this.tone});
+  const DraftPhoto({required this.id, required this.tone, this.source});
   final int id;
 
-  /// Placeholder shade until real image upload exists.
+  /// Placeholder shade, shown while there is no [source].
   final int tone;
+
+  /// The photo chosen on this phone (a file path, or `asset:` for the sample). Kept on the device;
+  /// there is no upload service in this build. Null: a placeholder tile.
+  final String? source;
 }
 
 /// Profile setup rules, in one place so screens and tests agree

@@ -276,9 +276,12 @@ class PromptMark extends StatelessWidget {
 
 /// One photo in a grid, by id. [tone] picks the placeholder shade until real images exist.
 class GridPhoto {
-  const GridPhoto({required this.id, required this.tone});
+  const GridPhoto({required this.id, required this.tone, this.image});
   final int id;
   final int tone;
+
+  /// The real photo, when there is one; otherwise the tile is the placeholder grey.
+  final ImageProvider? image;
 }
 
 /// 3 × 2 photo grid (`.theme-withings .photo-grid`): 14pt tiles in the warm photo grey with an order
@@ -335,6 +338,18 @@ class PhotoGrid extends StatelessWidget {
     );
   }
 
+  Widget _tile(GridPhoto photo) => ClipRRect(
+    borderRadius: AppRadii.all(AppRadii.card),
+    child: photo.image == null
+        ? const ColoredBox(color: AppColors.photo)
+        : Image(
+            image: photo.image!,
+            fit: BoxFit.cover,
+            gaplessPlayback: true,
+            errorBuilder: (_, _, _) => const ColoredBox(color: AppColors.photo),
+          ),
+  );
+
   Widget _filled(int i, GridPhoto photo) {
     return Semantics(
       label: i == 0 ? '$mainLabel photo' : 'Photo ${i + 1}',
@@ -342,26 +357,14 @@ class PhotoGrid extends StatelessWidget {
         children: [
           Positioned.fill(
             child: onOpen == null
-                ? DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: AppColors.photo,
-                      borderRadius: AppRadii.all(AppRadii.card),
-                    ),
-                  )
+                ? _tile(photo)
                 : Pressable(
                     onTap: () => onOpen!(photo.id),
                     semanticLabel: openLabel?.call(i + 1),
                     excludeChildSemantics: true,
                     pressedScale: 0.97,
                     borderRadius: AppRadii.all(AppRadii.card),
-                    child: SizedBox.expand(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: AppColors.photo,
-                          borderRadius: AppRadii.all(AppRadii.card),
-                        ),
-                      ),
-                    ),
+                    child: SizedBox.expand(child: _tile(photo)),
                   ),
           ),
           Positioned(
