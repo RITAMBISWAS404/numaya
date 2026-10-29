@@ -1047,87 +1047,108 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               constraints: const BoxConstraints(
                 maxWidth: AppSpacing.contentMax,
               ),
-              child: Column(
-                children: [
-                  header,
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => FocusScope.of(context).unfocus(),
-                      behavior: HitTestBehavior.translucent,
-                      excludeFromSemantics: true,
-                      // A conversation sits at the bottom, by the composer; the intro reads from
-                      // the top (V16 038 / 042).
-                      child: LayoutBuilder(
-                        builder: (context, box) => SingleChildScrollView(
-                          controller: _scroll,
-                          // Anchored to the newest message: the chat opens at the latest, and
-                          // stays there when the keyboard opens.
-                          reverse: messages.isNotEmpty,
-                          keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppLayout.screenGutter,
-                          ),
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              minHeight: box.maxHeight,
+              child: LayoutBuilder(
+                builder: (context, outer) => Column(
+                  children: [
+                    header,
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => FocusScope.of(context).unfocus(),
+                        behavior: HitTestBehavior.translucent,
+                        excludeFromSemantics: true,
+                        // A conversation sits at the bottom, by the composer; the intro reads from
+                        // the top (V16 038 / 042).
+                        child: LayoutBuilder(
+                          builder: (context, box) => SingleChildScrollView(
+                            controller: _scroll,
+                            // Anchored to the newest message: the chat opens at the latest, and
+                            // stays there when the keyboard opens.
+                            reverse: messages.isNotEmpty,
+                            keyboardDismissBehavior:
+                                ScrollViewKeyboardDismissBehavior.onDrag,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppLayout.screenGutter,
                             ),
-                            child: Align(
-                              alignment: messages.isEmpty
-                                  ? Alignment.topCenter
-                                  : Alignment.bottomCenter,
-                              child: body,
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minHeight: box.maxHeight,
+                              ),
+                              child: Align(
+                                alignment: messages.isEmpty
+                                    ? Alignment.topCenter
+                                    : Alignment.bottomCenter,
+                                child: body,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  if (!expired)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppLayout.screenGutter,
-                        AppSpacing.s2,
-                        AppLayout.screenGutter,
-                        AppSpacing.s3,
-                      ),
-                      child: Column(
-                        children: [
-                          if (_pending != null) ...[
-                            PendingAttachment(
-                              attachment: _pending!,
-                              onRemove: () => setState(() => _pending = null),
+                    if (!expired)
+                      // On a small phone with large text and the keyboard up, the composer area can
+                      // take at most a little over half the space and scrolls beyond that, so the
+                      // conversation and the header always stay visible.
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: outer.maxHeight * 0.55,
+                        ),
+                        child: SingleChildScrollView(
+                          reverse: true,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                              AppLayout.screenGutter,
+                              AppSpacing.s2,
+                              AppLayout.screenGutter,
+                              AppSpacing.s3,
                             ),
-                            const SizedBox(height: AppSpacing.s2),
-                          ],
-                          Composer(
-                            controller: _text,
-                            focusNode: _focus,
-                            placeholder: _pending == null
-                                ? l10n.chatPlaceholder(person.name)
-                                : l10n.chatCaptionPlaceholder,
-                            sendLabel: l10n.chatSend,
-                            onSend: _send,
-                            hasAttachment: _pending != null,
-                            leading: NavIconButton(
-                              icon: NumayaIcons.plus,
-                              label: l10n.chatAttach,
-                              style: NavButtonStyle.flat,
-                              onPressed: _attach,
+                            child: Column(
+                              children: [
+                                if (_pending != null) ...[
+                                  PendingAttachment(
+                                    attachment: _pending!,
+                                    onRemove: () =>
+                                        setState(() => _pending = null),
+                                  ),
+                                  const SizedBox(height: AppSpacing.s2),
+                                ],
+                                Composer(
+                                  controller: _text,
+                                  focusNode: _focus,
+                                  placeholder: _pending == null
+                                      ? l10n.chatPlaceholder(person.name)
+                                      : l10n.chatCaptionPlaceholder,
+                                  sendLabel: l10n.chatSend,
+                                  onSend: _send,
+                                  hasAttachment: _pending != null,
+                                  leading: NavIconButton(
+                                    icon: NumayaIcons.plus,
+                                    label: l10n.chatAttach,
+                                    style: NavButtonStyle.flat,
+                                    onPressed: _attach,
+                                  ),
+                                ),
+                                // The demo note steps aside while typing; it is back when the keyboard
+                                // closes.
+                                if (MediaQuery.viewInsetsOf(context).bottom ==
+                                    0) ...[
+                                  const SizedBox(height: AppSpacing.s2),
+                                  Text(
+                                    sample
+                                        ? l10n.chatSampleConversationNote(
+                                            person.name,
+                                          )
+                                        : l10n.chatSampleNote(person.name),
+                                    textAlign: TextAlign.center,
+                                    style: AppTypography.micro,
+                                  ),
+                                ],
+                              ],
                             ),
                           ),
-                          const SizedBox(height: AppSpacing.s2),
-                          Text(
-                            sample
-                                ? l10n.chatSampleConversationNote(person.name)
-                                : l10n.chatSampleNote(person.name),
-                            textAlign: TextAlign.center,
-                            style: AppTypography.micro,
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

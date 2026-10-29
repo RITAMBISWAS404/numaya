@@ -819,9 +819,13 @@ Future<int?> showNumayaActionSheet({
           semanticLabel: a.label,
           excludeChildSemantics: true,
           pressedScale: 1,
+          // At least a row tall; grows with large text instead of clipping the label.
           child: Container(
-            height: AppSizes.row,
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s4),
+            constraints: const BoxConstraints(minHeight: AppSizes.row),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.s4,
+              vertical: AppSpacing.s2,
+            ),
             child: Row(
               children: [
                 NumayaIcon(a.icon, size: AppSizes.iconMd, color: color),
@@ -848,24 +852,29 @@ Future<int?> showNumayaActionSheet({
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: AppRadii.all(AppRadii.card),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: [
-                  for (var i = 0; i < actions.length; i++) ...[
-                    if (i > 0)
-                      const Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: AppColors.border,
-                      ),
-                    row(i),
-                  ],
-                ],
+            // Scrolls when the actions don't fit (small phone, large text); Cancel stays put.
+            Flexible(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: AppRadii.all(AppRadii.card),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      for (var i = 0; i < actions.length; i++) ...[
+                        if (i > 0)
+                          const Divider(
+                            height: 1,
+                            thickness: 1,
+                            color: AppColors.border,
+                          ),
+                        row(i),
+                      ],
+                    ],
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: AppSpacing.s2),
@@ -877,7 +886,8 @@ Future<int?> showNumayaActionSheet({
               borderRadius: AppRadii.all(AppRadii.card),
               child: Container(
                 width: double.infinity,
-                height: AppSizes.row,
+                constraints: const BoxConstraints(minHeight: AppSizes.row),
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.s2),
                 decoration: BoxDecoration(
                   color: AppColors.surface,
                   borderRadius: AppRadii.all(AppRadii.card),

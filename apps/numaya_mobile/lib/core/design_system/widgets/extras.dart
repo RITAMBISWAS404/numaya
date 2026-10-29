@@ -316,7 +316,11 @@ class PlanCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
+                    // The saving tag moves under the title when both don't fit (large text).
+                    Wrap(
+                      spacing: AppSpacing.s2,
+                      runSpacing: AppSpacing.s1,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Text(
                           title,
@@ -325,10 +329,8 @@ class PlanCard extends StatelessWidget {
                             AppTypography.semibold,
                           ),
                         ),
-                        if (tag != null) ...[
-                          const SizedBox(width: AppSpacing.s2),
+                        if (tag != null)
                           StatusBadge(label: tag!, tone: BadgeTone.brand),
-                        ],
                       ],
                     ),
                     const SizedBox(height: 2),
