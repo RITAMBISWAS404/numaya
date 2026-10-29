@@ -123,3 +123,14 @@ const Map<NumayaIcons, (IconData, IconData)> kMaterialIcons = {
     Icons.auto_awesome_outlined,
   ),
 };
+
+/// Glyphs the mobile app needs that the shared web set (`NumayaIcons`, generated) doesn't have
+/// yet: chat attachments. Drawn with [MobileIcon]. Add them to the web set before the web uses them.
+enum NumayaMobileIcons { video, play, stop, attach }
+
+const Map<NumayaMobileIcons, IconData> kMobileIcons = {
+  NumayaMobileIcons.video: Icons.videocam_rounded,
+  NumayaMobileIcons.play: Icons.play_arrow_rounded,
+  NumayaMobileIcons.stop: Icons.stop_rounded,
+  NumayaMobileIcons.attach: Icons.add_rounded,
+};

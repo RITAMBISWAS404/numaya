@@ -1870,6 +1870,204 @@ abstract class AppLocalizations {
   /// **'Demo · saved on this device, not sent'**
   String get chatStatusOnDevice;
 
+  /// No description provided for @chatAttach.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a photo, video or voice note'**
+  String get chatAttach;
+
+  /// No description provided for @chatAttachPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get chatAttachPhoto;
+
+  /// No description provided for @chatAttachVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Video'**
+  String get chatAttachVideo;
+
+  /// No description provided for @chatAttachVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice note'**
+  String get chatAttachVoice;
+
+  /// No description provided for @chatAttachmentPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get chatAttachmentPhoto;
+
+  /// No description provided for @chatAttachmentVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Video'**
+  String get chatAttachmentVideo;
+
+  /// No description provided for @chatAttachmentSample.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample'**
+  String get chatAttachmentSample;
+
+  /// No description provided for @chatAttachmentRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove attachment'**
+  String get chatAttachmentRemove;
+
+  /// No description provided for @chatPendingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to send: {what}'**
+  String chatPendingLabel(String what);
+
+  /// No description provided for @chatCaptionPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a caption'**
+  String get chatCaptionPlaceholder;
+
+  /// No description provided for @chatOpenPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Open photo'**
+  String get chatOpenPhoto;
+
+  /// No description provided for @chatVideoNoPlayback.
+  ///
+  /// In en, this message translates to:
+  /// **'Video playback isn’t in this build. The file stays on your phone.'**
+  String get chatVideoNoPlayback;
+
+  /// No description provided for @chatVoiceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice note, {duration}'**
+  String chatVoiceLabel(String duration);
+
+  /// No description provided for @chatVoiceDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo · no sound recorded'**
+  String get chatVoiceDemo;
+
+  /// No description provided for @mediaPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Numaya can’t see your photos. Allow access in your phone’s Settings, then try again.'**
+  String get mediaPermissionDenied;
+
+  /// No description provided for @mediaUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'That file type isn’t supported. Choose a JPG, PNG, WebP or HEIC photo, or an MP4 or MOV video.'**
+  String get mediaUnsupported;
+
+  /// No description provided for @mediaTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'That video is over 100 MB. Choose a shorter one.'**
+  String get mediaTooLarge;
+
+  /// No description provided for @mediaUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t open that file. Try another one.'**
+  String get mediaUnreadable;
+
+  /// No description provided for @mediaUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Choosing photos isn’t available here. Turn on sample media in the Demo Hub to try it.'**
+  String get mediaUnavailable;
+
+  /// No description provided for @mediaMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is no longer on your phone'**
+  String get mediaMissing;
+
+  /// No description provided for @voiceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice note'**
+  String get voiceTitle;
+
+  /// No description provided for @voiceDemoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo recorder'**
+  String get voiceDemoTitle;
+
+  /// No description provided for @voiceDemoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'This build doesn’t use the microphone, so no sound is captured. It shows how recording a voice note works.'**
+  String get voiceDemoNote;
+
+  /// No description provided for @voiceStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start recording'**
+  String get voiceStart;
+
+  /// No description provided for @voiceStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get voiceStop;
+
+  /// No description provided for @voiceUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to message'**
+  String get voiceUse;
+
+  /// No description provided for @voiceRedo.
+  ///
+  /// In en, this message translates to:
+  /// **'Record again'**
+  String get voiceRedo;
+
+  /// No description provided for @voiceRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording…'**
+  String get voiceRecording;
+
+  /// No description provided for @voiceRecordingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording, {time}'**
+  String voiceRecordingLabel(String time);
+
+  /// No description provided for @voiceMaxNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 2 minutes'**
+  String get voiceMaxNote;
+
+  /// No description provided for @voiceTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Too short. Record for at least a second.'**
+  String get voiceTooShort;
+
+  /// No description provided for @demoSampleMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Use sample media'**
+  String get demoSampleMedia;
+
+  /// No description provided for @demoSampleMediaNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach the bundled sample photo and video instead of opening the phone’s gallery'**
+  String get demoSampleMediaNote;
+
   /// No description provided for @optionShareDate.
   ///
   /// In en, this message translates to:

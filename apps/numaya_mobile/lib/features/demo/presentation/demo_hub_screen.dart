@@ -10,6 +10,7 @@ import '../../account_health/application/visibility_report.dart';
 import '../../auth/application/session_controller.dart';
 import '../../auth/application/session_expiry.dart';
 import '../../dating/application/dating_controller.dart';
+import '../../dating/data/media_picker.dart';
 import '../../events/application/events_controller.dart';
 import '../../home/presentation/filters_sheet.dart';
 import '../../onboarding/application/device_permissions.dart';
@@ -157,6 +158,12 @@ class DemoHubScreen extends ConsumerWidget {
                 label: l10n.settingsSimulate,
                 switchValue: dating.simulateErrors,
                 onSwitch: ref.read(datingProvider.notifier).setSimulateErrors,
+              ),
+              ListRow(
+                label: l10n.demoSampleMedia,
+                detail: l10n.demoSampleMediaNote,
+                switchValue: ref.watch(sampleMediaProvider),
+                onSwitch: ref.read(sampleMediaProvider.notifier).set,
               ),
               ListRow(
                 label: l10n.demoOffline,

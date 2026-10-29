@@ -13,7 +13,9 @@ import '../../home/presentation/tab_screens.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../profile/application/profile_details_controller.dart';
 import '../application/dating_controller.dart';
+import '../data/media_picker.dart';
 import '../domain/sample_people.dart';
+import 'chat_attachments.dart';
 import 'safety_sheets.dart';
 import 'time_format.dart';
 
@@ -421,7 +423,13 @@ class _ConversationRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final preview = last.mine ? l10n.youPrefix(last.text) : last.text;
+    final text = last.attachment == null
+        ? last.text
+        : [
+            attachmentSummary(l10n, last.attachment!),
+            if (last.text.isNotEmpty) last.text,
+          ].join(': ');
+    final preview = last.mine ? l10n.youPrefix(text) : text;
     final time = shortTime(l10n, last.at, now);
     return Pressable(
       onTap: onTap,
@@ -522,6 +530,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   final _focus = FocusNode();
   final _scroll = ScrollController();
 
+  /// A photo, video or voice note waiting to be sent with the next message.
+  MessageAttachment? _pending;
+
   @override
   void initState() {
     super.initState();
@@ -547,12 +558,21 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   Future<void> _send(String text) async {
     _text.clear();
+    final attachment = _pending;
+    setState(() => _pending = null);
     AppHaptics.fire(context, HapticMoment.commit);
     final sending = ref
         .read(datingProvider.notifier)
-        .send(widget.personId, text);
+        .send(widget.personId, text, attachment: attachment);
     _toLatest();
     await sending;
+  }
+
+  Future<void> _attach() async {
+    FocusScope.of(context).unfocus();
+    final picked = await chooseAttachment(context, ref);
+    if (!mounted || picked == null) return;
+    setState(() => _pending = picked);
   }
 
   /// Brings the newest message into view after the frame that lays it out. The list is anchored
@@ -892,21 +912,43 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         final next = i + 1 < messages.length ? messages[i + 1] : null;
         final grouped = prev != null && prev.mine == m.mine;
         final endsGroup = next == null || next.mine != m.mine;
-        final bubble = Semantics(
-          label: m.mine
-              ? m.text
-              : l10n.chatTheirMessageLabel(person.name, m.text),
-          child: ExcludeSemantics(
-            child: MessageBubble(
-              text: m.text,
-              mine: m.mine,
-              grouped: grouped,
-              dimmed:
-                  m.status == MessageStatus.sending ||
-                  m.status == MessageStatus.waiting,
-            ),
-          ),
-        );
+        final dimmed =
+            m.status == MessageStatus.sending ||
+            m.status == MessageStatus.waiting;
+        final spoken = m.attachment == null
+            ? m.text
+            : [
+                attachmentSummary(l10n, m.attachment!),
+                if (m.text.isNotEmpty) m.text,
+              ].join('. ');
+        final bubble = m.attachment != null
+            ? MergeSemantics(
+                child: Semantics(
+                  label: m.mine
+                      ? spoken
+                      : l10n.chatTheirMessageLabel(person.name, spoken),
+                  child: AttachmentMessage(
+                    attachment: m.attachment!,
+                    caption: m.text,
+                    mine: m.mine,
+                    grouped: grouped,
+                    dimmed: dimmed,
+                  ),
+                ),
+              )
+            : Semantics(
+                label: m.mine
+                    ? m.text
+                    : l10n.chatTheirMessageLabel(person.name, m.text),
+                child: ExcludeSemantics(
+                  child: MessageBubble(
+                    text: m.text,
+                    mine: m.mine,
+                    grouped: grouped,
+                    dimmed: dimmed,
+                  ),
+                ),
+              );
         children.add(
           known.contains(m.id)
               ? bubble
@@ -1051,12 +1093,28 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       ),
                       child: Column(
                         children: [
+                          if (_pending != null) ...[
+                            PendingAttachment(
+                              attachment: _pending!,
+                              onRemove: () => setState(() => _pending = null),
+                            ),
+                            const SizedBox(height: AppSpacing.s2),
+                          ],
                           Composer(
                             controller: _text,
                             focusNode: _focus,
-                            placeholder: l10n.chatPlaceholder(person.name),
+                            placeholder: _pending == null
+                                ? l10n.chatPlaceholder(person.name)
+                                : l10n.chatCaptionPlaceholder,
                             sendLabel: l10n.chatSend,
                             onSend: _send,
+                            hasAttachment: _pending != null,
+                            leading: NavIconButton(
+                              icon: NumayaIcons.plus,
+                              label: l10n.chatAttach,
+                              style: NavButtonStyle.flat,
+                              onPressed: _attach,
+                            ),
                           ),
                           const SizedBox(height: AppSpacing.s2),
                           Text(

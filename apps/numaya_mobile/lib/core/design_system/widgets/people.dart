@@ -542,6 +542,8 @@ class Composer extends StatefulWidget {
     required this.onSend,
     this.focusNode,
     this.enabled = true,
+    this.leading,
+    this.hasAttachment = false,
   });
 
   final TextEditingController controller;
@@ -550,6 +552,12 @@ class Composer extends StatefulWidget {
   final String sendLabel;
   final ValueChanged<String> onSend;
   final bool enabled;
+
+  /// A control before the field (the attachment button in chat).
+  final Widget? leading;
+
+  /// An attachment is waiting, so Send works with an empty field (the text is its caption).
+  final bool hasAttachment;
 
   @override
   State<Composer> createState() => _ComposerState();
@@ -578,17 +586,23 @@ class _ComposerState extends State<Composer> {
 
   void _send() {
     final text = widget.controller.text.trim();
-    if (text.isEmpty) return;
+    if (text.isEmpty && !widget.hasAttachment) return;
     widget.onSend(text);
   }
 
   @override
   Widget build(BuildContext context) {
-    final canSend = widget.enabled && widget.controller.text.trim().isNotEmpty;
+    final canSend =
+        widget.enabled &&
+        (widget.controller.text.trim().isNotEmpty || widget.hasAttachment);
     final focused = _focus.hasFocus;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        if (widget.leading != null) ...[
+          widget.leading!,
+          const SizedBox(width: AppSpacing.s2 - 2),
+        ],
         Expanded(
           child: AnimatedContainer(
             duration: AppMotion.duration(context, AppMotion.base),

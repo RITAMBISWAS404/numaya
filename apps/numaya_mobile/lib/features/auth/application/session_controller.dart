@@ -5,6 +5,7 @@ import '../../../core/connectivity/connectivity.dart';
 import '../../../core/logging/app_logger.dart';
 import '../../account_health/application/visibility_report.dart';
 import '../../dating/application/dating_controller.dart';
+import '../../dating/data/media_picker.dart';
 import '../../events/application/events_controller.dart';
 import '../../home/application/discovery_filters.dart';
 import '../../onboarding/application/device_permissions.dart';
@@ -124,6 +125,7 @@ class SessionController extends Notifier<AuthSession?> {
     ref.invalidate(eventsProvider);
     ref.invalidate(accountSignalsProvider);
     ref.invalidate(connectivityProvider);
+    ref.invalidate(sampleMediaProvider);
     _log.info('Demo data reset');
   }
 

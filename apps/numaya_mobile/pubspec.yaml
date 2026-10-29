@@ -21,6 +21,7 @@ dependencies:
   flutter_svg: ^2.3.0
   # Pinned by flutter_localizations.
   intl: ^0.20.2
+  image_picker: ^1.2.4
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +36,8 @@ flutter:
 
   assets:
     - assets/illustrations/
+    # Sample media for the demo chat attachments (fictional, generated for this repo).
+    - assets/demo/
 
   # V16 type: one grotesk. Variable font converted from the web app's Fontsource file
   # (@fontsource-variable/hanken-grotesk, SIL OFL 1.1, Latin subset). Licence: assets/fonts/OFL-HankenGrotesk.txt.

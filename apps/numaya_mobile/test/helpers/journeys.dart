@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/router.dart';
 import 'package:numaya_mobile/app/routes.dart';
@@ -192,8 +193,11 @@ Future<ProviderContainer> quickStartApp(
   WidgetTester tester, {
   DemoWorld world = DemoWorld.full,
   DemoAuthRepository? auth,
+  List<Override> overrides = const [],
 }) async {
-  await tester.pumpWidget(testApp(world: world, auth: auth));
+  await tester.pumpWidget(
+    testApp(world: world, auth: auth, overrides: overrides),
+  );
   await tester.pump();
   final container = ProviderScope.containerOf(
     tester.element(find.byType(MaterialApp)),

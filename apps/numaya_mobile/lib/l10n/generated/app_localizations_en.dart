@@ -1072,6 +1072,118 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatStatusOnDevice => 'Demo · saved on this device, not sent';
 
   @override
+  String get chatAttach => 'Add a photo, video or voice note';
+
+  @override
+  String get chatAttachPhoto => 'Photo';
+
+  @override
+  String get chatAttachVideo => 'Video';
+
+  @override
+  String get chatAttachVoice => 'Voice note';
+
+  @override
+  String get chatAttachmentPhoto => 'Photo';
+
+  @override
+  String get chatAttachmentVideo => 'Video';
+
+  @override
+  String get chatAttachmentSample => 'Sample';
+
+  @override
+  String get chatAttachmentRemove => 'Remove attachment';
+
+  @override
+  String chatPendingLabel(String what) {
+    return 'Ready to send: $what';
+  }
+
+  @override
+  String get chatCaptionPlaceholder => 'Add a caption';
+
+  @override
+  String get chatOpenPhoto => 'Open photo';
+
+  @override
+  String get chatVideoNoPlayback =>
+      'Video playback isn’t in this build. The file stays on your phone.';
+
+  @override
+  String chatVoiceLabel(String duration) {
+    return 'Voice note, $duration';
+  }
+
+  @override
+  String get chatVoiceDemo => 'Demo · no sound recorded';
+
+  @override
+  String get mediaPermissionDenied =>
+      'Numaya can’t see your photos. Allow access in your phone’s Settings, then try again.';
+
+  @override
+  String get mediaUnsupported =>
+      'That file type isn’t supported. Choose a JPG, PNG, WebP or HEIC photo, or an MP4 or MOV video.';
+
+  @override
+  String get mediaTooLarge =>
+      'That video is over 100 MB. Choose a shorter one.';
+
+  @override
+  String get mediaUnreadable => 'Couldn’t open that file. Try another one.';
+
+  @override
+  String get mediaUnavailable =>
+      'Choosing photos isn’t available here. Turn on sample media in the Demo Hub to try it.';
+
+  @override
+  String get mediaMissing => 'This file is no longer on your phone';
+
+  @override
+  String get voiceTitle => 'Voice note';
+
+  @override
+  String get voiceDemoTitle => 'Demo recorder';
+
+  @override
+  String get voiceDemoNote =>
+      'This build doesn’t use the microphone, so no sound is captured. It shows how recording a voice note works.';
+
+  @override
+  String get voiceStart => 'Start recording';
+
+  @override
+  String get voiceStop => 'Stop';
+
+  @override
+  String get voiceUse => 'Add to message';
+
+  @override
+  String get voiceRedo => 'Record again';
+
+  @override
+  String get voiceRecording => 'Recording…';
+
+  @override
+  String voiceRecordingLabel(String time) {
+    return 'Recording, $time';
+  }
+
+  @override
+  String get voiceMaxNote => 'Up to 2 minutes';
+
+  @override
+  String get voiceTooShort => 'Too short. Record for at least a second.';
+
+  @override
+  String get demoSampleMedia => 'Use sample media';
+
+  @override
+  String get demoSampleMediaNote =>
+      'Attach the bundled sample photo and video instead of opening the phone’s gallery';
+
+  @override
   String get optionShareDate => 'Share date details';
 
   @override

@@ -35,6 +35,29 @@ class NumayaIcon extends StatelessWidget {
   }
 }
 
+/// A mobile-only glyph ([NumayaMobileIcons]), decorative like [NumayaIcon].
+class MobileIcon extends StatelessWidget {
+  const MobileIcon(
+    this.icon, {
+    super.key,
+    this.size = AppSizes.iconLg,
+    this.color,
+  });
+
+  final NumayaMobileIcons icon;
+  final double size;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) => ExcludeSemantics(
+    child: Icon(
+      kMobileIcons[icon],
+      size: size,
+      color: color ?? IconTheme.of(context).color ?? AppColors.textPrimary,
+    ),
+  );
+}
+
 /// An emoji glyph, decorative (the adjacent label carries the meaning). Falls back to the platform
 /// colour-emoji font (Noto Color Emoji on Android, Apple Color Emoji on iOS).
 class Emoji extends StatelessWidget {

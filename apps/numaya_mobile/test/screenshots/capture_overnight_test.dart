@@ -1,0 +1,82 @@
+@Tags(['screenshots'])
+library;
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:numaya_mobile/app/routes.dart';
+import 'package:numaya_mobile/core/design_system/design_system.dart';
+import 'package:numaya_mobile/features/dating/data/media_picker.dart';
+
+import '../helpers/journeys.dart';
+import '../helpers/test_app.dart';
+
+/// Chat media states from the overnight pass, into goldens/oNN-*.png, for
+/// docs/mobile/OVERNIGHT_QA_REPORT.md. Opt-in: `--tags screenshots --run-skipped`.
+void main() {
+  setUpAll(loadAppFonts);
+
+  testWidgets('capture chat media', (tester) async {
+    tester.view.physicalSize = const Size(786, 1704);
+    tester.view.devicePixelRatio = 2;
+    addTearDown(tester.view.reset);
+    final c = await quickStartApp(
+      tester,
+      overrides: [
+        mediaPickerProvider.overrideWithValue(const SampleMediaPicker()),
+      ],
+    );
+
+    Future<void> shot(String name) async {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 300)),
+      );
+      await tester.pump(const Duration(milliseconds: 700));
+      await expectLater(
+        find.byType(MaterialApp),
+        matchesGoldenFile('goldens/o$name.png'),
+      );
+    }
+
+    Future<void> choose(String option) async {
+      await tapOn(
+        tester,
+        find.bySemanticsLabel('Add a photo, video or voice note'),
+      );
+      await tester.pump(const Duration(milliseconds: 600));
+      await shot('01-attach-menu');
+      await tester.tap(find.text(option).last);
+      await tester.pump(const Duration(milliseconds: 600));
+      await tester.pump(const Duration(milliseconds: 600));
+    }
+
+    await goTo(c, tester, '${Routes.chat}/priya');
+    await choose('Photo');
+    await tester.enterText(find.byType(TextField), 'The stall I mentioned');
+    await tester.pump();
+    FocusManager.instance.primaryFocus?.unfocus();
+    await shot('02-photo-pending');
+    await tapOn(tester, find.bySemanticsLabel('Send'));
+    await tester.pump(const Duration(seconds: 1));
+    await shot('03-photo-sent');
+
+    await choose('Video');
+    await tapOn(tester, find.bySemanticsLabel('Send'));
+    await tester.pump(const Duration(seconds: 3));
+
+    await choose('Voice note');
+    await tapOn(tester, find.widgetWithText(NumayaButton, 'Start recording'));
+    await tester.pump(const Duration(seconds: 7));
+    await shot('04-voice-recording');
+    await tester.tap(find.widgetWithText(NumayaButton, 'Stop'));
+    await tester.pump();
+    await tapOn(tester, find.widgetWithText(NumayaButton, 'Add to message'));
+    await tester.pump(const Duration(milliseconds: 600));
+    await tapOn(tester, find.bySemanticsLabel('Send'));
+    await tester.pump(const Duration(seconds: 1));
+    await shot('05-video-and-voice-sent');
+
+    await goTo(c, tester, Routes.messages);
+    await shot('06-inbox-preview');
+    await settle(tester);
+  });
+}

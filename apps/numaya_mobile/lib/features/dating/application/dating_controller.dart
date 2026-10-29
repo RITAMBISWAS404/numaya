@@ -7,6 +7,7 @@ import '../../../core/connectivity/connectivity.dart';
 import '../../../core/logging/app_logger.dart';
 import '../../home/application/discovery_filters.dart';
 import '../../premium/application/premium_controller.dart';
+import '../data/media_picker.dart';
 import '../domain/sample_people.dart';
 
 enum EndReason { unmatched, blocked, reported }
@@ -48,13 +49,17 @@ class DemoMessage {
     required this.at,
     this.mine = true,
     this.sample = false,
+    this.attachment,
   });
   final int id;
+
+  /// The message text, or its caption when there is an [attachment] (may then be empty).
   final String text;
   final MessageStatus status;
   final DateTime at;
   final bool mine;
   final bool sample;
+  final MessageAttachment? attachment;
 
   DemoMessage withStatus(MessageStatus s) => DemoMessage(
     id: id,
@@ -63,6 +68,7 @@ class DemoMessage {
     at: at,
     mine: mine,
     sample: sample,
+    attachment: attachment,
   );
 
   @override
@@ -675,15 +681,22 @@ class DatingController extends Notifier<DatingState> {
 
   /// Adds a message to the thread. It stays on this device ([MessageStatus.onDevice]); with the
   /// "simulate connection problems" tool on, it fails so the retry path can be tried. Offline, it
-  /// waits ([MessageStatus.waiting]) and goes out when the connection is back.
-  Future<void> send(String id, String text) async {
+  /// waits ([MessageStatus.waiting]) and goes out when the connection is back. An [attachment]
+  /// (photo, video, voice note) goes the same way, with [text] as its optional caption; it is never
+  /// uploaded.
+  Future<void> send(
+    String id,
+    String text, {
+    MessageAttachment? attachment,
+  }) async {
     final body = text.trim();
-    if (body.isEmpty || !state.isActive(id)) return;
+    if ((body.isEmpty && attachment == null) || !state.isActive(id)) return;
     final message = DemoMessage(
       id: state.nextMessageId,
       text: body,
       status: _online ? MessageStatus.sending : MessageStatus.waiting,
       at: _now,
+      attachment: attachment,
     );
     state = state.copyWith(nextMessageId: state.nextMessageId + 1);
     _put(id, message);

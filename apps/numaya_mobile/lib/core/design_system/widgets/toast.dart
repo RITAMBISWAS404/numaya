@@ -160,23 +160,28 @@ class _ToastViewState extends State<_ToastView> with TickerProviderStateMixin {
                   padding: const EdgeInsets.fromLTRB(16, 9, 16, 10),
                   decoration: BoxDecoration(
                     color: AppColors.accentTint,
-                    borderRadius: AppRadii.all(AppRadii.pill),
+                    // A pill for one line; the same radius stays soft when a message wraps.
+                    borderRadius: AppRadii.all(20),
                     boxShadow: AppElevation.withingsFloat,
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        widget.message,
-                        style:
-                            AppTypography.weight(
-                              AppTypography.bodySm,
-                              AppTypography.semibold,
-                            ).copyWith(
-                              fontSize: 14,
-                              height: 18 / 14,
-                              color: AppColors.accentOnTint,
-                            ),
+                      // Wraps instead of overflowing: some messages (picker errors) run long.
+                      Flexible(
+                        child: Text(
+                          widget.message,
+                          textAlign: TextAlign.center,
+                          style:
+                              AppTypography.weight(
+                                AppTypography.bodySm,
+                                AppTypography.semibold,
+                              ).copyWith(
+                                fontSize: 14,
+                                height: 18 / 14,
+                                color: AppColors.accentOnTint,
+                              ),
+                        ),
                       ),
                       if (widget.busy) ...[
                         const SizedBox(width: 8),

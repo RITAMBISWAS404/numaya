@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/app.dart';
 import 'package:numaya_mobile/app/providers.dart';
@@ -30,13 +31,18 @@ class FixedWorld extends DemoWorldController {
 
 /// The real app with deterministic dependencies. [world] defaults to a brand-new account (no
 /// matches); the full demo world adds seeded matches and conversations.
-Widget testApp({DemoAuthRepository? auth, DemoWorld world = DemoWorld.fresh}) {
+Widget testApp({
+  DemoAuthRepository? auth,
+  DemoWorld world = DemoWorld.fresh,
+  List<Override> overrides = const [],
+}) {
   final repo = auth ?? testAuth();
   return ProviderScope(
     overrides: [
       clockProvider.overrideWithValue(() => testNow),
       demoAuthProvider.overrideWithValue(repo),
       demoWorldProvider.overrideWith(() => FixedWorld(world)),
+      ...overrides,
     ],
     child: const NumayaApp(),
   );
