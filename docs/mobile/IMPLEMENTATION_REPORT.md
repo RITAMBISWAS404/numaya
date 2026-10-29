@@ -170,7 +170,7 @@ published to any store.
 | `flutter build apk --debug` | **Not run: blocked.** No Android SDK. The SDK is downloaded from `dl.google.com`, which this cloud environment's network policy refuses (HTTP 403 at the proxy). `flutter doctor -v`: "✗ Unable to locate Android SDK". |
 
 The build was not faked or simulated. Follow [GETTING_STARTED_WINDOWS.md](GETTING_STARTED_WINDOWS.md) to build and run
-on a phone; the project has no native plugins, so a standard Android Studio install is all it needs.
+on a phone; a standard Android Studio install is all it needs (the only native plugin, `image_picker`, is added by Gradle).
 
 ## Problems found and fixed during the work
 

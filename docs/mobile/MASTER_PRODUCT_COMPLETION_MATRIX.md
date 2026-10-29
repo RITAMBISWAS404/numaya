@@ -1,5 +1,7 @@
 # Master product completion matrix
 
+> Updated by [OVERNIGHT_COMPLETION_MATRIX.md](OVERNIGHT_COMPLETION_MATRIX.md): chat photos, videos and demo voice notes (F15), real profile photos (F4), three new screens and four layout fixes.
+
 The authoritative record of what the Flutter app (`apps/numaya_mobile`) implements, what is partial and
 what remains. Detailed per-screen rows stay in the area inventories this file links to; this file
 reconciles them against the code and records the next action for anything not complete.
