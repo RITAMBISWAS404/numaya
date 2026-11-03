@@ -5,66 +5,91 @@ import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/core/logging/app_logger.dart';
 
 void main() {
-  group('V16 design tokens', () {
-    test('roles point at the V16 palette', () {
-      expect(AppColors.canvas, const Color(0xFFF5F4F1));
-      expect(AppColors.ink, const Color(0xFF121212));
-      expect(AppColors.accent, const Color(0xFF5066CC));
-      expect(AppColors.accentTint, const Color(0xFFE4EBFC));
-      expect(AppColors.positive, const Color(0xFF3C783C));
-      expect(AppColors.negative, const Color(0xFFCF3336));
-      // Shared roles re-pointed as in theme-withings.css.
+  group('Monochrome Meetup design tokens', () {
+    double ratio(Color a, Color b) {
+      final la = a.computeLuminance(), lb = b.computeLuminance();
+      final (hi, lo) = la > lb ? (la, lb) : (lb, la);
+      return (hi + 0.05) / (lo + 0.05);
+    }
+
+    test('roles point at the monochrome palette with the Numaya purple', () {
+      expect(AppColors.canvas, const Color(0xFFF4F4F6));
+      expect(AppColors.surface, const Color(0xFFFFFFFF));
+      expect(AppColors.ink, const Color(0xFF18181B));
+      // The canonical brand purple from tokens/numaya.tokens.json (purple.600).
+      expect(AppColors.accent, const Color(0xFF7262C7));
       expect(AppColors.brand, AppColors.accent);
-      expect(AppColors.controlSelected, AppColors.ink);
+      expect(AppColors.controlSelected, AppColors.accent);
       expect(AppColors.textPrimary, AppColors.ink);
       expect(AppColors.surfacePage, AppColors.canvas);
     });
 
-    test('text colours meet WCAG AA on their surfaces', () {
-      double ratio(Color a, Color b) {
-        final la = a.computeLuminance(), lb = b.computeLuminance();
-        final (hi, lo) = la > lb ? (la, lb) : (lb, la);
-        return (hi + 0.05) / (lo + 0.05);
+    test('the neutral ramp stays neutral (no warm stone page)', () {
+      for (final c in [AppColors.canvas, AppColors.fill, AppColors.photo]) {
+        final r = (c.r * 255).round(), b = (c.b * 255).round();
+        // Cool or neutral: blue never below red.
+        expect(b, greaterThanOrEqualTo(r));
       }
+    });
 
-      expect(ratio(AppColors.inkForeground, AppColors.ink), greaterThan(4.5));
-      expect(ratio(AppColors.textMuted, AppColors.canvas), greaterThan(4.5));
-      expect(
-        ratio(AppColors.textSecondary, AppColors.surface),
-        greaterThan(4.5),
-      );
-      expect(
-        ratio(AppColors.accentOnTint, AppColors.accentTint),
-        greaterThan(4.5),
-      );
+    test('text colours meet WCAG AA on every surface they sit on', () {
+      for (final bg in [
+        AppColors.surface,
+        AppColors.canvas,
+        AppColors.fill,
+        AppColors.accentTint,
+      ]) {
+        expect(ratio(AppColors.ink, bg), greaterThan(4.5));
+        expect(ratio(AppColors.textSecondary, bg), greaterThan(4.5));
+        expect(ratio(AppColors.textMuted, bg), greaterThan(4.5));
+        expect(ratio(AppColors.accentOnTint, bg), greaterThan(4.5));
+      }
       expect(
         ratio(AppColors.inkForeground, AppColors.accent),
         greaterThan(4.5),
       );
+      expect(ratio(AppColors.inkForeground, AppColors.ink), greaterThan(4.5));
+      expect(
+        ratio(AppColors.inkForeground, AppColors.negative),
+        greaterThan(4.5),
+      );
+      // White text on the photo panel, over the worst case (a white photo).
+      final panelOnWhite = Color.alphaBlend(
+        AppColors.photoPanel,
+        const Color(0xFFFFFFFF),
+      );
+      expect(ratio(const Color(0xFFFFFFFF), panelOnWhite), greaterThan(4.5));
     });
 
-    test('one grotesk family with the V16 type roles', () {
-      expect(AppTypography.pageTitle.fontFamily, 'Hanken Grotesk');
+    test('control boundaries meet 3:1', () {
+      expect(ratio(AppColors.outline, AppColors.surface), greaterThan(3));
+      expect(ratio(AppColors.outline, AppColors.canvas), greaterThan(3));
+      expect(ratio(AppColors.accent, AppColors.surface), greaterThan(3));
+    });
+
+    test('one rounded family with the monochrome type roles', () {
+      expect(AppTypography.pageTitle.fontFamily, 'Figtree');
       expect(AppTypography.pageTitle.fontSize, 30);
       expect(AppTypography.pageTitle.fontWeight, FontWeight.w700);
-      expect(AppTypography.flowTitle.fontSize, 26);
-      expect(AppTypography.flowTitle.fontWeight, FontWeight.w500);
-      expect(AppTypography.section.fontSize, 22);
-      expect(AppTypography.labelCaps.fontSize, 11.5);
-      expect(AppTypography.labelCaps.fontWeight, FontWeight.w700);
-      expect(AppTypography.body.fontSize, 15.5);
+      expect(AppTypography.flowTitle.fontSize, 28);
+      expect(AppTypography.section.fontSize, 20);
+      expect(AppTypography.labelCaps.fontSize, 12);
+      expect(AppTypography.body.fontSize, 16);
+      expect(AppTypography.body.height, 1.5);
     });
 
-    test('geometry matches the withings tokens', () {
-      expect(AppRadii.field, 8);
-      expect(AppRadii.control, 12);
-      expect(AppRadii.card, 14);
-      expect(AppRadii.photo, 16);
-      expect(AppSizes.buttonHeight, 50);
+    test('geometry follows the monochrome radii and sizes', () {
+      expect(AppRadii.field, 14);
+      expect(AppRadii.control, 14);
+      expect(AppRadii.card, 20);
+      expect(AppRadii.photo, 20);
+      expect(AppRadii.sheet, 28);
+      expect(AppSizes.buttonHeight, 52);
       expect(AppSizes.field, 54);
       expect(AppSizes.row, 56);
       expect(AppSizes.choice, 22);
       expect(AppSizes.touchMin, 44);
+      expect(AppLayout.screenGutter, 20);
     });
   });
 

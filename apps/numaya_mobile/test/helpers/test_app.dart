@@ -63,13 +63,13 @@ Future<void> usePhoneSize(
 
 bool _fontsLoaded = false;
 
-/// Loads the bundled Hanken Grotesk (and the system colour-emoji font, when present) so
+/// Loads the bundled Figtree (and the system colour-emoji font, when present) so
 /// screenshots show real type and emoji.
 Future<void> loadAppFonts() async {
   if (_fontsLoaded) return;
   _fontsLoaded = true;
   for (final (family, file) in [
-    ('Hanken Grotesk', 'assets/fonts/HankenGrotesk-Variable.ttf'),
+    ('Figtree', 'assets/fonts/Figtree-Variable.ttf'),
     ('Noto Color Emoji', '/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf'),
     // Flutter's Material Icons (the app's icons, RD-04), from the SDK running the tests.
     (

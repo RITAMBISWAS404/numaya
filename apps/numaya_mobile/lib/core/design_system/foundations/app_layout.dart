@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../tokens/monochrome_tokens.dart';
 import '../tokens/numaya_tokens.g.dart';
 
 /// 4 pt spacing scale and layout rhythm.
@@ -15,13 +16,13 @@ abstract final class AppSpacing {
   static const double s10 = NumayaSizeTokens.space10;
   static const double s12 = NumayaSizeTokens.space12;
 
-  /// Screen side margin.
-  static const double gutter = NumayaSizeTokens.layoutGutter;
+  /// Screen side margin: 20 in the monochrome system (was 16), for a more spacious page.
+  static const double gutter = MonoSpace.gutter;
 
   /// Discover's photo card sits 8pt from the edges.
   static const double gutterTight = NumayaSizeTokens.layoutGutterTight;
   static const double stackGap = NumayaSizeTokens.layoutStackGap;
-  static const double sectionGap = NumayaSizeTokens.layoutSectionGap;
+  static const double sectionGap = MonoSpace.section;
   static const double fieldGap = NumayaSizeTokens.layoutFieldGap;
 
   /// Widest content column; wider screens centre it.
@@ -49,8 +50,8 @@ abstract final class AppLayout {
   /// Between related items (cards in a list, rows of chips).
   static const double itemGap = AppSpacing.s3;
 
-  /// Inside cards.
-  static const double cardPadding = AppSpacing.s4;
+  /// Inside cards: 18.
+  static const double cardPadding = MonoSpace.cardPadding;
 
   /// Between a leading icon and its text.
   static const double iconLabelGap = AppSpacing.s2;
@@ -75,19 +76,23 @@ abstract final class AppMedia {
   static const double eventCover = 16 / 9;
 }
 
-/// V16 corner radii (`withings.radius.*`): tags 6, fields 8, buttons and chips 12, cards 14, photos and
-/// sheets 16; full pills only for compact actions, view tabs and the toast. A nested corner is its
-/// container's minus the inset.
+/// Monochrome corner radii (`MonoRadii`): tags 8, fields and controls 14, rounded-square icon
+/// buttons 14, tiles 16, cards and images 20, dialogs 24, sheets 28; full pills for buttons,
+/// filters and tabs. A nested corner is its container's minus the inset.
 abstract final class AppRadii {
-  static const double tag = NumayaSizeTokens.withingsRadiusTag;
-  static const double field = NumayaSizeTokens.withingsRadiusField;
-  static const double control = NumayaSizeTokens.withingsRadiusControl;
-  static const double card = NumayaSizeTokens.withingsRadiusCard;
-  static const double photo = NumayaSizeTokens.withingsRadiusPhoto;
-  static const double pill = NumayaSizeTokens.withingsRadiusPill;
+  static const double tag = MonoRadii.tag;
+  static const double field = MonoRadii.field;
+  static const double control = MonoRadii.control;
+  static const double iconButton = MonoRadii.iconButton;
+  static const double tile = MonoRadii.tile;
+  static const double card = MonoRadii.card;
+  static const double photo = MonoRadii.image;
+  static const double sheet = MonoRadii.sheet;
+  static const double dialog = MonoRadii.dialog;
+  static const double pill = MonoRadii.pill;
 
-  /// Segmented track; a segment is this minus the inset.
-  static const double segment = NumayaSizeTokens.withingsSegmentRadius;
+  /// Segmented track: a full pill; segments are pills inside it.
+  static const double segment = MonoRadii.pill;
 
   static BorderRadius all(double r) => BorderRadius.all(Radius.circular(r));
 }
@@ -106,27 +111,27 @@ abstract final class AppSizes {
   static const double iconMd = NumayaSizeTokens.sizeIconMd;
   static const double iconLg = NumayaSizeTokens.sizeIconLg;
 
-  /// Full-width buttons: 50.
-  static const double buttonHeight = NumayaSizeTokens.withingsButtonHeight;
+  /// Full-width buttons: 52.
+  static const double buttonHeight = MonoSizes.button;
 
-  /// Compact pill buttons: 36 visible inside the 44 hit area.
-  static const double buttonHeightSm = NumayaSizeTokens.withingsButtonHeightSm;
+  /// Compact pill buttons: 38 visible inside the 44 hit area.
+  static const double buttonHeightSm = MonoSizes.buttonSm;
   static const double buttonHeightQuiet = NumayaSizeTokens.buttonHeightQuiet;
 
   /// Text fields: 54.
-  static const double field = NumayaSizeTokens.withingsFieldHeight;
+  static const double field = MonoSizes.field;
 
   /// Grouped and selection rows: 56 minimum.
-  static const double row = NumayaSizeTokens.withingsRowHeight;
+  static const double row = MonoSizes.row;
   static const double fab = NumayaSizeTokens.fabSize;
 
-  /// Header buttons: 40 rounded squares (12 corner) inside a 44 hit area.
-  static const double iconButton = NumayaSizeTokens.withingsHeaderButton;
+  /// Header buttons: 42 rounded squares (14 corner) inside a 44 hit area.
+  static const double iconButton = MonoSizes.iconButton;
   static const double iconButtonSm = NumayaSizeTokens.iconButtonSizeSm;
   static const double chip = NumayaSizeTokens.chipHeight;
-  static const double search = NumayaSizeTokens.withingsSearchHeight;
-  static const double segmentHeight = NumayaSizeTokens.withingsSegmentHeight;
-  static const double segmentInset = NumayaSizeTokens.withingsSegmentInset;
+  static const double search = MonoSizes.search;
+  static const double segmentHeight = MonoSizes.segment;
+  static const double segmentInset = MonoSizes.segmentInset;
 
   /// Radio and checkbox: 22.
   static const double choice = NumayaSizeTokens.withingsChoiceSize;
@@ -154,16 +159,20 @@ abstract final class AppSizes {
   static const double topBar = 56;
 }
 
-/// Shadows. V16 cards, groups and fields take none; only floating things do.
+/// Shadows. Flat by default: cards, groups and fields take none on the grey page. Only things that
+/// float (tab bar, sticky bars, toast, buttons over photos) take [floating]; [subtle] is for the
+/// rare card that sits on white.
 abstract final class AppElevation {
+  static const List<BoxShadow> none = MonoShadows.none;
+  static const List<BoxShadow> subtle = MonoShadows.subtle;
+  static const List<BoxShadow> floating = MonoShadows.floating;
+
   /// The toast and anything floating over a photo.
-  static const List<BoxShadow> withingsFloat =
-      NumayaShadowTokens.shadowWithingsFloat;
+  static const List<BoxShadow> withingsFloat = MonoShadows.floating;
 
   /// The selected segment.
-  static const List<BoxShadow> segment =
-      NumayaShadowTokens.shadowWithingsSegment;
-  static const List<BoxShadow> thumb = NumayaShadowTokens.shadowThumb;
+  static const List<BoxShadow> segment = MonoShadows.segment;
+  static const List<BoxShadow> thumb = MonoShadows.thumb;
   static const List<BoxShadow> xs = NumayaShadowTokens.shadowXs;
   static const List<BoxShadow> sm = NumayaShadowTokens.shadowSm;
   static const List<BoxShadow> md = NumayaShadowTokens.shadowMd;

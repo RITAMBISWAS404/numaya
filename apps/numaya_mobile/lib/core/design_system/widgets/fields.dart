@@ -101,9 +101,8 @@ class FieldLabel extends StatelessWidget {
   final String text;
 
   @override
-  Widget build(BuildContext context) => ExcludeSemantics(
-    child: Text(text.toUpperCase(), style: AppTypography.labelCaps),
-  );
+  Widget build(BuildContext context) =>
+      ExcludeSemantics(child: Text(text, style: AppTypography.fieldLabel));
 }
 
 /// Labelled text field (`.field` + `.input`) with an optional helper or error note.

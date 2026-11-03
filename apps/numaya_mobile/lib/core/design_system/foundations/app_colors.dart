@@ -1,78 +1,85 @@
 import 'package:flutter/painting.dart';
 
-import '../tokens/numaya_tokens.g.dart';
+import '../tokens/monochrome_tokens.dart';
 
-typedef _T = NumayaColorTokens;
+typedef _M = MonoColors;
 
-/// Colours of Numaya V16, the Withings Health Mate reconstruction.
+/// Colours of the Monochrome Meetup experiment.
 ///
-/// The roles are re-pointed exactly as the web does it in the "Roles" block of
-/// `src/design-system/styles/theme-withings.css`: a warm stone page, white cards, near-black ink for
-/// text, primary actions and selected controls, Withings blue for accents and its light tint for
-/// selection, green switches, red for destruction. Values come from the generated tokens
-/// (`tokens/numaya.tokens.json` → `color.withings.*`); to change one, edit the JSON and regenerate.
+/// A cool neutral system (soft grey page, white surfaces, charcoal text) with Numaya's purple
+/// (#7262C7) as the one brand colour: primary actions, selection, the active tab, links and key
+/// states. No gradients. The role names are the ones every screen already uses, re-pointed onto
+/// `MonoColors` (tokens/monochrome_tokens.dart); see
+/// docs/design-experiments/monochrome-meetup/TOKENS.md for each role and its contrast.
 abstract final class AppColors {
-  // V16 palette -----------------------------------------------------------------------------
-  /// The page behind every screen (`--color-withings-canvas`, #F5F4F1).
-  static const Color canvas = _T.colorWithingsCanvas;
+  // Surfaces ---------------------------------------------------------------------------------
+  /// The page behind every screen.
+  static const Color canvas = _M.canvas;
 
-  /// Cards, grouped rows, fields, sheets, modal headers, tab bar.
-  static const Color surface = _T.colorWithingsSurface;
+  /// Cards, grouped rows, fields, sheets, bars.
+  static const Color surface = _M.surface;
 
-  /// Segmented track, switch-off track, chips on white cards, slider rail, disabled fields.
-  static const Color fill = _T.colorWithingsFill;
+  /// Idle pills, segmented track, switch-off track, tiles, chips on white.
+  static const Color fill = _M.fill;
 
-  /// Dividers, header and tab-bar edges, outlined info boxes, search field.
-  static const Color border = _T.colorWithingsBorder;
+  /// Hairlines: dividers, card and bar edges.
+  static const Color border = _M.line;
 
-  /// Dashed empty photo slots, sheet grabber.
-  static const Color borderStrong = _T.colorWithingsBorderStrong;
+  /// Dashed add slots, the sheet grabber.
+  static const Color borderStrong = _M.lineStrong;
 
   /// Photo placeholders.
-  static const Color photo = _T.colorWithingsPhoto;
+  static const Color photo = _M.fillStrong;
 
-  /// Text-field outline (5.25:1 on white).
-  static const Color outline = _T.colorWithingsOutline;
+  /// Field outline (3.38:1 on white).
+  static const Color outline = _M.outline;
 
-  /// Unselected radio and checkbox rings.
-  static const Color control = _T.colorWithingsControl;
+  /// Unselected radio and checkbox rings (3:1).
+  static const Color control = _M.outline;
 
-  /// Text, headings, primary buttons, selected radios, the active tab.
-  static const Color ink = _T.colorWithingsInk;
-  static const Color inkForeground = _T.colorWithingsInkForeground;
+  // Text and ink -------------------------------------------------------------------------------
+  /// Text, headings and strong icons. Strong neutral buttons where purple would compete.
+  static const Color ink = _M.ink;
+  static const Color inkForeground = _M.onBrand;
 
-  static const Color disabled = _T.colorWithingsDisabled;
-  static const Color disabledForeground = _T.colorWithingsDisabledForeground;
+  static const Color disabled = _M.disabled;
+  static const Color disabledForeground = _M.disabledText;
 
-  /// Withings blue: checked boxes, slider interval, links' hue, focus, the mark.
-  static const Color accent = _T.colorWithingsAccent;
-  static const Color accentHover = _T.colorWithingsAccentHover;
-  static const Color accentForeground = _T.colorWithingsAccentForeground;
+  // Purple -----------------------------------------------------------------------------------
+  /// The brand purple: primary actions, selected controls, active tab, progress, switch on.
+  static const Color accent = _M.brand;
+  static const Color accentHover = _M.brandPressed;
+  static const Color accentForeground = _M.onBrand;
 
-  /// Selected chips and tabs, toast, tint buttons, prompt-mark holder.
-  static const Color accentTint = _T.colorWithingsAccentTint;
+  /// Subtle purple surface: badges, info cards, selected chips.
+  static const Color accentTint = _M.brandSubtle;
 
-  /// Text and icons on the tint; links.
-  static const Color accentOnTint = _T.colorWithingsAccentOnTint;
+  /// Purple text and icons on light surfaces; links.
+  static const Color accentOnTint = _M.brandText;
 
-  /// Initials avatars (navy).
-  static const Color identity = _T.colorWithingsIdentity;
+  /// Edge of a selected chip.
+  static const Color accentLine = _M.brandLine;
 
-  /// Switch on.
-  /// Outline of secondary buttons and other quiet controls: ink at 30% (RD-07).
-  static const Color outlineSoft = Color(0x4D121212);
+  /// Initials avatars: the neutral photo grey with a charcoal initial (purple is kept for
+  /// actions; a dark disc was too heavy at profile size).
+  static const Color identity = _M.fillStrong;
+  static const Color onIdentity = _M.text2;
 
-  static const Color positive = _T.colorWithingsPositive;
+  /// Outline of secondary buttons and other quiet controls: ink at 30%.
+  static const Color outlineSoft = Color(0x4D18181B);
+
+  /// Success and confirmations.
+  static const Color positive = _M.success;
 
   /// Destructive buttons, notification dots, errors.
-  static const Color negative = _T.colorWithingsNegative;
+  static const Color negative = _M.danger;
 
-  /// Round holders behind interest-set emoji only, never text.
-  static const Color markYellow = _T.colorWithingsMarkYellow;
-  static const Color markLavender = _T.colorWithingsMarkLavender;
-  static const Color markPink = _T.colorWithingsMarkPink;
+  /// Round holders behind interest-set emoji: one neutral fill (no competing hues).
+  static const Color markYellow = _M.fill;
+  static const Color markLavender = _M.fill;
+  static const Color markPink = _M.fill;
 
-  // Shared roles, re-pointed as theme-withings.css does ---------------------------------------
+  // Shared roles -------------------------------------------------------------------------------
   static const Color surfacePage = canvas;
   static const Color surfaceSoft = fill;
   static const Color surfaceSunken = photo;
@@ -81,8 +88,8 @@ abstract final class AppColors {
   static const Color surfaceInverse = ink;
 
   static const Color textPrimary = ink;
-  static const Color textSecondary = _T.colorWithingsTextSecondary;
-  static const Color textMuted = _T.colorWithingsTextMuted;
+  static const Color textSecondary = _M.text2;
+  static const Color textMuted = _M.muted;
   static const Color textSubtle = disabledForeground;
   static const Color textBrand = accentOnTint;
   static const Color textBrandDeep = accentOnTint;
@@ -98,23 +105,30 @@ abstract final class AppColors {
   static const Color brandSubtle = accentTint;
   static const Color onBrand = accentForeground;
 
-  /// Ink is the selected control (radio, segment) and the primary action.
-  static const Color controlSelected = ink;
-  static const Color controlSelectedText = inkForeground;
+  /// Purple is the selected control (radio, segment, pill) and the primary action.
+  static const Color controlSelected = accent;
+  static const Color controlSelectedText = accentForeground;
   static const Color controlTrackOff = fill;
 
   static const Color focusField = accent;
 
-  /// `color-mix(in srgb, accent 24%, transparent)`.
-  static const Color focusHalo = Color(0x3D5066CC);
-  static const Color scrim = _T.colorOverlayScrim;
+  /// Brand at 24%.
+  static const Color focusHalo = Color(0x3D7262C7);
+  static const Color scrim = _M.scrim;
+
+  /// Solid translucent panel for text over photos (no gradient scrims).
+  static const Color photoPanel = _M.photoPanel;
+
+  /// Round buttons floating on photos.
+  static const Color photoButton = _M.photoButton;
 
   static const Color danger = negative;
-  static const Color dangerTint = _T.colorDangerTint;
+  static const Color dangerTint = _M.dangerSubtle;
   static const Color success = positive;
-  static const Color warning = _T.colorWarning;
-  static const Color warningTint = _T.colorWarningTint;
+  static const Color successTint = _M.successSubtle;
+  static const Color warning = _M.warning;
+  static const Color warningTint = _M.warningSubtle;
 
-  /// The Numaya mark's dot (kept from the brand mark).
-  static const Color accentRose = _T.colorAccentRose;
+  /// The Numaya mark's dot: brand purple.
+  static const Color accentRose = accent;
 }

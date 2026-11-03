@@ -3256,6 +3256,24 @@ abstract class AppLocalizations {
   /// **'Jump to any screen, switch the sample data and try each state. Everything here is local and simulated.'**
   String get demoHubBody;
 
+  /// No description provided for @demoDesignTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Design'**
+  String get demoDesignTitle;
+
+  /// No description provided for @demoDesignLab.
+  ///
+  /// In en, this message translates to:
+  /// **'Design Lab'**
+  String get demoDesignLab;
+
+  /// No description provided for @demoDesignLabDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Monochrome Meetup tokens, components and states'**
+  String get demoDesignLabDetail;
+
   /// No description provided for @demoStart.
   ///
   /// In en, this message translates to:

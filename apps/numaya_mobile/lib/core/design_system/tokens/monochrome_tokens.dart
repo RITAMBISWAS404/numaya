@@ -1,0 +1,145 @@
+import 'package:flutter/painting.dart';
+
+/// Monochrome Meetup tokens: the Flutter-only source of truth for the experimental visual system on
+/// `experiment/numaya-monochrome-meetup`.
+///
+/// Hand-authored on purpose. The generated `numaya_tokens.g.dart` mirrors the web prototype's
+/// `tokens/numaya.tokens.json`, and this experiment must not change the web. Each value's role,
+/// contrast and reference are documented in
+/// `docs/design-experiments/monochrome-meetup/TOKENS.md`; change both together.
+abstract final class MonoColors {
+  // Neutrals: a cool grey ramp (slightly violet-leaning so purple sits in it naturally).
+  /// Page behind every screen: soft cool grey, never the old warm stone.
+  static const Color canvas = Color(0xFFF4F4F6);
+
+  /// Cards, rows, sheets, fields, bars.
+  static const Color surface = Color(0xFFFFFFFF);
+
+  /// Secondary surface: idle pills, segmented track, tiles, switch-off track, chips on white.
+  static const Color fill = Color(0xFFECECF0);
+
+  /// Stronger fill: photo placeholders, pressed fill, slider rail.
+  static const Color fillStrong = Color(0xFFE2E2E7);
+
+  /// Hairlines: dividers, card edges, bar edges.
+  static const Color line = Color(0xFFE4E4E9);
+
+  /// Dashed add slots, grabber, decorative strong lines (not a control boundary).
+  static const Color lineStrong = Color(0xFFC7C7CE);
+
+  /// Control boundaries that must meet 3:1: fields, unselected radios and checkboxes (3.38:1 on
+  /// white, 3.07:1 on the canvas).
+  static const Color outline = Color(0xFF8B8B94);
+
+  /// Near-black charcoal: text, headings, strong icons (17.72:1 on white).
+  static const Color ink = Color(0xFF18181B);
+
+  /// Body copy and row labels (8.77:1 on white).
+  static const Color text2 = Color(0xFF4A4A53);
+
+  /// Captions, metadata, eyebrows (5.43:1 on white, 4.95:1 canvas, 4.61:1 fill, 4.78:1 tint).
+  static const Color muted = Color(0xFF696972);
+
+  /// Disabled fills and their labels (labels 3.42:1; disabled controls are exempt from 1.4.3).
+  static const Color disabled = Color(0xFFE4E4E9);
+  static const Color disabledText = Color(0xFF8A8A93);
+
+  // Purple: the Numaya brand (#7262C7, canonical in tokens/numaya.tokens.json `purple.600`).
+  /// Primary actions, selected pills and segments, active tab, switch on, progress.
+  static const Color brand = Color(0xFF7262C7);
+
+  /// Pressed / hovered primary.
+  static const Color brandPressed = Color(0xFF5F50B8);
+
+  /// Purple as text or icon on light surfaces: links, selected text, badges (6.82:1 on white,
+  /// 6.21:1 canvas, 6.00:1 tint). Plain brand is 4.46:1 on the canvas, short of AA for text.
+  static const Color brandText = Color(0xFF5B4BB0);
+
+  /// Subtle purple surface: badges, info cards, selected chip fill, promo cards.
+  static const Color brandSubtle = Color(0xFFF1EFF9);
+
+  /// Edge of a selected chip on the subtle surface.
+  static const Color brandLine = Color(0xFFCBC4EC);
+  static const Color onBrand = Color(0xFFFFFFFF);
+
+  // States.
+  static const Color success = Color(0xFF2F7D4F);
+  static const Color successSubtle = Color(0xFFE8F3EC);
+  static const Color danger = Color(0xFFC8383B);
+  static const Color dangerSubtle = Color(0xFFFBEDED);
+  static const Color warning = Color(0xFF8A5A00);
+  static const Color warningSubtle = Color(0xFFFBF3E2);
+
+  /// Modal barrier: ink at 45%.
+  static const Color scrim = Color(0x7318181B);
+
+  /// Solid translucent panel for text over photos (replaces gradient scrims): ink at 72%. White text
+  /// on it stays above 4.5:1 even over a white photo (blend ≈ #585859, 7.2:1).
+  static const Color photoPanel = Color(0xB818181B);
+
+  /// Round buttons floating on photos: white at 90%.
+  static const Color photoButton = Color(0xE6FFFFFF);
+}
+
+/// Corner radii: generous but role-specific (TOKENS.md "Shape").
+abstract final class MonoRadii {
+  static const double tag = 8;
+  static const double field = 14;
+  static const double control = 14;
+  static const double iconButton = 14;
+  static const double tile = 16;
+  static const double card = 20;
+  static const double image = 20;
+  static const double sheet = 28;
+  static const double dialog = 24;
+  static const double pill = 999;
+}
+
+/// Sizes that change with the new rhythm.
+abstract final class MonoSizes {
+  static const double button = 52;
+  static const double buttonSm = 38;
+  static const double field = 54;
+  static const double row = 56;
+  static const double iconButton = 42;
+  static const double search = 48;
+  static const double segment = 44;
+  static const double segmentInset = 4;
+  static const double tabBar = 64;
+}
+
+/// Spacing roles on the 4pt scale (LAYOUT_GUIDELINES.md).
+abstract final class MonoSpace {
+  static const double gutter = 20;
+  static const double section = 32;
+  static const double cardPadding = 18;
+  static const double item = 12;
+  static const double field = 20;
+}
+
+/// Elevation: flat by default. Only things that float get a shadow, and it is soft.
+abstract final class MonoShadows {
+  static const List<BoxShadow> none = [];
+
+  /// Cards that need separation from a white page (grouped settings, event cards on white).
+  static const List<BoxShadow> subtle = [
+    BoxShadow(color: Color(0x0A18181B), blurRadius: 2, offset: Offset(0, 1)),
+    BoxShadow(color: Color(0x0818181B), blurRadius: 12, offset: Offset(0, 4)),
+  ];
+
+  /// Floating bars and buttons over content: tab bar, sticky action bar, photo buttons, toast.
+  static const List<BoxShadow> floating = [
+    BoxShadow(color: Color(0x0F18181B), blurRadius: 4, offset: Offset(0, 1)),
+    BoxShadow(color: Color(0x1418181B), blurRadius: 24, offset: Offset(0, 8)),
+  ];
+
+  /// The selected segment in a segmented control.
+  static const List<BoxShadow> segment = [
+    BoxShadow(color: Color(0x1418181B), blurRadius: 4, offset: Offset(0, 1)),
+  ];
+
+  /// Slider and switch thumbs.
+  static const List<BoxShadow> thumb = [
+    BoxShadow(color: Color(0x2918181B), blurRadius: 4, offset: Offset(0, 1)),
+  ];
+}

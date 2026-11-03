@@ -20,6 +20,7 @@ import '../features/dating/presentation/match_screen.dart';
 import '../features/dating/presentation/messages_screens.dart';
 import '../features/dating/presentation/photo_viewer_screen.dart';
 import '../features/demo/presentation/demo_hub_screen.dart';
+import '../features/demo/presentation/design_lab_screen.dart';
 import '../features/events/presentation/event_detail_screen.dart';
 import '../features/events/presentation/event_form_screen.dart';
 import '../features/events/presentation/event_people_screen.dart';
@@ -67,8 +68,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final path = state.uri.path;
       final session = ref.read(sessionProvider);
-      // The Demo Hub exists only where demo sign-in does (never in release builds).
-      if (path == Routes.demo && ref.read(demoAuthProvider) == null) {
+      // The Demo Hub and its Design Lab exist only where demo sign-in does (never in release
+      // builds).
+      if ((path == Routes.demo || path == Routes.designLab) &&
+          ref.read(demoAuthProvider) == null) {
         return Routes.welcome;
       }
       if (session == null) {
@@ -88,7 +91,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (session.restorableUntil != null && !verifying) {
         return path == Routes.restore ||
                 path.startsWith(Routes.help) ||
-                path == Routes.demo
+                path == Routes.demo ||
+                path == Routes.designLab
             ? null
             : Routes.restore;
       }
@@ -331,6 +335,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const AccountBlockedScreen(),
       ),
       _route(path: Routes.demo, builder: (_, _) => const DemoHubScreen()),
+      _route(
+        path: Routes.designLab,
+        builder: (_, _) => const DesignLabScreen(),
+      ),
       _route(
         path: '${Routes.like}/:id',
         builder: (_, state) =>

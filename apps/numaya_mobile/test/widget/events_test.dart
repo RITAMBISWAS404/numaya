@@ -226,7 +226,7 @@ void main() {
     final c = await quickStartApp(tester, world: DemoWorld.fresh);
     await goTo(c, tester, Routes.events);
     await _tap(tester, _label('Create an event'));
-    expect(find.text('NEW EVENT'), findsOneWidget);
+    expect(find.text('New event'), findsOneWidget);
     await _tap(tester, find.widgetWithText(NumayaButton, 'Publish'));
     expect(find.text('Add a title of at least 4 characters.'), findsOneWidget);
     expect(find.text('Choose a category.'), findsOneWidget);
@@ -283,7 +283,7 @@ void main() {
     // Publishing an incomplete draft sends the host back to finish it.
     await _tap(tester, find.widgetWithText(NumayaButton, 'Publish'));
     await tester.pump(const Duration(milliseconds: 600));
-    expect(find.text('EDIT EVENT'), findsOneWidget);
+    expect(find.text('Edit event'), findsOneWidget);
     await settle(tester);
   });
 

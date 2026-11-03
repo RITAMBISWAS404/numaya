@@ -116,7 +116,7 @@ class ProfileScreen extends ConsumerWidget {
                                           ).copyWith(
                                             fontSize: 72,
                                             height: 1,
-                                            color: AppColors.inkForeground,
+                                            color: AppColors.onIdentity,
                                           ),
                                     ),
                             ),

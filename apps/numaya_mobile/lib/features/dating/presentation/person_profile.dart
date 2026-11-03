@@ -39,19 +39,10 @@ class PersonHeroCard extends StatelessWidget {
   /// "Like" / "Pass" while dragging.
   final String? stamp;
 
-  /// The scrim travels with the text (RD-11): a fade above it, then a gradient behind it that
-  /// never drops below 65% ink, so white text stays readable however tall a long name, job or
-  /// large text makes the block. The rest of the photo stays clear.
-  static const _fade = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [Color(0x00121212), Color(0xA6121212)],
-  );
-  static const _behindText = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [Color(0xA6121212), Color(0xCC121212)],
-  );
+  /// Text over the photo sits on a solid translucent panel inset from the card edges (no gradient
+  /// scrims in the monochrome system). The panel grows with a long name, job or large text, and at
+  /// 72% ink keeps white text above 4.5:1 over any photo; the rest of the photo stays clear.
+  static const double _panelInset = AppSpacing.s2;
 
   @override
   Widget build(BuildContext context) {
@@ -80,22 +71,20 @@ class PersonHeroCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const IgnorePointer(
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(gradient: _fade),
-                            child: SizedBox(height: AppSpacing.s12),
-                          ),
-                        ),
-                        DecoratedBox(
-                          decoration: const BoxDecoration(
-                            gradient: _behindText,
+                        Container(
+                          margin: const EdgeInsets.all(_panelInset),
+                          decoration: BoxDecoration(
+                            color: AppColors.photoPanel,
+                            borderRadius: AppRadii.all(
+                              AppRadii.photo - _panelInset,
+                            ),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(
-                              AppLayout.cardPadding,
-                              0,
-                              AppLayout.cardPadding,
-                              AppLayout.cardPadding,
+                              AppSpacing.s4,
+                              AppSpacing.s3,
+                              AppSpacing.s3,
+                              AppSpacing.s3,
                             ),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.end,

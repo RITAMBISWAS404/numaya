@@ -26,7 +26,7 @@ void main() {
       final row = find.bySemanticsLabel(RegExp('^Profile & visibility'));
       expect(row, findsOneWidget);
       await _tap(tester, row);
-      expect(find.text('PROFILE & VISIBILITY'), findsOneWidget);
+      expect(find.text('Profile & visibility'), findsOneWidget);
       final status = c.read(visibilityReportProvider).status;
       expect(status, VisibilityStatus.visible);
       expect(find.text('Visible'), findsOneWidget);
@@ -79,7 +79,7 @@ void main() {
       expect(c.read(routerProvider).state.uri.path, Routes.editProfile);
       await tapOn(tester, find.bySemanticsLabel('Back').first);
       await tester.pump(const Duration(milliseconds: 600));
-      expect(find.text('PROFILE & VISIBILITY'), findsOneWidget);
+      expect(find.text('Profile & visibility'), findsOneWidget);
       await settle(tester);
     },
   );

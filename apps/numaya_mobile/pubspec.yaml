@@ -41,10 +41,10 @@ flutter:
     # Sample media for the demo chat attachments (fictional, generated for this repo).
     - assets/demo/
 
-  # V16 type: one grotesk. Variable font converted from the web app's Fontsource file
-  # (@fontsource-variable/hanken-grotesk, SIL OFL 1.1, Latin subset). Licence: assets/fonts/OFL-HankenGrotesk.txt.
-  # Regenerate with tool/convert_fonts.py.
+  # Monochrome Meetup type: one rounded geometric family, Figtree (variable, wght 300-900), from
+  # github.com/google/fonts (ofl/figtree). Licence: assets/fonts/OFL-Figtree.txt (SIL OFL 1.1).
+  # The baseline's Hanken Grotesk file stays in assets/fonts/ (unregistered) for comparison.
   fonts:
-    - family: Hanken Grotesk
+    - family: Figtree
       fonts:
-        - asset: assets/fonts/HankenGrotesk-Variable.ttf
+        - asset: assets/fonts/Figtree-Variable.ttf

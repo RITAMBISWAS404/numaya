@@ -85,7 +85,7 @@ void main() {
       await usePhoneSize(tester);
       await signUpToHome(tester, testAuth());
       await _tapHere(tester, _action('See Maya’s photos').first);
-      expect(find.text('MAYA’S PHOTOS'), findsOneWidget);
+      expect(find.text('Maya’s photos'), findsOneWidget);
       expect(find.text('Photo 1 of 4'), findsOneWidget);
       await _tapHere(tester, _action('Next photo'));
       expect(find.text('Photo 2 of 4'), findsOneWidget);

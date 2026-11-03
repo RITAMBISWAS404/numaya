@@ -205,12 +205,8 @@ class NumayaTopBar extends StatelessWidget {
     return SizedBox(
       height: AppSizes.topBar,
       child: Padding(
-        // The plain back icon sits 8pt in, so its glyph lines up with the 16pt gutter; action
-        // buttons (rounded squares) end on the gutter itself.
-        padding: const EdgeInsets.only(
-          left: AppSpacing.s2,
-          right: AppLayout.barPadding,
-        ),
+        // Back and action buttons are rounded squares that sit on the gutter (Alan, Meetup).
+        padding: const EdgeInsets.symmetric(horizontal: AppLayout.barPadding),
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -222,7 +218,7 @@ class NumayaTopBar extends StatelessWidget {
                 label: title,
                 child: ExcludeSemantics(
                   child: Text(
-                    title!.toUpperCase(),
+                    title!,
                     style: AppTypography.headerCaps,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -237,7 +233,6 @@ class NumayaTopBar extends StatelessWidget {
                         ? NumayaIcons.close
                         : NumayaIcons.chevronLeft,
                     label: backLabel,
-                    style: NavButtonStyle.plain,
                     onPressed: onBack,
                   )
                 else

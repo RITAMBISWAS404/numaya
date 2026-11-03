@@ -1916,6 +1916,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Jump to any screen, switch the sample data and try each state. Everything here is local and simulated.';
 
   @override
+  String get demoDesignTitle => 'Design';
+
+  @override
+  String get demoDesignLab => 'Design Lab';
+
+  @override
+  String get demoDesignLabDetail =>
+      'Monochrome Meetup tokens, components and states';
+
+  @override
   String get demoStart => 'Start';
 
   @override

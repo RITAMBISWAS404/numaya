@@ -71,6 +71,9 @@ abstract final class Routes {
   /// Development-only screen catalogue.
   static const demo = '/demo';
 
+  /// Development-only Design Lab (Monochrome Meetup components and states), under the Demo Hub.
+  static const designLab = '/design-lab';
+
   /// Full-screen dating routes, outside the tab shell; each takes a sample person id.
   static const like = '/like';
   static const match = '/match';

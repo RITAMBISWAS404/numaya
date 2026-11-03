@@ -600,7 +600,7 @@ class _ReadProgress extends StatelessWidget {
               heightFactor: 1,
               child: const DecoratedBox(
                 decoration: BoxDecoration(
-                  color: AppColors.ink,
+                  color: AppColors.accent,
                   borderRadius: BorderRadius.all(Radius.circular(2)),
                 ),
               ),

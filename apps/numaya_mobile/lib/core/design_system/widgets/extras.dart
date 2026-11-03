@@ -305,7 +305,7 @@ class PlanCard extends StatelessWidget {
             color: AppColors.surface,
             borderRadius: AppRadii.all(AppRadii.card),
             border: Border.all(
-              color: selected ? AppColors.ink : AppColors.border,
+              color: selected ? AppColors.accent : AppColors.border,
               width: selected ? 2 : 1,
               strokeAlign: BorderSide.strokeAlignInside,
             ),

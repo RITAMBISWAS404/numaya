@@ -8,16 +8,16 @@ import '../icons/numaya_icon_data.g.dart';
 import 'primitives.dart';
 
 enum NumayaButtonVariant {
-  /// Ink, white label ("Done", "Next" in the reference). One per screen.
+  /// Brand purple, white label. One per screen.
   primary,
 
-  /// White with a 1px ink outline ("Share", "Previous"); also the cancel under a primary in sheets.
+  /// White with a quiet hairline outline; also the cancel under a primary in sheets.
   secondary,
 
   /// Text only, for the second choice under a primary on a page.
   quiet,
 
-  /// The blue tint with deep-blue text ("Explore data").
+  /// The subtle purple surface with purple text (Meetup's tinted secondary).
   brand,
 
   /// Red text, for a destructive choice in a list.
@@ -27,9 +27,9 @@ enum NumayaButtonVariant {
   destructiveSolid,
 }
 
-/// V16 button (`.theme-withings .btn`): a 50pt rounded rectangle with the 12pt control corner.
-/// [small] is the compact 36pt outlined pill ("Edit profile", "Find your people"); a small primary
-/// stays ink. Disabled: warm grey `#D6D2CE` with `#77736F` text.
+/// Monochrome button: a 52pt full pill. Primary is brand purple with white text; secondary white
+/// with a hairline; [small] is the compact 38pt pill ("Edit profile"). Disabled: neutral grey fill
+/// with grey text.
 class NumayaButton extends StatelessWidget {
   const NumayaButton({
     super.key,
@@ -84,8 +84,8 @@ class NumayaButton extends StatelessWidget {
         null,
       ),
       NumayaButtonVariant.primary => (
-        AppColors.ink,
-        AppColors.inkForeground,
+        AppColors.accent,
+        AppColors.accentForeground,
         null,
       ),
       // A quiet outline (ink at 30%) that still reads as a control (RD-07).
@@ -172,8 +172,7 @@ class NumayaButton extends StatelessWidget {
   }
 }
 
-/// The step button (`.fab`): an ink circle with a white arrow, like the reference's "Add Logs";
-/// disabled warm grey.
+/// The step button (`.fab`): a purple rounded square with a white arrow; disabled neutral grey.
 class NumayaFab extends StatelessWidget {
   const NumayaFab({
     super.key,
@@ -205,7 +204,7 @@ class NumayaFab extends StatelessWidget {
         // A rounded square like every other icon button (RD-02).
         decoration: BoxDecoration(
           borderRadius: AppRadii.all(AppRadii.control),
-          color: enabled ? AppColors.ink : AppColors.disabled,
+          color: enabled ? AppColors.accent : AppColors.disabled,
         ),
         alignment: Alignment.center,
         child: loading
@@ -213,13 +212,13 @@ class NumayaFab extends StatelessWidget {
                 dimension: 22,
                 child: CircularProgressIndicator(
                   strokeWidth: 2.2,
-                  color: AppColors.inkForeground,
+                  color: AppColors.accentForeground,
                 ),
               )
             : NumayaIcon(
                 icon,
                 color: enabled
-                    ? AppColors.inkForeground
+                    ? AppColors.accentForeground
                     : AppColors.disabledForeground,
               ),
       ),
@@ -263,8 +262,8 @@ class NavIconButton extends StatelessWidget {
         ? AppSizes.iconButtonSm
         : AppSizes.iconButton;
     final (Color bg, Color? ring) = switch (style) {
-      // A white rounded square on the stone page, without an outline (RD-02).
-      NavButtonStyle.floating => (AppColors.surface, null),
+      // A white rounded square with a hairline (Alan's back button), crisp on the grey page.
+      NavButtonStyle.floating => (AppColors.surface, AppColors.border),
       NavButtonStyle.flat => (AppColors.fill, null),
       NavButtonStyle.plain => (Colors.transparent, null),
     };
@@ -276,13 +275,13 @@ class NavIconButton extends StatelessWidget {
         semanticLabel: label,
         excludeChildSemantics: true,
         pressedScale: 0.92,
-        borderRadius: AppRadii.all(AppRadii.control),
+        borderRadius: AppRadii.all(AppRadii.iconButton),
         child: Container(
           width: size,
           height: size,
           decoration: BoxDecoration(
             color: bg,
-            borderRadius: AppRadii.all(AppRadii.control),
+            borderRadius: AppRadii.all(AppRadii.iconButton),
             border: ring == null
                 ? null
                 : Border.all(
@@ -309,7 +308,7 @@ class NavIconButton extends StatelessWidget {
   }
 }
 
-/// Underlined inline action (`.text-button`): deep blue, semibold.
+/// Underlined inline action (`.text-button`): purple text, semibold.
 class TextLink extends StatelessWidget {
   const TextLink({
     super.key,

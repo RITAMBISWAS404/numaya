@@ -60,6 +60,18 @@ class DemoHubScreen extends ConsumerWidget {
           StatusBanner(title: l10n.demoHubBanner, body: l10n.demoHubBody),
           const SizedBox(height: AppSpacing.sectionGap),
           ListGroup(
+            title: l10n.demoDesignTitle,
+            children: [
+              ListRow(
+                leading: NumayaIcons.palette,
+                label: l10n.demoDesignLab,
+                detail: l10n.demoDesignLabDetail,
+                onTap: () => context.push(Routes.designLab),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sectionGap),
+          ListGroup(
             title: l10n.demoStart,
             footnote: signedIn ? l10n.demoSignedIn : l10n.demoQuickStartNote,
             children: [

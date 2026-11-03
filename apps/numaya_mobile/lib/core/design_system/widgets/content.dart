@@ -122,8 +122,8 @@ class IllustrationView extends StatelessWidget {
   }
 }
 
-/// Information box (`.theme-withings .info-card`): the reference's notification box, the page
-/// colour with a hairline and an ink icon, so it reads as information, not a card you open.
+/// Information box (Alan's explanation cards): the subtle purple surface, no border, a purple icon,
+/// a bold title and secondary body, so it reads as explanation, not a card you open.
 class InfoCard extends StatelessWidget {
   const InfoCard({
     super.key,
@@ -140,22 +140,21 @@ class InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(AppSpacing.s4),
+      padding: const EdgeInsets.all(AppLayout.cardPadding),
       decoration: BoxDecoration(
-        color: AppColors.canvas,
+        color: AppColors.accentTint,
         borderRadius: AppRadii.all(AppRadii.card),
-        border: Border.all(
-          color: AppColors.border,
-          width: AppBorders.hairline,
-          strokeAlign: BorderSide.strokeAlignInside,
-        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              NumayaIcon(icon, size: AppSizes.iconMd, color: AppColors.ink),
+              NumayaIcon(
+                icon,
+                size: AppSizes.iconMd,
+                color: AppColors.accentOnTint,
+              ),
               const SizedBox(width: AppSpacing.s2),
               Expanded(
                 child: Text(

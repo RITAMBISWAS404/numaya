@@ -324,7 +324,7 @@ class NumayaChip extends StatelessWidget {
           color: selected
               ? AppColors.accent
               : onCard
-              ? AppColors.canvas
+              ? AppColors.fill
               : AppColors.surface,
           borderRadius: AppRadii.all(AppRadii.pill),
         ),
@@ -512,7 +512,7 @@ class _ChoiceMark extends StatelessWidget {
           border: checked
               ? null
               : Border.all(
-                  color: selected ? AppColors.ink : AppColors.control,
+                  color: selected ? AppColors.accent : AppColors.control,
                   width: AppBorders.selected,
                   strokeAlign: BorderSide.strokeAlignInside,
                 ),
@@ -525,7 +525,7 @@ class _ChoiceMark extends StatelessWidget {
                 width: 11,
                 height: 11,
                 decoration: const BoxDecoration(
-                  color: AppColors.ink,
+                  color: AppColors.accent,
                   shape: BoxShape.circle,
                 ),
               )
@@ -555,7 +555,7 @@ class OptionGroup extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ExcludeSemantics(
-            child: Text(legend.toUpperCase(), style: AppTypography.labelCaps),
+            child: Text(legend, style: AppTypography.fieldLabel),
           ),
           const SizedBox(height: AppSpacing.s3),
           WhiteCard(

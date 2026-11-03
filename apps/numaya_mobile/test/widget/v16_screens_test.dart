@@ -49,7 +49,7 @@ void main() {
     await tapNext(tester);
     await _tap(tester, find.text('Add a prompt'));
     await tester.pump(const Duration(milliseconds: 600));
-    expect(find.text('YOUR PROMPT'), findsOneWidget);
+    expect(find.text('Your prompt'), findsOneWidget);
     expect(find.text('Write an answer to save.'), findsOneWidget);
     expect(find.text('150 characters left'), findsOneWidget);
     await tester.enterText(find.byType(TextField).last, 'Hello');

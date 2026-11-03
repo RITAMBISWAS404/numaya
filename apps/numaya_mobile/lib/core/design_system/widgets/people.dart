@@ -39,11 +39,11 @@ class InitialsAvatar extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         initial,
-        style: AppTypography.weight(AppTypography.body, AppTypography.semibold)
+        style: AppTypography.weight(AppTypography.body, AppTypography.bold)
             .copyWith(
               fontSize: size * 0.42,
               height: 1,
-              color: AppColors.inkForeground,
+              color: AppColors.onIdentity,
             ),
       ),
     );
@@ -434,15 +434,17 @@ class _DecisionPill extends StatelessWidget {
         AppColors.outlineSoft,
         NumayaIcons.close,
       ),
+      // SuperSwipe is special but secondary: the subtle purple surface with a purple star.
       ActionKind.superSwipe => (
-        AppColors.accent,
-        AppColors.accentForeground,
-        null,
+        AppColors.accentTint,
+        AppColors.accentOnTint,
+        AppColors.accentLine,
         NumayaIcons.star,
       ),
+      // Like is the screen's primary action: brand purple.
       ActionKind.like => (
-        AppColors.ink,
-        AppColors.inkForeground,
+        AppColors.accent,
+        AppColors.accentForeground,
         null,
         NumayaIcons.heart,
       ),
@@ -667,8 +669,8 @@ class _ComposerState extends State<Composer> {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: canSend ? AppColors.ink : AppColors.disabled,
-                  borderRadius: AppRadii.all(AppRadii.control),
+                  color: canSend ? AppColors.accent : AppColors.disabled,
+                  shape: BoxShape.circle,
                 ),
                 alignment: Alignment.center,
                 child: NumayaIcon(
@@ -754,15 +756,20 @@ class ScallopPortrait extends StatelessWidget {
       child: Container(
         width: size,
         height: size,
-        color: AppColors.photo,
+        // The match is a rare celebration: their portrait sits on the subtle purple surface.
+        color: AppColors.accentTint,
         alignment: Alignment.center,
         child: Text(
           initial,
-          style: AppTypography.weight(
-            AppTypography.pageTitle,
-            AppTypography.bold,
-            // 88pt in the 264pt V16 frame.
-          ).copyWith(fontSize: size / 3, height: 1),
+          style:
+              AppTypography.weight(
+                AppTypography.pageTitle,
+                AppTypography.bold,
+              ).copyWith(
+                fontSize: size / 3,
+                height: 1,
+                color: AppColors.accentOnTint,
+              ),
         ),
       ),
     );
@@ -959,7 +966,7 @@ class ViewTabs extends StatelessWidget {
                       // Solid accent when selected (RD-05), neutral otherwise.
                       color: i == selected
                           ? AppColors.accent
-                          : Colors.transparent,
+                          : AppColors.surface,
                       borderRadius: AppRadii.all(AppRadii.pill),
                     ),
                     alignment: Alignment.center,
