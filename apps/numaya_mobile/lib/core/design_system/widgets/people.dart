@@ -431,14 +431,14 @@ class _DecisionPill extends StatelessWidget {
       ActionKind.pass => (
         AppColors.surface,
         AppColors.ink,
-        AppColors.outlineSoft,
+        null,
         NumayaIcons.close,
       ),
       // SuperSwipe is special but secondary: the subtle purple surface with a purple star.
       ActionKind.superSwipe => (
         AppColors.accentTint,
         AppColors.accentOnTint,
-        AppColors.accentLine,
+        null,
         NumayaIcons.star,
       ),
       // Like is the screen's primary action: brand purple.

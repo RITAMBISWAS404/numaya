@@ -48,6 +48,32 @@ class _DesignLabScreenState extends State<DesignLabScreen> {
                 'Development build only. Every token and component of the experimental '
                 'design system, for visual review.',
           ),
+          _section('Navigation: selected-state variants'),
+          for (final style in TabIndicatorStyle.values) ...[
+            Text(style.name, style: AppTypography.caption),
+            const SizedBox(height: AppSpacing.s1),
+            MediaQuery.removePadding(
+              context: context,
+              removeBottom: true,
+              child: NumayaTabBar(
+                indicator: style,
+                currentIndex: 2,
+                onSelect: (_) {},
+                items: const [
+                  TabItem(label: 'Home', icon: NumayaIcons.home),
+                  TabItem(label: 'Events', icon: NumayaIcons.event),
+                  TabItem(
+                    label: 'Likes',
+                    icon: NumayaIcons.heart,
+                    badgeCount: 2,
+                  ),
+                  TabItem(label: 'Messages', icon: NumayaIcons.message),
+                  TabItem(label: 'Profile', icon: NumayaIcons.user),
+                ],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.s3),
+          ],
           _section('Surfaces'),
           Wrap(
             spacing: AppSpacing.s3,

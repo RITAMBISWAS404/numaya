@@ -54,6 +54,10 @@ Future<void> signUpToSetup(
   await check(); // Phone
   await tester.enterText(find.byType(TextField), '4155550132');
   await tester.pump();
+  // enterText leaves a text-selection handle up (a real user's goes as they type); on a 320pt
+  // phone at 150% text its touch area reaches the step button, so the field gives up focus first.
+  FocusManager.instance.primaryFocus?.unfocus();
+  await tester.pump();
   await tester.tap(fab);
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 600));
@@ -181,8 +185,12 @@ Future<void> signUpToHome(WidgetTester tester, DemoAuthRepository auth) async {
 
 /// Taps a tab in the bottom bar by its label.
 Future<void> openTab(WidgetTester tester, String label) async {
+  // The navigation is icon-only: each destination carries its name as a tooltip and label.
   await tester.tap(
-    find.descendant(of: find.byType(NumayaTabBar), matching: find.text(label)),
+    find.descendant(
+      of: find.byType(NumayaTabBar),
+      matching: find.byTooltip(label),
+    ),
   );
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 600));

@@ -50,8 +50,11 @@ abstract final class AppLayout {
   /// Between related items (cards in a list, rows of chips).
   static const double itemGap = AppSpacing.s3;
 
-  /// Inside cards: 18.
+  /// Inside cards: 20.
   static const double cardPadding = MonoSpace.cardPadding;
+
+  /// Inside hero cards (profile header, health status): 24.
+  static const double heroPadding = MonoSpace.heroPadding;
 
   /// Between a leading icon and its text.
   static const double iconLabelGap = AppSpacing.s2;
@@ -86,6 +89,7 @@ abstract final class AppRadii {
   static const double iconButton = MonoRadii.iconButton;
   static const double tile = MonoRadii.tile;
   static const double card = MonoRadii.card;
+  static const double heroCard = MonoRadii.heroCard;
   static const double photo = MonoRadii.image;
   static const double sheet = MonoRadii.sheet;
   static const double dialog = MonoRadii.dialog;
@@ -155,7 +159,8 @@ abstract final class AppSizes {
 
   /// The member's own avatar on the Profile tab: about twice [avatar] (RD-15).
   static const double avatarProfile = 176;
-  static const double tabBar = NumayaSizeTokens.tabBarHeight;
+  static const double tabBar = MonoSizes.tabBar;
+  static const double tabItem = MonoSizes.tabItem;
   static const double topBar = 56;
 }
 

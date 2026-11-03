@@ -48,3 +48,7 @@ flutter:
     - family: Figtree
       fonts:
         - asset: assets/fonts/Figtree-Variable.ttf
+    # Headings and metrics (OFL-1.1, assets/fonts/OFL-PlusJakartaSans.txt; google/fonts ofl/plusjakartasans).
+    - family: Plus Jakarta Sans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Variable.ttf

@@ -65,28 +65,45 @@ void main() {
       expect(ratio(AppColors.outline, AppColors.surface), greaterThan(3));
       expect(ratio(AppColors.outline, AppColors.canvas), greaterThan(3));
       expect(ratio(AppColors.accent, AppColors.surface), greaterThan(3));
+      // Filled fields: placeholder and value text stay readable on the field fill.
+      expect(ratio(AppColors.textMuted, AppColors.field), greaterThan(4.5));
+      expect(ratio(AppColors.ink, AppColors.field), greaterThan(4.5));
+      // Selected nav item: purple icon on the tint is a meaningful graphic (3:1).
+      expect(
+        ratio(AppColors.accentOnTint, AppColors.accentTint),
+        greaterThan(3),
+      );
     });
 
-    test('one rounded family with the monochrome type roles', () {
-      expect(AppTypography.pageTitle.fontFamily, 'Figtree');
-      expect(AppTypography.pageTitle.fontSize, 30);
-      expect(AppTypography.pageTitle.fontWeight, FontWeight.w700);
-      expect(AppTypography.flowTitle.fontSize, 28);
-      expect(AppTypography.section.fontSize, 20);
+    test('Plus Jakarta Sans headings over Figtree text', () {
+      expect(AppTypography.pageTitle.fontFamily, 'Plus Jakarta Sans');
+      expect(AppTypography.hero.fontFamily, 'Plus Jakarta Sans');
+      expect(AppTypography.metric.fontFamily, 'Plus Jakarta Sans');
+      expect(AppTypography.body.fontFamily, 'Figtree');
+      expect(AppTypography.button.fontFamily, 'Figtree');
+      expect(AppTypography.pageTitle.fontSize, 32);
+      expect(AppTypography.pageTitle.fontWeight, FontWeight.w800);
+      expect(AppTypography.flowTitle.fontSize, 30);
+      expect(AppTypography.section.fontSize, 21);
+      expect(AppTypography.metric.fontSize, 40);
       expect(AppTypography.labelCaps.fontSize, 12);
       expect(AppTypography.body.fontSize, 16);
       expect(AppTypography.body.height, 1.5);
     });
 
     test('geometry follows the monochrome radii and sizes', () {
-      expect(AppRadii.field, 14);
-      expect(AppRadii.control, 14);
-      expect(AppRadii.card, 20);
-      expect(AppRadii.photo, 20);
-      expect(AppRadii.sheet, 28);
-      expect(AppSizes.buttonHeight, 52);
-      expect(AppSizes.field, 54);
-      expect(AppSizes.row, 56);
+      expect(AppRadii.field, 18);
+      expect(AppRadii.control, 16);
+      expect(AppRadii.card, 24);
+      expect(AppRadii.heroCard, 32);
+      expect(AppRadii.photo, 24);
+      expect(AppRadii.sheet, 32);
+      expect(AppSizes.buttonHeight, 56);
+      expect(AppSizes.field, 58);
+      expect(AppSizes.row, 60);
+      // Navigation targets meet Android's 48dp.
+      expect(AppSizes.tabItem, greaterThanOrEqualTo(48));
+      expect(AppSizes.iconButton, greaterThanOrEqualTo(44));
       expect(AppSizes.choice, 22);
       expect(AppSizes.touchMin, 44);
       expect(AppLayout.screenGutter, 20);

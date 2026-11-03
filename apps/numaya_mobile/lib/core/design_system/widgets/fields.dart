@@ -38,9 +38,9 @@ class FieldNote extends StatelessWidget {
   }
 }
 
-/// The V16 field (`.theme-withings .input`): white, a 1px dark outline, 8pt corners, 54pt tall.
-/// Focused: a 2pt blue outline. Invalid: a 2pt red outline, focused or not. Disabled: the recessed
-/// fill with no outline.
+/// The filled field (premium refinement): a neutral fill, no outline, 18pt corners, 58pt tall,
+/// identified by its visible label above it. Focused: white with a 2pt purple edge. Invalid: a 2pt
+/// red edge, focused or not. Disabled: the page tone with grey text.
 class InputSurface extends StatelessWidget {
   const InputSurface({
     super.key,
@@ -64,12 +64,12 @@ class InputSurface extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (Color edge, double width) = disabled
-        ? (Colors.transparent, AppBorders.hairline)
+        ? (Colors.transparent, AppBorders.focus)
         : invalid
         ? (AppColors.negative, AppBorders.focus)
         : focused
         ? (AppColors.focusField, AppBorders.focus)
-        : (AppColors.outline, AppBorders.hairline);
+        : (Colors.transparent, AppBorders.focus);
     return AnimatedContainer(
       duration: AppMotion.duration(context, AppMotion.base),
       curve: AppMotion.easeOut,
@@ -77,7 +77,11 @@ class InputSurface extends StatelessWidget {
       constraints: height == null ? const BoxConstraints(minHeight: 120) : null,
       padding: padding,
       decoration: BoxDecoration(
-        color: disabled ? AppColors.fill : AppColors.surface,
+        color: disabled
+            ? AppColors.canvas
+            : focused
+            ? AppColors.surface
+            : AppColors.field,
         borderRadius: AppRadii.all(AppRadii.field),
       ),
       // The outline is drawn on top, so the focus border (2pt) doesn't shift the text.
@@ -245,7 +249,7 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
                 decoration: InputDecoration(
                   isCollapsed: true,
                   border: InputBorder.none,
-                  // A single line is padded to a 48dp tap target inside the 54pt field.
+                  // A single line is padded to a 48dp tap target inside the 58pt field.
                   contentPadding: widget.multiline
                       ? EdgeInsets.zero
                       : const EdgeInsets.symmetric(vertical: 13),
@@ -253,7 +257,7 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
                   hintStyle: AppTypography.weight(
                     widget.multiline ? AppTypography.body : AppTypography.input,
                     400,
-                  ).copyWith(color: AppColors.textSubtle),
+                  ).copyWith(color: AppColors.textMuted),
                 ),
               ),
             ),
@@ -325,12 +329,7 @@ class CountryCodeBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: AppRadii.all(AppRadii.field),
-        border: Border.all(
-          color: AppColors.borderStrong,
-          width: AppBorders.hairline,
-          strokeAlign: BorderSide.strokeAlignInside,
-        ),
+        borderRadius: AppRadii.all(AppRadii.tag),
       ),
       alignment: Alignment.center,
       child: Text(
@@ -392,20 +391,20 @@ class _NumayaSearchFieldState extends State<NumayaSearchField> {
     final focused = _focus.hasFocus;
     return AnimatedContainer(
       duration: AppMotion.duration(context, AppMotion.base),
-      // V16 search: white with a hairline, the control corner; focus a 2pt blue outline. V16 is
-      // 46pt; on Android the field itself is the tap target, so it is at least 48dp.
+      // Filled search, a full pill (Meetup); focus: white with a 2pt purple edge. The field itself
+      // is the tap target, so it is at least 48dp.
       height: math.max(AppSizes.search, kMinInteractiveDimension),
       padding: const EdgeInsets.only(left: AppSpacing.s4),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: AppRadii.all(AppRadii.control),
+        color: focused ? AppColors.surface : AppColors.field,
+        borderRadius: AppRadii.all(AppRadii.pill),
       ),
-      // The outline is drawn on top so it doesn't take height from the field.
+      // The edge is drawn on top so it doesn't take height from the field.
       foregroundDecoration: BoxDecoration(
-        borderRadius: AppRadii.all(AppRadii.control),
+        borderRadius: AppRadii.all(AppRadii.pill),
         border: Border.all(
-          color: focused ? AppColors.focusField : AppColors.border,
-          width: focused ? AppBorders.focus : AppBorders.hairline,
+          color: focused ? AppColors.focusField : Colors.transparent,
+          width: AppBorders.focus,
           strokeAlign: BorderSide.strokeAlignInside,
         ),
       ),
@@ -439,7 +438,7 @@ class _NumayaSearchFieldState extends State<NumayaSearchField> {
                 hintText: widget.placeholder,
                 hintStyle: AppTypography.body.copyWith(
                   fontSize: 16,
-                  color: AppColors.textSubtle,
+                  color: AppColors.textMuted,
                 ),
               ),
             ),

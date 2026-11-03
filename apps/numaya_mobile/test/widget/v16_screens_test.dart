@@ -75,7 +75,7 @@ void main() {
     await usePhoneSize(tester);
     await _toInterests(tester, testAuth());
     await _toHome(tester);
-    await _tap(tester, find.text('Likes'));
+    await _tap(tester, find.byTooltip('Likes'));
     for (final name in [
       'Maya, 29',
       'Kemi, 27',
@@ -101,7 +101,7 @@ void main() {
     await usePhoneSize(tester);
     await _toInterests(tester, testAuth());
     await _toHome(tester);
-    await _tap(tester, find.text('Profile'));
+    await _tap(tester, find.byTooltip('Profile'));
     expect(find.text('Sam, 31'), findsOneWidget);
     expect(find.text('Woman · Looking for something casual'), findsOneWidget);
     await _tap(tester, find.bySemanticsLabel('Settings'));

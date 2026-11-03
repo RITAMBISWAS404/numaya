@@ -31,7 +31,11 @@ abstract final class AppColors {
   /// Photo placeholders.
   static const Color photo = _M.fillStrong;
 
-  /// Field outline (3.38:1 on white).
+  /// Filled fields and filled secondary buttons.
+  static const Color field = _M.field;
+  static const Color fieldPressed = _M.fieldPressed;
+
+  /// Field outline (3.38:1 on white): focus-free boundaries where one is still needed.
   static const Color outline = _M.outline;
 
   /// Unselected radio and checkbox rings (3:1).

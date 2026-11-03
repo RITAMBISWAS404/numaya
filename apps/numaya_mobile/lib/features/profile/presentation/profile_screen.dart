@@ -328,7 +328,17 @@ class _StaticChip extends StatelessWidget {
             Emoji(emoji!, size: 15.5),
             const SizedBox(width: 6),
           ],
-          Text(label, style: AppTypography.card),
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.weight(
+                AppTypography.label,
+                AppTypography.medium,
+              ).copyWith(fontSize: 15, color: AppColors.ink),
+            ),
+          ),
         ],
       ),
     );

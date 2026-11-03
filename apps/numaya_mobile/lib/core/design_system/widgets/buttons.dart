@@ -11,7 +11,7 @@ enum NumayaButtonVariant {
   /// Brand purple, white label. One per screen.
   primary,
 
-  /// White with a quiet hairline outline; also the cancel under a primary in sheets.
+  /// Filled neutral grey with ink text; also the cancel under a primary in sheets.
   secondary,
 
   /// Text only, for the second choice under a primary on a page.
@@ -27,9 +27,9 @@ enum NumayaButtonVariant {
   destructiveSolid,
 }
 
-/// Monochrome button: a 52pt full pill. Primary is brand purple with white text; secondary white
-/// with a hairline; [small] is the compact 38pt pill ("Edit profile"). Disabled: neutral grey fill
-/// with grey text.
+/// Monochrome button: a 56pt full pill. Primary is brand purple with white text; secondary a
+/// filled neutral with ink text (no outlines); [small] is the compact 40pt pill ("Edit profile").
+/// Disabled: neutral grey fill with grey text.
 class NumayaButton extends StatelessWidget {
   const NumayaButton({
     super.key,
@@ -88,12 +88,8 @@ class NumayaButton extends StatelessWidget {
         AppColors.accentForeground,
         null,
       ),
-      // A quiet outline (ink at 30%) that still reads as a control (RD-07).
-      NumayaButtonVariant.secondary => (
-        AppColors.surface,
-        AppColors.ink,
-        AppColors.outlineSoft,
-      ),
+      // Filled neutral: surface contrast, not a stroke, says "less important".
+      NumayaButtonVariant.secondary => (AppColors.field, AppColors.ink, null),
       NumayaButtonVariant.quiet => (Colors.transparent, AppColors.ink, null),
       NumayaButtonVariant.brand => (
         AppColors.accentTint,
@@ -268,8 +264,8 @@ class NavIconButton extends StatelessWidget {
     final (Color bg, Color? ring) = brand
         ? (AppColors.accentTint, null)
         : switch (style) {
-            // A white rounded square with a hairline (Alan's back button), crisp on the grey page.
-            NavButtonStyle.floating => (AppColors.surface, AppColors.border),
+            // A white rounded square with no outline: surface contrast against the grey page.
+            NavButtonStyle.floating => (AppColors.surface, null),
             NavButtonStyle.flat => (AppColors.fill, null),
             NavButtonStyle.plain => (Colors.transparent, null),
           };

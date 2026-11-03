@@ -25,20 +25,35 @@ class TabItem {
   final String? badgeLabel;
 }
 
-/// Bottom navigation (Meetup): a floating white rounded bar with a soft shadow, inset from the
-/// screen edges. The current tab sits on a grey capsule with a purple filled icon and label; the
-/// others are muted with the outline icon.
+/// How the current destination is marked in the icon-only navigation pill (compared in the Design
+/// Lab; [tint] is the shipped choice, see NAVIGATION_SPEC.md).
+enum TabIndicatorStyle {
+  /// A subtle purple rounded square behind a purple filled icon.
+  tint,
+
+  /// A solid purple circle behind a white filled icon.
+  filled,
+
+  /// The current item widens into a purple pill; others stay icon-sized.
+  expanded,
+}
+
+/// Bottom navigation: a floating white pill holding icons only, centred above the home indicator.
+/// Each destination is a 52pt target with a tooltip (long press) and a screen-reader label; the
+/// current one is marked by [indicator] and announced as selected. Notification dots stay red.
 class NumayaTabBar extends StatelessWidget {
   const NumayaTabBar({
     super.key,
     required this.items,
     required this.currentIndex,
     required this.onSelect,
+    this.indicator = TabIndicatorStyle.tint,
   });
 
   final List<TabItem> items;
   final int currentIndex;
   final ValueChanged<int> onSelect;
+  final TabIndicatorStyle indicator;
 
   @override
   Widget build(BuildContext context) {
@@ -47,100 +62,127 @@ class NumayaTabBar extends StatelessWidget {
       color: AppColors.canvas,
       child: Padding(
         padding: EdgeInsets.fromLTRB(
-          AppSpacing.s3,
+          AppSpacing.s4,
           AppSpacing.s2,
-          AppSpacing.s3,
-          bottom > 0 ? bottom : AppSpacing.s3,
+          AppSpacing.s4,
+          bottom > 0 ? bottom : AppSpacing.s4,
         ),
-        // heightFactor 1: the bar is as tall as its pill, never the whole slot.
-        child: Center(
-          heightFactor: 1,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: AppSpacing.contentMax),
-            child: Container(
-              height: AppSizes.tabBar,
-              padding: const EdgeInsets.all(AppSpacing.s1),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: AppRadii.all(AppRadii.pill),
-                border: Border.all(
-                  color: AppColors.border,
-                  width: AppBorders.hairline,
+        child: LayoutBuilder(
+          builder: (context, box) {
+            // Narrow phones tighten the gaps, then the items (never below 48): labels never come
+            // back.
+            final n = items.length;
+            final extra = indicator == TabIndicatorStyle.expanded
+                ? AppSizes.tabItem * 0.7
+                : 0.0;
+            const inner = 12.0;
+            var gap = AppSpacing.s2;
+            var item = AppSizes.tabItem;
+            double need() => inner + n * item + extra + (n - 1) * gap;
+            if (need() > box.maxWidth) gap = AppSpacing.s1;
+            if (need() > box.maxWidth) {
+              item = ((box.maxWidth - inner - extra - (n - 1) * gap) / n).clamp(
+                48.0,
+                AppSizes.tabItem,
+              );
+            }
+            return Center(
+              heightFactor: 1,
+              child: Container(
+                height: AppSizes.tabBar,
+                padding: const EdgeInsets.all(inner / 2),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: AppRadii.all(AppRadii.pill),
+                  boxShadow: AppElevation.subtle,
                 ),
-                boxShadow: AppElevation.floating,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (var i = 0; i < n; i++) ...[
+                      if (i > 0) SizedBox(width: gap),
+                      _tab(context, i, item),
+                    ],
+                  ],
+                ),
               ),
-              child: Row(
-                children: [
-                  for (var i = 0; i < items.length; i++)
-                    Expanded(child: _tab(context, i)),
-                ],
-              ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _tab(BuildContext context, int i) {
+  Widget _tab(BuildContext context, int i, double size) {
     final item = items[i];
     final current = i == currentIndex;
-    final color = current ? AppColors.accentOnTint : AppColors.textMuted;
+    final duration = AppMotion.duration(context, AppMotion.state);
+    final (Color bg, Color fg) = !current
+        ? (const Color(0x00FFFFFF), AppColors.textMuted)
+        : switch (indicator) {
+            TabIndicatorStyle.tint => (
+              AppColors.accentTint,
+              AppColors.accentOnTint,
+            ),
+            TabIndicatorStyle.filled => (
+              AppColors.accent,
+              AppColors.accentForeground,
+            ),
+            TabIndicatorStyle.expanded => (
+              AppColors.accent,
+              AppColors.accentForeground,
+            ),
+          };
+    final itemWidth = current && indicator == TabIndicatorStyle.expanded
+        ? size + AppSizes.tabItem * 0.7
+        : size;
+    final radius = indicator == TabIndicatorStyle.tint
+        ? AppRadii.iconButton
+        : AppRadii.pill;
     return Semantics(
       selected: current,
-      child: Pressable(
-        onTap: () => onSelect(i),
-        semanticLabel: item.badgeCount > 0
-            ? (item.badgeLabel ?? item.label)
-            : item.label,
-        excludeChildSemantics: true,
-        pressedScale: 0.96,
-        child: AnimatedContainer(
-          duration: AppMotion.duration(context, AppMotion.state),
-          curve: AppMotion.easeOut,
-          height: double.infinity,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: current ? AppColors.fill : const Color(0x00ECECF0),
-            borderRadius: AppRadii.all(AppRadii.pill),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  NumayaIcon(item.icon, outline: !current, color: color),
-                  if (item.badgeCount > 0)
-                    Positioned(
-                      right: -3,
-                      top: -2,
-                      child: Container(
-                        width: 9,
-                        height: 9,
-                        decoration: BoxDecoration(
-                          color: AppColors.negative,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.surface,
-                            width: 1.5,
-                          ),
-                        ),
+      button: true,
+      child: Tooltip(
+        message: item.label,
+        excludeFromSemantics: true,
+        child: Pressable(
+          onTap: () => onSelect(i),
+          semanticLabel: item.badgeCount > 0
+              ? (item.badgeLabel ?? item.label)
+              : item.label,
+          excludeChildSemantics: true,
+          pressedScale: 0.92,
+          borderRadius: AppRadii.all(radius),
+          child: AnimatedContainer(
+            duration: duration,
+            curve: AppMotion.easeOut,
+            width: itemWidth,
+            height: size,
+            decoration: BoxDecoration(
+              color: bg,
+              borderRadius: AppRadii.all(radius),
+            ),
+            alignment: Alignment.center,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                NumayaIcon(item.icon, outline: !current, size: 26, color: fg),
+                if (item.badgeCount > 0)
+                  Positioned(
+                    right: -3,
+                    top: -2,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: AppColors.negative,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.surface, width: 2),
                       ),
                     ),
-                ],
-              ),
-              const SizedBox(height: 3),
-              Text(
-                item.label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.weight(
-                  AppTypography.micro,
-                  current ? AppTypography.semibold : AppTypography.medium,
-                ).copyWith(fontSize: 11, height: 13 / 11, color: color),
-              ),
-            ],
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -233,7 +275,7 @@ class ListRow extends StatelessWidget {
     final row = Container(
       constraints: const BoxConstraints(minHeight: AppSizes.row),
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.s4,
+        horizontal: AppLayout.cardPadding,
         vertical: AppSpacing.s3,
       ),
       child: Row(
@@ -366,20 +408,10 @@ class ListGroup extends StatelessWidget {
             borderRadius: AppRadii.all(AppRadii.card),
           ),
           clipBehavior: Clip.antiAlias,
-          child: Column(
-            children: [
-              for (var i = 0; i < children.length; i++) ...[
-                if (i > 0)
-                  const Divider(
-                    height: 1,
-                    thickness: 1,
-                    indent: AppSpacing.s4,
-                    endIndent: AppSpacing.s4,
-                    color: AppColors.border,
-                  ),
-                children[i],
-              ],
-            ],
+          // No dividers: rows are separated by their own height and padding (outline reduction).
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.s1),
+            child: Column(children: children),
           ),
         ),
         if (footnote != null)

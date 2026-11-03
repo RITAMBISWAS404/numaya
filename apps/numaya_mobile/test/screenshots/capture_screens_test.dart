@@ -95,11 +95,11 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Close').last);
     await tester.pump();
     await tester.pump(const Duration(seconds: 3));
-    await tap(find.text('Likes'));
+    await tap(find.byTooltip('Likes'));
     await shot('18-likes');
-    await tap(find.text('Messages'));
+    await tap(find.byTooltip('Messages'));
     await shot('19-messages');
-    await tap(find.text('Profile'));
+    await tap(find.byTooltip('Profile'));
     await shot('20-profile');
     await tap(find.text('Edit profile'));
     await tester.pump(const Duration(milliseconds: 600));

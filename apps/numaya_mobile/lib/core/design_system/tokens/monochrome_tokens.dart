@@ -24,6 +24,13 @@ abstract final class MonoColors {
   /// Hairlines: dividers, card edges, bar edges.
   static const Color line = Color(0xFFE4E4E9);
 
+  /// Filled form fields and filled secondary buttons: a neutral one step deeper than [fill], so
+  /// it reads on white surfaces and on the canvas alike.
+  static const Color field = Color(0xFFEAEAEF);
+
+  /// Pressed state of filled neutral controls.
+  static const Color fieldPressed = Color(0xFFDDDDE3);
+
   /// Dashed add slots, grabber, decorative strong lines (not a control boundary).
   static const Color lineStrong = Color(0xFFC7C7CE);
 
@@ -81,38 +88,44 @@ abstract final class MonoColors {
   static const Color photoButton = Color(0xE6FFFFFF);
 }
 
-/// Corner radii: generous but role-specific (TOKENS.md "Shape").
+/// Corner radii: generous, role-specific (premium TOKENS.md "Shape"). Larger surfaces take larger
+/// corners; nested corners are the container's minus the inset.
 abstract final class MonoRadii {
   static const double tag = 8;
-  static const double field = 14;
-  static const double control = 14;
-  static const double iconButton = 14;
-  static const double tile = 16;
-  static const double card = 20;
-  static const double image = 20;
-  static const double sheet = 28;
-  static const double dialog = 24;
+  static const double field = 18;
+  static const double control = 16;
+  static const double iconButton = 16;
+  static const double tile = 18;
+  static const double card = 24;
+  static const double heroCard = 32;
+  static const double image = 24;
+  static const double sheet = 32;
+  static const double dialog = 28;
   static const double pill = 999;
 }
 
 /// Sizes that change with the new rhythm.
 abstract final class MonoSizes {
-  static const double button = 52;
-  static const double buttonSm = 38;
-  static const double field = 54;
-  static const double row = 56;
-  static const double iconButton = 42;
-  static const double search = 48;
-  static const double segment = 44;
+  static const double button = 56;
+  static const double buttonSm = 40;
+  static const double field = 58;
+  static const double row = 60;
+  static const double iconButton = 46;
+  static const double search = 52;
+  static const double segment = 46;
   static const double segmentInset = 4;
+
+  /// The floating icon-only navigation pill: 64 tall, 48pt targets.
   static const double tabBar = 64;
+  static const double tabItem = 52;
 }
 
 /// Spacing roles on the 4pt scale (LAYOUT_GUIDELINES.md).
 abstract final class MonoSpace {
   static const double gutter = 20;
-  static const double section = 32;
-  static const double cardPadding = 18;
+  static const double section = 40;
+  static const double cardPadding = 20;
+  static const double heroPadding = 24;
   static const double item = 12;
   static const double field = 20;
 }
