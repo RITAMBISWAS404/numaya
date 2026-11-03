@@ -71,6 +71,7 @@ class PremiumScreen extends ConsumerWidget {
             children: [
               ListRow(
                 leading: NumayaIcons.star,
+                tone: AccentTone.brand,
                 label: l10n.premiumSuperSwipesLeft,
                 value: '$superSwipes',
               ),
@@ -278,7 +279,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
           const IllustrationSlot(
             slot: 'premium_header',
             label: 'More ways to meet the right people',
-            aspectRatio: 16 / 9,
+            aspectRatio: IllustrationSlot.header,
           ),
           ScreenHeader(title: _title(l10n), lede: l10n.paywallLede),
           const SizedBox(height: AppSpacing.s4),

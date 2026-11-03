@@ -77,6 +77,20 @@ abstract final class MonoColors {
   static const Color warning = Color(0xFF8A5A00);
   static const Color warningSubtle = Color(0xFFFBF3E2);
 
+  // Semantic accents (final UX polish, FP-01): restrained hues for icon tiles, statuses and
+  // illustrations only. Purple stays the one action colour. Each foreground meets 4.5:1 on its own
+  // tint and on white, so it may carry a label as well as an icon.
+  /// Information, location, notifications: muted blue (5.92:1 on its tint, 6.78:1 on white).
+  static const Color info = Color(0xFF2C5C99);
+  static const Color infoSubtle = Color(0xFFEAF0FA);
+
+  /// Social and heart moments (likes, matches, people): muted coral (5.40:1 on its tint).
+  static const Color social = Color(0xFFA8402F);
+  static const Color socialSubtle = Color(0xFFFCEEEA);
+
+  /// Separators inside grouped lists: decorative, deliberately quiet (1.18:1 on white).
+  static const Color divider = Color(0xFFECECF0);
+
   /// Modal barrier: ink at 45%.
   static const Color scrim = Color(0x7318181B);
 
@@ -92,6 +106,10 @@ abstract final class MonoColors {
 /// corners; nested corners are the container's minus the inset.
 abstract final class MonoRadii {
   static const double tag = 8;
+
+  /// Rounded-square icon tiles in rows (40pt tile; 14 for the 48pt one).
+  static const double iconTile = 12;
+  static const double iconTileLg = 14;
   static const double field = 18;
   static const double control = 16;
   static const double iconButton = 16;
@@ -110,6 +128,10 @@ abstract final class MonoSizes {
   static const double buttonSm = 40;
   static const double field = 58;
   static const double row = 60;
+
+  /// Leading icon tiles: 40 in rows, 48 in cards and headers; the icon inside is 20 / 22.
+  static const double iconTile = 40;
+  static const double iconTileLg = 48;
   static const double iconButton = 46;
   static const double search = 52;
   static const double segment = 46;

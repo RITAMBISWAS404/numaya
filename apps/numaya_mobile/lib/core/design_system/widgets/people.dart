@@ -245,7 +245,7 @@ class ProfileSectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(AppSpacing.s4),
+      padding: const EdgeInsets.all(AppLayout.cardPadding),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: AppRadii.all(AppRadii.card),

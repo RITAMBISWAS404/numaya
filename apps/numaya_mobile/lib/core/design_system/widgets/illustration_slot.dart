@@ -7,8 +7,9 @@ import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
 import 'primitives.dart';
 
-/// A named place for a future illustration (docs/design-experiments/monochrome-meetup/
-/// ILLUSTRATION_GUIDELINES.md and ILLUSTRATION_ASSET_BACKLOG.md).
+/// A named place for a future illustration or the Numaya mascot (docs/design-experiments/
+/// numaya-final-ux-polish/ILLUSTRATION_ASSET_BACKLOG.md lists every slot, its ratio and the
+/// mascot's purpose there).
 ///
 /// Until [asset] is set it draws a placeholder: a subtle neutral surface with a dashed edge, a small
 /// image glyph and "Illustration: <label>". The box keeps [aspectRatio] (width ÷ height) at any
@@ -19,10 +20,16 @@ class IllustrationSlot extends StatelessWidget {
     super.key,
     required this.slot,
     required this.label,
-    this.aspectRatio = 4 / 3,
+    this.aspectRatio = empty,
     this.width,
     this.asset,
   });
+
+  /// Page headers and explainers (Opening Moves, Safety, Account Health): wide and calm.
+  static const double header = 16 / 9;
+
+  /// Empty and recovery states inside an [EmptyState] card: room for a figure with a prop.
+  static const double empty = 4 / 3;
 
   /// Stable code name for the slot, as listed in the asset backlog (`discover_meaningful`).
   final String slot;

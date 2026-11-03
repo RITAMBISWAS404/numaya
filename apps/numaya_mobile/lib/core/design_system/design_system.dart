@@ -15,6 +15,7 @@ export 'widgets/buttons.dart';
 export 'widgets/content.dart';
 export 'widgets/extras.dart';
 export 'widgets/fields.dart';
+export 'widgets/icon_tile.dart';
 export 'widgets/illustration_slot.dart';
 export 'widgets/layout.dart';
 export 'widgets/navigation.dart';

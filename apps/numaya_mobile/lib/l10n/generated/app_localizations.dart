@@ -1651,7 +1651,7 @@ abstract class AppLocalizations {
   /// No description provided for @likeTileCaption.
   ///
   /// In en, this message translates to:
-  /// **'Liked your profile · about {km} km'**
+  /// **'Liked you · {km} km away'**
   String likeTileCaption(int km);
 
   /// No description provided for @likeNew.
@@ -2317,7 +2317,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsSnoozeOff.
   ///
   /// In en, this message translates to:
-  /// **'Take a break without losing matches'**
+  /// **'Pause without losing matches'**
   String get settingsSnoozeOff;
 
   /// No description provided for @settingsSnoozeOn.
@@ -7687,7 +7687,7 @@ abstract class AppLocalizations {
   /// No description provided for @visAreaMissing.
   ///
   /// In en, this message translates to:
-  /// **'Without one, people see no distance and event distances can’t work.'**
+  /// **'Needed for distances to people and events.'**
   String get visAreaMissing;
 
   /// No description provided for @visNotSet.
@@ -8119,7 +8119,7 @@ abstract class AppLocalizations {
   /// No description provided for @visSettingsDetail.
   ///
   /// In en, this message translates to:
-  /// **'Visibility, completeness and notices'**
+  /// **'Completeness and notices'**
   String get visSettingsDetail;
 
   /// No description provided for @visAboutMeasuredTitle.

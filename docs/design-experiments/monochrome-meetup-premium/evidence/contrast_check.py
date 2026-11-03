@@ -4,7 +4,7 @@ def L(h):
     return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2]
 def r(a,b):
     la,lb=sorted([L(a),L(b)],reverse=True); return (la+0.05)/(lb+0.05)
-T=dict(canvas='F4F4F6',surface='FFFFFF',fill='ECECF0',field='EAEAEF',fieldPressed='DDDDE3',ink='18181B',text2='4A4A53',muted='696972',brand='7262C7',brandText='5B4BB0',brandSubtle='F1EFF9',onBrand='FFFFFF',danger='C8383B',dangerSubtle='FBEDED',warning='8A5A00',warningSubtle='FBF3E2',success='2B774B',successSubtle='E8F3EC',outline='8B8B94',disabled='E4E4E9',disabledText='8A8A93')
+T=dict(canvas='F4F4F6',surface='FFFFFF',fill='ECECF0',field='EAEAEF',fieldPressed='DDDDE3',ink='18181B',text2='4A4A53',muted='696972',brand='7262C7',brandText='5B4BB0',brandSubtle='F1EFF9',onBrand='FFFFFF',danger='C8383B',dangerSubtle='FBEDED',warning='8A5A00',warningSubtle='FBF3E2',success='2B774B',successSubtle='E8F3EC',outline='8B8B94',disabled='E4E4E9',disabledText='8A8A93',info='2C5C99',infoSubtle='EAF0FA',social='A8402F',socialSubtle='FCEEEA')
 pairs=[
 ('ink','canvas','Page titles, body','text',4.5),('ink','surface','Card text','text',4.5),('ink','field','Field value, secondary button label, Pass','text',4.5),
 ('text2','canvas','Secondary text on page','text',4.5),('text2','surface','Secondary text in cards','text',4.5),('text2','fill','Chip labels on fill','text',4.5),
@@ -14,7 +14,11 @@ pairs=[
 ('brand','brandSubtle','SuperSwipe star, tint marks (non-text)','ui',3.0),('brand','surface','Progress fill, switch on, radio (non-text)','ui',3.0),('brand','canvas','Step segments on page (non-text)','ui',3.0),
 ('danger','surface','Destructive text','text',4.5),('onBrand','danger','Destructive solid button','text',4.5),('danger','dangerSubtle','Error banner text','text',4.5),
 ('warning','warningSubtle','Warning banner text','text',4.5),('success','successSubtle','Success text','text',4.5),
-('outline','surface','Radio/checkbox ring, switch-off edge (non-text)','ui',3.0),('disabledText','disabled','Disabled button label (exempt)','exempt',0),
+('outline','surface','Radio/checkbox ring, switch-off edge (non-text)','ui',3.0),
+('info','infoSubtle','Info icon tile, info status (final polish)','text',4.5),('info','surface','Info text on white (final polish)','text',4.5),
+('social','socialSubtle','Social icon tile: likes, people (final polish)','text',4.5),('social','surface','Social text on white (final polish)','text',4.5),
+('success','surface','Positive text on white (final polish)','text',4.5),('warning','surface','Caution text on white (final polish)','text',4.5),
+('text2','fill','Neutral icon tile (final polish)','text',4.5),('disabledText','disabled','Disabled button label (exempt)','exempt',0),
 ]
 print('| Foreground | Background | Used for | Ratio | Needs | Result |\n|---|---|---|---|---|---|')
 for f,b,u,k,need in pairs:

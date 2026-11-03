@@ -171,6 +171,7 @@ class EditProfileScreen extends ConsumerWidget {
             children: [
               ListRow(
                 leading: NumayaIcons.verified,
+                tone: AccentTone.positive,
                 label: l10n.editVerify,
                 value: verificationValue,
                 onTap: () => context.push(Routes.verifyPhoto),

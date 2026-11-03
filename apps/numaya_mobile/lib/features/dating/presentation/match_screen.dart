@@ -8,14 +8,15 @@ import 'package:go_router/go_router.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
-import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/domain/profile_draft.dart';
 import '../application/dating_controller.dart';
 import '../domain/sample_people.dart';
+import 'person_profile.dart';
 
-/// Match (B-40 / B-41, V16 030 / 032): close top right, "It's a match!", the scalloped portrait with
-/// your avatar, what you both like, and a composer. Sending opens the conversation; closing keeps
-/// browsing and the match waits in Messages. No countdown (P-03 is open).
+/// Match (B-40 / B-41): close top right, "It's a match!", one large square photo of the person you
+/// matched with (final UX polish FP-05: no second avatar of yourself), what you both like, and a
+/// composer. Sending opens the conversation; closing keeps browsing and the match waits in
+/// Messages. No countdown (P-03 is open).
 class MatchScreen extends ConsumerStatefulWidget {
   const MatchScreen({super.key, required this.personId});
 
@@ -79,16 +80,17 @@ class _MatchScreenState extends ConsumerState<MatchScreen>
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final person = personById(widget.personId);
-    final me = ref.watch(onboardingProvider.select((s) => s.draft.firstName));
     if (person == null) return const SizedBox.shrink();
     final body = l10n.matchBody(person.name);
     final split = body.indexOf(person.name);
-    // V16 `.organic-portrait`: min(264px, 66vw, 32svh), 25svh on phones 700pt tall or less.
+    // The photo is the moment: as wide as the content column allows, up to 320pt, and never more
+    // than 40% of the screen height, so the message and actions stay in view on short phones.
     final screen = MediaQuery.sizeOf(context);
-    final portrait = [
-      264.0,
-      screen.width * 0.66,
-      screen.height * (screen.height <= 700 ? 0.25 : 0.32),
+    final photo = [
+      320.0,
+      math.min(screen.width, AppSpacing.contentMax) -
+          2 * AppLayout.screenGutter,
+      screen.height * 0.4,
     ].reduce(math.min);
 
     // Any touch finishes the celebration; nothing waits for it.
@@ -129,7 +131,7 @@ class _MatchScreenState extends ConsumerState<MatchScreen>
                 onPressed: _close,
               ),
             ),
-            const SizedBox(height: AppSpacing.s6),
+            const SizedBox(height: AppSpacing.s4),
             _enter(
               Semantics(
                 header: true,
@@ -150,49 +152,15 @@ class _MatchScreenState extends ConsumerState<MatchScreen>
               ),
               from: 0,
             ),
-            SizedBox(height: AppSpacing.s6 + 0.05 * portrait),
+            const SizedBox(height: AppSpacing.s6),
             _enter(
-              SizedBox.square(
-                dimension: portrait,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    // V16's backdrop frame is 10% larger than the photo box (inset -5%) and reads as
-                    // one photo-grey shape.
-                    Positioned(
-                      left: -0.05 * portrait,
-                      top: -0.05 * portrait,
-                      child: ScallopPortrait(
-                        initial: person.initial,
-                        size: portrait * 1.1,
-                      ),
-                    ),
-                    // You overlap the frame's lower left on a white ring (V16 `.match__you`).
-                    Positioned(
-                      left: -0.09 * portrait,
-                      bottom: -0.03 * portrait,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: AppColors.surface,
-                          shape: BoxShape.circle,
-                        ),
-                        child: InitialsAvatar(
-                          initial: me.trim().isEmpty
-                              ? '?'
-                              : me.trim()[0].toUpperCase(),
-                          size: 60,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              _MatchPhoto(person: person, size: photo),
               from: 0.1,
               rise: 0,
-              scaleFrom: 0.92,
+              scaleFrom: 0.94,
             ),
-            SizedBox(height: AppSpacing.s5 + 0.05 * portrait),
+            // Room for the heart mark that overlaps the photo's lower edge.
+            const SizedBox(height: _MatchPhoto.markOverhang + AppSpacing.s4),
             // V16 `.match__body`: 16pt, at most 300pt wide, balanced.
             _enter(
               ConstrainedBox(
@@ -272,6 +240,86 @@ class _MatchScreenState extends ConsumerState<MatchScreen>
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// The matched person, large: their first photo in a square with the hero-card corner, or, with no
+/// photo, their initial on the photo grey (more personal than a generic image glyph). One purple
+/// heart mark overlaps the lower edge: the only decoration, and it names the moment, not a person.
+class _MatchPhoto extends StatelessWidget {
+  const _MatchPhoto({required this.person, required this.size});
+
+  final SamplePerson person;
+  final double size;
+
+  static const double _mark = 56;
+
+  /// How far the mark hangs below the photo.
+  static const double markOverhang = _mark / 2;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final image = personPhotoImage(person, 1);
+    return SizedBox(
+      width: size,
+      height: size + markOverhang,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.topCenter,
+        children: [
+          SizedBox.square(
+            dimension: size,
+            child: PhotoPlaceholder(
+              key: const ValueKey('match-photo'),
+              label: l10n.discoverPhotoLabel(person.name, 1),
+              aspectRatio: null,
+              radius: AppRadii.heroCard,
+              child:
+                  image ??
+                  ColoredBox(
+                    color: AppColors.photo,
+                    child: Center(
+                      child: Text(
+                        person.initial,
+                        textScaler: TextScaler.noScaling,
+                        style:
+                            AppTypography.weight(
+                              AppTypography.hero,
+                              AppTypography.bold,
+                            ).copyWith(
+                              fontSize: size * 0.32,
+                              height: 1,
+                              color: AppColors.textSecondary,
+                            ),
+                      ),
+                    ),
+                  ),
+            ),
+          ),
+          Positioned(
+            top: size - markOverhang,
+            child: ExcludeSemantics(
+              child: Container(
+                width: _mark,
+                height: _mark,
+                decoration: BoxDecoration(
+                  color: AppColors.accent,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.canvas, width: 4),
+                ),
+                alignment: Alignment.center,
+                child: const NumayaIcon(
+                  NumayaIcons.heart,
+                  size: 24,
+                  color: AppColors.accentForeground,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

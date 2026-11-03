@@ -126,6 +126,11 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
   );
   Offset _exitDirection = Offset.zero;
 
+  /// The person whose decision is in flight. A second action on them (a double tap, a drag that
+  /// ends during the exit, a stale button from the previous frame) is ignored, so nobody is liked,
+  /// passed or SuperSwiped twice.
+  String? _deciding;
+
   @override
   void dispose() {
     _exit.dispose();
@@ -140,8 +145,10 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
     required bool liked,
     bool superSwipe = false,
   }) async {
-    // One decision at a time: taps during the 200 ms exit are ignored.
-    if (_exit.isAnimating) return;
+    // One decision at a time: taps during the 200 ms exit are ignored, and so is any action on
+    // someone already decided.
+    if (_exit.isAnimating || _deciding != null) return;
+    if (ref.read(datingProvider).seen.contains(person.id)) return;
     final controller = ref.read(datingProvider.notifier);
     if (superSwipe && controller.superSwipesLeft <= 0) {
       // No SuperSwipes left: the contextual paywall names what triggered it (D-14).
@@ -153,21 +160,26 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
       return;
     }
     AppHaptics.fire(context, HapticMoment.commit);
-    if (!AppMotion.reduced(context)) {
-      setState(
-        () => _exitDirection = superSwipe
-            ? const Offset(0, -1)
-            : Offset(liked ? 1 : -1, 0),
-      );
-      try {
-        await _exit.forward(from: 0).orCancel;
-      } on TickerCanceled {
-        return;
+    _deciding = person.id;
+    try {
+      if (!AppMotion.reduced(context)) {
+        setState(
+          () => _exitDirection = superSwipe
+              ? const Offset(0, -1)
+              : Offset(liked ? 1 : -1, 0),
+        );
+        try {
+          await _exit.forward(from: 0).orCancel;
+        } on TickerCanceled {
+          return;
+        }
+        if (!mounted) return;
       }
-      if (!mounted) return;
+      _commit(person, liked: liked, superSwipe: superSwipe);
+      _exit.value = 0;
+    } finally {
+      _deciding = null;
     }
-    _commit(person, liked: liked, superSwipe: superSwipe);
-    _exit.value = 0;
   }
 
   void _commit(
@@ -842,7 +854,10 @@ class _DecisionMotion extends StatelessWidget {
   }
 }
 
-/// The first photo card, draggable: past 96pt right likes, left passes (the web's threshold).
+/// The first photo card, draggable: past 96pt right likes, left passes (the web's threshold). The
+/// card follows the finger and tilts; the decision it is heading for shows on the photo. Letting go
+/// short of the line, or flinging it back, springs it home. Taps on the photo and the name still
+/// work: a tap never enters the horizontal-drag arena.
 class _SwipeCard extends StatefulWidget {
   const _SwipeCard({
     super.key,
@@ -868,55 +883,71 @@ class _SwipeCardState extends State<_SwipeCard> {
   static const _flingVelocity = 800.0;
   double _dx = 0;
 
+  /// The system took the pointer away mid-drag (a call, the notification shade). The drag
+  /// recogniser still reports an end, with no velocity; that must never count as a decision.
+  bool _pointerCancelled = false;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final stamp = _dx >= _threshold / 2
-        ? l10n.discoverLike
-        : _dx <= -_threshold / 2
-        ? l10n.discoverPass
-        : null;
     return Semantics(
       label: l10n.discoverSwipeHint(widget.person.name),
-      child: GestureDetector(
-        onHorizontalDragUpdate: (d) {
-          final wasPast = _dx.abs() >= _threshold;
-          setState(() => _dx += d.delta.dx);
-          // One tick each time the card crosses the line, so the stamp is felt as well as seen.
-          if (wasPast != _dx.abs() >= _threshold) {
-            AppHaptics.fire(context, HapticMoment.selection);
-          }
-        },
-        onHorizontalDragEnd: (d) {
-          final v = d.velocity.pixelsPerSecond.dx;
-          // Past the line, or flung firmly the way it already leans.
-          final decided =
-              _dx.abs() >= _threshold ||
-              (v.abs() >= _flingVelocity &&
-                  _dx.abs() >= 24 &&
-                  v.sign == _dx.sign);
-          if (decided) {
-            // The card stays where the finger left it and leaves from there.
-            widget.onDecide(_dx > 0);
-          } else {
-            setState(() => _dx = 0);
-          }
-        },
-        onHorizontalDragCancel: () => setState(() => _dx = 0),
-        child: AnimatedContainer(
-          duration: _dx == 0
-              ? AppMotion.duration(context, AppMotion.base)
-              : Duration.zero,
-          curve: AppMotion.easeOut,
-          transform: Matrix4.translationValues(_dx, 0, 0)
-            ..rotateZ(_dx / 24 * 3.1415926535 / 180),
-          transformAlignment: Alignment.bottomCenter,
-          child: PersonHeroCard(
-            person: widget.person,
-            stamp: stamp,
-            onOpenPhotos: widget.onOpenPhotos,
-            onMore: widget.onMore,
-          ),
+      // A Listener sees the cancel before the gesture recognisers do.
+      child: Listener(
+        onPointerDown: (_) => _pointerCancelled = false,
+        onPointerCancel: (_) => _pointerCancelled = true,
+        child: _gestures(context),
+      ),
+    );
+  }
+
+  Widget _gestures(BuildContext context) {
+    return GestureDetector(
+      onHorizontalDragUpdate: (d) {
+        final wasPast = _dx.abs() >= _threshold;
+        setState(() => _dx += d.delta.dx);
+        // One tick each time the card crosses the line, so the stamp is felt as well as seen.
+        if (wasPast != _dx.abs() >= _threshold) {
+          AppHaptics.fire(context, HapticMoment.selection);
+        }
+      },
+      onHorizontalDragEnd: (d) {
+        if (_pointerCancelled) {
+          setState(() => _dx = 0);
+          return;
+        }
+        final v = d.velocity.pixelsPerSecond.dx;
+        // Flung firmly back toward the centre: the member changed their mind, even past the
+        // line.
+        final pulledBack = v.abs() >= _flingVelocity && v.sign != _dx.sign;
+        // Past the line, or flung firmly the way it already leans.
+        final decided =
+            !pulledBack &&
+            (_dx.abs() >= _threshold ||
+                (v.abs() >= _flingVelocity &&
+                    _dx.abs() >= 24 &&
+                    v.sign == _dx.sign));
+        if (decided) {
+          // The card stays where the finger left it and leaves from there.
+          widget.onDecide(_dx > 0);
+        } else {
+          setState(() => _dx = 0);
+        }
+      },
+      onHorizontalDragCancel: () => setState(() => _dx = 0),
+      child: AnimatedContainer(
+        duration: _dx == 0
+            ? AppMotion.duration(context, AppMotion.base)
+            : Duration.zero,
+        curve: AppMotion.easeOut,
+        transform: Matrix4.translationValues(_dx, 0, 0)
+          ..rotateZ(_dx / 24 * 3.1415926535 / 180),
+        transformAlignment: Alignment.bottomCenter,
+        child: PersonHeroCard(
+          person: widget.person,
+          swipe: (_dx / _threshold).clamp(-1.0, 1.0),
+          onOpenPhotos: widget.onOpenPhotos,
+          onMore: widget.onMore,
         ),
       ),
     );

@@ -112,10 +112,7 @@ class _DesignLabScreenState extends State<DesignLabScreen> {
                   'Picnic in the park with board games. Bring a friend, we’ll have snacks.',
                   style: AppTypography.body,
                 ),
-                Text(
-                  'Liked your profile · about 4 km',
-                  style: AppTypography.caption,
-                ),
+                Text('Liked you · 4 km away', style: AppTypography.caption),
                 Text('SAT, 31 OCT · 19:00', style: AppTypography.labelCaps),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -395,7 +392,7 @@ class _DesignLabScreenState extends State<DesignLabScreen> {
           const IllustrationSlot(
             slot: 'events_explore',
             label: 'Explore events near you',
-            aspectRatio: 16 / 9,
+            aspectRatio: IllustrationSlot.header,
           ),
           const SizedBox(height: AppSpacing.s3),
           Row(

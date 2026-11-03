@@ -220,6 +220,7 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
         children: [
           ListRow(
             leading: NumayaIcons.verified,
+            tone: AccentTone.positive,
             label: l10n.filtersVerifiedOnly,
             switchValue: _draft.verifiedOnly,
             onSwitch: (v) => _set(_draft.copyWith(verifiedOnly: v)),

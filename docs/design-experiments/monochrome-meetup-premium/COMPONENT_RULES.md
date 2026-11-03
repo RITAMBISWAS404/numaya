@@ -43,8 +43,10 @@
 | Component | Treatment |
 |---|---|
 | Hero card | White, 32pt corners, 24pt padding. One per priority screen. |
-| `WhiteCard`, `ListGroup` | White, 24pt corners, **no row dividers**, rows padded 20pt |
-| `_Tile` (Profile grid) | White, 18pt corners, icon in purple, label and status |
+| `WhiteCard`, `ListGroup` | White, 24pt corners, rows padded 20pt. **Final polish (FP-02):** quiet `divider` hairlines between rows, starting at the row's text (after the tile) and ending at the card padding; `dividers: false` opts out |
+| `ListRow` | **Final polish (FP-03):** a `leading` icon sits in a 40pt `IconTile` coloured by `tone` (neutral by default); `inlineIcon: true` keeps a bare icon for metadata. The value takes at most 60% of the space left after the tile |
+| `IconTile` | Rounded square: 40pt (12 corner, 20pt icon) in rows, 48pt (14 corner, 22pt icon) in cards and tiles. Tint background, foreground ≥ 4.5:1. Tone by meaning (`AccentTone`), never decoration |
+| `_Tile` (Profile grid) | White, 24pt corners, a 48pt `IconTile` in its tone (visibility blue, Opening Moves coral, verification green, Premium purple), label and status |
 | `StatusBadge` | `(bg, fg, weight)`. Neutral: fill grey with no outline. Brand: tint with purple text. On a photo: white. |
 | `CompletionCard` | `card` title, an 8pt purple bar |
 | `MetricTile` | Unchanged; "—" plus "Not measured" when there is no data |
@@ -55,11 +57,26 @@
 |---|---|
 | `PersonHeroCard` | **Image-first.** A 4:3 photo (24pt corners) with only white badges and the photo count on it. Below it, the name (Jakarta 32/800, 24 above 160% text), then the job with an inline icon. |
 | Composer | A white tray (30pt corners, 6pt padding) holding a filled 24pt-corner field. The field gets a purple edge only when focused. Send is a purple circle. |
-| Chat list | Rows with no dividers |
+| Chat list | Rows with no dividers (avatars separate them) |
 | Context menu | A white grouped card, no dividers, red for destructive |
 
 ## Overlays
 | Component | Treatment |
 |---|---|
 | Bottom sheet | White, 32pt top corners, grabber, 22pt Jakarta title, **no rule under the header** |
-| Event RSVP bar | Floating white card with the `floating` shadow and **no hairline** |
+| Event RSVP bar | Floating white card with the `floating` shadow and **no hairline**. Corner 40 = the 56pt button's 28 + the 12pt inset (FP-06) |
+
+## Final polish additions
+| Component | Treatment |
+|---|---|
+| Swipe stamp | While dragging the Discover photo: a 76pt white disc with a check (Like, `brandText`) or a cross (Pass, ink), plus the word. Fades in from 25% of the 96pt threshold (FP-08) |
+| Match photo | One square photo of the matched person, 32 corner, up to 320pt and at most 40% of the screen height; their initial when there is no photo; a 56pt purple heart mark on the lower edge (FP-05) |
+
+## Choosing a list pattern
+| Pattern | Use when | Example |
+|---|---|---|
+| **Grouped list** (`ListGroup`) | Several related rows of the same kind; scanning matters | Settings, Account Health, event metadata, help |
+| **Independent cards** | Each item is distinct and carries its own content or action | Profile tiles, prompts, event cards, the Premium card |
+| **Avatar rows** | People | Chats, event attendees |
+
+Never put a grouped list inside a card, and never add dividers *and* card gaps to the same list.

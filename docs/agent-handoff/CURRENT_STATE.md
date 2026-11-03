@@ -1,6 +1,6 @@
 # Current state
 
-**Last verified:** 2026-11-04, on the owner's Windows 11 machine.
+**Last verified:** 2026-11-04, on the owner's Windows 11 machine, after the final UX polish.
 
 ## Git
 | Item | Value |
@@ -8,6 +8,7 @@
 | Repository | `RITAMBISWAS404/numaya` (`origin`, HTTPS) |
 | Local path | `C:\Users\biswa\Downloads\numaya\numaya` |
 | Working branch | `experiment/numaya-final-ux-polish` (tracks `origin`) |
+| Latest commit | the final-UX-polish commit on this branch (`git log -1`), on top of `93d5ce7` (handoff setup) |
 | Baseline branch | `experiment/numaya-monochrome-premium-refinement` |
 | Baseline commit | `e70135c` "Premium refinement: docs, contrast table, success token fix" (2026-11-03) |
 | Repo default branch | `claude/pensive-newton-glyzjr` |
@@ -19,15 +20,30 @@ work.
 **Branches not to touch:**
 - `experiment/numaya-android12-compat`: kept as it was.
 - `design/apple-impeccable-full-app` (`944c532`): separate Impeccable work in progress.
+- `experiment/impeccable-visual-refinement`: named in the final-polish brief, with 14 uncommitted
+  files in a separate checkout. **It does not exist on GitHub, and this machine has no such
+  branch or worktree** (checked 2026-11-04). If that checkout exists elsewhere, it is untouched
+  and unreconciled with this branch.
 
 ## What is built
-- **Flutter app:** `apps/numaya_mobile/`, in the Monochrome Premium design. Plus Jakarta Sans
-  headings over Figtree, purple `#7262C7`, filled controls, an icon-only floating tab pill.
+- **Flutter app:** `apps/numaya_mobile/`, in the Monochrome Premium design with the final UX
+  polish:
+  - Plus Jakarta Sans headings over Figtree, purple `#7262C7`, filled controls, an icon-only
+    floating tab pill;
+  - semantic icon tiles (`AccentTone`) and inset list dividers;
+  - cancel-safe swipes;
+  - a single-photo Match.
+  - The record is in
+    [`docs/design-experiments/numaya-final-ux-polish/`](../design-experiments/numaya-final-ux-polish/README.md).
 - **Web prototype:** the repo root. The premium refinement did not touch it.
 - **Design record:** [`docs/design-experiments/monochrome-meetup-premium/`](../design-experiments/monochrome-meetup-premium/README.md).
-- **Latest QA:** [VISUAL_QA_REPORT.md](../design-experiments/monochrome-meetup-premium/VISUAL_QA_REPORT.md)
-  (2026-11-03). 266 tests passed, 11 skipped. The 4-width × 3-text-size matrix passes. It has
-  never been run on a device.
+- **Latest QA:** [VISUAL_REVIEW_REPORT.md](../design-experiments/numaya-final-ux-polish/VISUAL_REVIEW_REPORT.md)
+  (2026-11-04).
+  - 288 tests passed, 11 skipped.
+  - The 4-width × 3-text-size matrix passes, now including Match.
+  - Smoke-tested on the Pixel 10 emulator; not run on a physical phone.
+  - The previous report is the premium
+    [VISUAL_QA_REPORT.md](../design-experiments/monochrome-meetup-premium/VISUAL_QA_REPORT.md).
 - **Research and specs:** [`docs/research/`](../research/README.md).
 
 ## Environment (this machine)
@@ -36,9 +52,9 @@ work.
 | Flutter / Dart | 3.47.8 stable / 3.13.7 at `C:\src\flutter`, on `PATH`; matches `pubspec.yaml` (`sdk: ^3.13.7`) |
 | Android SDK | `C:\Users\biswa\AppData\Local\Android\sdk`. Flutter finds it without `ANDROID_HOME`. Platforms 36, 36.1, 37.0; build-tools 36.0.0; NDK 28.2.13676358; licences accepted |
 | JDK | Android Studio's bundled JBR (OpenJDK 25.0.3) |
-| Emulators | `Pixel_8`, `Pixel_9`, `Pixel_9_2`, `Pixel_10` |
+| Emulators | `Pixel_8`, `Pixel_9`, `Pixel_9_2`, `Pixel_10` are listed, but **only `Pixel_10` has its system image** (android-36.1). The others point at a missing android-36 image. Boot `Pixel_10` with `-gpu swiftshader_indirect` (the hardware GPU path stayed offline) |
 | adb | 1.0.41 in `sdk\platform-tools`, **not on `PATH`**. Call it by full path, or use `flutter devices` |
-| Node / npm | Node 24.20.0. **`node_modules` is not installed**. Run `npm ci` before `npm run check` |
+| Node / npm | Node 24.20.0; `node_modules` installed. `npm run check` fails here only on CRLF line endings (`core.autocrlf=true`); the Playwright browser is not installed |
 | Visual Studio | Not installed. Only needed for Windows desktop builds; irrelevant here |
 | Shells | PowerShell 5.1 and Git Bash |
 

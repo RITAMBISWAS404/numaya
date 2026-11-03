@@ -255,6 +255,7 @@ class ProfileScreen extends ConsumerWidget {
                           tiles: [
                             _Tile(
                               icon: NumayaIcons.explore,
+                              tone: AccentTone.info,
                               label: l10n.visTitle,
                               value: VisibilityScreen.statusLabel(
                                 l10n,
@@ -264,6 +265,7 @@ class ProfileScreen extends ConsumerWidget {
                             ),
                             _Tile(
                               icon: NumayaIcons.message,
+                              tone: AccentTone.social,
                               label: l10n.openingMovesTitle,
                               value: l10n.openingMovesCount(
                                 details.openingMoves.length,
@@ -272,6 +274,7 @@ class ProfileScreen extends ConsumerWidget {
                             ),
                             _Tile(
                               icon: NumayaIcons.verified,
+                              tone: AccentTone.positive,
                               label: l10n.editVerify,
                               value: switch (verification) {
                                 PhotoVerificationStatus.verified =>
@@ -287,6 +290,7 @@ class ProfileScreen extends ConsumerWidget {
                             ),
                             _Tile(
                               icon: NumayaIcons.premium,
+                              tone: AccentTone.brand,
                               label: l10n.premiumName,
                               value: premium.active
                                   ? l10n.premiumActive
@@ -336,11 +340,13 @@ class ProfileScreen extends ConsumerWidget {
                           children: [
                             ListRow(
                               leading: NumayaIcons.shield,
+                              tone: AccentTone.positive,
                               label: l10n.safetyTitle,
                               onTap: () => context.push(Routes.safety),
                             ),
                             ListRow(
                               leading: NumayaIcons.help,
+                              tone: AccentTone.info,
                               label: l10n.helpTitle,
                               onTap: () => context.push(Routes.help),
                             ),
@@ -420,7 +426,7 @@ class _PremiumCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.s4),
+      padding: const EdgeInsets.all(AppLayout.cardPadding),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: AppRadii.all(AppRadii.card),
@@ -430,12 +436,8 @@ class _PremiumCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const NumayaIcon(
-                NumayaIcons.premium,
-                size: 24,
-                color: AppColors.accent,
-              ),
-              const SizedBox(width: AppSpacing.s2),
+              const IconTile(NumayaIcons.premium, tone: AccentTone.brand),
+              const SizedBox(width: AppLayout.tileLabelGap),
               Expanded(
                 child: Text(l10n.premiumName, style: AppTypography.emptyTitle),
               ),
@@ -470,16 +472,19 @@ class _PremiumCard extends StatelessWidget {
   }
 }
 
-/// One profile tile: a purple icon, a bold label and the current value, the whole tile tappable.
+/// One profile tile: an icon tile in its meaning's tone, a bold label and the current value, the
+/// whole tile tappable.
 class _Tile {
   const _Tile({
     required this.icon,
+    required this.tone,
     required this.label,
     required this.value,
     required this.onTap,
   });
 
   final NumayaIcons icon;
+  final AccentTone tone;
   final String label;
   final String value;
   final VoidCallback onTap;
@@ -530,7 +535,7 @@ class _TileGrid extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          NumayaIcon(t.icon, size: 26, color: AppColors.accentOnTint),
+          IconTile(t.icon, tone: t.tone, large: true),
           const SizedBox(height: AppSpacing.s4),
           Text(
             t.label,

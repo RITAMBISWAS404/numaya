@@ -6,6 +6,8 @@ import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
+import 'icon_tile.dart';
+import 'people.dart';
 import 'primitives.dart';
 
 class TabItem {
@@ -50,6 +52,9 @@ class NumayaTabBar extends StatelessWidget {
     this.indicator = TabIndicatorStyle.tint,
   });
 
+  /// Space between the pill's edge and each item.
+  static const double tabInset = 6;
+
   final List<TabItem> items;
   final int currentIndex;
   final ValueChanged<int> onSelect;
@@ -75,7 +80,7 @@ class NumayaTabBar extends StatelessWidget {
             final extra = indicator == TabIndicatorStyle.expanded
                 ? AppSizes.tabItem * 0.7
                 : 0.0;
-            const inner = 12.0;
+            const inner = 2 * tabInset;
             var gap = AppSpacing.s2;
             var item = AppSizes.tabItem;
             double need() => inner + n * item + extra + (n - 1) * gap;
@@ -136,8 +141,10 @@ class NumayaTabBar extends StatelessWidget {
     final itemWidth = current && indicator == TabIndicatorStyle.expanded
         ? size + AppSizes.tabItem * 0.7
         : size;
+    // The tint sits 6pt inside a 64pt pill, so its corner is the pill's minus the inset: a 52pt
+    // item becomes a circle, concentric with the bar's ends (FP-06).
     final radius = indicator == TabIndicatorStyle.tint
-        ? AppRadii.iconButton
+        ? AppRadii.nested(AppSizes.tabBar / 2, tabInset)
         : AppRadii.pill;
     return Semantics(
       selected: current,
@@ -233,8 +240,9 @@ class NumayaSwitch extends StatelessWidget {
   }
 }
 
-/// Grouped row (`.theme-withings .list-row`): 56pt minimum, a 16pt regular label, a secondary
-/// subtitle, and a trailing switch, value or chevron.
+/// Grouped row (`.theme-withings .list-row`): 60pt minimum, a 16pt regular label, a secondary
+/// subtitle, and a trailing switch, value or chevron. A [leading] icon sits in a 40pt [IconTile]
+/// coloured by [tone] (neutral by default); [inlineIcon] draws it bare instead, for plain metadata.
 class ListRow extends StatelessWidget {
   const ListRow({
     super.key,
@@ -247,6 +255,8 @@ class ListRow extends StatelessWidget {
     this.danger = false,
     this.showChevron,
     this.leading,
+    this.tone = AccentTone.neutral,
+    this.inlineIcon = false,
     this.avatar,
   });
 
@@ -260,89 +270,117 @@ class ListRow extends StatelessWidget {
   final bool? showChevron;
   final NumayaIcons? leading;
 
+  /// The meaning of the [leading] icon's tile.
+  final AccentTone tone;
+
+  /// The [leading] icon without a tile (metadata rows).
+  final bool inlineIcon;
+
+  /// Where the label starts, measured from the row's leading padding: dividers in a [ListGroup]
+  /// start here so they never cross the icon.
+  double get textInset => avatar != null
+      ? (avatar is InitialsAvatar ? (avatar! as InitialsAvatar).size : 0) +
+            AppLayout.tileLabelGap
+      : leading == null
+      ? 0
+      : inlineIcon
+      ? AppSizes.iconMd + AppLayout.tileLabelGap
+      : IconTile.rowInset;
+
   /// A person's avatar in place of [leading] (people lists).
   final Widget? avatar;
 
   @override
   Widget build(BuildContext context) {
-    final isSwitch = switchValue != null;
-    final chevron = showChevron ?? (onTap != null && !isSwitch && !danger);
-    // 60% of the row (rows fill their group, so the screen's content width stands in).
-    final valueMax =
-        (MediaQuery.sizeOf(context).width.clamp(0.0, AppSpacing.contentMax) -
-            2 * AppSpacing.gutter) *
-        0.6;
     final row = Container(
       constraints: const BoxConstraints(minHeight: AppSizes.row),
       padding: const EdgeInsets.symmetric(
         horizontal: AppLayout.cardPadding,
         vertical: AppSpacing.s3,
       ),
-      child: Row(
-        children: [
-          if (avatar != null) ...[
-            avatar!,
-            const SizedBox(width: AppSpacing.s3),
-          ] else if (leading != null) ...[
-            NumayaIcon(leading!, size: AppSizes.iconMd, color: AppColors.ink),
-            const SizedBox(width: AppSpacing.s3),
-          ],
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  label,
-                  style: AppTypography.row.copyWith(
-                    color: danger ? AppColors.negative : AppColors.ink,
-                  ),
-                ),
-                if (detail != null && detail!.isNotEmpty) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    detail!,
-                    style: AppTypography.caption.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          // A value is a preview of what the row opens (the whole answer is one tap away): its
-          // natural width up to 60% of the row and two lines; the label keeps the rest.
-          if (value != null)
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: valueMax),
-              child: Padding(
-                padding: const EdgeInsets.only(left: AppSpacing.s3),
-                child: Text(
-                  value!,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.end,
-                  style: AppTypography.row.copyWith(color: AppColors.textMuted),
-                ),
-              ),
-            ),
-          if (isSwitch)
-            Padding(
-              padding: const EdgeInsets.only(left: AppSpacing.s3),
-              child: NumayaSwitch(value: switchValue!, onChanged: onSwitch),
-            ),
-          if (chevron)
-            const Padding(
-              padding: EdgeInsets.only(left: AppSpacing.s2),
-              child: NumayaIcon(
-                NumayaIcons.chevronRight,
-                size: AppSizes.iconMd,
-                color: AppColors.textMuted,
-              ),
-            ),
-        ],
+      // The value may take 60% of what the row has left after its leading tile or avatar.
+      child: LayoutBuilder(
+        builder: (context, box) =>
+            _content((box.maxWidth - textInset).clamp(0.0, box.maxWidth) * 0.6),
       ),
     );
+    return _wrap(row);
+  }
+
+  Widget _content(double valueMax) {
+    final isSwitch = switchValue != null;
+    final chevron = showChevron ?? (onTap != null && !isSwitch && !danger);
+    return Row(
+      children: [
+        if (avatar != null) ...[
+          avatar!,
+          const SizedBox(width: AppLayout.tileLabelGap),
+        ] else if (leading != null) ...[
+          if (inlineIcon)
+            NumayaIcon(leading!, size: AppSizes.iconMd, color: AppColors.ink)
+          else
+            IconTile(leading!, tone: danger ? AccentTone.danger : tone),
+          const SizedBox(width: AppLayout.tileLabelGap),
+        ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                style: AppTypography.row.copyWith(
+                  color: danger ? AppColors.negative : AppColors.ink,
+                ),
+              ),
+              if (detail != null && detail!.isNotEmpty) ...[
+                const SizedBox(height: 2),
+                Text(
+                  detail!,
+                  style: AppTypography.caption.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+        // A value is a preview of what the row opens (the whole answer is one tap away): its
+        // natural width up to 60% of the row and two lines; the label keeps the rest.
+        if (value != null)
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: valueMax),
+            child: Padding(
+              padding: const EdgeInsets.only(left: AppSpacing.s3),
+              child: Text(
+                value!,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.end,
+                style: AppTypography.row.copyWith(color: AppColors.textMuted),
+              ),
+            ),
+          ),
+        if (isSwitch)
+          Padding(
+            padding: const EdgeInsets.only(left: AppSpacing.s3),
+            child: NumayaSwitch(value: switchValue!, onChanged: onSwitch),
+          ),
+        if (chevron)
+          const Padding(
+            padding: EdgeInsets.only(left: AppSpacing.s2),
+            child: NumayaIcon(
+              NumayaIcons.chevronRight,
+              size: AppSizes.iconMd,
+              color: AppColors.textMuted,
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _wrap(Widget row) {
+    final isSwitch = switchValue != null;
     if (isSwitch) {
       return Pressable(
         onTap: onSwitch == null ? null : () => onSwitch!(!switchValue!),
@@ -375,19 +413,27 @@ class ListRow extends StatelessWidget {
   }
 }
 
-/// A titled group of rows (`.list-group`): a 22pt medium ink heading, the rows on one white card
-/// with hairline dividers inset 16pt on both sides, a secondary footnote.
+/// A titled group of rows (`.list-group`): a section heading, the rows on one white card, a
+/// secondary footnote. Rows are separated by quiet [AppColors.divider] hairlines that start where
+/// the row's text starts (never through its icon tile) and stop at the card's padding (FP-02).
 class ListGroup extends StatelessWidget {
   const ListGroup({
     super.key,
     this.title,
     required this.children,
     this.footnote,
+    this.dividers = true,
   });
 
   final String? title;
   final List<Widget> children;
   final String? footnote;
+
+  /// Hairlines between rows. Off for groups whose rows are self-contained (cards, previews).
+  final bool dividers;
+
+  static double _inset(Widget row) =>
+      AppLayout.cardPadding + (row is ListRow ? row.textInset : 0);
 
   @override
   Widget build(BuildContext context) {
@@ -408,10 +454,29 @@ class ListGroup extends StatelessWidget {
             borderRadius: AppRadii.all(AppRadii.card),
           ),
           clipBehavior: Clip.antiAlias,
-          // No dividers: rows are separated by their own height and padding (outline reduction).
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.s1),
-            child: Column(children: children),
+            child: Column(
+              children: [
+                for (var i = 0; i < children.length; i++) ...[
+                  if (i > 0 && dividers)
+                    Padding(
+                      padding: EdgeInsetsDirectional.only(
+                        start: _inset(children[i]),
+                        end: AppLayout.cardPadding,
+                      ),
+                      child: const ExcludeSemantics(
+                        child: SizedBox(
+                          height: AppBorders.hairline,
+                          width: double.infinity,
+                          child: ColoredBox(color: AppColors.divider),
+                        ),
+                      ),
+                    ),
+                  children[i],
+                ],
+              ],
+            ),
           ),
         ),
         if (footnote != null)

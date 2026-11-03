@@ -288,6 +288,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                 for (final m in missing)
                   ListRow(
                     leading: NumayaIcons.alert,
+                    tone: AccentTone.caution,
                     label: missingLabel(m),
                     onTap: () => _edit(_stepFor(m)),
                   ),

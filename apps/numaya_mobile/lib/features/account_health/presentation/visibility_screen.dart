@@ -364,7 +364,15 @@ class VisibilityScreen extends ConsumerWidget {
                 ListGroup(
                   children: [
                     for (final (label, part, s) in parts)
+                      // Status in the tile (FP-04): green check when done, amber when there is
+                      // something to add; the value says it in words too.
                       ListRow(
+                        leading: part.complete
+                            ? NumayaIcons.check
+                            : NumayaIcons.pending,
+                        tone: part.complete
+                            ? AccentTone.positive
+                            : AccentTone.caution,
                         label: label,
                         value: part.complete
                             ? l10n.visDone
@@ -387,6 +395,8 @@ class VisibilityScreen extends ConsumerWidget {
             child: ListGroup(
               children: [
                 ListRow(
+                  leading: NumayaIcons.location,
+                  tone: r.areaSet ? AccentTone.positive : AccentTone.caution,
                   label: l10n.visArea,
                   detail: r.areaSet ? null : l10n.visAreaMissing,
                   value:
@@ -394,10 +404,16 @@ class VisibilityScreen extends ConsumerWidget {
                   onTap: () => unawaited(chooseArea()),
                 ),
                 ListRow(
+                  leading: NumayaIcons.heart,
+                  tone: r.openToSet ? AccentTone.positive : AccentTone.caution,
                   label: l10n.visOpenTo,
                   value: r.openToSet ? l10n.visSet : l10n.visNotSet,
                 ),
                 ListRow(
+                  leading: NumayaIcons.filter,
+                  tone: r.deckSize > 0 && r.filtersFit == 0
+                      ? AccentTone.caution
+                      : AccentTone.positive,
                   label: l10n.visFilters,
                   detail: r.deckSize > 0 && r.filtersFit == 0
                       ? l10n.visFiltersEmpty
@@ -416,12 +432,22 @@ class VisibilityScreen extends ConsumerWidget {
             child: ListGroup(
               children: [
                 ListRow(
+                  leading: NumayaIcons.user,
+                  tone: r.phoneVerified
+                      ? AccentTone.positive
+                      : AccentTone.caution,
                   label: l10n.visPhone,
                   value: r.phoneVerified
                       ? l10n.visPhotoVerified
                       : l10n.visNotSet,
                 ),
                 ListRow(
+                  leading: NumayaIcons.verified,
+                  tone: switch (r.photoStatus) {
+                    PhotoVerificationStatus.verified => AccentTone.positive,
+                    PhotoVerificationStatus.pending => AccentTone.info,
+                    _ => AccentTone.caution,
+                  },
                   label: l10n.visPhoto,
                   value: photoLabel(),
                   onTap:
@@ -441,6 +467,8 @@ class VisibilityScreen extends ConsumerWidget {
               NoticeState.none => ListGroup(
                 children: [
                   ListRow(
+                    leading: NumayaIcons.check,
+                    tone: AccentTone.positive,
                     label: l10n.visNoNotices,
                     detail: l10n.visDemoNoticeSource,
                   ),
@@ -520,6 +548,8 @@ class VisibilityScreen extends ConsumerWidget {
                     children: [
                       for (final s in r.suggestions)
                         ListRow(
+                          leading: NumayaIcons.sparkle,
+                          tone: AccentTone.brand,
                           label: suggestionTitle(s),
                           detail: suggestionWhy(s),
                           onTap: () => act(s),
@@ -533,6 +563,7 @@ class VisibilityScreen extends ConsumerWidget {
             children: [
               ListRow(
                 leading: NumayaIcons.info,
+                tone: AccentTone.info,
                 label: l10n.visHowItWorks,
                 onTap: () => open(Routes.visibilityAbout),
               ),
@@ -580,7 +611,7 @@ class VisibilityAboutScreen extends StatelessWidget {
           const IllustrationSlot(
             slot: 'health_how_it_works',
             label: 'How visibility is checked',
-            aspectRatio: 16 / 9,
+            aspectRatio: IllustrationSlot.header,
           ),
           const SizedBox(height: AppSpacing.s5),
           for (final (title, body) in items) ...[

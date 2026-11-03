@@ -344,6 +344,7 @@ class LocationScreen extends ConsumerWidget {
             children: [
               ListRow(
                 leading: NumayaIcons.location,
+                tone: AccentTone.info,
                 label: details.areaFromDevice
                     ? l10n.obLocationSetDevice(area)
                     : area,

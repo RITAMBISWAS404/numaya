@@ -59,6 +59,9 @@ abstract final class AppLayout {
   /// Between a leading icon and its text.
   static const double iconLabelGap = AppSpacing.s2;
 
+  /// Between a leading icon tile (or avatar) and its text.
+  static const double tileLabelGap = AppSpacing.s3;
+
   /// Between metadata lines (date, place, attendance).
   static const double metaGap = AppSpacing.s1;
 
@@ -84,6 +87,8 @@ abstract final class AppMedia {
 /// filters and tabs. A nested corner is its container's minus the inset.
 abstract final class AppRadii {
   static const double tag = MonoRadii.tag;
+  static const double iconTile = MonoRadii.iconTile;
+  static const double iconTileLg = MonoRadii.iconTileLg;
   static const double field = MonoRadii.field;
   static const double control = MonoRadii.control;
   static const double iconButton = MonoRadii.iconButton;
@@ -99,6 +104,11 @@ abstract final class AppRadii {
   static const double segment = MonoRadii.pill;
 
   static BorderRadius all(double r) => BorderRadius.all(Radius.circular(r));
+
+  /// The corner of a surface inset [inset] inside one with corner [outer], so both curves share a
+  /// centre: `outer - inset`, never below zero (COMPONENT_RULES "Nested corners").
+  static double nested(double outer, double inset) =>
+      outer - inset < 0 ? 0 : outer - inset;
 }
 
 /// Stroke widths.
@@ -127,6 +137,10 @@ abstract final class AppSizes {
 
   /// Grouped and selection rows: 56 minimum.
   static const double row = MonoSizes.row;
+
+  /// Leading icon tiles: 40 in rows, 48 in cards and headers.
+  static const double iconTile = MonoSizes.iconTile;
+  static const double iconTileLg = MonoSizes.iconTileLg;
   static const double fab = NumayaSizeTokens.fabSize;
 
   /// Header buttons: 42 rounded squares (14 corner) inside a 44 hit area.

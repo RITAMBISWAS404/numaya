@@ -97,6 +97,7 @@ const fullAppRoutes = [
   '${Routes.chat}/priya',
   '${Routes.chat}/jo',
   '${Routes.chat}/ollie',
+  '${Routes.match}/amara',
   Routes.forYou,
   Routes.events,
   '${Routes.events}?view=mine',

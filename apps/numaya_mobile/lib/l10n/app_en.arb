@@ -535,7 +535,7 @@
   "likesFilterAll": "All",
   "likesFilterNew": "New",
   "likesFilterNearby": "Nearby",
-  "likeTileCaption": "Liked your profile · about {km} km",
+  "likeTileCaption": "Liked you · {km} km away",
   "@likeTileCaption": {
     "placeholders": {
       "km": {
@@ -734,7 +734,7 @@
   },
   "settingsVisibility": "Visibility",
   "settingsSnooze": "Snooze",
-  "settingsSnoozeOff": "Take a break without losing matches",
+  "settingsSnoozeOff": "Pause without losing matches",
   "settingsSnoozeOn": "You’re hidden. Resume any time.",
   "settingsSnoozeNote": "Snooze hides your profile and pauses Home. Matches and chats stay.",
   "snoozedToast": "Snoozed. Home is paused.",
@@ -2284,7 +2284,7 @@
   "visDiscovery": "Discovery setup",
   "visDiscoveryNote": "These shape who you see, not who sees you.",
   "visArea": "Your area",
-  "visAreaMissing": "Without one, people see no distance and event distances can’t work.",
+  "visAreaMissing": "Needed for distances to people and events.",
   "visNotSet": "Not set",
   "visSet": "Set",
   "visOpenTo": "Who you want to meet",
@@ -2378,7 +2378,7 @@
       "time": {}
     }
   },
-  "visSettingsDetail": "Visibility, completeness and notices",
+  "visSettingsDetail": "Completeness and notices",
   "visAboutMeasuredTitle": "What is measured",
   "visAboutMeasuredBody": "Whether your profile can appear in Discover, how complete it is, how Discover is set up for you, your verification, any account notices, and counts of your likes, matches and conversations.",
   "visAboutHowTitle": "How it’s worked out",

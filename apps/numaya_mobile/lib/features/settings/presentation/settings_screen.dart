@@ -209,10 +209,12 @@ class SettingsScreen extends ConsumerWidget {
             title: l10n.settingsAccount,
             children: [
               ListRow(
+                leading: NumayaIcons.user,
                 label: l10n.settingsPhone,
                 value: session?.phone.display ?? '',
               ),
               ListRow(
+                leading: NumayaIcons.link,
                 label: l10n.recoveryEmailLabel,
                 value:
                     ref.watch(accountPrefsProvider).recoveryEmail ??
@@ -230,11 +232,14 @@ class SettingsScreen extends ConsumerWidget {
             footnote: l10n.settingsSnoozeNote,
             children: [
               ListRow(
+                leading: NumayaIcons.explore,
+                tone: AccentTone.info,
                 label: l10n.visTitle,
                 detail: l10n.visSettingsDetail,
                 onTap: () => context.push(Routes.visibility),
               ),
               ListRow(
+                leading: NumayaIcons.clock,
                 label: l10n.settingsSnooze,
                 detail: snoozeDetail,
                 switchValue: dating.snoozed,
@@ -242,6 +247,7 @@ class SettingsScreen extends ConsumerWidget {
                     v ? startSnooze(context, ref) : endSnooze(context, ref),
               ),
               ListRow(
+                leading: NumayaIcons.eyeOff,
                 label: l10n.incognito,
                 detail: premium.active
                     ? (premium.incognito ? l10n.incognitoOn : l10n.incognitoOff)
@@ -262,6 +268,7 @@ class SettingsScreen extends ConsumerWidget {
             children: [
               ListRow(
                 leading: NumayaIcons.location,
+                tone: AccentTone.info,
                 label: l10n.settingsCurrentLocation,
                 // The member's own choice; nothing stands in for an area never set (the
                 // same value Profile & visibility shows).
@@ -285,6 +292,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
               ListRow(
                 leading: premium.active ? NumayaIcons.public : NumayaIcons.lock,
+                tone: AccentTone.brand,
                 label: l10n.travelTitle,
                 value: premium.travelCity == null
                     ? (premium.active ? l10n.travelOffValue : l10n.premiumOnly)
@@ -299,11 +307,23 @@ class SettingsScreen extends ConsumerWidget {
             footnote: l10n.settingsNotificationsNote,
             children: [
               // V16 113: New messages, New likes, each with its state underneath.
-              for (final (c, label) in [
-                (NotificationCategory.messages, l10n.settingsMessages),
-                (NotificationCategory.likes, l10n.settingsNewLikes),
+              for (final (c, label, icon, tone) in [
+                (
+                  NotificationCategory.messages,
+                  l10n.settingsMessages,
+                  NumayaIcons.message,
+                  AccentTone.info,
+                ),
+                (
+                  NotificationCategory.likes,
+                  l10n.settingsNewLikes,
+                  NumayaIcons.heart,
+                  AccentTone.social,
+                ),
               ])
                 ListRow(
+                  leading: icon,
+                  tone: tone,
                   label: label,
                   detail: prefsController.muted(c)
                       ? l10n.settingsSwitchOff
@@ -312,6 +332,7 @@ class SettingsScreen extends ConsumerWidget {
                   onSwitch: (v) => prefsController.setCategory(c, v),
                 ),
               ListRow(
+                leading: NumayaIcons.bell,
                 label: l10n.notificationsMore,
                 onTap: () => context.push(Routes.notifications),
               ),
@@ -323,6 +344,7 @@ class SettingsScreen extends ConsumerWidget {
             footnote: l10n.settingsVibrationNote,
             children: [
               ListRow(
+                leading: NumayaIcons.sparkle,
                 label: l10n.settingsVibration,
                 detail: prefs.haptics
                     ? l10n.settingsSwitchOn
@@ -337,7 +359,7 @@ class SettingsScreen extends ConsumerWidget {
             title: l10n.settingsPrivacy,
             children: [
               ListRow(
-                leading: NumayaIcons.eyeOff,
+                leading: NumayaIcons.lock,
                 label: l10n.privacyTitle,
                 onTap: () => context.push(Routes.privacy),
               ),
@@ -349,6 +371,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
               ListRow(
                 leading: NumayaIcons.shield,
+                tone: AccentTone.positive,
                 label: l10n.safetyTitle,
                 onTap: () => context.push(Routes.safety),
               ),
@@ -360,6 +383,7 @@ class SettingsScreen extends ConsumerWidget {
             children: [
               ListRow(
                 leading: NumayaIcons.help,
+                tone: AccentTone.info,
                 label: l10n.helpTitle,
                 onTap: () => context.push(Routes.help),
               ),
@@ -396,6 +420,8 @@ class SettingsScreen extends ConsumerWidget {
                   onTap: () => context.push(Routes.demo),
                 ),
                 ListRow(
+                  leading: NumayaIcons.wifiOff,
+                  tone: AccentTone.caution,
                   label: l10n.settingsSimulate,
                   detail: dating.simulateErrors
                       ? l10n.settingsSimulateOn

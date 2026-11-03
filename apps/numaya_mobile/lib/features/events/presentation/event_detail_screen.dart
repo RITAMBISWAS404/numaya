@@ -291,6 +291,7 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
           children: [
             ListRow(
               leading: NumayaIcons.calendar,
+              tone: AccentTone.brand,
               label: eventDay(e.start),
               detail: l10n.eventTimeRange(
                 eventTime(e.start),
@@ -302,6 +303,7 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
               leading: e.format == EventFormat.online
                   ? NumayaIcons.public
                   : NumayaIcons.location,
+              tone: AccentTone.info,
               label: e.format == EventFormat.online
                   ? l10n.eventOnline
                   : e.venue,
@@ -320,6 +322,7 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
             ),
             ListRow(
               leading: NumayaIcons.groups,
+              tone: AccentTone.social,
               label: eventGoing(l10n, e),
               detail: e.waitlist.isEmpty
                   ? null
@@ -331,7 +334,8 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
             ListRow(
               avatar: InitialsAvatar(
                 initial: e.mine ? l10n.eventYou[0] : (host?.initial ?? '?'),
-                size: 32,
+                // The icon tiles' width, so every row's text starts on one line.
+                size: AppSizes.iconTile,
                 verified: host?.verified ?? false,
               ),
               label: l10n.eventHostedBy(eventHostName(l10n, e)),
@@ -520,17 +524,18 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
       );
     }
 
-    // Meetup's RSVP bar: a floating white card with the status and one action.
+    // Meetup's RSVP bar: a floating white card with the status and one action. Its corner is the
+    // pill button's plus the 12pt inset, so the two curves share a centre (FP-06).
     Widget bar(String status, String? detail, Widget? action) => Container(
       padding: const EdgeInsets.fromLTRB(
-        AppSpacing.s4,
+        AppLayout.cardPadding,
         AppSpacing.s3,
         AppSpacing.s3,
         AppSpacing.s3,
       ),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: AppRadii.all(AppRadii.card),
+        borderRadius: AppRadii.all(AppSizes.buttonHeight / 2 + AppSpacing.s3),
         boxShadow: AppElevation.floating,
       ),
       child: Row(

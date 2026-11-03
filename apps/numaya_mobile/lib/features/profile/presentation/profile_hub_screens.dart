@@ -91,7 +91,7 @@ class CompletionHubScreen extends ConsumerWidget {
           const IllustrationSlot(
             slot: 'profile_completion',
             label: 'A profile coming together',
-            aspectRatio: 16 / 9,
+            aspectRatio: IllustrationSlot.header,
           ),
           const SizedBox(height: AppSpacing.s5),
           Semantics(
@@ -244,7 +244,7 @@ class OpeningMovesScreen extends ConsumerWidget {
           const IllustrationSlot(
             slot: 'opening_moves_header',
             label: 'Start a new conversation',
-            aspectRatio: 16 / 9,
+            aspectRatio: IllustrationSlot.header,
           ),
           ScreenHeader(
             title: l10n.openingMovesHeading,

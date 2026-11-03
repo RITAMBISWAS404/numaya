@@ -22,11 +22,20 @@ values below are copied from it.
 | Danger / tint | `danger` / `dangerSubtle` | #C8383B / #FBEDED | Destructive, errors |
 | Warning / tint | `warning` / `warningSubtle` | #8A5A00 / #FBF3E2 | Expiring, changed |
 | Success / tint | `success` / `successSubtle` | **#2B774B** (was #2F7D4F) / #E8F3EC | Positive state |
+| **Info / tint** (final polish) | `info` / `infoSubtle` | #2C5C99 / #EAF0FA | Icon tiles and statuses: information, location, notifications |
+| **Social / tint** (final polish) | `social` / `socialSubtle` | #A8402F / #FCEEEA | Icon tiles and statuses: likes, matches, people |
+| **Divider** (final polish) | `divider` | #ECECF0 | Inset hairlines between grouped-list rows (decorative) |
+
+**Semantic accents (final polish, FP-01):** blue, green, amber, coral and red appear only in icon
+tiles, status marks and illustrations, through `AccentTone`. They never fill a button or carry an
+action; purple stays the only action colour. See
+[../numaya-final-ux-polish/README.md](../numaya-final-ux-polish/README.md).
 
 ## Radius (shape roles)
 | Token | pt | Used for |
 |---|---|---|
 | `tag` | 8 | Small tags, checkbox |
+| `iconTile` / `iconTileLg` (final polish) | 12 / 14 | 40pt and 48pt icon tiles |
 | `control` | 16 | Rounded-square buttons |
 | `iconButton` | 16 | Header buttons (46pt) |
 | `field` | 18 | Text fields, code cells |
@@ -111,6 +120,13 @@ WCAG 1.4.3.
 | `warning` #8A5A00 | `warningSubtle` #FBF3E2 | Warning banner text | 5.37:1 | 4.5 | pass |
 | `success` #2B774B | `successSubtle` #E8F3EC | Success text | 4.80:1 | 4.5 | pass |
 | `outline` #8B8B94 | `surface` #FFFFFF | Radio/checkbox ring, switch-off edge (non-text) | 3.38:1 | 3.0 | pass |
+| `info` #2C5C99 | `infoSubtle` #EAF0FA | Info icon tile, info status (final polish) | 5.92:1 | 4.5 | pass |
+| `info` #2C5C99 | `surface` #FFFFFF | Info text on white (final polish) | 6.78:1 | 4.5 | pass |
+| `social` #A8402F | `socialSubtle` #FCEEEA | Social icon tile: likes, people (final polish) | 5.40:1 | 4.5 | pass |
+| `social` #A8402F | `surface` #FFFFFF | Social text on white (final polish) | 6.11:1 | 4.5 | pass |
+| `success` #2B774B | `surface` #FFFFFF | Positive text on white (final polish) | 5.46:1 | 4.5 | pass |
+| `warning` #8A5A00 | `surface` #FFFFFF | Caution text on white (final polish) | 5.93:1 | 4.5 | pass |
+| `text2` #4A4A53 | `fill` #ECECF0 | Neutral icon tile (final polish) | 7.44:1 | 4.5 | pass |
 | `disabledText` #8A8A93 | `disabled` #E4E4E9 | Disabled button label (exempt) | 2.70:1 | — | exempt (disabled) |
 
 **Not a pair:** filled fields on the page (`field` on `canvas`, 1.06:1) and on white (1.21:1) are

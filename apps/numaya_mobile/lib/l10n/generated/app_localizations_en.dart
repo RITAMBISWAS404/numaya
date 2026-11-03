@@ -940,7 +940,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String likeTileCaption(int km) {
-    return 'Liked your profile · about $km km';
+    return 'Liked you · $km km away';
   }
 
   @override
@@ -1325,7 +1325,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSnooze => 'Snooze';
 
   @override
-  String get settingsSnoozeOff => 'Take a break without losing matches';
+  String get settingsSnoozeOff => 'Pause without losing matches';
 
   @override
   String get settingsSnoozeOn => 'You’re hidden. Resume any time.';
@@ -4480,8 +4480,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get visArea => 'Your area';
 
   @override
-  String get visAreaMissing =>
-      'Without one, people see no distance and event distances can’t work.';
+  String get visAreaMissing => 'Needed for distances to people and events.';
 
   @override
   String get visNotSet => 'Not set';
@@ -4726,7 +4725,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get visSettingsDetail => 'Visibility, completeness and notices';
+  String get visSettingsDetail => 'Completeness and notices';
 
   @override
   String get visAboutMeasuredTitle => 'What is measured';

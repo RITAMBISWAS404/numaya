@@ -133,6 +133,15 @@ abstract final class AppColors {
   static const Color warning = _M.warning;
   static const Color warningTint = _M.warningSubtle;
 
+  /// Semantic accents for icon tiles and statuses (never actions): see [AccentTone].
+  static const Color info = _M.info;
+  static const Color infoTint = _M.infoSubtle;
+  static const Color social = _M.social;
+  static const Color socialTint = _M.socialSubtle;
+
+  /// Separators between rows of a grouped list, inset to the text.
+  static const Color divider = _M.divider;
+
   /// The Numaya mark's dot: brand purple.
   static const Color accentRose = accent;
 }

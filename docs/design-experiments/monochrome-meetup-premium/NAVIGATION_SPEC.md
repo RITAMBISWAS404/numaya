@@ -8,7 +8,7 @@
 | Container | White pill, 64pt tall, `subtle` shadow, inset from the screen edges, in `bottomNavigationBar` (content does not scroll beneath it) |
 | Items | Home, Events, Likes, Messages, Profile. **Icons only, 26pt.** |
 | Item size | 52pt; on narrow screens it shrinks to 48pt minimum |
-| Selected | Tint circle (`brandSubtle`) with a purple filled icon (`brandText`, 6.00:1, above the 3:1 needed for graphics) |
+| Selected | Tint circle (`brandSubtle`) with a purple filled icon (`brandText`, 6.00:1, above the 3:1 needed for graphics). Its corner is `AppRadii.nested(32, 6)` = 26, concentric with the pill's ends (final polish FP-06; the code had drifted to a 16pt square) |
 | Unselected | Muted outline icon |
 | Badge | A red dot on the icon (Likes, Messages); also announced in the label |
 | Semantics | Each item is `Semantics(button: true, selected: …)`, labelled with the tab name, or with its badge label when badged ("Likes, 2 new") |

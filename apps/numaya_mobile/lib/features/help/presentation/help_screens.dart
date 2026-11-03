@@ -78,6 +78,7 @@ class _HelpCentreScreenState extends State<HelpCentreScreen> {
             children: [
               ListRow(
                 leading: NumayaIcons.message,
+                tone: AccentTone.info,
                 label: l10n.helpContact,
                 onTap: () => context.push(Routes.helpContact),
               ),
@@ -153,6 +154,7 @@ class HelpArticleScreen extends StatelessWidget {
             children: [
               ListRow(
                 leading: NumayaIcons.message,
+                tone: AccentTone.info,
                 label: l10n.helpContact,
                 onTap: () => context.push(Routes.helpContact),
               ),
@@ -278,7 +280,7 @@ class SafetyCentreScreen extends StatelessWidget {
           const IllustrationSlot(
             slot: 'safety_header',
             label: 'Date with confidence',
-            aspectRatio: 16 / 9,
+            aspectRatio: IllustrationSlot.header,
           ),
           ScreenHeader(title: l10n.safetyHeading, lede: l10n.safetyLede),
           const SizedBox(height: AppSpacing.s5),
@@ -305,6 +307,7 @@ class SafetyCentreScreen extends StatelessWidget {
             children: [
               ListRow(
                 leading: NumayaIcons.verified,
+                tone: AccentTone.positive,
                 label: l10n.editVerify,
                 onTap: () => context.push(Routes.verifyPhoto),
               ),
@@ -315,6 +318,7 @@ class SafetyCentreScreen extends StatelessWidget {
               ),
               ListRow(
                 leading: NumayaIcons.flag,
+                tone: AccentTone.caution,
                 label: helpArticle(HelpArticleId.reporting).title,
                 onTap: () => context.push(
                   '${Routes.help}/${HelpArticleId.reporting.name}',
@@ -322,6 +326,7 @@ class SafetyCentreScreen extends StatelessWidget {
               ),
               ListRow(
                 leading: NumayaIcons.event,
+                tone: AccentTone.brand,
                 label: helpArticle(HelpArticleId.safetyTips).title,
                 onTap: () => context.push(
                   '${Routes.help}/${HelpArticleId.safetyTips.name}',

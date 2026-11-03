@@ -15,7 +15,7 @@ class PersonHeroCard extends StatelessWidget {
     super.key,
     required this.person,
     this.action,
-    this.stamp,
+    this.swipe = 0,
     this.own = false,
     this.showAge = true,
     this.onOpenPhotos,
@@ -35,8 +35,10 @@ class PersonHeroCard extends StatelessWidget {
   final bool own;
   final bool showAge;
 
-  /// "Like" / "Pass" while dragging.
-  final String? stamp;
+  /// How far the card has been dragged toward a decision while swiping: -1 (pass) to 1 (like), 0
+  /// at rest. Past a quarter of the way the decision appears on the photo (Bumble's check and
+  /// cross), fully opaque at the threshold.
+  final double swipe;
 
   @override
   Widget build(BuildContext context) {
@@ -69,12 +71,15 @@ class PersonHeroCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                if (stamp != null)
+                if (swipe.abs() >= 0.25)
                   Positioned.fill(
-                    child: Center(
-                      child: StatusBadge(
-                        label: stamp!,
-                        tone: BadgeTone.onPhoto,
+                    child: IgnorePointer(
+                      child: _SwipeStamp(
+                        like: swipe > 0,
+                        label: swipe > 0
+                            ? l10n.discoverLike
+                            : l10n.discoverPass,
+                        strength: ((swipe.abs() - 0.25) / 0.75).clamp(0.0, 1.0),
                       ),
                     ),
                   ),
@@ -203,6 +208,56 @@ class PersonHeroCard extends StatelessWidget {
   }
 }
 
+/// The decision a swipe is heading for, on the photo: a white disc with a check (like, purple) or a
+/// cross (pass, charcoal) and its word, fading in with [strength] and growing slightly. The card's
+/// movement already says the direction; this names it, so colour is never the only signal.
+class _SwipeStamp extends StatelessWidget {
+  const _SwipeStamp({
+    required this.like,
+    required this.label,
+    required this.strength,
+  });
+
+  final bool like;
+  final String label;
+  final double strength;
+
+  @override
+  Widget build(BuildContext context) {
+    final fg = like ? AppColors.accentOnTint : AppColors.ink;
+    return Opacity(
+      opacity: 0.4 + 0.6 * strength,
+      child: Center(
+        child: Transform.scale(
+          scale: 0.85 + 0.15 * strength,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 76,
+                height: 76,
+                decoration: const BoxDecoration(
+                  color: AppColors.photoButton,
+                  shape: BoxShape.circle,
+                  boxShadow: AppElevation.floating,
+                ),
+                alignment: Alignment.center,
+                child: NumayaIcon(
+                  like ? NumayaIcons.check : NumayaIcons.close,
+                  size: 38,
+                  color: fg,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.s2),
+              StatusBadge(label: label, tone: BadgeTone.onPhoto),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// The sections of a sample profile below the first photo, in the web order: prompt, about me,
 /// photo, you both like, photo, location, remaining photos.
 List<Widget> personSections(
@@ -326,6 +381,11 @@ List<Widget> personSections(
     ],
   ];
 }
+
+/// A sample person's photo at [position] (1-based) for use inside a [PhotoPlaceholder], or null
+/// when there is none (the placeholder then shows).
+Widget? personPhotoImage(SamplePerson person, int position) =>
+    _real(person.photoAt(position));
 
 /// The member's own photo over the placeholder, when they chose one on this phone.
 Widget? _real(String? source) => source == null
