@@ -42,7 +42,7 @@ class PersonHeroCard extends StatelessWidget {
   /// Text over the photo sits on a solid translucent panel inset from the card edges (no gradient
   /// scrims in the monochrome system). The panel grows with a long name, job or large text, and at
   /// 72% ink keeps white text above 4.5:1 over any photo; the rest of the photo stays clear.
-  static const double _panelInset = AppSpacing.s2;
+  static const double _panelInset = 6;
 
   @override
   Widget build(BuildContext context) {
@@ -80,12 +80,8 @@ class PersonHeroCard extends StatelessWidget {
                             ),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                              AppSpacing.s4,
-                              AppSpacing.s3,
-                              AppSpacing.s3,
-                              AppSpacing.s3,
-                            ),
+                            // Tight sides: long names at 200% text keep their whole words.
+                            padding: const EdgeInsets.all(AppSpacing.s3),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -160,7 +156,11 @@ class PersonHeroCard extends StatelessWidget {
           showAge && person.age > 0
               ? l10n.profileNameAge(person.name, person.age)
               : person.name,
-          style: AppTypography.hero.copyWith(color: AppColors.inkForeground),
+          style: AppTypography.hero.copyWith(
+            fontSize: 32,
+            height: 38 / 32,
+            color: AppColors.inkForeground,
+          ),
         ),
       ),
       if (person.job != null)

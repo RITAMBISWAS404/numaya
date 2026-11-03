@@ -246,6 +246,7 @@ class NavIconButton extends StatelessWidget {
     required this.onPressed,
     this.style = NavButtonStyle.floating,
     this.outline = false,
+    this.brand = false,
   });
 
   final NumayaIcons icon;
@@ -256,17 +257,22 @@ class NavIconButton extends StatelessWidget {
   /// The unfilled drawing (a toggle that is off, such as an unsaved heart).
   final bool outline;
 
+  /// A brand action (Like in a list): the subtle purple surface with a purple icon.
+  final bool brand;
+
   @override
   Widget build(BuildContext context) {
     final size = style == NavButtonStyle.flat
         ? AppSizes.iconButtonSm
         : AppSizes.iconButton;
-    final (Color bg, Color? ring) = switch (style) {
-      // A white rounded square with a hairline (Alan's back button), crisp on the grey page.
-      NavButtonStyle.floating => (AppColors.surface, AppColors.border),
-      NavButtonStyle.flat => (AppColors.fill, null),
-      NavButtonStyle.plain => (Colors.transparent, null),
-    };
+    final (Color bg, Color? ring) = brand
+        ? (AppColors.accentTint, null)
+        : switch (style) {
+            // A white rounded square with a hairline (Alan's back button), crisp on the grey page.
+            NavButtonStyle.floating => (AppColors.surface, AppColors.border),
+            NavButtonStyle.flat => (AppColors.fill, null),
+            NavButtonStyle.plain => (Colors.transparent, null),
+          };
     return Tooltip(
       message: label,
       excludeFromSemantics: true,
@@ -300,6 +306,8 @@ class NavIconButton extends StatelessWidget {
             // Unavailable (no handler): the icon greys out, the button keeps its place.
             color: onPressed == null
                 ? AppColors.disabledForeground
+                : brand
+                ? AppColors.accentOnTint
                 : AppColors.ink,
           ),
         ),

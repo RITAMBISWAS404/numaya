@@ -515,29 +515,45 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
       );
     }
 
-    Widget bar(String status, String? detail, Widget? action) => Row(
-      children: [
-        Expanded(
-          child: Semantics(
-            liveRegion: true,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  status,
-                  style: AppTypography.weight(
-                    AppTypography.row,
-                    AppTypography.semibold,
+    // Meetup's RSVP bar: a floating white card with the status and one action.
+    Widget bar(String status, String? detail, Widget? action) => Container(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.s4,
+        AppSpacing.s3,
+        AppSpacing.s3,
+        AppSpacing.s3,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.card),
+        border: Border.all(color: AppColors.border, width: AppBorders.hairline),
+        boxShadow: AppElevation.floating,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Semantics(
+              liveRegion: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    status,
+                    style: AppTypography.weight(
+                      AppTypography.row,
+                      AppTypography.semibold,
+                    ),
                   ),
-                ),
-                if (detail != null) Text(detail, style: AppTypography.caption),
-              ],
+                  if (detail != null)
+                    Text(detail, style: AppTypography.caption),
+                ],
+              ),
             ),
           ),
-        ),
-        if (action != null) ...[const SizedBox(width: AppSpacing.s3), action],
-      ],
+          if (action != null) ...[const SizedBox(width: AppSpacing.s3), action],
+        ],
+      ),
     );
 
     Widget button(

@@ -182,6 +182,7 @@ class _PickCard extends StatelessWidget {
           NavIconButton(
             icon: NumayaIcons.heart,
             label: l10n.forYouLike(person.name),
+            brand: true,
             onPressed: onLike,
           ),
         ],

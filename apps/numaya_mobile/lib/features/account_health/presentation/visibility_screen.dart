@@ -211,18 +211,59 @@ class VisibilityScreen extends ConsumerWidget {
         body: l10n.visActivityEmptyBody,
       );
     } else {
-      activityBody = ListGroup(
-        footnote: r.insights == InsightsState.stale
-            ? l10n.visActivityStale
-            : l10n.visActivityUpdated,
+      // Bevel-style metric tiles, two per row. Profile views aren't measured, so that tile says so
+      // instead of showing a number.
+      Widget pair(Widget a, Widget b) => IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(child: a),
+            const SizedBox(width: AppLayout.itemGap),
+            Expanded(child: b),
+          ],
+        ),
+      );
+      activityBody = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          ListRow(label: l10n.visLikes, value: '${activity.likes}'),
-          ListRow(label: l10n.visMatches, value: '${activity.matches}'),
-          ListRow(
-            label: l10n.visConversations,
-            value: '${activity.conversations}',
+          pair(
+            MetricTile(
+              icon: NumayaIcons.heart,
+              label: l10n.visLikes,
+              value: '${activity.likes}',
+            ),
+            MetricTile(
+              icon: NumayaIcons.groups,
+              label: l10n.visMatches,
+              value: '${activity.matches}',
+            ),
           ),
-          ListRow(label: l10n.visViews, value: l10n.visNotMeasured),
+          const SizedBox(height: AppLayout.itemGap),
+          pair(
+            MetricTile(
+              icon: NumayaIcons.message,
+              label: l10n.visConversations,
+              value: '${activity.conversations}',
+            ),
+            MetricTile(
+              icon: NumayaIcons.eyeOff,
+              label: l10n.visViews,
+              value: null,
+              status: l10n.visNotMeasured,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.s2),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s1),
+            child: Text(
+              r.insights == InsightsState.stale
+                  ? l10n.visActivityStale
+                  : l10n.visActivityUpdated,
+              style: AppTypography.caption.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ),
         ],
       );
     }

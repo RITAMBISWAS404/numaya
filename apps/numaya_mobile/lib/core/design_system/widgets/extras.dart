@@ -599,3 +599,98 @@ class ConnectionBanner extends StatelessWidget {
     );
   }
 }
+
+/// A metric card (Bevel's tiles): a small label, a large number with an optional unit, and an
+/// optional status line. [value] null shows an em dash with [status] explaining why ("Not
+/// measured"): missing data is never shown as zero.
+class MetricTile extends StatelessWidget {
+  const MetricTile({
+    super.key,
+    required this.label,
+    required this.value,
+    this.unit,
+    this.status,
+    this.icon,
+  });
+
+  final String label;
+  final String? value;
+  final String? unit;
+  final String? status;
+  final NumayaIcons? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      container: true,
+      label: [
+        label,
+        value ?? '',
+        ?unit,
+        ?status,
+      ].where((s) => s.isNotEmpty).join(', '),
+      excludeSemantics: true,
+      child: Container(
+        padding: const EdgeInsets.all(AppLayout.cardPadding),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: AppRadii.all(AppRadii.card),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                if (icon != null) ...[
+                  NumayaIcon(icon!, size: 18, color: AppColors.textMuted),
+                  const SizedBox(width: AppSpacing.s1),
+                ],
+                Expanded(
+                  child: Text(
+                    label,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.caption,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.s2),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Flexible(
+                  child: Text(
+                    value ?? '—',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.metric.copyWith(
+                      color: value == null
+                          ? AppColors.textMuted
+                          : AppColors.ink,
+                    ),
+                  ),
+                ),
+                if (unit != null) ...[
+                  const SizedBox(width: 2),
+                  Text(unit!, style: AppTypography.metricUnit),
+                ],
+              ],
+            ),
+            if (status != null) ...[
+              const SizedBox(height: AppSpacing.s1),
+              Text(
+                status!,
+                style: AppTypography.caption.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}

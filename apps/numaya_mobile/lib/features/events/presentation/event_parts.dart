@@ -280,15 +280,22 @@ class EventCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        // Meetup's date eyebrow: when it is, in small capitals, above the title.
+                        Text(
+                          when.toUpperCase(),
+                          style: AppTypography.labelCaps.copyWith(
+                            color: AppColors.accentOnTint,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.s1),
                         Text(
                           e.title,
                           style: AppTypography.weight(
                             AppTypography.sheetTitle,
-                            AppTypography.semibold,
+                            AppTypography.bold,
                           ),
                         ),
-                        const SizedBox(height: AppLayout.metaGap),
-                        EventMetaRow(icon: NumayaIcons.calendar, text: when),
+                        const SizedBox(height: AppSpacing.s2),
                         EventMetaRow(
                           icon: e.format == EventFormat.online
                               ? NumayaIcons.public
