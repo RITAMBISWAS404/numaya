@@ -7,6 +7,25 @@ import 'app_layout.dart';
 import 'app_transitions.dart';
 import 'app_typography.dart';
 
+/// The system bars over Numaya's light pages: transparent, with dark icons, so the page runs
+/// edge to edge behind them (Android 15+ enforces this; older versions get it from
+/// `SystemUiMode.edgeToEdge` in main.dart).
+///
+/// The navigation bar's colour is deliberately left unset: Android before 8.0 (API 24–25) cannot
+/// draw dark navigation icons, so a transparent bar there would show white buttons on a light page.
+/// The Android themes give each API level the right bar instead (res/values*/styles.xml).
+abstract final class AppSystemUi {
+  static const SystemUiOverlayStyle style = SystemUiOverlayStyle(
+    statusBarColor: Color(0x00000000),
+    statusBarIconBrightness: Brightness.dark,
+    statusBarBrightness: Brightness.light,
+    systemStatusBarContrastEnforced: false,
+    systemNavigationBarIconBrightness: Brightness.dark,
+    systemNavigationBarDividerColor: Color(0x00000000),
+    systemNavigationBarContrastEnforced: false,
+  );
+}
+
 /// Material theme built from the Monochrome Meetup roles. Numaya widgets style themselves from the foundations;
 /// this covers the platform pieces (text selection, page transitions, system bars).
 abstract final class AppTheme {
@@ -79,7 +98,8 @@ abstract final class AppTheme {
         },
       ),
       appBarTheme: const AppBarTheme(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        // Not SystemUiOverlayStyle.dark: that also paints the navigation bar black.
+        systemOverlayStyle: AppSystemUi.style,
         backgroundColor: AppColors.surface,
         surfaceTintColor: Colors.transparent,
       ),

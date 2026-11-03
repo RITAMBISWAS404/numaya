@@ -125,3 +125,57 @@ The installer's "App not compatible" covers several different failures. `adb` pr
 
 To check a copy on the phone: `adb -d shell sha256sum /sdcard/Download/app-debug.apk`, then compare with the
 PC hash.
+
+## Final universal debug APK and system bars (2026-11-04)
+**Source:** `experiment/numaya-final-ux-polish`, built on the owner's Windows 11 machine with Flutter
+3.47.8 and Android build-tools 36.0.0. This section supersedes the "no plugins" row above:
+`image_picker` adds `image_picker_android` 0.8.13+25 and `flutter_plugin_android_lifecycle` 2.0.35, and
+both declare `minSdk = 24`, so the minimum stays at 24.
+
+### Verified from the built APK (`aapt2 dump badging`, `apksigner verify`)
+| Item | Value |
+|---|---|
+| Package | `com.numaya.numaya_mobile`, version 0.1.0 (1), debuggable |
+| `minSdkVersion` / `targetSdkVersion` / `compileSdkVersion` | **24 / 36 / 36** (Android 7.0 / 16 / 16) |
+| Native code | `arm64-v8a`, `armeabi-v7a`, `x86_64` (universal; no `--split-per-abi`) |
+| Features | only the implied `android.hardware.faketouch` (every touchscreen phone has it) |
+| Signature | verifies, APK Signature Scheme v2, `CN=Android Debug` (v2 is read by API 24+) |
+| Size | about 220 MB (debug JIT build with three ABIs; a release build is far smaller) |
+
+A successful build and an emulator run do not prove that every Android 7–16 phone works. Only
+Android 16 (API 36) was run, on an emulator.
+
+### System bars: what the app now does
+| Layer | Setting |
+|---|---|
+| Dart (`lib/main.dart`) | `SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge)` on every version; `AppSystemUi.style` applied at start, in the app-bar theme and as a root `AnnotatedRegion` |
+| `AppSystemUi.style` | transparent status bar, dark status icons, dark navigation icons, no contrast scrim, **navigation colour unset** (the themes own it, per API) |
+| `res/values` (API 24–25) | transparent status bar with dark icons; the navigation bar keeps the system's dark bar, because dark navigation icons do not exist before API 26 |
+| `res/values-v26` (API 26) | navigation bar in the page colour `#F4F4F6`; Flutter applies the dark-icon flag on the first frame |
+| `res/values-v27` (API 27–28) | page-coloured navigation bar with dark icons from the theme |
+| `res/values-v29` (API 29+) | fully transparent bars, `enforceNavigationBarContrast=false`. Android 15+ enforces edge to edge and ignores bar colours; this matches it on 10–14 |
+| Window and splash background | `@color/numaya_canvas` (`#F4F4F6`), not white or black |
+| Night mode | `values-night` removed: the app is light only (`ThemeMode.light`), so a dark-mode phone no longer gets a black launch window |
+| Before | `AppBarTheme.systemOverlayStyle = SystemUiOverlayStyle.dark` painted the navigation bar **black** on Android ≤ 14; no edge to edge below Android 15 |
+
+**Inset fix:** `showNumayaSheet` and `showNumayaActionSheet` now add the bottom system inset.
+`showModalBottomSheet(useSafeArea: true)` leaves the bottom to the content, and with a 48dp
+three-button bar the Filters "Reset" and the action sheet's "Cancel" sat under the navigation
+buttons. Tests in `test/widget/final_polish_test.dart` simulate the bar; they fail without the fix.
+
+### Emulator QA (Pixel 10 AVD, Android 16 / API 36, x86_64, software GPU)
+| Check | Gesture navigation | Three-button navigation |
+|---|---|---|
+| Welcome, Demo Hub, Discover, Events, Likes, Messages, Profile, Settings (top and scrolled end), Account Health | transparent status bar over the page grey, dark icons; handle on the page colour; floating pill above it | pill above the transparent button bar; dark buttons |
+| Filters sheet, action sheet | content above the handle | **fixed**: Reset and Cancel above the buttons |
+| Keyboard (sign-in phone field) | Next button above the IME; no black band | not re-checked |
+| Real swipes | left passes, right likes | (not repeated) |
+| Crashes | none in logcat for the app | none |
+
+**Not tested:**
+- **Physical phones:** no Samsung or other device was connected over adb.
+- **Older Android:** no API 31 or older system image is installed (only `android-36.1`). Android
+  7–14 behaviour comes from the theme resources above and is not run.
+- **First launch:** on a cold start of the debug (JIT) build with software rendering, Android once
+  showed "isn't responding" before the first frame. "Wait" continued normally. Release (AOT)
+  builds start much faster.

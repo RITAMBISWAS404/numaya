@@ -852,12 +852,13 @@ Future<int?> showNumayaActionSheet({
         );
       }
 
+      // Floats above the system navigation bar (three buttons or gesture handle), edge to edge.
       return Padding(
-        padding: const EdgeInsets.fromLTRB(
+        padding: EdgeInsets.fromLTRB(
           AppSpacing.s3,
           0,
           AppSpacing.s3,
-          AppSpacing.s2,
+          AppSpacing.s2 + MediaQuery.paddingOf(context).bottom,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

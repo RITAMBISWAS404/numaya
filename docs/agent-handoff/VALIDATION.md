@@ -54,5 +54,14 @@ flutter build apk --debug
 | 2026-11-04 | final-ux-polish (polish commit) | `vite build` | built |
 | 2026-11-04 | final-ux-polish (polish commit) | `npm run check` / `npm run test:e2e` | check fails on the CRLF artefact; e2e not run (no Playwright browser) |
 
-The app has now run on an emulator (Pixel 10, software GPU). It has **not** run on a physical
-phone.
+| 2026-11-04 | final-ux-polish (system bars) | `flutter analyze` / format / tokens | clean / 0 changed / up to date |
+| 2026-11-04 | final-ux-polish (system bars) | `flutter test` | **292 passed, 11 skipped, 0 failed** (+4: system-bar style, root region, two sheet-inset tests) |
+| 2026-11-04 | final-ux-polish (system bars) | `flutter build apk --debug` | universal APK: arm64-v8a, armeabi-v7a, x86_64; min 24, target 36, compile 36; v2 signature verifies; 220,344,688 bytes; SHA-256 `2eb261386d8d8c7405e9850d73b1ade26e5727515af611713300eff2342b43ee` |
+| 2026-11-04 | final-ux-polish (system bars) | Pixel 10 emulator, API 36, gesture and three-button | install, launch, Demo Hub, quick start, swipes, all tabs, Settings, Account Health, sheets, keyboard: pass after the sheet-inset fix |
+| 2026-11-04 | final-ux-polish (system bars) | Physical phones, API ≤ 35 | **not tested**: no device connected, no older system image installed |
+
+**APK on the Desktop:** `C:\Users\biswa\Desktop\Numaya\Numaya-final-debug.apk` (same SHA-256 as the build). This PC's visible Desktop is
+OneDrive-redirected (`C:\Users\biswa\OneDrive\Desktop`), so that folder is not shown on the desktop itself.
+
+The app has run on an emulator (Pixel 10, Android 16). It has **not** run on a physical phone or on
+Android ≤ 15.

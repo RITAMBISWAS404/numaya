@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Numaya is light only (ThemeMode.light), so the night variants match the day ones. The bars are
+     transparent with dark icons where the API level allows; Flutter keeps them so (AppSystemUi). -->
+<resources>
+    <!-- API 27-28: a navigation bar in the page colour with dark icons, from the first frame. -->
+    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@drawable/launch_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/numaya_canvas</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+    <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@color/numaya_canvas</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/numaya_canvas</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+</resources>

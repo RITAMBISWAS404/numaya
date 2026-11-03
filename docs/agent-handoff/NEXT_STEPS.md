@@ -8,7 +8,7 @@
    - Either run `git config core.autocrlf input` and re-checkout, or run the checks in WSL or
      CI, so `npm run check` compares LF with LF.
    - Run `npx playwright install chromium`, then `npm run test:e2e`.
-3. **Physical Android phone pass:** haptics on swipe and match, the tab pill over the gesture bar,
+3. **Physical Android phone pass** (install `Numaya-final-debug.apk` from the Desktop folder, Samsung Android 12 first): haptics on swipe and match, the tab pill over the gesture bar,
    real fonts.
 4. **Long-name Match check:** add a sample person with a 25+ character name, or a test seam for
    `personById`, and render `/match/<id>` at 320pt and 200% text.

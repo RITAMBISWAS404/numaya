@@ -39,9 +39,12 @@ work.
 - **Design record:** [`docs/design-experiments/monochrome-meetup-premium/`](../design-experiments/monochrome-meetup-premium/README.md).
 - **Latest QA:** [VISUAL_REVIEW_REPORT.md](../design-experiments/numaya-final-ux-polish/VISUAL_REVIEW_REPORT.md)
   (2026-11-04).
-  - 288 tests passed, 11 skipped.
+  - 292 tests passed, 11 skipped.
   - The 4-width × 3-text-size matrix passes, now including Match.
   - Smoke-tested on the Pixel 10 emulator; not run on a physical phone.
+  - System bars: edge to edge with transparent bars on all versions (AppSystemUi, plus themes per
+    API level). The universal debug APK was verified and copied to the Desktop. See
+    [ANDROID_COMPATIBILITY.md](../mobile/ANDROID_COMPATIBILITY.md) and VALIDATION.md.
   - The previous report is the premium
     [VISUAL_QA_REPORT.md](../design-experiments/monochrome-meetup-premium/VISUAL_QA_REPORT.md).
 - **Research and specs:** [`docs/research/`](../research/README.md).

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/router.dart';
@@ -424,6 +425,119 @@ void main() {
         expect(size.width / size.height, closeTo(ratio, 0.01));
       });
     }
+  });
+
+  group('System bars', () {
+    test('transparent status bar with dark icons; navigation colour left to Android', () {
+      const s = AppSystemUi.style;
+      expect(s.statusBarColor, const Color(0x00000000));
+      expect(s.statusBarIconBrightness, Brightness.dark);
+      expect(s.statusBarBrightness, Brightness.light);
+      expect(s.systemNavigationBarIconBrightness, Brightness.dark);
+      expect(s.systemNavigationBarContrastEnforced, isFalse);
+      // Never black: API 24-25 get the system bar from the theme, later APIs the page colour or
+      // transparency (res/values*/styles.xml).
+      expect(s.systemNavigationBarColor, isNull);
+      expect(AppTheme.light().appBarTheme.systemOverlayStyle, s);
+    });
+
+    testWidgets('every screen sits under the root system-bar region', (
+      tester,
+    ) async {
+      await usePhoneSize(tester);
+      final c = await quickStartApp(tester);
+      for (final route in [
+        Routes.home,
+        Routes.events,
+        Routes.profile,
+        Routes.settings,
+      ]) {
+        await goTo(c, tester, route);
+        final regions = tester
+            .widgetList<AnnotatedRegion<SystemUiOverlayStyle>>(
+              find.byType(AnnotatedRegion<SystemUiOverlayStyle>),
+            )
+            .map((r) => r.value);
+        expect(regions, everyElement(AppSystemUi.style), reason: route);
+        expect(regions, isNotEmpty, reason: route);
+      }
+      await settle(tester);
+    });
+  });
+
+  group('Sheets above the system navigation bar', () {
+    // A 48dp three-button bar, edge to edge: the app draws behind it and gets it as padding.
+    Future<void> withNavBar(WidgetTester tester) async {
+      await usePhoneSize(tester);
+      final dpr = tester.view.devicePixelRatio;
+      tester.view.padding = FakeViewPadding(bottom: 48 * dpr);
+      tester.view.viewPadding = FakeViewPadding(bottom: 48 * dpr);
+      addTearDown(tester.view.resetPadding);
+      addTearDown(tester.view.resetViewPadding);
+    }
+
+    Widget opener(void Function(BuildContext) open) => MaterialApp(
+      home: Builder(
+        builder: (context) => Scaffold(
+          body: Center(
+            child: TextButton(
+              onPressed: () => open(context),
+              child: const Text('Open'),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    testWidgets('the action sheet Cancel clears the bar', (tester) async {
+      await withNavBar(tester);
+      await tester.pumpWidget(
+        opener(
+          (context) => showNumayaActionSheet(
+            context: context,
+            cancelLabel: 'Cancel',
+            actions: const [
+              (icon: NumayaIcons.flag, label: 'Report', destructive: true),
+            ],
+          ),
+        ),
+      );
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      final height =
+          tester.view.physicalSize.height / tester.view.devicePixelRatio;
+      expect(
+        tester.getBottomLeft(find.text('Cancel')).dy,
+        lessThanOrEqualTo(height - 48),
+      );
+    });
+
+    testWidgets('the last control of a sheet clears the bar', (tester) async {
+      await withNavBar(tester);
+      await tester.pumpWidget(
+        opener(
+          (context) => showNumayaSheet<void>(
+            context: context,
+            title: 'Filters',
+            closeLabel: 'Close',
+            builder: (_) =>
+                const SizedBox(height: 56, child: Center(child: Text('Reset'))),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      final height =
+          tester.view.physicalSize.height / tester.view.devicePixelRatio;
+      final box = find.ancestor(
+        of: find.text('Reset'),
+        matching: find.byType(SizedBox),
+      );
+      expect(
+        tester.getBottomLeft(box.first).dy,
+        lessThanOrEqualTo(height - 48),
+      );
+    });
   });
 
   group('Nested corners', () {

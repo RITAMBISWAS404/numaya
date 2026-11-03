@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -68,7 +69,11 @@ class NumayaApp extends ConsumerWidget {
             ],
           );
         }
-        return app;
+        // Re-asserted on every frame from the root, so no route or sheet leaves the bars black.
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: AppSystemUi.style,
+          child: app,
+        );
       },
     );
   }

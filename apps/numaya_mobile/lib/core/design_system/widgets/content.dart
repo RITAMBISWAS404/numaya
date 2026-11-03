@@ -764,9 +764,15 @@ Future<T?> showNumayaSheet<T>({
       borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.sheet)),
     ),
     builder: (context) {
+      // `useSafeArea` leaves the bottom to the sheet: its white runs behind the system navigation
+      // bar (edge to edge), and its content stays above the bar and above the keyboard.
+      // paddingOf already shrinks to zero where the keyboard covers the bar.
       final sheet = Padding(
         padding: EdgeInsets.only(
-          bottom: AppSpacing.s4 + MediaQuery.viewInsetsOf(context).bottom,
+          bottom:
+              AppSpacing.s4 +
+              MediaQuery.viewInsetsOf(context).bottom +
+              MediaQuery.paddingOf(context).bottom,
         ),
         child: Column(
           mainAxisSize: tall ? MainAxisSize.max : MainAxisSize.min,

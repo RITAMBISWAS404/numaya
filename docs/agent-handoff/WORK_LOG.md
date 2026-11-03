@@ -2,6 +2,22 @@
 
 Newest first. One entry per session: date, who, what changed, commits, what was left.
 
+## 2026-11-04: universal APK and system bars
+- **Verified:**
+  - `85f46d1` clean;
+  - SDKs 24 / 36 / 36; both Android plugins declare `minSdk` 24;
+  - no ABI filters or `<uses-feature>` entries.
+- **System bars:**
+  - edge to edge on all versions, with transparent bars and dark icons (`AppSystemUi`);
+  - themes per API level (`values`, `-v26`, `-v27`, `-v29`), canvas window and splash background;
+  - removed the black `values-night` themes;
+  - replaced `SystemUiOverlayStyle.dark`, which made the navigation bar black.
+- **Found on device:** under three-button navigation, the sheet bottoms sat under the system
+  buttons. Fixed and covered by tests.
+- **Built:** universal debug APK, copied to `C:\Users\biswa\Desktop\Numaya\Numaya-final-debug.apk` (checksums match).
+- **Tested:** Pixel 10 emulator, API 36, gesture and three-button navigation.
+- **Left:** physical-phone test (Samsung, Android 12).
+
 ## 2026-11-04: final UX polish (same account, Claude Code desktop)
 - **Verified:**
   - branch `experiment/numaya-final-ux-polish` at `93d5ce7`, clean, tracking `origin`;
