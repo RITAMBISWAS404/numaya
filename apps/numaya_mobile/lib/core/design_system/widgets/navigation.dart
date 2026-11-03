@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 
 import '../foundations/app_colors.dart';
@@ -6,6 +8,7 @@ import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
+import '../tokens/monochrome_tokens.dart';
 import 'icon_tile.dart';
 import 'people.dart';
 import 'primitives.dart';
@@ -40,9 +43,21 @@ enum TabIndicatorStyle {
   expanded,
 }
 
-/// Bottom navigation: a floating white pill holding icons only, centred above the home indicator.
+/// What the navigation pill is made of (frosted-navigation experiment).
+enum TabBarSurface {
+  /// Frosted glass over content that scrolls beneath it: a clipped blur, a white tint and a
+  /// hairline edge. The host scaffold must extend its body behind the bar.
+  frosted,
+
+  /// The opaque white pill on a strip of page colour: the approved design, and the fallback.
+  opaque,
+}
+
+/// Bottom navigation: a floating pill holding icons only, centred above the home indicator.
 /// Each destination is a 52pt target with a tooltip (long press) and a screen-reader label; the
 /// current one is marked by [indicator] and announced as selected. Notification dots stay red.
+/// With [surface] frosted, High Contrast (the only related accessibility setting Flutter exposes;
+/// there is no reduce-transparency flag) switches it back to the opaque pill.
 class NumayaTabBar extends StatelessWidget {
   const NumayaTabBar({
     super.key,
@@ -50,6 +65,7 @@ class NumayaTabBar extends StatelessWidget {
     required this.currentIndex,
     required this.onSelect,
     this.indicator = TabIndicatorStyle.tint,
+    this.surface = TabBarSurface.frosted,
   });
 
   /// Space between the pill's edge and each item.
@@ -59,12 +75,19 @@ class NumayaTabBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onSelect;
   final TabIndicatorStyle indicator;
+  final TabBarSurface surface;
+
+  /// Whether this build draws glass: frosted, unless the person asked for High Contrast.
+  bool frostedIn(BuildContext context) =>
+      surface == TabBarSurface.frosted && !MediaQuery.highContrastOf(context);
 
   @override
   Widget build(BuildContext context) {
     final bottom = MediaQuery.paddingOf(context).bottom;
-    return ColoredBox(
-      color: AppColors.canvas,
+    final frosted = frostedIn(context);
+    return _frame(
+      frosted: frosted,
+      systemInset: bottom,
       child: Padding(
         padding: EdgeInsets.fromLTRB(
           AppSpacing.s4,
@@ -91,24 +114,60 @@ class NumayaTabBar extends StatelessWidget {
                 AppSizes.tabItem,
               );
             }
+            final row = Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (var i = 0; i < n; i++) ...[
+                  if (i > 0) SizedBox(width: gap),
+                  _tab(context, i, item, frosted: frosted),
+                ],
+              ],
+            );
+            if (!frosted) {
+              return Center(
+                heightFactor: 1,
+                child: Container(
+                  height: AppSizes.tabBar,
+                  padding: const EdgeInsets.all(inner / 2),
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: AppRadii.all(AppRadii.pill),
+                    boxShadow: AppElevation.subtle,
+                  ),
+                  child: row,
+                ),
+              );
+            }
+            // The blur is bounded by the pill's clip, so only the 64pt-tall pill samples what is
+            // beneath it. No shadow: under a translucent fill it would grey the glass.
             return Center(
               heightFactor: 1,
-              child: Container(
-                height: AppSizes.tabBar,
-                padding: const EdgeInsets.all(inner / 2),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: AppRadii.all(AppRadii.pill),
-                  boxShadow: AppElevation.subtle,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    for (var i = 0; i < n; i++) ...[
-                      if (i > 0) SizedBox(width: gap),
-                      _tab(context, i, item),
-                    ],
-                  ],
+              child: ClipRRect(
+                borderRadius: AppRadii.all(AppRadii.pill),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: MonoGlass.blur,
+                    sigmaY: MonoGlass.blur,
+                  ),
+                  child: Container(
+                    height: AppSizes.tabBar,
+                    padding: const EdgeInsets.all(inner / 2),
+                    decoration: BoxDecoration(
+                      color: MonoGlass.tint,
+                      borderRadius: AppRadii.all(AppRadii.pill),
+                    ),
+                    // Painted on top, so the hairline takes no room from the items (a border in
+                    // the decoration insets the row by 2pt and overflows a 320pt phone).
+                    foregroundDecoration: BoxDecoration(
+                      borderRadius: AppRadii.all(AppRadii.pill),
+                      border: Border.all(
+                        color: MonoGlass.edge,
+                        width: AppBorders.hairline,
+                        strokeAlign: BorderSide.strokeAlignInside,
+                      ),
+                    ),
+                    child: row,
+                  ),
                 ),
               ),
             );
@@ -118,12 +177,45 @@ class NumayaTabBar extends StatelessWidget {
     );
   }
 
-  Widget _tab(BuildContext context, int i, double size) {
+  /// Opaque: the pill on a strip of page colour, as approved. Frosted: content shows around and
+  /// beneath the pill, except under the system navigation (the three buttons or the gesture
+  /// handle), which keeps a near-opaque page-colour strip so Android's own controls stay legible
+  /// over any photo (found on the emulator in three-button mode).
+  Widget _frame({
+    required bool frosted,
+    required double systemInset,
+    required Widget child,
+  }) {
+    if (!frosted) return ColoredBox(color: AppColors.canvas, child: child);
+    return Stack(
+      children: [
+        if (systemInset > 0)
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: systemInset,
+            child: const ColoredBox(color: MonoGlass.systemInset),
+          ),
+        child,
+      ],
+    );
+  }
+
+  Widget _tab(
+    BuildContext context,
+    int i,
+    double size, {
+    required bool frosted,
+  }) {
     final item = items[i];
     final current = i == currentIndex;
     final duration = AppMotion.duration(context, AppMotion.state);
+    // On glass, unselected icons take the stronger secondary ink: the muted grey drops to 3.38:1
+    // over a dark photo, text2 stays at 5.46:1 or better.
+    final idle = frosted ? AppColors.textSecondary : AppColors.textMuted;
     final (Color bg, Color fg) = !current
-        ? (const Color(0x00FFFFFF), AppColors.textMuted)
+        ? (const Color(0x00FFFFFF), idle)
         : switch (indicator) {
             TabIndicatorStyle.tint => (
               AppColors.accentTint,

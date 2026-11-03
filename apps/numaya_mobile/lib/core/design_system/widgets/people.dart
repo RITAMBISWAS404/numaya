@@ -294,9 +294,14 @@ class InfoChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // At least the chip height, and taller when a long value wraps at large text: a person's own
+    // details are never cut off with an ellipsis (frosted-navigation experiment, FN-02).
     return Container(
-      height: AppSizes.chip,
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s3),
+      constraints: const BoxConstraints(minHeight: AppSizes.chip),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s3,
+        vertical: AppSpacing.s1,
+      ),
       // On a white card the chip takes the stone page colour, a step lighter than the fill
       // (RD-05); on the page it's white.
       decoration: BoxDecoration(
@@ -314,13 +319,9 @@ class InfoChip extends StatelessWidget {
             NumayaIcon(icon!, size: 16, color: AppColors.textMuted),
             const SizedBox(width: 6),
           ],
-          Flexible(
-            child: Text(
-              label,
-              style: AppTypography.card,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
+          // The shared chip label (Figtree 14/18 medium), the same role as the selectable chips,
+          // in ink because the value is the content. Was the 18pt bold card heading.
+          Flexible(child: Text(label, style: AppTypography.chip)),
         ],
       ),
     );

@@ -41,6 +41,10 @@ class TabPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Behind the frosted tab bar (HomeShell extends its body): the bar's height and the system
+    // inset arrive as bottom padding. Content scrolls under the bar but can always scroll clear of
+    // it, and the floating overlay sits above it.
+    final under = MediaQuery.paddingOf(context).bottom;
     return ColoredBox(
       color: AppColors.canvas,
       child: SafeArea(
@@ -55,20 +59,21 @@ class TabPage extends StatelessWidget {
                 Expanded(
                   child: LayoutBuilder(
                     builder: (context, box) => _TabViewport(
-                      height: box.maxHeight,
+                      height: box.maxHeight - under,
                       child: _withOverlay(
+                        under,
                         SingleChildScrollView(
                           controller: scrollController,
                           padding: EdgeInsets.fromLTRB(
                             gutter,
                             0,
                             gutter,
-                            AppSpacing.s6,
+                            AppSpacing.s6 + under,
                           ),
                           child: ConstrainedBox(
                             constraints: BoxConstraints(
                               minHeight: centered
-                                  ? box.maxHeight - AppSpacing.s6
+                                  ? box.maxHeight - AppSpacing.s6 - under
                                   : 0,
                             ),
                             child: Column(
@@ -104,12 +109,12 @@ class TabPage extends StatelessWidget {
     );
   }
 
-  Widget _withOverlay(Widget scroll) => overlay == null
+  Widget _withOverlay(double under, Widget scroll) => overlay == null
       ? scroll
       : Stack(
           children: [
             Positioned.fill(child: scroll),
-            Positioned(left: 0, right: 0, bottom: 0, child: overlay!),
+            Positioned(left: 0, right: 0, bottom: under, child: overlay!),
           ],
         );
 }

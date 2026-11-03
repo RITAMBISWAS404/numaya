@@ -46,25 +46,46 @@ class _BrandMarkPainter extends CustomPainter {
 
 /// Mark plus the "numaya" wordmark in bold Hanken Grotesk ink.
 class Wordmark extends StatelessWidget {
-  const Wordmark({super.key, this.small = false});
+  const Wordmark({super.key, this.small = false, this.maxWidth});
   final bool small;
+
+  /// The room the wordmark may take. When the full mark and word would not fit (Discover's header
+  /// between its buttons on a 320pt phone, or at large text), the mark alone stands for the brand,
+  /// rather than the word running under the buttons or being shrunk.
+  final double? maxWidth;
 
   @override
   Widget build(BuildContext context) {
+    final mark = BrandMark(size: small ? 20 : 26);
+    final gap = small ? 7.0 : 8.0;
+    final style = AppTypography.wordmark(small: small);
+    var fits = true;
+    if (maxWidth != null) {
+      final word = TextPainter(
+        text: TextSpan(text: 'numaya', style: style),
+        textDirection: TextDirection.ltr,
+        textScaler: MediaQuery.textScalerOf(context),
+        maxLines: 1,
+      )..layout();
+      fits = mark.size + gap + word.width <= maxWidth!;
+      word.dispose();
+    }
     return Semantics(
       label: 'Numaya',
       excludeSemantics: true,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          BrandMark(size: small ? 20 : 26),
-          SizedBox(width: small ? 7 : 8),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 3),
-            child: Text('numaya', style: AppTypography.wordmark(small: small)),
-          ),
-        ],
-      ),
+      child: fits
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                mark,
+                SizedBox(width: gap),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 3),
+                  child: Text('numaya', style: style),
+                ),
+              ],
+            )
+          : mark,
     );
   }
 }

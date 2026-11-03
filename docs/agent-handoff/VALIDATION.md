@@ -33,6 +33,49 @@ flutter build apk --debug
 "$LOCALAPPDATA/Android/sdk/platform-tools/adb.exe" install -r build/app/outputs/flutter-apk/app-debug.apk
 ```
 
+## Frosted-navigation experiment (2026-11-04, worktree `..\numaya-frosted-navigation`, uncommitted)
+| Stage | Command / check | Result |
+|---|---|---|
+| A (`eb0b37b`) | `flutter analyze`; `flutter test` | No issues; 292 passed, 11 skipped |
+| B | `flutter test` (full) | 292 passed, 11 skipped (before B's own tests were added) |
+| B+C | `flutter test test/widget/frosted_navigation_experiment_test.dart` | 10 passed |
+| B+C | `dart format --output=none --set-exit-if-changed lib test` | 0 changed |
+| B+C | `node tool/generate_tokens.mjs --check` | Dart tokens are up to date |
+| B+C | `flutter analyze` | No issues found (2 lint infos in the new test, fixed) |
+| B+C | `flutter test` (full, includes the 4-width × 3-text-size matrix and tap-target guidelines on every route) | **302 passed, 12 skipped, 0 failed** |
+| B+C | screenshot captures `--update-goldens` | 18 passed. 51 goldens changed (tab-root screens show the new bar; chip screens), plus 1 new (`fn01`). Spot-checked against HEAD |
+| C | `flutter build apk --debug` | built; SHA-256 `6b3250d6de6829c2ab4c0728c32145550807111c97daca9ace653859ca9e4f6c` |
+| C | Rendered glass contrast (pixels from `fn01`) | idle icon ≥ 5.46:1 (black), 6.39 (busy), 6.78 (purple), 8.77 (white); selected 6.00 |
+| C | Emulator: Pixel 10, API 36, 390dp and 320dp, gesture navigation | the journey ran, no crash |
+| C | Emulator: font scale 2.0 | Discover, the profile scroll and Profile lay out; chips wrap; the wordmark falls back to the mark |
+| C | Emulator: three-button navigation | First run: content behind the system buttons, so a strip was added. Re-check: buttons on the strip; Filters Reset clears them |
+| C | Keyboard over tab screens on device | **not verified** (the search field scrolled off-screen) |
+| — | TalkBack / VoiceOver | **not verified**. Semantics checked by widget tests (selected and button flags, labels) |
+| — | iOS | **not tested** (Windows host) |
+| — | Physical-device performance | **not verified** (emulator software GPU) |
+
+**What is in git vs local (handoff, branch `wip/frosted-navigation-handoff`):**
+- **In git:**
+  - all source and test changes;
+  - the 52 goldens;
+  - the report and these handoff files.
+- **Local only**, in `C:\Users\biswa\Downloads\numaya\numaya-frosted-navigation\artifacts\frosted-navigation-experiment\`
+  (about 13 MB, left out as bulky evidence):
+  - device screenshots `A-baseline/`, `B-refined/`, `C-frosted/`;
+  - `comparisons/`;
+  - `patches/`.
+- **Local only:** the APKs (scratchpad).
+- **Rendered-glass measurements** are reproducible from the committed golden
+  `fn01-glass-backgrounds.png`.
+
+**Re-check after checkout (another machine):**
+```sh
+flutter pub get
+flutter analyze
+flutter test   # expected: 302 passed, 12 skipped
+```
+Goldens were rendered on Windows; on Linux or macOS they will differ by font rasterising.
+
 ## Last results
 | Date | Branch @ commit | Check | Result |
 |---|---|---|---|

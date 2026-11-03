@@ -102,6 +102,24 @@ abstract final class MonoColors {
   static const Color photoButton = Color(0xE6FFFFFF);
 }
 
+/// Frosted navigation (frosted-navigation experiment, FN-04): the only glass in the app, on the
+/// floating tab bar. Content scrolls beneath it; the tint keeps unselected icons (`text2`) at
+/// 5.46:1 or better even over a black photo (80% white composites to #CCCCCC there).
+abstract final class MonoGlass {
+  /// Gaussian blur of whatever passes beneath the bar, in logical pixels.
+  static const double blur = 20;
+
+  /// White at 80% over the blur.
+  static const Color tint = Color(0xCCFFFFFF);
+
+  /// Hairline that keeps the bar's edge visible over white content: ink at 8%.
+  static const Color edge = Color(0x1418181B);
+
+  /// Under the system navigation (three buttons or the gesture handle): the page colour at 95%, so
+  /// Android's own controls never sit on a photo.
+  static const Color systemInset = Color(0xF2F4F4F6);
+}
+
 /// Corner radii: generous, role-specific (premium TOKENS.md "Shape"). Larger surfaces take larger
 /// corners; nested corners are the container's minus the inset.
 abstract final class MonoRadii {

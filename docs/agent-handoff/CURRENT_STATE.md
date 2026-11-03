@@ -1,5 +1,17 @@
 # Current state
 
+> **Frosted-navigation experiment (2026-11-04).** Worktree
+> `C:\Users\biswa\Downloads\numaya\numaya-frosted-navigation` on branch
+> `experiment/numaya-frosted-navigation`, from `eb0b37b`, **uncommitted**.
+> - Stage B: chip type role and compact Discover wordmark.
+> - Stage C: frosted tab bar.
+> - Report: `docs/design-experiments/frosted-navigation/README.md`.
+> - Main checkout: `C:\Users\biswa\Downloads\numaya\numaya` on
+>   `experiment/numaya-first-ui-improvement` still holds the earlier uncommitted header-spacing
+>   fix, untouched.
+> - Backend: none (demo and in-memory repositories only).
+> - Tools: see TOOLS_SKILLS_AND_INTEGRATIONS.md.
+
 **Last verified:** 2026-11-04, on the owner's Windows 11 machine, after the final UX polish.
 
 ## Git

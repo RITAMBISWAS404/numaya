@@ -29,6 +29,9 @@ class HomeShell extends ConsumerWidget {
       },
       child: Scaffold(
         backgroundColor: AppColors.canvas,
+        // Tab content scrolls beneath the frosted bar; the bodies add its height to their bottom
+        // padding (MediaQuery.paddingOf), so nothing ends hidden behind it.
+        extendBody: true,
         body: shell,
         bottomNavigationBar: NumayaTabBar(
           currentIndex: shell.currentIndex,

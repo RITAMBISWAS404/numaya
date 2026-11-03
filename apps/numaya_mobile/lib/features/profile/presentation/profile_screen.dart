@@ -79,12 +79,13 @@ class ProfileScreen extends ConsumerWidget {
                   ],
                 ),
                 Expanded(
+                  // Scrolls beneath the frosted tab bar and can always scroll clear of it.
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(
+                    padding: EdgeInsets.fromLTRB(
                       AppLayout.screenGutter,
                       AppLayout.screenTop,
                       AppLayout.screenGutter,
-                      AppSpacing.s8,
+                      AppSpacing.s8 + MediaQuery.paddingOf(context).bottom,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -380,8 +381,11 @@ class _StaticChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: AppSizes.chip,
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s3),
+      constraints: const BoxConstraints(minHeight: AppSizes.chip),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s3,
+        vertical: AppSpacing.s1,
+      ),
       decoration: BoxDecoration(
         color: AppColors.fill,
         borderRadius: AppRadii.all(AppRadii.pill),
@@ -393,17 +397,8 @@ class _StaticChip extends StatelessWidget {
             Emoji(emoji!, size: 15.5),
             const SizedBox(width: 6),
           ],
-          Flexible(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.weight(
-                AppTypography.label,
-                AppTypography.medium,
-              ).copyWith(fontSize: 15, color: AppColors.ink),
-            ),
-          ),
+          // The shared chip role (was a one-off 15pt).
+          Flexible(child: Text(label, style: AppTypography.chip)),
         ],
       ),
     );

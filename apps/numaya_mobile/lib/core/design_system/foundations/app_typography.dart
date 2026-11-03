@@ -96,6 +96,10 @@ abstract final class AppTypography {
     0,
   ).copyWith(color: AppColors.textSecondary);
 
+  /// Content chips (profile facts, shared interests, your interests): the [label] role in ink,
+  /// because the chip's text is the content. One chip type size across the app.
+  static final TextStyle chip = label.copyWith(color: AppColors.ink);
+
   /// Captions and metadata: 13/18 regular, muted.
   static final TextStyle caption = _style(
     family,

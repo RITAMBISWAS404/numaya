@@ -2,6 +2,32 @@
 
 Newest first. One entry per session: date, who, what changed, commits, what was left.
 
+## 2026-11-04: frosted-navigation experiment (worktree, uncommitted)
+- **Isolated:** the main checkout had uncommitted header-spacing work, so I created the worktree
+  `..\numaya-frosted-navigation` on the new branch `experiment/numaya-frosted-navigation` from
+  `eb0b37b`.
+- **Baseline A:** 292 passed, 11 skipped; analyze clean. Captured on the Pixel 10 emulator at
+  390dp and 320dp.
+- **Stage B:**
+  - `AppTypography.chip` (Figtree 14/18 medium, ink) for `InfoChip` and Profile chips; chips grow
+    instead of truncating;
+  - `Wordmark(maxWidth:)`, so Discover shows the mark alone at 320dp.
+- **Stage C:**
+  - `NumayaTabBar(surface: frosted)` with a built-in `BackdropFilter` and `MonoGlass` tokens;
+  - `HomeShell` `extendBody`; `TabPage` and Profile bottom padding;
+  - idle icons `text2` on glass;
+  - a system-inset strip (added after an emulator three-button check);
+  - High Contrast falls back to opaque.
+- **Tests:**
+  - 10 new tests in `frosted_navigation_experiment_test.dart`;
+  - 1 opt-in golden `fn01-glass-backgrounds`;
+  - 302 passed, 12 skipped;
+  - goldens regenerated.
+- **Tools:**
+  - Apple HIG, Liquid Glass Widgets and Mobbin search skills installed (project, in the worktree);
+  - `liquid_glass_widgets` package not adopted.
+- **Not committed or pushed.**
+
 ## 2026-11-04: universal APK and system bars
 - **Verified:**
   - `85f46d1` clean;

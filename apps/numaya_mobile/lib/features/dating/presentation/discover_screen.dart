@@ -288,6 +288,19 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
       });
     }
 
+    // The centred wordmark gets only the room between the two button groups, so on a 320pt phone
+    // it shows the mark alone instead of running under Filters.
+    final leftButtons = state.snoozed ? 0 : (lastPass == null ? 1 : 2);
+    final rightButtons = state.snoozed
+        ? 0
+        : (person != null && !failing ? 2 : 1);
+    final sideButtons = math.max(leftButtons, rightButtons);
+    final sideReserve = sideButtons * (AppSizes.iconButton + AppSpacing.s2);
+    final wordmarkRoom =
+        math.min(MediaQuery.sizeOf(context).width, AppSpacing.contentMax) -
+        2 * AppLayout.screenGutter -
+        2 * sideReserve;
+
     final header = SizedBox(
       height: AppSizes.topBar,
       child: Padding(
@@ -295,7 +308,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
         child: Stack(
           alignment: Alignment.center,
           children: [
-            const Wordmark(small: true),
+            Wordmark(small: true, maxWidth: wordmarkRoom),
             if (!state.snoozed)
               Align(
                 alignment: Alignment.centerLeft,
