@@ -45,6 +45,25 @@
       "butter": { "100": { "$type": "color", "$value": "#fbf0c9" }, "800": { "$type": "color", "$value": "#6e5200" } },
       "mint": { "100": { "$type": "color", "$value": "#ddf1e5" }, "700": { "$type": "color", "$value": "#2b6646" } },
       "sky": { "100": { "$type": "color", "$value": "#e1e9fb" }, "700": { "$type": "color", "$value": "#33509a" } },
+      "wth": {
+        "$description": "V16 (?theme=withings): Withings Health Mate palette. APPROXIMATIONS sampled from Mobbin preview images of the iOS app (3x3 px averages of flat fills on 299x678 JPEG previews; see artifacts/version-16-design-experiment/research/REFERENCE_ANALYSIS.md). Not official Withings tokens. Values marked derived are mine, for contrast or states.",
+        "canvas":       { "$type": "color", "$value": "#f4f3f1", "$description": "Warm light-grey page (sampled #F4F3F1, #F5F4F2, #F6F5F3 on four screens)." },
+        "white":        { "$type": "color", "$value": "#ffffff", "$description": "Cards, grouped rows, sheets (sampled #FDFDFD–#FFFFFF)." },
+        "track":        { "$type": "color", "$value": "#e4e4e6", "$description": "Segmented-control track, switch-off track, placeholders (sampled #E4E4E6)." },
+        "track-deep":   { "$type": "color", "$value": "#d6d4d0", "$description": "Slider track on a canvas-tone group inside a sheet (derived: 1.33:1 on the canvas, V11's track keeps 1.32:1 on white)." },
+        "line":         { "$type": "color", "$value": "#e7e7e7", "$description": "Row separators inside cards (sampled #E7E7E7)." },
+        "edge":         { "$type": "color", "$value": "#8e8a85", "$description": "Field and control edges (derived: the reference's lighter grey border, darkened to 3.43:1 on white for WCAG 1.4.11)." },
+        "ink":          { "$type": "color", "$value": "#0d0d0d", "$description": "Primary buttons, radios, checkboxes, headings (sampled #0B0B0B–#0D0D0D)." },
+        "grey-700":     { "$type": "color", "$value": "#4a4a4a", "$description": "Row and body text (sampled #4A4A4A): 8.86:1 on white." },
+        "grey-600":     { "$type": "color", "$value": "#6d6c6a", "$description": "Captions, eyebrows, idle tabs (sampled #6D6C6A): 5.25:1 on white, 4.73:1 on canvas." },
+        "blue":         { "$type": "color", "$value": "#4f65cb", "$description": "Withings blue (sampled #4F65CB, #4E65CC, #5566C9 on four screens): accent, selection, info, my messages. 5.18:1 with white." },
+        "blue-deep":    { "$type": "color", "$value": "#3d50b0", "$description": "Blue for text on the blue tint (derived: the sampled blue is 4.36:1 there; this is 5.95:1)." },
+        "blue-tint":    { "$type": "color", "$value": "#e6ebff", "$description": "Selected tab background, 'show all' rows, icon circles (sampled #E4EAFF, #E7EEFF, #EBF3FF)." },
+        "green":        { "$type": "color", "$value": "#3c7d40", "$description": "Switch on, success (sampled #3C7D40): 5.00:1 with white." },
+        "red":          { "$type": "color", "$value": "#cc3034", "$description": "Destructive buttons, notification dots (sampled #CC3034): 5.20:1 with white." },
+        "disabled":     { "$type": "color", "$value": "#c4c1bc", "$description": "Disabled button fill (sampled #C4C1BC)." },
+        "disabled-text":{ "$type": "color", "$value": "#6d6c6a", "$description": "Disabled button label (sampled #9E9B96, darkened to the caption grey: 2.92:1 on the fill, against the sampled 1.6:1; disabled controls are exempt from WCAG contrast)." }
+      },
       "alpha": {
         "ink-34":   { "$type": "color", "$value": "rgb(20 19 22 / 0.34)" },
         "ink-62":   { "$type": "color", "$value": "rgb(20 19 22 / 0.62)" },
@@ -68,7 +87,8 @@
     "font": {
       "family": {
         "fraunces": { "$type": "fontFamily", "$value": "\"Fraunces Variable\", ui-serif, Georgia, \"Times New Roman\", serif" },
-        "inter":    { "$type": "fontFamily", "$value": "\"Inter Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif" }
+        "inter":    { "$type": "fontFamily", "$value": "\"Inter Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif" },
+        "hanken-grotesk": { "$type": "fontFamily", "$value": "\"Hanken Grotesk Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif", "$description": "V16 heading face (OFL-1.1, self-hosted via @fontsource-variable/hanken-grotesk): the closest of four candidates to Health Mate's bold geometric grotesque headings (trial in artifacts/version-16-design-experiment/research/font-trial/)." }
       },
       "size": {
         "11": { "$type": "dimension", "$value": "11px" },
@@ -376,6 +396,38 @@
       "handle-slider-height": { "$type": "dimension", "$value": "22px" },
       "emoji-size":     { "$type": "dimension", "$value": "{primitive.dimension.32}" },
       "emoji-radius":   { "$type": "dimension", "$value": "10px" }
+    },
+    "wth": {
+      "$description": "V16 visual layer (?theme=withings) on V11's layout. Roles: ink for primary actions and choices, Withings blue for accent and selection, green for 'on', red for destructive and new. Nothing here sizes or places anything. See artifacts/version-16-design-experiment/design-system/.",
+      "font-heading":   { "$type": "fontFamily", "$value": "{primitive.font.family.hanken-grotesk}" },
+      "font-text":      { "$type": "fontFamily", "$value": "{primitive.font.family.inter}" },
+      "font-wordmark":  { "$type": "fontFamily", "$value": "{primitive.font.family.fraunces}", "$description": "The Numaya logotype keeps its own face: it is the product's mark, not interface type." },
+      "canvas":         { "$type": "color", "$value": "{primitive.color.wth.canvas}" },
+      "surface":        { "$type": "color", "$value": "{primitive.color.wth.white}" },
+      "track":          { "$type": "color", "$value": "{primitive.color.wth.track}" },
+      "track-deep":     { "$type": "color", "$value": "{primitive.color.wth.track-deep}" },
+      "line":           { "$type": "color", "$value": "{primitive.color.wth.line}" },
+      "edge":           { "$type": "color", "$value": "{primitive.color.wth.edge}" },
+      "ink":            { "$type": "color", "$value": "{primitive.color.wth.ink}" },
+      "on-ink":         { "$type": "color", "$value": "{primitive.color.wth.white}" },
+      "text":           { "$type": "color", "$value": "{primitive.color.wth.ink}" },
+      "text-body":      { "$type": "color", "$value": "{primitive.color.wth.grey-700}" },
+      "text-muted":     { "$type": "color", "$value": "{primitive.color.wth.grey-600}" },
+      "accent":         { "$type": "color", "$value": "{primitive.color.wth.blue}" },
+      "accent-text":    { "$type": "color", "$value": "{primitive.color.wth.blue-deep}" },
+      "accent-tint":    { "$type": "color", "$value": "{primitive.color.wth.blue-tint}" },
+      "on-accent":      { "$type": "color", "$value": "{primitive.color.wth.white}" },
+      "positive":       { "$type": "color", "$value": "{primitive.color.wth.green}" },
+      "danger":         { "$type": "color", "$value": "{primitive.color.wth.red}" },
+      "disabled":       { "$type": "color", "$value": "{primitive.color.wth.disabled}" },
+      "disabled-text":  { "$type": "color", "$value": "{primitive.color.wth.disabled-text}" },
+      "radius-button":  { "$type": "dimension", "$value": "12px", "$description": "Full-width and inline buttons, fields: rounded rectangles, not pills (measured ~12px at 48px height on the previews)." },
+      "radius-card":    { "$type": "dimension", "$value": "16px", "$description": "Cards and grouped rows (measured ~14–16px)." },
+      "radius-check":   { "$type": "dimension", "$value": "4px", "$description": "Checkboxes, small tags." },
+      "radius-pill":    { "$type": "dimension", "$value": "999px", "$description": "Tabs, small outline action pills, icon buttons, toggles." },
+      "border":         { "$type": "dimension", "$value": "1px" },
+      "focus":          { "$type": "dimension", "$value": "2px" },
+      "shadow-sheet":   { "$type": "shadow", "$value": "0 -8px 24px -12px rgb(13 13 13 / 0.18)", "$description": "Sheets only; cards sit on the canvas with no shadow." }
     }
   }
 }

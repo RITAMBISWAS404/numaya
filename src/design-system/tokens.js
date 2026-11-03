@@ -388,6 +388,150 @@ export const tokens = [
     "description": null
   },
   {
+    "id": "primitive.color.wth.canvas",
+    "name": "--p-color-wth-canvas",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#f4f3f1",
+    "resolved": "#f4f3f1",
+    "description": "Warm light-grey page (sampled #F4F3F1, #F5F4F2, #F6F5F3 on four screens)."
+  },
+  {
+    "id": "primitive.color.wth.white",
+    "name": "--p-color-wth-white",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#ffffff",
+    "resolved": "#ffffff",
+    "description": "Cards, grouped rows, sheets (sampled #FDFDFD–#FFFFFF)."
+  },
+  {
+    "id": "primitive.color.wth.track",
+    "name": "--p-color-wth-track",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#e4e4e6",
+    "resolved": "#e4e4e6",
+    "description": "Segmented-control track, switch-off track, placeholders (sampled #E4E4E6)."
+  },
+  {
+    "id": "primitive.color.wth.track-deep",
+    "name": "--p-color-wth-track-deep",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#d6d4d0",
+    "resolved": "#d6d4d0",
+    "description": "Slider track on a canvas-tone group inside a sheet (derived: 1.33:1 on the canvas, V11's track keeps 1.32:1 on white)."
+  },
+  {
+    "id": "primitive.color.wth.line",
+    "name": "--p-color-wth-line",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#e7e7e7",
+    "resolved": "#e7e7e7",
+    "description": "Row separators inside cards (sampled #E7E7E7)."
+  },
+  {
+    "id": "primitive.color.wth.edge",
+    "name": "--p-color-wth-edge",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#8e8a85",
+    "resolved": "#8e8a85",
+    "description": "Field and control edges (derived: the reference's lighter grey border, darkened to 3.43:1 on white for WCAG 1.4.11)."
+  },
+  {
+    "id": "primitive.color.wth.ink",
+    "name": "--p-color-wth-ink",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#0d0d0d",
+    "resolved": "#0d0d0d",
+    "description": "Primary buttons, radios, checkboxes, headings (sampled #0B0B0B–#0D0D0D)."
+  },
+  {
+    "id": "primitive.color.wth.grey-700",
+    "name": "--p-color-wth-grey-700",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#4a4a4a",
+    "resolved": "#4a4a4a",
+    "description": "Row and body text (sampled #4A4A4A): 8.86:1 on white."
+  },
+  {
+    "id": "primitive.color.wth.grey-600",
+    "name": "--p-color-wth-grey-600",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#6d6c6a",
+    "resolved": "#6d6c6a",
+    "description": "Captions, eyebrows, idle tabs (sampled #6D6C6A): 5.25:1 on white, 4.73:1 on canvas."
+  },
+  {
+    "id": "primitive.color.wth.blue",
+    "name": "--p-color-wth-blue",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#4f65cb",
+    "resolved": "#4f65cb",
+    "description": "Withings blue (sampled #4F65CB, #4E65CC, #5566C9 on four screens): accent, selection, info, my messages. 5.18:1 with white."
+  },
+  {
+    "id": "primitive.color.wth.blue-deep",
+    "name": "--p-color-wth-blue-deep",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#3d50b0",
+    "resolved": "#3d50b0",
+    "description": "Blue for text on the blue tint (derived: the sampled blue is 4.36:1 there; this is 5.95:1)."
+  },
+  {
+    "id": "primitive.color.wth.blue-tint",
+    "name": "--p-color-wth-blue-tint",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#e6ebff",
+    "resolved": "#e6ebff",
+    "description": "Selected tab background, 'show all' rows, icon circles (sampled #E4EAFF, #E7EEFF, #EBF3FF)."
+  },
+  {
+    "id": "primitive.color.wth.green",
+    "name": "--p-color-wth-green",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#3c7d40",
+    "resolved": "#3c7d40",
+    "description": "Switch on, success (sampled #3C7D40): 5.00:1 with white."
+  },
+  {
+    "id": "primitive.color.wth.red",
+    "name": "--p-color-wth-red",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#cc3034",
+    "resolved": "#cc3034",
+    "description": "Destructive buttons, notification dots (sampled #CC3034): 5.20:1 with white."
+  },
+  {
+    "id": "primitive.color.wth.disabled",
+    "name": "--p-color-wth-disabled",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#c4c1bc",
+    "resolved": "#c4c1bc",
+    "description": "Disabled button fill (sampled #C4C1BC)."
+  },
+  {
+    "id": "primitive.color.wth.disabled-text",
+    "name": "--p-color-wth-disabled-text",
+    "layer": "primitive",
+    "type": "color",
+    "value": "#6d6c6a",
+    "resolved": "#6d6c6a",
+    "description": "Disabled button label (sampled #9E9B96, darkened to the caption grey: 2.92:1 on the fill, against the sampled 1.6:1; disabled controls are exempt from WCAG contrast)."
+  },
+  {
     "id": "primitive.color.alpha.ink-34",
     "name": "--p-color-alpha-ink-34",
     "layer": "primitive",
@@ -530,6 +674,15 @@ export const tokens = [
     "value": "\"Inter Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
     "resolved": "\"Inter Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
     "description": null
+  },
+  {
+    "id": "primitive.font.family.hanken-grotesk",
+    "name": "--p-font-family-hanken-grotesk",
+    "layer": "primitive",
+    "type": "fontFamily",
+    "value": "\"Hanken Grotesk Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+    "resolved": "\"Hanken Grotesk Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+    "description": "V16 heading face (OFL-1.1, self-hosted via @fontsource-variable/hanken-grotesk): the closest of four candidates to Health Mate's bold geometric grotesque headings (trial in artifacts/version-16-design-experiment/research/font-trial/)."
   },
   {
     "id": "primitive.font.size.11",
@@ -2928,6 +3081,267 @@ export const tokens = [
     "value": "10px",
     "resolved": "10px",
     "description": null
+  },
+  {
+    "id": "component.wth.font-heading",
+    "name": "--wth-font-heading",
+    "layer": "component",
+    "type": "fontFamily",
+    "value": "{primitive.font.family.hanken-grotesk}",
+    "resolved": "\"Hanken Grotesk Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+    "description": null
+  },
+  {
+    "id": "component.wth.font-text",
+    "name": "--wth-font-text",
+    "layer": "component",
+    "type": "fontFamily",
+    "value": "{primitive.font.family.inter}",
+    "resolved": "\"Inter Variable\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+    "description": null
+  },
+  {
+    "id": "component.wth.font-wordmark",
+    "name": "--wth-font-wordmark",
+    "layer": "component",
+    "type": "fontFamily",
+    "value": "{primitive.font.family.fraunces}",
+    "resolved": "\"Fraunces Variable\", ui-serif, Georgia, \"Times New Roman\", serif",
+    "description": "The Numaya logotype keeps its own face: it is the product's mark, not interface type."
+  },
+  {
+    "id": "component.wth.canvas",
+    "name": "--wth-canvas",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.canvas}",
+    "resolved": "#f4f3f1",
+    "description": null
+  },
+  {
+    "id": "component.wth.surface",
+    "name": "--wth-surface",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.white}",
+    "resolved": "#ffffff",
+    "description": null
+  },
+  {
+    "id": "component.wth.track",
+    "name": "--wth-track",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.track}",
+    "resolved": "#e4e4e6",
+    "description": null
+  },
+  {
+    "id": "component.wth.track-deep",
+    "name": "--wth-track-deep",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.track-deep}",
+    "resolved": "#d6d4d0",
+    "description": null
+  },
+  {
+    "id": "component.wth.line",
+    "name": "--wth-line",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.line}",
+    "resolved": "#e7e7e7",
+    "description": null
+  },
+  {
+    "id": "component.wth.edge",
+    "name": "--wth-edge",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.edge}",
+    "resolved": "#8e8a85",
+    "description": null
+  },
+  {
+    "id": "component.wth.ink",
+    "name": "--wth-ink",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.ink}",
+    "resolved": "#0d0d0d",
+    "description": null
+  },
+  {
+    "id": "component.wth.on-ink",
+    "name": "--wth-on-ink",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.white}",
+    "resolved": "#ffffff",
+    "description": null
+  },
+  {
+    "id": "component.wth.text",
+    "name": "--wth-text",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.ink}",
+    "resolved": "#0d0d0d",
+    "description": null
+  },
+  {
+    "id": "component.wth.text-body",
+    "name": "--wth-text-body",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.grey-700}",
+    "resolved": "#4a4a4a",
+    "description": null
+  },
+  {
+    "id": "component.wth.text-muted",
+    "name": "--wth-text-muted",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.grey-600}",
+    "resolved": "#6d6c6a",
+    "description": null
+  },
+  {
+    "id": "component.wth.accent",
+    "name": "--wth-accent",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.blue}",
+    "resolved": "#4f65cb",
+    "description": null
+  },
+  {
+    "id": "component.wth.accent-text",
+    "name": "--wth-accent-text",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.blue-deep}",
+    "resolved": "#3d50b0",
+    "description": null
+  },
+  {
+    "id": "component.wth.accent-tint",
+    "name": "--wth-accent-tint",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.blue-tint}",
+    "resolved": "#e6ebff",
+    "description": null
+  },
+  {
+    "id": "component.wth.on-accent",
+    "name": "--wth-on-accent",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.white}",
+    "resolved": "#ffffff",
+    "description": null
+  },
+  {
+    "id": "component.wth.positive",
+    "name": "--wth-positive",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.green}",
+    "resolved": "#3c7d40",
+    "description": null
+  },
+  {
+    "id": "component.wth.danger",
+    "name": "--wth-danger",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.red}",
+    "resolved": "#cc3034",
+    "description": null
+  },
+  {
+    "id": "component.wth.disabled",
+    "name": "--wth-disabled",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.disabled}",
+    "resolved": "#c4c1bc",
+    "description": null
+  },
+  {
+    "id": "component.wth.disabled-text",
+    "name": "--wth-disabled-text",
+    "layer": "component",
+    "type": "color",
+    "value": "{primitive.color.wth.disabled-text}",
+    "resolved": "#6d6c6a",
+    "description": null
+  },
+  {
+    "id": "component.wth.radius-button",
+    "name": "--wth-radius-button",
+    "layer": "component",
+    "type": "dimension",
+    "value": "12px",
+    "resolved": "12px",
+    "description": "Full-width and inline buttons, fields: rounded rectangles, not pills (measured ~12px at 48px height on the previews)."
+  },
+  {
+    "id": "component.wth.radius-card",
+    "name": "--wth-radius-card",
+    "layer": "component",
+    "type": "dimension",
+    "value": "16px",
+    "resolved": "16px",
+    "description": "Cards and grouped rows (measured ~14–16px)."
+  },
+  {
+    "id": "component.wth.radius-check",
+    "name": "--wth-radius-check",
+    "layer": "component",
+    "type": "dimension",
+    "value": "4px",
+    "resolved": "4px",
+    "description": "Checkboxes, small tags."
+  },
+  {
+    "id": "component.wth.radius-pill",
+    "name": "--wth-radius-pill",
+    "layer": "component",
+    "type": "dimension",
+    "value": "999px",
+    "resolved": "999px",
+    "description": "Tabs, small outline action pills, icon buttons, toggles."
+  },
+  {
+    "id": "component.wth.border",
+    "name": "--wth-border",
+    "layer": "component",
+    "type": "dimension",
+    "value": "1px",
+    "resolved": "1px",
+    "description": null
+  },
+  {
+    "id": "component.wth.focus",
+    "name": "--wth-focus",
+    "layer": "component",
+    "type": "dimension",
+    "value": "2px",
+    "resolved": "2px",
+    "description": null
+  },
+  {
+    "id": "component.wth.shadow-sheet",
+    "name": "--wth-shadow-sheet",
+    "layer": "component",
+    "type": "shadow",
+    "value": "0 -8px 24px -12px rgb(13 13 13 / 0.18)",
+    "resolved": "0 -8px 24px -12px rgb(13 13 13 / 0.18)",
+    "description": "Sheets only; cards sit on the canvas with no shadow."
   }
 ];
 

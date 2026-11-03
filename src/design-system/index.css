@@ -1,6 +1,9 @@
 /* Numaya design system styles. Import once at the app entry. */
 @import "@fontsource-variable/fraunces/full.css";
 @import "@fontsource-variable/inter";
+/* V16 (?theme=withings) heading face. Declares @font-face only: nothing renders in it outside
+   .theme-wth. */
+@import "@fontsource-variable/hanken-grotesk";
 @import "./tokens.css";
 @import "./styles/base.css";
 @import "./styles/components.css";
@@ -12,3 +15,6 @@
 @import "./styles/activity.css";
 /* Opt-in visual experiment, scoped to .theme-tiimo (?theme=tiimo). */
 @import "./styles/theme-tiimo.css";
+/* Opt-in V16 visual layer, scoped to .theme-wth (?theme=withings), on top of V11 (.theme-tiimo):
+   colour, type, edges, radii and states only. */
+@import "./styles/theme-wth.css";

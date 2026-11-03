@@ -45,6 +45,22 @@
   --p-color-mint-700: #2b6646;
   --p-color-sky-100: #e1e9fb;
   --p-color-sky-700: #33509a;
+  --p-color-wth-canvas: #f4f3f1;
+  --p-color-wth-white: #ffffff;
+  --p-color-wth-track: #e4e4e6;
+  --p-color-wth-track-deep: #d6d4d0;
+  --p-color-wth-line: #e7e7e7;
+  --p-color-wth-edge: #8e8a85;
+  --p-color-wth-ink: #0d0d0d;
+  --p-color-wth-grey-700: #4a4a4a;
+  --p-color-wth-grey-600: #6d6c6a;
+  --p-color-wth-blue: #4f65cb;
+  --p-color-wth-blue-deep: #3d50b0;
+  --p-color-wth-blue-tint: #e6ebff;
+  --p-color-wth-green: #3c7d40;
+  --p-color-wth-red: #cc3034;
+  --p-color-wth-disabled: #c4c1bc;
+  --p-color-wth-disabled-text: #6d6c6a;
   --p-color-alpha-ink-34: rgb(20 19 22 / 0.34);
   --p-color-alpha-ink-62: rgb(20 19 22 / 0.62);
   --p-color-alpha-black: rgb(0 0 0);
@@ -61,6 +77,7 @@
   --p-color-palette-muted: #929099;
   --p-font-family-fraunces: "Fraunces Variable", ui-serif, Georgia, "Times New Roman", serif;
   --p-font-family-inter: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --p-font-family-hanken-grotesk: "Hanken Grotesk Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --p-font-size-11: 11px;
   --p-font-size-13: 13px;
   --p-font-size-15: 15px;
@@ -331,6 +348,35 @@
   --tiimo-handle-slider-height: 22px;
   --tiimo-emoji-size: var(--p-dimension-32);
   --tiimo-emoji-radius: 10px;
+  --wth-font-heading: var(--p-font-family-hanken-grotesk);
+  --wth-font-text: var(--p-font-family-inter);
+  --wth-font-wordmark: var(--p-font-family-fraunces);
+  --wth-canvas: var(--p-color-wth-canvas);
+  --wth-surface: var(--p-color-wth-white);
+  --wth-track: var(--p-color-wth-track);
+  --wth-track-deep: var(--p-color-wth-track-deep);
+  --wth-line: var(--p-color-wth-line);
+  --wth-edge: var(--p-color-wth-edge);
+  --wth-ink: var(--p-color-wth-ink);
+  --wth-on-ink: var(--p-color-wth-white);
+  --wth-text: var(--p-color-wth-ink);
+  --wth-text-body: var(--p-color-wth-grey-700);
+  --wth-text-muted: var(--p-color-wth-grey-600);
+  --wth-accent: var(--p-color-wth-blue);
+  --wth-accent-text: var(--p-color-wth-blue-deep);
+  --wth-accent-tint: var(--p-color-wth-blue-tint);
+  --wth-on-accent: var(--p-color-wth-white);
+  --wth-positive: var(--p-color-wth-green);
+  --wth-danger: var(--p-color-wth-red);
+  --wth-disabled: var(--p-color-wth-disabled);
+  --wth-disabled-text: var(--p-color-wth-disabled-text);
+  --wth-radius-button: 12px;
+  --wth-radius-card: 16px;
+  --wth-radius-check: 4px;
+  --wth-radius-pill: 999px;
+  --wth-border: 1px;
+  --wth-focus: 2px;
+  --wth-shadow-sheet: 0 -8px 24px -12px rgb(13 13 13 / 0.18);
 }
 
 @media (prefers-reduced-motion: reduce) {

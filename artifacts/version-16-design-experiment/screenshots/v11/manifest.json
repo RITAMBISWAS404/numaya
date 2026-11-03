@@ -1,0 +1,415 @@
+{
+  "generatedBy": "npm run gallery",
+  "screens": [
+    {
+      "id": "019",
+      "name": "Home: profile card",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/019-discover-393x852.png"
+    },
+    {
+      "id": "020",
+      "name": "Home: the full profile scroll",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 2945,
+        "deviceScaleFactor": 2
+      },
+      "capture": "full-page",
+      "image": "screens/020-discover-fullpage-393w.png"
+    },
+    {
+      "id": "022",
+      "name": "Home: Pass / SuperSwipe / Like at the end of the profile",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/022-discover-actions-393x852.png"
+    },
+    {
+      "id": "023",
+      "name": "Home: filters sheet",
+      "group": "Home: profiles and filters",
+      "route": "flows.html?screen=discovery&theme=tiimo",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/023-discover-filters-sheet-393x852.png"
+    },
+    {
+      "id": "030",
+      "name": "It’s a match",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=match&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/030-match-393x852.png",
+      "notes": "Seeded as right after liking Maya, who liked you."
+    },
+    {
+      "id": "032",
+      "name": "It’s a match: first message typed",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=match&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/032-match-typing-393x852.png"
+    },
+    {
+      "id": "033",
+      "name": "No new match yet",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=match&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/033-match-empty-393x852.png"
+    },
+    {
+      "id": "034",
+      "name": "Messages: search, new matches, filters and conversations",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chats&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/034-chats-393x852.png"
+    },
+    {
+      "id": "037",
+      "name": "Messages: empty",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chats&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/037-chats-empty-393x852.png",
+      "notes": "Seeded with no matches."
+    },
+    {
+      "id": "038",
+      "name": "Conversation",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/038-chat-conversation-393x852.png"
+    },
+    {
+      "id": "045",
+      "name": "Unmatch confirmation sheet",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chat&theme=tiimo",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/045-chat-unmatch-sheet-393x852.png"
+    },
+    {
+      "id": "052",
+      "name": "Messages: search + Unread filter with nothing to show",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=chats&theme=tiimo",
+      "state": "reached by interaction",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/052-chats-filter-empty-393x852.png"
+    },
+    {
+      "id": "054",
+      "name": "Likes: all",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=likes&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/054-likes-393x852.png"
+    },
+    {
+      "id": "058",
+      "name": "Likes: empty (every like handled)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=likes&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/058-likes-empty-393x852.png",
+      "notes": "Seeded with every like handled."
+    },
+    {
+      "id": "059",
+      "name": "Likes: a person who liked you (like back or pass)",
+      "group": "Likes, matches and messages",
+      "route": "flows.html?screen=like-profile&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/059-like-profile-393x852.png"
+    },
+    {
+      "id": "099",
+      "name": "My profile",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=profile&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/099-profile-393x852.png"
+    },
+    {
+      "id": "100",
+      "name": "My profile (full page)",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=profile&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 1409,
+        "deviceScaleFactor": 2
+      },
+      "capture": "full-page",
+      "image": "screens/100-profile-fullpage-393w.png"
+    },
+    {
+      "id": "102",
+      "name": "Edit profile",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=edit&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/102-edit-profile-393x852.png"
+    },
+    {
+      "id": "103",
+      "name": "Edit profile (full page)",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=edit&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 1930,
+        "deviceScaleFactor": 2
+      },
+      "capture": "full-page",
+      "image": "screens/103-edit-profile-fullpage-393w.png"
+    },
+    {
+      "id": "108",
+      "name": "Edit prompt",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=prompt&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/108-prompt-editor-393x852.png"
+    },
+    {
+      "id": "111",
+      "name": "Settings",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=settings&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/111-settings-393x852.png"
+    },
+    {
+      "id": "112",
+      "name": "Settings (full page)",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=settings&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 393,
+        "height": 1513,
+        "deviceScaleFactor": 2
+      },
+      "capture": "full-page",
+      "image": "screens/112-settings-fullpage-393w.png"
+    },
+    {
+      "id": "113",
+      "name": "Settings: Snooze on",
+      "group": "Profile, readiness, settings and account",
+      "route": "flows.html?screen=settings&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 393,
+        "height": 852,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/113-settings-snooze-on-393x852.png",
+      "notes": "Seeded with Snooze on."
+    },
+    {
+      "id": "145",
+      "name": "QA 375: Home profile card",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=discovery&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/145-qa-discover-375x667.png"
+    },
+    {
+      "id": "146",
+      "name": "QA 375: It’s a match",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=match&theme=tiimo",
+      "state": "seeded session",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/146-qa-match-375x667.png"
+    },
+    {
+      "id": "147",
+      "name": "QA 375: Chats",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=chats&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/147-qa-chats-375x667.png"
+    },
+    {
+      "id": "149",
+      "name": "QA 375: Settings",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=settings&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/149-qa-settings-375x667.png"
+    },
+    {
+      "id": "157",
+      "name": "QA 375: Likes",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=likes&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/157-qa-likes-375x667.png"
+    },
+    {
+      "id": "158",
+      "name": "QA 375: Profile home",
+      "group": "Small-phone QA (375 × 667)",
+      "route": "flows.html?screen=profile&theme=tiimo",
+      "state": "initial",
+      "viewport": {
+        "width": 375,
+        "height": 667,
+        "deviceScaleFactor": 2
+      },
+      "capture": "viewport",
+      "image": "screens/158-qa-profile-375x667.png"
+    }
+  ]
+}

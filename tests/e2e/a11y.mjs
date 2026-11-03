@@ -33,6 +33,15 @@ const TARGETS = [
   // The opt-in Tiimo-inspired experiment: the gallery themes all 11 of its flow screens at once.
   { name: "tiimo experiment: welcome", url: "?theme=tiimo" },
   { name: "tiimo experiment: flow previews", url: "flows.html?theme=tiimo" },
+  // V16, the Withings-inspired restyle of the same screens.
+  { name: "withings experiment: welcome", url: "?theme=withings" },
+  { name: "withings experiment: flow previews", url: "flows.html?theme=withings" },
+  {
+    name: "withings experiment: discover filters sheet",
+    url: "flows.html?theme=withings",
+    scope: "#discovery",
+    open: async (p) => p.locator("#discovery").getByRole("button", { name: /^Filters/ }).click(),
+  },
   {
     name: "chat options menu",
     url: "flows.html",

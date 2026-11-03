@@ -1,0 +1,622 @@
+/*
+ * V16: V11's layout in the Withings Health Mate visual language (?theme=withings). The system is
+ * written out in artifacts/version-16-design-experiment/design-system/; the evidence (45 Health Mate
+ * screens via Mobbin) is in its research/ folder.
+ *
+ * Opt-in: a screen renders inside `.theme-tiimo .theme-wth` only with `?theme=withings` and only if it
+ * takes part in the experiments (TIIMO_SCREENS), so the approved design and V11 are untouched.
+ *
+ * The layout contract (design-system/V11_LAYOUT_CONTRACT.md): every rule here changes how something
+ * looks, never where it is or how big it is: colour, background, inset edges, radius, font family,
+ * weight, tracking, case, and font size only on V11's line-height. No width, height, padding, margin,
+ * gap, position or display. tests/e2e/experiment-withings.mjs measures every element's box against V11.
+ *
+ * - Surfaces: a warm light-grey canvas with borderless white cards; hairlines only between rows.
+ * - Roles: ink for the primary action and for choices (radio, checkbox); Withings blue for accent and
+ *   selection (tabs, chips, SuperSwipe, my messages); green only for a switch that is on; red for
+ *   destructive and new.
+ * - Type: Hanken Grotesk for headings (bold, tight), Inter for everything read or tapped; small
+ *   uppercase tracked navigation titles and eyebrows.
+ * - Shapes: 12px buttons and fields, 16px cards, round tabs / chips / icon buttons / switches, 4px
+ *   checkboxes and tags.
+ */
+
+/* Foundations --------------------------------------------------------------------------------- */
+.theme-wth {
+  --color-palette-canvas: var(--wth-canvas);
+  --color-palette-surface: var(--wth-surface);
+  --color-palette-surface-secondary: var(--wth-surface);
+  --color-palette-surface-inset: var(--wth-track);
+  --color-palette-border: var(--wth-line);
+  --color-palette-text: var(--wth-text);
+  --color-palette-secondary: var(--wth-text-muted);
+  --color-palette-secondary-strong: var(--wth-text-body);
+  --color-palette-muted: var(--wth-text-muted);
+  --color-palette-disabled: var(--wth-disabled);
+  --color-palette-brand: var(--wth-accent);
+  --color-palette-brand-foreground: var(--wth-on-accent);
+  --color-palette-brand-tint: var(--wth-accent-tint);
+
+  --color-surface-page: var(--wth-canvas);
+  --color-surface: var(--wth-surface);
+  --color-surface-soft: var(--wth-track);
+  --color-surface-sunken: var(--wth-track);
+  --color-surface-photo: var(--wth-track);
+  --color-surface-brand: var(--wth-accent-tint);
+  --color-surface-inverse: var(--wth-ink);
+  --color-brand: var(--wth-accent);
+  --color-brand-hover: var(--wth-accent-text);
+  --color-brand-tint: var(--wth-accent-tint);
+  --color-brand-tint-strong: var(--wth-accent-tint);
+  --color-brand-subtle: var(--wth-accent-tint);
+  --color-brand-soft: var(--wth-accent-tint);
+  --color-brand-hero: var(--wth-accent);
+  --color-on-brand: var(--wth-on-accent);
+  --color-control-selected: var(--wth-ink);
+  --color-control-selected-text: var(--wth-on-ink);
+  --color-text-primary: var(--wth-text);
+  --color-text-secondary: var(--wth-text-body);
+  --color-text-muted: var(--wth-text-muted);
+  --color-text-subtle: var(--wth-text-muted);
+  --color-text-brand: var(--wth-accent-text);
+  --color-text-brand-deep: var(--wth-accent-text);
+  --color-border-subtle: var(--wth-line);
+  --color-border-strong: var(--wth-edge);
+  --color-border-brand: var(--wth-accent);
+  --color-focus-ring: var(--wth-accent);
+  --color-focus-halo: var(--wth-accent-tint);
+  --color-focus-field: var(--wth-accent);
+  --color-danger: var(--wth-danger);
+  --color-accent-rose-tint: var(--wth-accent-tint);
+  --color-accent-promo: var(--wth-accent-tint);
+  --color-accent-yellow-tint: var(--wth-accent-tint);
+
+  --font-display: var(--wth-font-heading);
+  --font-display-axes: normal;
+  --font-text: var(--wth-font-text);
+
+  --tiimo-radius-pill: var(--wth-radius-pill);
+  --tiimo-radius-button: var(--wth-radius-button);
+  --tiimo-radius-chip: var(--wth-radius-pill);
+  --tiimo-radius-control: var(--wth-radius-button);
+  --tiimo-radius-tag: var(--wth-radius-check);
+  --tiimo-radius-check: var(--wth-radius-check);
+  --tiimo-radius-item: var(--wth-radius-button);
+  --tiimo-radius-feature: var(--wth-radius-card);
+  --tiimo-radius-photo: var(--wth-radius-card);
+
+  background: var(--wth-canvas);
+  color: var(--wth-text);
+}
+
+.theme-wth :is(.fl-screen, .screen--wash) {
+  background: var(--wth-canvas);
+}
+
+/* Focus: the reference (iOS) shows none; V16 uses a 2px ring in the accent. */
+.theme-wth :is(button, a, select, [tabindex]):focus-visible,
+.theme-wth input:where([type="checkbox"], [type="radio"], [type="range"]):focus-visible {
+  outline: var(--wth-focus) solid var(--wth-accent);
+  outline-offset: 2px;
+}
+
+/* Type --------------------------------------------------------------------------------------- */
+/* Headings in Hanken Grotesk at V11's sizes and line-heights. Untracked, its width matches V11's
+   Fraunces within about 1% on the real strings (measured), so every heading breaks where V11's did. */
+.theme-wth :is(.topbar__large-title, .fl-section-title, .section__title, .sheet__title, .empty-state__title, .match__title, .fl-me__name, .profile-card__name, .prompt__answer, .profile-section__answer, .fl-title, .welcome__title) {
+  font-family: var(--wth-font-heading);
+  font-variation-settings: normal;
+  letter-spacing: 0;
+  color: var(--wth-text);
+}
+
+/* Bold for titles and names (Health Mate's "Good morning, John"), medium for section titles
+   ("Account Settings"), regular-medium for a person's own words. */
+.theme-wth :is(.topbar__large-title, .empty-state__title, .match__title, .fl-me__name, .profile-card__name, .welcome__title) {
+  font-weight: 700;
+}
+
+.theme-wth :is(.fl-section-title, .section__title, .sheet__title) {
+  font-weight: 600;
+}
+
+.theme-wth :is(.prompt__answer, .profile-section__answer) {
+  font-weight: 500;
+}
+
+.theme-wth .profile-card__name {
+  color: var(--wth-on-ink);
+}
+
+.theme-wth .fl-section-title__count {
+  color: var(--wth-text-muted);
+}
+
+/* Navigation titles: small, bold, uppercase, widely tracked (Health Mate's "ACCOUNT & SECURITY"),
+   on V11's line-height. */
+.theme-wth .topbar__title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Eyebrows: group labels as small uppercase grey ("WEIGHT", "E-MAIL ADDRESS"), on V11's line-height.
+   Not on the match's "You both like" (it sets the centred block's width) or the Edit interests label
+   (its count shares the line). */
+.theme-wth :is(.list-group__title, .slider__group-title, .option-cards__legend, .profile-section:not(.profile-section--prompt) .profile-section__title, .shared-interests__title) {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--wth-text-muted);
+}
+
+.theme-wth :is(.fl-caption, .section__description, .list-group__footnote, .empty-state__body, .person-tile__caption, .match__body) {
+  color: var(--wth-text-body);
+}
+
+/* The Numaya logotype keeps its own face; its dot takes the accent. */
+.theme-wth .wordmark__text {
+  font-family: var(--wth-font-wordmark);
+  font-variation-settings: "SOFT" 50, "WONK" 0;
+}
+
+.theme-wth .brand-mark__dot {
+  fill: var(--wth-accent);
+}
+
+/* Buttons ------------------------------------------------------------------------------------- */
+/* Full-size buttons are 12px rounded rectangles (Done, Next, Share); small inline actions are pills
+   ("Add a Reminder"). */
+.theme-wth .btn {
+  border-radius: var(--wth-radius-button);
+  box-shadow: none;
+}
+
+.theme-wth .btn--sm {
+  border-radius: var(--wth-radius-pill);
+}
+
+/* Primary: near-black with white text. */
+.theme-wth :is(.btn--primary, .fab) {
+  background: var(--wth-ink);
+  color: var(--wth-on-ink);
+  box-shadow: none;
+}
+
+.theme-wth :is(.btn--primary, .fab):hover:not(:disabled) {
+  background: var(--wth-text-body);
+}
+
+/* Secondary: white with a 1px black edge and black text. */
+.theme-wth .btn--secondary {
+  background: var(--wth-surface);
+  color: var(--wth-text);
+  box-shadow: inset 0 0 0 var(--wth-border) var(--wth-ink);
+}
+
+.theme-wth .btn--secondary:hover:not(:disabled) {
+  background: var(--wth-canvas);
+}
+
+/* Quiet: a black text link ("Check my Achieve tab"). */
+.theme-wth .btn--quiet {
+  background: none;
+  color: var(--wth-text);
+}
+
+.theme-wth .btn--quiet:hover:not(:disabled) {
+  background: none;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Disabled: the taupe fill (Health Mate's disabled "Save"). */
+.theme-wth .btn:disabled:not(.is-loading) {
+  background: var(--wth-disabled);
+  color: var(--wth-disabled-text);
+  box-shadow: none;
+  opacity: 1;
+}
+
+.theme-wth .btn--quiet:disabled:not(.is-loading) {
+  background: none;
+}
+
+/* Destructive: the red filled button ("Exit"). */
+.theme-wth :is(.btn--danger, .btn--destructive) {
+  background: var(--wth-danger);
+  color: var(--wth-on-ink);
+}
+
+/* Icon buttons: white circles with a faint edge and a black glyph. */
+.theme-wth .nav-button--floating {
+  background: var(--wth-surface);
+  color: var(--wth-text);
+  box-shadow: inset 0 0 0 var(--wth-border) var(--wth-line);
+}
+
+.theme-wth .nav-button--flat {
+  background: var(--wth-track);
+  color: var(--wth-text);
+}
+
+/* Navigation --------------------------------------------------------------------------------- */
+/* V11's five-item bar in Health Mate's colouring: white, a hairline, idle grey, the current item black
+   (icon and label). The red dots are the reference's own. */
+.theme-wth .tab-bar {
+  background: var(--wth-surface);
+  box-shadow: inset 0 var(--wth-border) 0 var(--wth-line);
+}
+
+.theme-wth .tab-bar__item,
+.theme-wth .tab-bar__icon {
+  color: var(--wth-text-muted);
+}
+
+.theme-wth .tab-bar__item.is-current,
+.theme-wth .tab-bar__item.is-current .tab-bar__icon {
+  color: var(--wth-text);
+}
+
+.theme-wth .tab-bar__item:hover,
+.theme-wth .tab-bar__item:hover .tab-bar__icon {
+  color: var(--wth-text);
+}
+
+.theme-wth .tab-bar .count-badge::after {
+  background: var(--wth-danger);
+}
+
+/* Filters and segmented options: text tabs with no fill; the current one in a blue tint with deep-blue
+   text (Health Mate's "Week", "All", "Weight"). V11's pills keep their boxes. */
+.theme-wth .filter-chips:not(:has(.chip[data-emoji])) .chip:not(.is-selected),
+.theme-wth .segmented__item:not(.is-selected, [aria-selected="true"], [aria-checked="true"]) {
+  background: none;
+  color: var(--wth-text);
+  box-shadow: none;
+}
+
+.theme-wth .filter-chips:not(:has(.chip[data-emoji])) .chip.is-selected,
+.theme-wth :is(.segmented__item.is-selected, .segmented__item[aria-selected="true"], .segmented__item[aria-checked="true"]) {
+  background: var(--wth-accent-tint);
+  color: var(--wth-accent-text);
+  box-shadow: none;
+}
+
+.theme-wth .filter-chips:not(:has(.chip[data-emoji])) .chip:not(.is-selected) .chip__count {
+  color: var(--wth-text-muted);
+}
+
+.theme-wth .filter-chips:not(:has(.chip[data-emoji])) .chip.is-selected .chip__count {
+  color: var(--wth-accent-text);
+}
+
+/* Chips, tags, counts -------------------------------------------------------------------------- */
+/* Interest chips: white pills with a hairline (the "1 Notification" pill). Choosable chips take the
+   3:1 control edge; selected ones the blue-tint selection. */
+.theme-wth .chip,
+.theme-wth :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip):not(.is-selected),
+.theme-wth :is(.chip--static, .shared-interests__pill, .match__shared-chip) {
+  background: var(--wth-surface);
+  box-shadow: inset 0 0 0 var(--wth-border) var(--wth-line);
+  color: var(--wth-text);
+}
+
+.theme-wth .chip-group .chip:not(.is-selected) {
+  box-shadow: inset 0 0 0 var(--wth-border) var(--wth-edge);
+}
+
+.theme-wth :is(.chip[data-emoji], .filter-chips:has(.chip[data-emoji]) .chip).is-selected,
+.theme-wth .chip-group .chip.is-selected {
+  background: var(--wth-accent-tint);
+  color: var(--wth-accent-text);
+  box-shadow: inset 0 0 0 var(--wth-border) var(--wth-accent);
+}
+
+/* Tags: 4px corners. "New" is the accent; "Your move" the tint; the score tag ink. */
+.theme-wth :is(.badge, .conversation__move, .fl-me__pct, .profile-card__pill, .photo-slot__index) {
+  border-radius: var(--wth-radius-check);
+}
+
+.theme-wth .badge {
+  background: var(--wth-track);
+  color: var(--wth-text);
+}
+
+.theme-wth .badge--brand,
+.theme-wth :is(.person-tile__badge, .activity-media__badges) .badge--brand {
+  background: var(--wth-accent);
+  color: var(--wth-on-accent);
+}
+
+.theme-wth .conversation__move {
+  background: var(--wth-accent-tint);
+  color: var(--wth-accent-text);
+}
+
+.theme-wth .fl-me__pct {
+  background: var(--wth-ink);
+  color: var(--wth-on-ink);
+}
+
+/* Unread counts: Health Mate's red notification colour. */
+.theme-wth .conversation__unread {
+  background: var(--wth-danger);
+  color: var(--wth-on-ink);
+}
+
+.theme-wth :is(.verified__mark, .avatar__badge) {
+  color: var(--wth-accent);
+}
+
+/* Fields ---------------------------------------------------------------------------------------- */
+/* White, a 1px grey edge, 12px corners (the e-mail field); 2px blue on focus. */
+.theme-wth :is(.input, .search, .composer__field),
+.theme-wth .composer__field:not(:focus-within) {
+  border-radius: var(--wth-radius-button);
+  background: var(--wth-surface);
+  box-shadow: inset 0 0 0 var(--wth-border) var(--wth-edge);
+}
+
+.theme-wth :is(.input:focus, .search:focus-within, .composer__field:focus-within) {
+  background: var(--wth-surface);
+  box-shadow: inset 0 0 0 var(--wth-focus) var(--wth-accent);
+}
+
+.theme-wth .composer__send {
+  background: var(--wth-ink);
+  color: var(--wth-on-ink);
+}
+
+.theme-wth .composer__send:disabled {
+  background: var(--wth-disabled);
+  color: var(--wth-disabled-text);
+}
+
+/* Cards and rows ------------------------------------------------------------------------------ */
+/* White cards on the canvas, 16px, no edge and no shadow; hairlines only between rows. */
+.theme-wth :is(.list-group__items, .card, .activity-card, .prompt, .prompt-set, .profile-section) {
+  border-radius: var(--wth-radius-card);
+  background: var(--wth-surface);
+  box-shadow: none;
+}
+
+/* Informational notes: the blue tint of "Show all measurements". */
+.theme-wth .info-card {
+  background: var(--wth-accent-tint);
+  box-shadow: none;
+}
+
+.theme-wth .info-card__icon {
+  color: var(--wth-accent);
+}
+
+.theme-wth .info-card__title {
+  color: var(--wth-text);
+}
+
+.theme-wth :is(.list-row__label, .switch-row__label, .slider__label) {
+  color: var(--wth-text-body);
+}
+
+.theme-wth :is(.list-row__value, .list-row__description, .switch-row__description) {
+  color: var(--wth-text-muted);
+}
+
+.theme-wth .list-row__icon {
+  color: var(--wth-accent);
+}
+
+.theme-wth .list-row__trail {
+  color: var(--wth-text);
+}
+
+.theme-wth .list-row--destructive :is(.list-row__label, .list-row__icon) {
+  color: var(--wth-danger);
+}
+
+.theme-wth :is(.list-row + .list-row, .switch-row + .switch-row)::before,
+.theme-wth .conversation + .conversation::before {
+  background: var(--wth-line);
+}
+
+/* Controls -------------------------------------------------------------------------------------- */
+/* Switch: on is Health Mate's green with a white knob; off a light grey track with a 3:1 edge. */
+.theme-wth .switch {
+  background: var(--wth-track);
+  box-shadow: inset 0 0 0 var(--wth-border) var(--wth-edge);
+}
+
+.theme-wth .switch::after {
+  background: var(--wth-surface);
+  box-shadow: 0 0 0 var(--wth-border) var(--wth-edge);
+}
+
+.theme-wth .switch:checked {
+  background: var(--wth-positive);
+  box-shadow: none;
+}
+
+.theme-wth .switch:checked::after {
+  background: var(--wth-surface);
+  box-shadow: none;
+}
+
+/* Sliders: the blue of the charts on the grey track (V11 draws both as pseudo-elements). */
+.theme-wth .slider__track::before {
+  background: var(--wth-track);
+}
+
+.theme-wth .slider__track::after {
+  background: var(--wth-accent);
+}
+
+/* Radios and checkboxes: black (the ring-and-dot radio, the black-filled checkbox). */
+.theme-wth :is(.choice__input--checkbox, .choice__input--radio, input[type="radio"], input[type="checkbox"]):not(.switch) {
+  accent-color: var(--wth-ink);
+}
+
+/* A chosen option card takes an ink edge. */
+.theme-wth :is(.option-card, .choice--card):has(input:checked) {
+  box-shadow: inset 0 0 0 1.5px var(--wth-ink);
+}
+
+/* People and photographs ------------------------------------------------------------------- */
+/* People are circles with a blue-tint fill and a blue initial (Health Mate's icon circles). The match
+   queue's portraits are 72 x 96, so they stay rounded rectangles (a circle would be an oval). */
+.theme-wth .avatar .avatar__image,
+.theme-wth .avatar.has-ring .avatar__image,
+.theme-wth .match__you,
+.theme-wth .match__you .avatar__image {
+  border-radius: 50%;
+}
+
+.theme-wth .avatar .avatar__image,
+.theme-wth .match-queue__image[class],
+.theme-wth .match__you .avatar__image {
+  background: var(--wth-accent-tint);
+  color: var(--wth-accent-text);
+  font-family: var(--wth-font-heading);
+  font-weight: 600;
+}
+
+.theme-wth .match-queue__image[class] {
+  border-radius: var(--wth-radius-card);
+}
+
+.theme-wth .match-queue__portrait.is-new .match-queue__image {
+  box-shadow: 0 0 0 2.5px var(--wth-canvas), 0 0 0 5px var(--wth-accent);
+}
+
+/* Profile photos: placeholders grey; with a real photo V11's black fade stays (it keeps the name
+   legible on any photo). */
+.theme-wth .profile-card__media:not(:has(.profile-card__img)) {
+  background-color: var(--wth-track);
+}
+
+.theme-wth :is(.profile-card__stand-in, .image-placeholder__icon) {
+  color: var(--wth-text-muted);
+}
+
+/* SuperSwipe: the accent action (blue, white star). Pass: white with a black edge. Like: black. */
+.theme-wth .profile-card__actions .action-bar__btn,
+.theme-wth .action-bar__btn--super {
+  background: var(--wth-accent);
+  color: var(--wth-on-accent);
+  box-shadow: none;
+}
+
+.theme-wth .action-bar .action-bar__btn--pass {
+  background: var(--wth-surface);
+  color: var(--wth-text);
+  box-shadow: inset 0 0 0 var(--wth-border) var(--wth-ink);
+}
+
+.theme-wth .action-bar .action-bar__btn--like {
+  background: var(--wth-ink);
+  color: var(--wth-on-ink);
+  box-shadow: none;
+}
+
+.theme-wth .fl-disc-head__progress span {
+  background: var(--wth-ink);
+}
+
+/* Prompts: the mark as a blue-tint tile with a blue glyph. */
+.theme-wth .prompt__mark {
+  background: var(--wth-accent-tint);
+  color: var(--wth-accent);
+}
+
+.theme-wth .prompt__label {
+  color: var(--wth-text-body);
+}
+
+.theme-wth .person-tile__photo {
+  background-color: var(--wth-track);
+}
+
+/* Messages: mine in the accent with white text; theirs white. */
+.theme-wth .message--me .message__bubble {
+  background: var(--wth-accent);
+  color: var(--wth-on-accent);
+}
+
+.theme-wth .message--them .message__bubble {
+  background: var(--wth-surface);
+  color: var(--wth-text);
+}
+
+/* Profile readiness: the blue chart line on the grey track, on canvas. */
+.theme-wth .readiness-meter {
+  background: var(--wth-canvas);
+}
+
+.theme-wth .readiness-meter::before {
+  background: var(--wth-track);
+}
+
+.theme-wth .readiness-meter::after {
+  background: var(--wth-accent);
+}
+
+/* Edit: photo slots grey; remove controls black; index tags white. */
+.theme-wth .photo-slot .image-placeholder {
+  background-color: var(--wth-track);
+}
+
+.theme-wth .photo-slot__remove {
+  background: var(--wth-ink);
+  color: var(--wth-on-ink);
+}
+
+.theme-wth .photo-slot__index {
+  background: var(--wth-surface);
+  color: var(--wth-text);
+}
+
+/* Match --------------------------------------------------------------------------------------- */
+/* V11's scallop keeps its shape and size; without a photo it takes the blue tint with a blue initial. */
+.theme-wth .organic-portrait__fallback[class],
+.theme-wth .organic-portrait__backdrop {
+  background: var(--wth-accent-tint);
+  color: var(--wth-accent-text);
+  font-family: var(--wth-font-heading);
+  font-weight: 700;
+}
+
+/* Your photo sits on their tinted scallop, so it takes the white surface (a tint-on-tint circle
+   merged into the shape). */
+.theme-wth .match__you {
+  box-shadow: 0 0 0 4px var(--wth-canvas);
+}
+
+.theme-wth .match__you .avatar__image {
+  background: var(--wth-surface);
+}
+
+.theme-wth .match__body strong {
+  color: var(--wth-text);
+}
+
+/* Sheets ------------------------------------------------------------------------------------- */
+/* White sheets; groups inside take the canvas tone (Health Mate's panels inside a sheet). */
+.theme-wth .sheet__panel {
+  background: var(--wth-surface);
+  box-shadow: var(--wth-shadow-sheet);
+}
+
+.theme-wth .sheet__panel :is(.list-group__items, .card, .info-card) {
+  background: var(--wth-canvas);
+}
+
+/* On those grey groups the light track vanished; the deeper one keeps V11's track contrast. */
+.theme-wth .sheet__panel .slider__track::before {
+  background: var(--wth-track-deep);
+}
+
+.theme-wth .sheet__grabber {
+  background: var(--wth-track);
+}
