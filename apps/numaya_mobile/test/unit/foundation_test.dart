@@ -73,6 +73,10 @@ void main() {
         ratio(AppColors.accentOnTint, AppColors.accentTint),
         greaterThan(3),
       );
+      // State colours as text on their own tints (banners, badges).
+      expect(ratio(AppColors.danger, AppColors.dangerTint), greaterThan(4.5));
+      expect(ratio(AppColors.warning, AppColors.warningTint), greaterThan(4.5));
+      expect(ratio(AppColors.success, AppColors.successTint), greaterThan(4.5));
     });
 
     test('Plus Jakarta Sans headings over Figtree text', () {

@@ -70,7 +70,7 @@ abstract final class MonoColors {
   static const Color onBrand = Color(0xFFFFFFFF);
 
   // States.
-  static const Color success = Color(0xFF2F7D4F);
+  static const Color success = Color(0xFF2B774B);
   static const Color successSubtle = Color(0xFFE8F3EC);
   static const Color danger = Color(0xFFC8383B);
   static const Color dangerSubtle = Color(0xFFFBEDED);
