@@ -50,23 +50,40 @@ console.log(`Wrote ${Object.keys(GLYPHS).length} icons to ${iconOut}`);
 // 2 · Illustrations ------------------------------------------------------------
 const { tokenByName } = await import(pathToFileURL(resolve(repoRoot, "src/design-system/tokens.js")).href);
 const c = (name) => tokenByName[name].resolved;
-// V16 re-points the roles the .ill__* classes read (theme-withings.css "Roles" block), so the
-// scenes are exported in V16 colours: ink outlines, blue accent, blue-tint wash, warm greys.
+// Monochrome Meetup experiment: the app no longer uses the V16 roles, so the scenes are exported in
+// the Flutter-only monochrome palette (lib/core/design_system/tokens/monochrome_tokens.dart, which
+// the web tokens don't carry): charcoal ink, cool greys, one purple accent; the yellow and promo
+// highlights become the lavender brand line.
+const MONO = {
+  "--color-withings-ink": "#18181b",
+  "--color-withings-accent-foreground": "#ffffff",
+  "--color-withings-surface": "#ffffff",
+  "--color-withings-accent-tint": "#f1eff9",
+  "--color-withings-fill": "#ececf0",
+  "--color-withings-photo": "#e2e2e7",
+  "--color-withings-border-strong": "#c7c7ce",
+  "--color-withings-control": "#8b8b94",
+  "--color-withings-accent": "#7262c7",
+  "--color-accent-promo": "#cbc4ec",
+  "--color-accent-yellow": "#cbc4ec",
+};
+const tokenColour = c;
+const mono = (name) => MONO[name] ?? tokenColour(name);
 const STYLE = {
-  ill__ink: { stroke: c("--color-withings-ink"), "stroke-width": "2.5", "stroke-linecap": "round", "stroke-linejoin": "round" },
+  ill__ink: { stroke: mono("--color-withings-ink"), "stroke-width": "2.5", "stroke-linecap": "round", "stroke-linejoin": "round" },
   ill__open: { fill: "none" },
-  "ill__on-brand": { stroke: c("--color-withings-accent-foreground"), "stroke-width": "3.5", "stroke-linecap": "round", "stroke-linejoin": "round" },
-  ill__paper: { fill: c("--color-withings-surface") },
-  ill__wash: { fill: c("--color-withings-accent-tint") },
-  ill__ground: { fill: c("--color-withings-fill") },
-  ill__soft: { fill: c("--color-withings-photo") },
-  ill__muted: { fill: c("--color-withings-border-strong") },
-  ill__strong: { fill: c("--color-withings-control") },
-  ill__brand: { fill: c("--color-withings-accent") },
-  ill__promo: { fill: c("--color-accent-promo") },
-  ill__yellow: { fill: c("--color-accent-yellow") },
-  "ill__on-brand-fill": { fill: c("--color-withings-accent-foreground") },
-  ill__trail: { fill: "none", stroke: c("--color-withings-control"), "stroke-width": "2", "stroke-linecap": "round", "stroke-dasharray": "2 6" },
+  "ill__on-brand": { stroke: mono("--color-withings-accent-foreground"), "stroke-width": "3.5", "stroke-linecap": "round", "stroke-linejoin": "round" },
+  ill__paper: { fill: mono("--color-withings-surface") },
+  ill__wash: { fill: mono("--color-withings-accent-tint") },
+  ill__ground: { fill: mono("--color-withings-fill") },
+  ill__soft: { fill: mono("--color-withings-photo") },
+  ill__muted: { fill: mono("--color-withings-border-strong") },
+  ill__strong: { fill: mono("--color-withings-control") },
+  ill__brand: { fill: mono("--color-withings-accent") },
+  ill__promo: { fill: mono("--color-accent-promo") },
+  ill__yellow: { fill: mono("--color-accent-yellow") },
+  "ill__on-brand-fill": { fill: mono("--color-withings-accent-foreground") },
+  ill__trail: { fill: "none", stroke: mono("--color-withings-control"), "stroke-width": "2", "stroke-linecap": "round", "stroke-dasharray": "2 6" },
 };
 
 const tmp = resolve(repoRoot, "node_modules/.cache/numaya-mobile-export");

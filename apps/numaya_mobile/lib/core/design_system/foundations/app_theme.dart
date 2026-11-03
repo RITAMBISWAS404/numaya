@@ -7,14 +7,14 @@ import 'app_layout.dart';
 import 'app_transitions.dart';
 import 'app_typography.dart';
 
-/// Material theme built from the V16 roles. Numaya widgets style themselves from the foundations;
+/// Material theme built from the Monochrome Meetup roles. Numaya widgets style themselves from the foundations;
 /// this covers the platform pieces (text selection, page transitions, system bars).
 abstract final class AppTheme {
   static ThemeData light() {
     const scheme = ColorScheme(
       brightness: Brightness.light,
-      primary: AppColors.ink,
-      onPrimary: AppColors.inkForeground,
+      primary: AppColors.accent,
+      onPrimary: AppColors.accentForeground,
       primaryContainer: AppColors.accentTint,
       onPrimaryContainer: AppColors.accentOnTint,
       secondary: AppColors.accent,
@@ -66,7 +66,7 @@ abstract final class AppTheme {
         showDragHandle: false,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(AppRadii.photo),
+            top: Radius.circular(AppRadii.sheet),
           ),
         ),
       ),

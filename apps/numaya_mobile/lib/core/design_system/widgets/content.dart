@@ -761,7 +761,7 @@ Future<T?> showNumayaSheet<T>({
     backgroundColor: AppColors.surface,
     barrierColor: AppColors.scrim,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.photo)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.sheet)),
     ),
     builder: (context) {
       final sheet = Padding(
