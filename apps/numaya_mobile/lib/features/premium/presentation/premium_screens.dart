@@ -275,6 +275,11 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
+          const IllustrationSlot(
+            slot: 'premium_header',
+            label: 'More ways to meet the right people',
+            aspectRatio: 16 / 9,
+          ),
           ScreenHeader(title: _title(l10n), lede: l10n.paywallLede),
           const SizedBox(height: AppSpacing.s4),
           WhiteCard(

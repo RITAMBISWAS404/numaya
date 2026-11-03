@@ -179,6 +179,11 @@ class LikeProfileScreen extends ConsumerWidget {
       return NumayaScreen(
         top: NumayaTopBar(onBack: () => context.pop(), backLabel: l10n.back),
         body: EmptyState(
+          art: const IllustrationSlot(
+            slot: 'like_gone',
+            label: 'This like has moved on',
+            width: 176,
+          ),
           title: l10n.likesEmptyTitle,
           body: l10n.likesEmptyBody,
         ),
@@ -326,6 +331,11 @@ class PersonProfileScreen extends ConsumerWidget {
       footer: footer,
       body: person == null
           ? EmptyState(
+              art: const IllustrationSlot(
+                slot: 'person_missing',
+                label: 'This profile is no longer here',
+                width: 176,
+              ),
               title: l10n.personMissingTitle,
               body: l10n.personMissingBody,
             )

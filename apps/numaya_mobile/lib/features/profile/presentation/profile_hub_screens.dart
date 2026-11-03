@@ -235,6 +235,11 @@ class OpeningMovesScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
+          const IllustrationSlot(
+            slot: 'opening_moves_header',
+            label: 'Start a new conversation',
+            aspectRatio: 16 / 9,
+          ),
           ScreenHeader(
             title: l10n.openingMovesHeading,
             lede: l10n.openingMovesLede,

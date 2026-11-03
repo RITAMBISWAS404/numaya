@@ -187,6 +187,11 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
       return NumayaScreen(
         top: NumayaTopBar(onBack: () => context.pop(), backLabel: l10n.back),
         body: EmptyState(
+          art: const IllustrationSlot(
+            slot: 'event_missing',
+            label: 'This event isn’t here anymore',
+            width: 176,
+          ),
           title: l10n.eventMissingTitle,
           body: l10n.eventMissingBody,
           action: NumayaButton(

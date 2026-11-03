@@ -275,6 +275,11 @@ class SafetyCentreScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
+          const IllustrationSlot(
+            slot: 'safety_header',
+            label: 'Date with confidence',
+            aspectRatio: 16 / 9,
+          ),
           ScreenHeader(title: l10n.safetyHeading, lede: l10n.safetyLede),
           const SizedBox(height: AppSpacing.s5),
           InfoCard(
