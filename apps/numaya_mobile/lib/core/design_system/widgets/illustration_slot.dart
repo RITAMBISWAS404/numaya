@@ -52,23 +52,33 @@ class IllustrationSlot extends StatelessWidget {
               ),
               padding: const EdgeInsets.all(AppSpacing.s4),
               alignment: Alignment.center,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const NumayaIcon(
-                    NumayaIcons.image,
-                    size: AppSizes.iconLg,
-                    color: AppColors.textMuted,
+              // At very large text the caption could outgrow the fixed-ratio box; the
+              // decorative placeholder scales down instead of overflowing.
+              child: LayoutBuilder(
+                builder: (context, box) => FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: SizedBox(
+                    width: box.maxWidth,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const NumayaIcon(
+                          NumayaIcons.image,
+                          size: AppSizes.iconLg,
+                          color: AppColors.textMuted,
+                        ),
+                        const SizedBox(height: AppSpacing.s2),
+                        Text(
+                          'Illustration: $label',
+                          textAlign: TextAlign.center,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTypography.caption,
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: AppSpacing.s2),
-                  Text(
-                    'Illustration: $label',
-                    textAlign: TextAlign.center,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.caption,
-                  ),
-                ],
+                ),
               ),
             ),
           );

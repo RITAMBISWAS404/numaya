@@ -129,34 +129,48 @@ class PersonHeroCard extends StatelessWidget {
     children: [
       Semantics(
         header: true,
-        child: Text(
-          showAge && person.age > 0
-              ? l10n.profileNameAge(person.name, person.age)
-              : person.name,
-          style: AppTypography.hero.copyWith(fontSize: 32, height: 38 / 32),
+        // At very large text sizes the 32pt name is stepped down to 24pt, so a long single-word
+        // name still scales up (to 48pt at 200%) but no longer breaks inside the word.
+        child: Builder(
+          builder: (context) {
+            final large = MediaQuery.textScalerOf(context).scale(10) > 16;
+            return Text(
+              showAge && person.age > 0
+                  ? l10n.profileNameAge(person.name, person.age)
+                  : person.name,
+              style: AppTypography.hero.copyWith(
+                fontSize: large ? 24 : 32,
+                height: large ? 30 / 24 : 38 / 32,
+              ),
+            );
+          },
         ),
       ),
       if (person.job != null)
         Padding(
           padding: const EdgeInsets.only(top: 2),
-          child: Row(
-            children: [
-              const NumayaIcon(
-                NumayaIcons.user,
-                size: AppSizes.iconSm,
-                color: AppColors.textMuted,
-              ),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  person.job!,
-                  style: AppTypography.weight(
-                    AppTypography.body,
-                    AppTypography.medium,
-                  ).copyWith(color: AppColors.textSecondary),
+          // The icon is an inline span so it stays on the first line when the job wraps.
+          child: Text.rich(
+            TextSpan(
+              children: [
+                const WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 6),
+                    child: NumayaIcon(
+                      NumayaIcons.user,
+                      size: AppSizes.iconSm,
+                      color: AppColors.textMuted,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                TextSpan(text: person.job!),
+              ],
+            ),
+            style: AppTypography.weight(
+              AppTypography.body,
+              AppTypography.medium,
+            ).copyWith(color: AppColors.textSecondary),
           ),
         ),
     ],

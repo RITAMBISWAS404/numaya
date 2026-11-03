@@ -577,6 +577,12 @@ class VisibilityAboutScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
+          const IllustrationSlot(
+            slot: 'health_how_it_works',
+            label: 'How visibility is checked',
+            aspectRatio: 16 / 9,
+          ),
+          const SizedBox(height: AppSpacing.s5),
           for (final (title, body) in items) ...[
             ProfileSectionCard(
               title: title,

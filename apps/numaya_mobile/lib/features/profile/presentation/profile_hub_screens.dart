@@ -88,6 +88,12 @@ class CompletionHubScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
+          const IllustrationSlot(
+            slot: 'profile_completion',
+            label: 'A profile coming together',
+            aspectRatio: 16 / 9,
+          ),
+          const SizedBox(height: AppSpacing.s5),
           Semantics(
             header: true,
             child: Text(

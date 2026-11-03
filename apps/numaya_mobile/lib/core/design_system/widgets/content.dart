@@ -735,8 +735,8 @@ class _SetupStepTile extends StatelessWidget {
   }
 }
 
-/// Bottom sheet (`.theme-withings .sheet`): white, 16pt top corners, a warm grabber, a 20pt medium
-/// title with a hairline under the header, and a bare ✕ to dismiss.
+/// Bottom sheet (`.theme-withings .sheet`): white, 16pt top corners, a warm grabber, a 22pt bold
+/// title with no rule under it (premium refinement: space, not lines), and a bare ✕ to dismiss.
 Future<T?> showNumayaSheet<T>({
   required BuildContext context,
   required String title,
@@ -789,14 +789,6 @@ Future<T?> showNumayaSheet<T>({
                 0,
                 AppSpacing.s2,
                 AppSpacing.s3,
-              ),
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: AppColors.border,
-                    width: AppBorders.hairline,
-                  ),
-                ),
               ),
               child: Row(
                 children: [

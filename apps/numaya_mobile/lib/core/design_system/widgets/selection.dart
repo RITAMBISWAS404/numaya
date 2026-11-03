@@ -562,15 +562,7 @@ class OptionGroup extends StatelessWidget {
             padding: EdgeInsets.zero,
             child: Column(
               children: [
-                for (var i = 0; i < children.length; i++) ...[
-                  if (i > 0)
-                    const Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: AppColors.border,
-                    ),
-                  children[i],
-                ],
+                for (var i = 0; i < children.length; i++) ...[children[i]],
               ],
             ),
           ),

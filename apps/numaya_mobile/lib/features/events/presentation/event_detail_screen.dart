@@ -531,7 +531,6 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: AppRadii.all(AppRadii.card),
-        border: Border.all(color: AppColors.border, width: AppBorders.hairline),
         boxShadow: AppElevation.floating,
       ),
       child: Row(

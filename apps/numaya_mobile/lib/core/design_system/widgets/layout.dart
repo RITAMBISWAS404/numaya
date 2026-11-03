@@ -71,12 +71,29 @@ class _NumayaScreenState extends State<NumayaScreen> {
           AppSpacing.gutter,
           AppSpacing.s6,
         );
+    // On a short screen with very large text a pinned footer can take most of the height and
+    // leave the content no room. There the footer scrolls with the content, after it.
+    final mq = MediaQuery.of(context);
+    final inlineFooter =
+        footer != null &&
+        scrollable &&
+        mq.size.height < 700 &&
+        mq.textScaler.scale(10) > 16;
     final content = scrollable
         ? SingleChildScrollView(
             controller: scrollController,
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             padding: padding,
-            child: body,
+            child: inlineFooter
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      body,
+                      const SizedBox(height: AppSpacing.s5),
+                      footer,
+                    ],
+                  )
+                : body,
           )
         : Padding(padding: padding, child: body);
 
@@ -130,7 +147,7 @@ class _NumayaScreenState extends State<NumayaScreen> {
                         ),
                       ),
                     ),
-                    if (footer != null)
+                    if (footer != null && !inlineFooter)
                       Padding(
                         padding: const EdgeInsets.fromLTRB(
                           AppSpacing.gutter,
@@ -213,15 +230,24 @@ class NumayaTopBar extends StatelessWidget {
             if (step != null && steps != null)
               StepProgress(step: step!, steps: steps!)
             else if (title != null)
-              Semantics(
-                header: true,
-                label: title,
-                child: ExcludeSemantics(
-                  child: Text(
-                    title!,
-                    style: AppTypography.headerCaps,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+              Padding(
+                // Keep the centred title clear of the buttons on both sides.
+                padding: EdgeInsets.symmetric(
+                  horizontal:
+                      (actions.length > 1 ? actions.length : 1) *
+                          (AppSizes.iconButton + AppSpacing.s1) +
+                      AppSpacing.s1,
+                ),
+                child: Semantics(
+                  header: true,
+                  label: title,
+                  child: ExcludeSemantics(
+                    child: Text(
+                      title!,
+                      style: AppTypography.headerCaps,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
               ),

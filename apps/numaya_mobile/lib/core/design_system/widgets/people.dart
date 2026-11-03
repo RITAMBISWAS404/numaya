@@ -873,15 +873,7 @@ Future<int?> showNumayaActionSheet({
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      for (var i = 0; i < actions.length; i++) ...[
-                        if (i > 0)
-                          const Divider(
-                            height: 1,
-                            thickness: 1,
-                            color: AppColors.border,
-                          ),
-                        row(i),
-                      ],
+                      for (var i = 0; i < actions.length; i++) ...[row(i)],
                     ],
                   ),
                 ),

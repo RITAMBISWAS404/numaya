@@ -121,13 +121,6 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       list = Column(
         children: [
           for (var i = 0; i < rows.length; i++) ...[
-            if (i > 0)
-              const Divider(
-                height: 1,
-                thickness: 1,
-                indent: 80,
-                color: AppColors.border,
-              ),
             _ConversationRow(
               person: rows[i],
               last: controller.lastMessage(rows[i].id)!,
