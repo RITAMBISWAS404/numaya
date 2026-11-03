@@ -486,7 +486,10 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // Keyed by person: the measured hero container keeps its state across people,
+                  // the swipe card (and its drag offset) must not.
                   _SwipeCard(
+                    key: ValueKey('swipe-${person.id}'),
                     person: person,
                     onOpenPhotos: () => openPhotos(1),
                     onMore: _toDetails,
@@ -842,6 +845,7 @@ class _DecisionMotion extends StatelessWidget {
 /// The first photo card, draggable: past 96pt right likes, left passes (the web's threshold).
 class _SwipeCard extends StatefulWidget {
   const _SwipeCard({
+    super.key,
     required this.person,
     required this.onDecide,
     required this.onOpenPhotos,
