@@ -321,75 +321,46 @@ class VisibilityScreen extends ConsumerWidget {
             style: AppTypography.body.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: AppSpacing.s4),
-          // 1. Visibility
-          Semantics(
-            header: true,
-            child: Text(l10n.visVisibility, style: AppTypography.section),
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          StatusBanner(
-            title: statusLabel(l10n, r.status),
-            body: [
+          // 1. Hero: visibility status and completeness together (Bevel's one-number summary).
+          _HealthHero(
+            statusTitle: statusLabel(l10n, r.status),
+            statusBody: [
               statusBody,
               for (final q in r.missing) '• ${reqLabel(q)}',
             ].join('\n'),
             tone: statusTone,
+            percent: c.percent,
+            percentLabel: l10n.completionPercent(c.percent),
+            completeLabel: c.percent >= 100
+                ? l10n.visComplete
+                : l10n.visIncomplete,
             action: statusAction == null
                 ? null
                 : NumayaButton(
                     label: statusAction.$1,
                     small: true,
                     expand: false,
-                    variant: NumayaButtonVariant.secondary,
                     onPressed: statusAction.$2,
                   ),
           ),
           const SizedBox(height: AppSpacing.s2),
-          Text(
-            r.status == VisibilityStatus.visible
-                ? l10n.visVisibleLimits
-                : l10n.visSourceNote,
-            style: AppTypography.caption,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s1),
+            child: Text(
+              r.status == VisibilityStatus.visible
+                  ? l10n.visVisibleLimits
+                  : l10n.visSourceNote,
+              style: AppTypography.caption,
+            ),
           ),
 
-          // 2. Profile completeness
+          // 2. Profile completeness, part by part
           section(
             l10n.visCompleteness,
             note: l10n.visCompletenessNote,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        l10n.completionPercent(c.percent),
-                        style: AppTypography.weight(
-                          AppTypography.section,
-                          AppTypography.semibold,
-                        ),
-                      ),
-                    ),
-                    StatusBadge(
-                      label: c.percent >= 100
-                          ? l10n.visComplete
-                          : l10n.visIncomplete,
-                      tone: BadgeTone.neutral,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.s2),
-                ClipRRect(
-                  borderRadius: AppRadii.all(AppRadii.pill),
-                  child: LinearProgressIndicator(
-                    value: c.percent / 100,
-                    minHeight: 6,
-                    color: AppColors.accent,
-                    backgroundColor: AppColors.fill,
-                    semanticsLabel: l10n.completionPercent(c.percent),
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.s3),
                 ListGroup(
                   children: [
                     for (final (label, part, s) in parts)
@@ -619,6 +590,145 @@ class VisibilityAboutScreen extends StatelessWidget {
             body: l10n.visAboutDemoBody,
           ),
           const SizedBox(height: AppSpacing.s4),
+        ],
+      ),
+    );
+  }
+}
+
+/// The Account Health hero: a tinted status pill with its explanation and action, and profile
+/// completeness as one large number over a thick bar. Everything shown comes from the visibility
+/// report and the member's own entries; nothing is predicted.
+class _HealthHero extends StatelessWidget {
+  const _HealthHero({
+    required this.statusTitle,
+    required this.statusBody,
+    required this.tone,
+    required this.percent,
+    required this.percentLabel,
+    required this.completeLabel,
+    this.action,
+  });
+
+  final String statusTitle;
+  final String statusBody;
+  final BannerTone tone;
+  final int percent;
+  final String percentLabel;
+  final String completeLabel;
+  final Widget? action;
+
+  @override
+  Widget build(BuildContext context) {
+    final (Color bg, Color fg, NumayaIcons icon) = switch (tone) {
+      BannerTone.success => (
+        AppColors.accentTint,
+        AppColors.accentOnTint,
+        NumayaIcons.verified,
+      ),
+      BannerTone.info => (
+        AppColors.accentTint,
+        AppColors.accentOnTint,
+        NumayaIcons.info,
+      ),
+      BannerTone.pending => (
+        AppColors.warningTint,
+        AppColors.warning,
+        NumayaIcons.pending,
+      ),
+      BannerTone.error => (
+        AppColors.dangerTint,
+        AppColors.negative,
+        NumayaIcons.alert,
+      ),
+    };
+    final number = percentLabel.split(' ').first;
+    final rest = percentLabel.substring(number.length);
+    return Container(
+      padding: const EdgeInsets.all(AppLayout.heroPadding),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.heroCard),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Semantics(
+            liveRegion: true,
+            header: true,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(10, 6, 14, 6),
+              decoration: BoxDecoration(
+                color: bg,
+                borderRadius: AppRadii.all(AppRadii.pill),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  NumayaIcon(icon, size: 18, color: fg),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      statusTitle,
+                      style: AppTypography.weight(
+                        AppTypography.bodySm,
+                        AppTypography.bold,
+                      ).copyWith(color: fg),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.s3),
+          Text(
+            statusBody,
+            style: AppTypography.body.copyWith(color: AppColors.textSecondary),
+          ),
+          if (action != null) ...[
+            const SizedBox(height: AppSpacing.s4),
+            action!,
+          ],
+          const SizedBox(height: AppSpacing.s6),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: number,
+                        style: AppTypography.metric.copyWith(
+                          fontSize: 52,
+                          height: 56 / 52,
+                          color: AppColors.accentOnTint,
+                        ),
+                      ),
+                      TextSpan(text: rest, style: AppTypography.metricUnit),
+                    ],
+                  ),
+                ),
+              ),
+              StatusBadge(label: completeLabel),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.s3),
+          ClipRRect(
+            borderRadius: AppRadii.all(AppRadii.pill),
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(end: (percent / 100).clamp(0, 1)),
+              duration: AppMotion.duration(context, AppMotion.progress),
+              curve: AppMotion.easeOut,
+              builder: (context, v, _) => LinearProgressIndicator(
+                value: v,
+                minHeight: 10,
+                color: AppColors.accent,
+                backgroundColor: AppColors.fill,
+                semanticsLabel: percentLabel,
+              ),
+            ),
+          ),
         ],
       ),
     );

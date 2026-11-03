@@ -16,10 +16,10 @@ import '../../verification/application/verification_controller.dart';
 import '../application/profile_details_controller.dart';
 import '../domain/profile_details.dart';
 
-/// B-23 Profile tab in V16's layout (screenshot 099-profile): the page title with a round settings
-/// button, a navy initials avatar, the name on the hero scale, a summary line, interest chips, an
-/// outlined "Edit profile" pill, the prompt card, then grouped rows. Everything shown is what the
-/// member entered; no score or activity is invented.
+/// B-23 Profile tab (premium refinement): a hero card (avatar beside the name and summary, the
+/// phone-verified badge, interests, Edit profile and Preview), the completion card, four profile
+/// tiles (visibility, Opening Moves, verification, Premium), the prompt, then one support group.
+/// Everything shown is what the member entered; no score or activity is invented.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
@@ -89,87 +89,148 @@ class ProfileScreen extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Center(
-                          child: ExcludeSemantics(
-                            child: Container(
-                              width: AppSizes.avatarProfile,
-                              height: AppSizes.avatarProfile,
-                              decoration: const BoxDecoration(
-                                color: AppColors.identity,
-                                shape: BoxShape.circle,
-                              ),
-                              alignment: Alignment.center,
-                              clipBehavior: Clip.antiAlias,
-                              child: mainPhoto != null
-                                  ? Image(
-                                      image: localImage(mainPhoto, width: 540),
+                        // 1. Identity: one hero card (Meetup's member page) holding who you are,
+                        // what you're into and the two things you do with your profile.
+                        Container(
+                          padding: const EdgeInsets.all(AppLayout.heroPadding),
+                          decoration: BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: AppRadii.all(AppRadii.heroCard),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Row(
+                                children: [
+                                  ExcludeSemantics(
+                                    child: Container(
                                       width: AppSizes.avatarProfile,
                                       height: AppSizes.avatarProfile,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Text(
-                                      initial,
-                                      style:
-                                          AppTypography.weight(
-                                            AppTypography.pageTitle,
-                                            AppTypography.semibold,
-                                          ).copyWith(
-                                            fontSize: 72,
-                                            height: 1,
-                                            color: AppColors.onIdentity,
-                                          ),
+                                      decoration: const BoxDecoration(
+                                        color: AppColors.identity,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      alignment: Alignment.center,
+                                      clipBehavior: Clip.antiAlias,
+                                      child: mainPhoto != null
+                                          ? Image(
+                                              image: localImage(
+                                                mainPhoto,
+                                                width: 300,
+                                              ),
+                                              width: AppSizes.avatarProfile,
+                                              height: AppSizes.avatarProfile,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Text(
+                                              initial,
+                                              style: AppTypography.hero
+                                                  .copyWith(
+                                                    fontSize: 40,
+                                                    height: 1,
+                                                    color: AppColors.onIdentity,
+                                                  ),
+                                            ),
                                     ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.s4),
-                        Semantics(
-                          header: true,
-                          child: Text(
-                            age == null
-                                ? draft.firstName
-                                : l10n.profileNameAge(draft.firstName, age),
-                            textAlign: TextAlign.center,
-                            style: AppTypography.hero,
-                          ),
-                        ),
-                        if (summary.isNotEmpty) ...[
-                          const SizedBox(height: AppSpacing.s1),
-                          Text(
-                            summary,
-                            textAlign: TextAlign.center,
-                            style: AppTypography.body.copyWith(
-                              color: AppColors.textMuted,
-                            ),
-                          ),
-                        ],
-                        if (draft.interests.isNotEmpty) ...[
-                          const SizedBox(height: AppSpacing.s4),
-                          Wrap(
-                            alignment: WrapAlignment.center,
-                            spacing: AppSpacing.s2,
-                            runSpacing: AppSpacing.s2,
-                            children: [
-                              for (final interest in draft.interests)
-                                _StaticChip(
-                                  label: interest,
-                                  emoji: kInterestEmoji[interest],
+                                  ),
+                                  const SizedBox(width: AppSpacing.s4),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Semantics(
+                                          header: true,
+                                          child: Text(
+                                            age == null
+                                                ? draft.firstName
+                                                : l10n.profileNameAge(
+                                                    draft.firstName,
+                                                    age,
+                                                  ),
+                                            style: AppTypography.headline,
+                                          ),
+                                        ),
+                                        if (summary.isNotEmpty) ...[
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            summary,
+                                            style: AppTypography.bodySm
+                                                .copyWith(
+                                                  color: AppColors.textMuted,
+                                                ),
+                                          ),
+                                        ],
+                                        const SizedBox(height: AppSpacing.s2),
+                                        StatusBadge(
+                                          label: l10n.profilePhoneVerified,
+                                          icon: NumayaIcons.verified,
+                                          tone: BadgeTone.brand,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              if (draft.interests.isNotEmpty) ...[
+                                const SizedBox(height: AppSpacing.s5),
+                                Wrap(
+                                  spacing: AppSpacing.s2,
+                                  runSpacing: AppSpacing.s2,
+                                  children: [
+                                    for (final interest in draft.interests)
+                                      _StaticChip(
+                                        label: interest,
+                                        emoji: kInterestEmoji[interest],
+                                      ),
+                                  ],
                                 ),
+                              ],
+                              const SizedBox(height: AppSpacing.s5),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: NumayaButton(
+                                      label: l10n.profileEdit,
+                                      icon: NumayaIcons.edit,
+                                      onPressed: () =>
+                                          context.push(Routes.editProfile),
+                                    ),
+                                  ),
+                                  const SizedBox(width: AppSpacing.s3),
+                                  // Preview as a filled square beside the primary: one action
+                                  // leads, the second stays one tap away (and named for
+                                  // screen readers and on long press).
+                                  Tooltip(
+                                    message: l10n.editPreview,
+                                    excludeFromSemantics: true,
+                                    child: Pressable(
+                                      onTap: () => context.push(Routes.preview),
+                                      semanticLabel: l10n.editPreview,
+                                      excludeChildSemantics: true,
+                                      borderRadius: AppRadii.all(AppRadii.pill),
+                                      child: Container(
+                                        width: AppSizes.buttonHeight,
+                                        height: AppSizes.buttonHeight,
+                                        decoration: const BoxDecoration(
+                                          color: AppColors.field,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: const NumayaIcon(
+                                          NumayaIcons.public,
+                                          color: AppColors.ink,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
-                        ],
-                        const SizedBox(height: AppSpacing.s4),
-                        Center(
-                          child: NumayaButton(
-                            label: l10n.profileEdit,
-                            small: true,
-                            expand: false,
-                            variant: NumayaButtonVariant.secondary,
-                            icon: NumayaIcons.edit,
-                            onPressed: () => context.push(Routes.editProfile),
-                          ),
                         ),
-                        const SizedBox(height: AppLayout.sectionGap),
+                        const SizedBox(height: AppSpacing.s4),
+                        // 2. Completion: what's left, with the one way to finish it.
                         CompletionCard(
                           percent: completion,
                           title: l10n.profileCompletionLabel(completion),
@@ -179,8 +240,63 @@ class ProfileScreen extends ConsumerWidget {
                           actionLabel: l10n.profileComplete,
                           onAction: () => context.push(Routes.completion),
                         ),
+                        // 3. Your profile at a glance: four tiles (Meetup's action tiles) instead of
+                        // a list of rows.
+                        const SizedBox(height: AppLayout.sectionGap),
+                        Semantics(
+                          header: true,
+                          child: Text(
+                            l10n.profileYourProfile,
+                            style: AppTypography.section,
+                          ),
+                        ),
+                        const SizedBox(height: AppLayout.headingGap),
+                        _TileGrid(
+                          tiles: [
+                            _Tile(
+                              icon: NumayaIcons.explore,
+                              label: l10n.visTitle,
+                              value: VisibilityScreen.statusLabel(
+                                l10n,
+                                ref.watch(visibilityReportProvider).status,
+                              ),
+                              onTap: () => context.push(Routes.visibility),
+                            ),
+                            _Tile(
+                              icon: NumayaIcons.message,
+                              label: l10n.openingMovesTitle,
+                              value: l10n.openingMovesCount(
+                                details.openingMoves.length,
+                              ),
+                              onTap: () => context.push(Routes.openingMoves),
+                            ),
+                            _Tile(
+                              icon: NumayaIcons.verified,
+                              label: l10n.editVerify,
+                              value: switch (verification) {
+                                PhotoVerificationStatus.verified =>
+                                  l10n.verifyStatusVerified,
+                                PhotoVerificationStatus.pending =>
+                                  l10n.verifyStatusPending,
+                                PhotoVerificationStatus.rejected =>
+                                  l10n.verifyStatusRejected,
+                                PhotoVerificationStatus.notStarted =>
+                                  l10n.verifyStatusNone,
+                              },
+                              onTap: () => context.push(Routes.verifyPhoto),
+                            ),
+                            _Tile(
+                              icon: NumayaIcons.premium,
+                              label: l10n.premiumName,
+                              value: premium.active
+                                  ? l10n.premiumActive
+                                  : l10n.premiumExplore,
+                              onTap: () => context.push(Routes.premium),
+                            ),
+                          ],
+                        ),
                         if (draft.prompt != null) ...[
-                          const SizedBox(height: AppSpacing.sectionGap),
+                          const SizedBox(height: AppLayout.sectionGap),
                           NumayaSection(
                             title: l10n.profilePromptTitle,
                             child: PromptCard(
@@ -205,56 +321,16 @@ class ProfileScreen extends ConsumerWidget {
                             ),
                           ),
                         ],
-                        const SizedBox(height: AppSpacing.sectionGap),
-                        ListGroup(
-                          title: l10n.profileYourProfile,
-                          children: [
-                            ListRow(
-                              leading: NumayaIcons.explore,
-                              label: l10n.visTitle,
-                              value: VisibilityScreen.statusLabel(
-                                l10n,
-                                ref.watch(visibilityReportProvider).status,
-                              ),
-                              onTap: () => context.push(Routes.visibility),
-                            ),
-                            ListRow(
-                              leading: NumayaIcons.public,
-                              label: l10n.editPreview,
-                              onTap: () => context.push(Routes.preview),
-                            ),
-                            ListRow(
-                              leading: NumayaIcons.message,
-                              label: l10n.openingMovesTitle,
-                              value: l10n.openingMovesCount(
-                                details.openingMoves.length,
-                              ),
-                              onTap: () => context.push(Routes.openingMoves),
-                            ),
-                            ListRow(
-                              leading: NumayaIcons.verified,
-                              label: l10n.editVerify,
-                              value: switch (verification) {
-                                PhotoVerificationStatus.verified =>
-                                  l10n.verifyStatusVerified,
-                                PhotoVerificationStatus.pending =>
-                                  l10n.verifyStatusPending,
-                                PhotoVerificationStatus.rejected =>
-                                  l10n.verifyStatusRejected,
-                                PhotoVerificationStatus.notStarted =>
-                                  l10n.verifyStatusNone,
-                              },
-                              onTap: () => context.push(Routes.verifyPhoto),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: AppSpacing.sectionGap),
-                        _PremiumCard(
-                          active: premium.active,
-                          until: premium.activeUntil,
-                          onTap: () => context.push(Routes.premium),
-                        ),
-                        const SizedBox(height: AppSpacing.sectionGap),
+                        if (premium.active) ...[
+                          const SizedBox(height: AppLayout.sectionGap),
+                          _PremiumCard(
+                            active: premium.active,
+                            until: premium.activeUntil,
+                            onTap: () => context.push(Routes.premium),
+                          ),
+                        ],
+                        // 4. Everything else in one quiet group.
+                        const SizedBox(height: AppLayout.sectionGap),
                         ListGroup(
                           title: l10n.profileSafetySupport,
                           children: [
@@ -268,27 +344,10 @@ class ProfileScreen extends ConsumerWidget {
                               label: l10n.helpTitle,
                               onTap: () => context.push(Routes.help),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: AppSpacing.sectionGap),
-                        ListGroup(
-                          title: l10n.profileAccount,
-                          children: [
                             ListRow(
                               leading: NumayaIcons.settings,
                               label: l10n.profileSettings,
                               onTap: () => context.push(Routes.settings),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: AppSpacing.sectionGap),
-                        ListGroup(
-                          title: l10n.profileTrust,
-                          children: [
-                            ListRow(
-                              leading: NumayaIcons.shield,
-                              label: l10n.profileVerification,
-                              value: l10n.profilePhoneVerified,
                             ),
                           ],
                         ),
@@ -305,7 +364,7 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-/// A content chip shown on the page (V16: white, 12pt corner, emoji and medium label).
+/// A content chip in the hero card: the fill grey, a full pill, emoji and medium label.
 class _StaticChip extends StatelessWidget {
   const _StaticChip({required this.label, this.emoji});
 
@@ -318,8 +377,8 @@ class _StaticChip extends StatelessWidget {
       height: AppSizes.chip,
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s3),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: AppRadii.all(AppRadii.control),
+        color: AppColors.fill,
+        borderRadius: AppRadii.all(AppRadii.pill),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -402,11 +461,88 @@ class _PremiumCard extends StatelessWidget {
             expand: false,
             variant: active
                 ? NumayaButtonVariant.secondary
-                : NumayaButtonVariant.primary,
+                : NumayaButtonVariant.brand,
             onPressed: onTap,
           ),
         ],
       ),
     );
   }
+}
+
+/// One profile tile: a purple icon, a bold label and the current value, the whole tile tappable.
+class _Tile {
+  const _Tile({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.onTap,
+  });
+
+  final NumayaIcons icon;
+  final String label;
+  final String value;
+  final VoidCallback onTap;
+}
+
+/// Tiles two to a row, each row as tall as its tallest tile.
+class _TileGrid extends StatelessWidget {
+  const _TileGrid({required this.tiles});
+
+  final List<_Tile> tiles;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (var i = 0; i < tiles.length; i += 2) ...[
+          if (i > 0) const SizedBox(height: AppLayout.itemGap),
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: _tile(tiles[i])),
+                const SizedBox(width: AppLayout.itemGap),
+                Expanded(
+                  child: i + 1 < tiles.length
+                      ? _tile(tiles[i + 1])
+                      : const SizedBox(),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _tile(_Tile t) => Pressable(
+    onTap: t.onTap,
+    semanticLabel: '${t.label}, ${t.value}',
+    excludeChildSemantics: true,
+    borderRadius: AppRadii.all(AppRadii.card),
+    child: Container(
+      padding: const EdgeInsets.all(AppLayout.cardPadding),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.card),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          NumayaIcon(t.icon, size: 26, color: AppColors.accentOnTint),
+          const SizedBox(height: AppSpacing.s4),
+          Text(
+            t.label,
+            style: AppTypography.weight(
+              AppTypography.body,
+              AppTypography.semibold,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(t.value, style: AppTypography.caption),
+        ],
+      ),
+    ),
+  );
 }

@@ -293,7 +293,7 @@ class _Segment extends StatelessWidget {
         child: state == 0
             ? null
             : state == 1
-            ? Container(color: AppColors.ink)
+            ? Container(color: AppColors.accent)
             : TweenAnimationBuilder<double>(
                 tween: Tween(begin: 0, end: 1),
                 duration: AppMotion.duration(context, AppMotion.progress),
@@ -301,7 +301,7 @@ class _Segment extends StatelessWidget {
                 builder: (context, v, _) => FractionallySizedBox(
                   widthFactor: v,
                   heightFactor: 1,
-                  child: Container(color: AppColors.ink),
+                  child: Container(color: AppColors.accent),
                 ),
               ),
       ),

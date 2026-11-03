@@ -6,11 +6,10 @@ import '../../../l10n/l10n.dart';
 import '../../onboarding/domain/profile_draft.dart';
 import '../domain/sample_people.dart';
 
-/// The first photo of a sample profile (UI_REFINEMENT_DECISIONS RD-10, RD-11): a 4:3 photo with a
-/// gradient scrim rising from the bottom, so badges, the name on the hero scale and the job sit on
-/// the photo itself rather than on a solid band. An optional [action] sits beside the name; the
-/// photo count and the drag stamp sit on top. When large text needs more room than the 4:3 photo
-/// gives, the card grows taller instead of squeezing the text.
+/// The first photo of a sample profile (premium refinement): an image-first card in Meetup's manner.
+/// The 4:3 photo stays clear, carrying only small white badges (sample, verified, new) and the photo
+/// count; the name on the hero scale, the job and an optional [action] sit below it on the card's
+/// own surface. No overlay or scrim is needed, and large text simply makes the text block taller.
 class PersonHeroCard extends StatelessWidget {
   const PersonHeroCard({
     super.key,
@@ -39,128 +38,102 @@ class PersonHeroCard extends StatelessWidget {
   /// "Like" / "Pass" while dragging.
   final String? stamp;
 
-  /// Text over the photo sits on a solid translucent panel inset from the card edges (no gradient
-  /// scrims in the monochrome system). The panel grows with a long name, job or large text, and at
-  /// 72% ink keeps white text above 4.5:1 over any photo; the rest of the photo stays clear.
-  static const double _panelInset = 6;
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return LayoutBuilder(
-      builder: (context, box) {
-        final width = box.maxWidth;
-        final photoHeight = width / AppMedia.personPhoto;
-        return ClipRRect(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ClipRRect(
           borderRadius: AppRadii.all(AppRadii.photo),
-          child: Stack(
-            children: [
-              Positioned.fill(child: _photo(l10n)),
-              // Sizes the card: the 4:3 photo, or taller when the text needs it.
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: photoHeight,
-                  minWidth: width,
-                  maxWidth: width,
-                ),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: SizedBox(
-                    width: width,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(_panelInset),
-                          decoration: BoxDecoration(
-                            color: AppColors.photoPanel,
-                            borderRadius: AppRadii.all(
-                              AppRadii.photo - _panelInset,
-                            ),
-                          ),
-                          child: Padding(
-                            // Tight sides: long names at 200% text keep their whole words.
-                            padding: const EdgeInsets.all(AppSpacing.s3),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Expanded(child: _more(l10n, _identity(l10n))),
-                                if (action != null) ...[
-                                  const SizedBox(width: AppSpacing.s3),
-                                  action!,
-                                ],
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              if (stamp != null)
-                Positioned(
-                  top: AppSpacing.s6,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: StatusBadge(label: stamp!, tone: BadgeTone.onPhoto),
-                  ),
-                ),
-              if (onOpenPhotos != null && person.photoCount > 1)
+          child: AspectRatio(
+            aspectRatio: AppMedia.personPhoto,
+            child: Stack(
+              children: [
+                Positioned.fill(child: _photo(l10n)),
                 Positioned(
                   top: AppSpacing.s3,
-                  right: AppSpacing.s3,
-                  child: IgnorePointer(
-                    child: StatusBadge(
-                      label: l10n.discoverPhotoCount(person.photoCount),
-                      icon: NumayaIcons.image,
-                      tone: BadgeTone.onPhoto,
+                  left: AppSpacing.s3,
+                  right: 96,
+                  child: IgnorePointer(child: _badges(l10n)),
+                ),
+                if (onOpenPhotos != null && person.photoCount > 1)
+                  Positioned(
+                    top: AppSpacing.s3,
+                    right: AppSpacing.s3,
+                    child: IgnorePointer(
+                      child: StatusBadge(
+                        label: l10n.discoverPhotoCount(person.photoCount),
+                        icon: NumayaIcons.image,
+                        tone: BadgeTone.onPhoto,
+                      ),
                     ),
                   ),
-                ),
+                if (stamp != null)
+                  Positioned.fill(
+                    child: Center(
+                      child: StatusBadge(
+                        label: stamp!,
+                        tone: BadgeTone.onPhoto,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.s3,
+            AppSpacing.s4,
+            AppSpacing.s3,
+            AppSpacing.s1,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(child: _more(l10n, _identity(l10n))),
+              if (action != null) ...[
+                const SizedBox(width: AppSpacing.s3),
+                action!,
+              ],
             ],
           ),
-        );
-      },
+        ),
+      ],
     );
   }
+
+  Widget _badges(AppLocalizations l10n) => Wrap(
+    spacing: 6,
+    runSpacing: 6,
+    children: [
+      StatusBadge(
+        label: own ? l10n.previewBadge : l10n.discoverSampleBadge,
+        tone: BadgeTone.onPhoto,
+      ),
+      if (person.verified)
+        StatusBadge(
+          label: l10n.discoverVerified,
+          icon: NumayaIcons.verified,
+          tone: BadgeTone.onPhoto,
+        ),
+      if (person.isNew)
+        StatusBadge(label: l10n.discoverNewHere, tone: BadgeTone.onPhoto),
+    ],
+  );
 
   Widget _identity(AppLocalizations l10n) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisSize: MainAxisSize.min,
     children: [
-      Wrap(
-        spacing: 6,
-        runSpacing: 6,
-        children: [
-          StatusBadge(
-            label: own ? l10n.previewBadge : l10n.discoverSampleBadge,
-            tone: BadgeTone.onDark,
-          ),
-          if (person.verified)
-            StatusBadge(
-              label: l10n.discoverVerified,
-              icon: NumayaIcons.verified,
-              tone: BadgeTone.onDark,
-            ),
-          if (person.isNew)
-            StatusBadge(label: l10n.discoverNewHere, tone: BadgeTone.onDark),
-        ],
-      ),
-      const SizedBox(height: AppSpacing.s2),
       Semantics(
         header: true,
         child: Text(
           showAge && person.age > 0
               ? l10n.profileNameAge(person.name, person.age)
               : person.name,
-          style: AppTypography.hero.copyWith(
-            fontSize: 32,
-            height: 38 / 32,
-            color: AppColors.inkForeground,
-          ),
+          style: AppTypography.hero.copyWith(fontSize: 32, height: 38 / 32),
         ),
       ),
       if (person.job != null)
@@ -171,7 +144,7 @@ class PersonHeroCard extends StatelessWidget {
               const NumayaIcon(
                 NumayaIcons.user,
                 size: AppSizes.iconSm,
-                color: AppColors.inkForeground,
+                color: AppColors.textMuted,
               ),
               const SizedBox(width: 6),
               Flexible(
@@ -180,7 +153,7 @@ class PersonHeroCard extends StatelessWidget {
                   style: AppTypography.weight(
                     AppTypography.body,
                     AppTypography.medium,
-                  ).copyWith(color: AppColors.inkForeground),
+                  ).copyWith(color: AppColors.textSecondary),
                 ),
               ),
             ],

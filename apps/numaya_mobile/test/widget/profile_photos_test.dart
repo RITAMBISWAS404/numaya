@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
+import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/dating/data/media_picker.dart';
 import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
 
@@ -71,7 +72,9 @@ void main() {
       );
       await goTo(c, tester, Routes.profile);
       expect(
-        find.byWidgetPredicate((w) => w is Image && w.width == 176),
+        find.byWidgetPredicate(
+          (w) => w is Image && w.width == AppSizes.avatarProfile,
+        ),
         findsOneWidget,
       );
       await goTo(c, tester, Routes.preview);

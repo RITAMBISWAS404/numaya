@@ -157,8 +157,8 @@ abstract final class AppSizes {
   static const double sliderThumb = NumayaSizeTokens.withingsThumbSlider;
   static const double avatar = NumayaSizeTokens.sizeAvatarXl;
 
-  /// The member's own avatar on the Profile tab: about twice [avatar] (RD-15).
-  static const double avatarProfile = 176;
+  /// The member's own avatar in the Profile hero card (premium refinement: beside the name).
+  static const double avatarProfile = 96;
   static const double tabBar = MonoSizes.tabBar;
   static const double tabItem = MonoSizes.tabItem;
   static const double topBar = 56;

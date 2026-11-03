@@ -135,15 +135,7 @@ class CompletionCard extends StatelessWidget {
                 ),
                 const SizedBox(width: AppLayout.iconLabelGap),
               ],
-              Expanded(
-                child: Text(
-                  title,
-                  style: AppTypography.weight(
-                    AppTypography.body,
-                    AppTypography.semibold,
-                  ),
-                ),
-              ),
+              Expanded(child: Text(title, style: AppTypography.card)),
             ],
           ),
           const SizedBox(height: AppSpacing.s3),
@@ -153,7 +145,7 @@ class CompletionCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: AppRadii.all(AppRadii.pill),
               child: SizedBox(
-                height: 6,
+                height: 8,
                 child: TweenAnimationBuilder<double>(
                   tween: Tween(end: (percent / 100).clamp(0, 1)),
                   duration: AppMotion.duration(context, AppMotion.progress),

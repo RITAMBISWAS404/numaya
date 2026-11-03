@@ -176,8 +176,8 @@ class _CodeCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final filled = digit != null;
-    // V16 has no code cell of its own; the cells extend the V16 field: white, 1pt outline, 8pt
-    // corner, a 2pt blue outline when active, red when wrong, the blue tint when verified.
+    // The cells extend the filled field: the neutral fill with no outline, white with a 2pt purple
+    // edge when active, red when wrong, the purple tint when verified.
     final (Color bg, Color ring, double ringWidth, Color fg) = switch (state) {
       CodeInputState.error => (
         AppColors.dangerTint,
@@ -198,9 +198,9 @@ class _CodeCell extends StatelessWidget {
         AppColors.ink,
       ),
       _ => (
-        AppColors.surface,
-        AppColors.outline,
-        AppBorders.hairline,
+        AppColors.field,
+        const Color(0x00EAEAEF),
+        AppBorders.focus,
         AppColors.ink,
       ),
     };

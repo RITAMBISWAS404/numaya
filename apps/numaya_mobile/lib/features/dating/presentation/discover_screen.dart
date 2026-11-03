@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show RenderAbstractViewport;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -63,14 +64,23 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
     _reading.value = p.pixels > _detailsOffset() - AppSpacing.s4;
   }
 
-  /// Where the profile below the card and its decision row starts.
+  /// The hero card (photo, name and decision row), measured for where the profile starts.
+  final _heroKey = GlobalKey();
+
+  /// Where the profile below the hero card starts: the card's bottom edge in scroll offset,
+  /// measured from the laid-out card (so text size and banners above it are accounted for).
   double _detailsOffset() {
+    final box = _heroKey.currentContext?.findRenderObject();
+    if (box is RenderBox && box.hasSize) {
+      final viewport = RenderAbstractViewport.maybeOf(box);
+      if (viewport != null) {
+        return viewport.getOffsetToReveal(box, 0).offset + box.size.height;
+      }
+    }
     final width =
         math.min(MediaQuery.sizeOf(context).width, AppSpacing.contentMax) -
         2 * AppLayout.screenGutter;
-    return width / AppMedia.personPhoto +
-        AppLayout.itemGap +
-        DecisionBar.height;
+    return width / AppMedia.personPhoto + DecisionBar.height;
   }
 
   void _toTop() {
@@ -464,21 +474,36 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
               ),
               const SizedBox(height: AppSpacing.s3),
             ],
-            _SwipeCard(
-              person: person,
-              onOpenPhotos: () => openPhotos(1),
-              onMore: _toDetails,
-              onDecide: (liked) => unawaited(_decide(person, liked: liked)),
-            ),
-            const SizedBox(height: AppLayout.itemGap),
-            // One decision row right under the card (RD-12); it floats once scrolled past.
-            DecisionBar(
-              passLabel: l10n.discoverPass,
-              superLabel: l10n.discoverSuperSwipe,
-              likeLabel: l10n.discoverLike,
-              onPass: () => decide(liked: false),
-              onSuper: () => decide(liked: true, superSwipe: true),
-              onLike: () => decide(liked: true),
+            // The photo and the decision share one white hero surface, so the actions belong to
+            // the person they decide on; the row floats once scrolled past (RD-12).
+            Container(
+              key: _heroKey,
+              padding: const EdgeInsets.all(AppSpacing.s2),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: AppRadii.all(AppRadii.heroCard),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _SwipeCard(
+                    person: person,
+                    onOpenPhotos: () => openPhotos(1),
+                    onMore: _toDetails,
+                    onDecide: (liked) =>
+                        unawaited(_decide(person, liked: liked)),
+                  ),
+                  const SizedBox(height: AppSpacing.s2),
+                  DecisionBar(
+                    passLabel: l10n.discoverPass,
+                    superLabel: l10n.discoverSuperSwipe,
+                    likeLabel: l10n.discoverLike,
+                    onPass: () => decide(liked: false),
+                    onSuper: () => decide(liked: true, superSwipe: true),
+                    onLike: () => decide(liked: true),
+                  ),
+                ],
+              ),
             ),
             if (!state.coachDone) ...[
               const SizedBox(height: AppLayout.itemGap),
