@@ -59,6 +59,25 @@ abstract final class AppLayout {
   /// Between a leading icon and its text.
   static const double iconLabelGap = AppSpacing.s2;
 
+  // Compact controls (spacing pass, SP-02). One inset and one icon gap per variant, so the same
+  // pill or badge has the same geometry wherever it appears.
+
+  /// Icon (or emoji) to label inside a pill or badge: 4. Rows, fields and buttons use
+  /// [iconLabelGap] (8).
+  static const double compactIconGap = AppSpacing.s1;
+
+  /// Pill inset (view tabs, selectable chips, fact chips): 12 across, 4 down; the 36pt height
+  /// comes from `AppSizes.chip`.
+  static const double pillInsetX = AppSpacing.s3;
+  static const double pillInsetY = AppSpacing.s1;
+
+  /// Badge inset (status badges, setup tags): 8 across, 4 down; badges are a smaller variant.
+  static const double badgeInsetX = AppSpacing.s2;
+  static const double badgeInsetY = AppSpacing.s1;
+
+  /// Gap between siblings in a chip or badge group (Wrap spacing and run spacing): 8.
+  static const double groupGap = AppSpacing.s2;
+
   /// Between a leading icon tile (or avatar) and its text.
   static const double tileLabelGap = AppSpacing.s3;
 

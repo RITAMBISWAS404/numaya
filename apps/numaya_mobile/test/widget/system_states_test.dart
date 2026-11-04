@@ -57,10 +57,7 @@ void main() {
         c.read(datingProvider).threads['priya']!.last.status,
         MessageStatus.onDevice,
       );
-      expect(
-        find.text('Demo · saved on this device, not sent'),
-        findsOneWidget,
-      );
+      expect(find.text('Not sent: saved on this device'), findsOneWidget);
 
       // Events: a join needs the service's answer, so offline it fails and nothing changes.
       c.read(connectivityProvider.notifier).setOnline(false);

@@ -940,7 +940,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String likeTileCaption(int km) {
-    return 'Liked you · $km km away';
+    return 'Liked you⁣$km km away';
   }
 
   @override
@@ -1069,7 +1069,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatStatusSending => 'Sending…';
 
   @override
-  String get chatStatusOnDevice => 'Demo · saved on this device, not sent';
+  String get chatStatusOnDevice => 'Not sent: saved on this device';
 
   @override
   String get chatAttach => 'Add a photo, video or voice note';
@@ -1116,7 +1116,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get chatVoiceDemo => 'Demo · no sound recorded';
+  String get chatVoiceDemo => 'Demo: no sound recorded';
 
   @override
   String get mediaPermissionDenied =>
@@ -1528,7 +1528,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String chatSampleConversationNote(Object name) {
-    return '$name’s messages were written for the demo. What you send stays on this device and no one replies.';
+    return 'Demo chat: $name’s messages are scripted, and what you send stays on this device.';
   }
 
   @override
@@ -1784,7 +1784,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get blockedAccountBody =>
-      'We found activity that goes against our guidelines. You can appeal within 6 months. This is a preview of a screen the server would show.';
+      'We found activity that goes against our guidelines. You can appeal within 6 months.';
 
   @override
   String get completionTitle => 'Complete your profile';
@@ -2891,7 +2891,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get obGenderMore => 'Add more about your gender';
 
   @override
-  String get obPronounsLabel => 'Pronouns · optional';
+  String get obPronounsLabel => 'Pronouns (optional)';
 
   @override
   String obPronounsCount(int count, int max) {
@@ -3052,7 +3052,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get permDemoTag => 'Demo · stands in for Android’s prompt';
+  String get permDemoTag => 'Demo: stands in for Android’s prompt';
 
   @override
   String get permLocationTitle =>
@@ -3400,7 +3400,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get obNotifFooter => 'You can change this in Settings';
 
   @override
-  String get obVerifyFooter => 'Optional · you can verify later';
+  String get obVerifyFooter => 'Optional: you can verify later';
 
   @override
   String get obDemoBuild => 'Demo build';
@@ -4195,7 +4195,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String eventVenueDistance(Object venue, Object km) {
-    return '$venue · about $km km';
+    return '$venue⁣about $km km';
   }
 
   @override

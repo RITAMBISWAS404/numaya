@@ -7,8 +7,8 @@ import '../../onboarding/domain/profile_draft.dart';
 import '../domain/sample_people.dart';
 
 /// The first photo of a sample profile (premium refinement): an image-first card in Meetup's manner.
-/// The 4:3 photo stays clear, carrying only small white badges (sample, verified, new) and the photo
-/// count; the name on the hero scale, the job and an optional [action] sit below it on the card's
+/// The 4:3 photo stays clear, carrying only small white badges (sample, new) and the photo
+/// count; the name on the hero scale with its verified tick, the job and an optional [action] sit below it on the card's
 /// own surface. No overlay or scrim is needed, and large text simply makes the text block taller.
 class PersonHeroCard extends StatelessWidget {
   const PersonHeroCard({
@@ -53,24 +53,54 @@ class PersonHeroCard extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned.fill(child: _photo(l10n)),
+                // Badges and the photo count share one row, so the count's real width (it grows
+                // with the text size) is reserved instead of a fixed 96pt that large text overran
+                // (OP-04).
                 Positioned(
                   top: AppSpacing.s3,
                   left: AppSpacing.s3,
-                  right: 96,
-                  child: IgnorePointer(child: _badges(l10n)),
-                ),
-                if (onOpenPhotos != null && person.photoCount > 1)
-                  Positioned(
-                    top: AppSpacing.s3,
-                    right: AppSpacing.s3,
-                    child: IgnorePointer(
-                      child: StatusBadge(
-                        label: l10n.discoverPhotoCount(person.photoCount),
-                        icon: NumayaIcons.image,
-                        tone: BadgeTone.onPhoto,
-                      ),
+                  right: AppSpacing.s3,
+                  child: IgnorePointer(
+                    child: Builder(
+                      builder: (context) {
+                        final count =
+                            onOpenPhotos != null && person.photoCount > 1
+                            ? StatusBadge(
+                                label: l10n.discoverPhotoCount(
+                                  person.photoCount,
+                                ),
+                                icon: NumayaIcons.image,
+                                tone: BadgeTone.onPhoto,
+                              )
+                            : null;
+                        // At very large text the count goes under the badges, so neither
+                        // squeezes the other into breaking inside words.
+                        if (MediaQuery.textScalerOf(context).scale(10) > 16) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _badges(l10n),
+                              if (count != null) ...[
+                                const SizedBox(height: AppLayout.groupGap),
+                                count,
+                              ],
+                            ],
+                          );
+                        }
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(child: _badges(l10n)),
+                            if (count != null) ...[
+                              const SizedBox(width: AppSpacing.s2),
+                              count,
+                            ],
+                          ],
+                        );
+                      },
                     ),
                   ),
+                ),
                 if (swipe.abs() >= 0.25)
                   Positioned.fill(
                     child: IgnorePointer(
@@ -105,24 +135,52 @@ class PersonHeroCard extends StatelessWidget {
             ],
           ),
         ),
+        // DX-02: shared ground sits with identity, before the decision (Bumble's "things in
+        // common" under the photo). The body no longer repeats it for other people.
+        // Above 160% text the chips would push the decision row under the tab bar, so they stay
+        // in the profile body instead.
+        if (!own &&
+            person.shared.isNotEmpty &&
+            MediaQuery.textScalerOf(context).scale(10) <= 16)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.s3,
+              AppSpacing.s3,
+              AppSpacing.s3,
+              AppSpacing.s1,
+            ),
+            child: Semantics(
+              container: true,
+              label: context.l10n.discoverYouBothLike,
+              child: Wrap(
+                spacing: AppLayout.groupGap,
+                runSpacing: AppLayout.groupGap,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Text(
+                    context.l10n.discoverYouBothLike,
+                    style: AppTypography.caption,
+                  ),
+                  for (final s in person.shared)
+                    InfoChip(label: s, emoji: kInterestEmoji[s]),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }
 
   Widget _badges(AppLocalizations l10n) => Wrap(
-    spacing: 6,
-    runSpacing: 6,
+    spacing: AppLayout.groupGap,
+    runSpacing: AppLayout.groupGap,
     children: [
       StatusBadge(
         label: own ? l10n.previewBadge : l10n.discoverSampleBadge,
         tone: BadgeTone.onPhoto,
       ),
-      if (person.verified)
-        StatusBadge(
-          label: l10n.discoverVerified,
-          icon: NumayaIcons.verified,
-          tone: BadgeTone.onPhoto,
-        ),
+      // BM-01: Verified moved from the photo to a tick beside the name (Bumble), so the photo
+      // carries at most the sample/preview notice, "New here" and the photo count.
       if (person.isNew)
         StatusBadge(label: l10n.discoverNewHere, tone: BadgeTone.onPhoto),
     ],
@@ -139,14 +197,44 @@ class PersonHeroCard extends StatelessWidget {
         child: Builder(
           builder: (context) {
             final large = MediaQuery.textScalerOf(context).scale(10) > 16;
-            return Text(
+            final line = large ? 30.0 : 38.0;
+            final name = Text(
               showAge && person.age > 0
                   ? l10n.profileNameAge(person.name, person.age)
                   : person.name,
+              // Hugs its longest line, so the tick follows the text, not the card edge.
+              textWidthBasis: TextWidthBasis.longestLine,
               style: AppTypography.hero.copyWith(
                 fontSize: large ? 24 : 32,
-                height: large ? 30 / 24 : 38 / 32,
+                height: line / (large ? 24 : 32),
               ),
+            );
+            if (!person.verified) return name;
+            // The tick sits at the end of the name's last line: a long name that wraps keeps it
+            // beside its final word instead of orphaning it on a line of its own.
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Flexible(child: name),
+                const SizedBox(width: AppLayout.iconLabelGap),
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom:
+                        (MediaQuery.textScalerOf(context).scale(line) -
+                            AppSizes.iconMd) /
+                        2,
+                  ),
+                  child: Semantics(
+                    label: l10n.discoverVerified,
+                    child: const NumayaIcon(
+                      NumayaIcons.verified,
+                      size: AppSizes.iconMd,
+                      color: AppColors.accent,
+                    ),
+                  ),
+                ),
+              ],
             );
           },
         ),
@@ -328,7 +416,10 @@ List<Widget> personSections(
         ),
       ),
     if (person.photoCount > 1) photo(2),
-    if (person.shared.isNotEmpty)
+    // Others' shared interests are in the hero card (DX-02), except above 160% text; your own
+    // stay here.
+    if (person.shared.isNotEmpty &&
+        (own || MediaQuery.textScalerOf(context).scale(10) > 16))
       ProfileSectionCard(
         title: own ? l10n.profileInterestsTitle : l10n.discoverYouBothLike,
         child: Wrap(

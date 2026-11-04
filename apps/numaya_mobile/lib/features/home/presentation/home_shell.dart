@@ -60,7 +60,7 @@ class HomeShell extends ConsumerWidget {
   }
 }
 
-/// Tab-root header (`.theme-withings .topbar--large`): a 30pt bold page title on the stone page,
+/// Tab-root header (`.theme-withings .topbar--large`): a 32pt extrabold page title on the page,
 /// with round white header buttons.
 class TabHeader extends StatelessWidget {
   const TabHeader({super.key, required this.title, this.actions = const []});
@@ -70,8 +70,12 @@ class TabHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 64,
+    // At very large text sizes the 32pt title steps down to 24pt (still 48pt at 200%) so a
+    // one-word title such as "Profile" fits beside its buttons instead of truncating (OP-04,
+    // the same rule as the Discover name, PR-12). The bar grows with its content.
+    final large = MediaQuery.textScalerOf(context).scale(10) > 16;
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 64),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppLayout.screenGutter),
         child: Row(
@@ -79,7 +83,15 @@ class TabHeader extends StatelessWidget {
             Expanded(
               child: Semantics(
                 header: true,
-                child: Text(title, style: AppTypography.pageTitle),
+                child: Text(
+                  title,
+                  style: large
+                      ? AppTypography.pageTitle.copyWith(
+                          fontSize: 24,
+                          height: 30 / 24,
+                        )
+                      : AppTypography.pageTitle,
+                ),
               ),
             ),
             for (final a in actions) ...[

@@ -49,3 +49,5 @@ app.*.map.json
 
 # Golden-test failure artifacts (diffs written by flutter test); never committed.
 test/screenshots/failures/
+# Variant comparison renders (copied to artifacts/overnight-polish/); never committed.
+test/screenshots/comparison/

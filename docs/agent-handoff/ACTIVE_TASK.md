@@ -1,5 +1,109 @@
 # Active task: frosted-navigation experiment, handed off
 
+> **Bumble × Meetup batch (2026-11-04):**
+> - BM-01: verified tick beside the name;
+> - BM-02: flush list groups in sheets;
+> - BM-03: attachment metadata uses `MetaText`;
+> - BM-04: " · " copy replaced.
+>
+> 342 passed, 15 skipped. Record: [DESIGN_CONTRACT.md](../design-experiments/overnight-polish/DESIGN_CONTRACT.md). Worktree `/home/user/numaya-overnight`, branch `experiment/numaya-overnight-polish`, HEAD `6b23c85`. **Local only, uncommitted; not on GitHub.** **Next:** the Windows device pass, then the illustration art.
+
+> **Pill gaps (2026-11-04):** `ViewTabs` now has an 8pt gap between pills; event badges 8/8. 338 passed, 15 skipped. Record: SPACING_AND_SHAPE.md, "Pill gaps". **Local only, uncommitted.**
+
+> **Core journey pass (2026-11-04):**
+> - DX-02: shared interests in the Discover hero (they return to the body above 160% text);
+> - DX-03: the Opening Moves card follows the conversations;
+> - DX-04: frosted navigation kept, solid under High Contrast;
+> - Likes and Events separators migrated.
+>
+> 337 passed, 15 skipped. Record: [CORE_JOURNEY.md](../design-experiments/overnight-polish/CORE_JOURNEY.md). **Local only, uncommitted.**
+
+> **Design direction (2026-11-04):**
+> - thesis and issue map written;
+> - Safety tips moved to one grouped list (DX-01);
+> - 334 passed, 14 skipped.
+>
+> Next: issue 7 (the remaining " · " separators). Record: [DESIGN_DIRECTION.md](../design-experiments/overnight-polish/DESIGN_DIRECTION.md). **Local only, uncommitted.**
+
+> **Component cleanup (2026-11-04):**
+> - switches without outlines;
+> - plain row icons;
+> - tinted-card borders;
+> - `MetaText` separators;
+> - a composer without its tray;
+> - one chat demo notice.
+>
+> 334 passed, 14 skipped. Record: [COMPONENT_CLEANUP.md](../design-experiments/overnight-polish/COMPONENT_CLEANUP.md). **Local only, uncommitted.**
+
+> **Spacing and shape pass (2026-11-04):**
+> - **Rules:**
+>   - one pill inset (12 × 4) and one badge inset (8 × 4);
+>   - a two-tier icon gap: 4 in pills and badges, 8 in rows, fields and buttons;
+>   - an 8pt group gap;
+>   - bubble and toast insets on the grid.
+> - **Tests:** 326 passed, 14 skipped.
+> - **Record:** [SPACING_AND_SHAPE.md](../design-experiments/overnight-polish/SPACING_AND_SHAPE.md).
+> - **Local only, uncommitted.**
+
+> **Type-roles pass (2026-11-04):**
+> - **Body:** 14/20 confirmed by resolved-style tests.
+> - **Pills, chips and badges:** 12/16 (8/12 tried and rejected).
+> - **Larger scale:** 32/28/24/20/18.
+> - **Tests:** 323 passed, 14 skipped.
+> - **Record:** [TYPE_ROLES.md](../design-experiments/overnight-polish/TYPE_ROLES.md).
+> - **Local only, uncommitted.**
+
+> **Final QA pass (2026-11-04):** the overnight candidate passed the audit.
+> - **Fixes:**
+>   - F-01: the Design Lab now uses the app clock (its golden had been nondeterministic);
+>   - F-02: a long `ListRow` value with a detail stacks under the label (Settings recovery
+>     email).
+> - **Tests:** 4 new regression tests; **316 passed, 14 skipped, 0 failed**.
+> - **Record:** [FINAL_QA.md](../design-experiments/overnight-polish/FINAL_QA.md).
+> - **Still local only, uncommitted.**
+> - **Next:**
+>   1. The owner authorises a commit and push.
+>   2. A Windows APK and device pass (TalkBack, gesture and three-button navigation, profile-mode
+>      scrolling).
+
+# Active task: overnight polish (14/20 body, large-text fixes, glass highlight, mascot)
+
+**Status:** implemented and tested in a cloud worktree on 2026-11-03 UTC. **Local only: not committed,
+not pushed.** Waiting for the owner's review and an authorisation to commit and push.
+
+| Item | Value |
+|---|---|
+| Worktree | `/home/user/numaya-overnight` (cloud container; ephemeral, so commit and push it before the session ends) |
+| Branch | `experiment/numaya-overnight-polish` (local only; not on GitHub) |
+| Base and HEAD | `6b23c85aa7be16b5cfeaebdea06c36a9090243b2` (`wip/frosted-navigation-handoff`, live on GitHub) |
+| Record | [docs/design-experiments/overnight-polish/README.md](../design-experiments/overnight-polish/README.md) |
+
+## Done
+- **14/20 semantic default body** (OP-01), compared against 16/24 and a rejected compact scale
+  under identical conditions.
+- **Role exceptions:** option rows and typed text stay 16 (OP-02, OP-03).
+- **Large-text fixes (OP-04):**
+  - tab title;
+  - Profile hero;
+  - Discover photo badges;
+  - `ChipSet` heading and interests count.
+- **Glass top highlight** (OP-05); the High Contrast fallback is unchanged.
+- **Mascot** SVG on the Likes empty states (OP-06).
+- **Calm direction** kept over the expressive one (OP-07).
+- **Tests:** 10 new widget tests, including a sweep of six never-tested routes; 3 new goldens;
+  154 goldens updated after review.
+
+## Next
+1. **Owner:** review the sheets listed in the record. Authorise commit and push, or request
+   changes.
+2. **On Windows** (Android SDK): build the debug APK and run the device pass:
+   - 320/390dp at font scale 1.0 and 2.0;
+   - the keyboard over tab screens with the frosted bar;
+   - TalkBack;
+   - profile-mode frame times for the blur.
+3. **Goldens:** the updated goldens were rendered on Linux. Re-render on the machine that owns
+   the golden baseline before treating them as the reference.
+
 **Resume from:** branch `wip/frosted-navigation-handoff` (pushed). It contains the whole
 experiment as one commit on top of `eb0b37b`. `experiment/numaya-frosted-navigation` still points at
 `eb0b37b` and holds nothing extra.

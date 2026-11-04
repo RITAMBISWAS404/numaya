@@ -284,22 +284,17 @@ class SafetyCentreScreen extends StatelessWidget {
           ),
           ScreenHeader(title: l10n.safetyHeading, lede: l10n.safetyLede),
           const SizedBox(height: AppSpacing.s5),
-          InfoCard(
-            icon: NumayaIcons.shield,
-            title: l10n.safetyTip1Title,
-            body: l10n.safetyTip1Body,
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          InfoCard(
-            icon: NumayaIcons.event,
-            title: l10n.safetyTip2Title,
-            body: l10n.safetyTip2Body,
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          InfoCard(
-            icon: NumayaIcons.flag,
-            title: l10n.safetyTip3Title,
-            body: l10n.safetyTip3Body,
+          // DX-01: the three tips read as one grouped list (plain icon, title, detail) instead of
+          // three stacked tinted cards; tint is kept for status, not for every explanation.
+          ListGroup(
+            children: [
+              for (final (icon, title, body) in [
+                (NumayaIcons.shield, l10n.safetyTip1Title, l10n.safetyTip1Body),
+                (NumayaIcons.event, l10n.safetyTip2Title, l10n.safetyTip2Body),
+                (NumayaIcons.flag, l10n.safetyTip3Title, l10n.safetyTip3Body),
+              ])
+                ListRow(leading: icon, label: title, detail: body),
+            ],
           ),
           const SizedBox(height: AppSpacing.sectionGap),
           ListGroup(

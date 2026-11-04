@@ -1,5 +1,6 @@
 import 'package:flutter/painting.dart';
 
+import '../tokens/monochrome_tokens.dart';
 import 'app_colors.dart';
 
 /// Monochrome Meetup type: Plus Jakarta Sans for headings, names and metrics; Figtree for reading
@@ -23,35 +24,38 @@ abstract final class AppTypography {
   static const double extrabold = 800;
 
   // Headings ----------------------------------------------------------------------------------
-  /// Large profile names ("Maya, 29"): 36/42 extrabold, -0.03em.
-  static final TextStyle hero = _style(display, 36, 42, extrabold, -0.03);
+  // Larger roles use one scale (type-roles pass, TR-02): 32/38 display, 28/34 prominent, 24/30
+  // screen, 20/26 section, 18/24 lead. Intentional exceptions: welcomeTitle, metric.
 
-  /// Tab-root page titles ("Events", "Likes"): 32/38 extrabold, -0.03em.
-  static final TextStyle pageTitle = _style(display, 32, 38, extrabold, -0.03);
+  /// Display: large profile names ("Maya, 29"): 32/38 extrabold, -0.03em.
+  static final TextStyle hero = _style(display, 32, 38, extrabold, -0.03);
 
-  /// Onboarding and editorial page headings: 30/36 bold, -0.025em.
-  static final TextStyle flowTitle = _style(display, 30, 36, bold, -0.025);
+  /// Prominent: tab-root page titles ("Events", "Likes"): 28/34 extrabold, -0.03em.
+  static final TextStyle pageTitle = _style(display, 28, 34, extrabold, -0.03);
 
-  /// Result titles ("You're verified"): 26/32 bold, -0.02em.
-  static final TextStyle headline = _style(display, 26, 32, bold, -0.02);
+  /// Screen: onboarding and editorial page headings: 24/30 bold, -0.02em.
+  static final TextStyle flowTitle = _style(display, 24, 30, bold, -0.02);
 
-  /// Section headings ("Your prompt", "Notifications"): 21/28 bold, -0.015em.
-  static final TextStyle section = _style(display, 21, 28, bold, -0.015);
+  /// Screen: result titles and the Profile name: 24/30 bold, -0.02em.
+  static final TextStyle headline = _style(display, 24, 30, bold, -0.02);
 
-  /// Sheet titles: 22/28 bold.
-  static final TextStyle sheetTitle = _style(display, 22, 28, bold, -0.015);
+  /// Section headings ("Your prompt", "Notifications"): 20/26 bold, -0.015em.
+  static final TextStyle section = _style(display, 20, 26, bold, -0.015);
 
-  /// Prompt answers: 20/27 semibold, -0.01em.
+  /// Sheet titles: 20/26 bold (the section size).
+  static final TextStyle sheetTitle = _style(display, 20, 26, bold, -0.015);
+
+  /// Prompt answers: 20/26 semibold, -0.01em.
   static final TextStyle promptAnswer = _style(
     display,
     20,
-    27,
+    26,
     semibold,
     -0.01,
   );
 
-  /// Empty-state titles: 22/28 bold.
-  static final TextStyle emptyTitle = _style(display, 22, 28, bold, -0.015);
+  /// Empty-state titles: 20/26 bold (the section size).
+  static final TextStyle emptyTitle = _style(display, 20, 26, bold, -0.015);
 
   /// Welcome headline: `clamp(36, 10.4vw, 44)`, line 1.06, bold, -0.03em.
   static TextStyle welcomeTitle(double screenWidth) {
@@ -73,7 +77,13 @@ abstract final class AppTypography {
   static final TextStyle card = _style(display, 18, 24, bold, -0.01);
 
   /// Body copy: 16/24 regular.
-  static final TextStyle body = _style(family, 16, 24, regular, 0);
+  static final TextStyle body = _style(
+    family,
+    MonoType.bodySize,
+    MonoType.bodyLine,
+    regular,
+    0,
+  );
 
   /// Secondary body: 14/20 regular.
   static final TextStyle bodySm = _style(family, 14, 20, regular, 0);
@@ -96,9 +106,13 @@ abstract final class AppTypography {
     0,
   ).copyWith(color: AppColors.textSecondary);
 
-  /// Content chips (profile facts, shared interests, your interests): the [label] role in ink,
+  /// Informational chips (profile facts, shared interests): the 12/16 [pill] size in ink,
   /// because the chip's text is the content. One chip type size across the app.
-  static final TextStyle chip = label.copyWith(color: AppColors.ink);
+  static final TextStyle chip = pill.copyWith(color: AppColors.ink);
+
+  /// Interactive pill labels (view tabs, filters, selectable chips): Figtree 12/16 medium;
+  /// selected pills use semibold (TR-03). Static fact chips share the size via [chip].
+  static final TextStyle pill = _style(family, 12, 16, medium, 0);
 
   /// Captions and metadata: 13/18 regular, muted.
   static final TextStyle caption = _style(

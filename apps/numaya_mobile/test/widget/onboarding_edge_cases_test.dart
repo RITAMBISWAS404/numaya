@@ -159,7 +159,7 @@ void main() {
     await tester.pump();
     await tapOn(tester, find.bySemanticsLabel('Send'));
     await tester.pump(const Duration(milliseconds: 600));
-    expect(find.text('Demo · saved on this device, not sent'), findsOneWidget);
+    expect(find.text('Not sent: saved on this device'), findsOneWidget);
     await tester.binding.handlePopRoute();
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));

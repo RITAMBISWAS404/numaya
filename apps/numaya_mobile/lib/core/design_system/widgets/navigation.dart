@@ -9,6 +9,7 @@ import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
 import '../tokens/monochrome_tokens.dart';
+import 'content.dart' show MetaText, SheetSurface;
 import 'icon_tile.dart';
 import 'people.dart';
 import 'primitives.dart';
@@ -149,24 +150,37 @@ class NumayaTabBar extends StatelessWidget {
                     sigmaX: MonoGlass.blur,
                     sigmaY: MonoGlass.blur,
                   ),
-                  child: Container(
-                    height: AppSizes.tabBar,
-                    padding: const EdgeInsets.all(inner / 2),
-                    decoration: BoxDecoration(
-                      color: MonoGlass.tint,
-                      borderRadius: AppRadii.all(AppRadii.pill),
-                    ),
-                    // Painted on top, so the hairline takes no room from the items (a border in
-                    // the decoration insets the row by 2pt and overflows a 320pt phone).
-                    foregroundDecoration: BoxDecoration(
-                      borderRadius: AppRadii.all(AppRadii.pill),
-                      border: Border.all(
-                        color: MonoGlass.edge,
-                        width: AppBorders.hairline,
-                        strokeAlign: BorderSide.strokeAlignInside,
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: AppSizes.tabBar,
+                        padding: const EdgeInsets.all(inner / 2),
+                        decoration: BoxDecoration(
+                          color: MonoGlass.tint,
+                          borderRadius: AppRadii.all(AppRadii.pill),
+                        ),
+                        // Painted on top, so the hairline takes no room from the items (a border in
+                        // the decoration insets the row by 2pt and overflows a 320pt phone).
+                        foregroundDecoration: BoxDecoration(
+                          borderRadius: AppRadii.all(AppRadii.pill),
+                          border: Border.all(
+                            color: MonoGlass.edge,
+                            width: AppBorders.hairline,
+                            strokeAlign: BorderSide.strokeAlignInside,
+                          ),
+                        ),
+                        child: row,
                       ),
-                    ),
-                    child: row,
+                      const Positioned(
+                        top: 1,
+                        left: MonoGlass.highlightInset,
+                        right: MonoGlass.highlightInset,
+                        height: 1,
+                        child: IgnorePointer(
+                          child: ColoredBox(color: MonoGlass.highlight),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -297,22 +311,25 @@ class NumayaSwitch extends StatelessWidget {
   final bool value;
   final ValueChanged<bool>? onChanged;
 
+  /// Component cleanup (CL-01). States, resolved here so every switch matches:
+  /// - **on:** brand track, white thumb with a soft shadow;
+  /// - **off:** light-grey track (`fillStrong`), white thumb with the same shadow; no outline;
+  /// - **disabled** (`onChanged == null`): the same shape at 45% opacity;
+  /// - **pressed and focused:** owned by the row around the switch (`ListRow`/`Pressable`
+  ///   press scale and focus ring), so the whole row is the hit area.
+  /// State is also carried by thumb position and by the row's `toggled` semantics, not by
+  /// colour alone.
   @override
   Widget build(BuildContext context) {
     final duration = AppMotion.duration(context, AppMotion.base);
-    return AnimatedContainer(
+    final track = AnimatedContainer(
       duration: duration,
       width: AppSizes.switchWidth,
       height: AppSizes.switchHeight,
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        color: value ? AppColors.accent : AppColors.fill,
+        color: value ? AppColors.accent : AppColors.switchOff,
         borderRadius: AppRadii.all(AppRadii.pill),
-        border: Border.all(
-          color: value ? AppColors.accent : AppColors.control,
-          width: AppBorders.selected,
-          strokeAlign: BorderSide.strokeAlignInside,
-        ),
       ),
       child: AnimatedAlign(
         duration: duration,
@@ -322,19 +339,22 @@ class NumayaSwitch extends StatelessWidget {
           width: AppSizes.switchThumb,
           height: AppSizes.switchThumb,
           decoration: BoxDecoration(
-            color: value ? AppColors.surface : AppColors.control,
+            color: AppColors.surface,
             shape: BoxShape.circle,
-            boxShadow: value ? AppElevation.thumb : null,
+            // A faint ink edge (8%) keeps the white thumb distinct from a white card when off.
+            border: Border.all(color: AppColors.ink.withValues(alpha: 0.08)),
+            boxShadow: AppElevation.thumb,
           ),
         ),
       ),
     );
+    return onChanged == null ? Opacity(opacity: 0.45, child: track) : track;
   }
 }
 
 /// Grouped row (`.theme-withings .list-row`): 60pt minimum, a 16pt regular label, a secondary
-/// subtitle, and a trailing switch, value or chevron. A [leading] icon sits in a 40pt [IconTile]
-/// coloured by [tone] (neutral by default); [inlineIcon] draws it bare instead, for plain metadata.
+/// subtitle, and a trailing switch, value or chevron. A [leading] icon is a plain 24pt monochrome
+/// glyph (red on destructive rows).
 class ListRow extends StatelessWidget {
   const ListRow({
     super.key,
@@ -362,10 +382,11 @@ class ListRow extends StatelessWidget {
   final bool? showChevron;
   final NumayaIcons? leading;
 
-  /// The meaning of the [leading] icon's tile.
+  /// Kept for API compatibility: rows no longer colour their icon (CL-02). Tiles elsewhere
+  /// (Profile's grid) still use [AccentTone].
   final AccentTone tone;
 
-  /// The [leading] icon without a tile (metadata rows).
+  /// Kept for API compatibility: every row icon is now drawn bare (CL-02).
   final bool inlineIcon;
 
   /// Where the label starts, measured from the row's leading padding: dividers in a [ListGroup]
@@ -375,31 +396,47 @@ class ListRow extends StatelessWidget {
             AppLayout.tileLabelGap
       : leading == null
       ? 0
-      : inlineIcon
-      ? AppSizes.iconMd + AppLayout.tileLabelGap
-      : IconTile.rowInset;
+      : AppSizes.iconMd + AppLayout.tileLabelGap;
 
   /// A person's avatar in place of [leading] (people lists).
   final Widget? avatar;
 
   @override
   Widget build(BuildContext context) {
+    final flush =
+        context.dependOnInheritedWidgetOfExactType<_FlushRows>() != null;
     final row = Container(
       constraints: const BoxConstraints(minHeight: AppSizes.row),
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppLayout.cardPadding,
+      padding: EdgeInsets.symmetric(
+        horizontal: flush ? 0 : AppLayout.cardPadding,
         vertical: AppSpacing.s3,
       ),
       // The value may take 60% of what the row has left after its leading tile or avatar.
       child: LayoutBuilder(
-        builder: (context, box) =>
-            _content((box.maxWidth - textInset).clamp(0.0, box.maxWidth) * 0.6),
+        builder: (context, box) {
+          final room = (box.maxWidth - textInset).clamp(0.0, box.maxWidth);
+          // A row with a detail line and a long value (an email address) stacks the value under
+          // the label: beside it, the value took 60% and squeezed the label and detail into a
+          // narrow column ("Recovery / email"). Short values stay trailing.
+          var stack = false;
+          if (value != null && detail != null && detail!.isNotEmpty) {
+            final painter = TextPainter(
+              text: TextSpan(text: value, style: AppTypography.row),
+              textScaler: MediaQuery.textScalerOf(context),
+              textDirection: Directionality.of(context),
+              maxLines: 1,
+            )..layout();
+            stack = painter.width > room * 0.4;
+            painter.dispose();
+          }
+          return _content(room * 0.6, stackValue: stack);
+        },
       ),
     );
     return _wrap(row);
   }
 
-  Widget _content(double valueMax) {
+  Widget _content(double valueMax, {bool stackValue = false}) {
     final isSwitch = switchValue != null;
     final chevron = showChevron ?? (onTap != null && !isSwitch && !danger);
     return Row(
@@ -408,10 +445,13 @@ class ListRow extends StatelessWidget {
           avatar!,
           const SizedBox(width: AppLayout.tileLabelGap),
         ] else if (leading != null) ...[
-          if (inlineIcon)
-            NumayaIcon(leading!, size: AppSizes.iconMd, color: AppColors.ink)
-          else
-            IconTile(leading!, tone: danger ? AccentTone.danger : tone),
+          // Plain monochrome icons beside the label (CL-02): no coloured tile. Red only on a
+          // destructive row; purple stays for brand and selection.
+          NumayaIcon(
+            leading!,
+            size: AppSizes.iconMd,
+            color: danger ? AppColors.negative : AppColors.textSecondary,
+          ),
           const SizedBox(width: AppLayout.tileLabelGap),
         ],
         Expanded(
@@ -425,9 +465,16 @@ class ListRow extends StatelessWidget {
                   color: danger ? AppColors.negative : AppColors.ink,
                 ),
               ),
-              if (detail != null && detail!.isNotEmpty) ...[
+              if (stackValue) ...[
                 const SizedBox(height: 2),
                 Text(
+                  value!,
+                  style: AppTypography.row.copyWith(color: AppColors.textMuted),
+                ),
+              ],
+              if (detail != null && detail!.isNotEmpty) ...[
+                const SizedBox(height: 2),
+                MetaText(
                   detail!,
                   style: AppTypography.caption.copyWith(
                     color: AppColors.textSecondary,
@@ -439,7 +486,7 @@ class ListRow extends StatelessWidget {
         ),
         // A value is a preview of what the row opens (the whole answer is one tap away): its
         // natural width up to 60% of the row and two lines; the label keeps the rest.
-        if (value != null)
+        if (value != null && !stackValue)
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: valueMax),
             child: Padding(
@@ -496,7 +543,8 @@ class ListRow extends StatelessWidget {
       onTap: onTap,
       semanticLabel: [
         [label, ?value].join(', '),
-        if (detail != null && detail!.isNotEmpty) detail!,
+        if (detail != null && detail!.isNotEmpty)
+          detail!.replaceAll(MetaText.joiner, ', '),
       ].join('. '),
       excludeChildSemantics: true,
       pressedScale: 1,
@@ -515,20 +563,29 @@ class ListGroup extends StatelessWidget {
     required this.children,
     this.footnote,
     this.dividers = true,
+    this.flush,
   });
 
   final String? title;
   final List<Widget> children;
   final String? footnote;
 
+  /// BM-02: rows on the surface's own colour, aligned to the content gutter, for a group that sits
+  /// on a white sheet. A white card on a white sheet draws nothing but still indents its rows, so
+  /// their labels started 20pt inside the headings above them.
+  /// Defaults to true inside a Numaya sheet ([SheetSurface]).
+  final bool? flush;
+
   /// Hairlines between rows. Off for groups whose rows are self-contained (cards, previews).
   final bool dividers;
 
-  static double _inset(Widget row) =>
-      AppLayout.cardPadding + (row is ListRow ? row.textInset : 0);
+  static double _inset(Widget row, bool flush) =>
+      (flush ? 0 : AppLayout.cardPadding) +
+      (row is ListRow ? row.textInset : 0);
 
   @override
   Widget build(BuildContext context) {
+    final flush = this.flush ?? SheetSurface.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -541,21 +598,23 @@ class ListGroup extends StatelessWidget {
             ),
           ),
         Container(
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: AppRadii.all(AppRadii.card),
-          ),
-          clipBehavior: Clip.antiAlias,
+          decoration: flush
+              ? null
+              : BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: AppRadii.all(AppRadii.card),
+                ),
+          clipBehavior: flush ? Clip.none : Clip.antiAlias,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: AppSpacing.s1),
+            padding: EdgeInsets.symmetric(vertical: flush ? 0 : AppSpacing.s1),
             child: Column(
               children: [
                 for (var i = 0; i < children.length; i++) ...[
                   if (i > 0 && dividers)
                     Padding(
                       padding: EdgeInsetsDirectional.only(
-                        start: _inset(children[i]),
-                        end: AppLayout.cardPadding,
+                        start: _inset(children[i], flush),
+                        end: flush ? 0 : AppLayout.cardPadding,
                       ),
                       child: const ExcludeSemantics(
                         child: SizedBox(
@@ -565,7 +624,7 @@ class ListGroup extends StatelessWidget {
                         ),
                       ),
                     ),
-                  children[i],
+                  if (flush) _FlushRows(child: children[i]) else children[i],
                 ],
               ],
             ),
@@ -652,4 +711,12 @@ class EmptyState extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Marks rows of a flush [ListGroup], so [ListRow] drops its horizontal card padding.
+class _FlushRows extends InheritedWidget {
+  const _FlushRows({required super.child});
+
+  @override
+  bool updateShouldNotify(_FlushRows oldWidget) => false;
 }

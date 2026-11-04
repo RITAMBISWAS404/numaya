@@ -172,8 +172,8 @@ class EventCover extends StatelessWidget {
                               : AppSizes.iconButton + AppSpacing.s1,
                         ),
                         child: Wrap(
-                          spacing: 6,
-                          runSpacing: 6,
+                          spacing: AppLayout.groupGap,
+                          runSpacing: AppLayout.groupGap,
                           children: badges,
                         ),
                       ),
@@ -253,7 +253,7 @@ class EventCard extends StatelessWidget {
                 e.title,
                 for (final b in badges) b.label,
                 when,
-                where,
+                where.replaceAll(MetaText.joiner, ', '),
                 going,
                 ?reason,
               ].join('. '),
@@ -362,7 +362,7 @@ class EventMetaRow extends StatelessWidget {
           ),
           const SizedBox(width: AppLayout.iconLabelGap),
           Expanded(
-            child: Text(
+            child: MetaText(
               text,
               style: AppTypography.bodySm.copyWith(
                 color: AppColors.textSecondary,

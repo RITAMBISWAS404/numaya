@@ -85,14 +85,26 @@ void main() {
       expect(AppTypography.metric.fontFamily, 'Plus Jakarta Sans');
       expect(AppTypography.body.fontFamily, 'Figtree');
       expect(AppTypography.button.fontFamily, 'Figtree');
-      expect(AppTypography.pageTitle.fontSize, 32);
+      // Type-roles pass (TR-02): 32 display, 28 prominent, 24 screen, 20 section, 18 lead.
+      expect(AppTypography.hero.fontSize, 32);
+      expect(AppTypography.pageTitle.fontSize, 28);
       expect(AppTypography.pageTitle.fontWeight, FontWeight.w800);
-      expect(AppTypography.flowTitle.fontSize, 30);
-      expect(AppTypography.section.fontSize, 21);
+      expect(AppTypography.flowTitle.fontSize, 24);
+      expect(AppTypography.headline.fontSize, 24);
+      expect(AppTypography.card.fontSize, 18);
+      expect(AppTypography.section.fontSize, 20);
+      expect(AppTypography.sheetTitle.fontSize, 20);
       expect(AppTypography.metric.fontSize, 40);
       expect(AppTypography.labelCaps.fontSize, 12);
-      expect(AppTypography.body.fontSize, 16);
-      expect(AppTypography.body.height, 1.5);
+      // OP-01: the semantic default body is 14/20 (the requested default); typing stays at 16
+      // and the 13/18 caption stays below body.
+      expect(AppTypography.body.fontSize, 14);
+      expect(AppTypography.body.height! * AppTypography.body.fontSize!, 20);
+      expect(AppTypography.input.fontSize, 16);
+      expect(
+        AppTypography.caption.fontSize!,
+        lessThan(AppTypography.body.fontSize!),
+      );
     });
 
     test('geometry follows the monochrome radii and sizes', () {

@@ -284,7 +284,7 @@ void main() {
       ),
     );
 
-    testWidgets('a leading icon sits in a 40pt rounded-square tile', (
+    testWidgets('a leading icon is a plain monochrome glyph (CL-02)', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -296,20 +296,17 @@ void main() {
           ),
         ),
       );
-      final tile = find.byType(IconTile);
-      expect(tile, findsOneWidget);
-      expect(tester.getSize(tile), const Size(40, 40));
-      final box = tester.widget<Container>(
-        find.descendant(of: tile, matching: find.byType(Container)),
-      );
-      final deco = box.decoration! as BoxDecoration;
-      expect(deco.color, AppColors.infoTint);
-      expect(deco.borderRadius, AppRadii.all(AppRadii.iconTile));
-      // The text starts after the tile and its gap.
+      // Component cleanup (CL-02): rows draw a plain monochrome icon, no coloured tile, and
+      // the tone no longer colours the row.
+      expect(find.byType(IconTile), findsNothing);
+      final icon = tester.widget<NumayaIcon>(find.byType(NumayaIcon));
+      expect(icon.color, AppColors.textSecondary);
+      expect(icon.size, AppSizes.iconMd);
+      // The text starts after the icon and its gap.
       final row = tester.getTopLeft(find.byType(ListRow));
       expect(
         tester.getTopLeft(find.text('Current location')).dx - row.dx,
-        AppLayout.cardPadding + IconTile.rowInset,
+        AppLayout.cardPadding + AppSizes.iconMd + AppLayout.tileLabelGap,
       );
     });
 
@@ -348,7 +345,7 @@ void main() {
       // Before a row with a tile: starts at the text, never through the tile.
       expect(
         tester.getTopLeft(lines.at(0)).dx - group,
-        AppLayout.cardPadding + IconTile.rowInset,
+        AppLayout.cardPadding + AppSizes.iconMd + AppLayout.tileLabelGap,
       );
       // Before a plain row: starts at the card padding.
       expect(tester.getTopLeft(lines.at(1)).dx - group, AppLayout.cardPadding);

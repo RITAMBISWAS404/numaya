@@ -82,10 +82,7 @@ void main() {
       await tapOn(tester, _action('Send'));
       await tester.pump(const Duration(milliseconds: 600));
       expect(find.text('Which record shop?'), findsOneWidget);
-      expect(
-        find.text('Demo · saved on this device, not sent'),
-        findsOneWidget,
-      );
+      expect(find.text('Not sent: saved on this device'), findsOneWidget);
       // No reply is ever invented.
       expect(
         find.text(

@@ -108,7 +108,8 @@ void main() {
     await tapOn(tester, find.bySemanticsLabel('Unread, 1'));
     await tapOn(tester, find.bySemanticsLabel(RegExp('^Priya')));
     await tester.pump(const Duration(milliseconds: 600));
-    expect(find.text('Sample conversation'), findsOneWidget);
+    // One demo notice replaces the badge, the footer and the per-message warning (CL-07).
+    expect(find.textContaining('Demo chat:'), findsOneWidget);
     expect(
       find.text('Yes! The cardamom buns sell out by ten.'),
       findsOneWidget,
@@ -117,7 +118,7 @@ void main() {
     await tester.pump();
     await tapOn(tester, find.bySemanticsLabel('Send'));
     await tester.pump(const Duration(milliseconds: 600));
-    expect(find.text('Demo · saved on this device, not sent'), findsOneWidget);
+    expect(find.text('Not sent: saved on this device'), findsOneWidget);
     await tapOn(tester, find.bySemanticsLabel('Back to messages'));
     await tester.pump(const Duration(milliseconds: 600));
     // The Unread view is now empty: Priya's messages have been read.

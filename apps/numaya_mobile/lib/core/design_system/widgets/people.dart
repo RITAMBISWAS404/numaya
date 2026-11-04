@@ -9,6 +9,7 @@ import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
+import 'content.dart' show MetaText;
 import 'primitives.dart';
 
 /// Initials avatar (`.theme-withings .avatar`): a circle, white initial on navy. [ring] draws the
@@ -200,7 +201,10 @@ class StatusBadge extends StatelessWidget {
     // 26 tall at normal sizes; grows and wraps under large text instead of overflowing.
     return Container(
       constraints: const BoxConstraints(minHeight: 26),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppLayout.badgeInsetX,
+        vertical: AppLayout.badgeInsetY,
+      ),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: AppRadii.all(AppRadii.pill),
@@ -215,10 +219,11 @@ class StatusBadge extends StatelessWidget {
           Flexible(
             child: Text(
               label,
+              // Status labels are 12/16 (TR-04); the 8/12 micro trial was rejected.
               style: AppTypography.weight(
-                AppTypography.caption,
+                AppTypography.micro,
                 weight,
-              ).copyWith(color: fg, height: 1.1),
+              ).copyWith(color: fg),
             ),
           ),
         ],
@@ -299,8 +304,8 @@ class InfoChip extends StatelessWidget {
     return Container(
       constraints: const BoxConstraints(minHeight: AppSizes.chip),
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.s3,
-        vertical: AppSpacing.s1,
+        horizontal: AppLayout.pillInsetX,
+        vertical: AppLayout.pillInsetY,
       ),
       // On a white card the chip takes the stone page colour, a step lighter than the fill
       // (RD-05); on the page it's white.
@@ -313,11 +318,11 @@ class InfoChip extends StatelessWidget {
         children: [
           if (emoji != null) ...[
             Emoji(emoji!, size: 15.5),
-            const SizedBox(width: 6),
+            const SizedBox(width: AppLayout.compactIconGap),
           ],
           if (icon != null) ...[
             NumayaIcon(icon!, size: 16, color: AppColors.textMuted),
-            const SizedBox(width: 6),
+            const SizedBox(width: AppLayout.compactIconGap),
           ],
           // The shared chip label (Figtree 14/18 medium), the same role as the selectable chips,
           // in ink because the value is the content. Was the 18pt bold card heading.
@@ -594,101 +599,96 @@ class _ComposerState extends State<Composer> {
         widget.enabled &&
         (widget.controller.text.trim().isNotEmpty || widget.hasAttachment);
     final focused = _focus.hasFocus;
-    // One integrated bar: attachment, a filled field and send share a white rounded surface.
-    return Container(
-      padding: const EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: AppRadii.all(30),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (widget.leading != null) ...[
-            widget.leading!,
-            const SizedBox(width: AppSpacing.s2 - 2),
-          ],
-          Expanded(
-            child: AnimatedContainer(
-              duration: AppMotion.duration(context, AppMotion.base),
-              // V16 draws a 44pt field; on Android the field itself is the 48dp tap target, so the
-              // text padding lives inside the TextField and the pill is 48 tall.
-              constraints: const BoxConstraints(
-                minHeight: kMinInteractiveDimension,
-              ),
-              decoration: BoxDecoration(
-                color: focused ? AppColors.surface : AppColors.field,
-                borderRadius: AppRadii.all(24),
-                border: Border.all(
-                  color: focused ? AppColors.focusField : Colors.transparent,
-                  width: AppBorders.focus,
-                  strokeAlign: BorderSide.strokeAlignInside,
-                ),
-              ),
-              child: Semantics(
-                label: widget.placeholder,
-                textField: true,
-                child: TextField(
-                  controller: widget.controller,
-                  focusNode: _focus,
-                  enabled: widget.enabled,
-                  minLines: 1,
-                  maxLines: 4,
-                  textCapitalization: TextCapitalization.sentences,
-                  textInputAction: TextInputAction.send,
-                  onSubmitted: (_) => _send(),
-                  style: AppTypography.row,
-                  cursorColor: AppColors.accent,
-                  decoration: InputDecoration(
-                    isCollapsed: true,
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.s4,
-                      vertical: 13,
-                    ),
-                    hintText: widget.placeholder,
-                    hintStyle: AppTypography.row.copyWith(
-                      color: AppColors.textMuted,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          // 8pt to the circle, as in V16 (the tap target adds 2pt).
-          const SizedBox(width: AppSpacing.s2 - 2),
-          Pressable(
-            onTap: canSend ? _send : null,
-            semanticLabel: widget.sendLabel,
-            excludeChildSemantics: true,
-            pressedScale: 0.92,
-            borderRadius: AppRadii.all(AppRadii.control),
-            // A 44pt rounded square (RD-02) inside a 48dp tap target.
-            child: SizedBox.square(
-              dimension: kMinInteractiveDimension,
-              child: Center(
-                child: AnimatedContainer(
-                  duration: AppMotion.duration(context, AppMotion.base),
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: canSend ? AppColors.accent : AppColors.disabled,
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: NumayaIcon(
-                    NumayaIcons.send,
-                    size: 22,
-                    color: canSend
-                        ? AppColors.inkForeground
-                        : AppColors.disabledForeground,
-                  ),
-                ),
-              ),
-            ),
-          ),
+    // Restrained composer (CL-06): attachment, a filled pill field and send on the page, with
+    // no surrounding tray. Bottom-aligned, so the actions stay level with the last line as the
+    // field grows.
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        if (widget.leading != null) ...[
+          widget.leading!,
+          const SizedBox(width: AppSpacing.s2),
         ],
-      ),
+        Expanded(
+          child: AnimatedContainer(
+            duration: AppMotion.duration(context, AppMotion.base),
+            // V16 draws a 44pt field; on Android the field itself is the 48dp tap target, so the
+            // text padding lives inside the TextField and the pill is 48 tall.
+            constraints: const BoxConstraints(
+              minHeight: kMinInteractiveDimension,
+            ),
+            decoration: BoxDecoration(
+              color: focused ? AppColors.surface : AppColors.field,
+              borderRadius: AppRadii.all(24),
+              border: Border.all(
+                color: focused ? AppColors.focusField : Colors.transparent,
+                width: AppBorders.focus,
+                strokeAlign: BorderSide.strokeAlignInside,
+              ),
+            ),
+            child: Semantics(
+              label: widget.placeholder,
+              textField: true,
+              child: TextField(
+                controller: widget.controller,
+                focusNode: _focus,
+                enabled: widget.enabled,
+                minLines: 1,
+                maxLines: 4,
+                textCapitalization: TextCapitalization.sentences,
+                textInputAction: TextInputAction.send,
+                onSubmitted: (_) => _send(),
+                style: AppTypography.row,
+                cursorColor: AppColors.accent,
+                decoration: InputDecoration(
+                  isCollapsed: true,
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.s4,
+                    vertical: 13,
+                  ),
+                  hintText: widget.placeholder,
+                  hintStyle: AppTypography.row.copyWith(
+                    color: AppColors.textMuted,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        // 8pt to the circle, as in V16 (the tap target adds 2pt).
+        const SizedBox(width: AppSpacing.s2 - 2),
+        Pressable(
+          onTap: canSend ? _send : null,
+          semanticLabel: widget.sendLabel,
+          excludeChildSemantics: true,
+          pressedScale: 0.92,
+          borderRadius: AppRadii.all(AppRadii.control),
+          // A 44pt rounded square (RD-02) inside a 48dp tap target.
+          child: SizedBox.square(
+            dimension: kMinInteractiveDimension,
+            child: Center(
+              child: AnimatedContainer(
+                duration: AppMotion.duration(context, AppMotion.base),
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: canSend ? AppColors.accent : AppColors.disabled,
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: NumayaIcon(
+                  NumayaIcons.send,
+                  size: 22,
+                  color: canSend
+                      ? AppColors.inkForeground
+                      : AppColors.disabledForeground,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -722,7 +722,11 @@ class MessageBubble extends StatelessWidget {
           opacity: dimmed ? AppOpacity.pending : 1,
           child: Container(
             margin: EdgeInsets.only(top: grouped ? 4 : AppSpacing.s2),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            // Bubble inset on the 4 grid (SP-04): 12 across, 8 down.
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.s3,
+              vertical: AppSpacing.s2,
+            ),
             decoration: BoxDecoration(
               color: mine ? AppColors.accent : AppColors.surface,
               borderRadius: BorderRadius.only(
@@ -942,9 +946,12 @@ class ViewTabs extends StatelessWidget {
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           padding: EdgeInsets.symmetric(horizontal: bleed),
+          // The row owns the gap between pills (8, `groupGap`); each pill owns its 12pt inset.
+          // Before this, adjacent pills touched ("Unread 1" ran into "Your move 2").
           child: Row(
             children: [
-              for (var i = 0; i < options.length; i++)
+              for (var i = 0; i < options.length; i++) ...[
+                if (i > 0) const SizedBox(width: AppLayout.groupGap),
                 Pressable(
                   onTap: () => onSelect(i),
                   haptic: HapticMoment.selection,
@@ -958,7 +965,9 @@ class ViewTabs extends StatelessWidget {
                   child: AnimatedContainer(
                     duration: AppMotion.duration(context, AppMotion.base),
                     height: AppSizes.chip,
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppLayout.pillInsetX,
+                    ),
                     decoration: BoxDecoration(
                       // Solid accent when selected (RD-05), neutral otherwise.
                       color: i == selected
@@ -987,8 +996,10 @@ class ViewTabs extends StatelessWidget {
                       ),
                       style:
                           AppTypography.weight(
-                            AppTypography.card,
-                            AppTypography.medium,
+                            AppTypography.pill,
+                            i == selected
+                                ? AppTypography.semibold
+                                : AppTypography.medium,
                           ).copyWith(
                             color: i == selected
                                 ? AppColors.accentForeground
@@ -997,6 +1008,7 @@ class ViewTabs extends StatelessWidget {
                     ),
                   ),
                 ),
+              ],
             ],
           ),
         ),
@@ -1069,7 +1081,7 @@ class PersonTile extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 2),
-          Text(
+          MetaText(
             caption,
             style: AppTypography.caption.copyWith(
               color: AppColors.textSecondary,

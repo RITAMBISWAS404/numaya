@@ -32,7 +32,8 @@ void main() {
       await tester.pumpWidget(host(const InfoChip(label: 'Long-term')));
       final text = tester.widget<Text>(find.text('Long-term'));
       expect(text.style, AppTypography.chip);
-      expect(AppTypography.chip.fontSize, 14);
+      // Type-roles pass (TR-03): informational chips are 12/16.
+      expect(AppTypography.chip.fontSize, 12);
       expect(AppTypography.chip.fontFamily, AppTypography.label.fontFamily);
       expect(AppTypography.chip.color, AppColors.ink);
     });

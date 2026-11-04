@@ -3,3 +3,7 @@ tags:
     # Pixel output differs between operating systems, so screenshot capture is opt-in:
     #   flutter test --tags screenshots --run-skipped --update-goldens
     skip: "Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens"
+  comparison:
+    # Variant comparison renders (overnight polish): opt-in, written to test/screenshots/comparison/.
+    #   flutter test --tags comparison --run-skipped --update-goldens --dart-define=NUMAYA_TYPE_SCALE=<scale>
+    skip: "Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens"

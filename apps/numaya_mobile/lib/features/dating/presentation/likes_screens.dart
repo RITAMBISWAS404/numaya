@@ -37,7 +37,10 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
     if (list.isEmpty) {
       body = switch (_filter) {
         LikeFilter.all => EmptyState(
-          art: const IllustrationView(NumayaIllustration.noMatch, width: 160),
+          art: const IllustrationView(
+            NumayaIllustration.mascotWaiting,
+            width: 176,
+          ),
           title: l10n.likesEmptyTitle,
           body: l10n.likesEmptyBody,
           action: NumayaButton(
@@ -102,7 +105,9 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
                           ? l10n.likeMatched
                           : like.isNew
                           ? l10n.likeNew
-                          : l10n.likeTileCaption(like.person.distanceKm),
+                          : l10n
+                                .likeTileCaption(like.person.distanceKm)
+                                .replaceAll(MetaText.joiner, ', '),
                     ),
                     badge: like.matched
                         ? StatusBadge(
@@ -179,9 +184,8 @@ class LikeProfileScreen extends ConsumerWidget {
       return NumayaScreen(
         top: NumayaTopBar(onBack: () => context.pop(), backLabel: l10n.back),
         body: EmptyState(
-          art: const IllustrationSlot(
-            slot: 'like_gone',
-            label: 'This like has moved on',
+          art: const IllustrationView(
+            NumayaIllustration.mascotWaiting,
             width: 176,
           ),
           title: l10n.likesEmptyTitle,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/providers.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../events/domain/sample_events.dart';
@@ -11,14 +13,14 @@ import '../../events/presentation/event_parts.dart';
 /// (docs/design-experiments/monochrome-meetup/DESIGN_SYSTEM.md). Reached from the Demo Hub; the
 /// router refuses it whenever the Demo Hub is refused (release builds). Copy here is English-only
 /// on purpose: it is a tool, not product UI.
-class DesignLabScreen extends StatefulWidget {
+class DesignLabScreen extends ConsumerStatefulWidget {
   const DesignLabScreen({super.key});
 
   @override
-  State<DesignLabScreen> createState() => _DesignLabScreenState();
+  ConsumerState<DesignLabScreen> createState() => _DesignLabScreenState();
 }
 
-class _DesignLabScreenState extends State<DesignLabScreen> {
+class _DesignLabScreenState extends ConsumerState<DesignLabScreen> {
   int _tab = 0;
   int _segment = 0;
   bool _switch = true;
@@ -29,7 +31,9 @@ class _DesignLabScreenState extends State<DesignLabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
+    // The app clock, not the wall clock: tests pin it, so the Lab's sample event (and its
+    // golden) no longer changes with the time of day.
+    final now = ref.watch(clockProvider)();
     final event = sampleEvents(now).first;
     return NumayaScreen(
       top: NumayaTopBar(

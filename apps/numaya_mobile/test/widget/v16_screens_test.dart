@@ -103,7 +103,11 @@ void main() {
     await _toHome(tester);
     await _tap(tester, find.byTooltip('Profile'));
     expect(find.text('Sam, 31'), findsOneWidget);
-    expect(find.text('Woman · Looking for something casual'), findsOneWidget);
+    // CL-04: the parts render with a vertical separator; screen readers hear them in order.
+    expect(
+      find.bySemanticsLabel('Woman, Looking for something casual'),
+      findsOneWidget,
+    );
     await _tap(tester, find.bySemanticsLabel('Settings'));
     await tester.pump(const Duration(milliseconds: 600));
     await _tap(tester, find.text('Delete account'));

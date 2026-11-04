@@ -1,5 +1,21 @@
 # Current state
 
+> **Final QA (2026-11-04), cloud:** the same worktree, branch and HEAD as the overnight entry below
+> (`/home/user/numaya-overnight`, `experiment/numaya-overnight-polish`, `6b23c85`). Two more
+> fixes; **local only, not on GitHub**. See
+> [FINAL_QA.md](../design-experiments/overnight-polish/FINAL_QA.md).
+
+> **Overnight polish (2026-11-03 UTC), cloud.** The worktree is `/home/user/numaya-overnight` on the
+> local branch `experiment/numaya-overnight-polish`, at HEAD `6b23c85` (`wip/frosted-navigation-handoff`, verified
+> live on GitHub).
+> - **Local changes, uncommitted:** the 14/20 body, the large-text fixes, the glass highlight and
+>   the mascot.
+> - **Not on GitHub** until the owner authorises a push.
+> - **Record:** [overnight-polish](../design-experiments/overnight-polish/README.md).
+> - **Elsewhere in the same container:** another checkout, `/home/user/numaya`
+>   (`experiment/impeccable-visual-refinement`, `6e4dbd1`), holds 14 uncommitted Impeccable web
+>   files. They are unrelated and were left untouched.
+
 > **Frosted-navigation experiment (2026-11-04).** Worktree
 > `C:\Users\biswa\Downloads\numaya\numaya-frosted-navigation` on branch
 > `experiment/numaya-frosted-navigation`, from `eb0b37b`, **uncommitted**.

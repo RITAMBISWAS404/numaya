@@ -703,7 +703,7 @@ class _HealthHero extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   NumayaIcon(icon, size: 18, color: fg),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: AppLayout.compactIconGap),
                   Flexible(
                     child: Text(
                       statusTitle,

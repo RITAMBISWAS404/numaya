@@ -45,7 +45,7 @@ class ProfileScreen extends ConsumerWidget {
             LookingFor.open => l10n.profileLookingOpen,
             LookingFor.casual => l10n.profileLookingCasual,
           };
-    final summary = [?gender, ?looking].join(' · ');
+    final summary = MetaText.join([gender, looking]);
     final mainPhoto = draft.photos.isEmpty ? null : draft.photos.first.source;
     final initial = draft.firstName.trim().isEmpty
         ? '?'
@@ -101,83 +101,75 @@ class ProfileScreen extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Row(
-                                children: [
-                                  ExcludeSemantics(
-                                    child: Container(
-                                      width: AppSizes.avatarProfile,
-                                      height: AppSizes.avatarProfile,
-                                      decoration: const BoxDecoration(
-                                        color: AppColors.identity,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      alignment: Alignment.center,
-                                      clipBehavior: Clip.antiAlias,
-                                      child: mainPhoto != null
-                                          ? Image(
-                                              image: localImage(
-                                                mainPhoto,
-                                                width: 300,
-                                              ),
-                                              width: AppSizes.avatarProfile,
-                                              height: AppSizes.avatarProfile,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Text(
-                                              initial,
-                                              style: AppTypography.hero
-                                                  .copyWith(
-                                                    fontSize: 40,
-                                                    height: 1,
-                                                    color: AppColors.onIdentity,
-                                                  ),
+                              _AvatarAndName(
+                                avatar: ExcludeSemantics(
+                                  child: Container(
+                                    width: AppSizes.avatarProfile,
+                                    height: AppSizes.avatarProfile,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.identity,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    alignment: Alignment.center,
+                                    clipBehavior: Clip.antiAlias,
+                                    child: mainPhoto != null
+                                        ? Image(
+                                            image: localImage(
+                                              mainPhoto,
+                                              width: 300,
                                             ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: AppSpacing.s4),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Semantics(
-                                          header: true,
-                                          child: Text(
-                                            age == null
-                                                ? draft.firstName
-                                                : l10n.profileNameAge(
-                                                    draft.firstName,
-                                                    age,
-                                                  ),
-                                            style: AppTypography.headline,
+                                            width: AppSizes.avatarProfile,
+                                            height: AppSizes.avatarProfile,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Text(
+                                            initial,
+                                            style: AppTypography.hero.copyWith(
+                                              fontSize: 40,
+                                              height: 1,
+                                              color: AppColors.onIdentity,
+                                            ),
                                           ),
-                                        ),
-                                        if (summary.isNotEmpty) ...[
-                                          const SizedBox(height: 2),
-                                          Text(
-                                            summary,
-                                            style: AppTypography.bodySm
-                                                .copyWith(
-                                                  color: AppColors.textMuted,
-                                                ),
-                                          ),
-                                        ],
-                                        const SizedBox(height: AppSpacing.s2),
-                                        StatusBadge(
-                                          label: l10n.profilePhoneVerified,
-                                          icon: NumayaIcons.verified,
-                                          tone: BadgeTone.brand,
-                                        ),
-                                      ],
-                                    ),
                                   ),
-                                ],
+                                ),
+                                details: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Semantics(
+                                      header: true,
+                                      child: Text(
+                                        age == null
+                                            ? draft.firstName
+                                            : l10n.profileNameAge(
+                                                draft.firstName,
+                                                age,
+                                              ),
+                                        style: AppTypography.headline,
+                                      ),
+                                    ),
+                                    if (summary.isNotEmpty) ...[
+                                      const SizedBox(height: 2),
+                                      MetaText(
+                                        summary,
+                                        style: AppTypography.bodySm.copyWith(
+                                          color: AppColors.textMuted,
+                                        ),
+                                      ),
+                                    ],
+                                    const SizedBox(height: AppSpacing.s2),
+                                    StatusBadge(
+                                      label: l10n.profilePhoneVerified,
+                                      icon: NumayaIcons.verified,
+                                      tone: BadgeTone.brand,
+                                    ),
+                                  ],
+                                ),
                               ),
                               if (draft.interests.isNotEmpty) ...[
                                 const SizedBox(height: AppSpacing.s5),
                                 Wrap(
-                                  spacing: AppSpacing.s2,
-                                  runSpacing: AppSpacing.s2,
+                                  spacing: AppLayout.groupGap,
+                                  runSpacing: AppLayout.groupGap,
                                   children: [
                                     for (final interest in draft.interests)
                                       _StaticChip(
@@ -383,8 +375,8 @@ class _StaticChip extends StatelessWidget {
     return Container(
       constraints: const BoxConstraints(minHeight: AppSizes.chip),
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.s3,
-        vertical: AppSpacing.s1,
+        horizontal: AppLayout.pillInsetX,
+        vertical: AppLayout.pillInsetY,
       ),
       decoration: BoxDecoration(
         color: AppColors.fill,
@@ -395,7 +387,7 @@ class _StaticChip extends StatelessWidget {
         children: [
           if (emoji != null) ...[
             Emoji(emoji!, size: 15.5),
-            const SizedBox(width: 6),
+            const SizedBox(width: AppLayout.compactIconGap),
           ],
           // The shared chip role (was a one-off 15pt).
           Flexible(child: Text(label, style: AppTypography.chip)),
@@ -545,4 +537,36 @@ class _TileGrid extends StatelessWidget {
       ),
     ),
   );
+}
+
+/// The Profile hero's avatar and identity. Side by side normally; at very large text sizes the
+/// avatar moves above the name so the name and badge keep the card's full width instead of
+/// breaking inside words (overnight polish, OP-04).
+class _AvatarAndName extends StatelessWidget {
+  const _AvatarAndName({required this.avatar, required this.details});
+
+  final Widget avatar;
+  final Widget details;
+
+  @override
+  Widget build(BuildContext context) {
+    final stacked = MediaQuery.textScalerOf(context).scale(10) > 16;
+    if (stacked) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          avatar,
+          const SizedBox(height: AppSpacing.s4),
+          details,
+        ],
+      );
+    }
+    return Row(
+      children: [
+        avatar,
+        const SizedBox(width: AppSpacing.s4),
+        Expanded(child: details),
+      ],
+    );
+  }
 }

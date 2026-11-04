@@ -313,7 +313,7 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                       ?e.area,
                       if (e.distanceFrom(area) case final km?)
                         l10n.eventAbout(_fmt(km)),
-                    ].join(' · '),
+                    ].join(MetaText.joiner),
             ),
             ListRow(
               leading: NumayaIcons.tag,

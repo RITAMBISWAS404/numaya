@@ -535,7 +535,7 @@
   "likesFilterAll": "All",
   "likesFilterNew": "New",
   "likesFilterNearby": "Nearby",
-  "likeTileCaption": "Liked you · {km} km away",
+  "likeTileCaption": "Liked you\u2063{km} km away",
   "@likeTileCaption": {
     "placeholders": {
       "km": {
@@ -631,7 +631,7 @@
   },
   "chatSend": "Send",
   "chatStatusSending": "Sending…",
-  "chatStatusOnDevice": "Demo · saved on this device, not sent",
+  "chatStatusOnDevice": "Not sent: saved on this device",
   "chatAttach": "Add a photo, video or voice note",
   "chatAttachPhoto": "Photo",
   "chatAttachVideo": "Video",
@@ -647,7 +647,7 @@
   "chatVideoNoPlayback": "Video playback isn’t in this build. The file stays on your phone.",
   "chatVoiceLabel": "Voice note, {duration}",
   "@chatVoiceLabel": {"placeholders": {"duration": {"type": "String"}}},
-  "chatVoiceDemo": "Demo · no sound recorded",
+  "chatVoiceDemo": "Demo: no sound recorded",
   "mediaPermissionDenied": "Numaya can’t see your photos. Allow access in your phone’s Settings, then try again.",
   "mediaUnsupported": "That file type isn’t supported. Choose a JPG, PNG, WebP or HEIC photo, or an MP4 or MOV video.",
   "mediaTooLarge": "That video is over 100 MB. Choose a shorter one.",
@@ -866,7 +866,7 @@
       "text": {}
     }
   },
-  "chatSampleConversationNote": "{name}’s messages were written for the demo. What you send stays on this device and no one replies.",
+  "chatSampleConversationNote": "Demo chat: {name}’s messages are scripted, and what you send stays on this device.",
   "@chatSampleConversationNote": {
     "placeholders": {
       "name": {}
@@ -1008,7 +1008,7 @@
   "appealSentBody": "In this demo nothing is sent or reviewed. In the real app a person reviews appeals and replies by email.",
   "blockedAccountTitle": "Account on hold",
   "blockedAccountHeading": "Your account has been blocked",
-  "blockedAccountBody": "We found activity that goes against our guidelines. You can appeal within 6 months. This is a preview of a screen the server would show.",
+  "blockedAccountBody": "We found activity that goes against our guidelines. You can appeal within 6 months.",
   "completionTitle": "Complete your profile",
   "completionPercent": "{percent}% complete",
   "@completionPercent": {
@@ -1469,7 +1469,7 @@
   "obGenderTitle": "How do you identify?",
   "obGenderLede": "Add more detail if you like, and choose what your profile shows.",
   "obGenderMore": "Add more about your gender",
-  "obPronounsLabel": "Pronouns · optional",
+  "obPronounsLabel": "Pronouns (optional)",
   "obPronounsCount": "{count}/{max}",
   "@obPronounsCount": {
     "placeholders": {
@@ -1558,7 +1558,7 @@
       }
     }
   },
-  "permDemoTag": "Demo · stands in for Android’s prompt",
+  "permDemoTag": "Demo: stands in for Android’s prompt",
   "permLocationTitle": "Allow Numaya to access this device’s location?",
   "permAllowApproximate": "While using the app · approximate",
   "permAllowPrecise": "While using the app · precise",
@@ -1729,7 +1729,7 @@
   "demoNeedsAccount": "Start a sign-up first",
   "obMeetLegend": "Show me",
   "obNotifFooter": "You can change this in Settings",
-  "obVerifyFooter": "Optional · you can verify later",
+  "obVerifyFooter": "Optional: you can verify later",
   "obDemoBuild": "Demo build",
   "discoverUndone": "{name} is back",
   "@discoverUndone": {
@@ -2157,7 +2157,7 @@
   },
   "eventUnsaved": "Removed from saved",
   "eventUntitled": "Untitled event",
-  "eventVenueDistance": "{venue} · about {km} km",
+  "eventVenueDistance": "{venue}\u2063about {km} km",
   "@eventVenueDistance": {
     "placeholders": {
       "venue": {},

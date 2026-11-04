@@ -1651,7 +1651,7 @@ abstract class AppLocalizations {
   /// No description provided for @likeTileCaption.
   ///
   /// In en, this message translates to:
-  /// **'Liked you · {km} km away'**
+  /// **'Liked you⁣{km} km away'**
   String likeTileCaption(int km);
 
   /// No description provided for @likeNew.
@@ -1867,7 +1867,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatStatusOnDevice.
   ///
   /// In en, this message translates to:
-  /// **'Demo · saved on this device, not sent'**
+  /// **'Not sent: saved on this device'**
   String get chatStatusOnDevice;
 
   /// No description provided for @chatAttach.
@@ -1951,7 +1951,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatVoiceDemo.
   ///
   /// In en, this message translates to:
-  /// **'Demo · no sound recorded'**
+  /// **'Demo: no sound recorded'**
   String get chatVoiceDemo;
 
   /// No description provided for @mediaPermissionDenied.
@@ -2635,7 +2635,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatSampleConversationNote.
   ///
   /// In en, this message translates to:
-  /// **'{name}’s messages were written for the demo. What you send stays on this device and no one replies.'**
+  /// **'Demo chat: {name}’s messages are scripted, and what you send stays on this device.'**
   String chatSampleConversationNote(Object name);
 
   /// No description provided for @reportWhere.
@@ -3019,7 +3019,7 @@ abstract class AppLocalizations {
   /// No description provided for @blockedAccountBody.
   ///
   /// In en, this message translates to:
-  /// **'We found activity that goes against our guidelines. You can appeal within 6 months. This is a preview of a screen the server would show.'**
+  /// **'We found activity that goes against our guidelines. You can appeal within 6 months.'**
   String get blockedAccountBody;
 
   /// No description provided for @completionTitle.
@@ -5011,7 +5011,7 @@ abstract class AppLocalizations {
   /// No description provided for @obPronounsLabel.
   ///
   /// In en, this message translates to:
-  /// **'Pronouns · optional'**
+  /// **'Pronouns (optional)'**
   String get obPronounsLabel;
 
   /// No description provided for @obPronounsCount.
@@ -5299,7 +5299,7 @@ abstract class AppLocalizations {
   /// No description provided for @permDemoTag.
   ///
   /// In en, this message translates to:
-  /// **'Demo · stands in for Android’s prompt'**
+  /// **'Demo: stands in for Android’s prompt'**
   String get permDemoTag;
 
   /// No description provided for @permLocationTitle.
@@ -5911,7 +5911,7 @@ abstract class AppLocalizations {
   /// No description provided for @obVerifyFooter.
   ///
   /// In en, this message translates to:
-  /// **'Optional · you can verify later'**
+  /// **'Optional: you can verify later'**
   String get obVerifyFooter;
 
   /// No description provided for @obDemoBuild.
@@ -7207,7 +7207,7 @@ abstract class AppLocalizations {
   /// No description provided for @eventVenueDistance.
   ///
   /// In en, this message translates to:
-  /// **'{venue} · about {km} km'**
+  /// **'{venue}⁣about {km} km'**
   String eventVenueDistance(Object venue, Object km);
 
   /// No description provided for @eventVenueHint.

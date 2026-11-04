@@ -1,5 +1,78 @@
 # Validation
 
+## Pill gaps (2026-11-04, cloud, uncommitted)
+| Command | Result |
+|---|---|
+| format, analyze, token check | clean |
+| `flutter test` | **338 passed, 15 skipped, 0 failed** |
+| captures | 20 passed; 28 changed and reviewed |
+
+## Core journey pass (2026-11-04, cloud, uncommitted)
+| Command | Result |
+|---|---|
+| format, analyze, token check | clean |
+| `flutter test` | **337 passed, 15 skipped, 0 failed** |
+| captures | 20 passed; 27 changed and reviewed |
+| device | not run |
+
+## Component cleanup (2026-11-04, cloud, uncommitted)
+| Command | Result |
+|---|---|
+| format, analyze, token check | clean |
+| `flutter test` | **334 passed, 14 skipped, 0 failed** |
+| captures | 20 passed; 93 changed and reviewed |
+| device, emulator | not run |
+
+## Spacing and shape pass (2026-11-04, cloud, uncommitted)
+| Command | Result |
+|---|---|
+| format, `flutter analyze`, token check | exit 0; No issues; up to date |
+| `flutter test` | **326 passed, 14 skipped, 0 failed** |
+| captures | 20 passed; 89 changed and reviewed |
+| emulator, device, Inspector | not run (no SDK or device; the Dart MCP server failed to start) |
+
+## Type-roles pass (2026-11-04, cloud, uncommitted)
+| Command | Result |
+|---|---|
+| format, `flutter analyze`, token check | exit 0; No issues; up to date |
+| `flutter test` | **323 passed, 14 skipped, 0 failed** |
+| `flutter test test/widget/type_roles_test.dart --dart-define=NUMAYA_TYPE_SCALE=base` | fails (+3 −4) as intended |
+| captures | 20 passed; 176 goldens changed and reviewed |
+| emulator, device, screen readers | not run (no SDK or device) |
+
+## Final QA pass (2026-11-04, cloud, uncommitted)
+| Command | Result |
+|---|---|
+| `dart format --output=none --set-exit-if-changed lib test` | exit 0 |
+| `flutter analyze` | No issues found |
+| `node tool/generate_tokens.mjs --check` | Dart tokens are up to date |
+| `flutter test` | **316 passed, 14 skipped, 0 failed** (the baseline before this pass was 312 / 14 / 0) |
+| `flutter test --tags screenshots --run-skipped --update-goldens test/screenshots` | 20 passed; only `m01` and `p05` changed; 33 renderer-only goldens restored |
+| `integration_test/`, the APK, emulator, device, TalkBack and VoiceOver | **Not run:** no device or Android SDK (`dl.google.com` is denied) |
+| `npm run check`, `npm run test:e2e` | **Not run:** no web change; no `node_modules` in the worktree |
+
+## Overnight polish (2026-11-03 UTC, cloud worktree `/home/user/numaya-overnight`, uncommitted)
+**Environment:** Linux, Flutter 3.47.8 and Dart 3.13.7 at `/opt/flutter-sdk`. **No Android SDK**:
+`flutter doctor` reports "Unable to locate Android SDK", and `dl.google.com` is denied by the
+network policy. Everything below is the Flutter test renderer, not an emulator or a device.
+
+| Stage | Command | Result |
+|---|---|---|
+| HEAD `6b23c85` | `flutter analyze`; `flutter test` | No issues; **302 passed, 12 skipped, 0 failed** (matches the Windows claim) |
+| HEAD | `flutter test --tags screenshots --run-skipped` (compare, no update), `fn01` | Fails by 1.17%: the goldens are Windows-rendered, so Linux font rasterising differs |
+| Final | `dart format --output=none --set-exit-if-changed lib test` | exit 0 |
+| Final | `flutter analyze` | No issues found |
+| Final | `node tool/generate_tokens.mjs --check` | Dart tokens are up to date |
+| Final | `flutter test` | **312 passed, 14 skipped, 0 failed** (+10 tests in `test/widget/overnight_polish_test.dart`; +2 opt-in files) |
+| Final | `flutter test --tags screenshots --run-skipped --update-goldens test/screenshots` | 20 passed. 157 goldens changed after review (154 updated, 3 new `op01`–`op03`); 34 renderer-only diffs restored to the committed versions |
+| Final | `flutter test --tags comparison --run-skipped --update-goldens --dart-define=NUMAYA_TYPE_SCALE={base,body14,compact} test/screenshots/compare_type_scale_test.dart` | 3 × 4 passed; renders in `artifacts/overnight-polish/type-comparison/` |
+| — | `npm run check`, `npm run test:e2e` (CLAUDE.md, web) | **Not run.** No web file changed (`git diff --stat` touches only `apps/numaya_mobile/`, `docs/` and `artifacts/`), and `node_modules` is not installed in this worktree |
+| — | APK build, emulator, physical device, TalkBack, VoiceOver, iOS, profile-mode performance | **Not run** (no Android SDK or Xcode here). Open for the Windows machine |
+
+**Goldens note:** the 154 updated goldens are Linux renders. On Windows they will differ by font
+rasterising. Re-render them there (`flutter test --tags screenshots --run-skipped --update-goldens`)
+before treating them as the reference.
+
 ## Required before each commit
 **Flutter** (in `apps/numaya_mobile/`):
 ```sh

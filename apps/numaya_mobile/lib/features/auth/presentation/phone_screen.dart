@@ -138,7 +138,7 @@ class _PhoneScreenState extends ConsumerState<PhoneScreen> {
                   ],
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: AppSpacing.s2),
               Expanded(
                 child: NumayaTextField(
                   label: l10n.phoneNumberLabel,

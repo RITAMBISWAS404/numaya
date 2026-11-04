@@ -448,6 +448,10 @@ class StatusBanner extends StatelessWidget {
         decoration: BoxDecoration(
           color: bg,
           borderRadius: AppRadii.all(AppRadii.card),
+          border: Border.all(
+            color: AppColors.tintBorder(fg),
+            width: AppBorders.hairline,
+          ),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

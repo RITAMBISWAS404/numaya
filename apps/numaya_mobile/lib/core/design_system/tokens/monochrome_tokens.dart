@@ -105,6 +105,21 @@ abstract final class MonoColors {
 /// Frosted navigation (frosted-navigation experiment, FN-04): the only glass in the app, on the
 /// floating tab bar. Content scrolls beneath it; the tint keeps unselected icons (`text2`) at
 /// 5.46:1 or better even over a black photo (80% white composites to #CCCCCC there).
+/// Body size (overnight polish, OP-01). The default is `body14`: a 14/20 semantic body.
+/// `--dart-define=NUMAYA_TYPE_SCALE=base` reproduces the earlier 16/24 body for comparison with
+/// identical data, viewport and navigation (docs/design-experiments/overnight-polish/).
+abstract final class MonoType {
+  static const String scale = String.fromEnvironment(
+    'NUMAYA_TYPE_SCALE',
+    defaultValue: 'body14',
+  );
+  static const bool body14 = scale != 'base';
+
+  /// The semantic default body role (`AppTypography.body`).
+  static const double bodySize = body14 ? 14 : 16;
+  static const double bodyLine = body14 ? 20 : 24;
+}
+
 abstract final class MonoGlass {
   /// Gaussian blur of whatever passes beneath the bar, in logical pixels.
   static const double blur = 20;
@@ -114,6 +129,12 @@ abstract final class MonoGlass {
 
   /// Hairline that keeps the bar's edge visible over white content: ink at 8%.
   static const Color edge = Color(0x1418181B);
+
+  /// Restrained top highlight (overnight polish, OP-05): a 1pt white line at 70% along the
+  /// straight top edge, inset from the rounded ends. Invisible over white; over dark or busy
+  /// content it reads as the lit edge of a pane. A solid line, not a gradient.
+  static const Color highlight = Color(0xB3FFFFFF);
+  static const double highlightInset = 24;
 
   /// Under the system navigation (three buttons or the gesture handle): the page colour at 95%, so
   /// Android's own controls never sit on a photo.

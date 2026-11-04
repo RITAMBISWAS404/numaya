@@ -68,15 +68,21 @@ class _InterestsScreenState extends ConsumerState<InterestsScreen> {
       Row(
         children: [
           Expanded(child: FieldLabel(l10n.interestsLabel)),
-          Semantics(
-            liveRegion: true,
-            child: Text(
-              l10n.interestsSelected(count).toUpperCase(),
-              style: AppTypography.labelCaps.copyWith(
-                color: AppColors.textMuted,
-                fontWeight: FontWeight.w400,
-                fontVariations: const [FontVariation('wght', 400)],
-                fontFeatures: const [FontFeature.tabularFigures()],
+          const SizedBox(width: AppSpacing.s2),
+          // Flexible: at 200% text on a 320pt phone the count wraps instead of overflowing
+          // (found by the overnight route-gap sweep).
+          Flexible(
+            child: Semantics(
+              liveRegion: true,
+              child: Text(
+                l10n.interestsSelected(count).toUpperCase(),
+                textAlign: TextAlign.end,
+                style: AppTypography.labelCaps.copyWith(
+                  color: AppColors.textMuted,
+                  fontWeight: FontWeight.w400,
+                  fontVariations: const [FontVariation('wght', 400)],
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                ),
               ),
             ),
           ),

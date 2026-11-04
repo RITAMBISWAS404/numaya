@@ -193,7 +193,7 @@ class SettingsScreen extends ConsumerWidget {
             else
               l10n.settingsSnoozeOn,
             ?prefs.awayStatus,
-          ].join(' · ');
+          ].join(MetaText.joiner);
 
     return NumayaScreen(
       top: NumayaTopBar(
@@ -264,7 +264,6 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: AppSpacing.sectionGap),
           ListGroup(
             title: l10n.settingsLocation,
-            footnote: l10n.settingsLocationNote,
             children: [
               ListRow(
                 leading: NumayaIcons.location,
@@ -304,7 +303,6 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: AppSpacing.sectionGap),
           ListGroup(
             title: l10n.settingsNotifications,
-            footnote: l10n.settingsNotificationsNote,
             children: [
               // V16 113: New messages, New likes, each with its state underneath.
               for (final (c, label, icon, tone) in [

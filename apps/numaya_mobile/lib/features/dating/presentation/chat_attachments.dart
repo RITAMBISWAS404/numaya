@@ -125,12 +125,12 @@ class PendingAttachment extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final a = attachment;
-    final detail = [
+    final detail = MetaText.join([
       if (a.sizeBytes != null && a.kind != AttachmentKind.voice)
         formatBytes(a.sizeBytes!),
       if (a.sample) l10n.chatAttachmentSample,
       if (a.kind == AttachmentKind.voice) l10n.chatVoiceDemo,
-    ].join(' · ');
+    ]);
     // The description and Remove are separate nodes, so Remove can be reached on its own.
     return Container(
       padding: const EdgeInsets.all(AppSpacing.s2),
@@ -185,7 +185,7 @@ class PendingAttachment extends StatelessWidget {
                             ),
                           ),
                           if (detail.isNotEmpty)
-                            Text(
+                            MetaText(
                               detail,
                               style: AppTypography.caption.copyWith(
                                 color: AppColors.textSecondary,
@@ -274,11 +274,11 @@ class AttachmentMessage extends StatelessWidget {
           mine: mine,
           leading: MobileIcon(NumayaMobileIcons.play, size: 28, color: fg),
           title: a.name ?? l10n.chatAttachmentVideo,
-          detail: [
+          detail: MetaText.join([
             l10n.chatAttachmentVideo,
             if (a.sizeBytes != null) formatBytes(a.sizeBytes!),
             if (a.sample) l10n.chatAttachmentSample,
-          ].join(' · '),
+          ]),
           fg: fg,
           muted: muted,
         ),
@@ -360,9 +360,10 @@ class _FileCard extends StatelessWidget {
                     AppTypography.semibold,
                   ).copyWith(color: fg),
                 ),
-                Text(
+                MetaText(
                   detail,
                   style: AppTypography.caption.copyWith(color: muted),
+                  separatorColor: muted.withValues(alpha: 0.5),
                 ),
               ],
             ),

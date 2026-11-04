@@ -167,7 +167,7 @@ void main() {
       expect(note.kind, AttachmentKind.voice);
       expect(note.duration, const Duration(seconds: 3));
       expect(note.sample, isTrue);
-      expect(find.text('Demo · no sound recorded'), findsOneWidget);
+      expect(find.text('Demo: no sound recorded'), findsOneWidget);
       await settle(tester);
     },
   );

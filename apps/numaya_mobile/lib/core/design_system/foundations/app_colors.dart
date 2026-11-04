@@ -31,6 +31,14 @@ abstract final class AppColors {
   /// Photo placeholders.
   static const Color photo = _M.fillStrong;
 
+  /// Border of a tinted card (CL-03): the card's own hue at 15%, so the edge reads against both
+  /// white cards and the grey page without a second colour.
+  static Color tintBorder(Color hue) => hue.withValues(alpha: 0.15);
+
+  /// Off switch track (CL-01): light grey (#DDDDE3), no outline. One step deeper than the card
+  /// fill so an off switch still reads on a white card; the thumb's edge does the rest.
+  static const Color switchOff = _M.fieldPressed;
+
   /// Filled fields and filled secondary buttons.
   static const Color field = _M.field;
   static const Color fieldPressed = _M.fieldPressed;

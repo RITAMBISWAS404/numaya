@@ -157,11 +157,15 @@ class _ToastViewState extends State<_ToastView> with TickerProviderStateMixin {
               child: Material(
                 type: MaterialType.transparency,
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(16, 9, 16, 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.s4,
+                    vertical: AppSpacing.s3,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.accentTint,
-                    // A pill for one line; the same radius stays soft when a message wraps.
-                    borderRadius: AppRadii.all(20),
+                    // The card radius clamps to a pill on one line and stays soft when a message
+                    // wraps (SP-05).
+                    borderRadius: AppRadii.all(AppRadii.card),
                     boxShadow: AppElevation.withingsFloat,
                   ),
                   child: Row(

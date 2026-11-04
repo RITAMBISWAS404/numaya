@@ -319,7 +319,10 @@ class NumayaChip extends StatelessWidget {
         duration: AppMotion.duration(context, AppMotion.base),
         curve: AppMotion.easeOut,
         constraints: const BoxConstraints(minHeight: AppSizes.chip),
-        padding: const EdgeInsets.fromLTRB(14, 5, AppSpacing.s3, 5),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppLayout.pillInsetX,
+          vertical: AppLayout.pillInsetY,
+        ),
         decoration: BoxDecoration(
           color: selected
               ? AppColors.accent
@@ -333,18 +336,18 @@ class NumayaChip extends StatelessWidget {
           children: [
             if (emoji != null) ...[
               Emoji(emoji!, size: 15.5),
-              const SizedBox(width: 6),
+              const SizedBox(width: AppLayout.compactIconGap),
             ],
             Flexible(
               child: Text(
                 label,
                 style: AppTypography.weight(
-                  AppTypography.card,
+                  AppTypography.pill,
                   selected ? AppTypography.semibold : AppTypography.medium,
                 ).copyWith(color: fg),
               ),
             ),
-            const SizedBox(width: 6),
+            const SizedBox(width: AppLayout.compactIconGap),
             NumayaIcon(
               selected ? NumayaIcons.minus : NumayaIcons.plus,
               size: 18,
@@ -389,19 +392,23 @@ class ChipSet extends StatelessWidget {
               Emoji(emoji!, size: 17),
               const SizedBox(width: AppLayout.iconLabelGap),
             ],
-            Text(
-              label,
-              style: AppTypography.weight(
-                AppTypography.label,
-                AppTypography.semibold,
-              ).copyWith(color: AppColors.ink),
+            // Flexible: a long group name wraps at large text instead of overflowing (found on
+            // /profile/edit/interests at 320pt and 200% by the overnight route-gap sweep).
+            Flexible(
+              child: Text(
+                label,
+                style: AppTypography.weight(
+                  AppTypography.label,
+                  AppTypography.semibold,
+                ).copyWith(color: AppColors.ink),
+              ),
             ),
           ],
         ),
         const SizedBox(height: AppSpacing.s2),
         Wrap(
-          spacing: AppSpacing.s2,
-          runSpacing: AppSpacing.s2,
+          spacing: AppLayout.groupGap,
+          runSpacing: AppLayout.groupGap,
           children: children,
         ),
       ],
@@ -458,13 +465,9 @@ class OptionCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      label,
-                      style: AppTypography.weight(
-                        AppTypography.body,
-                        AppTypography.medium,
-                      ).copyWith(color: fg),
-                    ),
+                    // Option rows are tappable list rows: they share ListRow's 16/22 `row` role
+                    // rather than the 14/20 reading body (OP-02 exception).
+                    Text(label, style: AppTypography.row.copyWith(color: fg)),
                     if (description != null) ...[
                       const SizedBox(height: 2),
                       Text(description!, style: AppTypography.caption),

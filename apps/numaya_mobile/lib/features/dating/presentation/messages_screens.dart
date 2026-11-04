@@ -264,10 +264,6 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               ),
             ),
           ],
-          if (movesCard != null && q.isEmpty) ...[
-            const SizedBox(height: AppSpacing.s5),
-            movesCard,
-          ],
           const SizedBox(height: AppSpacing.sectionGap),
           Semantics(
             header: true,
@@ -287,6 +283,12 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
           ),
           const SizedBox(height: AppSpacing.s3),
           list,
+          // DX-03: the Opening Moves suggestion follows the conversations (Bumble's inbox keeps
+          // matches and chats together); it no longer pushes them down.
+          if (movesCard != null && q.isEmpty) ...[
+            const SizedBox(height: AppSpacing.sectionGap),
+            movesCard,
+          ],
         ],
       ),
     );
@@ -880,13 +882,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       final last = messages.last;
       final children = <Widget>[
         const SizedBox(height: AppSpacing.s4),
-        if (sample)
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: AppSpacing.s2),
-              child: StatusBadge(label: l10n.chatSampleBadge),
-            ),
-          ),
         Text(
           l10n.chatMatchedWith(person.name),
           textAlign: TextAlign.center,

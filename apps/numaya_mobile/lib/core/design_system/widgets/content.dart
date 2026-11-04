@@ -105,7 +105,11 @@ enum NumayaIllustration {
   /// Mobile-only scenes drawn in the same style (assets/illustrations/mobile/, not the web export).
   noEvents,
   eventGoing,
-  notEnoughData;
+  notEnoughData,
+
+  /// The Numaya mascot (overnight polish, OP-06): a purple cat with large ears, waiting with a
+  /// heart. Original artwork; used where the person is waiting on someone else (no likes yet).
+  mascotWaiting;
 
   String get asset {
     final file = switch (this) {
@@ -115,6 +119,7 @@ enum NumayaIllustration {
       noEvents => 'mobile/no-events',
       eventGoing => 'mobile/event-going',
       notEnoughData => 'mobile/not-enough-data',
+      mascotWaiting => 'mobile/mascot-waiting',
       _ => name,
     };
     return 'assets/illustrations/$file.svg';
@@ -165,6 +170,10 @@ class InfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.accentTint,
         borderRadius: AppRadii.all(AppRadii.card),
+        border: Border.all(
+          color: AppColors.tintBorder(AppColors.accent),
+          width: AppBorders.hairline,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -540,7 +549,7 @@ class ResultPanel extends StatelessWidget {
             ),
           ),
           if (body != null) ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: AppSpacing.s2),
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 300),
               child: Text(
@@ -727,7 +736,10 @@ class _SetupStepTile extends StatelessWidget {
               const SizedBox(width: AppSpacing.s3),
               Container(
                 padding: active
-                    ? const EdgeInsets.symmetric(horizontal: 10, vertical: 4)
+                    ? const EdgeInsets.symmetric(
+                        horizontal: AppLayout.badgeInsetX,
+                        vertical: AppLayout.badgeInsetY,
+                      )
                     : EdgeInsets.zero,
                 decoration: active
                     ? BoxDecoration(
@@ -841,7 +853,7 @@ Future<T?> showNumayaSheet<T>({
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.gutter,
                 ),
-                child: builder(context),
+                child: SheetSurface(child: Builder(builder: builder)),
               ),
             ),
           ],
@@ -852,4 +864,90 @@ Future<T?> showNumayaSheet<T>({
           : sheet;
     },
   );
+}
+
+/// Marks content on a white sheet, so a [ListGroup] there lays its rows flush to the sheet's
+/// gutter instead of inside an invisible white card (BM-02).
+class SheetSurface extends InheritedWidget {
+  const SheetSurface({super.key, required super.child});
+
+  static bool of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<SheetSurface>() != null;
+
+  @override
+  bool updateShouldNotify(SheetSurface oldWidget) => false;
+}
+
+/// Metadata on one line (CL-04): parts such as "Woman | Looking for long-term" or
+/// "Mon 2 Nov | 2 km away", separated by a subtle vertical bar instead of a middle dot.
+///
+/// Code joins parts with [joiner] (U+2063 INVISIBLE SEPARATOR), which never appears in user
+/// content, so user text, decimals and real lists keep their own punctuation. The bar is excluded
+/// from semantics; screen readers hear the parts in order, separated by commas.
+class MetaText extends StatelessWidget {
+  const MetaText(
+    this.text, {
+    super.key,
+    this.style,
+    this.maxLines,
+    this.overflow,
+    this.separatorColor,
+  });
+
+  /// Joins metadata parts for [MetaText] (and for [ListRow] details, which render with it).
+  static const String joiner = '⁣';
+
+  /// [parts] joined with [joiner], skipping empty parts.
+  static String join(Iterable<String?> parts) =>
+      parts.whereType<String>().where((p) => p.isNotEmpty).join(joiner);
+
+  final String text;
+  final TextStyle? style;
+  final int? maxLines;
+  final TextOverflow? overflow;
+
+  /// The bar's colour; defaults to [AppColors.borderStrong]. Set it on coloured surfaces,
+  /// such as a sent chat bubble, where the default grey would not read.
+  final Color? separatorColor;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!text.contains(joiner)) {
+      return Text(text, style: style, maxLines: maxLines, overflow: overflow);
+    }
+    final parts = text.split(joiner);
+    final base = DefaultTextStyle.of(context).style.merge(style);
+    final size = (base.fontSize ?? 14) * 0.85;
+    return Semantics(
+      label: parts.join(', '),
+      child: ExcludeSemantics(
+        child: Text.rich(
+          TextSpan(
+            children: [
+              for (var i = 0; i < parts.length; i++) ...[
+                if (i > 0)
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.s2,
+                      ),
+                      child: Container(
+                        width: 1,
+                        height: size,
+                        color: separatorColor ?? AppColors.borderStrong,
+                      ),
+                    ),
+                  ),
+                TextSpan(text: parts[i]),
+              ],
+            ],
+          ),
+          style: style,
+          maxLines: maxLines,
+          overflow: overflow,
+        ),
+      ),
+    );
+  }
 }

@@ -1,5 +1,21 @@
 # Tools, skills and integrations
 
+> **Cloud session, 2026-11-03 UTC (Claude Code 2.1.317, Linux):**
+> - **`dart-flutter` plugin 1.0.7:** installed at user scope with
+>   `claude plugin marketplace add flutter/agent-plugins` and
+>   `claude plugin install dart-flutter@dart-flutter`; BSD-3-Clause. `claude plugin list` shows it
+>   enabled; its skills load in the next session.
+> - **Mobbin MCP:** connected; live searches ran.
+> - **Repo-local skills:** `impeccable`, `apple-hig`, `liquid-glass-widgets`, `liquid-glass` and
+>   `search` are present in the worktree and were read as files. This session was opened in
+>   another checkout, so only `impeccable` and `apple-design` loaded as `/` skills.
+> - **Not available here:**
+>   - the Android SDK (`dl.google.com` is denied by the network policy);
+>   - an SVG rasteriser (the mascot was verified through Flutter's own renderer).
+> - **Not installed:** Widgetbook, Alchemist, Maestro, Patrol, Color.js, Material Color
+>   Utilities, Lucide, Phosphor. Existing tests and goldens covered every check, contrast used
+>   the repo's Python script, and the icons were sufficient.
+
 **Verified:** 2026-11-04, Claude Code 2.1.272, Windows 11. Agent tools are not app dependencies;
 `pubspec.yaml` is unchanged.
 

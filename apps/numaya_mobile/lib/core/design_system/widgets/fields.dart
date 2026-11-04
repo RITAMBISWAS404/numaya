@@ -234,8 +234,10 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
                 onChanged: widget.onChanged,
                 onSubmitted: widget.onSubmitted,
                 style:
+                    // Typed text is 16 in every field, single- or multi-line (OP-03); multi-line
+                    // keeps its 24pt reading line.
                     (widget.multiline
-                            ? AppTypography.body
+                            ? AppTypography.input.copyWith(height: 24 / 16)
                             : AppTypography.input)
                         .copyWith(
                           color: widget.enabled
@@ -418,7 +420,7 @@ class _NumayaSearchFieldState extends State<NumayaSearchField> {
               color: AppColors.textMuted,
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: AppLayout.iconLabelGap),
           Expanded(
             child: TextField(
               controller: _controller,

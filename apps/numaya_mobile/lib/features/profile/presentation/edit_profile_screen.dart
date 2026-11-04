@@ -154,7 +154,7 @@ class EditProfileScreen extends ConsumerWidget {
                       size: AppSizes.iconSm,
                       color: AppColors.textMuted,
                     ),
-                    const SizedBox(width: 6),
+                    const SizedBox(width: AppLayout.iconLabelGap),
                     Expanded(
                       child: Text(
                         l10n.editPhotosNote,
