@@ -11,6 +11,7 @@ import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../experiments/experiments.dart';
 import '../../home/presentation/home_shell.dart';
 import '../../home/presentation/tab_screens.dart';
 import '../../premium/application/premium_controller.dart';
@@ -19,6 +20,7 @@ import '../application/dating_controller.dart';
 import '../data/media_picker.dart';
 import '../domain/sample_people.dart';
 import 'chat_attachments.dart';
+import 'empty_conversations.dart';
 import 'person_profile.dart';
 import 'safety_sheets.dart';
 import 'time_format.dart';
@@ -94,6 +96,22 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
         : _OpeningMovesCard(onTap: () => context.push(Routes.openingMoves));
 
     if (queued.isEmpty && expired.isEmpty && convs.isEmpty) {
+      // EXP-003 (Experiment Lab only; release builds show the refined candidate).
+      final variant = ref.watch(
+        experimentVariantProvider(Experiment.emptyChats),
+      );
+      if (variant != ExpVariant.current) {
+        return TabPage(
+          header: header,
+          child: EmptyConversations(
+            variant: variant,
+            likes: likes,
+            onDiscover: () => context.go(Routes.home),
+            onLikes: () => context.go(Routes.likes),
+            onEvents: () => context.go(Routes.events),
+          ),
+        );
+      }
       return TabPage(
         header: header,
         child: Column(

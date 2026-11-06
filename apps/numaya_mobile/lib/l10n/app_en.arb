@@ -254,6 +254,13 @@
   "chatsEmptyTitle": "Connections start here",
   "chatsEmptyBody": "When you like each other, you’ll match. Here’s where you can chat.",
   "findYourPeople": "Find your people",
+  "chatsEmptyNextTitle": "Ways to start",
+  "chatsEmptyDiscover": "Browse people near you",
+  "chatsEmptyDiscoverDetail": "Like someone and, if they like you back, you match",
+  "chatsEmptyLikes": "See who liked you",
+  "chatsEmptyLikesDetail": "Like them back to match straight away",
+  "chatsEmptyEvents": "Find an event",
+  "chatsEmptyEventsDetail": "Meet people who share your interests",
   "profileNameAge": "{name}, {age}",
   "@profileNameAge": {
     "placeholders": {
@@ -512,6 +519,12 @@
   },
   "backToMessages": "Back to messages",
   "matchTitle": "It’s a match!",
+  "matchPairTitle": "You and {name}",
+  "@matchPairTitle": {
+    "description": "EXP-001 match moment variants: the headline naming both people.",
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "matchPairBody": "You liked each other. Now say hello.",
   "matchBody": "You and {name} liked each other. Now say hello.",
   "@matchBody": {
     "placeholders": {
@@ -1041,6 +1054,14 @@
   "completionProgress": "{done} of {total} added",
   "completionYourProfile": "Your profile",
   "completionPartDone": "Done",
+  "completionNext": "Next: {part}",
+  "@completionNext": {
+    "description": "EXP-004 B: the single next profile part to finish.",
+    "placeholders": {"part": {"type": "String"}}
+  },
+  "completionContinue": "Continue",
+  "completionSeeAll": "See all",
+  "profileQuickVerify": "Verify",
   "completionUnit": "complete",
   "@completionProgress": {
     "placeholders": {

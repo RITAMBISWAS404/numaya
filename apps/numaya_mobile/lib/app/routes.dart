@@ -74,6 +74,9 @@ abstract final class Routes {
   /// Development-only Design Lab (Monochrome Meetup components and states), under the Demo Hub.
   static const designLab = '/design-lab';
 
+  /// DEVELOPMENT ONLY: overnight v3 layout experiments (Current / A / B / C per experiment).
+  static const experimentLab = '/experiment-lab';
+
   /// Full-screen dating routes, outside the tab shell; each takes a sample person id.
   static const like = '/like';
   static const match = '/match';

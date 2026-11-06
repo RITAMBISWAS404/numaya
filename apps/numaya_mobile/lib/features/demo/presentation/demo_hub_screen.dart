@@ -69,6 +69,12 @@ class DemoHubScreen extends ConsumerWidget {
                 detail: l10n.demoDesignLabDetail,
                 onTap: () => context.push(Routes.designLab),
               ),
+              ListRow(
+                leading: NumayaIcons.sparkle,
+                label: 'Experiment Lab',
+                detail: 'Current, A, B and C layouts, chosen per experiment',
+                onTap: () => context.push(Routes.experimentLab),
+              ),
             ],
           ),
           const SizedBox(height: AppSpacing.sectionGap),

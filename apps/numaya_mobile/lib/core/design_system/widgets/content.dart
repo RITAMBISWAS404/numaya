@@ -109,7 +109,14 @@ enum NumayaIllustration {
 
   /// The Numaya mascot (overnight polish, OP-06): a purple cat with large ears, waiting with a
   /// heart. Original artwork; used where the person is waiting on someone else (no likes yet).
-  mascotWaiting;
+  mascotWaiting,
+
+  /// Overnight v3 provisional poses, drawn from [mascotWaiting]'s geometry (see
+  /// `docs/design-experiments/ente-design-system/overnight-v3/mascot.csv`). Reached through
+  /// [MascotArt], which names the purpose.
+  mascotCelebrate,
+  mascotHello,
+  mascotCheer;
 
   String get asset {
     final file = switch (this) {
@@ -120,6 +127,9 @@ enum NumayaIllustration {
       eventGoing => 'mobile/event-going',
       notEnoughData => 'mobile/not-enough-data',
       mascotWaiting => 'mobile/mascot-waiting',
+      mascotCelebrate => 'mobile/mascot-celebrate',
+      mascotHello => 'mobile/mascot-hello',
+      mascotCheer => 'mobile/mascot-cheer',
       _ => name,
     };
     return 'assets/illustrations/$file.svg';

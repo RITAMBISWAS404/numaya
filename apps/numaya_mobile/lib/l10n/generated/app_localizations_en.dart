@@ -509,6 +509,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get findYourPeople => 'Find your people';
 
   @override
+  String get chatsEmptyNextTitle => 'Ways to start';
+
+  @override
+  String get chatsEmptyDiscover => 'Browse people near you';
+
+  @override
+  String get chatsEmptyDiscoverDetail =>
+      'Like someone and, if they like you back, you match';
+
+  @override
+  String get chatsEmptyLikes => 'See who liked you';
+
+  @override
+  String get chatsEmptyLikesDetail => 'Like them back to match straight away';
+
+  @override
+  String get chatsEmptyEvents => 'Find an event';
+
+  @override
+  String get chatsEmptyEventsDetail => 'Meet people who share your interests';
+
+  @override
   String profileNameAge(Object name, int age) {
     return '$name, $age';
   }
@@ -906,6 +928,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get matchTitle => 'It’s a match!';
+
+  @override
+  String matchPairTitle(String name) {
+    return 'You and $name';
+  }
+
+  @override
+  String get matchPairBody => 'You liked each other. Now say hello.';
 
   @override
   String matchBody(Object name) {
@@ -1856,6 +1886,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get completionPartDone => 'Done';
+
+  @override
+  String completionNext(String part) {
+    return 'Next: $part';
+  }
+
+  @override
+  String get completionContinue => 'Continue';
+
+  @override
+  String get completionSeeAll => 'See all';
+
+  @override
+  String get profileQuickVerify => 'Verify';
 
   @override
   String get completionUnit => 'complete';

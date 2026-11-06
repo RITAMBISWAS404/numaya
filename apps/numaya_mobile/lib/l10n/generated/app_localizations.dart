@@ -958,6 +958,48 @@ abstract class AppLocalizations {
   /// **'Find your people'**
   String get findYourPeople;
 
+  /// No description provided for @chatsEmptyNextTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ways to start'**
+  String get chatsEmptyNextTitle;
+
+  /// No description provided for @chatsEmptyDiscover.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse people near you'**
+  String get chatsEmptyDiscover;
+
+  /// No description provided for @chatsEmptyDiscoverDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Like someone and, if they like you back, you match'**
+  String get chatsEmptyDiscoverDetail;
+
+  /// No description provided for @chatsEmptyLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'See who liked you'**
+  String get chatsEmptyLikes;
+
+  /// No description provided for @chatsEmptyLikesDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Like them back to match straight away'**
+  String get chatsEmptyLikesDetail;
+
+  /// No description provided for @chatsEmptyEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Find an event'**
+  String get chatsEmptyEvents;
+
+  /// No description provided for @chatsEmptyEventsDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Meet people who share your interests'**
+  String get chatsEmptyEventsDetail;
+
   /// No description provided for @profileNameAge.
   ///
   /// In en, this message translates to:
@@ -1599,6 +1641,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'It’s a match!'**
   String get matchTitle;
+
+  /// EXP-001 match moment variants: the headline naming both people.
+  ///
+  /// In en, this message translates to:
+  /// **'You and {name}'**
+  String matchPairTitle(String name);
+
+  /// No description provided for @matchPairBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You liked each other. Now say hello.'**
+  String get matchPairBody;
 
   /// No description provided for @matchBody.
   ///
@@ -3153,6 +3207,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Done'**
   String get completionPartDone;
+
+  /// EXP-004 B: the single next profile part to finish.
+  ///
+  /// In en, this message translates to:
+  /// **'Next: {part}'**
+  String completionNext(String part);
+
+  /// No description provided for @completionContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get completionContinue;
+
+  /// No description provided for @completionSeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get completionSeeAll;
+
+  /// No description provided for @profileQuickVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get profileQuickVerify;
 
   /// No description provided for @completionUnit.
   ///

@@ -19,6 +19,7 @@ export 'widgets/fields.dart';
 export 'widgets/icon_tile.dart';
 export 'widgets/illustration_slot.dart';
 export 'widgets/layout.dart';
+export 'widgets/mascot.dart';
 export 'widgets/navigation.dart';
 export 'widgets/people.dart';
 export 'widgets/primitives.dart';

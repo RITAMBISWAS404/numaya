@@ -7,9 +7,13 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
+import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
+import '../../experiments/experiments.dart';
+import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/domain/profile_draft.dart';
 import '../domain/sample_people.dart';
+import 'match_variants.dart';
 import 'person_profile.dart';
 
 /// New Match (B-40, review UI-028 to UI-031).
@@ -100,6 +104,24 @@ class _MatchScreenState extends ConsumerState<MatchScreen>
       screen.height * 0.42 * AppMedia.personPhoto,
     );
 
+    // EXP-001 (Experiment Lab only; release builds always show the refined candidate below).
+    final variant = ref.watch(
+      experimentVariantProvider(Experiment.matchMoment),
+    );
+    final draft = ref.watch(onboardingProvider.select((s) => s.draft));
+    final ownName = draft.firstName.trim();
+    final ownInitial = ownName.isEmpty
+        ? '?'
+        : ownName.characters.first.toUpperCase();
+    final ownSource = draft.photos.isEmpty ? null : draft.photos.first.source;
+    final ownPhoto = ownSource == null
+        ? null
+        : Image(
+            image: localImage(ownSource, width: 720),
+            fit: BoxFit.cover,
+            errorBuilder: (_, _, _) => const SizedBox.shrink(),
+          );
+
     // Any touch finishes the celebration; nothing waits for it.
     return Listener(
       onPointerDown: (_) {
@@ -134,68 +156,83 @@ class _MatchScreenState extends ConsumerState<MatchScreen>
             ),
           ],
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: AppSpacing.s2),
-            _enter(
-              Center(
-                child: SizedBox(
-                  width: photoWidth,
-                  child: _MatchPhoto(person: person),
-                ),
-              ),
-              from: 0.05,
-              rise: 0,
-            ),
-            const SizedBox(height: AppSpacing.s4),
-            _enter(
-              Text.rich(
-                TextSpan(
-                  children: split < 0
-                      ? [TextSpan(text: body)]
-                      : [
-                          TextSpan(text: body.substring(0, split)),
-                          TextSpan(
-                            text: person.name,
-                            style: AppTypography.weight(
-                              AppTypography.body,
-                              AppTypography.semibold,
-                            ).copyWith(color: AppColors.ink),
-                          ),
-                          TextSpan(
-                            text: body.substring(split + person.name.length),
-                          ),
-                        ],
-                ),
-                style: AppTypography.body.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              from: 0.2,
-            ),
-            if (person.shared.isNotEmpty) ...[
-              const SizedBox(height: AppSpacing.s4),
+        body: switch (variant) {
+          ExpVariant.a => MatchPairedPortraits(
+            person: person,
+            ownInitial: ownInitial,
+            ownName: ownName,
+            ownPhoto: ownPhoto,
+            enter: _enter,
+          ),
+          ExpVariant.b => MatchIdentityHero(person: person, enter: _enter),
+          ExpVariant.c => MatchCatCelebration(
+            person: person,
+            ownInitial: ownInitial,
+            enter: _enter,
+          ),
+          ExpVariant.current => Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: AppSpacing.s2),
               _enter(
-                ProfileSectionCard(
-                  key: const ValueKey('match-shared-interests'),
-                  title: l10n.discoverYouBothLike,
-                  child: Wrap(
-                    spacing: AppSpacing.s2,
-                    runSpacing: AppSpacing.s2,
-                    children: [
-                      for (final s in person.shared)
-                        InfoChip(label: s, emoji: kInterestEmoji[s]),
-                    ],
+                Center(
+                  child: SizedBox(
+                    width: photoWidth,
+                    child: _MatchPhoto(person: person),
                   ),
                 ),
-                from: 0.3,
+                from: 0.05,
+                rise: 0,
               ),
+              const SizedBox(height: AppSpacing.s4),
+              _enter(
+                Text.rich(
+                  TextSpan(
+                    children: split < 0
+                        ? [TextSpan(text: body)]
+                        : [
+                            TextSpan(text: body.substring(0, split)),
+                            TextSpan(
+                              text: person.name,
+                              style: AppTypography.weight(
+                                AppTypography.body,
+                                AppTypography.semibold,
+                              ).copyWith(color: AppColors.ink),
+                            ),
+                            TextSpan(
+                              text: body.substring(split + person.name.length),
+                            ),
+                          ],
+                  ),
+                  style: AppTypography.body.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                from: 0.2,
+              ),
+              if (person.shared.isNotEmpty) ...[
+                const SizedBox(height: AppSpacing.s4),
+                _enter(
+                  ProfileSectionCard(
+                    key: const ValueKey('match-shared-interests'),
+                    title: l10n.discoverYouBothLike,
+                    child: Wrap(
+                      spacing: AppSpacing.s2,
+                      runSpacing: AppSpacing.s2,
+                      children: [
+                        for (final s in person.shared)
+                          InfoChip(label: s, emoji: kInterestEmoji[s]),
+                      ],
+                    ),
+                  ),
+                  from: 0.3,
+                ),
+              ],
+              const SizedBox(height: AppSpacing.s2),
             ],
-            const SizedBox(height: AppSpacing.s2),
-          ],
-        ),
+          ),
+        },
       ),
     );
   }

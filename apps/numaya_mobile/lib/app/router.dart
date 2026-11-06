@@ -25,6 +25,7 @@ import '../features/events/presentation/event_detail_screen.dart';
 import '../features/events/presentation/event_form_screen.dart';
 import '../features/events/presentation/event_people_screen.dart';
 import '../features/events/presentation/events_screen.dart';
+import '../features/experiments/experiment_lab_screen.dart';
 import '../features/help/presentation/help_screens.dart';
 import '../features/home/presentation/home_shell.dart';
 import '../features/onboarding/application/onboarding_controller.dart';
@@ -71,7 +72,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       final session = ref.read(sessionProvider);
       // The Demo Hub and its Design Lab exist only where demo sign-in does (never in release
       // builds).
-      if ((path == Routes.demo || path == Routes.designLab) &&
+      if ((path == Routes.demo ||
+              path == Routes.designLab ||
+              path == Routes.experimentLab) &&
           ref.read(demoAuthProvider) == null) {
         return Routes.welcome;
       }
@@ -98,7 +101,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         return path == Routes.restore ||
                 path.startsWith(Routes.help) ||
                 path == Routes.demo ||
-                path == Routes.designLab
+                path == Routes.designLab ||
+                path == Routes.experimentLab
             ? null
             : Routes.restore;
       }
@@ -341,6 +345,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const AccountBlockedScreen(),
       ),
       _route(path: Routes.demo, builder: (_, _) => const DemoHubScreen()),
+      _route(
+        path: Routes.experimentLab,
+        builder: (_, _) => const ExperimentLabScreen(),
+      ),
       _route(
         path: Routes.designLab,
         builder: (_, _) => const DesignLabScreen(),

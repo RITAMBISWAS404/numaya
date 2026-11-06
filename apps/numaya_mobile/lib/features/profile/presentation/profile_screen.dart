@@ -9,12 +9,14 @@ import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
 import '../../account_health/application/visibility_report.dart';
 import '../../account_health/presentation/visibility_screen.dart';
+import '../../experiments/experiments.dart';
 import '../../home/presentation/home_shell.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../verification/application/verification_controller.dart';
 import '../application/profile_details_controller.dart';
 import '../domain/profile_details.dart';
+import 'profile_variants.dart';
 
 /// B-23 Profile tab: the summary card (UI-042: a large round photo over the card, name,
 /// verification state, Edit profile), the completion card, the profile rows (visibility,
@@ -31,12 +33,54 @@ class ProfileScreen extends ConsumerWidget {
     final details = ref.watch(profileDetailsProvider);
     final premium = ref.watch(premiumProvider);
     final verification = ref.watch(photoVerificationProvider).status;
-    final completion = ProfileCompletion.of(draft, details).percent;
+    final parts = ProfileCompletion.of(draft, details);
+    final completion = parts.percent;
+    // EXP-002 / EXP-004 (Experiment Lab only; release builds show the refined candidate).
+    final headerVariant = ref.watch(
+      experimentVariantProvider(Experiment.profileHeader),
+    );
+    final completionVariant = ref.watch(
+      experimentVariantProvider(Experiment.completionCard),
+    );
     final age = draft.ageOn(ref.read(onboardingProvider.notifier).today);
     final mainPhoto = draft.photos.isEmpty ? null : draft.photos.first.source;
     final initial = draft.firstName.trim().isEmpty
         ? '?'
         : draft.firstName.trim().characters.first.toUpperCase();
+
+    ProfileHeaderData header() => ProfileHeaderData(
+      photo: mainPhoto,
+      initial: initial,
+      name: age == null
+          ? draft.firstName
+          : l10n.profileNameAge(draft.firstName, age),
+      verification: verification,
+      onEdit: () => context.push(Routes.editProfile),
+      onVerify: () => context.push(Routes.verifyPhoto),
+      onPreview: () => context.push(Routes.preview),
+    );
+    // EXP-004 B: the first unfinished part in the completion hub's order, and where its editor
+    // is (the bio editor is a sheet inside the hub, so Bio opens the hub).
+    final candidates = [
+      (l10n.completionPhotos, parts.photos, Routes.editProfile),
+      (
+        l10n.completionPrompts,
+        parts.prompts,
+        parts.prompts.done == 0
+            ? Routes.editPrompt
+            : '${Routes.editPrompt}?slot=${parts.prompts.done.clamp(1, 2)}',
+      ),
+      (l10n.completionInterests, parts.interests, Routes.editInterests),
+      (l10n.completionBio, parts.bio, Routes.completion),
+      (l10n.completionAbout, parts.about, Routes.editProfile),
+      (l10n.completionMore, parts.moreAbout, Routes.editProfile),
+    ];
+    final firstOpen = candidates
+        .where((c) => c.$2.done < c.$2.total)
+        .firstOrNull;
+    final next = firstOpen == null
+        ? null
+        : ((name: firstOpen.$1, part: firstOpen.$2), firstOpen.$3);
 
     return ColoredBox(
       color: AppColors.canvas,
@@ -81,27 +125,51 @@ class ProfileScreen extends ConsumerWidget {
                         // edge of a white card; name, verification state and Edit profile below.
                         // Interests and details stay in Edit profile and the preview, which
                         // Edit profile opens (so the old globe shortcut here is gone).
-                        _ProfileSummary(
-                          photo: mainPhoto,
-                          initial: initial,
-                          name: age == null
-                              ? draft.firstName
-                              : l10n.profileNameAge(draft.firstName, age),
-                          verification: verification,
-                          onEdit: () => context.push(Routes.editProfile),
-                          onVerify: () => context.push(Routes.verifyPhoto),
-                        ),
+                        switch (headerVariant) {
+                          ExpVariant.current => _ProfileSummary(
+                            photo: mainPhoto,
+                            initial: initial,
+                            name: age == null
+                                ? draft.firstName
+                                : l10n.profileNameAge(draft.firstName, age),
+                            verification: verification,
+                            onEdit: () => context.push(Routes.editProfile),
+                            onVerify: () => context.push(Routes.verifyPhoto),
+                          ),
+                          ExpVariant.a => ProfileHeaderCover(data: header()),
+                          ExpVariant.b => ProfileHeaderCompact(data: header()),
+                          ExpVariant.c => ProfileHeaderActions(data: header()),
+                        },
                         const SizedBox(height: AppSpacing.s4),
                         // 2. Completion: what's left, with the one way to finish it.
-                        CompletionCard(
-                          percent: completion,
-                          title: l10n.profileCompletionLabel(completion),
-                          // The bar and "Complete profile" say it; only the finished state needs
-                          // words.
-                          body: completion < 100 ? null : l10n.completionDone,
-                          actionLabel: l10n.profileComplete,
-                          onAction: () => context.push(Routes.completion),
-                        ),
+                        switch (completionVariant) {
+                          ExpVariant.current => CompletionCard(
+                            percent: completion,
+                            title: l10n.profileCompletionLabel(completion),
+                            // The bar and "Complete profile" say it; only the finished state
+                            // needs words.
+                            body: completion < 100 ? null : l10n.completionDone,
+                            actionLabel: l10n.profileComplete,
+                            onAction: () => context.push(Routes.completion),
+                          ),
+                          ExpVariant.a => CompletionBanner(
+                            percent: completion,
+                            onOpen: () => context.push(Routes.completion),
+                          ),
+                          ExpVariant.b => CompletionNextTask(
+                            percent: completion,
+                            next: next?.$1,
+                            onContinue: () =>
+                                context.push(next?.$2 ?? Routes.completion),
+                            onSeeAll: () => context.push(Routes.completion),
+                          ),
+                          ExpVariant.c => CompletionWithCat(
+                            percent: completion,
+                            title: l10n.profileCompletionLabel(completion),
+                            actionLabel: l10n.profileComplete,
+                            onAction: () => context.push(Routes.completion),
+                          ),
+                        },
                         // 3. Your profile: Ente Menu Items (ER-05). The four half-empty tiles became
                         // rows with their status as the subtitle, the way Ente lists settings.
                         const SizedBox(height: AppLayout.sectionGap),
