@@ -157,11 +157,18 @@ class InfoCard extends StatelessWidget {
     required this.icon,
     required this.title,
     this.body,
+    this.trailingArrow = false,
   });
 
   final NumayaIcons icon;
   final String title;
   final String? body;
+
+  /// V3-F01: the card is the child of a tap target (a [Pressable]), so it shows Ente's
+  /// actionable-banner affordance (14590:125245): a round fill button (the header icon-button
+  /// size) with an arrow,
+  /// centred on the right. Decorative; the wrapping control carries the semantics.
+  final bool trailingArrow;
 
   @override
   Widget build(BuildContext context) {
@@ -202,6 +209,25 @@ class InfoCard extends StatelessWidget {
               ],
             ),
           ),
+          if (trailingArrow) ...[
+            const SizedBox(width: AppSpacing.s3),
+            ExcludeSemantics(
+              child: Container(
+                width: AppSizes.iconButton,
+                height: AppSizes.iconButton,
+                decoration: const BoxDecoration(
+                  color: AppColors.fill,
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: const NumayaIcon(
+                  NumayaIcons.arrowRight,
+                  size: AppSizes.iconSm,
+                  color: AppColors.ink,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -841,14 +867,7 @@ Future<T?> showNumayaSheet<T>({
               fit: tall ? FlexFit.tight : FlexFit.loose,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s5),
-                // V3-D01: a content-height sheet scrolls when its content is taller than the
-                // space left (320pt at 200% text overflowed the Unmatch sheet by 31pt). Tall
-                // sheets fill their height and manage their own scrolling.
-                child: SheetSurface(
-                  child: tall
-                      ? Builder(builder: builder)
-                      : SingleChildScrollView(child: Builder(builder: builder)),
-                ),
+                child: SheetSurface(child: Builder(builder: builder)),
               ),
             ),
           ],

@@ -173,12 +173,18 @@ Future<bool> showBlockSheet(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ConsequenceList(
-          items: [
-            (NumayaIcons.block, l10n.blockC1(person.name)),
-            (NumayaIcons.eyeOff, l10n.blockC2),
-            (NumayaIcons.info, l10n.blockC3(person.name)),
-          ],
+        // V3-D01: the consequences scroll and the actions stay pinned, as in the other sheets,
+        // so large text on a narrow phone never pushes the confirmation off screen.
+        Flexible(
+          child: SingleChildScrollView(
+            child: ConsequenceList(
+              items: [
+                (NumayaIcons.block, l10n.blockC1(person.name)),
+                (NumayaIcons.eyeOff, l10n.blockC2),
+                (NumayaIcons.info, l10n.blockC3(person.name)),
+              ],
+            ),
+          ),
         ),
         const SizedBox(height: AppSpacing.s5),
         NumayaButton(
@@ -217,23 +223,37 @@ Future<UnmatchChoice?> showUnmatchSheet(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ConsequenceList(
-          items: [
-            (NumayaIcons.eyeOff, l10n.unmatchC1),
-            (NumayaIcons.message, l10n.unmatchC2),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.s3),
-        Pressable(
-          onTap: () => Navigator.of(context).pop(UnmatchChoice.report),
-          semanticLabel: '${l10n.unmatchNoteTitle} ${l10n.unmatchNoteBody}',
-          excludeChildSemantics: true,
-          pressedScale: 0.99,
-          borderRadius: AppRadii.all(AppRadii.card),
-          child: InfoCard(
-            icon: NumayaIcons.flag,
-            title: l10n.unmatchNoteTitle,
-            body: l10n.unmatchNoteBody,
+        // V3-D01: at 320pt and 200% text this content overflowed by 31pt. It now scrolls above
+        // the pinned Unmatch action.
+        Flexible(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ConsequenceList(
+                  items: [
+                    (NumayaIcons.eyeOff, l10n.unmatchC1),
+                    (NumayaIcons.message, l10n.unmatchC2),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.s3),
+                Pressable(
+                  onTap: () => Navigator.of(context).pop(UnmatchChoice.report),
+                  semanticLabel:
+                      '${l10n.unmatchNoteTitle} ${l10n.unmatchNoteBody}',
+                  excludeChildSemantics: true,
+                  pressedScale: 0.99,
+                  borderRadius: AppRadii.all(AppRadii.card),
+                  child: InfoCard(
+                    icon: NumayaIcons.flag,
+                    title: l10n.unmatchNoteTitle,
+                    body: l10n.unmatchNoteBody,
+                    trailingArrow: true,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         const SizedBox(height: AppSpacing.s5),
