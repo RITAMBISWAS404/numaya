@@ -41,9 +41,9 @@ enum AccentTone {
   };
 }
 
-/// A rounded-square tile holding one icon: the leading mark of a list row (40pt, 20pt icon, 12
-/// corner) or of a card or header ([large]: 48pt, 22pt icon, 14 corner). Decorative: the row's
-/// label says what it is.
+/// Ente Menu Item Icon (4055:5652): a 36pt slot ([large]: 48pt, for cards and headers) holding one
+/// glyph in its meaning's colour, with no tile behind it ("the colour is on the glyph, not a
+/// background"). Neutral glyphs take text/light. Decorative: the row's label says what it is.
 class IconTile extends StatelessWidget {
   const IconTile(
     this.icon, {
@@ -61,19 +61,17 @@ class IconTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (bg, fg) = tone.colors;
+    final (_, fg) = tone.colors;
     final size = large ? AppSizes.iconTileLg : AppSizes.iconTile;
-    return Container(
-      width: size,
-      height: size,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: AppRadii.all(
-          large ? AppRadii.iconTileLg : AppRadii.iconTile,
+    return SizedBox.square(
+      dimension: size,
+      child: Center(
+        child: NumayaIcon(
+          icon,
+          size: large ? AppSizes.iconLg : AppSizes.iconMd,
+          color: tone == AccentTone.neutral ? AppColors.textMuted : fg,
         ),
       ),
-      child: NumayaIcon(icon, size: large ? 22 : AppSizes.iconMd, color: fg),
     );
   }
 }

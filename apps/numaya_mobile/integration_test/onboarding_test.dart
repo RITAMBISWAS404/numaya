@@ -64,6 +64,9 @@ void main() {
     await tester.ensureVisible(find.text('Tap to write your answer'));
     await tester.tap(find.text('Tap to write your answer'));
     await wait();
+    // UI-008: pick a prompt; the answer is written in its sheet.
+    await tester.tap(find.text('A perfect first date'));
+    await wait();
     await tester.enterText(
       find.byType(TextField).last,
       'Someone who reads the menu out loud.',

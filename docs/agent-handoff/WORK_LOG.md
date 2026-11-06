@@ -1,5 +1,52 @@
 # Work log
 
+## 2026-11-06: review batch 2, UI-013 to UI-032 (Windows, uncommitted)
+- Implemented across Discover, Filters, navigation, New Match and the first-release scope:
+  - Backtrack and Filter header;
+  - swipe-only decisions with accessible alternatives;
+  - photo identity group; shared interests below the photo; About me divider;
+  - emoji detail pills and the card label hierarchy;
+  - gender rows (multi-select kept), outlined inactive tabs, grey sheets with white cards;
+  - full-width sliders and the Figma off switch;
+  - compact nav with a soft shadow;
+  - New Match with app bar, card, and View profile and Open chat actions;
+  - `ReleaseScope` gates Opening Moves and SuperSwipe; Follow does not exist.
+- Device: 30 shots at 390dp plus 30 at 320dp with 150% text, under `C:\Users\biswa\Downloads\NUMAYA_DISCOVER_MATCH_HANDOFF\numaya-ui-review\after\\`. Tracker: `docs/design-experiments/ente-design-system/UI_REVIEW_BATCH2_TRACKER.md`.
+
+
+## 2026-11-05: UI review handoff UI-001 to UI-012 (Windows, uncommitted)
+- Implemented the onboarding review and its app-wide rules:
+  - secondary buttons, option cards, age-range card and pop-up;
+  - inline height wheel, prompt cards, category prompt browser with answer sheet;
+  - stacked heading art, top-aligned alert icons, 3:4 profile photos, type one-offs.
+- UI-001 final artwork is blocked (temporary brand image in place). The UI-008 phrase "three-day-to-time-driven response" is awaiting clarification.
+- 373 passed, 15 skipped.
+- Evidence in `C:\Users\biswa\Downloads\NUMAYA_ONBOARDING_HANDOFF\numaya-ui-review\after\`. Status in `docs/design-experiments/ente-design-system/UI_REVIEW_HANDOFF_STATUS.md`.
+
+## 2026-11-05: UI screenshot inventory (Windows, capture only)
+- 151 device screenshots of the current Ente working tree, in `C:\Users\biswa\OneDrive\Desktop\Numaya-UI-Review-2026-11-05-1747`, with a README, index, coverage report, contact sheets and gallery.
+- Capture-only tool added, uncommitted: `apps/numaya_mobile/integration_test/ui_review_capture_test.dart`.
+- No product code changed.
+
+## 2026-11-05: Ente reconstruction pass (Windows, uncommitted)
+- Checked Bumble's discovery, filters, Chats and search flows on Mobbin.
+- Rebuilt Discovery as a full-screen photo card with the identity overlaid and a floating decision row.
+- Liked and person profiles use the same card.
+- Chats: search moved behind a header icon. The Profile tab uses Menu Item rows. Filters are grouped in cards.
+- Content pass removed redundant copy.
+- 361 passed, 15 skipped; R3 device journey captured; tracker in `TRACKER.md`.
+
+## 2026-11-05: Ente design system experiment (Windows, uncommitted)
+- New worktree `numaya-ente` from `f2e18e6` plus the final-design-run patch.
+- Read the Ente Figma file: tokens, type, spacing, radius and 14 components.
+- Mapped the Ente values into the hand-authored tokens, with purple in Ente's primary role.
+- Replaced the Material icon map with Lucide 4.0.1.
+- Restyled the shared components to Ente's specs.
+- Checked discovery, Likes and profile editing against Bumble on Mobbin.
+- QA fixed four real layout and target bugs and moved the old-spec tests to the Ente contract.
+- 361 passed, 15 skipped; two emulator journeys and a narrow, large-text pass.
+
+
 ## 2026-11-04: pill gaps (cloud, uncommitted)
 - Root cause: the `ViewTabs` row had no gap; fixed in the shared component (11 callers).
 - Event badges 6 → 8.

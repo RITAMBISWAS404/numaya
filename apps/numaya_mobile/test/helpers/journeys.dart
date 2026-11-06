@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart' show CustomSemanticsAction;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
@@ -28,6 +29,52 @@ Future<void> tapOn(WidgetTester tester, Finder f) async {
   // One frame to start any route transition, then let it run.
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 500));
+}
+
+/// UI-016: Discover decides by swiping the current photo (no decision buttons). [like] swipes
+/// right, otherwise left.
+Future<void> swipeDecide(WidgetTester tester, {required bool like}) async {
+  final card = find.byWidgetPredicate(
+    (w) =>
+        w.key is ValueKey<String> &&
+        (w.key! as ValueKey<String>).value.startsWith('swipe-'),
+  );
+  await tester.drag(card.first, Offset(like ? 260 : -260, 0));
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 600));
+}
+
+/// UI-016: the non-gesture path to the same decision: the photo's Like or Pass screen-reader
+/// action. Runs it without a drag, so no swipe haptics are mixed in.
+void semanticDecide(WidgetTester tester, {required bool like}) {
+  final label = like ? 'Like' : 'Pass';
+  final action = tester
+      .widgetList<Semantics>(find.byType(Semantics))
+      .map((s) => s.properties.customSemanticsActions)
+      .whereType<Map<CustomSemanticsAction, VoidCallback>>()
+      .expand((m) => m.entries)
+      .firstWhere((e) => e.key.label == label);
+  action.value();
+}
+
+/// UI-030: New Match has no composer; Open chat goes to the ordinary conversation. Does nothing
+/// when the match screen is not showing.
+Future<void> openChatFromMatch(WidgetTester tester) async {
+  final open = find.byKey(const ValueKey('match-open-chat'));
+  if (open.evaluate().isEmpty) return;
+  await tapOn(tester, open);
+  await tester.pump(const Duration(milliseconds: 600));
+}
+
+/// UI-028: leaves New Match for browsing (its app bar Close).
+Future<void> closeMatch(WidgetTester tester) async {
+  await tapOn(
+    tester,
+    find.byWidgetPredicate(
+      (w) => w is NavIconButton && w.label == 'Close and keep browsing',
+    ),
+  );
+  await tester.pump(const Duration(milliseconds: 600));
 }
 
 /// Taps the round next button and lets the next step slide in.
@@ -151,7 +198,10 @@ Future<void> finishProfileToHome(
   await check(); // Prompts
   await tapOn(tester, find.text('Add a prompt'));
   await tester.pump(const Duration(milliseconds: 600));
-  await check(); // Answer editor
+  await check(); // Prompt browser (UI-008)
+  await tapOn(tester, find.text('A perfect first date'));
+  await tester.pump(const Duration(milliseconds: 600));
+  await check(); // Answer sheet
   await tester.enterText(
     find.byType(TextField).last,
     'Reads the menu out loud.',

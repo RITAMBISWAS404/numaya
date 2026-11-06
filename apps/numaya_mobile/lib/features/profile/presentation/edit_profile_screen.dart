@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../core/media/local_image.dart';
@@ -88,7 +89,7 @@ class EditProfileScreen extends ConsumerWidget {
             icon: NumayaIcons.public,
             outline: true,
             label: l10n.editPreview,
-            style: NavButtonStyle.plain,
+            // The same filled square as Back beside it (FD-D2; it was the only bare header action).
             onPressed: () => context.push(Routes.preview),
           ),
         ],
@@ -145,23 +146,6 @@ class EditProfileScreen extends ConsumerWidget {
                   mainLabel: l10n.photosMain,
                   addLabel: l10n.photosAdd,
                   removeLabel: l10n.photosRemove,
-                ),
-                const SizedBox(height: AppSpacing.s3),
-                Row(
-                  children: [
-                    const NumayaIcon(
-                      NumayaIcons.info,
-                      size: AppSizes.iconSm,
-                      color: AppColors.textMuted,
-                    ),
-                    const SizedBox(width: AppLayout.iconLabelGap),
-                    Expanded(
-                      child: Text(
-                        l10n.editPhotosNote,
-                        style: AppTypography.caption,
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),
@@ -365,11 +349,12 @@ class EditProfileScreen extends ConsumerWidget {
                   saved();
                 },
               ),
-              ListRow(
-                label: l10n.openingMovesTitle,
-                value: l10n.openingMovesCount(details.openingMoves.length),
-                onTap: () => context.push(Routes.openingMoves),
-              ),
+              if (ReleaseScope.openingMoves)
+                ListRow(
+                  label: l10n.openingMovesTitle,
+                  value: l10n.openingMovesCount(details.openingMoves.length),
+                  onTap: () => context.push(Routes.openingMoves),
+                ),
               ListRow(
                 label: l10n.privacyTitle,
                 onTap: () => context.push(Routes.privacy),

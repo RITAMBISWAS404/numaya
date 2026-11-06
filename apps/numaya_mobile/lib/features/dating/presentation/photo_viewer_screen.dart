@@ -114,12 +114,6 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: AppSpacing.s3),
-                Text(
-                  l10n.photoViewerNote,
-                  textAlign: TextAlign.center,
-                  style: AppTypography.caption,
-                ),
                 const SizedBox(height: AppSpacing.s4),
               ],
             ),

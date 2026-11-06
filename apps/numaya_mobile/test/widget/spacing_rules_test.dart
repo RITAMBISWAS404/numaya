@@ -17,7 +17,7 @@ void main() {
       tester.getRect(b).left - tester.getRect(a).right;
 
   testWidgets(
-    'selectable chip: 12pt insets, 4pt icon gap, 36pt pill, 44pt target',
+    'selectable chip (Ente Filter Chip): 16 / 8 / 12 insets, 40pt pill, 44pt target',
     (tester) async {
       await tester.pumpWidget(
         host(NumayaChip(label: 'Jazz', selected: false, onTap: () {})),
@@ -25,11 +25,11 @@ void main() {
       final chip = tester.getRect(find.byType(NumayaChip));
       final label = tester.getRect(find.text('Jazz'));
       final icon = find.byType(NumayaIcon).last;
-      expect(label.left - chip.left, closeTo(AppLayout.pillInsetX, 0.5));
-      expect(gap(tester, find.text('Jazz'), icon), closeTo(4, 0.5));
+      expect(label.left - chip.left, closeTo(AppSpacing.s4, 0.5));
+      expect(gap(tester, find.text('Jazz'), icon), closeTo(AppSpacing.s2, 0.5));
       expect(
         chip.right - tester.getRect(icon).right,
-        closeTo(AppLayout.pillInsetX, 0.5),
+        closeTo(AppSpacing.s3, 0.5),
       );
       expect(chip.height, greaterThanOrEqualTo(AppSizes.chip));
       expect(chip.height, greaterThanOrEqualTo(44));
@@ -96,13 +96,14 @@ void main() {
     final pill = find.ancestor(
       of: find.text('Explore'),
       matching: find.byWidgetPredicate(
-        (w) => w is Container && w.constraints?.maxHeight == AppSizes.chip,
+        (w) => w is Container && w.constraints?.maxHeight == AppSizes.tagChip,
       ),
     );
     expect(pill, findsOneWidget);
+    // Ente Tag Chip: 20pt label inset.
     expect(
       tester.getRect(find.text('Explore')).left - tester.getRect(pill).left,
-      closeTo(AppLayout.pillInsetX, 0.5),
+      closeTo(AppSpacing.s5, 0.5),
     );
   });
 
@@ -132,7 +133,7 @@ void main() {
           matching: find.byWidgetPredicate(
             (w) =>
                 w is AnimatedContainer &&
-                w.constraints?.maxHeight == AppSizes.chip,
+                w.constraints?.maxHeight == AppSizes.tagChip,
           ),
         ),
       );

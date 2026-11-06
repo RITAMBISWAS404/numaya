@@ -1,5 +1,35 @@
 # Current state
 
+> **Latest (2026-11-06): review batch 2.** Worktree `..\numaya-ente`, branch
+> `experiment/numaya-ente-design-system`, HEAD `f2e18e6` plus **uncommitted** work: Ente, batch 1
+> and batch 2.
+> - Tracker: `docs/design-experiments/ente-design-system/UI_REVIEW_BATCH2_TRACKER.md`.
+> - Export: `artifacts/ente-design-system/patches/ui-review-batch2.patch`, which applies to
+>   `f2e18e6`.
+
+
+> **Latest (2026-11-05): UI review handoff.** This is implemented on the Ente worktree
+> `..\numaya-ente`, branch `experiment/numaya-ente-design-system`, HEAD `f2e18e6` plus
+> **uncommitted** changes.
+> - Status: UI-001 to UI-012 are implemented. Two items are open:
+>   - UI-001 final artwork is blocked;
+>   - the UI-008 phrase "three-day-to-time-driven response" is awaiting clarification.
+> - Status register: `docs/design-experiments/ente-design-system/UI_REVIEW_HANDOFF_STATUS.md`.
+> - Export: `artifacts/ente-design-system/patches/ui-review-handoff.patch`, which applies to `f2e18e6`.
+
+
+> **Latest (2026-11-05):** Ente experiment in `C:\Users\biswa\Downloads\numaya\numaya-ente`,
+> branch `experiment/numaya-ente-design-system`, HEAD `f2e18e6` plus **uncommitted** changes (the
+> final-design-run patch and the Ente work). Export:
+> `artifacts/ente-design-system/patches/ente-design-system.patch`.
+
+> **Latest (2026-11-05):**
+> - Worktree `C:\Users\biswa\Downloads\numaya\numaya-final-design`, branch
+>   `experiment/numaya-final-design-candidate`, HEAD `f2e18e6` plus **uncommitted** final-design-run
+>   changes. Export: `artifacts/final-design-run/patches/final-design-run.patch`.
+> - GitHub has `experiment/numaya-overnight-polish` at `f2e18e6` (this run's base).
+> - Backend: none (demo and in-memory repositories).
+
 > **Final QA (2026-11-04), cloud:** the same worktree, branch and HEAD as the overnight entry below
 > (`/home/user/numaya-overnight`, `experiment/numaya-overnight-polish`, `6b23c85`). Two more
 > fixes; **local only, not on GitHub**. See

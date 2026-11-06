@@ -133,8 +133,8 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
     }
 
     return TabPage(
+      // Bumble's Liked You has no lede: the title and the counted chips say it (ER-04).
       header: TabHeader(title: l10n.tabLikes),
-      subtitle: l10n.likesSubtitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -154,14 +154,7 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
           ),
           const SizedBox(height: AppSpacing.s4),
           body,
-          if (list.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.s5),
-            Text(
-              l10n.likesSampleNote,
-              textAlign: TextAlign.center,
-              style: AppTypography.caption,
-            ),
-          ],
+          if (list.isNotEmpty) ...[],
         ],
       ),
     );
@@ -257,15 +250,16 @@ class LikeProfileScreen extends ConsumerWidget {
             body: matched ? l10n.likeInfoMatched : l10n.likeInfoBody,
           ),
           const SizedBox(height: AppSpacing.s3),
-          PersonHeroCard(person: person),
+          PersonHeroCard(
+            person: person,
+            // The same Bumble card as Discover (ER-01), identity on the photo.
+            photoHeight: (MediaQuery.sizeOf(context).height * 0.6).clamp(
+              300.0,
+              560.0,
+            ),
+          ),
           const SizedBox(height: AppSpacing.s3),
           ...personSections(context, person),
-          const SizedBox(height: AppSpacing.s4),
-          Text(
-            l10n.likesSampleNote,
-            textAlign: TextAlign.center,
-            style: AppTypography.caption,
-          ),
         ],
       ),
     );
@@ -347,15 +341,16 @@ class PersonProfileScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: AppSpacing.s2),
-                PersonHeroCard(person: person),
+                PersonHeroCard(
+                  person: person,
+                  // The same Bumble card as Discover (ER-01), identity on the photo.
+                  photoHeight: (MediaQuery.sizeOf(context).height * 0.6).clamp(
+                    300.0,
+                    560.0,
+                  ),
+                ),
                 const SizedBox(height: AppSpacing.s3),
                 ...personSections(context, person),
-                const SizedBox(height: AppSpacing.s4),
-                Text(
-                  l10n.likesSampleNote,
-                  textAlign: TextAlign.center,
-                  style: AppTypography.caption,
-                ),
               ],
             ),
     );

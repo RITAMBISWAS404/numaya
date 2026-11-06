@@ -35,405 +35,430 @@ class _DesignLabScreenState extends ConsumerState<DesignLabScreen> {
     // golden) no longer changes with the time of day.
     final now = ref.watch(clockProvider)();
     final event = sampleEvents(now).first;
-    return NumayaScreen(
-      top: NumayaTopBar(
-        onBack: () =>
-            context.canPop() ? context.pop() : context.go(Routes.demo),
-        title: 'Design Lab',
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: AppSpacing.s4),
-          const InfoCard(
-            icon: NumayaIcons.info,
-            title: 'Monochrome Meetup',
-            body:
-                'Development build only. Every token and component of the experimental '
-                'design system, for visual review.',
-          ),
-          _section('Navigation: selected-state variants'),
-          for (final style in TabIndicatorStyle.values) ...[
-            Text(style.name, style: AppTypography.caption),
-            const SizedBox(height: AppSpacing.s1),
-            MediaQuery.removePadding(
-              context: context,
-              removeBottom: true,
-              child: NumayaTabBar(
-                indicator: style,
-                currentIndex: 2,
-                onSelect: (_) {},
-                items: const [
-                  TabItem(label: 'Home', icon: NumayaIcons.home),
-                  TabItem(label: 'Events', icon: NumayaIcons.event),
-                  TabItem(
-                    label: 'Likes',
-                    icon: NumayaIcons.heart,
-                    badgeCount: 2,
+    // The Lab is where unfinished art is reviewed, so its slots show their placeholders.
+    return IllustrationPlaceholders(
+      child: NumayaScreen(
+        top: NumayaTopBar(
+          onBack: () =>
+              context.canPop() ? context.pop() : context.go(Routes.demo),
+          title: 'Design Lab',
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: AppSpacing.s4),
+            const InfoCard(
+              icon: NumayaIcons.info,
+              title: 'Ente design system',
+              body:
+                  'Development build only. Every token and component of the Ente experiment '
+                  '(Numaya purple and fonts on Ente geometry, Lucide icons), for visual review.',
+            ),
+            _section('Navigation: selected-state variants'),
+            // The shipped Ente bar first, then the earlier indicator variants on the opaque pill
+            // for comparison.
+            for (final (style, surface) in [
+              (TabIndicatorStyle.tint, TabBarSurface.ente),
+              for (final s in TabIndicatorStyle.values)
+                (s, TabBarSurface.opaque),
+            ]) ...[
+              Text(
+                '${surface.name}: ${style.name}',
+                style: AppTypography.caption,
+              ),
+              const SizedBox(height: AppSpacing.s1),
+              MediaQuery.removePadding(
+                context: context,
+                removeBottom: true,
+                child: NumayaTabBar(
+                  indicator: style,
+                  surface: surface,
+                  currentIndex: 2,
+                  onSelect: (_) {},
+                  items: const [
+                    TabItem(label: 'Home', icon: NumayaIcons.home),
+                    TabItem(label: 'Events', icon: NumayaIcons.event),
+                    TabItem(
+                      label: 'Likes',
+                      icon: NumayaIcons.heart,
+                      badgeCount: 2,
+                    ),
+                    TabItem(label: 'Messages', icon: NumayaIcons.message),
+                    TabItem(label: 'Profile', icon: NumayaIcons.user),
+                  ],
+                ),
+              ),
+              const SizedBox(height: AppSpacing.s3),
+            ],
+            _section('Surfaces'),
+            Wrap(
+              spacing: AppSpacing.s3,
+              runSpacing: AppSpacing.s3,
+              children: [
+                _swatch('Canvas', AppColors.canvas, border: true),
+                _swatch('Surface', AppColors.surface, border: true),
+                _swatch('Fill', AppColors.fill),
+                _swatch('Photo', AppColors.photo),
+                _swatch('Line', AppColors.border),
+                _swatch('Outline', AppColors.outline, light: true),
+                _swatch('Ink', AppColors.ink, light: true),
+                _swatch('Text 2', AppColors.textSecondary, light: true),
+                _swatch('Muted', AppColors.textMuted, light: true),
+                _swatch('Brand', AppColors.accent, light: true),
+                _swatch('Brand text', AppColors.accentOnTint, light: true),
+                _swatch('Brand subtle', AppColors.accentTint),
+                _swatch('Success', AppColors.positive, light: true),
+                _swatch('Danger', AppColors.negative, light: true),
+              ],
+            ),
+            _section('Type'),
+            WhiteCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Maya, 29', style: AppTypography.hero),
+                  Text('Events', style: AppTypography.pageTitle),
+                  Text(
+                    'Let’s start with an intro',
+                    style: AppTypography.flowTitle,
                   ),
-                  TabItem(label: 'Messages', icon: NumayaIcons.message),
-                  TabItem(label: 'Profile', icon: NumayaIcons.user),
+                  Text('Your prompt', style: AppTypography.section),
+                  Text(
+                    'Board games and natural wine',
+                    style: AppTypography.card,
+                  ),
+                  Text(
+                    'Picnic in the park with board games. Bring a friend, we’ll have snacks.',
+                    style: AppTypography.body,
+                  ),
+                  Text('Liked you · 4 km away', style: AppTypography.caption),
+                  Text('SAT, 31 OCT · 19:00', style: AppTypography.labelCaps),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text('84', style: AppTypography.metric),
+                      const SizedBox(width: AppSpacing.s1),
+                      Text('/ 100', style: AppTypography.metricUnit),
+                    ],
+                  ),
                 ],
               ),
             ),
+            _section('Buttons'),
+            NumayaButton(label: 'Join event', onPressed: () {}),
             const SizedBox(height: AppSpacing.s3),
-          ],
-          _section('Surfaces'),
-          Wrap(
-            spacing: AppSpacing.s3,
-            runSpacing: AppSpacing.s3,
-            children: [
-              _swatch('Canvas', AppColors.canvas, border: true),
-              _swatch('Surface', AppColors.surface, border: true),
-              _swatch('Fill', AppColors.fill),
-              _swatch('Photo', AppColors.photo),
-              _swatch('Line', AppColors.border),
-              _swatch('Outline', AppColors.outline, light: true),
-              _swatch('Ink', AppColors.ink, light: true),
-              _swatch('Text 2', AppColors.textSecondary, light: true),
-              _swatch('Muted', AppColors.textMuted, light: true),
-              _swatch('Brand', AppColors.accent, light: true),
-              _swatch('Brand text', AppColors.accentOnTint, light: true),
-              _swatch('Brand subtle', AppColors.accentTint),
-              _swatch('Success', AppColors.positive, light: true),
-              _swatch('Danger', AppColors.negative, light: true),
-            ],
-          ),
-          _section('Type'),
-          WhiteCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            NumayaButton(
+              label: 'Not now',
+              variant: NumayaButtonVariant.secondary,
+              onPressed: () {},
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            NumayaButton(
+              label: 'Set Opening Moves',
+              variant: NumayaButtonVariant.brand,
+              onPressed: () {},
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            const NumayaButton(label: 'Disabled', onPressed: null),
+            const SizedBox(height: AppSpacing.s3),
+            NumayaButton(
+              label: 'Unmatch',
+              variant: NumayaButtonVariant.destructiveSolid,
+              onPressed: () {},
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            Wrap(
+              spacing: AppSpacing.s3,
+              runSpacing: AppSpacing.s3,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                Text('Maya, 29', style: AppTypography.hero),
-                Text('Events', style: AppTypography.pageTitle),
-                Text(
-                  'Let’s start with an intro',
-                  style: AppTypography.flowTitle,
+                NumayaButton(
+                  label: 'Edit profile',
+                  small: true,
+                  icon: NumayaIcons.edit,
+                  variant: NumayaButtonVariant.secondary,
+                  onPressed: () {},
                 ),
-                Text('Your prompt', style: AppTypography.section),
-                Text('Board games and natural wine', style: AppTypography.card),
-                Text(
-                  'Picnic in the park with board games. Bring a friend, we’ll have snacks.',
-                  style: AppTypography.body,
+                NumayaButton(
+                  label: 'Find your people',
+                  small: true,
+                  onPressed: () {},
                 ),
-                Text('Liked you · 4 km away', style: AppTypography.caption),
-                Text('SAT, 31 OCT · 19:00', style: AppTypography.labelCaps),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Text('84', style: AppTypography.metric),
-                    const SizedBox(width: AppSpacing.s1),
-                    Text('/ 100', style: AppTypography.metricUnit),
-                  ],
+                NumayaButton(
+                  label: 'Loading',
+                  small: true,
+                  loading: true,
+                  onPressed: () {},
+                ),
+                NavIconButton(
+                  icon: NumayaIcons.share,
+                  label: 'Share',
+                  onPressed: () {},
+                ),
+                NavIconButton(
+                  icon: NumayaIcons.heart,
+                  label: 'Save',
+                  outline: !_saved,
+                  onPressed: () => setState(() => _saved = !_saved),
+                ),
+                NumayaFab(onPressed: () {}, semanticLabel: 'Next'),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            TextLink(label: 'Edit attendance', onPressed: () {}),
+            _section('Pills, segments and chips'),
+            ViewTabs(
+              label: 'Filter',
+              options: const [
+                (label: 'Upcoming', count: null),
+                (label: 'Today', count: null),
+                (label: 'Tomorrow', count: null),
+                (label: 'Weekend', count: null),
+              ],
+              selected: _tab,
+              onSelect: (i) => setState(() => _tab = i),
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            ViewTabs(
+              label: 'Segments',
+              options: const [
+                (label: 'All', count: 7),
+                (label: 'New', count: 4),
+                (label: 'Nearby', count: 3),
+              ],
+              selected: _segment,
+              onSelect: (i) => setState(() => _segment = i),
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            Wrap(
+              spacing: AppSpacing.s2,
+              runSpacing: AppSpacing.s2,
+              children: [
+                for (final c in ['Jazz', 'Natural wine', 'Climbing'])
+                  NumayaChip(
+                    label: c,
+                    selected: _chips.contains(c),
+                    onTap: () => setState(
+                      () =>
+                          _chips.contains(c) ? _chips.remove(c) : _chips.add(c),
+                    ),
+                  ),
+                NumayaChip(
+                  label: 'Unavailable',
+                  selected: false,
+                  available: false,
+                  onTap: () {},
                 ),
               ],
             ),
-          ),
-          _section('Buttons'),
-          NumayaButton(label: 'Join event', onPressed: () {}),
-          const SizedBox(height: AppSpacing.s3),
-          NumayaButton(
-            label: 'Not now',
-            variant: NumayaButtonVariant.secondary,
-            onPressed: () {},
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          NumayaButton(
-            label: 'Set Opening Moves',
-            variant: NumayaButtonVariant.brand,
-            onPressed: () {},
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          const NumayaButton(label: 'Disabled', onPressed: null),
-          const SizedBox(height: AppSpacing.s3),
-          NumayaButton(
-            label: 'Unmatch',
-            variant: NumayaButtonVariant.destructiveSolid,
-            onPressed: () {},
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          Wrap(
-            spacing: AppSpacing.s3,
-            runSpacing: AppSpacing.s3,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              NumayaButton(
-                label: 'Edit profile',
-                small: true,
-                icon: NumayaIcons.edit,
-                variant: NumayaButtonVariant.secondary,
-                onPressed: () {},
+            const SizedBox(height: AppSpacing.s3),
+            const Wrap(
+              spacing: AppSpacing.s2,
+              runSpacing: AppSpacing.s2,
+              children: [
+                StatusBadge(label: 'First event', tone: BadgeTone.brand),
+                StatusBadge(label: 'Full'),
+                StatusBadge(label: 'Few spots left', tone: BadgeTone.brand),
+              ],
+            ),
+            _section('Fields'),
+            const NumayaTextField(
+              label: 'First name',
+              placeholder: 'Your name',
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            const NumayaTextField(
+              label: 'Email',
+              placeholder: 'you@example.com',
+              error: 'Enter an email like name@example.com',
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            NumayaSearchField(placeholder: 'Search events', onChanged: (_) {}),
+            _section('Controls'),
+            ListGroup(
+              children: [
+                ListRow(
+                  label: 'Show gender on profile',
+                  switchValue: _switch,
+                  onSwitch: (v) => setState(() => _switch = v),
+                ),
+                const ListRow(
+                  label: 'Incognito',
+                  detail: 'Premium',
+                  switchValue: false,
+                ),
+                ListRow(
+                  leading: NumayaIcons.shield,
+                  label: 'Safety centre',
+                  value: 'Open',
+                  onTap: () {},
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            WhiteCard(
+              padding: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  for (final (i, l) in ['Woman', 'Man', 'Nonbinary'].indexed)
+                    OptionCard(
+                      label: l,
+                      selected: _radio == i,
+                      onTap: () => setState(() => _radio = i),
+                    ),
+                  OptionCard(
+                    label: 'Show me in Discover',
+                    kind: OptionKind.checkbox,
+                    selected: _check,
+                    onTap: () => setState(() => _check = !_check),
+                  ),
+                ],
               ),
-              NumayaButton(
+            ),
+            _section('Cards'),
+            EventCard(
+              event: event,
+              now: now,
+              area: null,
+              saved: _saved,
+              onOpen: () {},
+              onToggleSave: () => setState(() => _saved = !_saved),
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            Row(
+              children: [
+                Expanded(
+                  child: _metric(
+                    'Profile completeness',
+                    '84',
+                    '%',
+                    'Above the 70% target',
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.s3),
+                Expanded(
+                  child: _metric(
+                    'Likes this week',
+                    '—',
+                    '',
+                    'Not enough data yet',
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            CompletionCard(
+              percent: 62,
+              title: 'Profile 62% complete',
+              body: 'Profiles with more to talk about get more matches.',
+              actionLabel: 'Complete profile',
+              onAction: () {},
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            const StatusBanner(
+              title: 'You’re offline',
+              body: 'Changes will send when you reconnect.',
+              tone: BannerTone.error,
+            ),
+            _section('People and messages'),
+            const Row(
+              children: [
+                InitialsAvatar(initial: 'P', verified: true),
+                SizedBox(width: AppSpacing.s3),
+                InitialsAvatar(initial: 'J', ring: true),
+                SizedBox(width: AppSpacing.s3),
+                InitialsAvatar(initial: 'A', size: 64),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            const Align(
+              alignment: Alignment.centerRight,
+              child: MessageBubble(
+                text: 'That bakery on Columbia Road, right?',
+              ),
+            ),
+            const SizedBox(height: AppSpacing.s2),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: MessageBubble(
+                text: 'Yes! The cardamom buns sell out by ten.',
+                mine: false,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            DecisionBar(
+              passLabel: 'Pass',
+              superLabel: 'SuperSwipe',
+              likeLabel: 'Like',
+              onPass: () {},
+              onSuper: () {},
+              onLike: () {},
+            ),
+            _section('States'),
+            const Center(
+              child: CircularProgressIndicator(color: AppColors.accent),
+            ),
+            EmptyState(
+              title: 'No incoming likes yet',
+              body: 'When someone likes your profile, they’ll show up here.',
+              art: const IllustrationSlot(
+                slot: 'likes_empty',
+                label: 'No incoming likes yet',
+                width: 200,
+              ),
+              action: NumayaButton(
                 label: 'Find your people',
                 small: true,
                 onPressed: () {},
               ),
-              NumayaButton(
-                label: 'Loading',
-                small: true,
-                loading: true,
-                onPressed: () {},
-              ),
-              NavIconButton(
-                icon: NumayaIcons.share,
-                label: 'Share',
-                onPressed: () {},
-              ),
-              NavIconButton(
-                icon: NumayaIcons.heart,
-                label: 'Save',
-                outline: !_saved,
-                onPressed: () => setState(() => _saved = !_saved),
-              ),
-              NumayaFab(onPressed: () {}, semanticLabel: 'Next'),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          TextLink(label: 'Edit attendance', onPressed: () {}),
-          _section('Pills, segments and chips'),
-          ViewTabs(
-            label: 'Filter',
-            options: const [
-              (label: 'Upcoming', count: null),
-              (label: 'Today', count: null),
-              (label: 'Tomorrow', count: null),
-              (label: 'Weekend', count: null),
-            ],
-            selected: _tab,
-            onSelect: (i) => setState(() => _tab = i),
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          ViewTabs(
-            label: 'Segments',
-            options: const [
-              (label: 'All', count: 7),
-              (label: 'New', count: 4),
-              (label: 'Nearby', count: 3),
-            ],
-            selected: _segment,
-            onSelect: (i) => setState(() => _segment = i),
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          Wrap(
-            spacing: AppSpacing.s2,
-            runSpacing: AppSpacing.s2,
-            children: [
-              for (final c in ['Jazz', 'Natural wine', 'Climbing'])
-                NumayaChip(
-                  label: c,
-                  selected: _chips.contains(c),
-                  onTap: () => setState(
-                    () => _chips.contains(c) ? _chips.remove(c) : _chips.add(c),
-                  ),
-                ),
-              NumayaChip(
-                label: 'Unavailable',
-                selected: false,
-                available: false,
-                onTap: () {},
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          const Wrap(
-            spacing: AppSpacing.s2,
-            runSpacing: AppSpacing.s2,
-            children: [
-              StatusBadge(label: 'First event', tone: BadgeTone.brand),
-              StatusBadge(label: 'Full'),
-              StatusBadge(label: 'Few spots left', tone: BadgeTone.brand),
-            ],
-          ),
-          _section('Fields'),
-          const NumayaTextField(label: 'First name', placeholder: 'Your name'),
-          const SizedBox(height: AppSpacing.s3),
-          const NumayaTextField(
-            label: 'Email',
-            placeholder: 'you@example.com',
-            error: 'Enter an email like name@example.com',
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          NumayaSearchField(placeholder: 'Search events', onChanged: (_) {}),
-          _section('Controls'),
-          ListGroup(
-            children: [
-              ListRow(
-                label: 'Show gender on profile',
-                switchValue: _switch,
-                onSwitch: (v) => setState(() => _switch = v),
-              ),
-              const ListRow(
-                label: 'Incognito',
-                detail: 'Premium',
-                switchValue: false,
-              ),
-              ListRow(
-                leading: NumayaIcons.shield,
-                label: 'Safety centre',
-                value: 'Open',
-                onTap: () {},
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          WhiteCard(
-            padding: EdgeInsets.zero,
-            child: Column(
+            ),
+            _section('Illustration slots'),
+            const IllustrationSlot(
+              slot: 'events_explore',
+              label: 'Explore events near you',
+              aspectRatio: IllustrationSlot.header,
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            Row(
               children: [
-                for (final (i, l) in ['Woman', 'Man', 'Nonbinary'].indexed)
-                  OptionCard(
-                    label: l,
-                    selected: _radio == i,
-                    onTap: () => setState(() => _radio = i),
-                  ),
-                OptionCard(
-                  label: 'Show me in Discover',
-                  kind: OptionKind.checkbox,
-                  selected: _check,
-                  onTap: () => setState(() => _check = !_check),
-                ),
-              ],
-            ),
-          ),
-          _section('Cards'),
-          EventCard(
-            event: event,
-            now: now,
-            area: null,
-            saved: _saved,
-            onOpen: () {},
-            onToggleSave: () => setState(() => _saved = !_saved),
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          Row(
-            children: [
-              Expanded(
-                child: _metric(
-                  'Profile completeness',
-                  '84',
-                  '%',
-                  'Above the 70% target',
-                ),
-              ),
-              const SizedBox(width: AppSpacing.s3),
-              Expanded(
-                child: _metric(
-                  'Likes this week',
-                  '—',
-                  '',
-                  'Not enough data yet',
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          CompletionCard(
-            percent: 62,
-            title: 'Profile 62% complete',
-            body: 'Profiles with more to talk about get more matches.',
-            actionLabel: 'Complete profile',
-            onAction: () {},
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          const StatusBanner(
-            title: 'You’re offline',
-            body: 'Changes will send when you reconnect.',
-            tone: BannerTone.error,
-          ),
-          _section('People and messages'),
-          const Row(
-            children: [
-              InitialsAvatar(initial: 'P', verified: true),
-              SizedBox(width: AppSpacing.s3),
-              InitialsAvatar(initial: 'J', ring: true),
-              SizedBox(width: AppSpacing.s3),
-              InitialsAvatar(initial: 'A', size: 64),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          const Align(
-            alignment: Alignment.centerRight,
-            child: MessageBubble(text: 'That bakery on Columbia Road, right?'),
-          ),
-          const SizedBox(height: AppSpacing.s2),
-          const Align(
-            alignment: Alignment.centerLeft,
-            child: MessageBubble(
-              text: 'Yes! The cardamom buns sell out by ten.',
-              mine: false,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          DecisionBar(
-            passLabel: 'Pass',
-            superLabel: 'SuperSwipe',
-            likeLabel: 'Like',
-            onPass: () {},
-            onSuper: () {},
-            onLike: () {},
-          ),
-          _section('States'),
-          const Center(
-            child: CircularProgressIndicator(color: AppColors.accent),
-          ),
-          EmptyState(
-            title: 'No incoming likes yet',
-            body: 'When someone likes your profile, they’ll show up here.',
-            art: const IllustrationSlot(
-              slot: 'likes_empty',
-              label: 'No incoming likes yet',
-              width: 200,
-            ),
-            action: NumayaButton(
-              label: 'Find your people',
-              small: true,
-              onPressed: () {},
-            ),
-          ),
-          _section('Illustration slots'),
-          const IllustrationSlot(
-            slot: 'events_explore',
-            label: 'Explore events near you',
-            aspectRatio: IllustrationSlot.header,
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          Row(
-            children: [
-              NumayaButton(
-                label: 'Open sheet',
-                small: true,
-                variant: NumayaButtonVariant.secondary,
-                onPressed: () => showModalBottomSheet<void>(
-                  context: context,
-                  sheetAnimationStyle: AppMotion.sheet(context),
-                  builder: (_) => Padding(
-                    padding: const EdgeInsets.all(AppLayout.screenGutter),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text('A bottom sheet', style: AppTypography.sheetTitle),
-                        const SizedBox(height: AppSpacing.s2),
-                        Text(
-                          'White, 28pt top corners, the modal scrim behind.',
-                          style: AppTypography.body,
-                        ),
-                        const SizedBox(height: AppSpacing.s5),
-                        NumayaButton(
-                          label: 'Done',
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                      ],
+                NumayaButton(
+                  label: 'Open sheet',
+                  small: true,
+                  variant: NumayaButtonVariant.secondary,
+                  onPressed: () => showModalBottomSheet<void>(
+                    context: context,
+                    sheetAnimationStyle: AppMotion.sheet(context),
+                    builder: (_) => Padding(
+                      padding: const EdgeInsets.all(AppLayout.screenGutter),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'A bottom sheet',
+                            style: AppTypography.sheetTitle,
+                          ),
+                          const SizedBox(height: AppSpacing.s2),
+                          Text(
+                            'White, 28pt top corners, the modal scrim behind.',
+                            style: AppTypography.body,
+                          ),
+                          const SizedBox(height: AppSpacing.s5),
+                          NumayaButton(
+                            label: 'Done',
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppLayout.screenBottom),
-        ],
+              ],
+            ),
+            const SizedBox(height: AppLayout.screenBottom),
+          ],
+        ),
       ),
     );
   }

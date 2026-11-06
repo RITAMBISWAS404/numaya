@@ -169,7 +169,7 @@ class EventCover extends StatelessWidget {
                         padding: EdgeInsets.only(
                           right: action == null
                               ? 0
-                              : AppSizes.iconButton + AppSpacing.s1,
+                              : AppSizes.iconButtonSlot + AppSpacing.s1,
                         ),
                         child: Wrap(
                           spacing: AppLayout.groupGap,
@@ -268,7 +268,9 @@ class EventCard extends StatelessWidget {
                     // Keeps the badges clear of the save button laid over this corner.
                     action: onToggleSave == null
                         ? null
-                        : const SizedBox.square(dimension: AppSizes.iconButton),
+                        : const SizedBox.square(
+                            dimension: AppSizes.iconButtonSlot,
+                          ),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(

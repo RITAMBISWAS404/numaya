@@ -153,8 +153,9 @@ void main() {
     await tapNext(tester);
     await finishProfileToHome(tester);
 
-    await tapOn(tester, find.bySemanticsLabel('Like').last);
+    await swipeDecide(tester, like: true);
     await tester.pump(const Duration(milliseconds: 600));
+    await openChatFromMatch(tester);
     await tester.enterText(find.byType(TextField), 'Hi');
     await tester.pump();
     await tapOn(tester, find.bySemanticsLabel('Send'));

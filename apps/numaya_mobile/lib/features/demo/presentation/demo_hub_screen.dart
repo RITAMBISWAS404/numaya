@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/connectivity/connectivity.dart';
 import '../../../core/design_system/design_system.dart';
@@ -351,7 +352,8 @@ class DemoHubScreen extends ConsumerWidget {
               link(l10n.demoChatNew, '${Routes.chat}/jo'),
               link(l10n.demoChatExpiring, '${Routes.chat}/lina'),
               link(l10n.demoChatExpired, '${Routes.chat}/ollie'),
-              link(l10n.openingMovesTitle, Routes.openingMoves),
+              if (ReleaseScope.openingMoves)
+                link(l10n.openingMovesTitle, Routes.openingMoves),
             ],
           ),
           const SizedBox(height: AppSpacing.sectionGap),

@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/router.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
+import 'package:numaya_mobile/core/design_system/icons/lucide_icons.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 import 'package:numaya_mobile/features/dating/presentation/match_screen.dart';
 
@@ -51,7 +52,7 @@ void main() {
       final g = await dragPhoto(tester, 'Sam, 31', 160);
       // Mid-drag: the decision is named on the photo, with its icon.
       expect(find.text('Like'), findsWidgets);
-      expect(find.byIcon(Icons.check_rounded), findsOneWidget);
+      expect(find.byIcon(kLucideIcons[NumayaIcons.check]!), findsOneWidget);
       await g.up();
       await afterDecision(tester);
       expect(find.text('You liked Sam'), findsOneWidget);
@@ -70,10 +71,17 @@ void main() {
       await afterDecision(tester);
       expect(find.text('Sam, 31'), findsOneWidget);
 
-      await tapOn(tester, label('Undo: bring back Maya'));
+      await tapOn(tester, label('Backtrack: bring back Maya'));
       expect(find.text('Maya, 29'), findsOneWidget);
       // One step only.
-      expect(find.bySemanticsLabel(RegExp('^Undo')), findsNothing);
+      expect(
+        tester
+            .widget<NavIconButton>(
+              find.byKey(const ValueKey('discover-backtrack')),
+            )
+            .onPressed,
+        isNull,
+      );
       await settle(tester);
     });
 
@@ -91,8 +99,9 @@ void main() {
         await g.up();
         await afterDecision(tester);
         expect(find.text('Maya, 29'), findsOneWidget);
-        expect(find.text('Like'), findsWidgets); // only the button, no stamp
-        expect(find.byIcon(Icons.check_rounded), findsNothing);
+        // No stamp left on the photo (and no decision buttons since UI-016).
+        expect(find.text('Like'), findsNothing);
+        expect(find.byIcon(kLucideIcons[NumayaIcons.check]!), findsNothing);
         await settle(tester);
       },
     );
@@ -137,20 +146,20 @@ void main() {
       await settle(tester);
     });
 
-    testWidgets('one decision per person: a double tap passes only once', (
+    testWidgets('one decision per person: a double Pass passes only once', (
       tester,
     ) async {
       await usePhoneSize(tester);
       await signUpToHome(tester, testAuth());
-      final pass = label('Pass').last;
-      await tester.tap(pass);
-      await tester.tap(pass, warnIfMissed: false);
+      // UI-016: the Pass action is the swipe's non-gesture equivalent.
+      semanticDecide(tester, like: false);
+      semanticDecide(tester, like: false);
       await afterDecision(tester);
       expect(find.text('Sam, 31'), findsOneWidget);
       await settle(tester);
     });
 
-    testWidgets('a button during a swipe exit does not decide again', (
+    testWidgets('an action during a swipe exit does not decide again', (
       tester,
     ) async {
       await usePhoneSize(tester);
@@ -160,7 +169,7 @@ void main() {
       await g.up();
       // The card is leaving; a Like tap now must not like the next person or Maya.
       await tester.pump(const Duration(milliseconds: 50));
-      await tester.tap(label('Like').last, warnIfMissed: false);
+      semanticDecide(tester, like: true);
       await afterDecision(tester);
       final state = c.read(datingProvider);
       expect(state.seen, {'maya'});
@@ -184,20 +193,21 @@ void main() {
       await settle(tester);
     });
 
-    testWidgets('the buttons decide the same way the gestures do', (
-      tester,
-    ) async {
-      await usePhoneSize(tester);
-      await signUpToHome(tester, testAuth());
-      await tapOn(tester, label('Pass').last);
-      await afterDecision(tester);
-      expect(find.text('Sam, 31'), findsOneWidget);
-      await tapOn(tester, label('Like').last);
-      await afterDecision(tester);
-      expect(find.text('You liked Sam'), findsOneWidget);
-      expect(find.text('Noor, 28'), findsOneWidget);
-      await settle(tester);
-    });
+    testWidgets(
+      'the screen-reader actions decide the same way the gestures do',
+      (tester) async {
+        await usePhoneSize(tester);
+        await signUpToHome(tester, testAuth());
+        semanticDecide(tester, like: false);
+        await afterDecision(tester);
+        expect(find.text('Sam, 31'), findsOneWidget);
+        semanticDecide(tester, like: true);
+        await afterDecision(tester);
+        expect(find.text('You liked Sam'), findsOneWidget);
+        expect(find.text('Noor, 28'), findsOneWidget);
+        await settle(tester);
+      },
+    );
   });
 
   group('Match', () {
@@ -216,10 +226,7 @@ void main() {
         matching: find.byType(PhotoPlaceholder),
       );
       expect(photos, findsOneWidget);
-      expect(
-        tester.widget<PhotoPlaceholder>(photos).label,
-        'Amara, photo 1 (placeholder)',
-      );
+      expect(tester.widget<PhotoPlaceholder>(photos).label, 'Amara, photo 1');
       expect(
         find.descendant(of: match, matching: find.byType(InitialsAvatar)),
         findsNothing,
@@ -228,10 +235,10 @@ void main() {
         find.descendant(of: match, matching: find.byType(ScallopPortrait)),
         findsNothing,
       );
-      // Square, with the hero-card corner, and prominent.
+      // UI-028 / UI-011: the profile photo's 3:4 portrait, with the hero-card corner, prominent.
       final size = tester.getSize(photos);
-      expect(size.width, size.height);
-      expect(size.width, greaterThanOrEqualTo(280));
+      expect(size.width / size.height, closeTo(3 / 4, 0.01));
+      expect(size.width, greaterThanOrEqualTo(240));
       expect(tester.widget<PhotoPlaceholder>(photos).radius, AppRadii.heroCard);
       expect(find.textContaining('Amara'), findsWidgets);
       await settle(tester);
@@ -240,17 +247,14 @@ void main() {
     testWidgets('a match from Discover names the right person', (tester) async {
       await usePhoneSize(tester);
       await signUpToHome(tester, testAuth());
-      await tapOn(tester, label('Like').last); // Maya already liked you.
+      await swipeDecide(tester, like: true); // Maya already liked you.
       await tester.pump(const Duration(milliseconds: 600));
       expect(find.text('It’s a match!'), findsOneWidget);
       final photo = find.descendant(
         of: find.byType(MatchScreen),
         matching: find.byType(PhotoPlaceholder),
       );
-      expect(
-        tester.widget<PhotoPlaceholder>(photo).label,
-        'Maya, photo 1 (placeholder)',
-      );
+      expect(tester.widget<PhotoPlaceholder>(photo).label, 'Maya, photo 1');
       await settle(tester);
     });
 
@@ -267,12 +271,19 @@ void main() {
         of: find.byType(MatchScreen),
         matching: find.byType(PhotoPlaceholder),
       );
-      // No photo: their initial stands in, and the square stays within 40% of the height.
+      // No photo: their initial stands in, and the portrait stays within 42% of the height so
+      // the two actions stay reachable (UI-030).
       expect(
         find.descendant(of: photo, matching: find.text('M')),
         findsOneWidget,
       );
-      expect(tester.getSize(photo).height, lessThanOrEqualTo(568 * 0.4));
+      expect(tester.getSize(photo).height, lessThanOrEqualTo(568 * 0.42 + 0.5));
+      // Both actions stay reachable (scrolled to, at this size).
+      for (final key in ['match-open-chat', 'match-view-profile']) {
+        await tester.ensureVisible(find.byKey(ValueKey(key)));
+        await tester.pump();
+        expect(find.byKey(ValueKey(key)).hitTestable(), findsOneWidget);
+      }
       await settle(tester);
     });
   });
@@ -296,17 +307,16 @@ void main() {
           ),
         ),
       );
-      // Component cleanup (CL-02): rows draw a plain monochrome icon, no coloured tile, and
-      // the tone no longer colours the row.
+      // Ente Menu Item Icon: a plain glyph in text/light in a 36pt slot, no tile behind it.
       expect(find.byType(IconTile), findsNothing);
       final icon = tester.widget<NumayaIcon>(find.byType(NumayaIcon));
-      expect(icon.color, AppColors.textSecondary);
+      expect(icon.color, AppColors.textMuted);
       expect(icon.size, AppSizes.iconMd);
-      // The text starts after the icon and its gap.
+      // The text starts after the list-card inset (UI-044: 16pt), the 36pt slot and its gap.
       final row = tester.getTopLeft(find.byType(ListRow));
       expect(
         tester.getTopLeft(find.text('Current location')).dx - row.dx,
-        AppLayout.cardPadding + AppSizes.iconMd + AppLayout.tileLabelGap,
+        AppLayout.cardPadding + AppSizes.iconTile + AppLayout.tileLabelGap,
       );
     });
 
@@ -323,36 +333,45 @@ void main() {
       expect(find.byType(IconTile), findsNothing);
     });
 
-    testWidgets('dividers sit between rows only, inset to the text', (
-      tester,
-    ) async {
-      await tester.pumpWidget(
-        host(
-          const ListGroup(
-            children: [
-              ListRow(leading: NumayaIcons.user, label: 'One'),
-              ListRow(leading: NumayaIcons.link, label: 'Two'),
-              ListRow(label: 'Three'),
-            ],
+    testWidgets(
+      'off a sheet, related rows share one white 20pt card with no hairlines '
+      '(OV-02, Ente Settings DS)',
+      (tester) async {
+        await tester.pumpWidget(
+          host(
+            const ListGroup(
+              children: [
+                ListRow(leading: NumayaIcons.user, label: 'One'),
+                ListRow(leading: NumayaIcons.link, label: 'Two'),
+                ListRow(label: 'Three'),
+              ],
+            ),
           ),
-        ),
-      );
-      final lines = find.byWidgetPredicate(
-        (w) => w is ColoredBox && w.color == AppColors.divider,
-      );
-      expect(lines, findsNWidgets(2));
-      final group = tester.getTopLeft(find.byType(ListGroup)).dx;
-      // Before a row with a tile: starts at the text, never through the tile.
-      expect(
-        tester.getTopLeft(lines.at(0)).dx - group,
-        AppLayout.cardPadding + AppSizes.iconMd + AppLayout.tileLabelGap,
-      );
-      // Before a plain row: starts at the card padding.
-      expect(tester.getTopLeft(lines.at(1)).dx - group, AppLayout.cardPadding);
-      // Ends at the card padding.
-      final card = tester.getTopRight(find.byType(ListGroup)).dx;
-      expect(card - tester.getTopRight(lines.at(0)).dx, AppLayout.cardPadding);
-    });
+        );
+        final lines = find.byWidgetPredicate(
+          (w) => w is ColoredBox && w.color == AppColors.divider,
+        );
+        expect(lines, findsNothing);
+        final cards = find.descendant(
+          of: find.byType(ListGroup),
+          matching: find.byWidgetPredicate(
+            (w) =>
+                w is DecoratedBox &&
+                w.decoration is BoxDecoration &&
+                (w.decoration as BoxDecoration).color == AppColors.surface &&
+                (w.decoration as BoxDecoration).borderRadius ==
+                    AppRadii.all(AppRadii.card),
+          ),
+        );
+        expect(cards, findsOneWidget);
+        for (final label in ['One', 'Two', 'Three']) {
+          expect(
+            find.descendant(of: cards, matching: find.text(label)),
+            findsOneWidget,
+          );
+        }
+      },
+    );
 
     testWidgets('groups can opt out of dividers', (tester) async {
       await tester.pumpWidget(
@@ -400,6 +419,9 @@ void main() {
         addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
         await tester.pumpWidget(
           MaterialApp(
+            // Slot geometry is reviewed with placeholders on (product screens hide them, FD-A1).
+            builder: (context, child) =>
+                IllustrationPlaceholders(child: child!),
             home: Scaffold(
               body: Padding(
                 padding: const EdgeInsets.all(20),
@@ -546,7 +568,7 @@ void main() {
       },
     );
 
-    testWidgets('the tab indicator is concentric with the floating pill', (
+    testWidgets('the tab indicator is fully rounded inside the rounded bar', (
       tester,
     ) async {
       await usePhoneSize(tester);
@@ -563,12 +585,8 @@ void main() {
       final deco =
           tester.widget<AnimatedContainer>(selected).decoration!
               as BoxDecoration;
-      expect(
-        deco.borderRadius,
-        AppRadii.all(
-          AppRadii.nested(AppSizes.tabBar / 2, NumayaTabBar.tabInset),
-        ),
-      );
+      // UI-026: the selected item is fully rounded, like the bar.
+      expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
       await settle(tester);
     });
 
@@ -581,7 +599,8 @@ void main() {
         (w) => w is ClipRRect && w.borderRadius == AppRadii.all(AppRadii.photo),
       );
       expect(photo, findsWidgets);
-      // The hero card is 32 with an 8pt inset: the photo's 24 is exactly what the rule asks.
+      // The hero card is 24 with an 8pt inset: the photo's 16 (Ente radius/lg) is what the rule
+      // asks.
       expect(AppRadii.nested(AppRadii.heroCard, AppSpacing.s2), AppRadii.photo);
       await settle(tester);
     });

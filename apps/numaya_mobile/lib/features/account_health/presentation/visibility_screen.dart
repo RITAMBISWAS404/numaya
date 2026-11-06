@@ -57,8 +57,6 @@ class VisibilityScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(l10n.visNoticeSheetBody, style: AppTypography.body),
-          const SizedBox(height: AppSpacing.s3),
-          Text(l10n.visDemoNoticeNote, style: AppTypography.caption),
           const SizedBox(height: AppSpacing.s5),
           NumayaButton(
             label: l10n.visGuidelines,
@@ -259,9 +257,7 @@ class VisibilityScreen extends ConsumerWidget {
               r.insights == InsightsState.stale
                   ? l10n.visActivityStale
                   : l10n.visActivityUpdated,
-              style: AppTypography.caption.copyWith(
-                color: AppColors.textSecondary,
-              ),
+              style: AppTypography.caption,
             ),
           ),
         ],
@@ -470,7 +466,6 @@ class VisibilityScreen extends ConsumerWidget {
                     leading: NumayaIcons.check,
                     tone: AccentTone.positive,
                     label: l10n.visNoNotices,
-                    detail: l10n.visDemoNoticeSource,
                   ),
                 ],
               ),
@@ -520,14 +515,6 @@ class VisibilityScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: StatusBadge(
-                    label: l10n.visSampleData,
-                    tone: BadgeTone.brand,
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.s3),
                 activityBody,
                 const SizedBox(height: AppSpacing.s2),
                 Text(l10n.visActivityMeaning, style: AppTypography.caption),
@@ -615,17 +602,14 @@ class VisibilityAboutScreen extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.s5),
           for (final (title, body) in items) ...[
+            // Help-style explainers: the title is the heading here (UI-020 exclusion).
             ProfileSectionCard(
               title: title,
+              explainer: true,
               child: Text(body, style: AppTypography.body),
             ),
             const SizedBox(height: AppSpacing.s3),
           ],
-          InfoCard(
-            icon: NumayaIcons.info,
-            title: l10n.visAboutDemoTitle,
-            body: l10n.visAboutDemoBody,
-          ),
           const SizedBox(height: AppSpacing.s4),
         ],
       ),
@@ -737,8 +721,6 @@ class _HealthHero extends StatelessWidget {
                       TextSpan(
                         text: number,
                         style: AppTypography.metric.copyWith(
-                          fontSize: 52,
-                          height: 56 / 52,
                           color: AppColors.accentOnTint,
                         ),
                       ),

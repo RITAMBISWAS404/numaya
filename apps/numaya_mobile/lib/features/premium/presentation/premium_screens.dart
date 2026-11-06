@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
@@ -28,7 +29,8 @@ class PremiumScreen extends ConsumerWidget {
       (l10n.featureAdvancedFilters, false, true),
       (l10n.featureIncognito, false, true),
       (l10n.featureTravel, false, true),
-      (l10n.featureSuperSwipes, false, true),
+      // UI-016: SuperSwipe is excluded from the first release.
+      if (ReleaseScope.superSwipe) (l10n.featureSuperSwipes, false, true),
     ];
     return NumayaScreen(
       top: NumayaTopBar(
@@ -65,18 +67,20 @@ class PremiumScreen extends ConsumerWidget {
                 ? l10n.premiumActivePlan(premium.activePlan!.label)
                 : l10n.premiumHeroBody,
           ),
-          const SizedBox(height: AppSpacing.s4),
-          ListGroup(
-            title: l10n.premiumYourExtras,
-            children: [
-              ListRow(
-                leading: NumayaIcons.star,
-                tone: AccentTone.brand,
-                label: l10n.premiumSuperSwipesLeft,
-                value: '$superSwipes',
-              ),
-            ],
-          ),
+          if (ReleaseScope.superSwipe) ...[
+            const SizedBox(height: AppSpacing.s4),
+            ListGroup(
+              title: l10n.premiumYourExtras,
+              children: [
+                ListRow(
+                  leading: NumayaIcons.star,
+                  tone: AccentTone.brand,
+                  label: l10n.premiumSuperSwipesLeft,
+                  value: '$superSwipes',
+                ),
+              ],
+            ),
+          ],
           const SizedBox(height: AppSpacing.sectionGap),
           Semantics(
             header: true,
@@ -207,7 +211,9 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     PremiumFeature.extendUnlimited => l10n.paywallForExtend,
     PremiumFeature.incognito => l10n.paywallForIncognito,
     PremiumFeature.travel => l10n.paywallForTravel,
-    PremiumFeature.superSwipes => l10n.paywallForSuperSwipes,
+    // A stale SuperSwipe deep link gets the general paywall in the first release.
+    PremiumFeature.superSwipes =>
+      ReleaseScope.superSwipe ? l10n.paywallForSuperSwipes : l10n.paywallTitle,
     PremiumFeature.general || null => l10n.paywallTitle,
   };
 
@@ -244,7 +250,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       (NumayaIcons.clock, l10n.featureExtend),
       (NumayaIcons.eyeOff, l10n.featureIncognito),
       (NumayaIcons.location, l10n.featureTravel),
-      (NumayaIcons.star, l10n.featureSuperSwipes),
+      if (ReleaseScope.superSwipe) (NumayaIcons.star, l10n.featureSuperSwipes),
     ];
 
     return NumayaScreen(

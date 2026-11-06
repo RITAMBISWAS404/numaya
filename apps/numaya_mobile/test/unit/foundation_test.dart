@@ -5,17 +5,18 @@ import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/core/logging/app_logger.dart';
 
 void main() {
-  group('Monochrome Meetup design tokens', () {
+  group('Ente design tokens (Ente experiment)', () {
     double ratio(Color a, Color b) {
       final la = a.computeLuminance(), lb = b.computeLuminance();
       final (hi, lo) = la > lb ? (la, lb) : (lb, la);
       return (hi + 0.05) / (lo + 0.05);
     }
 
-    test('roles point at the monochrome palette with the Numaya purple', () {
-      expect(AppColors.canvas, const Color(0xFFF4F4F6));
+    test('roles point at the Ente palette with the Numaya purple', () {
+      // Ente background/base, fill/light, text/base (Figma 10871:4421).
+      expect(AppColors.canvas, const Color(0xFFF4F4F4));
       expect(AppColors.surface, const Color(0xFFFFFFFF));
-      expect(AppColors.ink, const Color(0xFF18181B));
+      expect(AppColors.ink, const Color(0xFF000000));
       // The canonical brand purple from tokens/numaya.tokens.json (purple.600).
       expect(AppColors.accent, const Color(0xFF7262C7));
       expect(AppColors.brand, AppColors.accent);
@@ -85,10 +86,10 @@ void main() {
       expect(AppTypography.metric.fontFamily, 'Plus Jakarta Sans');
       expect(AppTypography.body.fontFamily, 'Figtree');
       expect(AppTypography.button.fontFamily, 'Figtree');
-      // Type-roles pass (TR-02): 32 display, 28 prominent, 24 screen, 20 section, 18 lead.
+      // Ente text styles: Display-1 32/40, Display-2 24/32, Display-3 / H1 20/28, H2 18/24.
       expect(AppTypography.hero.fontSize, 32);
-      expect(AppTypography.pageTitle.fontSize, 28);
-      expect(AppTypography.pageTitle.fontWeight, FontWeight.w800);
+      expect(AppTypography.pageTitle.fontSize, 24);
+      expect(AppTypography.pageTitle.fontWeight, FontWeight.w600);
       expect(AppTypography.flowTitle.fontSize, 24);
       expect(AppTypography.headline.fontSize, 24);
       expect(AppTypography.card.fontSize, 18);
@@ -96,33 +97,38 @@ void main() {
       expect(AppTypography.sheetTitle.fontSize, 20);
       expect(AppTypography.metric.fontSize, 40);
       expect(AppTypography.labelCaps.fontSize, 12);
-      // OP-01: the semantic default body is 14/20 (the requested default); typing stays at 16
-      // and the 13/18 caption stays below body.
+      // Ente Body 14/20 medium for body, typing and buttons; Mini 12/16 below it.
       expect(AppTypography.body.fontSize, 14);
       expect(AppTypography.body.height! * AppTypography.body.fontSize!, 20);
-      expect(AppTypography.input.fontSize, 16);
+      expect(AppTypography.body.fontWeight, FontWeight.w500);
+      expect(AppTypography.input.fontSize, 14);
+      expect(AppTypography.button.fontSize, 14);
       expect(
         AppTypography.caption.fontSize!,
         lessThan(AppTypography.body.fontSize!),
       );
     });
 
-    test('geometry follows the monochrome radii and sizes', () {
-      expect(AppRadii.field, 18);
-      expect(AppRadii.control, 16);
-      expect(AppRadii.card, 24);
-      expect(AppRadii.heroCard, 32);
-      expect(AppRadii.photo, 24);
-      expect(AppRadii.sheet, 32);
-      expect(AppSizes.buttonHeight, 56);
-      expect(AppSizes.field, 58);
+    test('geometry follows the Ente radii and sizes', () {
+      // radius/lg 16, radius/xl 20 (11112:4508); 24 for the hero card and sheet top (NX).
+      expect(AppRadii.field, 16);
+      expect(AppRadii.control, 20);
+      expect(AppRadii.card, 20);
+      expect(AppRadii.heroCard, 24);
+      expect(AppRadii.photo, 16); // nested: hero 24 minus its 8pt inset
+      expect(AppRadii.sheet, 24);
+      expect(AppRadii.iconButton, 12);
+      // Button Large 52, Text Input 52, Menu Item 60, Icon Button 38; the compact nav bar (UI-026)
+      // is 38 + 2 x 8 = 54.
+      expect(AppSizes.buttonHeight, 52);
+      expect(AppSizes.field, 52);
       expect(AppSizes.row, 60);
-      // Navigation targets meet Android's 48dp.
-      expect(AppSizes.tabItem, greaterThanOrEqualTo(48));
-      expect(AppSizes.iconButton, greaterThanOrEqualTo(44));
-      expect(AppSizes.choice, 22);
+      expect(AppSizes.iconButton, 38);
+      expect(AppSizes.tabBar, 54);
+      // Visible tiles may be compact; every hit area stays at least 44 (Pressable.minSize).
       expect(AppSizes.touchMin, 44);
-      expect(AppLayout.screenGutter, 20);
+      expect(AppSizes.choice, 20);
+      expect(AppLayout.screenGutter, 16);
     });
   });
 

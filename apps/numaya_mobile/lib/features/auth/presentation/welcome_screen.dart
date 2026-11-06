@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -63,151 +61,118 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final demo = ref.watch(demoAuthProvider) != null;
-    final width = MediaQuery.sizeOf(context).width
-        .clamp(0.0, AppSpacing.contentMax);
-    // The text column inside the gutters.
-    final text = width - 2 * AppLayout.screenGutter;
     final linkStyle =
         AppTypography.weight(
           AppTypography.micro,
           AppTypography.semibold,
         ).copyWith(
           color: AppColors.accentOnTint,
-          height: 18 / 12.5,
           decoration: TextDecoration.underline,
           decorationColor: AppColors.accentOnTint.withValues(alpha: 0.45),
         );
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
 
-    // V16: the welcome sits on the stone page (`.theme-withings.screen--wash`).
+    // UI-001: a large branded image fills the upper region; everything below sits in one white
+    // card with rounded top corners. Large text scrolls the page; the image gives up its space
+    // first.
     return ColoredBox(
       color: AppColors.canvas,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: SafeArea(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: AppSpacing.contentMax,
-              ),
-              // Large text can need more than the screen: then the page scrolls and the sticker
-              // hero gives up its space first.
-              child: LayoutBuilder(
-                builder: (context, viewport) => SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: viewport.maxHeight),
-                    child: IntrinsicHeight(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                              AppLayout.screenGutter,
-                              AppSpacing.s4,
-                              AppLayout.screenGutter,
-                              0,
-                            ),
-                            // Wraps under very large text rather than overflowing.
-                            child: Wrap(
-                              alignment: WrapAlignment.spaceBetween,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
-                                const Wordmark(),
-                                // Demo builds: the badge opens the Demo Hub (screen catalogue).
-                                if (demo)
-                                  Pressable(
+        body: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: AppSpacing.contentMax),
+            child: LayoutBuilder(
+              builder: (context, viewport) => SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: viewport.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: _ZeroIntrinsicHeight(
+                            // Demo builds only: the image opens the Demo Hub, which used to hang
+                            // off the (removed) Demo build badge. Same accessible name, so the
+                            // screen catalogue stays reachable.
+                            child: demo
+                                ? Pressable(
                                     onTap: () => context.push(Routes.demo),
                                     semanticLabel: l10n.demoHubOpen,
                                     excludeChildSemantics: true,
-                                    child: const SizedBox(
-                                      height: kMinInteractiveDimension,
-                                      child: Center(
-                                        widthFactor: 1,
-                                        child: DemoBadge(),
-                                      ),
-                                    ),
-                                  ),
-                              ],
+                                    pressedScale: 1,
+                                    child: const WelcomeBrandImage(),
+                                  )
+                                : const WelcomeBrandImage(),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(
+                            AppSpacing.s5,
+                            AppSpacing.s6,
+                            AppSpacing.s5,
+                            AppSpacing.s4 + bottomInset,
+                          ),
+                          decoration: const BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(AppRadii.sheet),
                             ),
                           ),
-                          // V16 keeps V11's hero: interests as tilted emoji stickers.
-                          const Expanded(
-                            child: _ZeroIntrinsicHeight(child: _StickerHero()),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                              AppLayout.screenGutter,
-                              AppSpacing.s4,
-                              AppLayout.screenGutter,
-                              AppSpacing.s2,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Semantics(
-                                  header: true,
-                                  child: Text(
-                                    l10n.welcomeTitle,
-                                    style: AppTypography.welcomeTitle(width),
-                                  ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Semantics(
+                                header: true,
+                                child: Text(
+                                  l10n.welcomeTitle,
+                                  style: AppTypography.hero,
                                 ),
-                                const SizedBox(height: AppSpacing.s4),
-                                // `.welcome__lede { max-width: 31ch }`, as padding so the page can measure it.
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    right: math.max(0, text - 272),
-                                  ),
-                                  child: Text(
-                                    l10n.welcomeLede,
-                                    style: AppTypography.input.copyWith(
-                                      color: AppColors.textMuted,
-                                    ),
-                                  ),
+                              ),
+                              const SizedBox(height: AppSpacing.s3),
+                              Text(
+                                l10n.welcomeLede,
+                                style: AppTypography.body.copyWith(
+                                  color: AppColors.textMuted,
                                 ),
-                                const SizedBox(height: AppSpacing.s8),
-                                NumayaButton(
-                                  label: l10n.welcomeCreateAccount,
-                                  onPressed: () => _start(AuthIntent.signUp),
-                                ),
-                                const SizedBox(height: 6),
-                                NumayaButton(
-                                  label: l10n.welcomeHaveAccount,
-                                  variant: NumayaButtonVariant.quiet,
-                                  onPressed: () => _start(AuthIntent.signIn),
-                                ),
-                                const SizedBox(height: AppSpacing.s3),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: math.max(0, (text - 300) / 2),
-                                  ),
-                                  child: Text.rich(
+                              ),
+                              const SizedBox(height: AppSpacing.s6),
+                              NumayaButton(
+                                label: l10n.welcomeCreateAccount,
+                                onPressed: () => _start(AuthIntent.signUp),
+                              ),
+                              const SizedBox(height: AppSpacing.s3),
+                              NumayaButton(
+                                label: l10n.welcomeHaveAccount,
+                                variant: NumayaButtonVariant.quiet,
+                                onPressed: () => _start(AuthIntent.signIn),
+                              ),
+                              const SizedBox(height: AppSpacing.s4),
+                              Text.rich(
+                                TextSpan(
+                                  style: AppTypography.micro,
+                                  children: [
+                                    TextSpan(text: l10n.welcomeLegalPrefix),
                                     TextSpan(
-                                      style: AppTypography.micro.copyWith(
-                                        height: 18 / 12.5,
-                                      ),
-                                      children: [
-                                        TextSpan(text: l10n.welcomeLegalPrefix),
-                                        TextSpan(
-                                          text: l10n.welcomeLegalTerms,
-                                          style: linkStyle,
-                                          recognizer: _terms,
-                                        ),
-                                        TextSpan(text: l10n.welcomeLegalMiddle),
-                                        TextSpan(
-                                          text: l10n.welcomeLegalPrivacy,
-                                          style: linkStyle,
-                                          recognizer: _privacy,
-                                        ),
-                                        TextSpan(text: l10n.welcomeLegalSuffix),
-                                      ],
+                                      text: l10n.welcomeLegalTerms,
+                                      style: linkStyle,
+                                      recognizer: _terms,
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
+                                    TextSpan(text: l10n.welcomeLegalMiddle),
+                                    TextSpan(
+                                      text: l10n.welcomeLegalPrivacy,
+                                      style: linkStyle,
+                                      recognizer: _privacy,
+                                    ),
+                                    TextSpan(text: l10n.welcomeLegalSuffix),
+                                  ],
                                 ),
-                              ],
-                            ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -244,77 +209,50 @@ class _RenderZeroIntrinsicHeight extends RenderProxyBox {
   double computeMaxIntrinsicWidth(double height) => 0;
 }
 
-/// Small label marking a development build that uses demo sign-in: V16's neutral status label
-/// (`.badge`: outlined 1pt ink, 6pt corner, medium).
-class DemoBadge extends StatelessWidget {
-  const DemoBadge({super.key});
+/// The upper region of Welcome (UI-001): one large branded image containing the Numaya name.
+///
+/// TEMPORARY ARTWORK. No approved image with the Numaya name exists in the project yet, so this
+/// draws the brand from the existing code-drawn mark and wordmark on the brand tint. Replace the
+/// body of [build] with the approved asset (for example `Image.asset(..., fit: BoxFit.cover)`)
+/// when it is supplied; the layout around it does not change. Decorative: the headline and the
+/// account actions carry the meaning.
+class WelcomeBrandImage extends StatelessWidget {
+  const WelcomeBrandImage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        borderRadius: AppRadii.all(AppRadii.tag),
-        border: Border.all(color: AppColors.ink, width: AppBorders.hairline),
-      ),
-      child: Text(
-        context.l10n.demoBuildLabel,
-        style: AppTypography.weight(
-          AppTypography.caption,
-          AppTypography.medium,
-        ).copyWith(color: AppColors.ink),
-      ),
-    );
-  }
-}
-
-/// The welcome hero (`.welcome__stickers`): four interest emoji on 76pt page-coloured tiles with a
-/// hairline, 20pt corners, tilted, placed by percentage of the hero as on the web.
-class _StickerHero extends StatelessWidget {
-  const _StickerHero();
-
-  static const _stickers = [
-    (emoji: '🍷', left: 0.16, top: 0.30, turn: -8.0),
-    (emoji: '🎷', left: 0.50, top: 0.18, turn: 6.0),
-    (emoji: '📷', left: 0.62, top: 0.50, turn: -4.0),
-    (emoji: '🧗', left: 0.28, top: 0.62, turn: 5.0),
-  ];
+  static const String brandName = 'numaya';
 
   @override
   Widget build(BuildContext context) {
     return ExcludeSemantics(
-      child: LayoutBuilder(
-        builder: (context, box) {
-          // The stickers need room; on short screens the hero simply stays empty.
-          if (box.maxHeight < 200) return const SizedBox.expand();
-          return Stack(
-            children: [
-              for (final s in _stickers)
-                Positioned(
-                  left: box.maxWidth * s.left,
-                  top: box.maxHeight * s.top,
-                  child: Transform.rotate(
-                    angle: s.turn * 3.1415926535 / 180,
-                    child: Container(
-                      width: 76,
-                      height: 76,
-                      decoration: BoxDecoration(
-                        color: AppColors.canvas,
-                        borderRadius: AppRadii.all(20),
-                        border: Border.all(
-                          color: AppColors.border,
-                          width: AppBorders.hairline,
-                          strokeAlign: BorderSide.strokeAlignInside,
-                        ),
+      child: ColoredBox(
+        color: AppColors.accentTint,
+        child: SafeArea(
+          bottom: false,
+          child: LayoutBuilder(
+            builder: (context, box) {
+              // Short screens or large text: the image yields its space to the card.
+              if (box.maxHeight < 120) return const SizedBox.expand();
+              final mark = (box.maxHeight * 0.28).clamp(48.0, 96.0);
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    BrandMark(size: mark),
+                    const SizedBox(height: AppSpacing.s4),
+                    Text(
+                      brandName,
+                      style: AppTypography.wordmark().copyWith(
+                        fontSize: mark * 0.5,
+                        height: 1,
+                        color: AppColors.accentOnTint,
                       ),
-                      alignment: Alignment.center,
-                      child: Emoji(s.emoji, size: 34),
                     ),
-                  ),
+                  ],
                 ),
-            ],
-          );
-        },
+              );
+            },
+          ),
+        ),
       ),
     );
   }

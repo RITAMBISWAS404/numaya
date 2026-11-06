@@ -50,8 +50,13 @@ class DemoMessage {
     this.mine = true,
     this.sample = false,
     this.attachment,
+    this.replyToId,
   });
   final int id;
+
+  /// The message this one replies to (UI-036), by id in the same thread; null for an ordinary
+  /// message. Optional, so every existing message and fixture stays valid.
+  final int? replyToId;
 
   /// The message text, or its caption when there is an [attachment] (may then be empty).
   final String text;
@@ -69,6 +74,7 @@ class DemoMessage {
     mine: mine,
     sample: sample,
     attachment: attachment,
+    replyToId: replyToId,
   );
 
   @override
@@ -446,9 +452,15 @@ class DatingController extends Notifier<DatingState> {
 
   /// Bring back the last person passed, at the front of the queue. One step only, and only for a
   /// pass: a like has been sent (Bumble's Backtrack works the same way). Returns who came back.
+  ///
+  /// Never brings back someone blocked or reported since (UI-013): the slot is cleared instead.
   SamplePerson? undo() {
     final id = state.lastPass;
     if (id == null) return null;
+    if (!state.isActive(id) || personById(id) == null) {
+      state = state.copyWith(clearLastPass: true);
+      return null;
+    }
     state = state.copyWith(
       seen: {...state.seen}..remove(id),
       clearLastPass: true,
@@ -688,15 +700,23 @@ class DatingController extends Notifier<DatingState> {
     String id,
     String text, {
     MessageAttachment? attachment,
+    int? replyToId,
   }) async {
     final body = text.trim();
     if ((body.isEmpty && attachment == null) || !state.isActive(id)) return;
+    // A reply keeps its target only if that message is still in this thread.
+    final target = replyToId == null
+        ? null
+        : (state.threads[id] ?? const <DemoMessage>[])
+              .where((m) => m.id == replyToId)
+              .firstOrNull;
     final message = DemoMessage(
       id: state.nextMessageId,
       text: body,
       status: _online ? MessageStatus.sending : MessageStatus.waiting,
       at: _now,
       attachment: attachment,
+      replyToId: target?.id,
     );
     state = state.copyWith(nextMessageId: state.nextMessageId + 1);
     _put(id, message);
@@ -810,6 +830,7 @@ class DatingController extends Notifier<DatingState> {
         ),
       ],
       ended: block ? {...state.ended, id: EndReason.reported} : null,
+      clearLastPass: block && state.lastPass == id,
     );
   }
 

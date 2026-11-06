@@ -38,9 +38,11 @@ class FieldNote extends StatelessWidget {
   }
 }
 
-/// The filled field (premium refinement): a neutral fill, no outline, 18pt corners, 58pt tall,
-/// identified by its visible label above it. Focused: white with a 2pt purple edge. Invalid: a 2pt
-/// red edge, focused or not. Disabled: the page tone with grey text.
+/// Ente Text Input (2275:11526), 16pt corners, 52pt tall, labelled above. UI-037: the idle state
+/// is Ente's Default (2275:11693), a white field with no stroke; it reads against the grey page
+/// and grey sheets by its fill, and the label above names it. Focused: a 2pt Numaya-purple edge
+/// (Ente draws a 1pt grey one; the brand focus is kept so focus stays obvious). Invalid: a 2pt red
+/// edge, focused or not. Disabled: fill/dark with grey text.
 class InputSurface extends StatelessWidget {
   const InputSurface({
     super.key,
@@ -69,7 +71,7 @@ class InputSurface extends StatelessWidget {
         ? (AppColors.negative, AppBorders.focus)
         : focused
         ? (AppColors.focusField, AppBorders.focus)
-        : (Colors.transparent, AppBorders.focus);
+        : (const Color(0x00FFFFFF), AppBorders.hairline);
     return AnimatedContainer(
       duration: AppMotion.duration(context, AppMotion.base),
       curve: AppMotion.easeOut,
@@ -77,11 +79,7 @@ class InputSurface extends StatelessWidget {
       constraints: height == null ? const BoxConstraints(minHeight: 120) : null,
       padding: padding,
       decoration: BoxDecoration(
-        color: disabled
-            ? AppColors.canvas
-            : focused
-            ? AppColors.surface
-            : AppColors.field,
+        color: disabled ? AppColors.field : AppColors.surface,
         borderRadius: AppRadii.all(AppRadii.field),
       ),
       // The outline is drawn on top, so the focus border (2pt) doesn't shift the text.
@@ -234,10 +232,10 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
                 onChanged: widget.onChanged,
                 onSubmitted: widget.onSubmitted,
                 style:
-                    // Typed text is 16 in every field, single- or multi-line (OP-03); multi-line
-                    // keeps its 24pt reading line.
+                    // Typed text is Ente Body (14/20) in every field; multi-line keeps a 22pt
+                    // reading line.
                     (widget.multiline
-                            ? AppTypography.input.copyWith(height: 24 / 16)
+                            ? AppTypography.input.copyWith(height: 22 / 14)
                             : AppTypography.input)
                         .copyWith(
                           color: widget.enabled
@@ -251,10 +249,11 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
                 decoration: InputDecoration(
                   isCollapsed: true,
                   border: InputBorder.none,
-                  // A single line is padded to a 48dp tap target inside the 58pt field.
+                  // A single 20pt line is padded to fill the 52pt Ente field, so the editable
+                  // area is the whole field (and over the 48dp tap target).
                   contentPadding: widget.multiline
                       ? EdgeInsets.zero
-                      : const EdgeInsets.symmetric(vertical: 13),
+                      : const EdgeInsets.symmetric(vertical: 16),
                   hintText: widget.placeholder,
                   hintStyle: AppTypography.weight(
                     widget.multiline ? AppTypography.body : AppTypography.input,
@@ -338,7 +337,6 @@ class CountryCodeBadge extends StatelessWidget {
         iso,
         style: AppTypography.weight(AppTypography.micro, AppTypography.bold)
             .copyWith(
-              fontSize: 11,
               height: 1,
               letterSpacing: 0.66,
               color: AppColors.textSecondary,
@@ -398,15 +396,17 @@ class _NumayaSearchFieldState extends State<NumayaSearchField> {
       height: math.max(AppSizes.search, kMinInteractiveDimension),
       padding: const EdgeInsets.only(left: AppSpacing.s4),
       decoration: BoxDecoration(
-        color: focused ? AppColors.surface : AppColors.field,
-        borderRadius: AppRadii.all(AppRadii.pill),
+        // Ente search is a Text Input with a search prefix: white, 16pt corners, no idle stroke
+        // (UI-037).
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.field),
       ),
       // The edge is drawn on top so it doesn't take height from the field.
       foregroundDecoration: BoxDecoration(
-        borderRadius: AppRadii.all(AppRadii.pill),
+        borderRadius: AppRadii.all(AppRadii.field),
         border: Border.all(
-          color: focused ? AppColors.focusField : Colors.transparent,
-          width: AppBorders.focus,
+          color: focused ? AppColors.focusField : const Color(0x00FFFFFF),
+          width: focused ? AppBorders.focus : AppBorders.hairline,
           strokeAlign: BorderSide.strokeAlignInside,
         ),
       ),
@@ -433,13 +433,16 @@ class _NumayaSearchFieldState extends State<NumayaSearchField> {
               keyboardType: TextInputType.text,
               textAlignVertical: TextAlignVertical.center,
               textInputAction: TextInputAction.search,
-              style: AppTypography.body.copyWith(fontSize: 16),
+              // Ente Text Input: Body 14/20 for the value and the hint.
+              style: AppTypography.input,
               decoration: InputDecoration(
                 isCollapsed: true,
                 border: InputBorder.none,
                 hintText: widget.placeholder,
-                hintStyle: AppTypography.body.copyWith(
-                  fontSize: 16,
+                // One line: at 150% text on a 320pt phone the hint wrapped and was cut in half by
+                // the 52pt field (Messages, Ente device pass). The full hint is still announced.
+                hintMaxLines: 1,
+                hintStyle: AppTypography.input.copyWith(
                   color: AppColors.textMuted,
                 ),
               ),

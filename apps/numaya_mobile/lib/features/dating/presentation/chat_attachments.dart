@@ -128,7 +128,6 @@ class PendingAttachment extends StatelessWidget {
     final detail = MetaText.join([
       if (a.sizeBytes != null && a.kind != AttachmentKind.voice)
         formatBytes(a.sizeBytes!),
-      if (a.sample) l10n.chatAttachmentSample,
       if (a.kind == AttachmentKind.voice) l10n.chatVoiceDemo,
     ]);
     // The description and Remove are separate nodes, so Remove can be reached on its own.
@@ -185,12 +184,7 @@ class PendingAttachment extends StatelessWidget {
                             ),
                           ),
                           if (detail.isNotEmpty)
-                            MetaText(
-                              detail,
-                              style: AppTypography.caption.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
+                            MetaText(detail, style: AppTypography.caption),
                         ],
                       ),
                     ),
@@ -256,7 +250,7 @@ class AttachmentMessage extends StatelessWidget {
           borderRadius: AppRadii.all(AppRadii.card),
           child: SizedBox(
             width: width,
-            height: width / AppMedia.personPhoto,
+            height: width / AppMedia.chatPhoto,
             child: a.source == null
                 ? const ColoredBox(color: AppColors.photo)
                 : AttachmentImage(attachment: a, width: width),
@@ -277,7 +271,6 @@ class AttachmentMessage extends StatelessWidget {
           detail: MetaText.join([
             l10n.chatAttachmentVideo,
             if (a.sizeBytes != null) formatBytes(a.sizeBytes!),
-            if (a.sample) l10n.chatAttachmentSample,
           ]),
           fg: fg,
           muted: muted,

@@ -1,5 +1,56 @@
 # Validation
 
+> **Review batch 2 (2026-11-06, Windows, Flutter 3.47.8, worktree `..\numaya-ente`):**
+> - Formatting, analysis and the token check are clean.
+> - `flutter test`: **393 passed, 15 skipped, 0 failed**. It includes the new 20-test
+>   `test/widget/discover_match_review_test.dart`. 20 older tests were rewritten because they
+>   encoded the superseded decisions: buttons, composer, flush sheets, 62pt nav, outlined switch.
+> - Emulator (Pixel 10, API 36): 390dp and 320dp at 150% text, 30 captures each, no skips.
+> - Not run: physical phone, iOS, TalkBack speech. Goldens were not regenerated.
+
+
+> **UI review handoff (2026-11-05, Windows, Flutter 3.47.8, worktree `..\numaya-ente`):**
+> - `dart format` clean, `flutter analyze` clean, `generate_tokens --check` up to date.
+> - `flutter test`: **373 passed, 15 skipped, 0 failed**. This includes 12 new tests in
+>   `test/widget/ui_review_handoff_test.dart`:
+>   - height skip and unit conversion;
+>   - both slider thumbs;
+>   - prompt select, save, edit and cancel;
+>   - prompt card hierarchy;
+>   - heading art position;
+>   - alert icon alignment;
+>   - quiet button.
+> - Emulator (Pixel 10, API 36): 22 shots at 390dp, plus 18 at 320dp with 150% text. The narrow set
+>   predates the Discover inline-row fix.
+> - Not run: physical phone, iOS, TalkBack speech. Goldens were not regenerated.
+
+
+> **Ente experiment (2026-11-05, Windows, Flutter 3.47.8, worktree `..\numaya-ente`):**
+> - `dart format` clean, `flutter analyze` clean, `generate_tokens --check` up to date;
+> - `flutter test` **361 passed, 15 skipped, 0 failed** (the `accessibility_tools` audit is included);
+> - emulator (Pixel 10, API 36): 390dp journeys E1 and E2, plus 320dp at 150% text;
+> - goldens not regenerated (they are Linux renders of the old look);
+> - not run: physical phone, TalkBack speech, iOS.
+
+> **Final design run (2026-11-05):**
+> - **Windows host, Flutter 3.47.8 / Dart 3.13.7, worktree `..\numaya-final-design`:**
+>   - baseline `f2e18e6`: 342 passed, 15 skipped;
+>   - final: `dart format` 0 changed, `generate_tokens --check` up to date, `flutter analyze` clean,
+>     `flutter test` **361 passed, 15 skipped, 0 failed** (includes the `accessibility_tools` audit
+>     and its negative control);
+>   - `flutter build apk --release` builds (debug-signed);
+>   - `flutter build apk --debug`: SHA-256 `78170dec…114b`.
+> - **Device evidence** (Pixel 10 AVD, Android 16 / API 36, x86_64, 1080×2424, `wm density 443`
+>   = 390dp; also 540 = 320dp at font scale 2.0):
+>   - journeys in `artifacts/final-design-run/device/`;
+>   - keyboard over the tab bar: verified;
+>   - three-button navigation: verified;
+>   - TalkBack: accessibility tree verified, live speech **not** (first-run permission prompt
+>     dismissed, not granted).
+> - **Goldens:** 101 Windows-to-Windows diffs reviewed; the Linux goldens were restored, so
+>   regenerate them on Linux.
+> - **Not run:** iOS, physical phone, profile-mode frame times.
+
 ## Pill gaps (2026-11-04, cloud, uncommitted)
 | Command | Result |
 |---|---|

@@ -85,13 +85,6 @@ class _EmailFormState extends State<_EmailForm> {
             autofillHints: const [AutofillHints.email],
             onSubmitted: (_) => _save(),
           ),
-          const SizedBox(height: AppSpacing.s3),
-          Text(
-            l10n.recoveryEmailDemo,
-            style: AppTypography.caption.copyWith(
-              color: AppColors.textSecondary,
-            ),
-          ),
           const SizedBox(height: AppSpacing.s5),
           NumayaButton(
             label: l10n.save,

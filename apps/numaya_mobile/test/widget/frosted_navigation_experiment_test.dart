@@ -67,37 +67,27 @@ void main() {
     });
   });
 
-  group('C: frosted tab bar', () {
+  // Ente experiment: the shipped bar is Ente's opaque Nav Bar; the frosted surface remains as a
+  // comparison (Design Lab, High Contrast test below). The layout guarantees still apply.
+  group('C: floating tab bar (Ente Nav Bar)', () {
     Finder bar() => find.byType(NumayaTabBar);
+    Finder pillOf() => find.byKey(NumayaTabBar.pillKey);
 
-    testWidgets('one blur, bounded by the pill clip, with the glass tint', (
-      tester,
-    ) async {
-      await usePhoneSize(tester);
-      await quickStartApp(tester);
-      final blur = find.descendant(
-        of: bar(),
-        matching: find.byType(BackdropFilter),
-      );
-      expect(blur, findsOneWidget);
-      expect(find.byType(BackdropFilter), findsOneWidget);
-      expect(
-        find.ancestor(of: blur, matching: find.byType(ClipRRect)),
-        findsWidgets,
-      );
-      // The blur covers the pill only (64pt tall), never the screen.
-      expect(tester.getSize(blur).height, AppSizes.tabBar);
-      final glass = find.descendant(
-        of: blur,
-        matching: find.byWidgetPredicate(
-          (w) =>
-              w is Container &&
-              (w.decoration as BoxDecoration?)?.color == MonoGlass.tint,
-        ),
-      );
-      expect(glass, findsOneWidget);
-      await settle(tester);
-    });
+    testWidgets(
+      'nav bar: opaque white, fully rounded, soft shadow, no blur (UI-026, UI-027)',
+      (tester) async {
+        await usePhoneSize(tester);
+        await quickStartApp(tester);
+        expect(find.byType(BackdropFilter), findsNothing);
+        final pill = tester.widget<Container>(pillOf());
+        final deco = pill.decoration! as BoxDecoration;
+        expect(deco.color, AppColors.surface);
+        expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
+        expect(deco.boxShadow, AppElevation.navigation);
+        expect(tester.getSize(pillOf()).height, AppSizes.tabBar);
+        await settle(tester);
+      },
+    );
 
     testWidgets('system navigation keeps a page-colour strip under it', (
       tester,
@@ -122,9 +112,7 @@ void main() {
           tester.view.physicalSize.height / tester.view.devicePixelRatio;
       expect(tester.getBottomLeft(strip).dy, screenBottom);
       // The pill sits above the strip, never on the system buttons.
-      final pill = tester.getRect(
-        find.descendant(of: bar(), matching: find.byType(BackdropFilter)),
-      );
+      final pill = tester.getRect(pillOf());
       expect(pill.bottom, lessThanOrEqualTo(screenBottom - 48));
       await settle(tester);
     });
@@ -184,9 +172,7 @@ void main() {
       await tester.drag(scroll, const Offset(0, -2000));
       await tester.pump(const Duration(milliseconds: 600));
       final last = tester.getRect(find.text('Settings').last);
-      final pill = tester.getRect(
-        find.descendant(of: bar(), matching: find.byType(BackdropFilter)),
-      );
+      final pill = tester.getRect(pillOf());
       expect(last.bottom, lessThanOrEqualTo(pill.top));
       await settle(tester);
     });
@@ -227,28 +213,22 @@ void main() {
       await goTo(c, tester, Routes.home);
     }
 
-    testWidgets(
-      'at 320pt the wordmark shows the mark only and clears Filters',
-      (tester) async {
-        await discoverAt(tester, const Size(320, 568));
-        final wordmark = find.byType(Wordmark);
-        expect(
-          find.descendant(of: wordmark, matching: find.text('numaya')),
-          findsNothing,
-        );
-        final mark = tester.getRect(find.byType(BrandMark).first);
-        final filters = tester.getRect(
-          find
-              .ancestor(
-                of: find.bySemanticsLabel('Filters'),
-                matching: find.byType(NavIconButton),
-              )
-              .first,
-        );
-        expect(mark.right, lessThan(filters.left));
-        await settle(tester);
-      },
-    );
+    testWidgets('at 320pt the wordmark clears Filters', (tester) async {
+      // Ente's 38pt header buttons and 16pt gutter leave room for the full wordmark at 320pt;
+      // what matters is that it never runs under the buttons.
+      await discoverAt(tester, const Size(320, 568));
+      final mark = tester.getRect(find.byType(Wordmark).first);
+      final filters = tester.getRect(
+        find
+            .ancestor(
+              of: find.bySemanticsLabel('Filters'),
+              matching: find.byType(NavIconButton),
+            )
+            .first,
+      );
+      expect(mark.right, lessThan(filters.left));
+      await settle(tester);
+    });
 
     testWidgets('at 390pt the full wordmark still shows', (tester) async {
       await discoverAt(tester, const Size(390, 844));

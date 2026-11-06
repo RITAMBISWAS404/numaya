@@ -145,7 +145,7 @@ class _BioScreenState extends ConsumerState<BioScreen> {
           const SizedBox(height: AppSpacing.s5),
           ProfileSectionCard(
             title: l10n.obBioPreview,
-            child: Text(bio, style: AppTypography.body),
+            child: Text(bio, style: AppTypography.cardPrimary),
           ),
         ],
       ],

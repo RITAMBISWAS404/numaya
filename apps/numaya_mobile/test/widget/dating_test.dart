@@ -7,12 +7,9 @@ import '../helpers/test_app.dart';
 
 Finder _action(String label) => find.bySemanticsLabel(label);
 
-/// The Pass / Like / SuperSwipe circles at the end of the profile (the SuperSwipe also floats on
-/// the photo, so take the last one).
-Future<void> _decide(WidgetTester tester, String label) async {
-  await tapOn(tester, _action(label).last);
-  await tester.pump(const Duration(milliseconds: 300));
-}
+/// UI-016: a swipe on the photo (no decision buttons).
+Future<void> _decide(WidgetTester tester, String label) =>
+    swipeDecide(tester, like: label == 'Like');
 
 void main() {
   setUpAll(loadAppFonts);
@@ -23,17 +20,20 @@ void main() {
     await usePhoneSize(tester);
     await signUpToHome(tester, testAuth());
     expect(find.text('Maya, 29'), findsOneWidget);
-    expect(find.text('Sample profile'), findsOneWidget);
+    // UI-041: no "Sample profile" badge.
+    expect(find.text('Sample profile'), findsNothing);
+    // ER-01: the photo's "Sample profile" badge is the notice; the repeated line at the end of
+    // the profile is gone.
     expect(
       find.text(
         'Sample profiles. Photos are placeholders; distances are illustrative.',
       ),
-      findsOneWidget,
+      findsNothing,
     );
 
     await _decide(tester, 'Pass');
     expect(find.text('Sam, 31'), findsOneWidget);
-    await tapOn(tester, _action('Undo: bring back Maya'));
+    await tapOn(tester, _action('Backtrack: bring back Maya'));
     expect(find.text('Maya, 29'), findsOneWidget);
 
     await _decide(tester, 'Pass');
@@ -74,9 +74,10 @@ void main() {
       expect(find.text('It’s a match!'), findsOneWidget);
       expect(
         find.text('Maya is a sample profile: messages stay on this device.'),
-        findsOneWidget,
+        findsNothing, // UI-041
       );
 
+      await openChatFromMatch(tester);
       await tester.enterText(find.byType(TextField), 'Which record shop?');
       await tester.pump();
       await tapOn(tester, _action('Send'));
@@ -88,7 +89,7 @@ void main() {
         find.text(
           'Maya is a sample profile. Messages stay on this device and no one replies.',
         ),
-        findsOneWidget,
+        findsNothing, // UI-041
       );
 
       await tapOn(tester, _action('Back to messages'));
@@ -107,14 +108,14 @@ void main() {
       await signUpToHome(tester, testAuth());
       await _decide(tester, 'Like');
       await tester.pump(const Duration(milliseconds: 600));
-      await tapOn(tester, find.text('Keep browsing'));
+      await closeMatch(tester);
       await tester.pump(const Duration(milliseconds: 600));
       expect(find.text('Sam, 31'), findsOneWidget);
       expect(find.bySemanticsLabel('Messages, 1 new'), findsOneWidget);
 
       await openTab(tester, 'Messages');
       expect(find.text('New matches (1)'), findsOneWidget);
-      await tapOn(tester, _action('Message Maya'));
+      await tapOn(tester, find.bySemanticsLabel(RegExp(r'^Maya, new match')));
       await tester.pump(const Duration(milliseconds: 600));
       expect(
         find.text('You matched. Say hello and make it personal.'),
@@ -177,7 +178,7 @@ void main() {
     await tapOn(tester, find.text('Like back'));
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.text('It’s a match!'), findsOneWidget);
-    await tapOn(tester, find.text('Keep browsing'));
+    await closeMatch(tester);
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.bySemanticsLabel(RegExp('^Kemi, 27. Matched')), findsOneWidget);
 
@@ -200,6 +201,7 @@ void main() {
     await signUpToHome(tester, testAuth());
     await _decide(tester, 'Like');
     await tester.pump(const Duration(milliseconds: 600));
+    await openChatFromMatch(tester);
     await tester.enterText(find.byType(TextField), 'Hi!');
     await tester.pump();
     await tapOn(tester, _action('Send'));
@@ -214,17 +216,12 @@ void main() {
     await tester.pumpAndSettle();
     // B-54: an optional reason, kept on this device.
     expect(
-      find.text(
-        'Could you tell us why? Your answer stays on this device and Maya won’t know.',
-      ),
+      find.text('Could you tell us why? Maya won’t know.'),
       findsOneWidget,
     );
     await tapOn(tester, find.text('They didn’t reply'));
     await tester.pumpAndSettle();
-    expect(
-      find.text('Thanks. Your answer is saved on this device.'),
-      findsOneWidget,
-    );
+    expect(find.text('Thanks for telling us.'), findsOneWidget);
     expect(find.text('You’ve unmatched Maya'), findsOneWidget);
     await tapOn(tester, find.widgetWithText(NumayaButton, 'Back to messages'));
     await tester.pump(const Duration(milliseconds: 600));
@@ -240,6 +237,7 @@ void main() {
       await signUpToHome(tester, testAuth());
       await _decide(tester, 'Like');
       await tester.pump(const Duration(milliseconds: 600));
+      await openChatFromMatch(tester);
       await tester.enterText(find.byType(TextField), 'Hello');
       await tester.pump();
       await tapOn(tester, _action('Send'));
@@ -314,7 +312,7 @@ void main() {
       await signUpToHome(tester, testAuth());
       await _decide(tester, 'Like');
       await tester.pump(const Duration(milliseconds: 600));
-      await tapOn(tester, find.text('Keep browsing'));
+      await closeMatch(tester);
       await tester.pump(const Duration(milliseconds: 600));
 
       await openTab(tester, 'Profile');
@@ -336,8 +334,9 @@ void main() {
       expect(find.text('Still can’t load profiles'), findsOneWidget);
 
       await openTab(tester, 'Messages');
-      await tapOn(tester, _action('Message Maya'));
+      await tapOn(tester, find.bySemanticsLabel(RegExp(r'^Maya, new match')));
       await tester.pump(const Duration(milliseconds: 600));
+      await openChatFromMatch(tester);
       await tester.enterText(find.byType(TextField), 'Hi');
       await tester.pump();
       await tapOn(tester, _action('Send'));
@@ -380,6 +379,7 @@ void main() {
     await signUpToHome(tester, testAuth());
     await _decide(tester, 'Like');
     await tester.pump(const Duration(milliseconds: 600));
+    await openChatFromMatch(tester);
     await tester.enterText(find.byType(TextField), 'Record shops?');
     await tester.pump();
     await tapOn(tester, _action('Send'));
@@ -387,13 +387,22 @@ void main() {
     await tapOn(tester, _action('Back to messages'));
     await tester.pump(const Duration(milliseconds: 600));
     await openTab(tester, 'Messages');
+    // ER-03: search opens from the header icon (Bumble's Chats).
+    await tapOn(
+      tester,
+      find.bySemanticsLabel('Search names and messages').first,
+    );
+    await tester.pump(const Duration(milliseconds: 300));
+    await openChatFromMatch(tester);
     await tester.enterText(find.byType(TextField), 'record');
     await tester.pump();
     expect(find.text('You: Record shops?'), findsOneWidget);
+    await openChatFromMatch(tester);
     await tester.enterText(find.byType(TextField), 'zebra');
     await tester.pump();
     expect(find.text('Nothing matches “zebra”'), findsOneWidget);
     await tapOn(tester, find.bySemanticsLabel('Unread, 0'));
+    await openChatFromMatch(tester);
     await tester.enterText(find.byType(TextField), '');
     await tester.pump();
     expect(find.text('You’re all caught up'), findsOneWidget);

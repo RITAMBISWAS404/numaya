@@ -23,7 +23,8 @@ void main() {
     expect(s.height! * s.fontSize!, closeTo(20, 0.001), reason: '$what: line');
     // Regression: the old 16/24 default must not come back through an override.
     expect(s.fontSize, isNot(16), reason: '$what: not the old 16');
-    expect(s.fontWeight, FontWeight.w400, reason: '$what: Figtree 400');
+    // Ente Body is medium (500) (Ente experiment).
+    expect(s.fontWeight, FontWeight.w500, reason: '$what: Figtree 500');
   }
 
   group('TR-01: body copy is 14/20', () {
@@ -32,12 +33,17 @@ void main() {
       expect(AppTypography.body.fontFamily, 'Figtree');
     });
 
-    testWidgets('a Discover bio resolves to the body role', (tester) async {
+    // UI-020: the bio is the About me card's primary content, larger than its 14pt label.
+    testWidgets('a Discover bio is the card-primary role (UI-020)', (
+      tester,
+    ) async {
       await usePhoneSize(tester);
       await quickStartApp(tester);
       final bio = find.text('Designer by day, crate-digger by night.').first;
       await tester.ensureVisible(bio);
-      expectBody(resolved(tester, bio), 'bio');
+      final s = resolved(tester, bio);
+      expect(s.fontSize, AppTypography.cardPrimary.fontSize);
+      expect(s.fontSize, greaterThan(AppTypography.body.fontSize!));
       await settle(tester);
     });
 
@@ -101,8 +107,9 @@ void main() {
       final on = tester.widget<Text>(find.text('Jazz')).style!;
       expect(idle.fontSize, 12);
       expect(idle.height! * 12, closeTo(16, 0.001));
+      // Ente Filter Chip: Mini at 500 in both states; the fill carries the selection.
       expect(idle.fontWeight, FontWeight.w500);
-      expect(on.fontWeight, FontWeight.w600);
+      expect(on.fontWeight, FontWeight.w500);
       // The pill keeps its height; the smaller label does not shrink the control.
       expect(
         tester.getSize(find.byType(NumayaChip).first).height,
@@ -110,7 +117,7 @@ void main() {
       );
     });
 
-    testWidgets('view tabs and filters: 12/16 labels in a full-height pill', (
+    testWidgets('view tabs: Ente Tag Chip, Body 14/20 labels in a 44pt chip', (
       tester,
     ) async {
       await usePhoneSize(tester);
@@ -127,11 +134,11 @@ void main() {
           .toList();
       expect(styles, isNotEmpty);
       for (final s in styles) {
-        expect(s.fontSize, 12);
+        expect(s.fontSize, 14);
       }
       expect(
         tester.getSize(find.byType(ViewTabs).first).height,
-        greaterThanOrEqualTo(AppSizes.chip),
+        greaterThanOrEqualTo(AppSizes.tagChip),
       );
       await settle(tester);
     });

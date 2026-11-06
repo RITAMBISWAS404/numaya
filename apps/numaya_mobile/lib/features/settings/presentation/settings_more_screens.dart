@@ -78,7 +78,6 @@ class _NotificationSettingsScreenState
               ),
               const SizedBox(height: AppSpacing.s4),
               ListGroup(
-                footnote: l10n.notifEmailNote,
                 children: [
                   ListRow(
                     label: l10n.notifPush,
@@ -131,7 +130,6 @@ class _NotificationSettingsScreenState
         children: [
           const SizedBox(height: AppSpacing.s4),
           ListGroup(
-            footnote: l10n.settingsNotificationsNote,
             children: [
               for (final c in NotificationCategory.values)
                 ListRow(

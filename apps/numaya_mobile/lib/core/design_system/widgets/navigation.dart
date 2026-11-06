@@ -9,7 +9,7 @@ import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
 import '../tokens/monochrome_tokens.dart';
-import 'content.dart' show MetaText, SheetSurface;
+import 'content.dart' show MetaText;
 import 'icon_tile.dart';
 import 'people.dart';
 import 'primitives.dart';
@@ -52,6 +52,11 @@ enum TabBarSurface {
 
   /// The opaque white pill on a strip of page colour: the approved design, and the fallback.
   opaque,
+
+  /// Ente Nav Bar (7634:54194): an opaque white bar with 20pt corners and Ente's soft drop shadow,
+  /// floating over content (no glass, no page strip), 38pt icon tiles with 12pt corners. The
+  /// shipped surface on the Ente experiment.
+  ente,
 }
 
 /// Bottom navigation: a floating pill holding icons only, centred above the home indicator.
@@ -66,11 +71,14 @@ class NumayaTabBar extends StatelessWidget {
     required this.currentIndex,
     required this.onSelect,
     this.indicator = TabIndicatorStyle.tint,
-    this.surface = TabBarSurface.frosted,
+    this.surface = TabBarSurface.ente,
   });
 
   /// Space between the pill's edge and each item.
   static const double tabInset = 6;
+
+  /// Marks the visible bar (any surface), so layouts and tests can find its bounds.
+  static const Key pillKey = ValueKey('numaya-tab-bar-pill');
 
   final List<TabItem> items;
   final int currentIndex;
@@ -86,8 +94,10 @@ class NumayaTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final bottom = MediaQuery.paddingOf(context).bottom;
     final frosted = frostedIn(context);
+    final ente = surface == TabBarSurface.ente;
+    if (ente) return _compact(context, bottom);
     return _frame(
-      frosted: frosted,
+      frosted: frosted || ente,
       systemInset: bottom,
       child: Padding(
         padding: EdgeInsets.fromLTRB(
@@ -104,14 +114,23 @@ class NumayaTabBar extends StatelessWidget {
             final extra = indicator == TabIndicatorStyle.expanded
                 ? AppSizes.tabItem * 0.7
                 : 0.0;
-            const inner = 2 * tabInset;
-            var gap = AppSpacing.s2;
+            // The Ente bar insets its row 12 each side; the other pills 6.
+            final inner = ente ? 2 * (15.0 - 3) : 2 * tabInset;
+            var gap = ente ? AppSpacing.s6 : AppSpacing.s2;
             var item = AppSizes.tabItem;
-            double need() => inner + n * item + extra + (n - 1) * gap;
+            // Each item lays out at least its 44pt hit area (Pressable.minSize), even when the
+            // visible Ente tile is 38.
+            double need() =>
+                inner +
+                n * (item > AppSizes.touchMin ? item : AppSizes.touchMin) +
+                extra +
+                (n - 1) * gap;
+            if (ente && need() > box.maxWidth) gap = AppSpacing.s4;
+            if (ente && need() > box.maxWidth) gap = AppSpacing.s2;
             if (need() > box.maxWidth) gap = AppSpacing.s1;
             if (need() > box.maxWidth) {
               item = ((box.maxWidth - inner - extra - (n - 1) * gap) / n).clamp(
-                48.0,
+                AppSizes.tabItem,
                 AppSizes.tabItem,
               );
             }
@@ -120,16 +139,33 @@ class NumayaTabBar extends StatelessWidget {
               children: [
                 for (var i = 0; i < n; i++) ...[
                   if (i > 0) SizedBox(width: gap),
-                  _tab(context, i, item, frosted: frosted),
+                  _tab(context, i, item, frosted: frosted, ente: ente),
                 ],
               ],
             );
+            if (ente) {
+              // Ente's bar insets its tiles 15pt from the ends; the 44pt hit areas centre in it.
+              return Center(
+                heightFactor: 1,
+                child: Container(
+                  key: pillKey,
+                  height: AppSizes.tabBar,
+                  padding: const EdgeInsets.symmetric(horizontal: 15 - 3),
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: AppRadii.all(AppRadii.control),
+                    boxShadow: AppElevation.floating,
+                  ),
+                  child: row,
+                ),
+              );
+            }
             if (!frosted) {
               return Center(
                 heightFactor: 1,
                 child: Container(
                   height: AppSizes.tabBar,
-                  padding: const EdgeInsets.all(inner / 2),
+                  padding: EdgeInsets.all(inner / 2),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: AppRadii.all(AppRadii.pill),
@@ -154,7 +190,7 @@ class NumayaTabBar extends StatelessWidget {
                     children: [
                       Container(
                         height: AppSizes.tabBar,
-                        padding: const EdgeInsets.all(inner / 2),
+                        padding: EdgeInsets.all(inner / 2),
                         decoration: BoxDecoration(
                           color: MonoGlass.tint,
                           borderRadius: AppRadii.all(AppRadii.pill),
@@ -191,6 +227,118 @@ class NumayaTabBar extends StatelessWidget {
     );
   }
 
+  /// The compact bar (UI-026/UI-027, A-013's lower example): sized by its items, never stretched.
+  /// 8pt of visible padding on every edge, 4pt between item bounds, 48 x 38 items, fully rounded
+  /// bar and items, and the shared soft navigation shadow. Safe-area spacing sits outside the bar.
+  ///
+  /// Hit areas: each item is 48 wide (above the 44pt minimum) and its tap target reaches 3pt above
+  /// and below the 38pt tile into the bar's padding, so every target is 48 x 44 without touching a
+  /// neighbour's (they stay 4pt apart).
+  Widget _compact(BuildContext context, double bottom) {
+    const reach = (AppSizes.touchMin - AppSizes.tabItem) / 2;
+    final row = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var i = 0; i < items.length; i++) ...[
+          if (i > 0) const SizedBox(width: AppSizes.tabGap),
+          _compactTab(context, i),
+        ],
+      ],
+    );
+    return _frame(
+      frosted: true,
+      systemInset: bottom,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.s4,
+          AppSpacing.s2,
+          AppSpacing.s4,
+          bottom > 0 ? bottom : AppSpacing.s4,
+        ),
+        child: Center(
+          heightFactor: 1,
+          child: Container(
+            key: pillKey,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.tabPadding,
+              vertical: AppSizes.tabPadding - reach,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: AppRadii.all(AppRadii.pill),
+              boxShadow: AppElevation.navigation,
+            ),
+            // A very narrow screen scrolls the row rather than squeezing items below 48.
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: row,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _compactTab(BuildContext context, int i) {
+    final item = items[i];
+    final current = i == currentIndex;
+    final duration = AppMotion.duration(context, AppMotion.state);
+    final fg = current ? AppColors.accentOnTint : AppColors.textSecondary;
+    return Semantics(
+      selected: current,
+      button: true,
+      child: Tooltip(
+        message: item.label,
+        excludeFromSemantics: true,
+        child: Pressable(
+          onTap: () => onSelect(i),
+          semanticLabel: item.badgeCount > 0
+              ? (item.badgeLabel ?? item.label)
+              : item.label,
+          excludeChildSemantics: true,
+          pressedScale: 0.95,
+          borderRadius: AppRadii.all(AppRadii.pill),
+          child: AnimatedContainer(
+            duration: duration,
+            curve: AppMotion.easeOut,
+            width: AppSizes.tabItemWidth,
+            height: AppSizes.tabItem,
+            decoration: BoxDecoration(
+              color: current ? AppColors.accentTint : const Color(0x00FFFFFF),
+              borderRadius: AppRadii.all(AppRadii.pill),
+            ),
+            alignment: Alignment.center,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                NumayaIcon(
+                  item.icon,
+                  outline: !current,
+                  size: AppSizes.iconMd,
+                  color: fg,
+                ),
+                if (item.badgeCount > 0)
+                  Positioned(
+                    right: -3,
+                    top: -2,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: AppColors.negative,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.surface, width: 2),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   /// Opaque: the pill on a strip of page colour, as approved. Frosted: content shows around and
   /// beneath the pill, except under the system navigation (the three buttons or the gesture
   /// handle), which keeps a near-opaque page-colour strip so Android's own controls stay legible
@@ -221,13 +369,16 @@ class NumayaTabBar extends StatelessWidget {
     int i,
     double size, {
     required bool frosted,
+    bool ente = false,
   }) {
     final item = items[i];
     final current = i == currentIndex;
     final duration = AppMotion.duration(context, AppMotion.state);
     // On glass, unselected icons take the stronger secondary ink: the muted grey drops to 3.38:1
     // over a dark photo, text2 stays at 5.46:1 or better.
-    final idle = frosted ? AppColors.textSecondary : AppColors.textMuted;
+    final idle = frosted || ente
+        ? AppColors.textSecondary
+        : AppColors.textMuted;
     final (Color bg, Color fg) = !current
         ? (const Color(0x00FFFFFF), idle)
         : switch (indicator) {
@@ -249,7 +400,9 @@ class NumayaTabBar extends StatelessWidget {
         : size;
     // The tint sits 6pt inside a 64pt pill, so its corner is the pill's minus the inset: a 52pt
     // item becomes a circle, concentric with the bar's ends (FP-06).
-    final radius = indicator == TabIndicatorStyle.tint
+    final radius = ente
+        ? AppRadii.iconButton
+        : indicator == TabIndicatorStyle.tint
         ? AppRadii.nested(AppSizes.tabBar / 2, tabInset)
         : AppRadii.pill;
     return Semantics(
@@ -264,7 +417,8 @@ class NumayaTabBar extends StatelessWidget {
               ? (item.badgeLabel ?? item.label)
               : item.label,
           excludeChildSemantics: true,
-          pressedScale: 0.92,
+          // Subtle press feedback (0.95-0.98 range); 0.92 squashed the 26pt icon (FD-B3).
+          pressedScale: 0.95,
           borderRadius: AppRadii.all(radius),
           child: AnimatedContainer(
             duration: duration,
@@ -279,7 +433,12 @@ class NumayaTabBar extends StatelessWidget {
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                NumayaIcon(item.icon, outline: !current, size: 26, color: fg),
+                NumayaIcon(
+                  item.icon,
+                  outline: !current,
+                  size: ente ? AppSizes.iconMd : 26,
+                  color: fg,
+                ),
                 if (item.badgeCount > 0)
                   Positioned(
                     right: -3,
@@ -303,8 +462,9 @@ class NumayaTabBar extends StatelessWidget {
   }
 }
 
-/// Switch: iOS proportions (51 × 31). On: brand purple with a white thumb. Off: the grey fill with
-/// a 1.5pt outline in the 3:1 control grey, so the off state still reads as a control.
+/// Ente Toggle Switch (2482:6644) at 1.5x its 31 x 18 drawing (46 x 27, a Numaya extension so the
+/// knob reads on a phone). On: Numaya purple (Ente's primary) with a white knob. Off (UI-025): a
+/// solid grey track with a white knob and no outline, as Ente's Selected=False (2482:6647).
 class NumayaSwitch extends StatelessWidget {
   const NumayaSwitch({super.key, required this.value, required this.onChanged});
 
@@ -313,7 +473,10 @@ class NumayaSwitch extends StatelessWidget {
 
   /// Component cleanup (CL-01). States, resolved here so every switch matches:
   /// - **on:** brand track, white thumb with a soft shadow;
-  /// - **off:** light-grey track (`fillStrong`), white thumb with the same shadow; no outline;
+  /// - **off** (UI-025, 2026-11-06 decision): the lighter existing neutral `switchOff` track, no
+  ///   outline, as the reviewer asked (A-025 showed the darker grey). The track alone is faint on
+  ///   white, so the white thumb keeps a hairline ink edge as well as its shadow: the knob, its
+  ///   position and the row's toggled semantics carry the state;
   /// - **disabled** (`onChanged == null`): the same shape at 45% opacity;
   /// - **pressed and focused:** owned by the row around the switch (`ListRow`/`Pressable`
   ///   press scale and focus ring), so the whole row is the hit area.
@@ -328,6 +491,8 @@ class NumayaSwitch extends StatelessWidget {
       height: AppSizes.switchHeight,
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
+        // UI-025: Ente's off state (2482:6647) is a solid grey track with a white knob and no
+        // outline, in the lighter existing neutral the review asked for.
         color: value ? AppColors.accent : AppColors.switchOff,
         borderRadius: AppRadii.all(AppRadii.pill),
       ),
@@ -341,8 +506,10 @@ class NumayaSwitch extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.surface,
             shape: BoxShape.circle,
-            // A faint ink edge (8%) keeps the white thumb distinct from a white card when off.
-            border: Border.all(color: AppColors.ink.withValues(alpha: 0.08)),
+            border: Border.all(
+              color: AppColors.ink.withValues(alpha: 0.08),
+              width: AppBorders.hairline,
+            ),
             boxShadow: AppElevation.thumb,
           ),
         ),
@@ -396,7 +563,7 @@ class ListRow extends StatelessWidget {
             AppLayout.tileLabelGap
       : leading == null
       ? 0
-      : AppSizes.iconMd + AppLayout.tileLabelGap;
+      : AppSizes.iconTile + AppLayout.tileLabelGap;
 
   /// A person's avatar in place of [leading] (people lists).
   final Widget? avatar;
@@ -408,6 +575,9 @@ class ListRow extends StatelessWidget {
     final row = Container(
       constraints: const BoxConstraints(minHeight: AppSizes.row),
       padding: EdgeInsets.symmetric(
+        // UI-044: one inset for the list-card family: 16pt across (the card padding, as option
+        // rows and fields use) and 12pt down, inside its own white card. Flush rows sit inside a
+        // card that already pads them.
         horizontal: flush ? 0 : AppLayout.cardPadding,
         vertical: AppSpacing.s3,
       ),
@@ -445,12 +615,17 @@ class ListRow extends StatelessWidget {
           avatar!,
           const SizedBox(width: AppLayout.tileLabelGap),
         ] else if (leading != null) ...[
-          // Plain monochrome icons beside the label (CL-02): no coloured tile. Red only on a
-          // destructive row; purple stays for brand and selection.
-          NumayaIcon(
-            leading!,
-            size: AppSizes.iconMd,
-            color: danger ? AppColors.negative : AppColors.textSecondary,
+          // Ente Menu Item Icon (4055:5652): a 36pt slot, the glyph alone in text/light (no tile
+          // background), red on a destructive row.
+          SizedBox.square(
+            dimension: AppSizes.iconTile,
+            child: Center(
+              child: NumayaIcon(
+                leading!,
+                size: AppSizes.iconMd,
+                color: danger ? AppColors.negative : AppColors.textMuted,
+              ),
+            ),
           ),
           const SizedBox(width: AppLayout.tileLabelGap),
         ],
@@ -477,7 +652,7 @@ class ListRow extends StatelessWidget {
                 MetaText(
                   detail!,
                   style: AppTypography.caption.copyWith(
-                    color: AppColors.textSecondary,
+                    color: AppColors.textMuted,
                   ),
                 ),
               ],
@@ -510,7 +685,7 @@ class ListRow extends StatelessWidget {
             padding: EdgeInsets.only(left: AppSpacing.s2),
             child: NumayaIcon(
               NumayaIcons.chevronRight,
-              size: AppSizes.iconMd,
+              size: AppSizes.iconLg,
               color: AppColors.textMuted,
             ),
           ),
@@ -573,7 +748,7 @@ class ListGroup extends StatelessWidget {
   /// BM-02: rows on the surface's own colour, aligned to the content gutter, for a group that sits
   /// on a white sheet. A white card on a white sheet draws nothing but still indents its rows, so
   /// their labels started 20pt inside the headings above them.
-  /// Defaults to true inside a Numaya sheet ([SheetSurface]).
+  /// Defaults to false everywhere, sheets included (UI-023).
   final bool? flush;
 
   /// Hairlines between rows. Off for groups whose rows are self-contained (cards, previews).
@@ -585,7 +760,8 @@ class ListGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final flush = this.flush ?? SheetSurface.of(context);
+    // UI-023: sheets are the grey page surface now, so groups default to white cards there too.
+    final flush = this.flush ?? false;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -597,39 +773,47 @@ class ListGroup extends StatelessWidget {
               child: Text(title!, style: AppTypography.section),
             ),
           ),
-        Container(
-          decoration: flush
-              ? null
-              : BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: AppRadii.all(AppRadii.card),
-                ),
-          clipBehavior: flush ? Clip.none : Clip.antiAlias,
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: flush ? 0 : AppSpacing.s1),
-            child: Column(
-              children: [
-                for (var i = 0; i < children.length; i++) ...[
-                  if (i > 0 && dividers)
-                    Padding(
-                      padding: EdgeInsetsDirectional.only(
-                        start: _inset(children[i], flush),
-                        end: flush ? 0 : AppLayout.cardPadding,
-                      ),
-                      child: const ExcludeSemantics(
-                        child: SizedBox(
-                          height: AppBorders.hairline,
-                          width: double.infinity,
-                          child: ColoredBox(color: AppColors.divider),
-                        ),
+        // OV-02: related rows share one white 20pt card with no hairlines, as Ente's newer
+        // Settings composition (Updated screens, 12099:96480) groups them; a one-row group is the
+        // single-row card of its Account screen. (The older menu item list, 5906:38912, gave
+        // every row its own card; on long menus that read as a tower of separate buttons.)
+        // Selectable option lists keep their separate cards (UI-003, OptionGroup).
+        // On a white surface ([flush]) the rows sit on it, divided by hairlines.
+        if (!flush)
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: AppRadii.all(AppRadii.card),
+            ),
+            child: ClipRRect(
+              borderRadius: AppRadii.all(AppRadii.card),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: children,
+              ),
+            ),
+          )
+        else
+          Column(
+            children: [
+              for (var i = 0; i < children.length; i++) ...[
+                if (i > 0 && dividers)
+                  Padding(
+                    padding: EdgeInsetsDirectional.only(
+                      start: _inset(children[i], flush),
+                    ),
+                    child: const ExcludeSemantics(
+                      child: SizedBox(
+                        height: AppBorders.hairline,
+                        width: double.infinity,
+                        child: ColoredBox(color: AppColors.divider),
                       ),
                     ),
-                  if (flush) _FlushRows(child: children[i]) else children[i],
-                ],
+                  ),
+                _FlushRows(child: children[i]),
               ],
-            ),
+            ],
           ),
-        ),
         if (footnote != null)
           Padding(
             padding: const EdgeInsets.fromLTRB(
@@ -638,12 +822,8 @@ class ListGroup extends StatelessWidget {
               AppSpacing.s1,
               0,
             ),
-            child: Text(
-              footnote!,
-              style: AppTypography.caption.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
+            // UI-045: helper copy under a list card is the muted caption.
+            child: Text(footnote!, style: AppTypography.caption),
           ),
       ],
     );

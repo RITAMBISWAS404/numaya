@@ -13,46 +13,51 @@ void main() {
   Finder inHero(Finder f) =>
       find.descendant(of: find.byType(PersonHeroCard), matching: f);
 
-  testWidgets(
-    'DX-02: shared interests sit with identity, once, before the decision',
-    (tester) async {
-      await usePhoneSize(tester);
-      await quickStartApp(tester);
-      expect(inHero(find.text('You both like')), findsOneWidget);
-      // Not repeated in the profile body.
-      expect(find.text('You both like'), findsOneWidget);
-      await settle(tester);
-    },
-  );
+  // DX-02 is superseded by UI-015: shared interests are their own section below the photo.
+  testWidgets('UI-015: shared interests are a section below the photo, once', (
+    tester,
+  ) async {
+    await usePhoneSize(tester);
+    await quickStartApp(tester);
+    expect(inHero(find.text('You both like')), findsNothing);
+    final shared = find.byKey(const ValueKey('shared-interests'));
+    await tester.scrollUntilVisible(
+      shared,
+      200,
+      scrollable: find
+          .byWidgetPredicate(
+            (w) => w is Scrollable && w.axisDirection == AxisDirection.down,
+          )
+          .first,
+    );
+    expect(find.text('You both like'), findsOneWidget);
+    await settle(tester);
+  });
 
   testWidgets(
-    'DX-02: above 160% text they return to the body, so actions stay visible',
+    'UI-015: at 200% text on a 320pt phone the section still follows',
     (tester) async {
       await usePhoneSize(tester, size: const Size(320, 693));
       tester.platformDispatcher.textScaleFactorTestValue = 2;
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
       await quickStartApp(tester);
       expect(inHero(find.text('You both like')), findsNothing);
-      // The decision row is on screen on arrival.
-      final like = tester.getRect(find.bySemanticsLabel('Like').last);
-      expect(like.bottom, lessThan(693));
+      // UI-016: no decision row to keep on screen; the name is on the photo on arrival.
+      expect(find.text('Maya, 29'), findsOneWidget);
+      expect(tester.getRect(find.text('Maya, 29')).bottom, lessThan(693));
       await settle(tester);
     },
   );
 
-  testWidgets('DX-03: the Opening Moves suggestion follows the conversations', (
+  // DX-03 is superseded by UI-031: no Opening Moves promotion in the first release.
+  testWidgets('UI-031: Messages shows no Opening Moves suggestion', (
     tester,
   ) async {
     await usePhoneSize(tester);
     final c = await quickStartApp(tester);
     await goTo(c, tester, Routes.messages);
-    final promo = find.text('Skip the small talk');
-    await tester.ensureVisible(promo);
-    await tester.pump();
-    expect(
-      tester.getTopLeft(promo).dy,
-      greaterThan(tester.getTopLeft(find.text('Priya')).dy),
-    );
+    expect(find.text('Skip the small talk'), findsNothing);
+    expect(find.text('Priya'), findsWidgets);
     await settle(tester);
   });
 }

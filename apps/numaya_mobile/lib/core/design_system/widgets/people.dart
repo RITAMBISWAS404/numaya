@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show OverflowBoxFit;
+import 'package:flutter/semantics.dart' show CustomSemanticsAction;
 
 import '../foundations/app_colors.dart';
 import '../foundations/app_haptics.dart';
@@ -9,6 +10,7 @@ import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
+import 'buttons.dart' show NavButtonStyle, NavIconButton;
 import 'content.dart' show MetaText;
 import 'primitives.dart';
 
@@ -232,19 +234,26 @@ class StatusBadge extends StatelessWidget {
   }
 }
 
-/// A white card with a card title (`.theme-withings .profile-section`): someone's prompt, "You
-/// both like", "About me", "My location".
+/// A white content card (`.theme-withings .profile-section`): someone's "About me", "You both
+/// like", "My location", an event answer.
+///
+/// UI-020: the card's [title] is a small muted label above the content, and the content carries
+/// the emphasis (callers set its text in [AppTypography.cardPrimary] or show chips), the same
+/// hierarchy as the prompt card (UI-007). [explainer] keeps the title as a real heading for cards
+/// whose body explains the title (help-style "how it works" cards), where the title is the point.
 class ProfileSectionCard extends StatelessWidget {
   const ProfileSectionCard({
     super.key,
     required this.title,
     required this.child,
     this.leading,
+    this.explainer = false,
   });
 
   final String title;
   final Widget child;
   final Widget? leading;
+  final bool explainer;
 
   @override
   Widget build(BuildContext context) {
@@ -267,12 +276,19 @@ class ProfileSectionCard extends StatelessWidget {
               Expanded(
                 child: Semantics(
                   header: true,
-                  child: Text(title, style: AppTypography.card),
+                  child: Text(
+                    title,
+                    style: explainer
+                        ? AppTypography.card
+                        : AppTypography.label.copyWith(
+                            color: AppColors.textMuted,
+                          ),
+                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: AppSpacing.s3),
+          SizedBox(height: explainer ? AppSpacing.s3 : AppSpacing.s2),
           child,
         ],
       ),
@@ -297,6 +313,10 @@ class InfoChip extends StatelessWidget {
   /// On the stone page the chip is white; on a white card it takes the fill.
   final bool onPage;
 
+  /// The emoji's size and its gap to the label, shared by every emoji pill (UI-019).
+  static const double emojiSize = 16;
+  static const double emojiGap = 6;
+
   @override
   Widget build(BuildContext context) {
     // At least the chip height, and taller when a long value wraps at large text: a person's own
@@ -316,9 +336,12 @@ class InfoChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // UI-019: profile-detail pills lead with an emoji (an explicit exception to the Lucide
+          // icon family, which every other app icon keeps), one size and one 6pt gap for all of
+          // them. The emoji is decorative: the label alone is announced.
           if (emoji != null) ...[
-            Emoji(emoji!, size: 15.5),
-            const SizedBox(width: AppLayout.compactIconGap),
+            Emoji(emoji!, size: InfoChip.emojiSize),
+            const SizedBox(width: InfoChip.emojiGap),
           ],
           if (icon != null) ...[
             NumayaIcon(icon!, size: 16, color: AppColors.textMuted),
@@ -364,6 +387,40 @@ class DecisionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Floating over a profile being read (final design run FD-B2): three compact 56pt circles,
+    // centred, icon-only (labels stay in the tooltip and semantics). The full-width labelled row
+    // stacked on top of the tab bar covered about 190pt of the profile on a phone; the reading view
+    // needs the actions present, not dominant (Bumble keeps one compact action over content).
+    if (floating) {
+      return Center(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final (i, kind) in ActionKind.values.indexed) ...[
+              if (i > 0) const SizedBox(width: AppSpacing.s4),
+              SizedBox.square(
+                dimension: height,
+                child: _DecisionPill(
+                  kind: kind,
+                  label: switch (kind) {
+                    ActionKind.pass => passLabel,
+                    ActionKind.superSwipe => superLabel,
+                    ActionKind.like => likeLabel,
+                  },
+                  showLabel: false,
+                  floating: true,
+                  onPressed: switch (kind) {
+                    ActionKind.pass => onPass,
+                    ActionKind.superSwipe => onSuper,
+                    ActionKind.like => onLike,
+                  },
+                ),
+              ),
+            ],
+          ],
+        ),
+      );
+    }
     return LayoutBuilder(
       builder: (context, box) {
         // Labels need about 112pt per wide pill at the current text size.
@@ -458,12 +515,16 @@ class _DecisionPill extends StatelessWidget {
         semanticLabel: label,
         excludeChildSemantics: true,
         pressedScale: 0.96,
-        borderRadius: AppRadii.all(AppRadii.pill),
+        borderRadius: AppRadii.all(floating ? AppRadii.pill : AppRadii.control),
+        // Ente Button Large geometry inline (20pt corners); the floating trio stays circular, as
+        // Ente's Icon Button Type=Circular for controls over photos.
         child: Container(
           height: DecisionBar.height,
           decoration: BoxDecoration(
             color: bg,
-            borderRadius: AppRadii.all(AppRadii.pill),
+            borderRadius: AppRadii.all(
+              floating ? AppRadii.pill : AppRadii.control,
+            ),
             border: edge == null
                 ? null
                 : Border.all(
@@ -617,11 +678,14 @@ class _ComposerState extends State<Composer> {
             constraints: const BoxConstraints(
               minHeight: kMinInteractiveDimension,
             ),
+            // UI-037/UI-038: Ente Text Input's Default state (2275:11693) has no idle stroke. The
+            // field sits in the white composer bar, so it takes the light fill to read as a field
+            // (as Bumble's composer does); focused keeps the 2pt Numaya-purple edge.
             decoration: BoxDecoration(
-              color: focused ? AppColors.surface : AppColors.field,
-              borderRadius: AppRadii.all(24),
+              color: AppColors.fill,
+              borderRadius: AppRadii.all(AppRadii.field),
               border: Border.all(
-                color: focused ? AppColors.focusField : Colors.transparent,
+                color: focused ? AppColors.focusField : const Color(0x00EAEAEA),
                 width: AppBorders.focus,
                 strokeAlign: BorderSide.strokeAlignInside,
               ),
@@ -645,7 +709,7 @@ class _ComposerState extends State<Composer> {
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.s4,
-                    vertical: 13,
+                    vertical: 14, // a 20pt line plus 28: the 48dp target
                   ),
                   hintText: widget.placeholder,
                   hintStyle: AppTypography.row.copyWith(
@@ -677,8 +741,9 @@ class _ComposerState extends State<Composer> {
                   shape: BoxShape.circle,
                 ),
                 alignment: Alignment.center,
+                // UI-039: a plain upward arrow.
                 child: NumayaIcon(
-                  NumayaIcons.send,
+                  NumayaIcons.arrowUp,
                   size: 22,
                   color: canSend
                       ? AppColors.inkForeground
@@ -703,12 +768,18 @@ class MessageBubble extends StatelessWidget {
     this.grouped = false,
     this.dimmed = false,
     this.mine = true,
+    this.replyAuthor,
+    this.replyText,
   });
 
   final String text;
   final bool grouped;
   final bool dimmed;
   final bool mine;
+
+  /// The message this one answers (UI-036): who wrote it and its text, quoted at the top.
+  final String? replyAuthor;
+  final String? replyText;
 
   @override
   Widget build(BuildContext context) {
@@ -722,27 +793,354 @@ class MessageBubble extends StatelessWidget {
           opacity: dimmed ? AppOpacity.pending : 1,
           child: Container(
             margin: EdgeInsets.only(top: grouped ? 4 : AppSpacing.s2),
-            // Bubble inset on the 4 grid (SP-04): 12 across, 8 down.
+            // Ente Comment Bubble (5412:23548 / 5412:23575): 20pt corners with one 6pt corner on
+            // the sender's side. UI-040: Numaya purple for your own, white for theirs.
+            // Inset 16 across and 12 down (Ente uses 16 all round; tightened for chat density).
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.s3,
-              vertical: AppSpacing.s2,
+              horizontal: AppSpacing.s4,
+              vertical: AppSpacing.s3,
             ),
             decoration: BoxDecoration(
               color: mine ? AppColors.accent : AppColors.surface,
               borderRadius: BorderRadius.only(
-                topLeft: const Radius.circular(AppRadii.card),
-                topRight: const Radius.circular(AppRadii.card),
-                bottomLeft: Radius.circular(mine ? AppRadii.card : 6),
-                bottomRight: Radius.circular(mine ? 6 : AppRadii.card),
+                topLeft: Radius.circular(mine ? AppRadii.card : 6),
+                topRight: Radius.circular(mine ? 6 : AppRadii.card),
+                bottomLeft: const Radius.circular(AppRadii.card),
+                bottomRight: const Radius.circular(AppRadii.card),
               ),
             ),
-            child: Text(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (replyText != null) ...[
+                  _QuotedReply(
+                    author: replyAuthor ?? '',
+                    text: replyText!,
+                    onAccent: mine,
+                  ),
+                  const SizedBox(height: AppSpacing.s2),
+                ],
+                Text(
+                  text,
+                  style: AppTypography.body.copyWith(
+                    color: mine ? AppColors.accentForeground : AppColors.ink,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A replied-to message quoted inside a bubble or above the composer (UI-036): a 3pt bar, the
+/// author in semibold, then up to two lines of their text.
+class _QuotedReply extends StatelessWidget {
+  const _QuotedReply({
+    required this.author,
+    required this.text,
+    required this.onAccent,
+  });
+
+  final String author;
+  final String text;
+  final bool onAccent;
+
+  @override
+  Widget build(BuildContext context) {
+    final fg = onAccent ? AppColors.accentForeground : AppColors.textSecondary;
+    return _BarSurface(
+      color: onAccent ? const Color(0x26FFFFFF) : AppColors.canvas,
+      bar: onAccent ? AppColors.accentForeground : AppColors.accent,
+      radius: AppRadii.tag,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.s2,
+          AppSpacing.s1,
+          AppSpacing.s2,
+          AppSpacing.s1,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              author,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.weight(
+                AppTypography.caption,
+                AppTypography.semibold,
+              ).copyWith(color: fg),
+            ),
+            Text(
               text,
-              style: AppTypography.body.copyWith(
-                color: mine ? AppColors.accentForeground : AppColors.ink,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.caption.copyWith(color: fg),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The reply being written (UI-036), shown at the top of the composer: who is being answered,
+/// their text on one line, and a cancel button.
+class ReplyPreview extends StatelessWidget {
+  const ReplyPreview({
+    super.key,
+    required this.title,
+    required this.text,
+    required this.cancelLabel,
+    required this.onCancel,
+  });
+
+  final String title;
+  final String text;
+  final String cancelLabel;
+  final VoidCallback onCancel;
+
+  @override
+  Widget build(BuildContext context) {
+    return _BarSurface(
+      color: AppColors.canvas,
+      bar: AppColors.accent,
+      radius: AppRadii.tile,
+      child: Row(
+        children: [
+          const SizedBox(width: AppSpacing.s3),
+          Expanded(
+            child: Semantics(
+              liveRegion: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.weight(
+                      AppTypography.caption,
+                      AppTypography.semibold,
+                    ).copyWith(color: AppColors.accentOnTint),
+                  ),
+                  Text(
+                    text,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.caption,
+                  ),
+                ],
               ),
             ),
           ),
+          NavIconButton(
+            icon: NumayaIcons.close,
+            label: cancelLabel,
+            style: NavButtonStyle.plain,
+            onPressed: onCancel,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A rounded surface with a 3pt accent bar on its leading edge (quoted replies, the reply
+/// preview). The bar is a child, clipped by the corners: Flutter cannot paint a one-sided border
+/// with rounded corners.
+class _BarSurface extends StatelessWidget {
+  const _BarSurface({
+    required this.color,
+    required this.bar,
+    required this.radius,
+    required this.child,
+  });
+
+  final Color color;
+  final Color bar;
+  final double radius;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: AppRadii.all(radius),
+      child: ColoredBox(
+        color: color,
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ColoredBox(color: bar, child: const SizedBox(width: 3)),
+              Flexible(child: child),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// One chat message with its two horizontal gestures (UI-035, UI-036).
+///
+/// - Drag **left**: reveals the message's exact send [time] at the right edge of the row. Your own
+///   bubble slides left to make room; the other person's bubble barely moves (it already leaves
+///   the right of the row free). The time hides again on release.
+/// - Drag **right** past [replyThreshold]: starts a reply to this message ([onReply]). A reply
+///   glyph fades in behind the bubble while dragging; crossing the threshold gives one selection
+///   haptic, and the bubble springs back on release.
+///
+/// Movement is bounded, and the drag only claims horizontal gestures, so vertical scrolling keeps
+/// working. [timeShown] pins the time open without a gesture (the long-press and screen-reader
+/// alternatives); [semanticActions] carries those alternatives for assistive technology.
+class SwipeableMessage extends StatefulWidget {
+  const SwipeableMessage({
+    super.key,
+    required this.child,
+    required this.mine,
+    required this.time,
+    required this.onReply,
+    this.timeShown = false,
+    this.onLongPress,
+    this.semanticActions = const {},
+  });
+
+  final Widget child;
+  final bool mine;
+  final String time;
+  final VoidCallback onReply;
+  final bool timeShown;
+  final VoidCallback? onLongPress;
+  final Map<CustomSemanticsAction, VoidCallback> semanticActions;
+
+  /// How far right a drag must travel to start a reply.
+  static const double replyThreshold = 56;
+
+  /// The furthest a bubble moves either way.
+  static const double maxRight = 72;
+  static const double maxLeft = 64;
+
+  @override
+  State<SwipeableMessage> createState() => _SwipeableMessageState();
+}
+
+class _SwipeableMessageState extends State<SwipeableMessage>
+    with SingleTickerProviderStateMixin {
+  double _dx = 0;
+  bool _armed = false;
+  late final AnimationController _settle = AnimationController(vsync: this)
+    ..addListener(() => setState(() => _dx = _from * (1 - _settle.value)));
+  double _from = 0;
+
+  @override
+  void dispose() {
+    _settle.dispose();
+    super.dispose();
+  }
+
+  void _update(DragUpdateDetails d) {
+    _settle.stop();
+    setState(() {
+      _dx = (_dx + (d.primaryDelta ?? 0)).clamp(
+        -SwipeableMessage.maxLeft,
+        SwipeableMessage.maxRight,
+      );
+    });
+    final armed = _dx >= SwipeableMessage.replyThreshold;
+    if (armed && !_armed) AppHaptics.fire(context, HapticMoment.selection);
+    _armed = armed;
+  }
+
+  void _end([DragEndDetails? _]) {
+    if (_armed) widget.onReply();
+    _armed = false;
+    _from = _dx;
+    if (_from == 0) return;
+    final duration = AppMotion.duration(context, AppMotion.state);
+    if (duration == Duration.zero) {
+      setState(() => _dx = 0);
+      return;
+    }
+    _settle
+      ..duration = duration
+      ..forward(from: 0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final left = (-_dx).clamp(0.0, SwipeableMessage.maxLeft);
+    final right = _dx.clamp(0.0, SwipeableMessage.maxRight);
+    final timeOpacity = widget.timeShown
+        ? 1.0
+        : (left / (SwipeableMessage.maxLeft * 0.6)).clamp(0.0, 1.0);
+    // Your bubble slides fully; theirs only a quarter as far (they already leave room).
+    final shownLeft = widget.timeShown && left == 0
+        ? (widget.mine ? SwipeableMessage.maxLeft * 0.75 : 0.0)
+        : (widget.mine ? left : left * 0.25);
+    return Semantics(
+      customSemanticsActions: widget.semanticActions,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onHorizontalDragUpdate: _update,
+        onHorizontalDragEnd: _end,
+        onHorizontalDragCancel: _end,
+        onLongPress: widget.onLongPress,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // The reply glyph, behind the bubble's leading edge.
+            Positioned(
+              left: 0,
+              top: 0,
+              bottom: 0,
+              child: ExcludeSemantics(
+                child: Opacity(
+                  opacity: (right / SwipeableMessage.replyThreshold).clamp(
+                    0.0,
+                    1.0,
+                  ),
+                  child: Center(
+                    child: NumayaIcon(
+                      NumayaIcons.undo,
+                      size: AppSizes.iconMd,
+                      color: _armed ? AppColors.accent : AppColors.textMuted,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // The exact time, at the right edge of the row.
+            Positioned(
+              right: 0,
+              top: 0,
+              bottom: 0,
+              child: ExcludeSemantics(
+                excluding: timeOpacity == 0,
+                child: Opacity(
+                  opacity: timeOpacity,
+                  child: Center(
+                    child: Text(
+                      widget.time,
+                      style: AppTypography.micro.copyWith(
+                        color: AppColors.textMuted,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Transform.translate(
+              offset: Offset(right - shownLeft, 0),
+              child: widget.child,
+            ),
+          ],
         ),
       ),
     );
@@ -810,8 +1208,10 @@ class _ScallopClipper extends CustomClipper<Path> {
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
 
-/// Action sheet (`.theme-withings .sheet--actions`): a white group of rows with dividers and a
-/// separate white Cancel block, both with the card corner. Returns the chosen index.
+/// Action sheet, as Ente's Action Sheet (v2) (25316:7380, OV-03): one white sheet attached to the
+/// bottom edge with a grabber, rows of a 20pt muted glyph and a Body label (destructive rows in
+/// red), then Ente's hairline and a quiet centred Cancel row. Cancel stays visible (Ente relies on
+/// tapping outside): it is the explicit, accessible way out. Returns the chosen index.
 Future<int?> showNumayaActionSheet({
   required BuildContext context,
   required List<({NumayaIcons icon, String label, bool destructive})> actions,
@@ -822,13 +1222,18 @@ Future<int?> showNumayaActionSheet({
     sheetAnimationStyle: AppMotion.sheet(context),
     useRootNavigator: true,
     useSafeArea: true,
-    backgroundColor: Colors.transparent,
+    isScrollControlled: true,
+    backgroundColor: AppColors.surface,
     barrierColor: AppColors.scrim,
     elevation: 0,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.sheet)),
+    ),
     builder: (context) {
       Widget row(int i) {
         final a = actions[i];
-        final color = a.destructive ? AppColors.negative : AppColors.ink;
+        final label = a.destructive ? AppColors.negative : AppColors.ink;
+        final glyph = a.destructive ? AppColors.negative : AppColors.textMuted;
         return Pressable(
           onTap: () => Navigator.of(context).pop(i),
           semanticLabel: a.label,
@@ -836,19 +1241,22 @@ Future<int?> showNumayaActionSheet({
           pressedScale: 1,
           // At least a row tall; grows with large text instead of clipping the label.
           child: Container(
-            constraints: const BoxConstraints(minHeight: AppSizes.row),
+            constraints: const BoxConstraints(minHeight: AppSizes.touchMin + 4),
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.s4,
+              horizontal: AppLayout.screenGutter,
               vertical: AppSpacing.s2,
             ),
             child: Row(
               children: [
-                NumayaIcon(a.icon, size: AppSizes.iconMd, color: color),
+                NumayaIcon(a.icon, size: AppSizes.iconMd, color: glyph),
                 const SizedBox(width: AppSpacing.s4),
                 Expanded(
                   child: Text(
                     a.label,
-                    style: AppTypography.row.copyWith(color: color),
+                    style: AppTypography.weight(
+                      AppTypography.body,
+                      AppTypography.medium,
+                    ).copyWith(color: label),
                   ),
                 ),
               ],
@@ -857,51 +1265,65 @@ Future<int?> showNumayaActionSheet({
         );
       }
 
-      // Floats above the system navigation bar (three buttons or gesture handle), edge to edge.
       return Padding(
-        padding: EdgeInsets.fromLTRB(
-          AppSpacing.s3,
-          0,
-          AppSpacing.s3,
-          AppSpacing.s2 + MediaQuery.paddingOf(context).bottom,
+        // The white runs behind the system navigation bar; the rows stay above it.
+        padding: EdgeInsets.only(
+          bottom: AppSpacing.s2 + MediaQuery.paddingOf(context).bottom,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Container(
+              width: 36,
+              height: 4,
+              margin: const EdgeInsets.only(
+                top: AppSpacing.s2,
+                bottom: AppSpacing.s3,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.borderStrong,
+                borderRadius: AppRadii.all(AppRadii.pill),
+              ),
+            ),
             // Scrolls when the actions don't fit (small phone, large text); Cancel stays put.
             Flexible(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: AppRadii.all(AppRadii.card),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      for (var i = 0; i < actions.length; i++) ...[row(i)],
-                    ],
-                  ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [for (var i = 0; i < actions.length; i++) row(i)],
                 ),
               ),
             ),
-            const SizedBox(height: AppSpacing.s2),
+            const Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppLayout.screenGutter,
+                vertical: AppSpacing.s2,
+              ),
+              child: ExcludeSemantics(
+                child: SizedBox(
+                  height: AppBorders.hairline,
+                  width: double.infinity,
+                  child: ColoredBox(color: AppColors.divider),
+                ),
+              ),
+            ),
             Pressable(
               onTap: () => Navigator.of(context).pop(),
               semanticLabel: cancelLabel,
               excludeChildSemantics: true,
-              pressedScale: 0.99,
-              borderRadius: AppRadii.all(AppRadii.card),
+              pressedScale: 1,
               child: Container(
                 width: double.infinity,
-                constraints: const BoxConstraints(minHeight: AppSizes.row),
-                padding: const EdgeInsets.symmetric(vertical: AppSpacing.s2),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: AppRadii.all(AppRadii.card),
+                constraints: const BoxConstraints(
+                  minHeight: AppSizes.touchMin + 4,
                 ),
                 alignment: Alignment.center,
-                child: Text(cancelLabel, style: AppTypography.button),
+                child: Text(
+                  cancelLabel,
+                  style: AppTypography.weight(
+                    AppTypography.body,
+                    AppTypography.semibold,
+                  ),
+                ),
               ),
             ),
           ],
@@ -921,12 +1343,18 @@ class ViewTabs extends StatelessWidget {
     required this.onSelect,
     required this.label,
     this.bleed = 0,
+    this.onWhite = false,
   });
 
   /// How far the row scrolls past its own edges: the page gutter for a row that sits in a padded
   /// page, so options scroll to the screen edge instead of being cut at the gutter (RR-1). The
   /// first option still lines up with the gutter.
   final double bleed;
+
+  /// UI-047: the tabs sit on a white surface. Inactive pills are white, so only then do they
+  /// need a subtle edge; on the grey page and grey sheets (every current caller) the white fill
+  /// alone is the boundary.
+  final bool onWhite;
 
   /// A null count shows the label alone (segmented choices such as Basic / Advanced).
   final List<({String label, int? count})> options;
@@ -961,20 +1389,35 @@ class ViewTabs extends StatelessWidget {
                   selected: i == selected,
                   excludeChildSemantics: true,
                   pressedScale: 0.97,
-                  borderRadius: AppRadii.all(AppRadii.pill),
+                  borderRadius: AppRadii.all(AppRadii.tile),
+                  // Ente Tag Chip (2482:6479): 44 tall, 16pt corners, 20pt insets, Body label;
+                  // exactly one selected, in the primary (Numaya purple) with a white label.
                   child: AnimatedContainer(
                     duration: AppMotion.duration(context, AppMotion.base),
-                    height: AppSizes.chip,
+                    height: AppSizes.tagChip,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: AppLayout.pillInsetX,
+                      horizontal: AppSpacing.s5,
                     ),
+                    // UI-022/UI-047: the inactive pill is white. On the grey page and grey sheets
+                    // that fill is its boundary, with no stroke; on a white surface ([onWhite])
+                    // a subtle hairline edge marks it.
                     decoration: BoxDecoration(
-                      // Solid accent when selected (RD-05), neutral otherwise.
                       color: i == selected
                           ? AppColors.accent
                           : AppColors.surface,
-                      borderRadius: AppRadii.all(AppRadii.pill),
+                      borderRadius: AppRadii.all(AppRadii.tile),
                     ),
+                    // Painted on top, so the edge takes no room from the label's inset.
+                    foregroundDecoration: i == selected || !onWhite
+                        ? null
+                        : BoxDecoration(
+                            borderRadius: AppRadii.all(AppRadii.tile),
+                            border: Border.all(
+                              color: AppColors.borderStrong,
+                              width: AppBorders.hairline,
+                              strokeAlign: BorderSide.strokeAlignInside,
+                            ),
+                          ),
                     alignment: Alignment.center,
                     child: Text.rich(
                       TextSpan(
@@ -994,17 +1437,11 @@ class ViewTabs extends StatelessWidget {
                             ),
                         ],
                       ),
-                      style:
-                          AppTypography.weight(
-                            AppTypography.pill,
-                            i == selected
-                                ? AppTypography.semibold
-                                : AppTypography.medium,
-                          ).copyWith(
-                            color: i == selected
-                                ? AppColors.accentForeground
-                                : AppColors.ink,
-                          ),
+                      style: AppTypography.bodySm.copyWith(
+                        color: i == selected
+                            ? AppColors.accentForeground
+                            : AppColors.textSecondary,
+                      ),
                     ),
                   ),
                 ),
@@ -1081,12 +1518,7 @@ class PersonTile extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 2),
-          MetaText(
-            caption,
-            style: AppTypography.caption.copyWith(
-              color: AppColors.textSecondary,
-            ),
-          ),
+          MetaText(caption, style: AppTypography.caption),
         ],
       ),
     );

@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show RenderAbstractViewport;
+import 'package:flutter/semantics.dart' show CustomSemanticsAction;
+import 'package:flutter/services.dart' show LogicalKeyboardKey;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,21 +14,20 @@ import '../../../l10n/l10n.dart';
 import '../../home/application/discovery_filters.dart';
 import '../../home/presentation/filters_sheet.dart';
 import '../../home/presentation/tab_screens.dart';
-import '../../premium/application/premium_controller.dart';
 import '../../settings/presentation/settings_screen.dart';
 import '../application/dating_controller.dart';
 import '../domain/sample_people.dart';
 import 'person_profile.dart';
 import 'safety_sheets.dart';
 
-/// Home (B-30 / B-32, V16 019–024): one sample profile at a time as a scroll (photo card, prompt,
-/// about me, shared interests, location, photos) ending in Pass / SuperSwipe / Like. Swipe the first
-/// photo right to like, left to pass. Liking someone who already liked you opens the match.
+/// Home (B-30 / B-32): one sample profile at a time as a scroll (photo card, prompt, about me,
+/// shared interests, photos, location). Decisions are swipes only (UI-016): swipe the photo right
+/// to like, left to pass; screen readers get Like and Pass actions on the photo, and keyboards the
+/// left and right arrows. Liking someone who already liked you opens the match.
 ///
-/// Reading a profile (docs/mobile/DISCOVERY_SCREEN_INVENTORY.md): a bar under the header shows how
-/// far through it you are (Bumble); once the photo card has scrolled away, Pass / SuperSwipe / Like
-/// float over the profile (Hinge, happn) until the inline row comes into view; Android back
-/// returns to the top before it leaves Home. Any photo opens the photo viewer.
+/// Header (UI-013): the wordmark on the left; Backtrack, then Filter on the right. Backtrack brings
+/// back the last person passed (one step, as Bumble's). Android back returns to the top of a long
+/// profile before it leaves Home. Any photo opens the photo viewer.
 class DiscoverScreen extends ConsumerStatefulWidget {
   const DiscoverScreen({super.key});
 
@@ -45,11 +44,8 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
   /// Retries that failed again (the error then says so).
   int _failedRetries = 0;
 
-  /// Scrolled past most of the photo card: the floating actions show and back returns to the top.
+  /// Scrolled past the photo card: Android back returns to the top first.
   final _reading = ValueNotifier(false);
-
-  /// The inline action row at the end is close enough to use instead of the floating one.
-  final _nearEnd = ValueNotifier(false);
 
   @override
   void initState() {
@@ -60,11 +56,10 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
   void _onScroll() {
     if (!_scroll.hasClients) return;
     final p = _scroll.position;
-    // Past the photo card and its decision row: the floating row takes over (RD-12).
     _reading.value = p.pixels > _detailsOffset() - AppSpacing.s4;
   }
 
-  /// The hero card (photo, name and decision row), measured for where the profile starts.
+  /// The hero card (the photo and its identity), measured for where the profile starts.
   final _heroKey = GlobalKey();
 
   /// Where the profile below the hero card starts: the card's bottom edge in scroll offset,
@@ -80,7 +75,20 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
     final width =
         math.min(MediaQuery.sizeOf(context).width, AppSpacing.contentMax) -
         2 * AppLayout.screenGutter;
-    return width / AppMedia.personPhoto + DecisionBar.height;
+    return width / AppMedia.personPhoto;
+  }
+
+  /// Only switches the hero card to its overlay layout now: the frame itself is the 3:4 portrait
+  /// (UI-011).
+  double _photoHeight(BuildContext context) {
+    final mq = MediaQuery.of(context);
+    final h =
+        mq.size.height -
+        mq.padding.top -
+        AppSizes.topBar -
+        mq.padding.bottom -
+        AppSpacing.s4 * 2;
+    return h.clamp(300.0, 620.0);
   }
 
   void _toTop() {
@@ -119,16 +127,16 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
   }
 
   /// The decided profile leaving (MOTION_DESIGN_AUDIT "Decide"): right for a like, left for a
-  /// pass, up for a SuperSwipe. The decision itself is applied when it has left.
+  /// pass. The decision itself is applied when it has left.
   late final AnimationController _exit = AnimationController(
     vsync: this,
     duration: AppMotion.exit,
   );
   Offset _exitDirection = Offset.zero;
 
-  /// The person whose decision is in flight. A second action on them (a double tap, a drag that
-  /// ends during the exit, a stale button from the previous frame) is ignored, so nobody is liked,
-  /// passed or SuperSwiped twice.
+  /// The person whose decision is in flight. A second action on them (a double swipe, a drag that
+  /// ends during the exit, an accessibility action from the previous frame) is ignored, so nobody
+  /// is liked or passed twice.
   String? _deciding;
 
   @override
@@ -136,38 +144,19 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
     _exit.dispose();
     _scroll.dispose();
     _reading.dispose();
-    _nearEnd.dispose();
     super.dispose();
   }
 
-  Future<void> _decide(
-    SamplePerson person, {
-    required bool liked,
-    bool superSwipe = false,
-  }) async {
-    // One decision at a time: taps during the 200 ms exit are ignored, and so is any action on
+  Future<void> _decide(SamplePerson person, {required bool liked}) async {
+    // One decision at a time: input during the 200 ms exit is ignored, and so is any action on
     // someone already decided.
     if (_exit.isAnimating || _deciding != null) return;
     if (ref.read(datingProvider).seen.contains(person.id)) return;
-    final controller = ref.read(datingProvider.notifier);
-    if (superSwipe && controller.superSwipesLeft <= 0) {
-      // No SuperSwipes left: the contextual paywall names what triggered it (D-14).
-      unawaited(
-        context.push(
-          '${Routes.paywall}?feature=${PremiumFeature.superSwipes.name}',
-        ),
-      );
-      return;
-    }
     AppHaptics.fire(context, HapticMoment.commit);
     _deciding = person.id;
     try {
       if (!AppMotion.reduced(context)) {
-        setState(
-          () => _exitDirection = superSwipe
-              ? const Offset(0, -1)
-              : Offset(liked ? 1 : -1, 0),
-        );
+        setState(() => _exitDirection = Offset(liked ? 1 : -1, 0));
         try {
           await _exit.forward(from: 0).orCancel;
         } on TickerCanceled {
@@ -175,43 +164,24 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
         }
         if (!mounted) return;
       }
-      _commit(person, liked: liked, superSwipe: superSwipe);
+      _commit(person, liked: liked);
       _exit.value = 0;
     } finally {
       _deciding = null;
     }
   }
 
-  void _commit(
-    SamplePerson person, {
-    required bool liked,
-    required bool superSwipe,
-  }) {
+  void _commit(SamplePerson person, {required bool liked}) {
     final l10n = context.l10n;
-    final controller = ref.read(datingProvider.notifier);
-    final result = superSwipe
-        ? controller.superSwipe(person.id)
-        : controller.decide(person.id, liked: liked);
-    if (result == null) {
-      // No SuperSwipes left: the contextual paywall names what triggered it (D-14).
-      unawaited(
-        context.push(
-          '${Routes.paywall}?feature=${PremiumFeature.superSwipes.name}',
-        ),
-      );
-      return;
-    }
+    final result = ref
+        .read(datingProvider.notifier)
+        .decide(person.id, liked: liked);
     if (result == DecisionResult.matched) {
       unawaited(context.push('${Routes.match}/${person.id}'));
     } else if (liked) {
       NumayaToast.show(
         context,
-        superSwipe
-            ? l10n.discoverSuperSentLeft(
-                controller.superSwipesLeft,
-                person.name,
-              )
-            : l10n.discoverLiked(person.name),
+        l10n.discoverLiked(person.name),
         belowHeader: true,
       );
     }
@@ -288,81 +258,47 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
       });
     }
 
-    // The centred wordmark gets only the room between the two button groups, so on a 320pt phone
-    // it shows the mark alone instead of running under Filters.
-    final leftButtons = state.snoozed ? 0 : (lastPass == null ? 1 : 2);
-    final rightButtons = state.snoozed
-        ? 0
-        : (person != null && !failing ? 2 : 1);
-    final sideButtons = math.max(leftButtons, rightButtons);
-    final sideReserve = sideButtons * (AppSizes.iconButton + AppSpacing.s2);
+    // UI-013: the wordmark on the left and exactly two controls on the right, Backtrack then
+    // Filter; no strip under the header. The wordmark gets the room the buttons leave, so on a
+    // 320pt phone it shows the mark alone.
+    final buttons = state.snoozed ? 0 : 2;
     final wordmarkRoom =
         math.min(MediaQuery.sizeOf(context).width, AppSpacing.contentMax) -
         2 * AppLayout.screenGutter -
-        2 * sideReserve;
+        buttons * (AppSizes.iconButtonSlot + AppSpacing.s2);
 
     final header = SizedBox(
       height: AppSizes.topBar,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppLayout.screenGutter),
-        child: Stack(
-          alignment: Alignment.center,
+        child: Row(
           children: [
-            Wordmark(small: true, maxWidth: wordmarkRoom),
-            if (!state.snoozed)
-              Align(
+            Expanded(
+              child: Align(
                 alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // B-33 curated picks, a sub-view of Home (P-08: both formats).
-                    NavIconButton(
-                      icon: NumayaIcons.sparkle,
-                      label: l10n.forYouOpen,
-                      onPressed: () => context.push(Routes.forYou),
-                    ),
-                    if (lastPass != null) ...[
-                      const SizedBox(width: AppSpacing.s2),
-                      NavIconButton(
-                        icon: NumayaIcons.undo,
-                        label: l10n.discoverUndo(lastPass.name),
-                        onPressed: _undo,
-                      ),
-                    ],
-                  ],
-                ),
+                child: Wordmark(small: true, maxWidth: wordmarkRoom),
               ),
-            if (!state.snoozed)
-              Align(
-                alignment: Alignment.centerRight,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _FiltersButton(
-                      label: narrowed
-                          ? l10n.discoverFiltersChanged
-                          : l10n.discoverFilters,
-                      changed: narrowed,
-                      onPressed: () => showFiltersSheet(context, ref),
-                    ),
-                    if (person != null && !failing) ...[
-                      const SizedBox(width: AppSpacing.s2),
-                      NavIconButton(
-                        icon: NumayaIcons.more,
-                        label: l10n.discoverOptions,
-                        onPressed: () => _options(person),
-                      ),
-                    ],
-                  ],
-                ),
+            ),
+            if (!state.snoozed) ...[
+              // Backtrack: one step, only for a pass (a like has been sent). Disabled, and
+              // announced as such, until there is someone to bring back.
+              NavIconButton(
+                key: const ValueKey('discover-backtrack'),
+                icon: NumayaIcons.undo,
+                label: lastPass == null
+                    ? l10n.discoverBacktrackNone
+                    : l10n.discoverUndo(lastPass.name),
+                onPressed: lastPass == null ? null : _undo,
               ),
-            if (person != null && !failing && !_retrying && !state.snoozed)
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: _ReadProgress(scroll: _scroll),
+              const SizedBox(width: AppSpacing.s2),
+              _FiltersButton(
+                label: narrowed
+                    ? l10n.discoverFiltersChanged
+                    : l10n.discoverFilters,
+                changed: narrowed,
+                onPressed: () => showFiltersSheet(context, ref),
               ),
+            ],
           ],
         ),
       ),
@@ -468,8 +404,6 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
       );
     }
 
-    void decide({required bool liked, bool superSwipe = false}) =>
-        unawaited(_decide(person, liked: liked, superSwipe: superSwipe));
     void openPhotos(int start) =>
         unawaited(context.push(Routes.personPhotos(person.id, start: start)));
 
@@ -478,13 +412,6 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
       scrollController: _scroll,
       topGap: false,
       gutter: AppLayout.screenGutter,
-      overlay: _FloatingActions(
-        visible: _reading,
-        nearEnd: _nearEnd,
-        onPass: () => decide(liked: false),
-        onSuper: () => decide(liked: true, superSwipe: true),
-        onLike: () => decide(liked: true),
-      ),
       child: _DecisionMotion(
         key: ValueKey(person.id),
         exit: _exit,
@@ -499,44 +426,28 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
               ),
               const SizedBox(height: AppSpacing.s3),
             ],
-            // The photo and the decision share one white hero surface, so the actions belong to
-            // the person they decide on; the row floats once scrolled past (RD-12).
-            Container(
+            // Bumble's discovery card (ER-01): the 3:4 photo (UI-011) with the identity group laid
+            // over its foot (UI-014); the profile follows as cards when scrolled.
+            KeyedSubtree(
               key: _heroKey,
-              padding: const EdgeInsets.all(AppSpacing.s2),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: AppRadii.all(AppRadii.heroCard),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Keyed by person: the measured hero container keeps its state across people,
-                  // the swipe card (and its drag offset) must not.
-                  _SwipeCard(
-                    key: ValueKey('swipe-${person.id}'),
-                    person: person,
-                    onOpenPhotos: () => openPhotos(1),
-                    onMore: _toDetails,
-                    onDecide: (liked) =>
-                        unawaited(_decide(person, liked: liked)),
-                  ),
-                  const SizedBox(height: AppSpacing.s2),
-                  DecisionBar(
-                    passLabel: l10n.discoverPass,
-                    superLabel: l10n.discoverSuperSwipe,
-                    likeLabel: l10n.discoverLike,
-                    onPass: () => decide(liked: false),
-                    onSuper: () => decide(liked: true, superSwipe: true),
-                    onLike: () => decide(liked: true),
-                  ),
-                ],
+              // Keyed by person: the measured hero keeps its state across people, the swipe card
+              // (and its drag offset) must not.
+              child: _SwipeCard(
+                key: ValueKey('swipe-${person.id}'),
+                person: person,
+                photoHeight: _photoHeight(context),
+                photoAction: NavIconButton(
+                  icon: NumayaIcons.more,
+                  label: l10n.discoverOptions,
+                  style: NavButtonStyle.circular,
+                  onPressed: () => _options(person),
+                ),
+                onOpenPhotos: () => openPhotos(1),
+                onMore: _toDetails,
+                onDecide: (liked) => unawaited(_decide(person, liked: liked)),
               ),
             ),
-            if (!state.coachDone) ...[
-              const SizedBox(height: AppLayout.itemGap),
-              _CoachHint(onDismiss: controller.dismissCoach),
-            ],
+            // UI-016: no decision buttons; the photo is swiped.
             const SizedBox(height: AppLayout.itemGap),
             ...personSections(context, person, onPhoto: openPhotos),
             const SizedBox(height: AppLayout.sectionGap),
@@ -549,13 +460,6 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
               ),
             ),
             const SizedBox(height: AppSpacing.s4),
-            Text(
-              l10n.discoverSampleNote,
-              textAlign: TextAlign.center,
-              style: AppTypography.caption,
-            ),
-            // Room for the floating decision row over the end of the profile.
-            const SizedBox(height: DecisionBar.height + AppSpacing.s4),
           ],
         ),
       ),
@@ -623,204 +527,6 @@ class _FiltersButton extends StatelessWidget {
   }
 }
 
-/// How far through the current profile the member has read (Bumble's bar under the header).
-/// Decorative: the profile itself is the content.
-class _ReadProgress extends StatelessWidget {
-  const _ReadProgress({required this.scroll});
-
-  final ScrollController scroll;
-
-  @override
-  Widget build(BuildContext context) {
-    return ExcludeSemantics(
-      child: AnimatedBuilder(
-        animation: scroll,
-        builder: (context, _) {
-          var t = 0.0;
-          if (scroll.hasClients && scroll.position.hasContentDimensions) {
-            final max = scroll.position.maxScrollExtent;
-            t = max <= 0 ? 0 : (scroll.position.pixels / max).clamp(0.0, 1.0);
-          }
-          return Container(
-            height: 3,
-            decoration: BoxDecoration(
-              color: AppColors.fill,
-              borderRadius: AppRadii.all(AppRadii.pill),
-            ),
-            alignment: Alignment.centerLeft,
-            child: FractionallySizedBox(
-              widthFactor: t,
-              heightFactor: 1,
-              child: const DecoratedBox(
-                decoration: BoxDecoration(
-                  color: AppColors.accent,
-                  borderRadius: BorderRadius.all(Radius.circular(2)),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-/// Pass / SuperSwipe / Like floating over a profile being read, so a decision never needs a
-/// scroll back (Hinge's floating ×, happn's action bar). Hidden over the photo card, which has
-/// its own, and near the end, where the inline row takes over.
-class _FloatingActions extends StatefulWidget {
-  const _FloatingActions({
-    required this.visible,
-    required this.nearEnd,
-    required this.onPass,
-    required this.onSuper,
-    required this.onLike,
-  });
-
-  final ValueListenable<bool> visible;
-  final ValueListenable<bool> nearEnd;
-  final VoidCallback onPass;
-  final VoidCallback onSuper;
-  final VoidCallback onLike;
-
-  @override
-  State<_FloatingActions> createState() => _FloatingActionsState();
-}
-
-class _FloatingActionsState extends State<_FloatingActions> {
-  late final Listenable _changes = Listenable.merge([
-    widget.visible,
-    widget.nearEnd,
-  ]);
-
-  /// In the tree: showing, or still fading out. Once gone it is removed entirely, so nothing
-  /// hidden lingers for screen readers or hit tests.
-  bool _mounted = false;
-
-  bool get _show => widget.visible.value && !widget.nearEnd.value;
-
-  @override
-  void initState() {
-    super.initState();
-    _changes.addListener(_changed);
-  }
-
-  @override
-  void dispose() {
-    _changes.removeListener(_changed);
-    super.dispose();
-  }
-
-  /// False for the first frame after mounting, so the bar rises in from its hidden position.
-  bool _entered = false;
-
-  void _changed() {
-    if (_show && !_mounted) {
-      _entered = false;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) setState(() => _entered = true);
-      });
-    }
-    setState(() {
-      if (_show) _mounted = true;
-    });
-    // Under reduced motion there is no fade to wait for.
-    if (!_show && AppMotion.reduced(context)) setState(() => _mounted = false);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final show = _show && (_entered || AppMotion.reduced(context));
-    if (!_mounted) return const SizedBox.shrink();
-    final duration = AppMotion.duration(context, AppMotion.state);
-    return Builder(
-      builder: (context) {
-        return IgnorePointer(
-          ignoring: !show,
-          child: ExcludeSemantics(
-            excluding: !show,
-            child: AnimatedSlide(
-              offset: show ? Offset.zero : const Offset(0, 0.6),
-              duration: duration,
-              curve: AppMotion.easeOut,
-              child: AnimatedOpacity(
-                opacity: show ? 1 : 0,
-                duration: duration,
-                curve: AppMotion.easeOut,
-                onEnd: () {
-                  if (!_show && mounted) setState(() => _mounted = false);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppLayout.screenGutter,
-                    0,
-                    AppLayout.screenGutter,
-                    AppSpacing.s4,
-                  ),
-                  child: DecisionBar(
-                    passLabel: l10n.discoverPass,
-                    superLabel: l10n.discoverSuperSwipe,
-                    likeLabel: l10n.discoverLike,
-                    floating: true,
-                    onPass: widget.onPass,
-                    onSuper: widget.onSuper,
-                    onLike: widget.onLike,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-/// First-visit tip on the photo card (B-31, as a small card rather than a dimmed overlay, so the
-/// profile stays visible). Gone after the first decision or when hidden.
-class _CoachHint extends StatelessWidget {
-  const _CoachHint({required this.onDismiss});
-
-  final VoidCallback onDismiss;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Container(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.s4,
-        AppSpacing.s2,
-        AppSpacing.s1,
-        AppSpacing.s2,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: AppRadii.all(AppRadii.card),
-      ),
-      child: Row(
-        children: [
-          const NumayaIcon(
-            NumayaIcons.cards,
-            size: AppSizes.iconMd,
-            color: AppColors.ink,
-          ),
-          const SizedBox(width: AppSpacing.s3),
-          Expanded(
-            child: Text(l10n.discoverCoach, style: AppTypography.bodySm),
-          ),
-          NavIconButton(
-            icon: NumayaIcons.close,
-            label: l10n.discoverCoachDismiss,
-            style: NavButtonStyle.plain,
-            onPressed: onDismiss,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 /// A profile settling in when it becomes the current one, and leaving in [direction] while [exit]
 /// runs. Under reduced motion the profile is simply replaced.
 class _DecisionMotion extends StatelessWidget {
@@ -878,9 +584,13 @@ class _SwipeCard extends StatefulWidget {
     required this.onDecide,
     required this.onOpenPhotos,
     required this.onMore,
+    this.photoHeight,
+    this.photoAction,
   });
 
   final SamplePerson person;
+  final double? photoHeight;
+  final Widget? photoAction;
   final VoidCallback onOpenPhotos;
   final VoidCallback onMore;
   final ValueChanged<bool> onDecide;
@@ -903,13 +613,31 @@ class _SwipeCardState extends State<_SwipeCard> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    // UI-016: with no buttons, the swipe has non-gesture equivalents: Like and Pass as screen
+    // reader actions on the photo, and the right and left arrow keys once it has focus.
     return Semantics(
       label: l10n.discoverSwipeHint(widget.person.name),
-      // A Listener sees the cancel before the gesture recognisers do.
-      child: Listener(
-        onPointerDown: (_) => _pointerCancelled = false,
-        onPointerCancel: (_) => _pointerCancelled = true,
-        child: _gestures(context),
+      customSemanticsActions: {
+        CustomSemanticsAction(label: l10n.discoverLike): () =>
+            widget.onDecide(true),
+        CustomSemanticsAction(label: l10n.discoverPass): () =>
+            widget.onDecide(false),
+      },
+      child: CallbackShortcuts(
+        bindings: {
+          const SingleActivator(LogicalKeyboardKey.arrowRight): () =>
+              widget.onDecide(true),
+          const SingleActivator(LogicalKeyboardKey.arrowLeft): () =>
+              widget.onDecide(false),
+        },
+        child: Focus(
+          // A Listener sees the cancel before the gesture recognisers do.
+          child: Listener(
+            onPointerDown: (_) => _pointerCancelled = false,
+            onPointerCancel: (_) => _pointerCancelled = true,
+            child: _gestures(context),
+          ),
+        ),
       ),
     );
   }
@@ -961,6 +689,8 @@ class _SwipeCardState extends State<_SwipeCard> {
           swipe: (_dx / _threshold).clamp(-1.0, 1.0),
           onOpenPhotos: widget.onOpenPhotos,
           onMore: widget.onMore,
+          photoHeight: widget.photoHeight,
+          photoAction: widget.photoAction,
         ),
       ),
     );

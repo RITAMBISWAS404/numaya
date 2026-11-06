@@ -60,11 +60,6 @@ Future<PermissionAnswer?> _showPrompt(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: StatusBadge(label: l10n.permDemoTag),
-        ),
-        const SizedBox(height: AppSpacing.s4),
         for (final (answer, label) in options) ...[
           NumayaButton(
             label: label,

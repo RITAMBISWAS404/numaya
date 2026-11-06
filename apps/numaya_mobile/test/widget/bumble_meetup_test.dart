@@ -46,7 +46,9 @@ void main() {
     await settle(tester);
   });
 
-  group('BM-02 list groups on a sheet are flush with the sheet gutter', () {
+  // BM-02 is superseded by UI-023: sheets are the grey page surface, so a group there keeps its
+  // white cards exactly as on a page.
+  group('UI-023 list groups on a sheet keep their white cards', () {
     Widget group() => ListGroup(
       children: [
         ListRow(label: 'Snooze', switchValue: false, onSwitch: (_) {}),
@@ -80,12 +82,21 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('row labels start on the heading’s edge', (tester) async {
-      await open(tester);
-      final heading = tester.getTopLeft(find.text('Heading')).dx;
-      expect(tester.getTopLeft(find.text('Snooze')).dx, heading);
-      expect(tester.getTopLeft(find.text('Incognito')).dx, heading);
-    });
+    testWidgets(
+      'row labels sit inside their cards, as on a page (UI-044: one 16pt inset)',
+      (tester) async {
+        await open(tester);
+        final heading = tester.getTopLeft(find.text('Heading')).dx;
+        expect(
+          tester.getTopLeft(find.text('Snooze')).dx - heading,
+          AppLayout.cardPadding,
+        );
+        expect(
+          tester.getTopLeft(find.text('Incognito')).dx - heading,
+          AppLayout.cardPadding,
+        );
+      },
+    );
 
     testWidgets('off a sheet, the group keeps its card inset', (tester) async {
       await tester.pumpWidget(
@@ -101,7 +112,7 @@ void main() {
       final heading = tester.getTopLeft(find.text('Heading')).dx;
       expect(
         tester.getTopLeft(find.text('Snooze')).dx - heading,
-        AppLayout.cardPadding,
+        AppLayout.cardPadding, // UI-044: the list-card inset (16pt)
       );
     });
   });

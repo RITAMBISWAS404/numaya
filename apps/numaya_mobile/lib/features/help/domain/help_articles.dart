@@ -164,9 +164,7 @@ const List<HelpArticle> kHelpArticles = [
     [
       (
         heading: 'What do I get?',
-        body:
-            'Advanced filters, Rematch, unlimited Extends, Incognito, Travel and extra '
-            'SuperSwipes.',
+        body: 'Advanced filters, Rematch, unlimited Extends, Incognito and Travel.',
       ),
       (
         heading: 'How do I cancel?',

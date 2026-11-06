@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart' show CupertinoPicker;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -134,7 +135,7 @@ void main() {
       expect(find.text('Use my location'), findsNothing);
       await tapOn(tester, find.text('Open settings'));
       expect(
-        find.text('Demo build: this would open Numaya’s Android settings.'),
+        find.text('Settings can’t be opened from here yet.'),
         findsOneWidget,
       );
 
@@ -159,7 +160,7 @@ void main() {
       await tapOn(tester, find.text('Use my location'));
       await tapOn(tester, find.text('While using the app · approximate'));
       await tester.pump(const Duration(milliseconds: 600));
-      expect(find.text('Hackney, London (sample area)'), findsOneWidget);
+      expect(find.text('Hackney, London'), findsOneWidget);
       expect(
         c.read(devicePermissionsProvider).of(DevicePermission.location),
         PermissionStatus.granted,
@@ -251,15 +252,25 @@ void main() {
       tester.getSemantics(find.bySemanticsLabel(RegExp('^A green flag'))),
       isSemantics(isEnabled: false, hasEnabledState: true),
     );
-    // Leaving without Save keeps nothing.
-    await tester.enterText(find.byType(TextField).last, 'Draft only');
+    // Leaving the browser without answering keeps nothing new.
     await tester.binding.handlePopRoute();
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
     expect(c.read(profileDetailsProvider).extraPrompts, isEmpty);
 
-    for (final answer in ['Pastries.', 'Pineapple on pizza.']) {
+    for (final (question, answer) in [
+      ('My Sunday ritual', 'Pastries.'),
+      ('Let’s debate this', 'Pineapple on pizza.'),
+    ]) {
       await tapOn(tester, find.text('Add a prompt'));
+      await tester.pump(const Duration(milliseconds: 600));
+      // UI-008: pick the prompt (its category tab first), then answer in the sheet.
+      await tapOn(
+        tester,
+        find.text(question == 'My Sunday ritual' ? 'Weekends' : 'Opinions'),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tapOn(tester, find.text(question));
       await tester.pump(const Duration(milliseconds: 600));
       await tester.enterText(find.byType(TextField).last, answer);
       await tester.pump();
@@ -294,16 +305,23 @@ void main() {
   testWidgets('height: units, limits, remove; skip clears it', (tester) async {
     final c = await newAccount(tester);
     await goTo(c, tester, Routes.setupHeight);
-    await tapOn(tester, find.text('Add my height'));
+    // UI-006: the wheel is there on arrival, resting on 170 cm without saving it.
     expect(find.text('170 cm'), findsOneWidget);
+    expect(c.read(profileDetailsProvider).heightCm, isNull);
     await tapOn(tester, find.text('ft / in'));
-    expect(find.text('5′ 7″'), findsOneWidget);
-    await tapOn(tester, find.bySemanticsLabel('Shorter'));
-    expect(c.read(profileDetailsProvider).heightCm, 169);
+    await tester.pumpAndSettle();
+    expect(find.text('5′ 7″'), findsWidgets);
+    // The wheel stops at the lowest supported height.
     c.read(profileDetailsProvider.notifier).setHeight(140);
+    await tapOn(tester, find.text('cm'));
+    await tester.pumpAndSettle();
+    await tester.drag(find.byType(CupertinoPicker), const Offset(0, 400));
+    await tester.pumpAndSettle();
+    expect(c.read(profileDetailsProvider).heightCm, 140);
+    await tapOn(tester, find.text('Remove height'));
+    expect(c.read(profileDetailsProvider).heightCm, isNull);
+    c.read(profileDetailsProvider.notifier).setHeight(175);
     await tester.pump();
-    final shorter = tester.getSemantics(find.bySemanticsLabel('Shorter'));
-    expect(shorter, isSemantics(isEnabled: false, hasEnabledState: true));
     await tapOn(tester, find.text('Skip'));
     await tester.pump(const Duration(milliseconds: 600));
     expect(c.read(profileDetailsProvider).heightCm, isNull);
@@ -412,8 +430,9 @@ void main() {
     final c = await newAccount(tester);
     await goTo(c, tester, Routes.setupVerify);
     expect(
+      // UI-041: no demo notice on the verification offer.
       find.textContaining('Demo build: verification is simulated.'),
-      findsOneWidget,
+      findsNothing,
     );
     await tapOn(tester, find.text('Verify now'));
     await tester.pump(const Duration(milliseconds: 600));

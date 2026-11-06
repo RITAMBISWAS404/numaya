@@ -282,7 +282,7 @@ class SafetyCentreScreen extends StatelessWidget {
             label: 'Date with confidence',
             aspectRatio: IllustrationSlot.header,
           ),
-          ScreenHeader(title: l10n.safetyHeading, lede: l10n.safetyLede),
+          ScreenHeader(title: l10n.safetyHeading),
           const SizedBox(height: AppSpacing.s5),
           // DX-01: the three tips read as one grouped list (plain icon, title, detail) instead of
           // three stacked tinted cards; tint is kept for status, not for every explanation.

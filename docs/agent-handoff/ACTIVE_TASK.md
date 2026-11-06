@@ -1,5 +1,75 @@
 # Active task: frosted-navigation experiment, handed off
 
+> **Overnight v2 (2026-11-06, cloud/Linux, uncommitted):** package `NUMAYA_OVERNIGHT_V2.zip`
+> executed in `/home/user/numaya-ente` (base `f2e18e6`, local branch
+> `experiment/numaya-ente-design-system`). Figma primary pages fully indexed and inspected;
+> shared fixes OV-01 alerts → Ente Banner, OV-02 grouped menu cards (Updated screens Settings),
+> OV-03 Action Sheet v2, OV-04 neutral toast; 58-route before/after inventory (28 changed) with a
+> second visual review. Tests: **418 passed, 17 skipped, 0 failed**. Records:
+> `docs/design-experiments/ente-design-system/overnight-v2/` (FIGMA_SOURCE_MAP, COMPONENT_MAP,
+> COVERAGE, DECISIONS); gallery `artifacts/ente-design-system/overnight-v2/gallery/index.html`.
+> **Next:** Windows emulator pass (sheets, keyboard, TalkBack, back); regenerate goldens.
+
+
+> **Review batch 3 (2026-11-06, cloud/Linux, uncommitted):** UI-033 to UI-046 reconciled and
+> completed in `/home/user/numaya-ente` (restored from the Windows recovery ZIP). Tracker:
+> `docs/design-experiments/ente-design-system/UI_REVIEW_BATCH3_TRACKER.md`. Tests: 416 passed,
+> 16 skipped. UI-043 deferred (optional). **Next:** run on the Windows emulator (gestures,
+> keyboard, TalkBack), regenerate the goldens, and review the UI-041 "kept on purpose" list.
+
+
+> **Review batch 2 (2026-11-06, Windows, uncommitted):** UI-013 to UI-032 are implemented and
+> device-verified; UI-001 to UI-012 were re-checked. Tracker: `docs/design-experiments/ente-design-system/UI_REVIEW_BATCH2_TRACKER.md`.
+>
+> Open decisions:
+> - UI-021: should gender filtering stay multi-select or become single-select?
+> - For You now has no main-app entry point, since its sparkle button was removed.
+> - UI-001 final artwork.
+> - UI-008: what "three-day-to-time-driven response" means.
+>
+> **Next:** the owner reviews `after/sheets/review2-*.jpg` and decides on a commit. Regenerate the
+> goldens on Linux afterwards.
+
+
+> **UI review handoff (2026-11-05, Windows, uncommitted), in worktree `..\numaya-ente`:**
+> - Onboarding issues UI-001 to UI-012 and the app-wide rollout are done. Tests: 373 passed, 15 skipped.
+> - Status by issue: `docs/design-experiments/ente-design-system/UI_REVIEW_HANDOFF_STATUS.md`.
+> - Evidence: `C:\Users\biswa\Downloads\NUMAYA_ONBOARDING_HANDOFF\numaya-ui-review\after\\`.
+> - **Blocked:** final Welcome artwork (a temporary `WelcomeBrandImage` is in place).
+> - **Awaiting the owner:** what "three-day-to-time-driven response" means for UI-008.
+> - **Next:**
+>   1. The owner reviews the before/after sheets, answers the UI-008 question and supplies the artwork.
+>   2. Commit or push only on approval.
+>   3. Regenerate the goldens on Linux.
+
+
+> **Ente design system experiment (2026-11-05, Windows, uncommitted):** worktree `..\numaya-ente`,
+> branch `experiment/numaya-ente-design-system`, on `f2e18e6` plus the final-design-run patch.
+> - Ente geometry, type and states with Numaya purple and fonts, Lucide icons and Bumble flows.
+> - **Tests:** 361 passed, 15 skipped.
+> - **Record:** `docs/design-experiments/ente-design-system/`; state in `RUN_STATE.md`.
+> - **Next:** the owner reviews the sheets and decides on commit/push. Then regenerate the goldens on Linux.
+
+> **Final design run (2026-11-05, Windows, uncommitted):** worktree `..\numaya-final-design`,
+> branch `experiment/numaya-final-design-candidate` on `f2e18e6`.
+> - **First device evidence** for the overnight candidate (Pixel 10 emulator, API 36).
+> - **Fixed:**
+>   - FD-A1: no placeholder art on product screens;
+>   - FD-A2: off-switch 3:1 edge;
+>   - FD-B1: button labels wrap instead of truncating;
+>   - FD-D1: 8pt header-action gap;
+>   - FD-D2: Edit profile Preview style.
+> - **Tool-assisted pass:**
+>   - FD-B2: compact floating decision row (from the Impeccable critique);
+>   - FD-B3: motion timing (from the Emil review);
+>   - `accessibility_tools` audit: 0 issues on 14 routes.
+> - **Tests:** 361 passed, 15 skipped.
+> - **Record:** `docs/design-experiments/final-design-run/README.md`; state in `RUN_STATE.md`.
+> - **Next:**
+>   1. Authorise commit and push.
+>   2. Regenerate goldens on Linux.
+>   3. Physical-phone pass.
+
 > **Bumble × Meetup batch (2026-11-04):**
 > - BM-01: verified tick beside the name;
 > - BM-02: flush list groups in sheets;

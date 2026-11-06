@@ -95,7 +95,15 @@ abstract final class AppLayout {
 abstract final class AppMedia {
   /// Person photos (Discover card, photo viewer, previews): 4:3 width to height, as specified
   /// for this pass. V16 drew a portrait 3:4 card; the conflict is recorded in RD-10.
-  static const double personPhoto = 4 / 3;
+  /// UI-011: photos of people in profiles are portrait, 3:4 width to height, full content width.
+  static const double personPhoto = 3 / 4;
+
+  /// Photos sent in a chat keep their landscape frame (not a profile photo, outside UI-011).
+  static const double chatPhoto = 4 / 3;
+
+  /// Small list thumbnails (For you rows) keep their compact landscape frame: a thumbnail, not a
+  /// full profile photo, so outside UI-011.
+  static const double listThumbnail = 4 / 3;
 
   /// Event covers in lists.
   static const double eventCover = 16 / 9;
@@ -106,6 +114,7 @@ abstract final class AppMedia {
 /// filters and tabs. A nested corner is its container's minus the inset.
 abstract final class AppRadii {
   static const double tag = MonoRadii.tag;
+  static const double checkbox = MonoRadii.checkbox;
   static const double iconTile = MonoRadii.iconTile;
   static const double iconTileLg = MonoRadii.iconTileLg;
   static const double field = MonoRadii.field;
@@ -164,14 +173,20 @@ abstract final class AppSizes {
 
   /// Header buttons: 42 rounded squares (14 corner) inside a 44 hit area.
   static const double iconButton = MonoSizes.iconButton;
+
+  /// The room an icon button takes in a row: the visible 38pt Ente tile inside its 44pt hit area.
+  static const double iconButtonSlot = touchMin > iconButton
+      ? touchMin
+      : iconButton;
   static const double iconButtonSm = NumayaSizeTokens.iconButtonSizeSm;
-  static const double chip = NumayaSizeTokens.chipHeight;
+  static const double chip = MonoSizes.filterChip;
+  static const double tagChip = MonoSizes.tagChip;
   static const double search = MonoSizes.search;
   static const double segmentHeight = MonoSizes.segment;
   static const double segmentInset = MonoSizes.segmentInset;
 
   /// Radio and checkbox: 22.
-  static const double choice = NumayaSizeTokens.withingsChoiceSize;
+  static const double choice = MonoSizes.choice;
 
   /// Interest-set emoji holder: 28 circle.
   static const double mark = NumayaSizeTokens.withingsMarkSize;
@@ -184,9 +199,9 @@ abstract final class AppSizes {
       NumayaSizeTokens.progressSegmentHeight;
   static const double codeCellHeight = NumayaSizeTokens.codeCellHeight;
   static const double codeCellRadius = NumayaSizeTokens.codeCellRadius;
-  static const double switchWidth = NumayaSizeTokens.switchWidth;
-  static const double switchHeight = NumayaSizeTokens.switchHeight;
-  static const double switchThumb = NumayaSizeTokens.withingsThumbSwitch;
+  static const double switchWidth = MonoSizes.switchWidth;
+  static const double switchHeight = MonoSizes.switchHeight;
+  static const double switchThumb = MonoSizes.switchThumb;
   static const double sliderThumb = NumayaSizeTokens.withingsThumbSlider;
   static const double avatar = NumayaSizeTokens.sizeAvatarXl;
 
@@ -194,6 +209,9 @@ abstract final class AppSizes {
   static const double avatarProfile = 96;
   static const double tabBar = MonoSizes.tabBar;
   static const double tabItem = MonoSizes.tabItem;
+  static const double tabItemWidth = MonoSizes.tabItemWidth;
+  static const double tabPadding = MonoSizes.tabPadding;
+  static const double tabGap = MonoSizes.tabGap;
   static const double topBar = 56;
 }
 
@@ -204,6 +222,9 @@ abstract final class AppElevation {
   static const List<BoxShadow> none = MonoShadows.none;
   static const List<BoxShadow> subtle = MonoShadows.subtle;
   static const List<BoxShadow> floating = MonoShadows.floating;
+
+  /// The navigation bar only (UI-027).
+  static const List<BoxShadow> navigation = MonoShadows.navigation;
 
   /// The toast and anything floating over a photo.
   static const List<BoxShadow> withingsFloat = MonoShadows.floating;

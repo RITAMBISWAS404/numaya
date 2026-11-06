@@ -12,9 +12,9 @@ import '../../premium/application/premium_controller.dart';
 import '../../profile/domain/profile_details.dart';
 import '../application/discovery_filters.dart';
 
-/// Filters (B-34 basic, B-35 advanced; Mobbin "Filtering people"), in V16's filters sheet: 22pt
-/// medium questions, the blue slider interval, switch rows for each fallback ("Show other people
-/// if I run out", D-15), an ink "Show N people" and an outlined Reset. Advanced filters are part of
+/// Filters (B-34 basic, B-35 advanced; Mobbin "Filtering people"), on the grey sheet (UI-023):
+/// small question headings over white cards, full-width sliders (UI-024), switch rows for each
+/// fallback ("Show other people if I run out", D-15), "Show N people" and a secondary Reset. Advanced filters are part of
 /// Premium in the demo (P-05); without it they're shown locked with a way to the paywall.
 Future<void> showFiltersSheet(BuildContext context, WidgetRef ref) {
   final l10n = context.l10n;
@@ -95,25 +95,53 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
     final controller = ref.read(datingProvider.notifier);
     final count = controller.queue(_draft).length;
     final fallback = count > 0 && controller.showingFallback(_draft);
-    final sliderTheme = SliderTheme.of(context).copyWith(
-      activeTrackColor: AppColors.accent,
-      inactiveTrackColor: AppColors.fill,
-      thumbColor: AppColors.surface,
-      overlayColor: AppColors.focusHalo,
-      trackHeight: 4,
-      rangeThumbShape: const V16RangeThumb(),
-      thumbShape: const V16SliderThumb(),
-      showValueIndicator: ShowValueIndicator.never,
-      disabledActiveTrackColor: AppColors.borderStrong,
-      disabledInactiveTrackColor: AppColors.fill,
-      disabledThumbColor: AppColors.fill,
-    );
+    // Every slider shares the app theme: the full content width (UI-024) and the brand track.
+    final sliderTheme = numayaSliderTheme(context);
+    // Bumble's filters (ER-06), on the grey sheet (UI-023): each question is a small heading over
+    // one white card that holds its control and its "if I run out" switch, across the content
+    // width. Single-select-style lists (genders, intentions) are separate white rows instead.
     Widget heading(String text) => Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacing.s3),
+      padding: const EdgeInsets.only(bottom: AppSpacing.s2),
       child: Semantics(
         header: true,
-        child: Text(text, style: AppTypography.section),
+        child: Text(text, style: AppTypography.headerCaps),
       ),
+    );
+    Widget group(List<Widget> children, {Key? key}) => WhiteCard(
+      key: key,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.s4,
+        AppSpacing.s3,
+        AppSpacing.s4,
+        AppSpacing.s1,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: children,
+      ),
+    );
+    // UI-003 / UI-021: selectable rows, each its own white card 8pt apart.
+    Widget rows(String legend, List<Widget> options) => Semantics(
+      container: true,
+      label: legend,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (var i = 0; i < options.length; i++) ...[
+            if (i > 0) const SizedBox(height: AppSpacing.s2),
+            WhiteCard(padding: EdgeInsets.zero, child: options[i]),
+          ],
+        ],
+      ),
+    );
+    Widget note(String text) => Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.s1,
+        AppSpacing.s2,
+        AppSpacing.s1,
+        0,
+      ),
+      child: Text(text, style: AppTypography.caption),
     );
     Widget label(String title, String value) => Row(
       children: [
@@ -133,100 +161,99 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
 
     final basic = <Widget>[
       heading(l10n.filtersWhoHeading),
-      Wrap(
-        spacing: AppSpacing.s2,
-        runSpacing: AppSpacing.s2,
-        children: [
-          for (final (g, name) in genders)
-            NumayaChip(
-              label: name,
-              onCard: true,
-              selected: _draft.genders.contains(g),
-              onTap: () {
-                final next = {..._draft.genders};
-                next.contains(g) ? next.remove(g) : next.add(g);
-                _set(_draft.copyWith(genders: next));
-              },
-            ),
-        ],
-      ),
-      const SizedBox(height: AppSpacing.s2),
-      Text(
-        _draft.genders.isEmpty ? l10n.filtersEveryone : l10n.filtersWhoHint,
-        style: AppTypography.caption,
-      ),
-      const SizedBox(height: AppSpacing.s6),
+      // UI-021: the genders are selectable rows with round indicators. Several can be chosen, as
+      // before (the cardinality is pending clarification), and none means everyone.
+      rows(l10n.filtersWhoHeading, [
+        for (final (g, name) in genders)
+          OptionCard(
+            key: ValueKey('gender-${g.name}'),
+            label: name,
+            kind: OptionKind.multiCircle,
+            selected: _draft.genders.contains(g),
+            onTap: () {
+              final next = {..._draft.genders};
+              next.contains(g) ? next.remove(g) : next.add(g);
+              _set(_draft.copyWith(genders: next));
+            },
+          ),
+      ]),
+      note(_draft.genders.isEmpty ? l10n.filtersEveryone : l10n.filtersWhoHint),
+      const SizedBox(height: AppSpacing.s5),
       heading(l10n.filtersAgeHeading),
-      label(
-        l10n.filtersAge,
-        l10n.filtersAgeValue(_draft.minAge, _draft.maxAge),
-      ),
-      SliderTheme(
-        data: sliderTheme,
-        child: RangeSlider(
+      group([
+        label(
+          l10n.filtersAge,
+          l10n.filtersAgeValue(_draft.minAge, _draft.maxAge),
+        ),
+        AgeRangeSlider(
           values: RangeValues(
             _draft.minAge.toDouble(),
             _draft.maxAge.toDouble(),
           ),
-          min: DiscoveryFilters.ageFloor.toDouble(),
-          max: DiscoveryFilters.ageCeiling.toDouble(),
-          divisions: DiscoveryFilters.ageCeiling - DiscoveryFilters.ageFloor,
-          semanticFormatterCallback: (v) => '${v.round()}',
+          min: DiscoveryFilters.ageFloor,
+          max: DiscoveryFilters.ageCeiling,
           onChanged: (v) => _set(
             _draft.copyWith(minAge: v.start.round(), maxAge: v.end.round()),
           ),
         ),
-      ),
-      ListGroup(
-        children: [
-          ListRow(
-            label: l10n.filtersAgeFallback,
-            switchValue: _draft.ageFallback,
-            onSwitch: (v) => _set(_draft.copyWith(ageFallback: v)),
-          ),
-        ],
-      ),
-      const SizedBox(height: AppSpacing.s6),
-      heading(l10n.filtersDistanceHeading),
-      label(
-        l10n.filtersDistanceLabel,
-        l10n.filtersDistanceValue(_draft.maxDistanceKm),
-      ),
-      SliderTheme(
-        data: sliderTheme,
-        child: Slider(
-          value: _draft.maxDistanceKm.toDouble(),
-          min: 1,
-          max: DiscoveryFilters.distanceCeilingKm.toDouble(),
-          divisions: DiscoveryFilters.distanceCeilingKm - 1,
-          semanticFormatterCallback: (v) =>
-              l10n.filtersDistanceValue(v.round()),
-          onChanged: (v) => _set(_draft.copyWith(maxDistanceKm: v.round())),
+        ListGroup(
+          flush: true,
+          children: [
+            ListRow(
+              label: l10n.filtersAgeFallback,
+              switchValue: _draft.ageFallback,
+              onSwitch: (v) => _set(_draft.copyWith(ageFallback: v)),
+            ),
+          ],
         ),
-      ),
-      ListGroup(
-        children: [
-          ListRow(
-            label: l10n.filtersDistanceFallback,
-            switchValue: _draft.distanceFallback,
-            onSwitch: (v) => _set(_draft.copyWith(distanceFallback: v)),
+      ]),
+      const SizedBox(height: AppSpacing.s5),
+      heading(l10n.filtersDistanceHeading),
+      group([
+        label(
+          l10n.filtersDistanceLabel,
+          l10n.filtersDistanceValue(_draft.maxDistanceKm),
+        ),
+        SliderTheme(
+          data: sliderTheme,
+          child: Slider(
+            value: _draft.maxDistanceKm.toDouble(),
+            min: 1,
+            max: DiscoveryFilters.distanceCeilingKm.toDouble(),
+            divisions: DiscoveryFilters.distanceCeilingKm - 1,
+            semanticFormatterCallback: (v) =>
+                l10n.filtersDistanceValue(v.round()),
+            onChanged: (v) => _set(_draft.copyWith(maxDistanceKm: v.round())),
           ),
-        ],
-      ),
-      const SizedBox(height: AppSpacing.s6),
+        ),
+        ListGroup(
+          flush: true,
+          children: [
+            ListRow(
+              label: l10n.filtersDistanceFallback,
+              switchValue: _draft.distanceFallback,
+              onSwitch: (v) => _set(_draft.copyWith(distanceFallback: v)),
+            ),
+          ],
+        ),
+      ]),
+      const SizedBox(height: AppSpacing.s5),
       heading(l10n.filtersVerifiedHeading),
-      ListGroup(
-        footnote: l10n.filtersVerifiedNote,
-        children: [
-          ListRow(
-            leading: NumayaIcons.verified,
-            tone: AccentTone.positive,
-            label: l10n.filtersVerifiedOnly,
-            switchValue: _draft.verifiedOnly,
-            onSwitch: (v) => _set(_draft.copyWith(verifiedOnly: v)),
-          ),
-        ],
-      ),
+      group(key: const ValueKey('filters-verified-card'), [
+        ListGroup(
+          flush: true,
+          children: [
+            ListRow(
+              leading: NumayaIcons.verified,
+              tone: AccentTone.positive,
+              label: l10n.filtersVerifiedOnly,
+              switchValue: _draft.verifiedOnly,
+              onSwitch: (v) => _set(_draft.copyWith(verifiedOnly: v)),
+            ),
+          ],
+        ),
+      ]),
+      note(l10n.filtersVerifiedNote),
       Align(
         alignment: Alignment.centerLeft,
         child: TextLink(
@@ -261,52 +288,52 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
         const SizedBox(height: AppSpacing.s5),
       ],
       heading(l10n.filtersHeightHeading),
-      label(
-        l10n.filtersHeight,
-        _draft.minHeightCm == null
-            ? l10n.filtersAny
-            : l10n.filtersTallerThan(_draft.minHeightCm!),
-      ),
-      SliderTheme(
-        data: sliderTheme,
-        child: Slider(
-          value: minHeight.toDouble(),
-          min: DetailRules.minHeight.toDouble(),
-          max: 200,
-          divisions: 200 - DetailRules.minHeight,
-          semanticFormatterCallback: (v) => v.round() == DetailRules.minHeight
+      group(key: const ValueKey('filters-height-card'), [
+        label(
+          l10n.filtersHeight,
+          _draft.minHeightCm == null
               ? l10n.filtersAny
-              : l10n.filtersTallerThan(v.round()),
-          onChanged: premium
-              ? (v) => _set(
-                  v.round() == DetailRules.minHeight
-                      ? _draft.copyWith(clearHeight: true)
-                      : _draft.copyWith(minHeightCm: v.round()),
-                )
-              : null,
+              : l10n.filtersTallerThan(_draft.minHeightCm!),
         ),
-      ),
+        SliderTheme(
+          data: sliderTheme,
+          child: Slider(
+            value: minHeight.toDouble(),
+            min: DetailRules.minHeight.toDouble(),
+            max: 200,
+            divisions: 200 - DetailRules.minHeight,
+            semanticFormatterCallback: (v) => v.round() == DetailRules.minHeight
+                ? l10n.filtersAny
+                : l10n.filtersTallerThan(v.round()),
+            onChanged: premium
+                ? (v) => _set(
+                    v.round() == DetailRules.minHeight
+                        ? _draft.copyWith(clearHeight: true)
+                        : _draft.copyWith(minHeightCm: v.round()),
+                  )
+                : null,
+          ),
+        ),
+      ]),
       const SizedBox(height: AppSpacing.s5),
-      OptionGroup(
-        legend: l10n.filtersIntentionsHeading,
-        children: [
-          for (final i in kIntentionFilters)
-            OptionCard(
-              label: i,
-              kind: OptionKind.checkbox,
-              enabled: premium,
-              selected: _draft.intentions.contains(i),
-              onTap: () {
-                final next = {..._draft.intentions};
-                next.contains(i) ? next.remove(i) : next.add(i);
-                _set(_draft.copyWith(intentions: next));
-              },
-            ),
-        ],
-      ),
+      heading(l10n.filtersIntentionsHeading),
+      rows(l10n.filtersIntentionsHeading, [
+        for (final i in kIntentionFilters)
+          OptionCard(
+            label: i,
+            kind: OptionKind.checkbox,
+            enabled: premium,
+            selected: _draft.intentions.contains(i),
+            onTap: () {
+              final next = {..._draft.intentions};
+              next.contains(i) ? next.remove(i) : next.add(i);
+              _set(_draft.copyWith(intentions: next));
+            },
+          ),
+      ]),
       const SizedBox(height: AppSpacing.s5),
+      heading(l10n.filtersMoreHeading),
       ListGroup(
-        title: l10n.filtersMoreHeading,
         children: [
           for (final key in DetailKey.filterable)
             ListRow(
@@ -330,6 +357,7 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
           ),
         ],
       ),
+      const SizedBox(height: AppSpacing.s2),
     ];
 
     return Column(

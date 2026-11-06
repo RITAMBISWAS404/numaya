@@ -339,7 +339,7 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                 verified: host?.verified ?? false,
               ),
               label: l10n.eventHostedBy(eventHostName(l10n, e)),
-              detail: e.mine ? l10n.eventHostYou : l10n.eventHostSample,
+              detail: e.mine ? l10n.eventHostYou : null,
               onTap: host == null || preview
                   ? null
                   : () => context.push('${Routes.person}/${host.id}'),
@@ -357,7 +357,7 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
           const SizedBox(height: AppSpacing.s4),
           ProfileSectionCard(
             title: e.question ?? l10n.eventYourAnswer,
-            child: Text(answer, style: AppTypography.body),
+            child: Text(answer, style: AppTypography.cardPrimary),
           ),
         ],
         const SizedBox(height: AppSpacing.s5),
@@ -425,12 +425,6 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
             ),
           ),
         ],
-        const SizedBox(height: AppSpacing.s4),
-        Text(
-          e.sample ? l10n.eventsSampleNote : l10n.eventOwnNote,
-          textAlign: TextAlign.center,
-          style: AppTypography.caption,
-        ),
         const SizedBox(height: AppSpacing.s4),
       ],
     );
@@ -593,7 +587,7 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
       case Participation.going:
         return bar(
           l10n.eventYoureGoing,
-          phase == EventPhase.live ? l10n.eventLiveTitle : l10n.eventDemoRsvp,
+          phase == EventPhase.live ? l10n.eventLiveTitle : null,
           phase == EventPhase.live
               ? null
               : button(l10n.eventLeave, () => _leave(e), secondary: true),

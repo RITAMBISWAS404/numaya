@@ -1,0 +1,3894 @@
+diff --git a/.claude/skills/emil-design-eng/SKILL.md b/.claude/skills/emil-design-eng/SKILL.md
+index 62ce902..dc063c2 100644
+--- a/.claude/skills/emil-design-eng/SKILL.md
++++ b/.claude/skills/emil-design-eng/SKILL.md
+@@ -492,23 +492,25 @@ element.style.setProperty('--swipe-amount', `${distance}px`);
+ element.style.transform = `translateY(${distance}px)`;
+ ```
+ 
+-### Framer Motion hardware acceleration caveat
++### Motion hardware acceleration caveat
+ 
+-Framer Motion's shorthand properties (`x`, `y`, `scale`) are NOT hardware-accelerated. They use `requestAnimationFrame` on the main thread. For hardware acceleration, use the full `transform` string:
++From `motion` 14.2, Motion's shorthand properties (`x`, `y`, `scale`, `rotate`) are hardware-accelerated on HTML elements. Before 14.2 they use `requestAnimationFrame` on the main thread, so on those versions use the full `transform` string for hardware acceleration:
+ 
+ ```jsx
+-// NOT hardware accelerated (convenient but drops frames under load)
++// motion 14.2+: hardware accelerated. Before 14.2: main thread, drops frames under load
+ <motion.div animate={{ x: 100 }} />
+ 
+-// Hardware accelerated (stays smooth even when main thread is busy)
++// Hardware accelerated in every version (stays smooth even when main thread is busy)
+ <motion.div animate={{ transform: "translateX(100px)" }} />
+ ```
+ 
++Some Motion animations still run on the main thread in every version: layout animations (`layout`, `layoutId`), animations with `onUpdate` or `transformTemplate`, inertia (drag momentum), and values driven every frame by a motion value (drag, `useTransform`).
++
+ This matters when the browser is simultaneously loading content, running scripts, or painting. At Vercel, the dashboard tab animation used Shared Layout Animations and dropped frames during page loads. Switching to CSS animations (off main thread) fixed it.
+ 
+ ### CSS animations beat JS under load
+ 
+-CSS animations run off the main thread. When the browser is busy loading a new page, Framer Motion animations (using `requestAnimationFrame`) drop frames. CSS animations remain smooth. Use CSS for predetermined animations; JS for dynamic, interruptible ones.
++CSS animations run off the main thread. When the browser is busy loading a new page, animations that run on `requestAnimationFrame` (including Motion layout animations) drop frames. CSS animations remain smooth. Use CSS for predetermined animations; JS for dynamic, interruptible ones.
+ 
+ ### Use WAAPI for programmatic CSS animations
+ 
+@@ -669,6 +671,6 @@ When reviewing UI code, check for:
+ | Duration > 300ms on UI element             | Reduce to 150-250ms                                              |
+ | Hover animation without media query        | Add `@media (hover: hover) and (pointer: fine)`                  |
+ | Keyframes on rapidly-triggered element     | Use CSS transitions for interruptibility                         |
+-| Framer Motion `x`/`y` props under load     | Use `transform: "translateX()"` for hardware acceleration        |
++| Motion `x`/`y` props under load (pre-14.2) | Upgrade to 14.2+, or use `transform: "translateX()"`             |
+ | Same enter/exit transition speed           | Make exit faster than enter (e.g., enter 2s, exit 200ms)         |
+ | Elements all appear at once                | Add stagger delay (30-80ms between items)                        |
+diff --git a/apps/numaya_mobile/lib/app/app.dart b/apps/numaya_mobile/lib/app/app.dart
+index 584d77b..98bb115 100644
+--- a/apps/numaya_mobile/lib/app/app.dart
++++ b/apps/numaya_mobile/lib/app/app.dart
+@@ -17,6 +17,13 @@ import 'routes.dart';
+ class NumayaApp extends ConsumerWidget {
+   const NumayaApp({super.key});
+ 
++  /// Development and test hook: wraps the app below `MaterialApp` (for example with
++  /// `AccessibilityTools` from the dev-only `accessibility_tools` package, set by
++  /// `test/widget/a11y_tools_audit_test.dart`). Always null in the app itself, so no development
++  /// package is imported from `lib/` and release builds are unaffected.
++  @visibleForTesting
++  static TransitionBuilder? debugWrapper;
++
+   @override
+   Widget build(BuildContext context, WidgetRef ref) {
+     final haptics = ref.watch(accountPrefsProvider.select((p) => p.haptics));
+@@ -70,6 +77,8 @@ class NumayaApp extends ConsumerWidget {
+           );
+         }
+         // Re-asserted on every frame from the root, so no route or sheet leaves the bars black.
++        final wrap = debugWrapper;
++        if (wrap != null) app = wrap(context, app);
+         return AnnotatedRegion<SystemUiOverlayStyle>(
+           value: AppSystemUi.style,
+           child: app,
+diff --git a/apps/numaya_mobile/lib/core/design_system/design_system.dart b/apps/numaya_mobile/lib/core/design_system/design_system.dart
+index 812cae6..e4fec6a 100644
+--- a/apps/numaya_mobile/lib/core/design_system/design_system.dart
++++ b/apps/numaya_mobile/lib/core/design_system/design_system.dart
+@@ -9,7 +9,7 @@ export 'foundations/app_motion.dart';
+ export 'foundations/app_theme.dart';
+ export 'foundations/app_transitions.dart';
+ export 'foundations/app_typography.dart';
+-export 'icons/material_icons.dart' show NumayaMobileIcons;
++export 'icons/lucide_icons.dart' show NumayaMobileIcons;
+ export 'icons/numaya_icon_data.g.dart';
+ export 'widgets/buttons.dart';
+ export 'widgets/content.dart';
+diff --git a/apps/numaya_mobile/lib/core/design_system/foundations/app_layout.dart b/apps/numaya_mobile/lib/core/design_system/foundations/app_layout.dart
+index e9952da..a93601e 100644
+--- a/apps/numaya_mobile/lib/core/design_system/foundations/app_layout.dart
++++ b/apps/numaya_mobile/lib/core/design_system/foundations/app_layout.dart
+@@ -106,6 +106,7 @@ abstract final class AppMedia {
+ /// filters and tabs. A nested corner is its container's minus the inset.
+ abstract final class AppRadii {
+   static const double tag = MonoRadii.tag;
++  static const double checkbox = MonoRadii.checkbox;
+   static const double iconTile = MonoRadii.iconTile;
+   static const double iconTileLg = MonoRadii.iconTileLg;
+   static const double field = MonoRadii.field;
+@@ -164,14 +165,20 @@ abstract final class AppSizes {
+ 
+   /// Header buttons: 42 rounded squares (14 corner) inside a 44 hit area.
+   static const double iconButton = MonoSizes.iconButton;
++
++  /// The room an icon button takes in a row: the visible 38pt Ente tile inside its 44pt hit area.
++  static const double iconButtonSlot = touchMin > iconButton
++      ? touchMin
++      : iconButton;
+   static const double iconButtonSm = NumayaSizeTokens.iconButtonSizeSm;
+-  static const double chip = NumayaSizeTokens.chipHeight;
++  static const double chip = MonoSizes.filterChip;
++  static const double tagChip = MonoSizes.tagChip;
+   static const double search = MonoSizes.search;
+   static const double segmentHeight = MonoSizes.segment;
+   static const double segmentInset = MonoSizes.segmentInset;
+ 
+   /// Radio and checkbox: 22.
+-  static const double choice = NumayaSizeTokens.withingsChoiceSize;
++  static const double choice = MonoSizes.choice;
+ 
+   /// Interest-set emoji holder: 28 circle.
+   static const double mark = NumayaSizeTokens.withingsMarkSize;
+@@ -184,9 +191,9 @@ abstract final class AppSizes {
+       NumayaSizeTokens.progressSegmentHeight;
+   static const double codeCellHeight = NumayaSizeTokens.codeCellHeight;
+   static const double codeCellRadius = NumayaSizeTokens.codeCellRadius;
+-  static const double switchWidth = NumayaSizeTokens.switchWidth;
+-  static const double switchHeight = NumayaSizeTokens.switchHeight;
+-  static const double switchThumb = NumayaSizeTokens.withingsThumbSwitch;
++  static const double switchWidth = MonoSizes.switchWidth;
++  static const double switchHeight = MonoSizes.switchHeight;
++  static const double switchThumb = MonoSizes.switchThumb;
+   static const double sliderThumb = NumayaSizeTokens.withingsThumbSlider;
+   static const double avatar = NumayaSizeTokens.sizeAvatarXl;
+ 
+diff --git a/apps/numaya_mobile/lib/core/design_system/foundations/app_typography.dart b/apps/numaya_mobile/lib/core/design_system/foundations/app_typography.dart
+index dc30958..87add55 100644
+--- a/apps/numaya_mobile/lib/core/design_system/foundations/app_typography.dart
++++ b/apps/numaya_mobile/lib/core/design_system/foundations/app_typography.dart
+@@ -24,38 +24,34 @@ abstract final class AppTypography {
+   static const double extrabold = 800;
+ 
+   // Headings ----------------------------------------------------------------------------------
+-  // Larger roles use one scale (type-roles pass, TR-02): 32/38 display, 28/34 prominent, 24/30
+-  // screen, 20/26 section, 18/24 lead. Intentional exceptions: welcomeTitle, metric.
++  // Ente text styles (Figma 10854:4420) with Numaya's families: Ente's Outfit display roles use
++  // Plus Jakarta Sans, its Inter roles use Figtree. Display-1 32/40, Display-2 24/32, Display-3
++  // 20/28, H1 20/28, H2 18/24, Large 16/20, Body 14/20 medium, Mini 12/16 medium. Intentional
++  // exceptions (Numaya extensions): welcomeTitle, metric.
+ 
+   /// Display: large profile names ("Maya, 29"): 32/38 extrabold, -0.03em.
+-  static final TextStyle hero = _style(display, 32, 38, extrabold, -0.03);
++  static final TextStyle hero = _style(display, 32, 40, semibold, 0);
+ 
+   /// Prominent: tab-root page titles ("Events", "Likes"): 28/34 extrabold, -0.03em.
+-  static final TextStyle pageTitle = _style(display, 28, 34, extrabold, -0.03);
++  static final TextStyle pageTitle = _style(display, 24, 32, semibold, 0);
+ 
+   /// Screen: onboarding and editorial page headings: 24/30 bold, -0.02em.
+-  static final TextStyle flowTitle = _style(display, 24, 30, bold, -0.02);
++  static final TextStyle flowTitle = _style(display, 24, 32, semibold, 0);
+ 
+   /// Screen: result titles and the Profile name: 24/30 bold, -0.02em.
+-  static final TextStyle headline = _style(display, 24, 30, bold, -0.02);
++  static final TextStyle headline = _style(display, 24, 32, semibold, 0);
+ 
+   /// Section headings ("Your prompt", "Notifications"): 20/26 bold, -0.015em.
+-  static final TextStyle section = _style(display, 20, 26, bold, -0.015);
++  static final TextStyle section = _style(display, 20, 28, semibold, 0);
+ 
+   /// Sheet titles: 20/26 bold (the section size).
+-  static final TextStyle sheetTitle = _style(display, 20, 26, bold, -0.015);
++  static final TextStyle sheetTitle = _style(family, 20, 28, semibold, 0);
+ 
+   /// Prompt answers: 20/26 semibold, -0.01em.
+-  static final TextStyle promptAnswer = _style(
+-    display,
+-    20,
+-    26,
+-    semibold,
+-    -0.01,
+-  );
++  static final TextStyle promptAnswer = _style(family, 20, 28, semibold, 0);
+ 
+   /// Empty-state titles: 20/26 bold (the section size).
+-  static final TextStyle emptyTitle = _style(display, 20, 26, bold, -0.015);
++  static final TextStyle emptyTitle = _style(display, 20, 28, semibold, 0);
+ 
+   /// Welcome headline: `clamp(36, 10.4vw, 44)`, line 1.06, bold, -0.03em.
+   static TextStyle welcomeTitle(double screenWidth) {
+@@ -71,37 +67,37 @@ abstract final class AppTypography {
+ 
+   // Text -------------------------------------------------------------------------------------
+   /// Grouped-row labels: 16/22 medium.
+-  static final TextStyle row = _style(family, 16, 22, medium, 0);
++  static final TextStyle row = _style(family, 14, 20, medium, 0);
+ 
+   /// Card titles (event titles in lists, prompt questions): 18/24 bold, -0.01em.
+-  static final TextStyle card = _style(display, 18, 24, bold, -0.01);
++  static final TextStyle card = _style(family, 18, 24, semibold, 0);
+ 
+   /// Body copy: 16/24 regular.
+   static final TextStyle body = _style(
+     family,
+     MonoType.bodySize,
+     MonoType.bodyLine,
+-    regular,
++    medium,
+     0,
+   );
+ 
+   /// Secondary body: 14/20 regular.
+-  static final TextStyle bodySm = _style(family, 14, 20, regular, 0);
++  static final TextStyle bodySm = _style(family, 14, 20, medium, 0);
+ 
+   /// Field text: 16/22 regular.
+-  static final TextStyle input = _style(family, 16, 22, regular, 0);
++  static final TextStyle input = _style(family, 14, 20, medium, 0);
+ 
+   /// Full-width buttons: 16/20 semibold.
+-  static final TextStyle button = _style(family, 16, 20, semibold, 0);
++  static final TextStyle button = _style(family, 14, 20, medium, 0);
+ 
+   /// Small pill buttons and pills: 14/18 semibold.
+-  static final TextStyle buttonSm = _style(family, 14, 18, semibold, 0);
++  static final TextStyle buttonSm = _style(family, 14, 20, medium, 0);
+ 
+   /// Labels on chips and tiles: 14/18 medium, secondary.
+   static final TextStyle label = _style(
+     family,
+     14,
+-    18,
++    20,
+     medium,
+     0,
+   ).copyWith(color: AppColors.textSecondary);
+@@ -117,9 +113,9 @@ abstract final class AppTypography {
+   /// Captions and metadata: 13/18 regular, muted.
+   static final TextStyle caption = _style(
+     family,
+-    13,
+-    18,
+-    regular,
++    12,
++    16,
++    medium,
+     0,
+   ).copyWith(color: AppColors.textMuted);
+ 
+@@ -133,7 +129,7 @@ abstract final class AppTypography {
+   ).copyWith(color: AppColors.textMuted);
+ 
+   /// Modal header titles ("Edit profile"): 17/22 semibold, sentence case.
+-  static final TextStyle headerCaps = _style(family, 17, 22, semibold, -0.005);
++  static final TextStyle headerCaps = _style(family, 16, 20, semibold, 0);
+ 
+   /// Eyebrows ("SAT, JUL 11 · 7:30 PM", "YOUR PROMPT"): 12/16 semibold, 0.06em, muted. Apply to
+   /// upper-cased text.
+@@ -142,17 +138,17 @@ abstract final class AppTypography {
+     12,
+     16,
+     semibold,
+-    0.06,
++    0,
+   ).copyWith(color: AppColors.textMuted);
+ 
+   /// Field and option-group labels ("First name"): 14/18 semibold, secondary, sentence case.
+   static final TextStyle fieldLabel = _style(
+     family,
+     14,
+-    18,
+-    semibold,
++    20,
++    medium,
+     0,
+-  ).copyWith(color: AppColors.textSecondary);
++  ).copyWith(color: AppColors.textPrimary);
+ 
+   /// Large numbers on metric cards and hero status (Bevel): 40/44 bold, tabular figures.
+   static final TextStyle metric = _style(
+@@ -166,7 +162,7 @@ abstract final class AppTypography {
+   /// The unit beside a metric ("/ 100", "%"): 15/20 medium, muted.
+   static final TextStyle metricUnit = _style(
+     family,
+-    15,
++    14,
+     20,
+     medium,
+     0,
+diff --git a/apps/numaya_mobile/lib/core/design_system/icons/lucide_icons.dart b/apps/numaya_mobile/lib/core/design_system/icons/lucide_icons.dart
+new file mode 100644
+index 0000000..1107e3f
+--- /dev/null
++++ b/apps/numaya_mobile/lib/core/design_system/icons/lucide_icons.dart
+@@ -0,0 +1,93 @@
++import 'package:flutter/widgets.dart';
++import 'package:lucide_icons_flutter/lucide_icons.dart';
++
++import 'numaya_icon_data.g.dart';
++
++/// Ente design-system experiment: every [NumayaIcons] name drawn with one Lucide glyph
++/// (lucide_icons_flutter 4.0.1, MIT; Lucide glyphs ISC). Lucide is a stroke-only set, so there is
++/// no filled twin: a state that the Material set showed by filling the glyph (an active tab, a
++/// saved heart) is carried by colour and by the control's own surface instead
++/// (docs/design-experiments/ente-design-system/DECISIONS.md, ED-03).
++///
++/// The names stay the shared vocabulary; only this map changes the drawing.
++const Map<NumayaIcons, IconData> kLucideIcons = {
++  // Every chevronLeft is a back control; Ente headers draw it as an arrow (arrow-left-02).
++  NumayaIcons.chevronLeft: LucideIcons.arrowLeft,
++  NumayaIcons.chevronRight: LucideIcons.chevronRight,
++  NumayaIcons.chevronDown: LucideIcons.chevronDown,
++  NumayaIcons.chevronUp: LucideIcons.chevronUp,
++  NumayaIcons.arrowRight: LucideIcons.arrowRight,
++  NumayaIcons.arrowUp: LucideIcons.arrowUp,
++  NumayaIcons.check: LucideIcons.check,
++  NumayaIcons.plus: LucideIcons.plus,
++  NumayaIcons.minus: LucideIcons.minus,
++  NumayaIcons.close: LucideIcons.x,
++  NumayaIcons.search: LucideIcons.search,
++  NumayaIcons.lock: LucideIcons.lock,
++  NumayaIcons.heart: LucideIcons.heart,
++  NumayaIcons.star: LucideIcons.star,
++  NumayaIcons.delete: LucideIcons.delete,
++  NumayaIcons.message: LucideIcons.messageCircle,
++  NumayaIcons.shield: LucideIcons.shieldCheck,
++  NumayaIcons.verified: LucideIcons.badgeCheck,
++  NumayaIcons.flag: LucideIcons.flag,
++  NumayaIcons.block: LucideIcons.ban,
++  NumayaIcons.info: LucideIcons.info,
++  NumayaIcons.alert: LucideIcons.triangleAlert,
++  NumayaIcons.wifiOff: LucideIcons.wifiOff,
++  NumayaIcons.camera: LucideIcons.camera,
++  NumayaIcons.image: LucideIcons.image,
++  NumayaIcons.mic: LucideIcons.mic,
++  NumayaIcons.send: LucideIcons.sendHorizontal,
++  NumayaIcons.more: LucideIcons.ellipsis,
++  NumayaIcons.filter: LucideIcons.slidersHorizontal,
++  NumayaIcons.settings: LucideIcons.settings,
++  NumayaIcons.user: LucideIcons.user,
++  NumayaIcons.userMinus: LucideIcons.userMinus,
++  NumayaIcons.trash: LucideIcons.trash2,
++  NumayaIcons.location: LucideIcons.mapPin,
++  NumayaIcons.bell: LucideIcons.bell,
++  NumayaIcons.eyeOff: LucideIcons.eyeOff,
++  NumayaIcons.undo: LucideIcons.undo2,
++  NumayaIcons.home: LucideIcons.house,
++  NumayaIcons.event: LucideIcons.calendarHeart,
++  NumayaIcons.calendar: LucideIcons.calendarDays,
++  NumayaIcons.clock: LucideIcons.clock,
++  NumayaIcons.groups: LucideIcons.users,
++  NumayaIcons.share: LucideIcons.share2,
++  NumayaIcons.edit: LucideIcons.pencil,
++  NumayaIcons.waitlist: LucideIcons.hourglass,
++  NumayaIcons.eventBusy: LucideIcons.calendarX,
++  NumayaIcons.help: LucideIcons.circleQuestionMark,
++  NumayaIcons.premium: LucideIcons.crown,
++  NumayaIcons.link: LucideIcons.link,
++  NumayaIcons.music: LucideIcons.music,
++  NumayaIcons.maintenance: LucideIcons.wrench,
++  NumayaIcons.public: LucideIcons.globe,
++  NumayaIcons.nearby: LucideIcons.navigation,
++  NumayaIcons.tag: LucideIcons.tag,
++  NumayaIcons.draft: LucideIcons.fileText,
++  NumayaIcons.pending: LucideIcons.circleDashed,
++  NumayaIcons.refresh: LucideIcons.refreshCw,
++  NumayaIcons.userAdd: LucideIcons.userPlus,
++  NumayaIcons.explore: LucideIcons.compass,
++  NumayaIcons.food: LucideIcons.utensils,
++  NumayaIcons.park: LucideIcons.trees,
++  NumayaIcons.run: LucideIcons.personStanding,
++  NumayaIcons.palette: LucideIcons.palette,
++  NumayaIcons.games: LucideIcons.dices,
++  NumayaIcons.interests: LucideIcons.shapes,
++  NumayaIcons.cards: LucideIcons.layers,
++  NumayaIcons.sparkle: LucideIcons.sparkles,
++};
++
++/// Glyphs the mobile app needs beyond the shared web set.
++enum NumayaMobileIcons { video, play, stop, attach }
++
++/// Mobile-only glyphs, drawn with Lucide like [kLucideIcons].
++const Map<NumayaMobileIcons, IconData> kLucideMobileIcons = {
++  NumayaMobileIcons.video: LucideIcons.video,
++  NumayaMobileIcons.play: LucideIcons.play,
++  NumayaMobileIcons.stop: LucideIcons.square,
++  NumayaMobileIcons.attach: LucideIcons.plus,
++};
+diff --git a/apps/numaya_mobile/lib/core/design_system/icons/material_icons.dart b/apps/numaya_mobile/lib/core/design_system/icons/material_icons.dart
+deleted file mode 100644
+index 51855ab..0000000
+--- a/apps/numaya_mobile/lib/core/design_system/icons/material_icons.dart
++++ /dev/null
+@@ -1,136 +0,0 @@
+-import 'package:flutter/material.dart';
+-
+-import 'numaya_icon_data.g.dart';
+-
+-/// Every [NumayaIcons] name drawn with Flutter's standard Material Icons (rounded style, the
+-/// closest match to V16's Material Symbols Rounded), as (filled, outline). The outline drawing is
+-/// used where an unfilled icon carries a state (an inactive tab, an unsaved heart).
+-///
+-/// The names stay the shared vocabulary with the web design system; only the Flutter rendering
+-/// changes (docs/mobile/UI_REFINEMENT_DECISIONS.md, RD-04). `star_shine` has no Material Icons
+-/// equivalent: curated picks use `auto_awesome`.
+-const Map<NumayaIcons, (IconData, IconData)> kMaterialIcons = {
+-  NumayaIcons.chevronLeft: (
+-    Icons.chevron_left_rounded,
+-    Icons.chevron_left_rounded,
+-  ),
+-  NumayaIcons.chevronRight: (
+-    Icons.chevron_right_rounded,
+-    Icons.chevron_right_rounded,
+-  ),
+-  NumayaIcons.chevronDown: (
+-    Icons.keyboard_arrow_down_rounded,
+-    Icons.keyboard_arrow_down_rounded,
+-  ),
+-  NumayaIcons.chevronUp: (
+-    Icons.keyboard_arrow_up_rounded,
+-    Icons.keyboard_arrow_up_rounded,
+-  ),
+-  NumayaIcons.arrowRight: (
+-    Icons.arrow_forward_rounded,
+-    Icons.arrow_forward_rounded,
+-  ),
+-  NumayaIcons.arrowUp: (Icons.arrow_upward_rounded, Icons.arrow_upward_rounded),
+-  NumayaIcons.check: (Icons.check_rounded, Icons.check_rounded),
+-  NumayaIcons.plus: (Icons.add_rounded, Icons.add_rounded),
+-  NumayaIcons.minus: (Icons.remove_rounded, Icons.remove_rounded),
+-  NumayaIcons.close: (Icons.close_rounded, Icons.close_rounded),
+-  NumayaIcons.search: (Icons.search_rounded, Icons.search_rounded),
+-  NumayaIcons.lock: (Icons.lock_rounded, Icons.lock_outline_rounded),
+-  NumayaIcons.heart: (Icons.favorite_rounded, Icons.favorite_border_rounded),
+-  NumayaIcons.star: (Icons.star_rounded, Icons.star_border_rounded),
+-  NumayaIcons.delete: (Icons.backspace_rounded, Icons.backspace_outlined),
+-  NumayaIcons.message: (
+-    Icons.chat_bubble_rounded,
+-    Icons.chat_bubble_outline_rounded,
+-  ),
+-  NumayaIcons.shield: (
+-    Icons.verified_user_rounded,
+-    Icons.verified_user_outlined,
+-  ),
+-  NumayaIcons.verified: (Icons.verified_rounded, Icons.verified_outlined),
+-  NumayaIcons.flag: (Icons.flag_rounded, Icons.flag_outlined),
+-  NumayaIcons.block: (Icons.block_rounded, Icons.block_rounded),
+-  NumayaIcons.info: (Icons.info_rounded, Icons.info_outline_rounded),
+-  NumayaIcons.alert: (Icons.warning_rounded, Icons.warning_amber_rounded),
+-  NumayaIcons.wifiOff: (Icons.wifi_off_rounded, Icons.wifi_off_rounded),
+-  NumayaIcons.camera: (Icons.photo_camera_rounded, Icons.photo_camera_outlined),
+-  NumayaIcons.image: (Icons.image_rounded, Icons.image_outlined),
+-  NumayaIcons.mic: (Icons.mic_rounded, Icons.mic_none_rounded),
+-  NumayaIcons.send: (Icons.arrow_upward_rounded, Icons.arrow_upward_rounded),
+-  NumayaIcons.more: (Icons.more_horiz_rounded, Icons.more_horiz_rounded),
+-  NumayaIcons.filter: (Icons.tune_rounded, Icons.tune_rounded),
+-  NumayaIcons.settings: (Icons.settings_rounded, Icons.settings_outlined),
+-  NumayaIcons.user: (Icons.person_rounded, Icons.person_outline_rounded),
+-  NumayaIcons.userMinus: (
+-    Icons.person_remove_rounded,
+-    Icons.person_remove_outlined,
+-  ),
+-  NumayaIcons.trash: (Icons.delete_rounded, Icons.delete_outline_rounded),
+-  NumayaIcons.location: (Icons.location_on_rounded, Icons.location_on_outlined),
+-  NumayaIcons.bell: (
+-    Icons.notifications_rounded,
+-    Icons.notifications_none_rounded,
+-  ),
+-  NumayaIcons.eyeOff: (
+-    Icons.visibility_off_rounded,
+-    Icons.visibility_off_outlined,
+-  ),
+-  NumayaIcons.undo: (Icons.undo_rounded, Icons.undo_rounded),
+-  NumayaIcons.home: (Icons.home_rounded, Icons.home_outlined),
+-  NumayaIcons.event: (Icons.event_rounded, Icons.event_outlined),
+-  NumayaIcons.calendar: (
+-    Icons.calendar_month_rounded,
+-    Icons.calendar_month_outlined,
+-  ),
+-  NumayaIcons.clock: (Icons.schedule_rounded, Icons.schedule_outlined),
+-  NumayaIcons.groups: (Icons.groups_rounded, Icons.groups_outlined),
+-  NumayaIcons.share: (Icons.share_rounded, Icons.share_outlined),
+-  NumayaIcons.edit: (Icons.edit_rounded, Icons.edit_outlined),
+-  NumayaIcons.waitlist: (
+-    Icons.hourglass_top_rounded,
+-    Icons.hourglass_top_rounded,
+-  ),
+-  NumayaIcons.eventBusy: (Icons.event_busy_rounded, Icons.event_busy_outlined),
+-  NumayaIcons.help: (Icons.help_rounded, Icons.help_outline_rounded),
+-  NumayaIcons.premium: (
+-    Icons.workspace_premium_rounded,
+-    Icons.workspace_premium_outlined,
+-  ),
+-  NumayaIcons.link: (Icons.link_rounded, Icons.link_rounded),
+-  NumayaIcons.music: (Icons.music_note_rounded, Icons.music_note_outlined),
+-  NumayaIcons.maintenance: (
+-    Icons.construction_rounded,
+-    Icons.construction_rounded,
+-  ),
+-  NumayaIcons.public: (Icons.public_rounded, Icons.public_rounded),
+-  NumayaIcons.nearby: (Icons.near_me_rounded, Icons.near_me_outlined),
+-  NumayaIcons.tag: (Icons.sell_rounded, Icons.sell_outlined),
+-  NumayaIcons.draft: (Icons.description_rounded, Icons.description_outlined),
+-  NumayaIcons.pending: (Icons.pending_rounded, Icons.pending_outlined),
+-  NumayaIcons.refresh: (Icons.refresh_rounded, Icons.refresh_rounded),
+-  NumayaIcons.userAdd: (Icons.person_add_rounded, Icons.person_add_outlined),
+-  NumayaIcons.explore: (Icons.explore_rounded, Icons.explore_outlined),
+-  NumayaIcons.food: (Icons.restaurant_rounded, Icons.restaurant_rounded),
+-  NumayaIcons.park: (Icons.park_rounded, Icons.park_outlined),
+-  NumayaIcons.run: (Icons.directions_run_rounded, Icons.directions_run_rounded),
+-  NumayaIcons.palette: (Icons.palette_rounded, Icons.palette_outlined),
+-  NumayaIcons.games: (Icons.casino_rounded, Icons.casino_outlined),
+-  NumayaIcons.interests: (Icons.interests_rounded, Icons.interests_outlined),
+-  NumayaIcons.cards: (Icons.style_rounded, Icons.style_outlined),
+-  NumayaIcons.sparkle: (
+-    Icons.auto_awesome_rounded,
+-    Icons.auto_awesome_outlined,
+-  ),
+-};
+-
+-/// Glyphs the mobile app needs that the shared web set (`NumayaIcons`, generated) doesn't have
+-/// yet: chat attachments. Drawn with [MobileIcon]. Add them to the web set before the web uses them.
+-enum NumayaMobileIcons { video, play, stop, attach }
+-
+-const Map<NumayaMobileIcons, IconData> kMobileIcons = {
+-  NumayaMobileIcons.video: Icons.videocam_rounded,
+-  NumayaMobileIcons.play: Icons.play_arrow_rounded,
+-  NumayaMobileIcons.stop: Icons.stop_rounded,
+-  NumayaMobileIcons.attach: Icons.add_rounded,
+-};
+diff --git a/apps/numaya_mobile/lib/core/design_system/tokens/monochrome_tokens.dart b/apps/numaya_mobile/lib/core/design_system/tokens/monochrome_tokens.dart
+index 399eb81..0454e34 100644
+--- a/apps/numaya_mobile/lib/core/design_system/tokens/monochrome_tokens.dart
++++ b/apps/numaya_mobile/lib/core/design_system/tokens/monochrome_tokens.dart
+@@ -1,7 +1,11 @@
+ import 'package:flutter/painting.dart';
+ 
+-/// Monochrome Meetup tokens: the Flutter-only source of truth for the experimental visual system on
+-/// `experiment/numaya-monochrome-meetup`.
++/// Ente design-system tokens (experiment/numaya-ente-design-system): the Flutter-only source of
++/// truth. Values come from the Ente Figma file (22AeTw6QiPj2fNYHLhC7MK: colours 10871:4421, type
++/// 10854:4420, spacing 11107:37840, radius 11112:4508) with Numaya purple in Ente's
++/// `primary/*` role. Every mapping and exception is in
++/// `docs/design-experiments/ente-design-system/TOKENS.md`. Names are kept from the monochrome
++/// system so the widgets did not need renaming.
+ ///
+ /// Hand-authored on purpose. The generated `numaya_tokens.g.dart` mirrors the web prototype's
+ /// `tokens/numaya.tokens.json`, and this experiment must not change the web. Each value's role,
+@@ -10,46 +14,46 @@ import 'package:flutter/painting.dart';
+ abstract final class MonoColors {
+   // Neutrals: a cool grey ramp (slightly violet-leaning so purple sits in it naturally).
+   /// Page behind every screen: soft cool grey, never the old warm stone.
+-  static const Color canvas = Color(0xFFF4F4F6);
++  static const Color canvas = Color(0xFFF4F4F4);
+ 
+   /// Cards, rows, sheets, fields, bars.
+   static const Color surface = Color(0xFFFFFFFF);
+ 
+   /// Secondary surface: idle pills, segmented track, tiles, switch-off track, chips on white.
+-  static const Color fill = Color(0xFFECECF0);
++  static const Color fill = Color(0xFFEAEAEA);
+ 
+   /// Stronger fill: photo placeholders, pressed fill, slider rail.
+-  static const Color fillStrong = Color(0xFFE2E2E7);
++  static const Color fillStrong = Color(0xFFDEDEDE);
+ 
+   /// Hairlines: dividers, card edges, bar edges.
+-  static const Color line = Color(0xFFE4E4E9);
++  static const Color line = Color(0xFFE0E0E0);
+ 
+   /// Filled form fields and filled secondary buttons: a neutral one step deeper than [fill], so
+   /// it reads on white surfaces and on the canvas alike.
+-  static const Color field = Color(0xFFEAEAEF);
++  static const Color field = Color(0xFFEAEAEA);
+ 
+   /// Pressed state of filled neutral controls.
+-  static const Color fieldPressed = Color(0xFFDDDDE3);
++  static const Color fieldPressed = Color(0xFFDEDEDE);
+ 
+   /// Dashed add slots, grabber, decorative strong lines (not a control boundary).
+-  static const Color lineStrong = Color(0xFFC7C7CE);
++  static const Color lineStrong = Color(0xFFD2D2D2);
+ 
+   /// Control boundaries that must meet 3:1: fields, unselected radios and checkboxes (3.38:1 on
+   /// white, 3.07:1 on the canvas).
+-  static const Color outline = Color(0xFF8B8B94);
++  static const Color outline = Color(0xFF8A8A8A);
+ 
+   /// Near-black charcoal: text, headings, strong icons (17.72:1 on white).
+-  static const Color ink = Color(0xFF18181B);
++  static const Color ink = Color(0xFF000000);
+ 
+   /// Body copy and row labels (8.77:1 on white).
+-  static const Color text2 = Color(0xFF4A4A53);
++  static const Color text2 = Color(0xFF1A1A1A);
+ 
+   /// Captions, metadata, eyebrows (5.43:1 on white, 4.95:1 canvas, 4.61:1 fill, 4.78:1 tint).
+-  static const Color muted = Color(0xFF696972);
++  static const Color muted = Color(0xFF666666);
+ 
+   /// Disabled fills and their labels (labels 3.42:1; disabled controls are exempt from 1.4.3).
+-  static const Color disabled = Color(0xFFE4E4E9);
+-  static const Color disabledText = Color(0xFF8A8A93);
++  static const Color disabled = Color(0xFFEAEAEA);
++  static const Color disabledText = Color(0xFF8A8A8A);
+ 
+   // Purple: the Numaya brand (#7262C7, canonical in tokens/numaya.tokens.json `purple.600`).
+   /// Primary actions, selected pills and segments, active tab, switch on, progress.
+@@ -70,33 +74,33 @@ abstract final class MonoColors {
+   static const Color onBrand = Color(0xFFFFFFFF);
+ 
+   // States.
+-  static const Color success = Color(0xFF2B774B);
+-  static const Color successSubtle = Color(0xFFE8F3EC);
+-  static const Color danger = Color(0xFFC8383B);
+-  static const Color dangerSubtle = Color(0xFFFBEDED);
++  static const Color success = Color(0xFF036614);
++  static const Color successSubtle = Color(0xFFDDEEDF);
++  static const Color danger = Color(0xFFC52E2E);
++  static const Color dangerSubtle = Color(0xFFFAEBEB);
+   static const Color warning = Color(0xFF8A5A00);
+-  static const Color warningSubtle = Color(0xFFFBF3E2);
++  static const Color warningSubtle = Color(0xFFFAF4EB);
+ 
+   // Semantic accents (final UX polish, FP-01): restrained hues for icon tiles, statuses and
+   // illustrations only. Purple stays the one action colour. Each foreground meets 4.5:1 on its own
+   // tint and on white, so it may carry a label as well as an icon.
+   /// Information, location, notifications: muted blue (5.92:1 on its tint, 6.78:1 on white).
+-  static const Color info = Color(0xFF2C5C99);
+-  static const Color infoSubtle = Color(0xFFEAF0FA);
++  static const Color info = Color(0xFF0E5FD9);
++  static const Color infoSubtle = Color(0xFFE7EFFA);
+ 
+   /// Social and heart moments (likes, matches, people): muted coral (5.40:1 on its tint).
+   static const Color social = Color(0xFFA8402F);
+   static const Color socialSubtle = Color(0xFFFCEEEA);
+ 
+   /// Separators inside grouped lists: decorative, deliberately quiet (1.18:1 on white).
+-  static const Color divider = Color(0xFFECECF0);
++  static const Color divider = Color(0xFFEBEBEB);
+ 
+   /// Modal barrier: ink at 45%.
+-  static const Color scrim = Color(0x7318181B);
++  static const Color scrim = Color(0x66000000);
+ 
+   /// Solid translucent panel for text over photos (replaces gradient scrims): ink at 72%. White text
+   /// on it stays above 4.5:1 even over a white photo (blend ≈ #585859, 7.2:1).
+-  static const Color photoPanel = Color(0xB818181B);
++  static const Color photoPanel = Color(0xB8000000);
+ 
+   /// Round buttons floating on photos: white at 90%.
+   static const Color photoButton = Color(0xE6FFFFFF);
+@@ -144,51 +148,64 @@ abstract final class MonoGlass {
+ /// Corner radii: generous, role-specific (premium TOKENS.md "Shape"). Larger surfaces take larger
+ /// corners; nested corners are the container's minus the inset.
+ abstract final class MonoRadii {
+-  static const double tag = 8;
++  static const double tag = 12;
++
++  /// Ente Checkbox: radius/sm (4) on 16, scaled with the 20pt mark.
++  static const double checkbox = 5;
+ 
+   /// Rounded-square icon tiles in rows (40pt tile; 14 for the 48pt one).
+   static const double iconTile = 12;
+-  static const double iconTileLg = 14;
+-  static const double field = 18;
+-  static const double control = 16;
+-  static const double iconButton = 16;
+-  static const double tile = 18;
+-  static const double card = 24;
+-  static const double heroCard = 32;
+-  static const double image = 24;
+-  static const double sheet = 32;
+-  static const double dialog = 28;
++  static const double iconTileLg = 12;
++  static const double field = 16;
++  static const double control = 20;
++  static const double iconButton = 12;
++  static const double tile = 16;
++  static const double card = 20;
++  static const double heroCard = 24;
++  static const double image = 16;
++  static const double sheet = 24;
++  static const double dialog = 20;
+   static const double pill = 999;
+ }
+ 
+ /// Sizes that change with the new rhythm.
+ abstract final class MonoSizes {
+-  static const double button = 56;
++  static const double button = 52;
+   static const double buttonSm = 40;
+-  static const double field = 58;
++  static const double field = 52;
+   static const double row = 60;
+ 
+   /// Leading icon tiles: 40 in rows, 48 in cards and headers; the icon inside is 20 / 22.
+-  static const double iconTile = 40;
++  static const double iconTile = 36;
+   static const double iconTileLg = 48;
+-  static const double iconButton = 46;
++  static const double iconButton = 38;
+   static const double search = 52;
+-  static const double segment = 46;
++  static const double segment = 44;
+   static const double segmentInset = 4;
+ 
+   /// The floating icon-only navigation pill: 64 tall, 48pt targets.
+-  static const double tabBar = 64;
+-  static const double tabItem = 52;
++  static const double tabBar = 62;
++  static const double tabItem = 38;
++
++  /// Ente Toggle Switch (31 x 18) at 1.5x; Ente Checkbox and Radio (16) at 1.25x.
++  static const double switchWidth = 46;
++  static const double switchHeight = 27;
++  static const double switchThumb = 23;
++  static const double choice = 20;
++
++  /// Ente Filter Chip (9524:4352) 40 tall; Tag Chip (2482:6479) 44 tall.
++  static const double filterChip = 40;
++  static const double tagChip = 44;
+ }
+ 
+ /// Spacing roles on the 4pt scale (LAYOUT_GUIDELINES.md).
+ abstract final class MonoSpace {
+-  static const double gutter = 20;
+-  static const double section = 40;
+-  static const double cardPadding = 20;
+-  static const double heroPadding = 24;
++  static const double gutter = 16;
++  static const double section = 24;
++  static const double cardPadding = 16;
++  static const double heroPadding = 20;
+   static const double item = 12;
+-  static const double field = 20;
++  static const double field = 16;
+ }
+ 
+ /// Elevation: flat by default. Only things that float get a shadow, and it is soft.
+@@ -202,9 +219,9 @@ abstract final class MonoShadows {
+   ];
+ 
+   /// Floating bars and buttons over content: tab bar, sticky action bar, photo buttons, toast.
++  /// Ente Nav Bar (7634:54194): drop-shadow 0 4 8.75 black at 25%.
+   static const List<BoxShadow> floating = [
+-    BoxShadow(color: Color(0x0F18181B), blurRadius: 4, offset: Offset(0, 1)),
+-    BoxShadow(color: Color(0x1418181B), blurRadius: 24, offset: Offset(0, 8)),
++    BoxShadow(color: Color(0x40000000), blurRadius: 8.75, offset: Offset(0, 4)),
+   ];
+ 
+   /// The selected segment in a segmented control.
+diff --git a/apps/numaya_mobile/lib/core/design_system/widgets/buttons.dart b/apps/numaya_mobile/lib/core/design_system/widgets/buttons.dart
+index 7125f5a..9a3f507 100644
+--- a/apps/numaya_mobile/lib/core/design_system/widgets/buttons.dart
++++ b/apps/numaya_mobile/lib/core/design_system/widgets/buttons.dart
+@@ -27,9 +27,10 @@ enum NumayaButtonVariant {
+   destructiveSolid,
+ }
+ 
+-/// Monochrome button: a 56pt full pill. Primary is brand purple with white text; secondary a
+-/// filled neutral with ink text (no outlines); [small] is the compact 40pt pill ("Edit profile").
+-/// Disabled: neutral grey fill with grey text.
++/// Ente Button Large / Small (2207:41759, 2207:41578): 52pt tall, 20pt corners, 24pt side insets,
++/// Body 14/20 label. Primary is Numaya purple (Ente's primary role) with white text; secondary the
++/// fill/dark neutral with ink text; [small] is the compact 40pt button. Disabled: fill/dark with
++/// grey text.
+ class NumayaButton extends StatelessWidget {
+   const NumayaButton({
+     super.key,
+@@ -61,8 +62,8 @@ class NumayaButton extends StatelessWidget {
+         : textOnly
+         ? AppSizes.buttonHeightQuiet
+         : AppSizes.buttonHeight;
+-    // Every button is a pill (RD-02: pills for actions, rounded rectangles for surfaces).
+-    const radius = AppRadii.pill;
++    // Ente Button Large (2207:41760): a 20pt rounded rectangle, not a pill.
++    const radius = AppRadii.control;
+ 
+     // A small button that isn't primary, tint or solid red is the outlined pill.
+     final effective =
+@@ -117,12 +118,15 @@ class NumayaButton extends StatelessWidget {
+           NumayaIcon(icon!, size: small ? 18 : AppSizes.iconMd, color: fg),
+           const SizedBox(width: AppSpacing.s2),
+         ],
++        // Up to two centred lines: at large text on a narrow phone the label wraps instead of
++        // being cut off ("Create an accou…" on Welcome at 320pt and 200%, final design run FD-B1).
+         Flexible(
+           child: Text(
+             label,
+-            maxLines: 1,
++            maxLines: 2,
+             overflow: TextOverflow.ellipsis,
+-            style: textStyle.copyWith(color: fg, height: 1),
++            textAlign: TextAlign.center,
++            style: textStyle.copyWith(color: fg, height: 1.2),
+           ),
+         ),
+       ],
+@@ -136,10 +140,12 @@ class NumayaButton extends StatelessWidget {
+       child: AnimatedContainer(
+         duration: AppMotion.duration(context, AppMotion.base),
+         curve: AppMotion.easeOut,
+-        height: height,
++        // At least the button height; taller only when the label wraps.
++        constraints: BoxConstraints(minHeight: height),
+         width: expand && !small ? double.infinity : null,
+         padding: EdgeInsets.symmetric(
+           horizontal: small ? AppSpacing.s4 : AppSpacing.s6,
++          vertical: AppSpacing.s2,
+         ),
+         decoration: BoxDecoration(
+           color: bg,
+@@ -152,10 +158,11 @@ class NumayaButton extends StatelessWidget {
+                   strokeAlign: BorderSide.strokeAlignInside,
+                 ),
+         ),
+-        // A compact button hugs its label; only full-width buttons fill the row.
+-        alignment: expand && !small ? Alignment.center : null,
++        // A compact button hugs its label; only full-width buttons fill the row. Both factors are
++        // 1 so the button never stretches to fill a tall parent (only `minHeight` applies).
+         child: Center(
+           widthFactor: 1,
++          heightFactor: 1,
+           child: loading
+               ? SizedBox.square(
+                   dimension: 20,
+@@ -229,8 +236,12 @@ enum NavButtonStyle {
+   /// A grey rounded square.
+   flat,
+ 
+-  /// A bare ink icon: modal headers, sheet headers.
++  /// A bare ink icon: modal headers.
+   plain,
++
++  /// Ente Icon Button Type=Circular (5518:37854): a 38pt fill/dark circle, the sheet close button
++  /// and controls over photos.
++  circular,
+ }
+ 
+ /// Round icon button (`.nav-button`). Always has an accessible [label].
+@@ -261,6 +272,9 @@ class NavIconButton extends StatelessWidget {
+     final size = style == NavButtonStyle.flat
+         ? AppSizes.iconButtonSm
+         : AppSizes.iconButton;
++    final radius = style == NavButtonStyle.circular
++        ? AppRadii.pill
++        : AppRadii.iconButton;
+     final (Color bg, Color? ring) = brand
+         ? (AppColors.accentTint, null)
+         : switch (style) {
+@@ -268,6 +282,7 @@ class NavIconButton extends StatelessWidget {
+             NavButtonStyle.floating => (AppColors.surface, null),
+             NavButtonStyle.flat => (AppColors.fill, null),
+             NavButtonStyle.plain => (Colors.transparent, null),
++            NavButtonStyle.circular => (AppColors.fill, null),
+           };
+     return Tooltip(
+       message: label,
+@@ -276,14 +291,14 @@ class NavIconButton extends StatelessWidget {
+         onTap: onPressed,
+         semanticLabel: label,
+         excludeChildSemantics: true,
+-        pressedScale: 0.92,
+-        borderRadius: AppRadii.all(AppRadii.iconButton),
++        pressedScale: 0.95,
++        borderRadius: AppRadii.all(radius),
+         child: Container(
+           width: size,
+           height: size,
+           decoration: BoxDecoration(
+             color: bg,
+-            borderRadius: AppRadii.all(AppRadii.iconButton),
++            borderRadius: AppRadii.all(radius),
+             border: ring == null
+                 ? null
+                 : Border.all(
+@@ -295,9 +310,9 @@ class NavIconButton extends StatelessWidget {
+           alignment: Alignment.center,
+           child: NumayaIcon(
+             icon,
+-            size: style == NavButtonStyle.flat
+-                ? AppSizes.iconMd
+-                : AppSizes.iconLg,
++            // Ente Icon: Small (18) inside a 38pt Icon Button; 20 here for Lucide's thinner
++            // stroke at phone density.
++            size: AppSizes.iconMd,
+             outline: outline,
+             // Unavailable (no handler): the icon greys out, the button keeps its place.
+             color: onPressed == null
+diff --git a/apps/numaya_mobile/lib/core/design_system/widgets/content.dart b/apps/numaya_mobile/lib/core/design_system/widgets/content.dart
+index 46660eb..eae4821 100644
+--- a/apps/numaya_mobile/lib/core/design_system/widgets/content.dart
++++ b/apps/numaya_mobile/lib/core/design_system/widgets/content.dart
+@@ -768,8 +768,9 @@ class _SetupStepTile extends StatelessWidget {
+   }
+ }
+ 
+-/// Bottom sheet (`.theme-withings .sheet`): white, 16pt top corners, a warm grabber, a 22pt bold
+-/// title with no rule under it (premium refinement: space, not lines), and a bare ✕ to dismiss.
++/// Ente bottom sheet (Bottom Sheet Header 4809:7991, template 4809:8027): white, 24pt top corners,
++/// no drag handle, 20pt padding, the title in H1 (20/28 semibold) on the left and a circular close
++/// button on the right, 16pt to the content. Swipe-down dismissal still works (a Numaya keep).
+ Future<T?> showNumayaSheet<T>({
+   required BuildContext context,
+   required String title,
+@@ -811,23 +812,12 @@ Future<T?> showNumayaSheet<T>({
+           mainAxisSize: tall ? MainAxisSize.max : MainAxisSize.min,
+           crossAxisAlignment: CrossAxisAlignment.stretch,
+           children: [
+-            Center(
+-              child: Container(
+-                width: 36,
+-                height: 5,
+-                margin: const EdgeInsets.only(top: AppSpacing.s2, bottom: 14),
+-                decoration: BoxDecoration(
+-                  color: AppColors.borderStrong,
+-                  borderRadius: AppRadii.all(AppRadii.pill),
+-                ),
+-              ),
+-            ),
+             Container(
+               padding: const EdgeInsets.fromLTRB(
+-                AppSpacing.gutter,
++                AppSpacing.s5,
++                AppSpacing.s5,
++                AppSpacing.s4,
+                 0,
+-                AppSpacing.s2,
+-                AppSpacing.s3,
+               ),
+               child: Row(
+                 children: [
+@@ -840,7 +830,7 @@ Future<T?> showNumayaSheet<T>({
+                   NavIconButton(
+                     icon: NumayaIcons.close,
+                     label: closeLabel,
+-                    style: NavButtonStyle.plain,
++                    style: NavButtonStyle.circular,
+                     onPressed: () => Navigator.of(context).pop(),
+                   ),
+                 ],
+@@ -850,9 +840,7 @@ Future<T?> showNumayaSheet<T>({
+             Flexible(
+               fit: tall ? FlexFit.tight : FlexFit.loose,
+               child: Padding(
+-                padding: const EdgeInsets.symmetric(
+-                  horizontal: AppSpacing.gutter,
+-                ),
++                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s5),
+                 child: SheetSurface(child: Builder(builder: builder)),
+               ),
+             ),
+diff --git a/apps/numaya_mobile/lib/core/design_system/widgets/fields.dart b/apps/numaya_mobile/lib/core/design_system/widgets/fields.dart
+index 3f85096..5979196 100644
+--- a/apps/numaya_mobile/lib/core/design_system/widgets/fields.dart
++++ b/apps/numaya_mobile/lib/core/design_system/widgets/fields.dart
+@@ -38,9 +38,10 @@ class FieldNote extends StatelessWidget {
+   }
+ }
+ 
+-/// The filled field (premium refinement): a neutral fill, no outline, 18pt corners, 58pt tall,
+-/// identified by its visible label above it. Focused: white with a 2pt purple edge. Invalid: a 2pt
+-/// red edge, focused or not. Disabled: the page tone with grey text.
++/// Ente Text Input (2275:11526): white, a 1pt outline, 16pt corners, 52pt tall, labelled above.
++/// The outline uses the 3:1 control grey (Ente draws text/lighter, 2.96:1; raised for WCAG 1.4.11).
++/// Focused: a 2pt Numaya-purple edge. Invalid: a 2pt red edge, focused or not. Disabled: fill/dark
++/// with no edge and grey text.
+ class InputSurface extends StatelessWidget {
+   const InputSurface({
+     super.key,
+@@ -69,7 +70,7 @@ class InputSurface extends StatelessWidget {
+         ? (AppColors.negative, AppBorders.focus)
+         : focused
+         ? (AppColors.focusField, AppBorders.focus)
+-        : (Colors.transparent, AppBorders.focus);
++        : (AppColors.control, AppBorders.hairline);
+     return AnimatedContainer(
+       duration: AppMotion.duration(context, AppMotion.base),
+       curve: AppMotion.easeOut,
+@@ -77,11 +78,7 @@ class InputSurface extends StatelessWidget {
+       constraints: height == null ? const BoxConstraints(minHeight: 120) : null,
+       padding: padding,
+       decoration: BoxDecoration(
+-        color: disabled
+-            ? AppColors.canvas
+-            : focused
+-            ? AppColors.surface
+-            : AppColors.field,
++        color: disabled ? AppColors.field : AppColors.surface,
+         borderRadius: AppRadii.all(AppRadii.field),
+       ),
+       // The outline is drawn on top, so the focus border (2pt) doesn't shift the text.
+@@ -234,10 +231,10 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
+                 onChanged: widget.onChanged,
+                 onSubmitted: widget.onSubmitted,
+                 style:
+-                    // Typed text is 16 in every field, single- or multi-line (OP-03); multi-line
+-                    // keeps its 24pt reading line.
++                    // Typed text is Ente Body (14/20) in every field; multi-line keeps a 22pt
++                    // reading line.
+                     (widget.multiline
+-                            ? AppTypography.input.copyWith(height: 24 / 16)
++                            ? AppTypography.input.copyWith(height: 22 / 14)
+                             : AppTypography.input)
+                         .copyWith(
+                           color: widget.enabled
+@@ -251,10 +248,11 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
+                 decoration: InputDecoration(
+                   isCollapsed: true,
+                   border: InputBorder.none,
+-                  // A single line is padded to a 48dp tap target inside the 58pt field.
++                  // A single 20pt line is padded to fill the 52pt Ente field, so the editable
++                  // area is the whole field (and over the 48dp tap target).
+                   contentPadding: widget.multiline
+                       ? EdgeInsets.zero
+-                      : const EdgeInsets.symmetric(vertical: 13),
++                      : const EdgeInsets.symmetric(vertical: 16),
+                   hintText: widget.placeholder,
+                   hintStyle: AppTypography.weight(
+                     widget.multiline ? AppTypography.body : AppTypography.input,
+@@ -398,15 +396,16 @@ class _NumayaSearchFieldState extends State<NumayaSearchField> {
+       height: math.max(AppSizes.search, kMinInteractiveDimension),
+       padding: const EdgeInsets.only(left: AppSpacing.s4),
+       decoration: BoxDecoration(
+-        color: focused ? AppColors.surface : AppColors.field,
+-        borderRadius: AppRadii.all(AppRadii.pill),
++        // Ente search is a Text Input with a search prefix: white, 16pt corners, 1pt outline.
++        color: AppColors.surface,
++        borderRadius: AppRadii.all(AppRadii.field),
+       ),
+       // The edge is drawn on top so it doesn't take height from the field.
+       foregroundDecoration: BoxDecoration(
+-        borderRadius: AppRadii.all(AppRadii.pill),
++        borderRadius: AppRadii.all(AppRadii.field),
+         border: Border.all(
+-          color: focused ? AppColors.focusField : Colors.transparent,
+-          width: AppBorders.focus,
++          color: focused ? AppColors.focusField : AppColors.control,
++          width: focused ? AppBorders.focus : AppBorders.hairline,
+           strokeAlign: BorderSide.strokeAlignInside,
+         ),
+       ),
+@@ -433,13 +432,16 @@ class _NumayaSearchFieldState extends State<NumayaSearchField> {
+               keyboardType: TextInputType.text,
+               textAlignVertical: TextAlignVertical.center,
+               textInputAction: TextInputAction.search,
+-              style: AppTypography.body.copyWith(fontSize: 16),
++              // Ente Text Input: Body 14/20 for the value and the hint.
++              style: AppTypography.input,
+               decoration: InputDecoration(
+                 isCollapsed: true,
+                 border: InputBorder.none,
+                 hintText: widget.placeholder,
+-                hintStyle: AppTypography.body.copyWith(
+-                  fontSize: 16,
++                // One line: at 150% text on a 320pt phone the hint wrapped and was cut in half by
++                // the 52pt field (Messages, Ente device pass). The full hint is still announced.
++                hintMaxLines: 1,
++                hintStyle: AppTypography.input.copyWith(
+                   color: AppColors.textMuted,
+                 ),
+               ),
+diff --git a/apps/numaya_mobile/lib/core/design_system/widgets/icon_tile.dart b/apps/numaya_mobile/lib/core/design_system/widgets/icon_tile.dart
+index 97766fd..dadf529 100644
+--- a/apps/numaya_mobile/lib/core/design_system/widgets/icon_tile.dart
++++ b/apps/numaya_mobile/lib/core/design_system/widgets/icon_tile.dart
+@@ -41,9 +41,9 @@ enum AccentTone {
+   };
+ }
+ 
+-/// A rounded-square tile holding one icon: the leading mark of a list row (40pt, 20pt icon, 12
+-/// corner) or of a card or header ([large]: 48pt, 22pt icon, 14 corner). Decorative: the row's
+-/// label says what it is.
++/// Ente Menu Item Icon (4055:5652): a 36pt slot ([large]: 48pt, for cards and headers) holding one
++/// glyph in its meaning's colour, with no tile behind it ("the colour is on the glyph, not a
++/// background"). Neutral glyphs take text/light. Decorative: the row's label says what it is.
+ class IconTile extends StatelessWidget {
+   const IconTile(
+     this.icon, {
+@@ -61,19 +61,17 @@ class IconTile extends StatelessWidget {
+ 
+   @override
+   Widget build(BuildContext context) {
+-    final (bg, fg) = tone.colors;
++    final (_, fg) = tone.colors;
+     final size = large ? AppSizes.iconTileLg : AppSizes.iconTile;
+-    return Container(
+-      width: size,
+-      height: size,
+-      alignment: Alignment.center,
+-      decoration: BoxDecoration(
+-        color: bg,
+-        borderRadius: AppRadii.all(
+-          large ? AppRadii.iconTileLg : AppRadii.iconTile,
++    return SizedBox.square(
++      dimension: size,
++      child: Center(
++        child: NumayaIcon(
++          icon,
++          size: large ? AppSizes.iconLg : AppSizes.iconMd,
++          color: tone == AccentTone.neutral ? AppColors.textMuted : fg,
+         ),
+       ),
+-      child: NumayaIcon(icon, size: large ? 22 : AppSizes.iconMd, color: fg),
+     );
+   }
+ }
+diff --git a/apps/numaya_mobile/lib/core/design_system/widgets/illustration_slot.dart b/apps/numaya_mobile/lib/core/design_system/widgets/illustration_slot.dart
+index ebb4659..5b7ea94 100644
+--- a/apps/numaya_mobile/lib/core/design_system/widgets/illustration_slot.dart
++++ b/apps/numaya_mobile/lib/core/design_system/widgets/illustration_slot.dart
+@@ -11,10 +11,34 @@ import 'primitives.dart';
+ /// numaya-final-ux-polish/ILLUSTRATION_ASSET_BACKLOG.md lists every slot, its ratio and the
+ /// mascot's purpose there).
+ ///
+-/// Until [asset] is set it draws a placeholder: a subtle neutral surface with a dashed edge, a small
+-/// image glyph and "Illustration: <label>". The box keeps [aspectRatio] (width ÷ height) at any
++/// Until [asset] is set, the slot renders **nothing** on product screens (final design run, FD-A1:
++/// a dashed "Illustration: …" box is implementation scaffolding, and it pushed Safety and Opening
++/// Moves below the fold). Inside [IllustrationPlaceholders] (the Design Lab, slot tests) it draws
++/// the placeholder instead: a subtle neutral surface with a dashed edge, a small image glyph and
++/// "Illustration: <label>". The box keeps [aspectRatio] (width ÷ height) at any
+ /// width, so the final SVG drops in without moving anything. Always decorative: the copy around it
+ /// carries the meaning, so it is excluded from semantics.
++/// Shows [IllustrationSlot] placeholders for art that does not exist yet. Only the Design Lab and
++/// tests that check slot geometry turn this on; product screens never show a placeholder.
++class IllustrationPlaceholders extends InheritedWidget {
++  const IllustrationPlaceholders({
++    super.key,
++    this.show = true,
++    required super.child,
++  });
++
++  final bool show;
++
++  static bool showIn(BuildContext context) =>
++      context
++          .dependOnInheritedWidgetOfExactType<IllustrationPlaceholders>()
++          ?.show ??
++      false;
++
++  @override
++  bool updateShouldNotify(IllustrationPlaceholders old) => old.show != show;
++}
++
+ class IllustrationSlot extends StatelessWidget {
+   const IllustrationSlot({
+     super.key,
+@@ -48,6 +72,9 @@ class IllustrationSlot extends StatelessWidget {
+ 
+   @override
+   Widget build(BuildContext context) {
++    if (asset == null && !IllustrationPlaceholders.showIn(context)) {
++      return const SizedBox.shrink();
++    }
+     final Widget content = asset != null
+         ? SvgPicture.asset(asset!, fit: BoxFit.contain)
+         : CustomPaint(
+diff --git a/apps/numaya_mobile/lib/core/design_system/widgets/layout.dart b/apps/numaya_mobile/lib/core/design_system/widgets/layout.dart
+index 574c2ee..4bc2196 100644
+--- a/apps/numaya_mobile/lib/core/design_system/widgets/layout.dart
++++ b/apps/numaya_mobile/lib/core/design_system/widgets/layout.dart
+@@ -192,9 +192,9 @@ class StepFooter extends StatelessWidget {
+   }
+ }
+ 
+-/// Modal and flow header (`.theme-withings .topbar`): a bare ink back icon, centred progress
+-/// segments or a title in tracked small capitals ("EDIT PROFILE"), optional actions. [NumayaScreen]
+-/// draws it on a white bar with a hairline under it.
++/// Inner-page header, Ente Header (v2) in its Collapsed state (11441:5208): a bare back arrow,
++/// the title left-aligned beside it in Large (16/20 semibold), and up to three 38pt Icon Buttons on
++/// the right, 6-8pt apart. Flow steps put the progress segments in the title's place.
+ class NumayaTopBar extends StatelessWidget {
+   const NumayaTopBar({
+     super.key,
+@@ -228,29 +228,7 @@ class NumayaTopBar extends StatelessWidget {
+           alignment: Alignment.center,
+           children: [
+             if (step != null && steps != null)
+-              StepProgress(step: step!, steps: steps!)
+-            else if (title != null)
+-              Padding(
+-                // Keep the centred title clear of the buttons on both sides.
+-                padding: EdgeInsets.symmetric(
+-                  horizontal:
+-                      (actions.length > 1 ? actions.length : 1) *
+-                          (AppSizes.iconButton + AppSpacing.s1) +
+-                      AppSpacing.s1,
+-                ),
+-                child: Semantics(
+-                  header: true,
+-                  label: title,
+-                  child: ExcludeSemantics(
+-                    child: Text(
+-                      title!,
+-                      style: AppTypography.headerCaps,
+-                      maxLines: 1,
+-                      overflow: TextOverflow.ellipsis,
+-                    ),
+-                  ),
+-                ),
+-              ),
++              StepProgress(step: step!, steps: steps!),
+             Row(
+               children: [
+                 if (onBack != null)
+@@ -259,12 +237,39 @@ class NumayaTopBar extends StatelessWidget {
+                         ? NumayaIcons.close
+                         : NumayaIcons.chevronLeft,
+                     label: backLabel,
++                    style: NavButtonStyle.plain,
+                     onPressed: onBack,
+                   )
+                 else
+-                  const SizedBox(width: AppSizes.iconButton),
+-                const Spacer(),
+-                ...actions,
++                  const SizedBox(width: AppSizes.iconButtonSlot),
++                if (title != null && (step == null || steps == null))
++                  Expanded(
++                    child: Padding(
++                      padding: const EdgeInsets.symmetric(
++                        horizontal: AppSpacing.s2,
++                      ),
++                      child: Semantics(
++                        header: true,
++                        label: title,
++                        child: ExcludeSemantics(
++                          child: Text(
++                            title!,
++                            style: AppTypography.headerCaps,
++                            maxLines: 1,
++                            overflow: TextOverflow.ellipsis,
++                          ),
++                        ),
++                      ),
++                    ),
++                  )
++                else
++                  const Spacer(),
++                // Adjacent actions keep the 8pt gap the tab headers use, so two buttons never
++                // read as one (Event detail's Share and Save touched; FD-D1).
++                for (var i = 0; i < actions.length; i++) ...[
++                  if (i > 0) const SizedBox(width: AppSpacing.s2),
++                  actions[i],
++                ],
+               ],
+             ),
+           ],
+diff --git a/apps/numaya_mobile/lib/core/design_system/widgets/navigation.dart b/apps/numaya_mobile/lib/core/design_system/widgets/navigation.dart
+index b37106a..bbe49ec 100644
+--- a/apps/numaya_mobile/lib/core/design_system/widgets/navigation.dart
++++ b/apps/numaya_mobile/lib/core/design_system/widgets/navigation.dart
+@@ -52,6 +52,11 @@ enum TabBarSurface {
+ 
+   /// The opaque white pill on a strip of page colour: the approved design, and the fallback.
+   opaque,
++
++  /// Ente Nav Bar (7634:54194): an opaque white bar with 20pt corners and Ente's soft drop shadow,
++  /// floating over content (no glass, no page strip), 38pt icon tiles with 12pt corners. The
++  /// shipped surface on the Ente experiment.
++  ente,
+ }
+ 
+ /// Bottom navigation: a floating pill holding icons only, centred above the home indicator.
+@@ -66,12 +71,15 @@ class NumayaTabBar extends StatelessWidget {
+     required this.currentIndex,
+     required this.onSelect,
+     this.indicator = TabIndicatorStyle.tint,
+-    this.surface = TabBarSurface.frosted,
++    this.surface = TabBarSurface.ente,
+   });
+ 
+   /// Space between the pill's edge and each item.
+   static const double tabInset = 6;
+ 
++  /// Marks the visible bar (any surface), so layouts and tests can find its bounds.
++  static const Key pillKey = ValueKey('numaya-tab-bar-pill');
++
+   final List<TabItem> items;
+   final int currentIndex;
+   final ValueChanged<int> onSelect;
+@@ -86,8 +94,9 @@ class NumayaTabBar extends StatelessWidget {
+   Widget build(BuildContext context) {
+     final bottom = MediaQuery.paddingOf(context).bottom;
+     final frosted = frostedIn(context);
++    final ente = surface == TabBarSurface.ente;
+     return _frame(
+-      frosted: frosted,
++      frosted: frosted || ente,
+       systemInset: bottom,
+       child: Padding(
+         padding: EdgeInsets.fromLTRB(
+@@ -104,14 +113,23 @@ class NumayaTabBar extends StatelessWidget {
+             final extra = indicator == TabIndicatorStyle.expanded
+                 ? AppSizes.tabItem * 0.7
+                 : 0.0;
+-            const inner = 2 * tabInset;
+-            var gap = AppSpacing.s2;
++            // The Ente bar insets its row 12 each side; the other pills 6.
++            final inner = ente ? 2 * (15.0 - 3) : 2 * tabInset;
++            var gap = ente ? AppSpacing.s6 : AppSpacing.s2;
+             var item = AppSizes.tabItem;
+-            double need() => inner + n * item + extra + (n - 1) * gap;
++            // Each item lays out at least its 44pt hit area (Pressable.minSize), even when the
++            // visible Ente tile is 38.
++            double need() =>
++                inner +
++                n * (item > AppSizes.touchMin ? item : AppSizes.touchMin) +
++                extra +
++                (n - 1) * gap;
++            if (ente && need() > box.maxWidth) gap = AppSpacing.s4;
++            if (ente && need() > box.maxWidth) gap = AppSpacing.s2;
+             if (need() > box.maxWidth) gap = AppSpacing.s1;
+             if (need() > box.maxWidth) {
+               item = ((box.maxWidth - inner - extra - (n - 1) * gap) / n).clamp(
+-                48.0,
++                AppSizes.tabItem,
+                 AppSizes.tabItem,
+               );
+             }
+@@ -120,16 +138,33 @@ class NumayaTabBar extends StatelessWidget {
+               children: [
+                 for (var i = 0; i < n; i++) ...[
+                   if (i > 0) SizedBox(width: gap),
+-                  _tab(context, i, item, frosted: frosted),
++                  _tab(context, i, item, frosted: frosted, ente: ente),
+                 ],
+               ],
+             );
++            if (ente) {
++              // Ente's bar insets its tiles 15pt from the ends; the 44pt hit areas centre in it.
++              return Center(
++                heightFactor: 1,
++                child: Container(
++                  key: pillKey,
++                  height: AppSizes.tabBar,
++                  padding: const EdgeInsets.symmetric(horizontal: 15 - 3),
++                  decoration: BoxDecoration(
++                    color: AppColors.surface,
++                    borderRadius: AppRadii.all(AppRadii.control),
++                    boxShadow: AppElevation.floating,
++                  ),
++                  child: row,
++                ),
++              );
++            }
+             if (!frosted) {
+               return Center(
+                 heightFactor: 1,
+                 child: Container(
+                   height: AppSizes.tabBar,
+-                  padding: const EdgeInsets.all(inner / 2),
++                  padding: EdgeInsets.all(inner / 2),
+                   decoration: BoxDecoration(
+                     color: AppColors.surface,
+                     borderRadius: AppRadii.all(AppRadii.pill),
+@@ -154,7 +189,7 @@ class NumayaTabBar extends StatelessWidget {
+                     children: [
+                       Container(
+                         height: AppSizes.tabBar,
+-                        padding: const EdgeInsets.all(inner / 2),
++                        padding: EdgeInsets.all(inner / 2),
+                         decoration: BoxDecoration(
+                           color: MonoGlass.tint,
+                           borderRadius: AppRadii.all(AppRadii.pill),
+@@ -221,13 +256,16 @@ class NumayaTabBar extends StatelessWidget {
+     int i,
+     double size, {
+     required bool frosted,
++    bool ente = false,
+   }) {
+     final item = items[i];
+     final current = i == currentIndex;
+     final duration = AppMotion.duration(context, AppMotion.state);
+     // On glass, unselected icons take the stronger secondary ink: the muted grey drops to 3.38:1
+     // over a dark photo, text2 stays at 5.46:1 or better.
+-    final idle = frosted ? AppColors.textSecondary : AppColors.textMuted;
++    final idle = frosted || ente
++        ? AppColors.textSecondary
++        : AppColors.textMuted;
+     final (Color bg, Color fg) = !current
+         ? (const Color(0x00FFFFFF), idle)
+         : switch (indicator) {
+@@ -249,7 +287,9 @@ class NumayaTabBar extends StatelessWidget {
+         : size;
+     // The tint sits 6pt inside a 64pt pill, so its corner is the pill's minus the inset: a 52pt
+     // item becomes a circle, concentric with the bar's ends (FP-06).
+-    final radius = indicator == TabIndicatorStyle.tint
++    final radius = ente
++        ? AppRadii.iconButton
++        : indicator == TabIndicatorStyle.tint
+         ? AppRadii.nested(AppSizes.tabBar / 2, tabInset)
+         : AppRadii.pill;
+     return Semantics(
+@@ -264,7 +304,8 @@ class NumayaTabBar extends StatelessWidget {
+               ? (item.badgeLabel ?? item.label)
+               : item.label,
+           excludeChildSemantics: true,
+-          pressedScale: 0.92,
++          // Subtle press feedback (0.95-0.98 range); 0.92 squashed the 26pt icon (FD-B3).
++          pressedScale: 0.95,
+           borderRadius: AppRadii.all(radius),
+           child: AnimatedContainer(
+             duration: duration,
+@@ -279,7 +320,12 @@ class NumayaTabBar extends StatelessWidget {
+             child: Stack(
+               clipBehavior: Clip.none,
+               children: [
+-                NumayaIcon(item.icon, outline: !current, size: 26, color: fg),
++                NumayaIcon(
++                  item.icon,
++                  outline: !current,
++                  size: ente ? AppSizes.iconMd : 26,
++                  color: fg,
++                ),
+                 if (item.badgeCount > 0)
+                   Positioned(
+                     right: -3,
+@@ -303,8 +349,10 @@ class NumayaTabBar extends StatelessWidget {
+   }
+ }
+ 
+-/// Switch: iOS proportions (51 × 31). On: brand purple with a white thumb. Off: the grey fill with
+-/// a 1.5pt outline in the 3:1 control grey, so the off state still reads as a control.
++/// Ente Toggle Switch (2482:6644) at 1.5x its 31 x 18 drawing (46 x 27, a Numaya extension so the
++/// knob reads on a phone). On: Numaya purple (Ente's primary) with a white knob. Off: fill/dark
++/// with a 1.5pt outline in the 3:1 control grey (an accessibility exception to Ente's edgeless
++/// off track), so the off state still reads as a control.
+ class NumayaSwitch extends StatelessWidget {
+   const NumayaSwitch({super.key, required this.value, required this.onChanged});
+ 
+@@ -313,7 +361,9 @@ class NumayaSwitch extends StatelessWidget {
+ 
+   /// Component cleanup (CL-01). States, resolved here so every switch matches:
+   /// - **on:** brand track, white thumb with a soft shadow;
+-  /// - **off:** light-grey track (`fillStrong`), white thumb with the same shadow; no outline;
++  /// - **off:** light-grey track (`fillStrong`) with a 1.5pt edge in the control grey (3.38:1 on
++  ///   white, 3.07:1 on the page; WCAG 1.4.11), white thumb with the same shadow. Without the edge
++  ///   the track was 1.33:1 on a white card (final design run FD-A2, measured on the emulator);
+   /// - **disabled** (`onChanged == null`): the same shape at 45% opacity;
+   /// - **pressed and focused:** owned by the row around the switch (`ListRow`/`Pressable`
+   ///   press scale and focus ring), so the whole row is the hit area.
+@@ -330,6 +380,13 @@ class NumayaSwitch extends StatelessWidget {
+       decoration: BoxDecoration(
+         color: value ? AppColors.accent : AppColors.switchOff,
+         borderRadius: AppRadii.all(AppRadii.pill),
++        border: value
++            ? null
++            : Border.all(
++                color: AppColors.control,
++                width: AppBorders.selected,
++                strokeAlign: BorderSide.strokeAlignInside,
++              ),
+       ),
+       child: AnimatedAlign(
+         duration: duration,
+@@ -396,7 +453,7 @@ class ListRow extends StatelessWidget {
+             AppLayout.tileLabelGap
+       : leading == null
+       ? 0
+-      : AppSizes.iconMd + AppLayout.tileLabelGap;
++      : AppSizes.iconTile + AppLayout.tileLabelGap;
+ 
+   /// A person's avatar in place of [leading] (people lists).
+   final Widget? avatar;
+@@ -408,8 +465,9 @@ class ListRow extends StatelessWidget {
+     final row = Container(
+       constraints: const BoxConstraints(minHeight: AppSizes.row),
+       padding: EdgeInsets.symmetric(
+-        horizontal: flush ? 0 : AppLayout.cardPadding,
+-        vertical: AppSpacing.s3,
++        // Ente Menu Item (4055:18733): 12pt all round inside its own white card.
++        horizontal: flush ? 0 : AppSpacing.s3,
++        vertical: AppSpacing.s2,
+       ),
+       // The value may take 60% of what the row has left after its leading tile or avatar.
+       child: LayoutBuilder(
+@@ -445,12 +503,17 @@ class ListRow extends StatelessWidget {
+           avatar!,
+           const SizedBox(width: AppLayout.tileLabelGap),
+         ] else if (leading != null) ...[
+-          // Plain monochrome icons beside the label (CL-02): no coloured tile. Red only on a
+-          // destructive row; purple stays for brand and selection.
+-          NumayaIcon(
+-            leading!,
+-            size: AppSizes.iconMd,
+-            color: danger ? AppColors.negative : AppColors.textSecondary,
++          // Ente Menu Item Icon (4055:5652): a 36pt slot, the glyph alone in text/light (no tile
++          // background), red on a destructive row.
++          SizedBox.square(
++            dimension: AppSizes.iconTile,
++            child: Center(
++              child: NumayaIcon(
++                leading!,
++                size: AppSizes.iconMd,
++                color: danger ? AppColors.negative : AppColors.textMuted,
++              ),
++            ),
+           ),
+           const SizedBox(width: AppLayout.tileLabelGap),
+         ],
+@@ -477,7 +540,7 @@ class ListRow extends StatelessWidget {
+                 MetaText(
+                   detail!,
+                   style: AppTypography.caption.copyWith(
+-                    color: AppColors.textSecondary,
++                    color: AppColors.textMuted,
+                   ),
+                 ),
+               ],
+@@ -510,7 +573,7 @@ class ListRow extends StatelessWidget {
+             padding: EdgeInsets.only(left: AppSpacing.s2),
+             child: NumayaIcon(
+               NumayaIcons.chevronRight,
+-              size: AppSizes.iconMd,
++              size: AppSizes.iconLg,
+               color: AppColors.textMuted,
+             ),
+           ),
+@@ -597,39 +660,43 @@ class ListGroup extends StatelessWidget {
+               child: Text(title!, style: AppTypography.section),
+             ),
+           ),
+-        Container(
+-          decoration: flush
+-              ? null
+-              : BoxDecoration(
+-                  color: AppColors.surface,
+-                  borderRadius: AppRadii.all(AppRadii.card),
+-                ),
+-          clipBehavior: flush ? Clip.none : Clip.antiAlias,
+-          child: Padding(
+-            padding: EdgeInsets.symmetric(vertical: flush ? 0 : AppSpacing.s1),
+-            child: Column(
+-              children: [
+-                for (var i = 0; i < children.length; i++) ...[
+-                  if (i > 0 && dividers)
+-                    Padding(
+-                      padding: EdgeInsetsDirectional.only(
+-                        start: _inset(children[i], flush),
+-                        end: flush ? 0 : AppLayout.cardPadding,
+-                      ),
+-                      child: const ExcludeSemantics(
+-                        child: SizedBox(
+-                          height: AppBorders.hairline,
+-                          width: double.infinity,
+-                          child: ColoredBox(color: AppColors.divider),
+-                        ),
++        // Ente (menu item list 5906:38912): each row is its own white 20pt card, 8pt apart; no
++        // hairlines. On a white sheet ([flush]) the rows sit on the sheet, divided as before.
++        if (!flush)
++          for (var i = 0; i < children.length; i++) ...[
++            if (i > 0) const SizedBox(height: AppSpacing.s2),
++            DecoratedBox(
++              decoration: BoxDecoration(
++                color: AppColors.surface,
++                borderRadius: AppRadii.all(AppRadii.card),
++              ),
++              child: ClipRRect(
++                borderRadius: AppRadii.all(AppRadii.card),
++                child: children[i],
++              ),
++            ),
++          ]
++        else
++          Column(
++            children: [
++              for (var i = 0; i < children.length; i++) ...[
++                if (i > 0 && dividers)
++                  Padding(
++                    padding: EdgeInsetsDirectional.only(
++                      start: _inset(children[i], flush),
++                    ),
++                    child: const ExcludeSemantics(
++                      child: SizedBox(
++                        height: AppBorders.hairline,
++                        width: double.infinity,
++                        child: ColoredBox(color: AppColors.divider),
+                       ),
+                     ),
+-                  if (flush) _FlushRows(child: children[i]) else children[i],
+-                ],
++                  ),
++                _FlushRows(child: children[i]),
+               ],
+-            ),
++            ],
+           ),
+-        ),
+         if (footnote != null)
+           Padding(
+             padding: const EdgeInsets.fromLTRB(
+diff --git a/apps/numaya_mobile/lib/core/design_system/widgets/people.dart b/apps/numaya_mobile/lib/core/design_system/widgets/people.dart
+index d4aeefd..80f6802 100644
+--- a/apps/numaya_mobile/lib/core/design_system/widgets/people.dart
++++ b/apps/numaya_mobile/lib/core/design_system/widgets/people.dart
+@@ -364,6 +364,40 @@ class DecisionBar extends StatelessWidget {
+ 
+   @override
+   Widget build(BuildContext context) {
++    // Floating over a profile being read (final design run FD-B2): three compact 56pt circles,
++    // centred, icon-only (labels stay in the tooltip and semantics). The full-width labelled row
++    // stacked on top of the tab bar covered about 190pt of the profile on a phone; the reading view
++    // needs the actions present, not dominant (Bumble keeps one compact action over content).
++    if (floating) {
++      return Center(
++        child: Row(
++          mainAxisSize: MainAxisSize.min,
++          children: [
++            for (final (i, kind) in ActionKind.values.indexed) ...[
++              if (i > 0) const SizedBox(width: AppSpacing.s4),
++              SizedBox.square(
++                dimension: height,
++                child: _DecisionPill(
++                  kind: kind,
++                  label: switch (kind) {
++                    ActionKind.pass => passLabel,
++                    ActionKind.superSwipe => superLabel,
++                    ActionKind.like => likeLabel,
++                  },
++                  showLabel: false,
++                  floating: true,
++                  onPressed: switch (kind) {
++                    ActionKind.pass => onPass,
++                    ActionKind.superSwipe => onSuper,
++                    ActionKind.like => onLike,
++                  },
++                ),
++              ),
++            ],
++          ],
++        ),
++      );
++    }
+     return LayoutBuilder(
+       builder: (context, box) {
+         // Labels need about 112pt per wide pill at the current text size.
+@@ -458,12 +492,16 @@ class _DecisionPill extends StatelessWidget {
+         semanticLabel: label,
+         excludeChildSemantics: true,
+         pressedScale: 0.96,
+-        borderRadius: AppRadii.all(AppRadii.pill),
++        borderRadius: AppRadii.all(floating ? AppRadii.pill : AppRadii.control),
++        // Ente Button Large geometry inline (20pt corners); the floating trio stays circular, as
++        // Ente's Icon Button Type=Circular for controls over photos.
+         child: Container(
+           height: DecisionBar.height,
+           decoration: BoxDecoration(
+             color: bg,
+-            borderRadius: AppRadii.all(AppRadii.pill),
++            borderRadius: AppRadii.all(
++              floating ? AppRadii.pill : AppRadii.control,
++            ),
+             border: edge == null
+                 ? null
+                 : Border.all(
+@@ -617,12 +655,14 @@ class _ComposerState extends State<Composer> {
+             constraints: const BoxConstraints(
+               minHeight: kMinInteractiveDimension,
+             ),
++            // Ente Text Input as the composer (Comment Bubble "WITH: Text Input"): white, 16pt
++            // corners, the 3:1 outline; a 2pt purple edge when focused.
+             decoration: BoxDecoration(
+-              color: focused ? AppColors.surface : AppColors.field,
+-              borderRadius: AppRadii.all(24),
++              color: AppColors.surface,
++              borderRadius: AppRadii.all(AppRadii.field),
+               border: Border.all(
+-                color: focused ? AppColors.focusField : Colors.transparent,
+-                width: AppBorders.focus,
++                color: focused ? AppColors.focusField : AppColors.control,
++                width: focused ? AppBorders.focus : AppBorders.hairline,
+                 strokeAlign: BorderSide.strokeAlignInside,
+               ),
+             ),
+@@ -645,7 +685,7 @@ class _ComposerState extends State<Composer> {
+                   border: InputBorder.none,
+                   contentPadding: const EdgeInsets.symmetric(
+                     horizontal: AppSpacing.s4,
+-                    vertical: 13,
++                    vertical: 14, // a 20pt line plus 28: the 48dp target
+                   ),
+                   hintText: widget.placeholder,
+                   hintStyle: AppTypography.row.copyWith(
+@@ -722,18 +762,20 @@ class MessageBubble extends StatelessWidget {
+           opacity: dimmed ? AppOpacity.pending : 1,
+           child: Container(
+             margin: EdgeInsets.only(top: grouped ? 4 : AppSpacing.s2),
+-            // Bubble inset on the 4 grid (SP-04): 12 across, 8 down.
++            // Ente Comment Bubble (5412:23548 / 5412:23575): 20pt corners with one 6pt corner on
++            // the sender's side, primary (Numaya purple) for your own, fill/darker for theirs.
++            // Inset 16 across and 12 down (Ente uses 16 all round; tightened for chat density).
+             padding: const EdgeInsets.symmetric(
+-              horizontal: AppSpacing.s3,
+-              vertical: AppSpacing.s2,
++              horizontal: AppSpacing.s4,
++              vertical: AppSpacing.s3,
+             ),
+             decoration: BoxDecoration(
+-              color: mine ? AppColors.accent : AppColors.surface,
++              color: mine ? AppColors.accent : AppColors.photo,
+               borderRadius: BorderRadius.only(
+-                topLeft: const Radius.circular(AppRadii.card),
+-                topRight: const Radius.circular(AppRadii.card),
+-                bottomLeft: Radius.circular(mine ? AppRadii.card : 6),
+-                bottomRight: Radius.circular(mine ? 6 : AppRadii.card),
++                topLeft: Radius.circular(mine ? AppRadii.card : 6),
++                topRight: Radius.circular(mine ? 6 : AppRadii.card),
++                bottomLeft: const Radius.circular(AppRadii.card),
++                bottomRight: const Radius.circular(AppRadii.card),
+               ),
+             ),
+             child: Text(
+@@ -961,19 +1003,20 @@ class ViewTabs extends StatelessWidget {
+                   selected: i == selected,
+                   excludeChildSemantics: true,
+                   pressedScale: 0.97,
+-                  borderRadius: AppRadii.all(AppRadii.pill),
++                  borderRadius: AppRadii.all(AppRadii.tile),
++                  // Ente Tag Chip (2482:6479): 44 tall, 16pt corners, 20pt insets, Body label;
++                  // exactly one selected, in the primary (Numaya purple) with a white label.
+                   child: AnimatedContainer(
+                     duration: AppMotion.duration(context, AppMotion.base),
+-                    height: AppSizes.chip,
++                    height: AppSizes.tagChip,
+                     padding: const EdgeInsets.symmetric(
+-                      horizontal: AppLayout.pillInsetX,
++                      horizontal: AppSpacing.s5,
+                     ),
+                     decoration: BoxDecoration(
+-                      // Solid accent when selected (RD-05), neutral otherwise.
+                       color: i == selected
+                           ? AppColors.accent
+                           : AppColors.surface,
+-                      borderRadius: AppRadii.all(AppRadii.pill),
++                      borderRadius: AppRadii.all(AppRadii.tile),
+                     ),
+                     alignment: Alignment.center,
+                     child: Text.rich(
+@@ -994,17 +1037,11 @@ class ViewTabs extends StatelessWidget {
+                             ),
+                         ],
+                       ),
+-                      style:
+-                          AppTypography.weight(
+-                            AppTypography.pill,
+-                            i == selected
+-                                ? AppTypography.semibold
+-                                : AppTypography.medium,
+-                          ).copyWith(
+-                            color: i == selected
+-                                ? AppColors.accentForeground
+-                                : AppColors.ink,
+-                          ),
++                      style: AppTypography.bodySm.copyWith(
++                        color: i == selected
++                            ? AppColors.accentForeground
++                            : AppColors.textMuted,
++                      ),
+                     ),
+                   ),
+                 ),
+diff --git a/apps/numaya_mobile/lib/core/design_system/widgets/primitives.dart b/apps/numaya_mobile/lib/core/design_system/widgets/primitives.dart
+index 2dc2a27..5b21099 100644
+--- a/apps/numaya_mobile/lib/core/design_system/widgets/primitives.dart
++++ b/apps/numaya_mobile/lib/core/design_system/widgets/primitives.dart
+@@ -5,12 +5,13 @@ import '../foundations/app_colors.dart';
+ import '../foundations/app_haptics.dart';
+ import '../foundations/app_layout.dart';
+ import '../foundations/app_motion.dart';
+-import '../icons/material_icons.dart';
++import '../icons/lucide_icons.dart';
+ import '../icons/numaya_icon_data.g.dart';
+ 
+-/// A standard Material icon (Flutter's Material Icons, rounded), named by the shared icon set and
+-/// mapped in [kMaterialIcons]: filled by default, outline where the unfilled drawing carries a
+-/// different state. Decorative: icon-only controls carry their own label.
++/// A Lucide icon (Ente design-system experiment), named by the shared icon set and mapped in
++/// [kLucideIcons]. Lucide has one stroke drawing per glyph, so [outline] no longer changes the
++/// drawing; callers keep passing it so the state stays documented at the call site. Decorative:
++/// icon-only controls carry their own label.
+ class NumayaIcon extends StatelessWidget {
+   const NumayaIcon(
+     this.icon, {
+@@ -27,10 +28,9 @@ class NumayaIcon extends StatelessWidget {
+ 
+   @override
+   Widget build(BuildContext context) {
+-    final (filled, open) = kMaterialIcons[icon]!;
+     final tint = color ?? IconTheme.of(context).color ?? AppColors.textPrimary;
+     return ExcludeSemantics(
+-      child: Icon(outline ? open : filled, size: size, color: tint),
++      child: Icon(kLucideIcons[icon], size: size, color: tint),
+     );
+   }
+ }
+@@ -51,7 +51,7 @@ class MobileIcon extends StatelessWidget {
+   @override
+   Widget build(BuildContext context) => ExcludeSemantics(
+     child: Icon(
+-      kMobileIcons[icon],
++      kLucideMobileIcons[icon],
+       size: size,
+       color: color ?? IconTheme.of(context).color ?? AppColors.textPrimary,
+     ),
+diff --git a/apps/numaya_mobile/lib/core/design_system/widgets/selection.dart b/apps/numaya_mobile/lib/core/design_system/widgets/selection.dart
+index f2ca4c1..0bffdae 100644
+--- a/apps/numaya_mobile/lib/core/design_system/widgets/selection.dart
++++ b/apps/numaya_mobile/lib/core/design_system/widgets/selection.dart
+@@ -276,10 +276,10 @@ enum MarkTone {
+       values.firstWhere((t) => t.name == name, orElse: () => butter);
+ }
+ 
+-/// V16 content chip (`.theme-withings .chip[data-emoji]`): a white 12pt-corner rectangle with an
+-/// emoji and a 15pt medium label, a plus or minus at the end. Selected: the blue tint with deep-blue
+-/// semibold text. On a white card or sheet ([onCard]) it takes the fill so it still reads as a chip.
+-/// Unavailable (quota reached): the disabled foreground.
++/// Ente Filter Chip (9524:4352): a 40pt pill, Mini 12/16 label. Unselected: white (fill/dark on a
++/// white card or sheet, [onCard]), text/light label and an add glyph at the end. Selected: the
++/// reverse (ink) fill, white label and a small cross to clear. Unavailable (quota reached): the
++/// disabled foreground.
+ class NumayaChip extends StatelessWidget {
+   const NumayaChip({
+     super.key,
+@@ -301,12 +301,11 @@ class NumayaChip extends StatelessWidget {
+   @override
+   Widget build(BuildContext context) {
+     final unavailable = !available && !selected;
+-    // Selected chips are solid accent with white text (RD-05); unselected stay neutral.
+     final fg = selected
+-        ? AppColors.accentForeground
++        ? AppColors.inkForeground
+         : unavailable
+         ? AppColors.disabledForeground
+-        : AppColors.ink;
++        : AppColors.textMuted;
+     return Pressable(
+       onTap: unavailable ? null : onTap,
+       haptic: HapticMoment.selection,
+@@ -319,13 +318,16 @@ class NumayaChip extends StatelessWidget {
+         duration: AppMotion.duration(context, AppMotion.base),
+         curve: AppMotion.easeOut,
+         constraints: const BoxConstraints(minHeight: AppSizes.chip),
+-        padding: const EdgeInsets.symmetric(
+-          horizontal: AppLayout.pillInsetX,
+-          vertical: AppLayout.pillInsetY,
++        // Ente: 16 before the label, 12 after the trailing glyph, 8 between.
++        padding: const EdgeInsetsDirectional.fromSTEB(
++          AppSpacing.s4,
++          AppSpacing.s2,
++          AppSpacing.s3,
++          AppSpacing.s2,
+         ),
+         decoration: BoxDecoration(
+           color: selected
+-              ? AppColors.accent
++              ? AppColors.ink
+               : onCard
+               ? AppColors.fill
+               : AppColors.surface,
+@@ -339,20 +341,14 @@ class NumayaChip extends StatelessWidget {
+               const SizedBox(width: AppLayout.compactIconGap),
+             ],
+             Flexible(
+-              child: Text(
+-                label,
+-                style: AppTypography.weight(
+-                  AppTypography.pill,
+-                  selected ? AppTypography.semibold : AppTypography.medium,
+-                ).copyWith(color: fg),
+-              ),
++              child: Text(label, style: AppTypography.pill.copyWith(color: fg)),
+             ),
+-            const SizedBox(width: AppLayout.compactIconGap),
++            const SizedBox(width: AppSpacing.s2),
+             NumayaIcon(
+-              selected ? NumayaIcons.minus : NumayaIcons.plus,
+-              size: 18,
++              selected ? NumayaIcons.close : NumayaIcons.plus,
++              size: selected ? 14 : 18,
+               color: selected
+-                  ? AppColors.accentForeground
++                  ? AppColors.inkForeground
+                   : unavailable
+                   ? AppColors.borderStrong
+                   : AppColors.textMuted,
+@@ -485,8 +481,9 @@ class OptionCard extends StatelessWidget {
+   }
+ }
+ 
+-/// V16 radio: a grey ring; selected an ink ring around an ink dot. Checkbox: a grey 6pt square;
+-/// checked Withings blue with a white tick.
++/// Ente Radio Button and Checkbox (2482:6625, 2482:6649) at 20pt: an outlined ring or 5pt-corner
++/// square in the 3:1 control grey; selected Numaya purple (Ente's primary) with a white tick or a
++/// purple dot.
+ class _ChoiceMark extends StatelessWidget {
+   const _ChoiceMark({
+     required this.kind,
+@@ -511,7 +508,7 @@ class _ChoiceMark extends StatelessWidget {
+         decoration: BoxDecoration(
+           color: checked ? AppColors.accent : AppColors.surface,
+           shape: radio ? BoxShape.circle : BoxShape.rectangle,
+-          borderRadius: radio ? null : AppRadii.all(AppRadii.tag),
++          borderRadius: radio ? null : AppRadii.all(AppRadii.checkbox),
+           border: checked
+               ? null
+               : Border.all(
+@@ -525,8 +522,8 @@ class _ChoiceMark extends StatelessWidget {
+             ? null
+             : radio
+             ? Container(
+-                width: 11,
+-                height: 11,
++                width: 10,
++                height: 10,
+                 decoration: const BoxDecoration(
+                   color: AppColors.accent,
+                   shape: BoxShape.circle,
+@@ -534,7 +531,7 @@ class _ChoiceMark extends StatelessWidget {
+               )
+             : const NumayaIcon(
+                 NumayaIcons.check,
+-                size: 16,
++                size: 14,
+                 color: AppColors.accentForeground,
+               ),
+       ),
+diff --git a/apps/numaya_mobile/lib/features/dating/presentation/discover_screen.dart b/apps/numaya_mobile/lib/features/dating/presentation/discover_screen.dart
+index 233d599..628b7fc 100644
+--- a/apps/numaya_mobile/lib/features/dating/presentation/discover_screen.dart
++++ b/apps/numaya_mobile/lib/features/dating/presentation/discover_screen.dart
+@@ -295,7 +295,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
+         ? 0
+         : (person != null && !failing ? 2 : 1);
+     final sideButtons = math.max(leftButtons, rightButtons);
+-    final sideReserve = sideButtons * (AppSizes.iconButton + AppSpacing.s2);
++    final sideReserve = sideButtons * (AppSizes.iconButtonSlot + AppSpacing.s2);
+     final wordmarkRoom =
+         math.min(MediaQuery.sizeOf(context).width, AppSpacing.contentMax) -
+         2 * AppLayout.screenGutter -
+@@ -733,7 +733,12 @@ class _FloatingActionsState extends State<_FloatingActions> {
+     final l10n = context.l10n;
+     final show = _show && (_entered || AppMotion.reduced(context));
+     if (!_mounted) return const SizedBox.shrink();
+-    final duration = AppMotion.duration(context, AppMotion.state);
++    // Enters on the state duration, leaves faster: the row responds to the scroll, it is not a
++    // decision the member is making (Emil: exits quicker than entries; FD-B3).
++    final duration = AppMotion.duration(
++      context,
++      show ? AppMotion.state : AppMotion.fast,
++    );
+     return Builder(
+       builder: (context) {
+         return IgnorePointer(
+diff --git a/apps/numaya_mobile/lib/features/dating/presentation/messages_screens.dart b/apps/numaya_mobile/lib/features/dating/presentation/messages_screens.dart
+index 25e987b..9dc1d4f 100644
+--- a/apps/numaya_mobile/lib/features/dating/presentation/messages_screens.dart
++++ b/apps/numaya_mobile/lib/features/dating/presentation/messages_screens.dart
+@@ -704,6 +704,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
+             NavIconButton(
+               icon: NumayaIcons.chevronLeft,
+               label: l10n.backToMessages,
++              style: NavButtonStyle.plain,
+               onPressed: _back,
+             ),
+             const SizedBox(width: AppSpacing.s3),
+diff --git a/apps/numaya_mobile/lib/features/demo/presentation/design_lab_screen.dart b/apps/numaya_mobile/lib/features/demo/presentation/design_lab_screen.dart
+index ead0794..d231705 100644
+--- a/apps/numaya_mobile/lib/features/demo/presentation/design_lab_screen.dart
++++ b/apps/numaya_mobile/lib/features/demo/presentation/design_lab_screen.dart
+@@ -35,405 +35,430 @@ class _DesignLabScreenState extends ConsumerState<DesignLabScreen> {
+     // golden) no longer changes with the time of day.
+     final now = ref.watch(clockProvider)();
+     final event = sampleEvents(now).first;
+-    return NumayaScreen(
+-      top: NumayaTopBar(
+-        onBack: () =>
+-            context.canPop() ? context.pop() : context.go(Routes.demo),
+-        title: 'Design Lab',
+-      ),
+-      body: Column(
+-        crossAxisAlignment: CrossAxisAlignment.stretch,
+-        children: [
+-          const SizedBox(height: AppSpacing.s4),
+-          const InfoCard(
+-            icon: NumayaIcons.info,
+-            title: 'Monochrome Meetup',
+-            body:
+-                'Development build only. Every token and component of the experimental '
+-                'design system, for visual review.',
+-          ),
+-          _section('Navigation: selected-state variants'),
+-          for (final style in TabIndicatorStyle.values) ...[
+-            Text(style.name, style: AppTypography.caption),
+-            const SizedBox(height: AppSpacing.s1),
+-            MediaQuery.removePadding(
+-              context: context,
+-              removeBottom: true,
+-              child: NumayaTabBar(
+-                indicator: style,
+-                currentIndex: 2,
+-                onSelect: (_) {},
+-                items: const [
+-                  TabItem(label: 'Home', icon: NumayaIcons.home),
+-                  TabItem(label: 'Events', icon: NumayaIcons.event),
+-                  TabItem(
+-                    label: 'Likes',
+-                    icon: NumayaIcons.heart,
+-                    badgeCount: 2,
++    // The Lab is where unfinished art is reviewed, so its slots show their placeholders.
++    return IllustrationPlaceholders(
++      child: NumayaScreen(
++        top: NumayaTopBar(
++          onBack: () =>
++              context.canPop() ? context.pop() : context.go(Routes.demo),
++          title: 'Design Lab',
++        ),
++        body: Column(
++          crossAxisAlignment: CrossAxisAlignment.stretch,
++          children: [
++            const SizedBox(height: AppSpacing.s4),
++            const InfoCard(
++              icon: NumayaIcons.info,
++              title: 'Ente design system',
++              body:
++                  'Development build only. Every token and component of the Ente experiment '
++                  '(Numaya purple and fonts on Ente geometry, Lucide icons), for visual review.',
++            ),
++            _section('Navigation: selected-state variants'),
++            // The shipped Ente bar first, then the earlier indicator variants on the opaque pill
++            // for comparison.
++            for (final (style, surface) in [
++              (TabIndicatorStyle.tint, TabBarSurface.ente),
++              for (final s in TabIndicatorStyle.values)
++                (s, TabBarSurface.opaque),
++            ]) ...[
++              Text(
++                '${surface.name}: ${style.name}',
++                style: AppTypography.caption,
++              ),
++              const SizedBox(height: AppSpacing.s1),
++              MediaQuery.removePadding(
++                context: context,
++                removeBottom: true,
++                child: NumayaTabBar(
++                  indicator: style,
++                  surface: surface,
++                  currentIndex: 2,
++                  onSelect: (_) {},
++                  items: const [
++                    TabItem(label: 'Home', icon: NumayaIcons.home),
++                    TabItem(label: 'Events', icon: NumayaIcons.event),
++                    TabItem(
++                      label: 'Likes',
++                      icon: NumayaIcons.heart,
++                      badgeCount: 2,
++                    ),
++                    TabItem(label: 'Messages', icon: NumayaIcons.message),
++                    TabItem(label: 'Profile', icon: NumayaIcons.user),
++                  ],
++                ),
++              ),
++              const SizedBox(height: AppSpacing.s3),
++            ],
++            _section('Surfaces'),
++            Wrap(
++              spacing: AppSpacing.s3,
++              runSpacing: AppSpacing.s3,
++              children: [
++                _swatch('Canvas', AppColors.canvas, border: true),
++                _swatch('Surface', AppColors.surface, border: true),
++                _swatch('Fill', AppColors.fill),
++                _swatch('Photo', AppColors.photo),
++                _swatch('Line', AppColors.border),
++                _swatch('Outline', AppColors.outline, light: true),
++                _swatch('Ink', AppColors.ink, light: true),
++                _swatch('Text 2', AppColors.textSecondary, light: true),
++                _swatch('Muted', AppColors.textMuted, light: true),
++                _swatch('Brand', AppColors.accent, light: true),
++                _swatch('Brand text', AppColors.accentOnTint, light: true),
++                _swatch('Brand subtle', AppColors.accentTint),
++                _swatch('Success', AppColors.positive, light: true),
++                _swatch('Danger', AppColors.negative, light: true),
++              ],
++            ),
++            _section('Type'),
++            WhiteCard(
++              child: Column(
++                crossAxisAlignment: CrossAxisAlignment.start,
++                children: [
++                  Text('Maya, 29', style: AppTypography.hero),
++                  Text('Events', style: AppTypography.pageTitle),
++                  Text(
++                    'Let’s start with an intro',
++                    style: AppTypography.flowTitle,
++                  ),
++                  Text('Your prompt', style: AppTypography.section),
++                  Text(
++                    'Board games and natural wine',
++                    style: AppTypography.card,
++                  ),
++                  Text(
++                    'Picnic in the park with board games. Bring a friend, we’ll have snacks.',
++                    style: AppTypography.body,
++                  ),
++                  Text('Liked you · 4 km away', style: AppTypography.caption),
++                  Text('SAT, 31 OCT · 19:00', style: AppTypography.labelCaps),
++                  Row(
++                    crossAxisAlignment: CrossAxisAlignment.baseline,
++                    textBaseline: TextBaseline.alphabetic,
++                    children: [
++                      Text('84', style: AppTypography.metric),
++                      const SizedBox(width: AppSpacing.s1),
++                      Text('/ 100', style: AppTypography.metricUnit),
++                    ],
+                   ),
+-                  TabItem(label: 'Messages', icon: NumayaIcons.message),
+-                  TabItem(label: 'Profile', icon: NumayaIcons.user),
+                 ],
+               ),
+             ),
++            _section('Buttons'),
++            NumayaButton(label: 'Join event', onPressed: () {}),
+             const SizedBox(height: AppSpacing.s3),
+-          ],
+-          _section('Surfaces'),
+-          Wrap(
+-            spacing: AppSpacing.s3,
+-            runSpacing: AppSpacing.s3,
+-            children: [
+-              _swatch('Canvas', AppColors.canvas, border: true),
+-              _swatch('Surface', AppColors.surface, border: true),
+-              _swatch('Fill', AppColors.fill),
+-              _swatch('Photo', AppColors.photo),
+-              _swatch('Line', AppColors.border),
+-              _swatch('Outline', AppColors.outline, light: true),
+-              _swatch('Ink', AppColors.ink, light: true),
+-              _swatch('Text 2', AppColors.textSecondary, light: true),
+-              _swatch('Muted', AppColors.textMuted, light: true),
+-              _swatch('Brand', AppColors.accent, light: true),
+-              _swatch('Brand text', AppColors.accentOnTint, light: true),
+-              _swatch('Brand subtle', AppColors.accentTint),
+-              _swatch('Success', AppColors.positive, light: true),
+-              _swatch('Danger', AppColors.negative, light: true),
+-            ],
+-          ),
+-          _section('Type'),
+-          WhiteCard(
+-            child: Column(
+-              crossAxisAlignment: CrossAxisAlignment.start,
++            NumayaButton(
++              label: 'Not now',
++              variant: NumayaButtonVariant.secondary,
++              onPressed: () {},
++            ),
++            const SizedBox(height: AppSpacing.s3),
++            NumayaButton(
++              label: 'Set Opening Moves',
++              variant: NumayaButtonVariant.brand,
++              onPressed: () {},
++            ),
++            const SizedBox(height: AppSpacing.s3),
++            const NumayaButton(label: 'Disabled', onPressed: null),
++            const SizedBox(height: AppSpacing.s3),
++            NumayaButton(
++              label: 'Unmatch',
++              variant: NumayaButtonVariant.destructiveSolid,
++              onPressed: () {},
++            ),
++            const SizedBox(height: AppSpacing.s3),
++            Wrap(
++              spacing: AppSpacing.s3,
++              runSpacing: AppSpacing.s3,
++              crossAxisAlignment: WrapCrossAlignment.center,
+               children: [
+-                Text('Maya, 29', style: AppTypography.hero),
+-                Text('Events', style: AppTypography.pageTitle),
+-                Text(
+-                  'Let’s start with an intro',
+-                  style: AppTypography.flowTitle,
++                NumayaButton(
++                  label: 'Edit profile',
++                  small: true,
++                  icon: NumayaIcons.edit,
++                  variant: NumayaButtonVariant.secondary,
++                  onPressed: () {},
+                 ),
+-                Text('Your prompt', style: AppTypography.section),
+-                Text('Board games and natural wine', style: AppTypography.card),
+-                Text(
+-                  'Picnic in the park with board games. Bring a friend, we’ll have snacks.',
+-                  style: AppTypography.body,
++                NumayaButton(
++                  label: 'Find your people',
++                  small: true,
++                  onPressed: () {},
+                 ),
+-                Text('Liked you · 4 km away', style: AppTypography.caption),
+-                Text('SAT, 31 OCT · 19:00', style: AppTypography.labelCaps),
+-                Row(
+-                  crossAxisAlignment: CrossAxisAlignment.baseline,
+-                  textBaseline: TextBaseline.alphabetic,
+-                  children: [
+-                    Text('84', style: AppTypography.metric),
+-                    const SizedBox(width: AppSpacing.s1),
+-                    Text('/ 100', style: AppTypography.metricUnit),
+-                  ],
++                NumayaButton(
++                  label: 'Loading',
++                  small: true,
++                  loading: true,
++                  onPressed: () {},
++                ),
++                NavIconButton(
++                  icon: NumayaIcons.share,
++                  label: 'Share',
++                  onPressed: () {},
+                 ),
++                NavIconButton(
++                  icon: NumayaIcons.heart,
++                  label: 'Save',
++                  outline: !_saved,
++                  onPressed: () => setState(() => _saved = !_saved),
++                ),
++                NumayaFab(onPressed: () {}, semanticLabel: 'Next'),
+               ],
+             ),
+-          ),
+-          _section('Buttons'),
+-          NumayaButton(label: 'Join event', onPressed: () {}),
+-          const SizedBox(height: AppSpacing.s3),
+-          NumayaButton(
+-            label: 'Not now',
+-            variant: NumayaButtonVariant.secondary,
+-            onPressed: () {},
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          NumayaButton(
+-            label: 'Set Opening Moves',
+-            variant: NumayaButtonVariant.brand,
+-            onPressed: () {},
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          const NumayaButton(label: 'Disabled', onPressed: null),
+-          const SizedBox(height: AppSpacing.s3),
+-          NumayaButton(
+-            label: 'Unmatch',
+-            variant: NumayaButtonVariant.destructiveSolid,
+-            onPressed: () {},
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          Wrap(
+-            spacing: AppSpacing.s3,
+-            runSpacing: AppSpacing.s3,
+-            crossAxisAlignment: WrapCrossAlignment.center,
+-            children: [
+-              NumayaButton(
+-                label: 'Edit profile',
+-                small: true,
+-                icon: NumayaIcons.edit,
+-                variant: NumayaButtonVariant.secondary,
+-                onPressed: () {},
+-              ),
+-              NumayaButton(
+-                label: 'Find your people',
+-                small: true,
+-                onPressed: () {},
+-              ),
+-              NumayaButton(
+-                label: 'Loading',
+-                small: true,
+-                loading: true,
+-                onPressed: () {},
+-              ),
+-              NavIconButton(
+-                icon: NumayaIcons.share,
+-                label: 'Share',
+-                onPressed: () {},
+-              ),
+-              NavIconButton(
+-                icon: NumayaIcons.heart,
+-                label: 'Save',
+-                outline: !_saved,
+-                onPressed: () => setState(() => _saved = !_saved),
+-              ),
+-              NumayaFab(onPressed: () {}, semanticLabel: 'Next'),
+-            ],
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          TextLink(label: 'Edit attendance', onPressed: () {}),
+-          _section('Pills, segments and chips'),
+-          ViewTabs(
+-            label: 'Filter',
+-            options: const [
+-              (label: 'Upcoming', count: null),
+-              (label: 'Today', count: null),
+-              (label: 'Tomorrow', count: null),
+-              (label: 'Weekend', count: null),
+-            ],
+-            selected: _tab,
+-            onSelect: (i) => setState(() => _tab = i),
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          ViewTabs(
+-            label: 'Segments',
+-            options: const [
+-              (label: 'All', count: 7),
+-              (label: 'New', count: 4),
+-              (label: 'Nearby', count: 3),
+-            ],
+-            selected: _segment,
+-            onSelect: (i) => setState(() => _segment = i),
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          Wrap(
+-            spacing: AppSpacing.s2,
+-            runSpacing: AppSpacing.s2,
+-            children: [
+-              for (final c in ['Jazz', 'Natural wine', 'Climbing'])
+-                NumayaChip(
+-                  label: c,
+-                  selected: _chips.contains(c),
+-                  onTap: () => setState(
+-                    () => _chips.contains(c) ? _chips.remove(c) : _chips.add(c),
++            const SizedBox(height: AppSpacing.s3),
++            TextLink(label: 'Edit attendance', onPressed: () {}),
++            _section('Pills, segments and chips'),
++            ViewTabs(
++              label: 'Filter',
++              options: const [
++                (label: 'Upcoming', count: null),
++                (label: 'Today', count: null),
++                (label: 'Tomorrow', count: null),
++                (label: 'Weekend', count: null),
++              ],
++              selected: _tab,
++              onSelect: (i) => setState(() => _tab = i),
++            ),
++            const SizedBox(height: AppSpacing.s3),
++            ViewTabs(
++              label: 'Segments',
++              options: const [
++                (label: 'All', count: 7),
++                (label: 'New', count: 4),
++                (label: 'Nearby', count: 3),
++              ],
++              selected: _segment,
++              onSelect: (i) => setState(() => _segment = i),
++            ),
++            const SizedBox(height: AppSpacing.s3),
++            Wrap(
++              spacing: AppSpacing.s2,
++              runSpacing: AppSpacing.s2,
++              children: [
++                for (final c in ['Jazz', 'Natural wine', 'Climbing'])
++                  NumayaChip(
++                    label: c,
++                    selected: _chips.contains(c),
++                    onTap: () => setState(
++                      () =>
++                          _chips.contains(c) ? _chips.remove(c) : _chips.add(c),
++                    ),
+                   ),
++                NumayaChip(
++                  label: 'Unavailable',
++                  selected: false,
++                  available: false,
++                  onTap: () {},
+                 ),
+-              NumayaChip(
+-                label: 'Unavailable',
+-                selected: false,
+-                available: false,
+-                onTap: () {},
+-              ),
+-            ],
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          const Wrap(
+-            spacing: AppSpacing.s2,
+-            runSpacing: AppSpacing.s2,
+-            children: [
+-              StatusBadge(label: 'First event', tone: BadgeTone.brand),
+-              StatusBadge(label: 'Full'),
+-              StatusBadge(label: 'Few spots left', tone: BadgeTone.brand),
+-            ],
+-          ),
+-          _section('Fields'),
+-          const NumayaTextField(label: 'First name', placeholder: 'Your name'),
+-          const SizedBox(height: AppSpacing.s3),
+-          const NumayaTextField(
+-            label: 'Email',
+-            placeholder: 'you@example.com',
+-            error: 'Enter an email like name@example.com',
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          NumayaSearchField(placeholder: 'Search events', onChanged: (_) {}),
+-          _section('Controls'),
+-          ListGroup(
+-            children: [
+-              ListRow(
+-                label: 'Show gender on profile',
+-                switchValue: _switch,
+-                onSwitch: (v) => setState(() => _switch = v),
+-              ),
+-              const ListRow(
+-                label: 'Incognito',
+-                detail: 'Premium',
+-                switchValue: false,
+-              ),
+-              ListRow(
+-                leading: NumayaIcons.shield,
+-                label: 'Safety centre',
+-                value: 'Open',
+-                onTap: () {},
+-              ),
+-            ],
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          WhiteCard(
+-            padding: EdgeInsets.zero,
+-            child: Column(
++              ],
++            ),
++            const SizedBox(height: AppSpacing.s3),
++            const Wrap(
++              spacing: AppSpacing.s2,
++              runSpacing: AppSpacing.s2,
++              children: [
++                StatusBadge(label: 'First event', tone: BadgeTone.brand),
++                StatusBadge(label: 'Full'),
++                StatusBadge(label: 'Few spots left', tone: BadgeTone.brand),
++              ],
++            ),
++            _section('Fields'),
++            const NumayaTextField(
++              label: 'First name',
++              placeholder: 'Your name',
++            ),
++            const SizedBox(height: AppSpacing.s3),
++            const NumayaTextField(
++              label: 'Email',
++              placeholder: 'you@example.com',
++              error: 'Enter an email like name@example.com',
++            ),
++            const SizedBox(height: AppSpacing.s3),
++            NumayaSearchField(placeholder: 'Search events', onChanged: (_) {}),
++            _section('Controls'),
++            ListGroup(
+               children: [
+-                for (final (i, l) in ['Woman', 'Man', 'Nonbinary'].indexed)
++                ListRow(
++                  label: 'Show gender on profile',
++                  switchValue: _switch,
++                  onSwitch: (v) => setState(() => _switch = v),
++                ),
++                const ListRow(
++                  label: 'Incognito',
++                  detail: 'Premium',
++                  switchValue: false,
++                ),
++                ListRow(
++                  leading: NumayaIcons.shield,
++                  label: 'Safety centre',
++                  value: 'Open',
++                  onTap: () {},
++                ),
++              ],
++            ),
++            const SizedBox(height: AppSpacing.s3),
++            WhiteCard(
++              padding: EdgeInsets.zero,
++              child: Column(
++                children: [
++                  for (final (i, l) in ['Woman', 'Man', 'Nonbinary'].indexed)
++                    OptionCard(
++                      label: l,
++                      selected: _radio == i,
++                      onTap: () => setState(() => _radio = i),
++                    ),
+                   OptionCard(
+-                    label: l,
+-                    selected: _radio == i,
+-                    onTap: () => setState(() => _radio = i),
++                    label: 'Show me in Discover',
++                    kind: OptionKind.checkbox,
++                    selected: _check,
++                    onTap: () => setState(() => _check = !_check),
++                  ),
++                ],
++              ),
++            ),
++            _section('Cards'),
++            EventCard(
++              event: event,
++              now: now,
++              area: null,
++              saved: _saved,
++              onOpen: () {},
++              onToggleSave: () => setState(() => _saved = !_saved),
++            ),
++            const SizedBox(height: AppSpacing.s3),
++            Row(
++              children: [
++                Expanded(
++                  child: _metric(
++                    'Profile completeness',
++                    '84',
++                    '%',
++                    'Above the 70% target',
++                  ),
++                ),
++                const SizedBox(width: AppSpacing.s3),
++                Expanded(
++                  child: _metric(
++                    'Likes this week',
++                    '—',
++                    '',
++                    'Not enough data yet',
+                   ),
+-                OptionCard(
+-                  label: 'Show me in Discover',
+-                  kind: OptionKind.checkbox,
+-                  selected: _check,
+-                  onTap: () => setState(() => _check = !_check),
+                 ),
+               ],
+             ),
+-          ),
+-          _section('Cards'),
+-          EventCard(
+-            event: event,
+-            now: now,
+-            area: null,
+-            saved: _saved,
+-            onOpen: () {},
+-            onToggleSave: () => setState(() => _saved = !_saved),
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          Row(
+-            children: [
+-              Expanded(
+-                child: _metric(
+-                  'Profile completeness',
+-                  '84',
+-                  '%',
+-                  'Above the 70% target',
+-                ),
++            const SizedBox(height: AppSpacing.s3),
++            CompletionCard(
++              percent: 62,
++              title: 'Profile 62% complete',
++              body: 'Profiles with more to talk about get more matches.',
++              actionLabel: 'Complete profile',
++              onAction: () {},
++            ),
++            const SizedBox(height: AppSpacing.s3),
++            const StatusBanner(
++              title: 'You’re offline',
++              body: 'Changes will send when you reconnect.',
++              tone: BannerTone.error,
++            ),
++            _section('People and messages'),
++            const Row(
++              children: [
++                InitialsAvatar(initial: 'P', verified: true),
++                SizedBox(width: AppSpacing.s3),
++                InitialsAvatar(initial: 'J', ring: true),
++                SizedBox(width: AppSpacing.s3),
++                InitialsAvatar(initial: 'A', size: 64),
++              ],
++            ),
++            const SizedBox(height: AppSpacing.s3),
++            const Align(
++              alignment: Alignment.centerRight,
++              child: MessageBubble(
++                text: 'That bakery on Columbia Road, right?',
+               ),
+-              const SizedBox(width: AppSpacing.s3),
+-              Expanded(
+-                child: _metric(
+-                  'Likes this week',
+-                  '—',
+-                  '',
+-                  'Not enough data yet',
+-                ),
++            ),
++            const SizedBox(height: AppSpacing.s2),
++            const Align(
++              alignment: Alignment.centerLeft,
++              child: MessageBubble(
++                text: 'Yes! The cardamom buns sell out by ten.',
++                mine: false,
+               ),
+-            ],
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          CompletionCard(
+-            percent: 62,
+-            title: 'Profile 62% complete',
+-            body: 'Profiles with more to talk about get more matches.',
+-            actionLabel: 'Complete profile',
+-            onAction: () {},
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          const StatusBanner(
+-            title: 'You’re offline',
+-            body: 'Changes will send when you reconnect.',
+-            tone: BannerTone.error,
+-          ),
+-          _section('People and messages'),
+-          const Row(
+-            children: [
+-              InitialsAvatar(initial: 'P', verified: true),
+-              SizedBox(width: AppSpacing.s3),
+-              InitialsAvatar(initial: 'J', ring: true),
+-              SizedBox(width: AppSpacing.s3),
+-              InitialsAvatar(initial: 'A', size: 64),
+-            ],
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          const Align(
+-            alignment: Alignment.centerRight,
+-            child: MessageBubble(text: 'That bakery on Columbia Road, right?'),
+-          ),
+-          const SizedBox(height: AppSpacing.s2),
+-          const Align(
+-            alignment: Alignment.centerLeft,
+-            child: MessageBubble(
+-              text: 'Yes! The cardamom buns sell out by ten.',
+-              mine: false,
+             ),
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          DecisionBar(
+-            passLabel: 'Pass',
+-            superLabel: 'SuperSwipe',
+-            likeLabel: 'Like',
+-            onPass: () {},
+-            onSuper: () {},
+-            onLike: () {},
+-          ),
+-          _section('States'),
+-          const Center(
+-            child: CircularProgressIndicator(color: AppColors.accent),
+-          ),
+-          EmptyState(
+-            title: 'No incoming likes yet',
+-            body: 'When someone likes your profile, they’ll show up here.',
+-            art: const IllustrationSlot(
+-              slot: 'likes_empty',
+-              label: 'No incoming likes yet',
+-              width: 200,
++            const SizedBox(height: AppSpacing.s3),
++            DecisionBar(
++              passLabel: 'Pass',
++              superLabel: 'SuperSwipe',
++              likeLabel: 'Like',
++              onPass: () {},
++              onSuper: () {},
++              onLike: () {},
+             ),
+-            action: NumayaButton(
+-              label: 'Find your people',
+-              small: true,
+-              onPressed: () {},
++            _section('States'),
++            const Center(
++              child: CircularProgressIndicator(color: AppColors.accent),
+             ),
+-          ),
+-          _section('Illustration slots'),
+-          const IllustrationSlot(
+-            slot: 'events_explore',
+-            label: 'Explore events near you',
+-            aspectRatio: IllustrationSlot.header,
+-          ),
+-          const SizedBox(height: AppSpacing.s3),
+-          Row(
+-            children: [
+-              NumayaButton(
+-                label: 'Open sheet',
++            EmptyState(
++              title: 'No incoming likes yet',
++              body: 'When someone likes your profile, they’ll show up here.',
++              art: const IllustrationSlot(
++                slot: 'likes_empty',
++                label: 'No incoming likes yet',
++                width: 200,
++              ),
++              action: NumayaButton(
++                label: 'Find your people',
+                 small: true,
+-                variant: NumayaButtonVariant.secondary,
+-                onPressed: () => showModalBottomSheet<void>(
+-                  context: context,
+-                  sheetAnimationStyle: AppMotion.sheet(context),
+-                  builder: (_) => Padding(
+-                    padding: const EdgeInsets.all(AppLayout.screenGutter),
+-                    child: Column(
+-                      mainAxisSize: MainAxisSize.min,
+-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+-                      children: [
+-                        Text('A bottom sheet', style: AppTypography.sheetTitle),
+-                        const SizedBox(height: AppSpacing.s2),
+-                        Text(
+-                          'White, 28pt top corners, the modal scrim behind.',
+-                          style: AppTypography.body,
+-                        ),
+-                        const SizedBox(height: AppSpacing.s5),
+-                        NumayaButton(
+-                          label: 'Done',
+-                          onPressed: () => Navigator.of(context).pop(),
+-                        ),
+-                      ],
++                onPressed: () {},
++              ),
++            ),
++            _section('Illustration slots'),
++            const IllustrationSlot(
++              slot: 'events_explore',
++              label: 'Explore events near you',
++              aspectRatio: IllustrationSlot.header,
++            ),
++            const SizedBox(height: AppSpacing.s3),
++            Row(
++              children: [
++                NumayaButton(
++                  label: 'Open sheet',
++                  small: true,
++                  variant: NumayaButtonVariant.secondary,
++                  onPressed: () => showModalBottomSheet<void>(
++                    context: context,
++                    sheetAnimationStyle: AppMotion.sheet(context),
++                    builder: (_) => Padding(
++                      padding: const EdgeInsets.all(AppLayout.screenGutter),
++                      child: Column(
++                        mainAxisSize: MainAxisSize.min,
++                        crossAxisAlignment: CrossAxisAlignment.stretch,
++                        children: [
++                          Text(
++                            'A bottom sheet',
++                            style: AppTypography.sheetTitle,
++                          ),
++                          const SizedBox(height: AppSpacing.s2),
++                          Text(
++                            'White, 28pt top corners, the modal scrim behind.',
++                            style: AppTypography.body,
++                          ),
++                          const SizedBox(height: AppSpacing.s5),
++                          NumayaButton(
++                            label: 'Done',
++                            onPressed: () => Navigator.of(context).pop(),
++                          ),
++                        ],
++                      ),
+                     ),
+                   ),
+                 ),
+-              ),
+-            ],
+-          ),
+-          const SizedBox(height: AppLayout.screenBottom),
+-        ],
++              ],
++            ),
++            const SizedBox(height: AppLayout.screenBottom),
++          ],
++        ),
+       ),
+     );
+   }
+diff --git a/apps/numaya_mobile/lib/features/events/presentation/event_parts.dart b/apps/numaya_mobile/lib/features/events/presentation/event_parts.dart
+index eedf79b..6dd091c 100644
+--- a/apps/numaya_mobile/lib/features/events/presentation/event_parts.dart
++++ b/apps/numaya_mobile/lib/features/events/presentation/event_parts.dart
+@@ -169,7 +169,7 @@ class EventCover extends StatelessWidget {
+                         padding: EdgeInsets.only(
+                           right: action == null
+                               ? 0
+-                              : AppSizes.iconButton + AppSpacing.s1,
++                              : AppSizes.iconButtonSlot + AppSpacing.s1,
+                         ),
+                         child: Wrap(
+                           spacing: AppLayout.groupGap,
+@@ -268,7 +268,9 @@ class EventCard extends StatelessWidget {
+                     // Keeps the badges clear of the save button laid over this corner.
+                     action: onToggleSave == null
+                         ? null
+-                        : const SizedBox.square(dimension: AppSizes.iconButton),
++                        : const SizedBox.square(
++                            dimension: AppSizes.iconButtonSlot,
++                          ),
+                   ),
+                   Padding(
+                     padding: const EdgeInsets.fromLTRB(
+diff --git a/apps/numaya_mobile/lib/features/profile/presentation/edit_profile_screen.dart b/apps/numaya_mobile/lib/features/profile/presentation/edit_profile_screen.dart
+index 713970b..60984fe 100644
+--- a/apps/numaya_mobile/lib/features/profile/presentation/edit_profile_screen.dart
++++ b/apps/numaya_mobile/lib/features/profile/presentation/edit_profile_screen.dart
+@@ -88,7 +88,7 @@ class EditProfileScreen extends ConsumerWidget {
+             icon: NumayaIcons.public,
+             outline: true,
+             label: l10n.editPreview,
+-            style: NavButtonStyle.plain,
++            // The same filled square as Back beside it (FD-D2; it was the only bare header action).
+             onPressed: () => context.push(Routes.preview),
+           ),
+         ],
+diff --git a/apps/numaya_mobile/lib/l10n/app_en.arb b/apps/numaya_mobile/lib/l10n/app_en.arb
+index a826c63..fa38076 100644
+--- a/apps/numaya_mobile/lib/l10n/app_en.arb
++++ b/apps/numaya_mobile/lib/l10n/app_en.arb
+@@ -1067,7 +1067,7 @@
+   "demoHubBody": "Jump to any screen, switch the sample data and try each state. Everything here is local and simulated.",
+   "demoDesignTitle": "Design",
+   "demoDesignLab": "Design Lab",
+-  "demoDesignLabDetail": "Monochrome Meetup tokens, components and states",
++  "demoDesignLabDetail": "Ente design system tokens, components and states",
+   "demoStart": "Start",
+   "demoQuickStart": "Quick start as Alex (sample account)",
+   "demoQuickStartNote": "Skips sign-up with a finished sample profile and a fictional 555 number.",
+diff --git a/apps/numaya_mobile/lib/l10n/generated/app_localizations.dart b/apps/numaya_mobile/lib/l10n/generated/app_localizations.dart
+index 15b03d7..8a95210 100644
+--- a/apps/numaya_mobile/lib/l10n/generated/app_localizations.dart
++++ b/apps/numaya_mobile/lib/l10n/generated/app_localizations.dart
+@@ -3271,7 +3271,7 @@ abstract class AppLocalizations {
+   /// No description provided for @demoDesignLabDetail.
+   ///
+   /// In en, this message translates to:
+-  /// **'Monochrome Meetup tokens, components and states'**
++  /// **'Ente design system tokens, components and states'**
+   String get demoDesignLabDetail;
+ 
+   /// No description provided for @demoStart.
+diff --git a/apps/numaya_mobile/lib/l10n/generated/app_localizations_en.dart b/apps/numaya_mobile/lib/l10n/generated/app_localizations_en.dart
+index c92f308..c63a233 100644
+--- a/apps/numaya_mobile/lib/l10n/generated/app_localizations_en.dart
++++ b/apps/numaya_mobile/lib/l10n/generated/app_localizations_en.dart
+@@ -1923,7 +1923,7 @@ class AppLocalizationsEn extends AppLocalizations {
+ 
+   @override
+   String get demoDesignLabDetail =>
+-      'Monochrome Meetup tokens, components and states';
++      'Ente design system tokens, components and states';
+ 
+   @override
+   String get demoStart => 'Start';
+diff --git a/apps/numaya_mobile/pubspec.lock b/apps/numaya_mobile/pubspec.lock
+index 5538a93..f987681 100644
+--- a/apps/numaya_mobile/pubspec.lock
++++ b/apps/numaya_mobile/pubspec.lock
+@@ -1,6 +1,14 @@
+ # Generated by pub
+ # See https://dart.dev/tools/pub/glossary#lockfile
+ packages:
++  accessibility_tools:
++    dependency: "direct dev"
++    description:
++      name: accessibility_tools
++      sha256: "991d41bfdae0849a58b6cf6c3af51bb32d7f333eb4ebb1d4c35a28f9484cb274"
++      url: "https://pub.dev"
++    source: hosted
++    version: "3.0.0"
+   args:
+     dependency: transitive
+     description:
+@@ -340,6 +348,14 @@ packages:
+       url: "https://pub.dev"
+     source: hosted
+     version: "1.3.0"
++  lucide_icons_flutter:
++    dependency: "direct main"
++    description:
++      name: lucide_icons_flutter
++      sha256: a07370b432d4a88ed8fd6c26b5bbcc4e29fb7b24b6350517fd32209a6b1a50c1
++      url: "https://pub.dev"
++    source: hosted
++    version: "4.0.1"
+   matcher:
+     dependency: transitive
+     description:
+diff --git a/apps/numaya_mobile/pubspec.yaml b/apps/numaya_mobile/pubspec.yaml
+index 3945d2c..45ffd38 100644
+--- a/apps/numaya_mobile/pubspec.yaml
++++ b/apps/numaya_mobile/pubspec.yaml
+@@ -22,6 +22,7 @@ dependencies:
+   # Pinned by flutter_localizations.
+   intl: ^0.20.2
+   image_picker: ^1.2.4
++  lucide_icons_flutter: 4.0.1
+ 
+ dev_dependencies:
+   flutter_test:
+@@ -29,6 +30,7 @@ dev_dependencies:
+   integration_test:
+     sdk: flutter
+   flutter_lints: ^6.0.0
++  accessibility_tools: ^3.0.0
+ 
+ flutter:
+   uses-material-design: true
+diff --git a/apps/numaya_mobile/test/unit/foundation_test.dart b/apps/numaya_mobile/test/unit/foundation_test.dart
+index 82c435e..7a2d124 100644
+--- a/apps/numaya_mobile/test/unit/foundation_test.dart
++++ b/apps/numaya_mobile/test/unit/foundation_test.dart
+@@ -5,17 +5,18 @@ import 'package:numaya_mobile/core/design_system/design_system.dart';
+ import 'package:numaya_mobile/core/logging/app_logger.dart';
+ 
+ void main() {
+-  group('Monochrome Meetup design tokens', () {
++  group('Ente design tokens (Ente experiment)', () {
+     double ratio(Color a, Color b) {
+       final la = a.computeLuminance(), lb = b.computeLuminance();
+       final (hi, lo) = la > lb ? (la, lb) : (lb, la);
+       return (hi + 0.05) / (lo + 0.05);
+     }
+ 
+-    test('roles point at the monochrome palette with the Numaya purple', () {
+-      expect(AppColors.canvas, const Color(0xFFF4F4F6));
++    test('roles point at the Ente palette with the Numaya purple', () {
++      // Ente background/base, fill/light, text/base (Figma 10871:4421).
++      expect(AppColors.canvas, const Color(0xFFF4F4F4));
+       expect(AppColors.surface, const Color(0xFFFFFFFF));
+-      expect(AppColors.ink, const Color(0xFF18181B));
++      expect(AppColors.ink, const Color(0xFF000000));
+       // The canonical brand purple from tokens/numaya.tokens.json (purple.600).
+       expect(AppColors.accent, const Color(0xFF7262C7));
+       expect(AppColors.brand, AppColors.accent);
+@@ -85,10 +86,10 @@ void main() {
+       expect(AppTypography.metric.fontFamily, 'Plus Jakarta Sans');
+       expect(AppTypography.body.fontFamily, 'Figtree');
+       expect(AppTypography.button.fontFamily, 'Figtree');
+-      // Type-roles pass (TR-02): 32 display, 28 prominent, 24 screen, 20 section, 18 lead.
++      // Ente text styles: Display-1 32/40, Display-2 24/32, Display-3 / H1 20/28, H2 18/24.
+       expect(AppTypography.hero.fontSize, 32);
+-      expect(AppTypography.pageTitle.fontSize, 28);
+-      expect(AppTypography.pageTitle.fontWeight, FontWeight.w800);
++      expect(AppTypography.pageTitle.fontSize, 24);
++      expect(AppTypography.pageTitle.fontWeight, FontWeight.w600);
+       expect(AppTypography.flowTitle.fontSize, 24);
+       expect(AppTypography.headline.fontSize, 24);
+       expect(AppTypography.card.fontSize, 18);
+@@ -96,33 +97,37 @@ void main() {
+       expect(AppTypography.sheetTitle.fontSize, 20);
+       expect(AppTypography.metric.fontSize, 40);
+       expect(AppTypography.labelCaps.fontSize, 12);
+-      // OP-01: the semantic default body is 14/20 (the requested default); typing stays at 16
+-      // and the 13/18 caption stays below body.
++      // Ente Body 14/20 medium for body, typing and buttons; Mini 12/16 below it.
+       expect(AppTypography.body.fontSize, 14);
+       expect(AppTypography.body.height! * AppTypography.body.fontSize!, 20);
+-      expect(AppTypography.input.fontSize, 16);
++      expect(AppTypography.body.fontWeight, FontWeight.w500);
++      expect(AppTypography.input.fontSize, 14);
++      expect(AppTypography.button.fontSize, 14);
+       expect(
+         AppTypography.caption.fontSize!,
+         lessThan(AppTypography.body.fontSize!),
+       );
+     });
+ 
+-    test('geometry follows the monochrome radii and sizes', () {
+-      expect(AppRadii.field, 18);
+-      expect(AppRadii.control, 16);
+-      expect(AppRadii.card, 24);
+-      expect(AppRadii.heroCard, 32);
+-      expect(AppRadii.photo, 24);
+-      expect(AppRadii.sheet, 32);
+-      expect(AppSizes.buttonHeight, 56);
+-      expect(AppSizes.field, 58);
++    test('geometry follows the Ente radii and sizes', () {
++      // radius/lg 16, radius/xl 20 (11112:4508); 24 for the hero card and sheet top (NX).
++      expect(AppRadii.field, 16);
++      expect(AppRadii.control, 20);
++      expect(AppRadii.card, 20);
++      expect(AppRadii.heroCard, 24);
++      expect(AppRadii.photo, 16); // nested: hero 24 minus its 8pt inset
++      expect(AppRadii.sheet, 24);
++      expect(AppRadii.iconButton, 12);
++      // Button Large 52, Text Input 52, Menu Item 60, Icon Button 38, Nav Bar 62.
++      expect(AppSizes.buttonHeight, 52);
++      expect(AppSizes.field, 52);
+       expect(AppSizes.row, 60);
+-      // Navigation targets meet Android's 48dp.
+-      expect(AppSizes.tabItem, greaterThanOrEqualTo(48));
+-      expect(AppSizes.iconButton, greaterThanOrEqualTo(44));
+-      expect(AppSizes.choice, 22);
++      expect(AppSizes.iconButton, 38);
++      expect(AppSizes.tabBar, 62);
++      // Visible tiles may be compact; every hit area stays at least 44 (Pressable.minSize).
+       expect(AppSizes.touchMin, 44);
+-      expect(AppLayout.screenGutter, 20);
++      expect(AppSizes.choice, 20);
++      expect(AppLayout.screenGutter, 16);
+     });
+   });
+ 
+diff --git a/apps/numaya_mobile/test/widget/bumble_meetup_test.dart b/apps/numaya_mobile/test/widget/bumble_meetup_test.dart
+index 47b0948..3a28c22 100644
+--- a/apps/numaya_mobile/test/widget/bumble_meetup_test.dart
++++ b/apps/numaya_mobile/test/widget/bumble_meetup_test.dart
+@@ -101,7 +101,7 @@ void main() {
+       final heading = tester.getTopLeft(find.text('Heading')).dx;
+       expect(
+         tester.getTopLeft(find.text('Snooze')).dx - heading,
+-        AppLayout.cardPadding,
++        AppSpacing.s3, // Ente Menu Item: 12pt inside its own card
+       );
+     });
+   });
+diff --git a/apps/numaya_mobile/test/widget/component_cleanup_test.dart b/apps/numaya_mobile/test/widget/component_cleanup_test.dart
+index 92563ac..6e98ddc 100644
+--- a/apps/numaya_mobile/test/widget/component_cleanup_test.dart
++++ b/apps/numaya_mobile/test/widget/component_cleanup_test.dart
+@@ -47,14 +47,25 @@ void main() {
+       expect(find.byType(Opacity), findsNothing);
+     });
+ 
+-    testWidgets('off: light-grey track, white thumb, no outline', (
++    testWidgets('off: light-grey track with a 3:1 edge, white thumb', (
+       tester,
+     ) async {
+       await tester.pumpWidget(
+         host(NumayaSwitch(value: false, onChanged: (_) {})),
+       );
+       expect(trackOf(tester).color, AppColors.switchOff);
+-      expect(trackOf(tester).border, isNull);
++      // FD-A2: the track alone was 1.33:1 on a white card (measured on the emulator), short of the
++      // 3:1 WCAG 1.4.11 asks of the mark that identifies the control.
++      final edge = (trackOf(tester).border! as Border).top;
++      expect(edge.color, AppColors.control);
++      expect(edge.width, AppBorders.selected);
++      double ratio(Color a, Color b) {
++        final la = a.computeLuminance(), lb = b.computeLuminance();
++        return ((la > lb ? la : lb) + 0.05) / ((la > lb ? lb : la) + 0.05);
++      }
++
++      expect(ratio(edge.color, AppColors.surface), greaterThanOrEqualTo(3));
++      expect(ratio(edge.color, AppColors.canvas), greaterThanOrEqualTo(3));
+       expect(thumbOf(tester).color, AppColors.surface);
+     });
+ 
+@@ -196,7 +207,9 @@ void main() {
+     await usePhoneSize(tester);
+     final c = await quickStartApp(tester);
+     await goTo(c, tester, '${Routes.chat}/priya');
+-    final trays = find.descendant(
++    // No white tray around the composer: the only white surface is the Ente Text Input itself,
++    // which holds the text field.
++    final whites = find.descendant(
+       of: find.byType(Composer),
+       matching: find.byWidgetPredicate(
+         (w) =>
+@@ -205,7 +218,11 @@ void main() {
+             (w.decoration! as BoxDecoration).color == AppColors.surface,
+       ),
+     );
+-    expect(trays, findsNothing);
++    expect(whites, findsOneWidget);
++    expect(
++      find.descendant(of: whites, matching: find.byType(TextField)),
++      findsOneWidget,
++    );
+     expect(find.text('Sample conversation'), findsNothing);
+     expect(find.textContaining('Demo chat:'), findsOneWidget);
+     await settle(tester);
+diff --git a/apps/numaya_mobile/test/widget/design_lab_test.dart b/apps/numaya_mobile/test/widget/design_lab_test.dart
+index ad89e97..23e20fd 100644
+--- a/apps/numaya_mobile/test/widget/design_lab_test.dart
++++ b/apps/numaya_mobile/test/widget/design_lab_test.dart
+@@ -29,7 +29,7 @@ void main() {
+     await tester.pump();
+     await tester.pump(const Duration(milliseconds: 600));
+     expect(find.byType(DesignLabScreen), findsOneWidget);
+-    expect(find.text('Monochrome Meetup'), findsOneWidget);
++    expect(find.text('Ente design system'), findsOneWidget);
+     // Illustration slots are decorative: present in the tree, absent from semantics.
+     await tester.scrollUntilVisible(
+       find.byKey(const ValueKey('illustration-slot-events_explore')),
+diff --git a/apps/numaya_mobile/test/widget/ente_design_system_test.dart b/apps/numaya_mobile/test/widget/ente_design_system_test.dart
+new file mode 100644
+index 0000000..65257cc
+--- /dev/null
++++ b/apps/numaya_mobile/test/widget/ente_design_system_test.dart
+@@ -0,0 +1,119 @@
++import 'package:flutter/material.dart';
++import 'package:flutter/rendering.dart' show RenderParagraph;
++import 'package:flutter_test/flutter_test.dart';
++import 'package:lucide_icons_flutter/lucide_icons.dart';
++import 'package:numaya_mobile/app/routes.dart';
++import 'package:numaya_mobile/core/design_system/design_system.dart';
++import 'package:numaya_mobile/core/design_system/icons/lucide_icons.dart';
++
++import '../helpers/journeys.dart';
++import '../helpers/test_app.dart';
++
++/// Ente design system experiment (docs/design-experiments/ente-design-system/): the contract the
++/// shared components now follow, and the regressions found on the emulator.
++void main() {
++  setUpAll(loadAppFonts);
++
++  test('every shared icon name has one Lucide glyph (ED-03)', () {
++    for (final icon in NumayaIcons.values) {
++      expect(kLucideIcons[icon], isNotNull, reason: icon.name);
++      expect(kLucideIcons[icon]!.fontFamily, 'Lucide', reason: icon.name);
++    }
++    for (final icon in NumayaMobileIcons.values) {
++      expect(kLucideMobileIcons[icon], isNotNull, reason: icon.name);
++    }
++    // Back controls draw Ente's arrow, not a chevron.
++    expect(kLucideIcons[NumayaIcons.chevronLeft], LucideIcons.arrowLeft);
++  });
++
++  testWidgets('Button Large: 52pt, 20pt corners, Body label', (tester) async {
++    await tester.pumpWidget(
++      MaterialApp(
++        home: Scaffold(
++          body: Center(
++            child: NumayaButton(label: 'Save', onPressed: () {}),
++          ),
++        ),
++      ),
++    );
++    expect(tester.getSize(find.byType(NumayaButton)).height, 52);
++    final box = tester.widget<AnimatedContainer>(
++      find.descendant(
++        of: find.byType(NumayaButton),
++        matching: find.byType(AnimatedContainer),
++      ),
++    );
++    expect((box.decoration! as BoxDecoration).borderRadius, AppRadii.all(20));
++    final label = tester.widget<Text>(find.text('Save')).style!;
++    expect(label.fontSize, 14);
++    expect(label.fontWeight, FontWeight.w500);
++  });
++
++  testWidgets('inner pages use Ente Header (v2): bare back arrow, title left', (
++    tester,
++  ) async {
++    await usePhoneSize(tester);
++    final c = await quickStartApp(tester);
++    await goTo(c, tester, Routes.settings);
++    final back = tester
++        .widgetList<NavIconButton>(
++          find.descendant(
++            of: find.byType(NumayaTopBar),
++            matching: find.byType(NavIconButton),
++          ),
++        )
++        .first;
++    expect(back.style, NavButtonStyle.plain);
++    final bar = tester.getRect(find.byType(NumayaTopBar));
++    final title = tester.getRect(
++      find.descendant(
++        of: find.byType(NumayaTopBar),
++        matching: find.text('Settings'),
++      ),
++    );
++    // Left-aligned beside the back button, not centred.
++    expect(title.left - bar.left, lessThan(bar.width / 4));
++    await settle(tester);
++  });
++
++  testWidgets(
++    'search hint stays on one line at 320pt and 150% text (device pass)',
++    (tester) async {
++      await usePhoneSize(tester, size: const Size(320, 568));
++      tester.platformDispatcher.textScaleFactorTestValue = 1.5;
++      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
++      final c = await quickStartApp(tester);
++      await goTo(c, tester, Routes.messages);
++      final field = find.byType(NumayaSearchField);
++      expect(field, findsOneWidget);
++      final hint = find.descendant(
++        of: field,
++        matching: find.textContaining('Search'),
++      );
++      // One 20pt line at 150% is 30pt; two lines would be 60.
++      final paragraph = tester.renderObject<RenderParagraph>(hint.first);
++      expect(paragraph.size.height, lessThan(40));
++      expect(tester.takeException(), isNull);
++      await settle(tester);
++    },
++  );
++
++  testWidgets('settings rows are separate Ente Menu Item cards', (
++    tester,
++  ) async {
++    await usePhoneSize(tester);
++    final c = await quickStartApp(tester);
++    await goTo(c, tester, Routes.settings);
++    final cards = find.byWidgetPredicate(
++      (w) =>
++          w is DecoratedBox &&
++          w.decoration is BoxDecoration &&
++          (w.decoration as BoxDecoration).color == AppColors.surface &&
++          (w.decoration as BoxDecoration).borderRadius ==
++              AppRadii.all(AppRadii.card),
++    );
++    expect(cards, findsWidgets);
++    expect(tester.getSize(cards.first).height, greaterThanOrEqualTo(60));
++    await settle(tester);
++  });
++}
+diff --git a/apps/numaya_mobile/test/widget/final_polish_test.dart b/apps/numaya_mobile/test/widget/final_polish_test.dart
+index 17e2309..0208536 100644
+--- a/apps/numaya_mobile/test/widget/final_polish_test.dart
++++ b/apps/numaya_mobile/test/widget/final_polish_test.dart
+@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
+ import 'package:numaya_mobile/app/router.dart';
+ import 'package:numaya_mobile/app/routes.dart';
+ import 'package:numaya_mobile/core/design_system/design_system.dart';
++import 'package:numaya_mobile/core/design_system/icons/lucide_icons.dart';
+ import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
+ import 'package:numaya_mobile/features/dating/presentation/match_screen.dart';
+ 
+@@ -51,7 +52,7 @@ void main() {
+       final g = await dragPhoto(tester, 'Sam, 31', 160);
+       // Mid-drag: the decision is named on the photo, with its icon.
+       expect(find.text('Like'), findsWidgets);
+-      expect(find.byIcon(Icons.check_rounded), findsOneWidget);
++      expect(find.byIcon(kLucideIcons[NumayaIcons.check]!), findsOneWidget);
+       await g.up();
+       await afterDecision(tester);
+       expect(find.text('You liked Sam'), findsOneWidget);
+@@ -92,7 +93,7 @@ void main() {
+         await afterDecision(tester);
+         expect(find.text('Maya, 29'), findsOneWidget);
+         expect(find.text('Like'), findsWidgets); // only the button, no stamp
+-        expect(find.byIcon(Icons.check_rounded), findsNothing);
++        expect(find.byIcon(kLucideIcons[NumayaIcons.check]!), findsNothing);
+         await settle(tester);
+       },
+     );
+@@ -296,17 +297,16 @@ void main() {
+           ),
+         ),
+       );
+-      // Component cleanup (CL-02): rows draw a plain monochrome icon, no coloured tile, and
+-      // the tone no longer colours the row.
++      // Ente Menu Item Icon: a plain glyph in text/light in a 36pt slot, no tile behind it.
+       expect(find.byType(IconTile), findsNothing);
+       final icon = tester.widget<NumayaIcon>(find.byType(NumayaIcon));
+-      expect(icon.color, AppColors.textSecondary);
++      expect(icon.color, AppColors.textMuted);
+       expect(icon.size, AppSizes.iconMd);
+-      // The text starts after the icon and its gap.
++      // The text starts after the 12pt row padding, the 36pt slot and its gap.
+       final row = tester.getTopLeft(find.byType(ListRow));
+       expect(
+         tester.getTopLeft(find.text('Current location')).dx - row.dx,
+-        AppLayout.cardPadding + AppSizes.iconMd + AppLayout.tileLabelGap,
++        AppSpacing.s3 + AppSizes.iconTile + AppLayout.tileLabelGap,
+       );
+     });
+ 
+@@ -323,36 +323,43 @@ void main() {
+       expect(find.byType(IconTile), findsNothing);
+     });
+ 
+-    testWidgets('dividers sit between rows only, inset to the text', (
+-      tester,
+-    ) async {
+-      await tester.pumpWidget(
+-        host(
+-          const ListGroup(
+-            children: [
+-              ListRow(leading: NumayaIcons.user, label: 'One'),
+-              ListRow(leading: NumayaIcons.link, label: 'Two'),
+-              ListRow(label: 'Three'),
+-            ],
++    testWidgets(
++      'off a sheet, each row is its own 20pt card, 8pt apart (Ente)',
++      (tester) async {
++        await tester.pumpWidget(
++          host(
++            const ListGroup(
++              children: [
++                ListRow(leading: NumayaIcons.user, label: 'One'),
++                ListRow(leading: NumayaIcons.link, label: 'Two'),
++                ListRow(label: 'Three'),
++              ],
++            ),
+           ),
+-        ),
+-      );
+-      final lines = find.byWidgetPredicate(
+-        (w) => w is ColoredBox && w.color == AppColors.divider,
+-      );
+-      expect(lines, findsNWidgets(2));
+-      final group = tester.getTopLeft(find.byType(ListGroup)).dx;
+-      // Before a row with a tile: starts at the text, never through the tile.
+-      expect(
+-        tester.getTopLeft(lines.at(0)).dx - group,
+-        AppLayout.cardPadding + AppSizes.iconMd + AppLayout.tileLabelGap,
+-      );
+-      // Before a plain row: starts at the card padding.
+-      expect(tester.getTopLeft(lines.at(1)).dx - group, AppLayout.cardPadding);
+-      // Ends at the card padding.
+-      final card = tester.getTopRight(find.byType(ListGroup)).dx;
+-      expect(card - tester.getTopRight(lines.at(0)).dx, AppLayout.cardPadding);
+-    });
++        );
++        final lines = find.byWidgetPredicate(
++          (w) => w is ColoredBox && w.color == AppColors.divider,
++        );
++        expect(lines, findsNothing);
++        final cards = find.descendant(
++          of: find.byType(ListGroup),
++          matching: find.byWidgetPredicate(
++            (w) =>
++                w is DecoratedBox &&
++                w.decoration is BoxDecoration &&
++                (w.decoration as BoxDecoration).color == AppColors.surface &&
++                (w.decoration as BoxDecoration).borderRadius ==
++                    AppRadii.all(AppRadii.card),
++          ),
++        );
++        expect(cards, findsNWidgets(3));
++        expect(
++          tester.getTopLeft(cards.at(1)).dy -
++              tester.getBottomLeft(cards.at(0)).dy,
++          AppSpacing.s2,
++        );
++      },
++    );
+ 
+     testWidgets('groups can opt out of dividers', (tester) async {
+       await tester.pumpWidget(
+@@ -400,6 +407,9 @@ void main() {
+         addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+         await tester.pumpWidget(
+           MaterialApp(
++            // Slot geometry is reviewed with placeholders on (product screens hide them, FD-A1).
++            builder: (context, child) =>
++                IllustrationPlaceholders(child: child!),
+             home: Scaffold(
+               body: Padding(
+                 padding: const EdgeInsets.all(20),
+@@ -563,12 +573,8 @@ void main() {
+       final deco =
+           tester.widget<AnimatedContainer>(selected).decoration!
+               as BoxDecoration;
+-      expect(
+-        deco.borderRadius,
+-        AppRadii.all(
+-          AppRadii.nested(AppSizes.tabBar / 2, NumayaTabBar.tabInset),
+-        ),
+-      );
++      // Ente Nav Bar: the selected tile is a 12pt-corner Icon Button.
++      expect(deco.borderRadius, AppRadii.all(AppRadii.iconButton));
+       await settle(tester);
+     });
+ 
+@@ -581,7 +587,8 @@ void main() {
+         (w) => w is ClipRRect && w.borderRadius == AppRadii.all(AppRadii.photo),
+       );
+       expect(photo, findsWidgets);
+-      // The hero card is 32 with an 8pt inset: the photo's 24 is exactly what the rule asks.
++      // The hero card is 24 with an 8pt inset: the photo's 16 (Ente radius/lg) is what the rule
++      // asks.
+       expect(AppRadii.nested(AppRadii.heroCard, AppSpacing.s2), AppRadii.photo);
+       await settle(tester);
+     });
+diff --git a/apps/numaya_mobile/test/widget/frosted_navigation_experiment_test.dart b/apps/numaya_mobile/test/widget/frosted_navigation_experiment_test.dart
+index 44ccec8..1227753 100644
+--- a/apps/numaya_mobile/test/widget/frosted_navigation_experiment_test.dart
++++ b/apps/numaya_mobile/test/widget/frosted_navigation_experiment_test.dart
+@@ -67,37 +67,27 @@ void main() {
+     });
+   });
+ 
+-  group('C: frosted tab bar', () {
++  // Ente experiment: the shipped bar is Ente's opaque Nav Bar; the frosted surface remains as a
++  // comparison (Design Lab, High Contrast test below). The layout guarantees still apply.
++  group('C: floating tab bar (Ente Nav Bar)', () {
+     Finder bar() => find.byType(NumayaTabBar);
++    Finder pillOf() => find.byKey(NumayaTabBar.pillKey);
+ 
+-    testWidgets('one blur, bounded by the pill clip, with the glass tint', (
+-      tester,
+-    ) async {
+-      await usePhoneSize(tester);
+-      await quickStartApp(tester);
+-      final blur = find.descendant(
+-        of: bar(),
+-        matching: find.byType(BackdropFilter),
+-      );
+-      expect(blur, findsOneWidget);
+-      expect(find.byType(BackdropFilter), findsOneWidget);
+-      expect(
+-        find.ancestor(of: blur, matching: find.byType(ClipRRect)),
+-        findsWidgets,
+-      );
+-      // The blur covers the pill only (64pt tall), never the screen.
+-      expect(tester.getSize(blur).height, AppSizes.tabBar);
+-      final glass = find.descendant(
+-        of: blur,
+-        matching: find.byWidgetPredicate(
+-          (w) =>
+-              w is Container &&
+-              (w.decoration as BoxDecoration?)?.color == MonoGlass.tint,
+-        ),
+-      );
+-      expect(glass, findsOneWidget);
+-      await settle(tester);
+-    });
++    testWidgets(
++      'Ente Nav Bar: opaque white, 20pt corners, Ente shadow, no blur',
++      (tester) async {
++        await usePhoneSize(tester);
++        await quickStartApp(tester);
++        expect(find.byType(BackdropFilter), findsNothing);
++        final pill = tester.widget<Container>(pillOf());
++        final deco = pill.decoration! as BoxDecoration;
++        expect(deco.color, AppColors.surface);
++        expect(deco.borderRadius, AppRadii.all(AppRadii.control));
++        expect(deco.boxShadow, AppElevation.floating);
++        expect(tester.getSize(pillOf()).height, AppSizes.tabBar);
++        await settle(tester);
++      },
++    );
+ 
+     testWidgets('system navigation keeps a page-colour strip under it', (
+       tester,
+@@ -122,9 +112,7 @@ void main() {
+           tester.view.physicalSize.height / tester.view.devicePixelRatio;
+       expect(tester.getBottomLeft(strip).dy, screenBottom);
+       // The pill sits above the strip, never on the system buttons.
+-      final pill = tester.getRect(
+-        find.descendant(of: bar(), matching: find.byType(BackdropFilter)),
+-      );
++      final pill = tester.getRect(pillOf());
+       expect(pill.bottom, lessThanOrEqualTo(screenBottom - 48));
+       await settle(tester);
+     });
+@@ -184,9 +172,7 @@ void main() {
+       await tester.drag(scroll, const Offset(0, -2000));
+       await tester.pump(const Duration(milliseconds: 600));
+       final last = tester.getRect(find.text('Settings').last);
+-      final pill = tester.getRect(
+-        find.descendant(of: bar(), matching: find.byType(BackdropFilter)),
+-      );
++      final pill = tester.getRect(pillOf());
+       expect(last.bottom, lessThanOrEqualTo(pill.top));
+       await settle(tester);
+     });
+@@ -227,28 +213,22 @@ void main() {
+       await goTo(c, tester, Routes.home);
+     }
+ 
+-    testWidgets(
+-      'at 320pt the wordmark shows the mark only and clears Filters',
+-      (tester) async {
+-        await discoverAt(tester, const Size(320, 568));
+-        final wordmark = find.byType(Wordmark);
+-        expect(
+-          find.descendant(of: wordmark, matching: find.text('numaya')),
+-          findsNothing,
+-        );
+-        final mark = tester.getRect(find.byType(BrandMark).first);
+-        final filters = tester.getRect(
+-          find
+-              .ancestor(
+-                of: find.bySemanticsLabel('Filters'),
+-                matching: find.byType(NavIconButton),
+-              )
+-              .first,
+-        );
+-        expect(mark.right, lessThan(filters.left));
+-        await settle(tester);
+-      },
+-    );
++    testWidgets('at 320pt the wordmark clears Filters', (tester) async {
++      // Ente's 38pt header buttons and 16pt gutter leave room for the full wordmark at 320pt;
++      // what matters is that it never runs under the buttons.
++      await discoverAt(tester, const Size(320, 568));
++      final mark = tester.getRect(find.byType(Wordmark).first);
++      final filters = tester.getRect(
++        find
++            .ancestor(
++              of: find.bySemanticsLabel('Filters'),
++              matching: find.byType(NavIconButton),
++            )
++            .first,
++      );
++      expect(mark.right, lessThan(filters.left));
++      await settle(tester);
++    });
+ 
+     testWidgets('at 390pt the full wordmark still shows', (tester) async {
+       await discoverAt(tester, const Size(390, 844));
+diff --git a/apps/numaya_mobile/test/widget/overnight_polish_test.dart b/apps/numaya_mobile/test/widget/overnight_polish_test.dart
+index 1e7bfd6..4e99918 100644
+--- a/apps/numaya_mobile/test/widget/overnight_polish_test.dart
++++ b/apps/numaya_mobile/test/widget/overnight_polish_test.dart
+@@ -21,12 +21,13 @@ void main() {
+   }
+ 
+   group('OP-01 to OP-03: type roles', () {
+-    test('the semantic body is 14/20; option rows and typing keep 16', () {
++    test('the semantic body is 14/20; rows and typing use Ente Body too', () {
+       expect(MonoType.scale, 'body14');
+       expect(AppTypography.body.fontSize, 14);
+       expect(AppTypography.body.height! * 14, closeTo(20, 0.001));
+-      expect(AppTypography.row.fontSize, 16);
+-      expect(AppTypography.input.fontSize, 16);
++      // Ente experiment: Menu Item titles and Text Input values are Body 14/20.
++      expect(AppTypography.row.fontSize, 14);
++      expect(AppTypography.input.fontSize, 14);
+     });
+ 
+     testWidgets('option rows use the row role, not the reading body', (
+@@ -106,13 +107,27 @@ void main() {
+     );
+ 
+     testWidgets('the frosted bar draws one top highlight', (tester) async {
++      // Ente experiment: the frosted bar is a comparison surface, no longer the app default.
+       await usePhoneSize(tester);
+-      await quickStartApp(tester);
++      await tester.pumpWidget(
++        MaterialApp(
++          home: Scaffold(
++            bottomNavigationBar: NumayaTabBar(
++              surface: TabBarSurface.frosted,
++              currentIndex: 0,
++              onSelect: (_) {},
++              items: const [
++                TabItem(label: 'Home', icon: NumayaIcons.home),
++                TabItem(label: 'Profile', icon: NumayaIcons.user),
++              ],
++            ),
++          ),
++        ),
++      );
+       expect(
+         find.descendant(of: find.byType(NumayaTabBar), matching: highlight()),
+         findsOneWidget,
+       );
+-      await settle(tester);
+     });
+ 
+     testWidgets('High Contrast drops the glass and its highlight', (
+diff --git a/apps/numaya_mobile/test/widget/spacing_rules_test.dart b/apps/numaya_mobile/test/widget/spacing_rules_test.dart
+index 0ac10c8..d4d3a20 100644
+--- a/apps/numaya_mobile/test/widget/spacing_rules_test.dart
++++ b/apps/numaya_mobile/test/widget/spacing_rules_test.dart
+@@ -17,7 +17,7 @@ void main() {
+       tester.getRect(b).left - tester.getRect(a).right;
+ 
+   testWidgets(
+-    'selectable chip: 12pt insets, 4pt icon gap, 36pt pill, 44pt target',
++    'selectable chip (Ente Filter Chip): 16 / 8 / 12 insets, 40pt pill, 44pt target',
+     (tester) async {
+       await tester.pumpWidget(
+         host(NumayaChip(label: 'Jazz', selected: false, onTap: () {})),
+@@ -25,11 +25,11 @@ void main() {
+       final chip = tester.getRect(find.byType(NumayaChip));
+       final label = tester.getRect(find.text('Jazz'));
+       final icon = find.byType(NumayaIcon).last;
+-      expect(label.left - chip.left, closeTo(AppLayout.pillInsetX, 0.5));
+-      expect(gap(tester, find.text('Jazz'), icon), closeTo(4, 0.5));
++      expect(label.left - chip.left, closeTo(AppSpacing.s4, 0.5));
++      expect(gap(tester, find.text('Jazz'), icon), closeTo(AppSpacing.s2, 0.5));
+       expect(
+         chip.right - tester.getRect(icon).right,
+-        closeTo(AppLayout.pillInsetX, 0.5),
++        closeTo(AppSpacing.s3, 0.5),
+       );
+       expect(chip.height, greaterThanOrEqualTo(AppSizes.chip));
+       expect(chip.height, greaterThanOrEqualTo(44));
+@@ -96,13 +96,14 @@ void main() {
+     final pill = find.ancestor(
+       of: find.text('Explore'),
+       matching: find.byWidgetPredicate(
+-        (w) => w is Container && w.constraints?.maxHeight == AppSizes.chip,
++        (w) => w is Container && w.constraints?.maxHeight == AppSizes.tagChip,
+       ),
+     );
+     expect(pill, findsOneWidget);
++    // Ente Tag Chip: 20pt label inset.
+     expect(
+       tester.getRect(find.text('Explore')).left - tester.getRect(pill).left,
+-      closeTo(AppLayout.pillInsetX, 0.5),
++      closeTo(AppSpacing.s5, 0.5),
+     );
+   });
+ 
+@@ -132,7 +133,7 @@ void main() {
+           matching: find.byWidgetPredicate(
+             (w) =>
+                 w is AnimatedContainer &&
+-                w.constraints?.maxHeight == AppSizes.chip,
++                w.constraints?.maxHeight == AppSizes.tagChip,
+           ),
+         ),
+       );
+diff --git a/apps/numaya_mobile/test/widget/type_roles_test.dart b/apps/numaya_mobile/test/widget/type_roles_test.dart
+index 8027b3a..6da6565 100644
+--- a/apps/numaya_mobile/test/widget/type_roles_test.dart
++++ b/apps/numaya_mobile/test/widget/type_roles_test.dart
+@@ -23,7 +23,8 @@ void main() {
+     expect(s.height! * s.fontSize!, closeTo(20, 0.001), reason: '$what: line');
+     // Regression: the old 16/24 default must not come back through an override.
+     expect(s.fontSize, isNot(16), reason: '$what: not the old 16');
+-    expect(s.fontWeight, FontWeight.w400, reason: '$what: Figtree 400');
++    // Ente Body is medium (500) (Ente experiment).
++    expect(s.fontWeight, FontWeight.w500, reason: '$what: Figtree 500');
+   }
+ 
+   group('TR-01: body copy is 14/20', () {
+@@ -101,8 +102,9 @@ void main() {
+       final on = tester.widget<Text>(find.text('Jazz')).style!;
+       expect(idle.fontSize, 12);
+       expect(idle.height! * 12, closeTo(16, 0.001));
++      // Ente Filter Chip: Mini at 500 in both states; the fill carries the selection.
+       expect(idle.fontWeight, FontWeight.w500);
+-      expect(on.fontWeight, FontWeight.w600);
++      expect(on.fontWeight, FontWeight.w500);
+       // The pill keeps its height; the smaller label does not shrink the control.
+       expect(
+         tester.getSize(find.byType(NumayaChip).first).height,
+@@ -110,7 +112,7 @@ void main() {
+       );
+     });
+ 
+-    testWidgets('view tabs and filters: 12/16 labels in a full-height pill', (
++    testWidgets('view tabs: Ente Tag Chip, Body 14/20 labels in a 44pt chip', (
+       tester,
+     ) async {
+       await usePhoneSize(tester);
+@@ -127,11 +129,11 @@ void main() {
+           .toList();
+       expect(styles, isNotEmpty);
+       for (final s in styles) {
+-        expect(s.fontSize, 12);
++        expect(s.fontSize, 14);
+       }
+       expect(
+         tester.getSize(find.byType(ViewTabs).first).height,
+-        greaterThanOrEqualTo(AppSizes.chip),
++        greaterThanOrEqualTo(AppSizes.tagChip),
+       );
+       await settle(tester);
+     });
+diff --git a/docs/agent-handoff/ACTIVE_TASK.md b/docs/agent-handoff/ACTIVE_TASK.md
+index 9de6db2..768325e 100644
+--- a/docs/agent-handoff/ACTIVE_TASK.md
++++ b/docs/agent-handoff/ACTIVE_TASK.md
+@@ -1,5 +1,32 @@
+ # Active task: frosted-navigation experiment, handed off
+ 
++> **Ente design system experiment (2026-11-05, Windows, uncommitted):** worktree `..\numaya-ente`,
++> branch `experiment/numaya-ente-design-system`, on `f2e18e6` plus the final-design-run patch.
++> - Ente geometry, type and states with Numaya purple and fonts, Lucide icons and Bumble flows.
++> - **Tests:** 361 passed, 15 skipped.
++> - **Record:** `docs/design-experiments/ente-design-system/`; state in `RUN_STATE.md`.
++> - **Next:** the owner reviews the sheets and decides on commit/push. Then regenerate the goldens on Linux.
++
++> **Final design run (2026-11-05, Windows, uncommitted):** worktree `..\numaya-final-design`,
++> branch `experiment/numaya-final-design-candidate` on `f2e18e6`.
++> - **First device evidence** for the overnight candidate (Pixel 10 emulator, API 36).
++> - **Fixed:**
++>   - FD-A1: no placeholder art on product screens;
++>   - FD-A2: off-switch 3:1 edge;
++>   - FD-B1: button labels wrap instead of truncating;
++>   - FD-D1: 8pt header-action gap;
++>   - FD-D2: Edit profile Preview style.
++> - **Tool-assisted pass:**
++>   - FD-B2: compact floating decision row (from the Impeccable critique);
++>   - FD-B3: motion timing (from the Emil review);
++>   - `accessibility_tools` audit: 0 issues on 14 routes.
++> - **Tests:** 361 passed, 15 skipped.
++> - **Record:** `docs/design-experiments/final-design-run/README.md`; state in `RUN_STATE.md`.
++> - **Next:**
++>   1. Authorise commit and push.
++>   2. Regenerate goldens on Linux.
++>   3. Physical-phone pass.
++
+ > **Bumble × Meetup batch (2026-11-04):**
+ > - BM-01: verified tick beside the name;
+ > - BM-02: flush list groups in sheets;
+diff --git a/docs/agent-handoff/CURRENT_STATE.md b/docs/agent-handoff/CURRENT_STATE.md
+index 856c533..c722e9c 100644
+--- a/docs/agent-handoff/CURRENT_STATE.md
++++ b/docs/agent-handoff/CURRENT_STATE.md
+@@ -1,5 +1,17 @@
+ # Current state
+ 
++> **Latest (2026-11-05):** Ente experiment in `C:\Users\biswa\Downloads\numaya\numaya-ente`,
++> branch `experiment/numaya-ente-design-system`, HEAD `f2e18e6` plus **uncommitted** changes (the
++> final-design-run patch and the Ente work). Export:
++> `artifacts/ente-design-system/patches/ente-design-system.patch`.
++
++> **Latest (2026-11-05):**
++> - Worktree `C:\Users\biswa\Downloads\numaya\numaya-final-design`, branch
++>   `experiment/numaya-final-design-candidate`, HEAD `f2e18e6` plus **uncommitted** final-design-run
++>   changes. Export: `artifacts/final-design-run/patches/final-design-run.patch`.
++> - GitHub has `experiment/numaya-overnight-polish` at `f2e18e6` (this run's base).
++> - Backend: none (demo and in-memory repositories).
++
+ > **Final QA (2026-11-04), cloud:** the same worktree, branch and HEAD as the overnight entry below
+ > (`/home/user/numaya-overnight`, `experiment/numaya-overnight-polish`, `6b23c85`). Two more
+ > fixes; **local only, not on GitHub**. See
+diff --git a/docs/agent-handoff/VALIDATION.md b/docs/agent-handoff/VALIDATION.md
+index 5a8fdda..fdeed94 100644
+--- a/docs/agent-handoff/VALIDATION.md
++++ b/docs/agent-handoff/VALIDATION.md
+@@ -1,5 +1,31 @@
+ # Validation
+ 
++> **Ente experiment (2026-11-05, Windows, Flutter 3.47.8, worktree `..\numaya-ente`):**
++> - `dart format` clean, `flutter analyze` clean, `generate_tokens --check` up to date;
++> - `flutter test` **361 passed, 15 skipped, 0 failed** (the `accessibility_tools` audit is included);
++> - emulator (Pixel 10, API 36): 390dp journeys E1 and E2, plus 320dp at 150% text;
++> - goldens not regenerated (they are Linux renders of the old look);
++> - not run: physical phone, TalkBack speech, iOS.
++
++> **Final design run (2026-11-05):**
++> - **Windows host, Flutter 3.47.8 / Dart 3.13.7, worktree `..\numaya-final-design`:**
++>   - baseline `f2e18e6`: 342 passed, 15 skipped;
++>   - final: `dart format` 0 changed, `generate_tokens --check` up to date, `flutter analyze` clean,
++>     `flutter test` **361 passed, 15 skipped, 0 failed** (includes the `accessibility_tools` audit
++>     and its negative control);
++>   - `flutter build apk --release` builds (debug-signed);
++>   - `flutter build apk --debug`: SHA-256 `78170dec…114b`.
++> - **Device evidence** (Pixel 10 AVD, Android 16 / API 36, x86_64, 1080×2424, `wm density 443`
++>   = 390dp; also 540 = 320dp at font scale 2.0):
++>   - journeys in `artifacts/final-design-run/device/`;
++>   - keyboard over the tab bar: verified;
++>   - three-button navigation: verified;
++>   - TalkBack: accessibility tree verified, live speech **not** (first-run permission prompt
++>     dismissed, not granted).
++> - **Goldens:** 101 Windows-to-Windows diffs reviewed; the Linux goldens were restored, so
++>   regenerate them on Linux.
++> - **Not run:** iOS, physical phone, profile-mode frame times.
++
+ ## Pill gaps (2026-11-04, cloud, uncommitted)
+ | Command | Result |
+ |---|---|
+diff --git a/docs/agent-handoff/WORK_LOG.md b/docs/agent-handoff/WORK_LOG.md
+index 530edc8..51fe7c7 100644
+--- a/docs/agent-handoff/WORK_LOG.md
++++ b/docs/agent-handoff/WORK_LOG.md
+@@ -1,5 +1,16 @@
+ # Work log
+ 
++## 2026-11-05: Ente design system experiment (Windows, uncommitted)
++- New worktree `numaya-ente` from `f2e18e6` plus the final-design-run patch.
++- Read the Ente Figma file: tokens, type, spacing, radius and 14 components.
++- Mapped the Ente values into the hand-authored tokens, with purple in Ente's primary role.
++- Replaced the Material icon map with Lucide 4.0.1.
++- Restyled the shared components to Ente's specs.
++- Checked discovery, Likes and profile editing against Bumble on Mobbin.
++- QA fixed four real layout and target bugs and moved the old-spec tests to the Ente contract.
++- 361 passed, 15 skipped; two emulator journeys and a narrow, large-text pass.
++
++
+ ## 2026-11-04: pill gaps (cloud, uncommitted)
+ - Root cause: the `ViewTabs` row had no gap; fixed in the shared component (11 callers).
+ - Event badges 6 → 8.
+diff --git a/docs/design-experiments/ente-design-system/TOKENS.md b/docs/design-experiments/ente-design-system/TOKENS.md
+new file mode 100644
+index 0000000..ea0323d
+--- /dev/null
++++ b/docs/design-experiments/ente-design-system/TOKENS.md
+@@ -0,0 +1,110 @@
++# Ente design system: token mapping
++
++These tokens come from the Ente Figma file `22AeTw6QiPj2fNYHLhC7MK`, adapted for Numaya.
++
++- **Where the values live:** `apps/numaya_mobile/lib/core/design_system/tokens/monochrome_tokens.dart`.
++- **Why the old names stay:** the file keeps its monochrome-era class and field names, so no widget needed renaming. Only the values changed.
++- **Consumers:** the widgets read these values through `AppColors`, `AppTypography`, `AppSpacing`, `AppRadii` and `AppSizes`.
++
++Values marked **NX** are Numaya extensions. They are not in Ente's file, and the reason for each is given in its row.
++
++## Colour (Figma node 10871:4421)
++
++| Ente variable | Ente value | Numaya token | Value used | Note |
++|---|---|---|---|---|
++| background/base | #F4F4F4 | `canvas` | #F4F4F4 | |
++| fill/light | #FFFFFF | `surface` | #FFFFFF | |
++| fill/dark | #EAEAEA | `fill`, `field`, `disabled` | #EAEAEA | |
++| fill/darker | #DEDEDE | `fillStrong`, `fieldPressed`; others' chat bubble | #DEDEDE | |
++| fill/darkest | #D2D2D2 | `lineStrong` | #D2D2D2 | |
++| stroke/dark | #E0E0E0 | `line` | #E0E0E0 | |
++| stroke/faint | #EBEBEB | `divider` | #EBEBEB | |
++| text/base | #000000 | `ink` | #000000 | |
++| text/dark | #1A1A1A | `text2` | #1A1A1A | |
++| text/light | #666666 | `muted` | #666666 | 5.74:1 on white, 5.27:1 on the canvas |
++| text/lighter | #969696 | `outline`, `disabledText` | **#8A8A8A** | Ente's value is 2.96:1 on white, short of the 3:1 that WCAG 1.4.11 asks of control edges. Darkened to 3.45:1 |
++| text/lightest | #D6D6D6 | (not used for text) | | 1.4:1 on white, too faint even for disabled labels. Disabled labels use #8A8A8A |
++| **primary/default** (green #08C225) | | `brand` | **#7262C7** | The explicit override: Numaya purple takes Ente's primary role (constructive action, selected Tag Chip, switch on, own chat bubble, checkbox on) |
++| primary/dark | #069D1E | `brandPressed` | #5F50B8 | |
++| primary/light | #DDEEDF | `brandSubtle` | #F1EFF9 | |
++| primary/stroke | #BAECC2 | `brandLine` | #CBC4EC | |
++| (no Ente equivalent) | | `brandText` | #5B4BB0 | NX: purple text at 6.8:1. Plain purple on the canvas is 4.46:1 |
++| primary/darker | #057C18 | `success` | **#036614** | Green keeps its meaning as success, not purple. Darkened one step so it reaches 4.5:1 on its own tint |
++| primary/light | #DDEEDF | `successSubtle` | #DDEEDF | |
++| warning/darker | #C52E2E | `danger` | #C52E2E | warning/default (#F63A3A) gives 3.6:1 under white text, so the darker step is used for the Critical button |
++| warning/light | #FAEBEB | `dangerSubtle` | #FAEBEB | |
++| caution/light | #FAF4EB | `warningSubtle` | #FAF4EB | caution/default (#F08A1E) is too light for text, so caution text stays #8A5A00 |
++| info/dark | #0E5FD9 | `info` | #0E5FD9 | info/default is 4.4:1 as text, so the darker step is used |
++| info/light | #E7EFFA | `infoSubtle` | #E7EFFA | |
++| special/scrim | #00000066 | `scrim` | #00000066 | |
++| background-reverse | #161616 | (`ink`) | #000000 | The selected Filter Chip fill |
++| (Numaya) | | `social`, `socialSubtle` | coral, unchanged | NX: heart and match moments |
++
++## Type (Figma node 10854:4420)
++
++The font families are swapped for Numaya's own:
++
++- Ente's display face, **Outfit**, becomes **Plus Jakarta Sans**. It is used for Display-1/2/3, page titles and section headings.
++- Ente's text face, **Inter**, becomes **Figtree**. It is used for everything else.
++
++The sizes, line heights and weights are Ente's.
++
++| Ente style | Size/line, weight | Numaya roles |
++|---|---|---|
++| Display-1 | 32/40, 600 | `hero` |
++| Display-2 | 24/32, 600 | `pageTitle`, `flowTitle`, `headline` (Header v2 title) |
++| Display-3 | 20/28, 600 | `section`, `emptyTitle` |
++| H1 | 20/28, 600 | `sheetTitle` (Bottom Sheet Header), `promptAnswer` |
++| H2 | 18/24, 600 | `card` |
++| Large | 16/20, 600 | `headerCaps` |
++| Body | 14/20, 500 | `body`, `bodySm`, `row`, `input`, `button`, `buttonSm`, `label`, `fieldLabel`, `metricUnit` |
++| Mini | 12/16, 500 | `pill`, `chip`, `caption`, `micro`; `labelCaps` at 600 |
++| Tiny | 10/12, 500 | not used. Nothing important is set this small |
++
++The Welcome title (36 to 44) and the metric figure (40/44) stay as Numaya exceptions (NX).
++
++## Spacing (11107:37840) and radius (11112:4508)
++
++**Spacing.** Ente's scale is 2, 4, 8, 12, 16, 20 and 24. The existing 4pt scale already contains these steps.
++
++| Role | Value | Ente source |
++|---|---|---|
++| Screen gutter | 16 | Header (v2) sits at x = 16 |
++| Section gap | 24 | spacing/xxl |
++| Card padding | 16 | spacing/lg |
++| Menu Item padding | 12 | spacing/md |
++| Gap between rows | 8 | spacing/sm |
++
++**Radius.** Ente's radii are sm 4, md 12, lg 16 and xl 20.
++
++| Radius | Used for |
++|---|---|
++| 12 (md) | icon buttons, icon slots, tags |
++| 16 (lg) | fields, tiles, Tag Chip |
++| 20 (xl) | buttons, cards, menu items, the tab bar, chat bubbles |
++| 16 (photo) | the Discover photo, so it nests inside its 24pt hero card with an 8pt inset (24 − 8) |
++
++Three values go past Ente's scale:
++
++- **24 (NX):** the hero card and the sheet top. Larger surfaces need a larger corner, and 24 is also the Filter Chip radius.
++- **5:** the checkbox. This is radius/sm (4) scaled with the 20pt mark.
++- **Pill:** chips and avatars only.
++
++## Sizes
++
++| Component | Ente | Numaya |
++|---|---|---|
++| Button Large | 52 tall, 24 side insets, radius 20 | same |
++| Button Small | — | 40 (kept) |
++| Icon Button | 38 (18 glyph + 8 + 2 padding), radius 12 | 38 visual inside a 44pt hit area (`Pressable.minSize`). The glyph is 20 (NX), because Lucide's 2px stroke at 18 read as spindly |
++| Text Input | 52, radius 16, 16 insets | same |
++| Menu Item | 60, 36 leading slot, 12 padding | same; the trailing chevron is 24 |
++| Filter Chip | 40, pill | same |
++| Tag Chip | 44, radius 16, 20 insets | same |
++| Toggle Switch | 31 × 18 | **46 × 27 (NX, 1.5×)**: at 31 × 18 the knob is under 16pt on a phone |
++| Checkbox / Radio | 16 | **20 (NX, 1.25×)** |
++| Nav Bar | 62 tall, radius 20, 15 insets, 38 tiles | same; 5 tiles instead of Ente's 4 |
++
++## Elevation
++
++Ente is flat. Only the Nav Bar casts a shadow: offset 0 4, blur 8.75, black at 25%. That shadow is now `floating`. Everything else uses either surface contrast (white on #F4F4F4) or no elevation.
+diff --git a/docs/design-experiments/overnight-polish/DESIGN_CONTRACT.md b/docs/design-experiments/overnight-polish/DESIGN_CONTRACT.md
+index 6d2a290..fb19313 100644
+--- a/docs/design-experiments/overnight-polish/DESIGN_CONTRACT.md
++++ b/docs/design-experiments/overnight-polish/DESIGN_CONTRACT.md
+@@ -90,3 +90,13 @@ large-text sweeps); 5 renderer-only goldens restored. Sheets:
+ | Internal demo | **Go** once a debug APK is built on Windows |
+ | Staging | **No-go:** no backend |
+ | Public release | **No-go:** see FINAL_QA.md |
++
++## Contract additions: final design run (2026-11-05, device-verified)
++| Area | Rule |
++|---|---|
++| Art | Never show an unfinished illustration on a product screen: an `IllustrationSlot` without `asset` collapses. Placeholders appear only inside `IllustrationPlaceholders` (the Design Lab, slot tests) (FD-A1) |
++| Switch | Off: light track plus a 1.5pt `control` edge (≥ 3:1 on white and on the page). On: purple track. The thumb is always white (FD-A2) |
++| Buttons | Never truncate a button label: up to two centred lines; the height is a minimum (56 / 40) (FD-B1) |
++| Header actions | 8pt between adjacent header buttons; every header action uses the floating filled square (FD-D1, FD-D2) |
++
++Record: [../final-design-run/README.md](../final-design-run/README.md).

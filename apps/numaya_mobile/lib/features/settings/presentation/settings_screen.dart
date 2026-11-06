@@ -433,7 +433,6 @@ class SettingsScreen extends ConsumerWidget {
           ],
           ListGroup(
             title: l10n.settingsAbout,
-            footnote: demo ? l10n.settingsDemoNote : null,
             children: [ListRow(label: l10n.settingsVersion(version))],
           ),
           const SizedBox(height: AppSpacing.sectionGap),
@@ -455,12 +454,7 @@ class SettingsScreen extends ConsumerWidget {
               0,
               0,
             ),
-            child: Text(
-              l10n.settingsDeleteNote,
-              style: AppTypography.caption.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
+            child: Text(l10n.settingsDeleteNote, style: AppTypography.caption),
           ),
         ],
       ),

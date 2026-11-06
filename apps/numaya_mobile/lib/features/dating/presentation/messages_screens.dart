@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart' show CustomSemanticsAction;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../../app/providers.dart';
+import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
@@ -16,6 +19,7 @@ import '../application/dating_controller.dart';
 import '../data/media_picker.dart';
 import '../domain/sample_people.dart';
 import 'chat_attachments.dart';
+import 'person_profile.dart';
 import 'safety_sheets.dart';
 import 'time_format.dart';
 
@@ -34,6 +38,17 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   final _search = TextEditingController();
   String _query = '';
   _ConvFilter _filter = _ConvFilter.all;
+
+  /// Bumble's Chats keep search behind a header icon (ER-03); the field opens on demand.
+  bool _searching = false;
+
+  void _closeSearch() {
+    _search.clear();
+    setState(() {
+      _query = '';
+      _searching = false;
+    });
+  }
 
   @override
   void dispose() {
@@ -59,9 +74,22 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     final hasMoves = ref.watch(
       profileDetailsProvider.select((d) => d.openingMoves.isNotEmpty),
     );
-    final header = TabHeader(title: l10n.tabChats);
+    final header = TabHeader(
+      title: l10n.tabChats,
+      actions: [
+        if (!_searching)
+          NavIconButton(
+            icon: NumayaIcons.search,
+            label: l10n.messagesSearch,
+            onPressed: () => setState(() => _searching = true),
+          ),
+      ],
+    );
+    // Bumble's list labels ("Your matches (10)", "Chats") are small headings, not page sections.
+    final listHeading = AppTypography.headerCaps;
 
-    final movesCard = hasMoves
+    // UI-031: no Opening Moves promotion in the first release.
+    final movesCard = hasMoves || !ReleaseScope.openingMoves
         ? null
         : _OpeningMovesCard(onTap: () => context.push(Routes.openingMoves));
 
@@ -181,19 +209,34 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          NumayaSearchField(
-            controller: _search,
-            placeholder: l10n.messagesSearch,
-            clearLabel: l10n.close,
-            onChanged: (v) => setState(() => _query = v),
-          ),
+          if (_searching) ...[
+            Row(
+              children: [
+                Expanded(
+                  child: NumayaSearchField(
+                    controller: _search,
+                    placeholder: l10n.messagesSearch,
+                    clearLabel: l10n.close,
+                    autofocus: true,
+                    onChanged: (v) => setState(() => _query = v),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.s2),
+                TextLink(
+                  label: l10n.cancel,
+                  muted: true,
+                  onPressed: _closeSearch,
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.s4),
+          ],
           if (queueCount > 0) ...[
-            const SizedBox(height: AppSpacing.sectionGap),
             Semantics(
               header: true,
               child: Text(
                 l10n.newMatchesTitle(queueShown.length),
-                style: AppTypography.section,
+                style: listHeading,
               ),
             ),
             const SizedBox(height: AppSpacing.s3),
@@ -203,62 +246,33 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // UI-034: Likes stays first, as an illustrated rounded square with the real
+                  // count at the top.
                   if (likes > 0 && q.isEmpty)
-                    _QueueItem(
+                    _LikesTile(
+                      count: likes,
                       semanticLabel: l10n.queueLikesLabel(likes),
-                      caption: l10n.queueLikes,
                       onTap: () => context.go(Routes.likes),
-                      child: Container(
-                        width: 72,
-                        height: 72,
-                        decoration: const BoxDecoration(
-                          color: AppColors.accentTint,
-                          shape: BoxShape.circle,
-                        ),
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const NumayaIcon(
-                              NumayaIcons.heart,
-                              size: 20,
-                              color: AppColors.accentOnTint,
-                            ),
-                            Text(
-                              '$likes',
-                              style: AppTypography.weight(
-                                AppTypography.body,
-                                AppTypography.semibold,
-                              ).copyWith(color: AppColors.accentOnTint),
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
+                  // UI-033: each match is a larger rounded-square photo with no visible name,
+                  // countdown or ring. Name and time left stay in the spoken label.
                   for (final m in queueShown)
-                    _QueueItem(
-                      semanticLabel: l10n.chatPlaceholder(m.person.name),
-                      caption: m.person.name,
-                      subcaption: timeLeft(l10n, m.remaining),
-                      urgent: m.remaining.inHours < 2,
-                      onTap: () => _open(m.person),
-                      child: CountdownAvatar(
-                        initial: m.person.initial,
-                        fraction: m.fraction,
-                        urgent: m.remaining.inHours < 2,
+                    _MatchTile(
+                      key: ValueKey('match-tile-${m.person.id}'),
+                      person: m.person,
+                      semanticLabel: l10n.queueMatchLabel(
+                        m.person.name,
+                        timeLeft(l10n, m.remaining),
                       ),
+                      onTap: () => _open(m.person),
                     ),
                   for (final p in expiredShown)
-                    _QueueItem(
+                    _MatchTile(
+                      key: ValueKey('match-tile-${p.id}'),
+                      person: p,
+                      expired: true,
                       semanticLabel: l10n.queueExpiredLabel(p.name),
-                      caption: p.name,
-                      subcaption: l10n.queueExpired,
                       onTap: () => context.push('${Routes.chat}/${p.id}'),
-                      child: CountdownAvatar(
-                        initial: p.initial,
-                        fraction: 0,
-                        expired: true,
-                      ),
                     ),
                 ],
               ),
@@ -267,7 +281,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
           const SizedBox(height: AppSpacing.sectionGap),
           Semantics(
             header: true,
-            child: Text(l10n.conversationsTitle, style: AppTypography.section),
+            child: Text(l10n.conversationsTitle, style: listHeading),
           ),
           const SizedBox(height: AppSpacing.s3),
           ViewTabs(
@@ -295,55 +309,122 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   }
 }
 
-class _QueueItem extends StatelessWidget {
-  const _QueueItem({
+/// The New matches row's tile size and corner (UI-033, A-016): a rounded square the photo fills.
+const double _tileSize = 96;
+const double _tileGap = AppSpacing.s3;
+
+/// One new match (UI-033): their first photo in a rounded square, or their initial on the photo
+/// grey. An expired match is dimmed; its state is in the spoken label.
+class _MatchTile extends StatelessWidget {
+  const _MatchTile({
+    super.key,
+    required this.person,
     required this.semanticLabel,
-    required this.caption,
     required this.onTap,
-    required this.child,
-    this.subcaption,
-    this.urgent = false,
+    this.expired = false,
   });
 
+  final SamplePerson person;
   final String semanticLabel;
-  final String caption;
-  final String? subcaption;
-  final bool urgent;
   final VoidCallback onTap;
-  final Widget child;
+  final bool expired;
 
   @override
   Widget build(BuildContext context) {
+    final image = personPhotoImage(person, 1);
     return Padding(
-      padding: const EdgeInsets.only(right: AppSpacing.s3),
+      padding: const EdgeInsets.only(right: _tileGap),
       child: Pressable(
         onTap: onTap,
         semanticLabel: semanticLabel,
         excludeChildSemantics: true,
-        child: SizedBox(
-          width: 76,
-          child: Column(
-            children: [
-              child,
-              const SizedBox(height: AppSpacing.s2),
-              Text(
-                caption,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.weight(
-                  AppTypography.bodySm,
-                  AppTypography.medium,
-                ),
-              ),
-              if (subcaption != null)
-                Text(
-                  subcaption!,
-                  maxLines: 1,
-                  style: AppTypography.micro.copyWith(
-                    color: urgent ? AppColors.negative : AppColors.textMuted,
+        borderRadius: AppRadii.all(AppRadii.card),
+        child: Opacity(
+          opacity: expired ? AppOpacity.disabled : 1,
+          child: ClipRRect(
+            borderRadius: AppRadii.all(AppRadii.card),
+            child: SizedBox.square(
+              dimension: _tileSize,
+              child:
+                  image ??
+                  ColoredBox(
+                    color: AppColors.photo,
+                    child: Center(
+                      child: Text(
+                        person.initial,
+                        textScaler: TextScaler.noScaling,
+                        style: AppTypography.weight(
+                          AppTypography.headline,
+                          AppTypography.semibold,
+                        ).copyWith(color: AppColors.textSecondary),
+                      ),
+                    ),
+                  ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The Likes tile (UI-034, A-016's illustrated first tile): the same rounded square, the real
+/// count large at the top, and the Numaya mascot (existing approved artwork) anchored at the foot.
+class _LikesTile extends StatelessWidget {
+  const _LikesTile({
+    required this.count,
+    required this.semanticLabel,
+    required this.onTap,
+  });
+
+  final int count;
+  final String semanticLabel;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: _tileGap),
+      child: Pressable(
+        key: const ValueKey('likes-tile'),
+        onTap: onTap,
+        semanticLabel: semanticLabel,
+        excludeChildSemantics: true,
+        borderRadius: AppRadii.all(AppRadii.card),
+        child: ClipRRect(
+          borderRadius: AppRadii.all(AppRadii.card),
+          child: Container(
+            width: _tileSize,
+            height: _tileSize,
+            color: AppColors.accentTint,
+            child: Stack(
+              children: [
+                const Positioned(
+                  left: 10,
+                  right: 10,
+                  bottom: -6,
+                  child: IllustrationView(
+                    NumayaIllustration.mascotWaiting,
+                    width: _tileSize - 20,
                   ),
                 ),
-            ],
+                Positioned(
+                  top: AppSpacing.s2,
+                  left: AppSpacing.s3,
+                  right: AppSpacing.s2,
+                  child: Text(
+                    count > 99 ? '99+' : '$count',
+                    key: const ValueKey('likes-tile-count'),
+                    maxLines: 1,
+                    textScaler: TextScaler.noScaling,
+                    style: AppTypography.weight(
+                      AppTypography.headline,
+                      AppTypography.bold,
+                    ).copyWith(color: AppColors.accentOnTint),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -481,9 +562,10 @@ class _ConversationRow extends StatelessWidget {
                                     ? AppTypography.semibold
                                     : AppTypography.regular,
                               ).copyWith(
+                                // UI-045: a read preview is muted metadata; unread stays ink.
                                 color: unread > 0
                                     ? AppColors.ink
-                                    : AppColors.textSecondary,
+                                    : AppColors.textMuted,
                               ),
                         ),
                       ),
@@ -528,6 +610,48 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   /// A photo, video or voice note waiting to be sent with the next message.
   MessageAttachment? _pending;
 
+  /// The message being answered (UI-036), set by a right swipe or the Reply action.
+  DemoMessage? _replyTo;
+
+  /// Messages whose exact time is pinned open by the Show time action (UI-035's alternative to
+  /// the left swipe).
+  final Set<int> _timeShown = {};
+
+  void _startReply(DemoMessage m) {
+    setState(() => _replyTo = m);
+    _focus.requestFocus();
+  }
+
+  void _toggleTime(DemoMessage m) => setState(
+    () => _timeShown.contains(m.id)
+        ? _timeShown.remove(m.id)
+        : _timeShown.add(m.id),
+  );
+
+  /// The long-press alternative to both swipes: Reply, or Show / Hide time.
+  Future<void> _messageActions(DemoMessage m) async {
+    final l10n = context.l10n;
+    final shown = _timeShown.contains(m.id);
+    final choice = await showNumayaActionSheet(
+      context: context,
+      cancelLabel: l10n.cancel,
+      actions: [
+        (icon: NumayaIcons.undo, label: l10n.chatReply, destructive: false),
+        (
+          icon: NumayaIcons.clock,
+          label: shown ? l10n.chatHideTime : l10n.chatShowTime,
+          destructive: false,
+        ),
+      ],
+    );
+    if (!mounted || choice == null) return;
+    if (choice == 0) {
+      _startReply(m);
+    } else {
+      _toggleTime(m);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -554,11 +678,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Future<void> _send(String text) async {
     _text.clear();
     final attachment = _pending;
-    setState(() => _pending = null);
+    final replyTo = _replyTo;
+    setState(() {
+      _pending = null;
+      _replyTo = null;
+    });
     AppHaptics.fire(context, HapticMoment.commit);
     final sending = ref
         .read(datingProvider.notifier)
-        .send(widget.personId, text, attachment: attachment);
+        .send(
+          widget.personId,
+          text,
+          attachment: attachment,
+          replyToId: replyTo?.id,
+        );
     _toLatest();
     await sending;
   }
@@ -686,7 +819,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final messages = state.threads[person.id] ?? const <DemoMessage>[];
     final known = _known ??= {for (final m in messages) m.id};
     final expired = controller.isExpired(person.id);
-    final sample = messages.any((m) => m.sample);
     final now = ref.read(clockProvider)();
 
     // V16 sets the chat header 8pt lower than the flow top bar (centre at 36pt).
@@ -704,6 +836,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             NavIconButton(
               icon: NumayaIcons.chevronLeft,
               label: l10n.backToMessages,
+              style: NavButtonStyle.plain,
               onPressed: _back,
             ),
             const SizedBox(width: AppSpacing.s3),
@@ -833,7 +966,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   : null,
             ),
           ),
-          if (person.openingMove != null) ...[
+          // UI-031: ordinary messaging only; no Opening Move in the first release.
+          if (ReleaseScope.openingMoves && person.openingMove != null) ...[
             const SizedBox(height: AppSpacing.s4),
             PromptCard(
               question: l10n.chatTheirMove(person.name),
@@ -889,17 +1023,24 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ),
       ];
       DateTime? day;
+      final byId = {for (final m in messages) m.id: m};
+      String preview(DemoMessage m) => m.attachment == null
+          ? m.text
+          : [
+              attachmentSummary(l10n, m.attachment!),
+              if (m.text.isNotEmpty) m.text,
+            ].join('. ');
       for (var i = 0; i < messages.length; i++) {
         final m = messages[i];
         final d = DateTime(m.at.year, m.at.month, m.at.day);
-        if (sample && day != d) {
+        // Day lines stay (UI-035): with exact times hidden, they are the thread's time context.
+        if (day != d) {
           day = d;
           children.add(ChatSystemLine(dayLine(l10n, m.at, now)));
         }
         final prev = i > 0 ? messages[i - 1] : null;
-        final next = i + 1 < messages.length ? messages[i + 1] : null;
         final grouped = prev != null && prev.mine == m.mine;
-        final endsGroup = next == null || next.mine != m.mine;
+        final quoted = m.replyToId == null ? null : byId[m.replyToId];
         final dimmed =
             m.status == MessageStatus.sending ||
             m.status == MessageStatus.waiting;
@@ -934,35 +1075,48 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     mine: m.mine,
                     grouped: grouped,
                     dimmed: dimmed,
+                    replyAuthor: quoted == null
+                        ? null
+                        : (quoted.mine ? l10n.chatYou : person.name),
+                    replyText: quoted == null ? null : preview(quoted),
                   ),
                 ),
               );
+        // UI-035/UI-036: no exact time at rest; drag left to see it, right to reply. Long press
+        // and the screen-reader actions offer both without a gesture.
+        final time = DateFormat('HH:mm').format(m.at);
+        final swipeable = SwipeableMessage(
+          key: ValueKey('message-${m.id}'),
+          mine: m.mine,
+          time: time,
+          timeShown: _timeShown.contains(m.id),
+          onReply: () => _startReply(m),
+          onLongPress: () => _messageActions(m),
+          semanticActions: {
+            CustomSemanticsAction(label: l10n.chatReply): () => _startReply(m),
+            CustomSemanticsAction(
+              label: _timeShown.contains(m.id)
+                  ? l10n.chatHideTime
+                  : l10n.chatSentAt(time),
+            ): () =>
+                _toggleTime(m),
+          },
+          child: bubble,
+        );
         children.add(
           known.contains(m.id)
-              ? bubble
-              : _SettleIn(key: ValueKey(m.id), child: bubble),
+              ? swipeable
+              : _SettleIn(key: ValueKey(m.id), child: swipeable),
         );
-        if (sample && endsGroup && m != last) {
-          children.add(
-            Align(
-              alignment: m.mine ? Alignment.centerRight : Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(
-                  shortTime(l10n, m.at, now),
-                  style: AppTypography.micro,
-                ),
-              ),
-            ),
-          );
-        }
       }
       children.addAll([
         const SizedBox(height: AppSpacing.s1),
+        // UI-035: the resting thread shows no exact time; your own newest message keeps its
+        // delivery state (sending, waiting, failed, not sent), which is status, not a timestamp.
         Align(
-          alignment: last.mine ? Alignment.centerRight : Alignment.centerLeft,
+          alignment: Alignment.centerRight,
           child: !last.mine || last.sample
-              ? Text(shortTime(l10n, last.at, now), style: AppTypography.micro)
+              ? const SizedBox.shrink()
               : switch (last.status) {
                   MessageStatus.sending => Text(
                     l10n.chatStatusSending,
@@ -1029,115 +1183,148 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       },
       child: Scaffold(
         backgroundColor: AppColors.canvas,
+        // The composer bar runs under the system navigation area (UI-038), so the bottom inset is
+        // its own padding rather than the SafeArea's.
         body: SafeArea(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: AppSpacing.contentMax,
-              ),
-              child: LayoutBuilder(
-                builder: (context, outer) => Column(
-                  children: [
-                    header,
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => FocusScope.of(context).unfocus(),
-                        behavior: HitTestBehavior.translucent,
-                        excludeFromSemantics: true,
-                        // A conversation sits at the bottom, by the composer; the intro reads from
-                        // the top (V16 038 / 042).
-                        child: LayoutBuilder(
-                          builder: (context, box) => SingleChildScrollView(
-                            controller: _scroll,
-                            // Anchored to the newest message: the chat opens at the latest, and
-                            // stays there when the keyboard opens.
-                            reverse: messages.isNotEmpty,
-                            keyboardDismissBehavior:
-                                ScrollViewKeyboardDismissBehavior.onDrag,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: AppLayout.screenGutter,
-                            ),
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                minHeight: box.maxHeight,
+          bottom: false,
+          child: LayoutBuilder(
+            builder: (context, outer) => Column(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxWidth: AppSpacing.contentMax,
+                      ),
+                      child: Column(
+                        children: [
+                          header,
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () => FocusScope.of(context).unfocus(),
+                              behavior: HitTestBehavior.translucent,
+                              excludeFromSemantics: true,
+                              // A conversation sits at the bottom, by the composer; the intro reads
+                              // from the top (V16 038 / 042).
+                              child: LayoutBuilder(
+                                builder: (context, box) => SingleChildScrollView(
+                                  controller: _scroll,
+                                  // Anchored to the newest message: the chat opens at the latest,
+                                  // and stays there when the keyboard opens.
+                                  reverse: messages.isNotEmpty,
+                                  keyboardDismissBehavior:
+                                      ScrollViewKeyboardDismissBehavior.onDrag,
+                                  padding: const EdgeInsets.fromLTRB(
+                                    AppLayout.screenGutter,
+                                    0,
+                                    AppLayout.screenGutter,
+                                    AppSpacing.s3,
+                                  ),
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      minHeight: box.maxHeight,
+                                    ),
+                                    child: Align(
+                                      alignment: messages.isEmpty
+                                          ? Alignment.topCenter
+                                          : Alignment.bottomCenter,
+                                      child: body,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              child: Align(
-                                alignment: messages.isEmpty
-                                    ? Alignment.topCenter
-                                    : Alignment.bottomCenter,
-                                child: body,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                if (!expired)
+                  // UI-038: Plus, the field and Send in one white bar, edge to edge. On a small
+                  // phone with large text and the keyboard up, the bar takes at most a little over
+                  // half the height and scrolls beyond that, so the conversation stays visible.
+                  // The bottom padding is the system inset (zero while the keyboard is up, since
+                  // the Scaffold already lifts the bar above it).
+                  ColoredBox(
+                    key: const ValueKey('chat-composer-bar'),
+                    color: AppColors.surface,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: outer.maxHeight * 0.55,
+                      ),
+                      child: SingleChildScrollView(
+                        reverse: true,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(
+                            AppSpacing.s3,
+                            AppSpacing.s2,
+                            AppSpacing.s3,
+                            AppSpacing.s2 +
+                                MediaQuery.paddingOf(context).bottom,
+                          ),
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                maxWidth: AppSpacing.contentMax,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (_replyTo case final r?) ...[
+                                    ReplyPreview(
+                                      title: r.mine
+                                          ? l10n.chatReplyingToYourself
+                                          : l10n.chatReplyingTo(person.name),
+                                      text: r.attachment == null
+                                          ? r.text
+                                          : [
+                                              attachmentSummary(
+                                                l10n,
+                                                r.attachment!,
+                                              ),
+                                              if (r.text.isNotEmpty) r.text,
+                                            ].join('. '),
+                                      cancelLabel: l10n.chatCancelReply,
+                                      onCancel: () =>
+                                          setState(() => _replyTo = null),
+                                    ),
+                                    const SizedBox(height: AppSpacing.s2),
+                                  ],
+                                  if (_pending != null) ...[
+                                    PendingAttachment(
+                                      attachment: _pending!,
+                                      onRemove: () =>
+                                          setState(() => _pending = null),
+                                    ),
+                                    const SizedBox(height: AppSpacing.s2),
+                                  ],
+                                  // UI-041: no demo footer under the composer.
+                                  Composer(
+                                    controller: _text,
+                                    focusNode: _focus,
+                                    placeholder: _pending == null
+                                        ? l10n.chatPlaceholder(person.name)
+                                        : l10n.chatCaptionPlaceholder,
+                                    sendLabel: l10n.chatSend,
+                                    onSend: _send,
+                                    hasAttachment: _pending != null,
+                                    leading: NavIconButton(
+                                      icon: NumayaIcons.plus,
+                                      label: l10n.chatAttach,
+                                      style: NavButtonStyle.plain,
+                                      onPressed: _attach,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                    if (!expired)
-                      // On a small phone with large text and the keyboard up, the composer area can
-                      // take at most a little over half the space and scrolls beyond that, so the
-                      // conversation and the header always stay visible.
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxHeight: outer.maxHeight * 0.55,
-                        ),
-                        child: SingleChildScrollView(
-                          reverse: true,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                              AppLayout.screenGutter,
-                              AppSpacing.s2,
-                              AppLayout.screenGutter,
-                              AppSpacing.s3,
-                            ),
-                            child: Column(
-                              children: [
-                                if (_pending != null) ...[
-                                  PendingAttachment(
-                                    attachment: _pending!,
-                                    onRemove: () =>
-                                        setState(() => _pending = null),
-                                  ),
-                                  const SizedBox(height: AppSpacing.s2),
-                                ],
-                                Composer(
-                                  controller: _text,
-                                  focusNode: _focus,
-                                  placeholder: _pending == null
-                                      ? l10n.chatPlaceholder(person.name)
-                                      : l10n.chatCaptionPlaceholder,
-                                  sendLabel: l10n.chatSend,
-                                  onSend: _send,
-                                  hasAttachment: _pending != null,
-                                  leading: NavIconButton(
-                                    icon: NumayaIcons.plus,
-                                    label: l10n.chatAttach,
-                                    style: NavButtonStyle.flat,
-                                    onPressed: _attach,
-                                  ),
-                                ),
-                                // The demo note steps aside while typing; it is back when the keyboard
-                                // closes.
-                                if (MediaQuery.viewInsetsOf(context).bottom ==
-                                    0) ...[
-                                  const SizedBox(height: AppSpacing.s2),
-                                  Text(
-                                    sample
-                                        ? l10n.chatSampleConversationNote(
-                                            person.name,
-                                          )
-                                        : l10n.chatSampleNote(person.name),
-                                    textAlign: TextAlign.center,
-                                    style: AppTypography.micro,
-                                  ),
-                                ],
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
+                  ),
+              ],
             ),
           ),
         ),

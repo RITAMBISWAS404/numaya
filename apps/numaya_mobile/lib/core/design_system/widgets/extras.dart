@@ -102,14 +102,16 @@ class CompletionCard extends StatelessWidget {
     super.key,
     required this.percent,
     required this.title,
-    required this.body,
+    this.body,
     this.actionLabel,
     this.onAction,
   });
 
   final int percent;
   final String title;
-  final String body;
+
+  /// Optional: the percentage and the action usually say enough (ER content pass).
+  final String? body;
   final String? actionLabel;
   final VoidCallback? onAction;
 
@@ -165,13 +167,15 @@ class CompletionCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: AppSpacing.s3),
-          Text(
-            body,
-            style: AppTypography.bodySm.copyWith(
-              color: AppColors.textSecondary,
+          if (body != null) ...[
+            const SizedBox(height: AppSpacing.s3),
+            Text(
+              body!,
+              style: AppTypography.bodySm.copyWith(
+                color: AppColors.textSecondary,
+              ),
             ),
-          ),
+          ],
           if (actionLabel != null && !done) ...[
             const SizedBox(height: AppSpacing.s4),
             Align(
@@ -242,12 +246,7 @@ class CompletionTile extends StatelessWidget {
             const SizedBox(height: AppSpacing.s3),
             Text(title, style: AppTypography.card),
             const SizedBox(height: 2),
-            Text(
-              progress,
-              style: AppTypography.caption.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
+            Text(progress, style: AppTypography.caption),
           ],
         ),
       ),
@@ -326,12 +325,7 @@ class PlanCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 2),
-                    Text(
-                      perWeek,
-                      style: AppTypography.caption.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
+                    Text(perWeek, style: AppTypography.caption),
                   ],
                 ),
               ),
@@ -400,7 +394,9 @@ class ComparisonRow extends StatelessWidget {
 enum BannerTone { info, pending, success, error }
 
 /// A status banner (states-and-recovery: `StatusBanner`): pending review, approved, rejected,
-/// offline. Tinted card with an icon, title and optional body and action.
+/// offline. Ente's Banner (14590:125245, OV-01): a white card with no tint or border; the status
+/// shows in the icon (top-aligned with the title, UI-010) and, for errors and success, in the
+/// title colour, as Ente's "Subscribe" and "Enable" banners do. Body muted; optional action below.
 class StatusBanner extends StatelessWidget {
   const StatusBanner({
     super.key,
@@ -417,24 +413,21 @@ class StatusBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (Color bg, Color fg, NumayaIcons icon) = switch (tone) {
-      BannerTone.info => (
-        AppColors.accentTint,
-        AppColors.accentOnTint,
-        NumayaIcons.info,
-      ),
+    // (icon colour, title colour, icon)
+    final (Color mark, Color titleColor, NumayaIcons icon) = switch (tone) {
+      BannerTone.info => (AppColors.accent, AppColors.ink, NumayaIcons.info),
       BannerTone.pending => (
-        AppColors.warningTint,
+        AppColors.warning,
         AppColors.ink,
         NumayaIcons.pending,
       ),
       BannerTone.success => (
-        AppColors.accentTint,
-        AppColors.accentOnTint,
+        AppColors.positive,
+        AppColors.positive,
         NumayaIcons.verified,
       ),
       BannerTone.error => (
-        AppColors.dangerTint,
+        AppColors.negative,
         AppColors.negative,
         NumayaIcons.alert,
       ),
@@ -446,17 +439,14 @@ class StatusBanner extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(AppSpacing.s4),
         decoration: BoxDecoration(
-          color: bg,
+          color: AppColors.surface,
           borderRadius: AppRadii.all(AppRadii.card),
-          border: Border.all(
-            color: AppColors.tintBorder(fg),
-            width: AppBorders.hairline,
-          ),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            NumayaIcon(icon, size: 22, color: fg),
+            // UI-010: top-aligned with the first line (20pt icon, 20pt line).
+            NumayaIcon(icon, size: AppSizes.iconMd, color: mark),
             const SizedBox(width: AppSpacing.s3),
             Expanded(
               child: Column(
@@ -464,20 +454,17 @@ class StatusBanner extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style:
-                        AppTypography.weight(
-                          AppTypography.body,
-                          AppTypography.semibold,
-                        ).copyWith(
-                          color: fg == AppColors.negative ? fg : AppColors.ink,
-                        ),
+                    style: AppTypography.weight(
+                      AppTypography.body,
+                      AppTypography.semibold,
+                    ).copyWith(color: titleColor),
                   ),
                   if (body != null) ...[
                     const SizedBox(height: 2),
                     Text(
                       body!,
                       style: AppTypography.bodySm.copyWith(
-                        color: AppColors.textSecondary,
+                        color: AppColors.textMuted,
                       ),
                     ),
                   ],
@@ -677,12 +664,7 @@ class MetricTile extends StatelessWidget {
             ),
             if (status != null) ...[
               const SizedBox(height: AppSpacing.s1),
-              Text(
-                status!,
-                style: AppTypography.caption.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-              ),
+              Text(status!, style: AppTypography.caption),
             ],
           ],
         ),

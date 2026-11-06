@@ -425,7 +425,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get photosInfoBody =>
-      'Photo upload isn’t connected in this build, so + adds a placeholder tile. You can choose a different main photo later in Edit profile.';
+      'You can choose a different main photo later in Edit profile.';
 
   @override
   String get photosFinish => 'Finish profile';
@@ -664,7 +664,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String discoverPhotoLabel(Object name, int position) {
-    return '$name, photo $position (placeholder)';
+    return '$name, photo $position';
   }
 
   @override
@@ -707,7 +707,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String discoverUndo(Object name) {
-    return 'Undo: bring back $name';
+    return 'Backtrack: bring back $name';
   }
 
   @override
@@ -715,7 +715,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String discoverSwipeHint(Object name) {
-    return '$name. Swipe right to like, left to pass, or use the buttons at the end of the profile.';
+    return '$name. Swipe right to like or left to pass.';
   }
 
   @override
@@ -740,7 +740,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get discoverSeenAllBody =>
-      'That’s every sample profile. People you passed on can come back around.';
+      'You’ve seen everyone for now. People you passed on can come back around.';
 
   @override
   String get discoverShowAgain => 'Show them again';
@@ -759,8 +759,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get discoverErrorTitle => 'We couldn’t load profiles';
 
   @override
-  String get discoverErrorBody =>
-      'This is a simulated connection problem. Try again, or turn it off in Settings › Prototype tools.';
+  String get discoverErrorBody => 'Check your connection and try again.';
 
   @override
   String get discoverRetry => 'Try again';
@@ -1066,6 +1065,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatSend => 'Send';
 
   @override
+  String get chatReply => 'Reply';
+
+  @override
+  String get chatShowTime => 'Show time';
+
+  @override
+  String get chatHideTime => 'Hide time';
+
+  @override
+  String chatSentAt(String time) {
+    return 'Sent $time';
+  }
+
+  @override
+  String chatReplyingTo(String name) {
+    return 'Replying to $name';
+  }
+
+  @override
+  String get chatReplyingToYourself => 'Replying to yourself';
+
+  @override
+  String get chatYou => 'You';
+
+  @override
+  String get chatCancelReply => 'Cancel reply';
+
+  @override
   String get chatStatusSending => 'Sending…';
 
   @override
@@ -1107,8 +1134,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatOpenPhoto => 'Open photo';
 
   @override
-  String get chatVideoNoPlayback =>
-      'Video playback isn’t in this build. The file stays on your phone.';
+  String get chatVideoNoPlayback => 'This video can’t be played here yet.';
 
   @override
   String chatVoiceLabel(String duration) {
@@ -1116,7 +1142,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get chatVoiceDemo => 'Demo: no sound recorded';
+  String get chatVoiceDemo => 'Voice note';
 
   @override
   String get mediaPermissionDenied =>
@@ -1134,8 +1160,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mediaUnreadable => 'Couldn’t open that file. Try another one.';
 
   @override
-  String get mediaUnavailable =>
-      'Choosing photos isn’t available here. Turn on sample media in the Demo Hub to try it.';
+  String get mediaUnavailable => 'Choosing photos isn’t available here.';
 
   @override
   String get mediaMissing => 'This file is no longer on your phone';
@@ -1255,8 +1280,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recoveryEmailRemove => 'Remove email';
 
   @override
-  String get recoveryEmailUnverified =>
-      'Not verified: no email service in this build';
+  String get recoveryEmailUnverified => 'Not verified';
 
   @override
   String get reauthTitle => 'Please sign in again';
@@ -1440,6 +1464,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String queueMatchLabel(String name, String timeLeft) {
+    return '$name, new match, $timeLeft. Open chat';
+  }
+
+  @override
   String get queueExpired => 'Expired';
 
   @override
@@ -1528,7 +1557,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String chatSampleConversationNote(Object name) {
-    return 'Demo chat: $name’s messages are scripted, and what you send stays on this device.';
+    return 'Demo: $name’s replies are scripted and nothing you send leaves this device.';
   }
 
   @override
@@ -1541,7 +1570,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String didMeetBody(Object name) {
-    return 'Your answer stays on this device and helps you keep track. $name won’t see it.';
+    return 'Your answer helps you keep track. $name won’t see it.';
   }
 
   @override
@@ -1551,7 +1580,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get didMeetNo => 'No, we didn’t meet';
 
   @override
-  String get didMeetThanks => 'Thanks. Saved on this device.';
+  String get didMeetThanks => 'Thanks. Saved.';
 
   @override
   String unmatchedReasonTitle(Object name) {
@@ -1560,15 +1589,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String unmatchedReasonBody(Object name) {
-    return 'Could you tell us why? Your answer stays on this device and $name won’t know.';
+    return 'Could you tell us why? $name won’t know.';
   }
 
   @override
   String get unmatchReasonSkip => 'Skip';
 
   @override
-  String get unmatchReasonThanks =>
-      'Thanks. Your answer is saved on this device.';
+  String get unmatchReasonThanks => 'Thanks for telling us.';
 
   @override
   String get filtersDone => 'Done';
@@ -1618,7 +1646,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get filtersAdvancedLockedBody =>
-      'Narrow down by height, intentions and more. In this demo Premium is simulated: no payment is taken.';
+      'Narrow down by height, intentions and more.';
 
   @override
   String get premiumSee => 'See Premium';
@@ -1739,8 +1767,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get forYouRationale =>
-      'Based on your interests and who you’ve liked. Sample profiles.';
+  String get forYouRationale => 'Based on your interests and who you’ve liked.';
 
   @override
   String get likeAction => 'Like';
@@ -1825,6 +1852,15 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get completionYourProfile => 'Your profile';
+
+  @override
+  String get completionPartDone => 'Done';
+
+  @override
+  String get completionUnit => 'complete';
+
+  @override
   String get contactTopic => 'What’s it about?';
 
   @override
@@ -1892,8 +1928,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteSubscriptionTitle => 'Your Premium plan won’t be cancelled';
 
   @override
-  String get deleteSubscriptionBody =>
-      'Cancel it in your app store first. In this demo there is no real subscription.';
+  String get deleteSubscriptionBody => 'Cancel it in your app store first.';
 
   @override
   String get deleteContinue => 'Continue';
@@ -1923,7 +1958,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get demoDesignLabDetail =>
-      'Monochrome Meetup tokens, components and states';
+      'Ente design system tokens, components and states';
 
   @override
   String get demoStart => 'Start';
@@ -2186,8 +2221,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logoutTitle => 'Log out?';
 
   @override
-  String get logoutBody =>
-      'In this demo, logging out clears your profile and sample data from this device.';
+  String get logoutBody => 'Logging out clears your profile from this device.';
 
   @override
   String get yes => 'yes';
@@ -2546,7 +2580,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsCurrentLocation => 'Current location';
 
   @override
-  String get settingsSampleLocation => 'Hackney, London (sample)';
+  String get settingsSampleLocation => 'Hackney, London';
 
   @override
   String get settingsHelpLegal => 'Help and legal';
@@ -2585,8 +2619,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get travelTitle => 'Travel';
 
   @override
-  String get travelBody =>
-      'Planning a trip? Meet people there before you go. Demo: changes the sample location only.';
+  String get travelBody => 'Planning a trip? Meet people there before you go.';
 
   @override
   String get travelPick => 'Where are you going?';
@@ -2637,11 +2670,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get verifyCameraOff =>
-      'The camera isn’t connected in this demo. Take a demo selfie to continue.';
+  String get verifyCameraOff => 'Take a selfie to continue.';
 
   @override
-  String get verifyTakeSelfie => 'Take demo selfie';
+  String get verifyTakeSelfie => 'Take selfie';
 
   @override
   String get verifyOtherPose => 'Show me a different pose';
@@ -2654,7 +2686,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your selfie is compared with your profile photos. It isn’t shown on your profile.';
 
   @override
-  String get verifyDemoSelfie => 'Demo selfie (placeholder)';
+  String get verifyDemoSelfie => 'Your selfie';
 
   @override
   String get verifyRetake => 'Retake';
@@ -2663,8 +2695,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get verifyPendingTitle => 'Checking your selfie';
 
   @override
-  String get verifyPendingBody =>
-      'Usually a few minutes. In this demo the review is simulated and takes a few seconds.';
+  String get verifyPendingBody => 'Usually a few minutes.';
 
   @override
   String get verifyDoneTitle => 'You’re verified';
@@ -3001,7 +3032,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String obLocationSetDevice(String area) {
-    return '$area (sample area)';
+    return '$area';
   }
 
   @override
@@ -3031,8 +3062,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get obOpenSettings => 'Open settings';
 
   @override
-  String get obOpenSettingsDemo =>
-      'Demo build: this would open Numaya’s Android settings.';
+  String get obOpenSettingsDemo => 'Settings can’t be opened from here yet.';
 
   @override
   String get obLocationFooter => 'Only your area is shown';
@@ -3168,6 +3198,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get promptAlreadyUsed => 'Already answered';
+
+  @override
+  String get promptCurrent => 'Your current prompt';
+
+  @override
+  String get promptCategories => 'Prompt categories';
 
   @override
   String get obBioTitle => 'Write a short bio';
@@ -3411,6 +3447,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get discoverBacktrackNone =>
+      'Backtrack. Nothing to bring back yet: pass on someone first';
+
+  @override
+  String get matchViewProfile => 'View profile';
+
+  @override
+  String get matchOpenChat => 'Open chat';
+
+  @override
   String get discoverCoach =>
       'Swipe right to like, left to pass. Scroll for more about them.';
 
@@ -3445,7 +3491,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get discoverSeenAllLikedBody =>
-      'You liked everyone you saw. New people don’t arrive in this demo, so check who likes you instead.';
+      'You liked everyone you saw. See who likes you in the meantime.';
 
   @override
   String get discoverSeeLikes => 'See who likes you';
@@ -3780,7 +3826,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get eventFailedBody =>
-      'Nothing changed. This is the demo’s simulated connection problem.';
+      'Nothing changed. Check your connection and try again.';
 
   @override
   String get eventFailedTitle => 'Couldn’t save that';
@@ -3839,7 +3885,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String eventFilterAreaOutside(Object area) {
-    return 'Events in this demo are in London, not $area';
+    return 'No events near $area yet';
   }
 
   @override
@@ -4132,8 +4178,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get eventShare => 'Share';
 
   @override
-  String get eventShareToast =>
-      'Sharing isn’t available in the demo. Nothing leaves this device.';
+  String get eventShareToast => 'Sharing isn’t available yet.';
 
   @override
   String eventShowCount(int count) {
@@ -4267,8 +4312,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get eventsClear => 'Clear search and filters';
 
   @override
-  String get eventsErrorBody =>
-      'This is a simulated connection problem. Try again, or turn it off in the Demo Hub.';
+  String get eventsErrorBody => 'Check your connection and try again.';
 
   @override
   String get eventsErrorStillTitle => 'Still can’t load events';
@@ -4399,11 +4443,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get visVisibleLimits =>
-      'Based on your settings and a demo notice source. How often a profile is shown also depends on who is nearby and what they’re looking for, which this page can’t see.';
+      'Based on your settings. How often a profile is shown also depends on who is nearby and what they’re looking for, which this page can’t see.';
 
   @override
-  String get visSourceNote =>
-      'Based on your own settings and a demo notice source.';
+  String get visSourceNote => 'Based on your own settings.';
 
   @override
   String get visPausedBody =>

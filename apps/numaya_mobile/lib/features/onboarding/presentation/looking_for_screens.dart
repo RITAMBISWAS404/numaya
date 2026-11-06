@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/cupertino.dart' show CupertinoPicker;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,21 +11,10 @@ import '../../profile/application/profile_details_controller.dart';
 import '../../profile/domain/profile_details.dart';
 import '../application/device_permissions.dart';
 import '../application/onboarding_controller.dart';
+import '../domain/height_units.dart';
 import '../domain/profile_draft.dart';
 import 'permission_prompt.dart';
 import 'step_scaffold.dart';
-
-SliderThemeData _sliderTheme(BuildContext context) =>
-    SliderTheme.of(context).copyWith(
-      activeTrackColor: AppColors.accent,
-      inactiveTrackColor: AppColors.fill,
-      thumbColor: AppColors.surface,
-      overlayColor: AppColors.focusHalo,
-      trackHeight: 4,
-      rangeThumbShape: const V16RangeThumb(),
-      thumbShape: const V16SliderThumb(),
-      showValueIndicator: ShowValueIndicator.never,
-    );
 
 /// OB-09: who the member wants to meet (Hinge "Who are you open to dating?" [O]) and their age
 /// range. Private; sets the Discovery filters.
@@ -106,31 +96,45 @@ class _MeetScreenState extends ConsumerState<MeetScreen> {
           ],
         ),
         const SizedBox(height: AppSpacing.fieldGap),
-        Row(
-          children: [
-            Expanded(child: FieldLabel(l10n.obAgesLabel)),
-            Text(
-              l10n.filtersAgeValue(_ages.start.round(), _ages.end.round()),
-              style: AppTypography.weight(
-                AppTypography.row,
-                AppTypography.medium,
+        // UI-004: the label, the range read-out and both thumbs share one dedicated card.
+        WhiteCard(
+          key: const ValueKey('age-range-card'),
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.s4,
+            AppSpacing.s4,
+            AppSpacing.s4,
+            AppSpacing.s2,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  Expanded(child: FieldLabel(l10n.obAgesLabel)),
+                  Text(
+                    l10n.filtersAgeValue(
+                      _ages.start.round(),
+                      _ages.end.round(),
+                    ),
+                    style: AppTypography.weight(
+                      AppTypography.row,
+                      AppTypography.semibold,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-        SliderTheme(
-          data: _sliderTheme(context),
-          child: RangeSlider(
-            values: _ages,
-            min: DiscoveryFilters.ageFloor.toDouble(),
-            max: DiscoveryFilters.ageCeiling.toDouble(),
-            divisions: DiscoveryFilters.ageCeiling - DiscoveryFilters.ageFloor,
-            semanticFormatterCallback: (v) => '${v.round()}',
-            onChanged: (v) {
-              // Keep at least two years between the ends.
-              if (v.end - v.start < 2) return;
-              setState(() => _ages = v);
-            },
+              const SizedBox(height: AppSpacing.s2),
+              AgeRangeSlider(
+                values: _ages,
+                min: DiscoveryFilters.ageFloor,
+                max: DiscoveryFilters.ageCeiling,
+                onChanged: (v) {
+                  // Keep at least two years between the ends.
+                  if (v.end - v.start < 2) return;
+                  setState(() => _ages = v);
+                },
+              ),
+            ],
           ),
         ),
       ],
@@ -182,13 +186,12 @@ class IntentionsScreen extends ConsumerWidget {
   }
 }
 
-/// Height in feet and inches, for the ft/in display.
-({int feet, int inches}) _feetInches(int cm) {
-  final total = (cm / 2.54).round();
-  return (feet: total ~/ 12, inches: total % 12);
-}
-
 /// OB-11: height, optional (Hinge FT/CM [O]). Stored in centimetres; shown in either unit.
+///
+/// UI-006: the picker is an inline wheel, usable on arrival ("Add my height" is gone). The wheel
+/// rests on the saved height, or on [HeightUnits.defaultCm] when there is none, but nothing is
+/// recorded until the member moves it: opening the step and continuing leaves height unset, and
+/// Skip clears it.
 class HeightScreen extends ConsumerStatefulWidget {
   const HeightScreen({super.key});
 
@@ -204,15 +207,6 @@ class _HeightScreenState extends ConsumerState<HeightScreen> {
     final l10n = context.l10n;
     final height = ref.watch(profileDetailsProvider.select((d) => d.heightCm));
     final details = ref.read(profileDetailsProvider.notifier);
-    String label(int cm) {
-      if (!_feet) return l10n.heightValue(cm);
-      final fi = _feetInches(cm);
-      return l10n.obHeightFeet(fi.feet, fi.inches);
-    }
-
-    void change(int delta) => details.setHeight(
-      (height! + delta).clamp(DetailRules.minHeight, DetailRules.maxHeight),
-    );
 
     return OnboardingStepScaffold(
       step: SetupStep.height,
@@ -235,53 +229,19 @@ class _HeightScreenState extends ConsumerState<HeightScreen> {
           selected: _feet ? 1 : 0,
           onSelect: (i) => setState(() => _feet = i == 1),
         ),
-        const SizedBox(height: AppSpacing.s6),
-        if (height == null)
-          NumayaButton(
-            label: l10n.obHeightAdd,
-            variant: NumayaButtonVariant.secondary,
-            onPressed: () => details.setHeight(170),
-          )
-        else ...[
-          Row(
-            children: [
-              NavIconButton(
-                icon: NumayaIcons.minus,
-                label: l10n.obHeightShorter,
-                onPressed: height > DetailRules.minHeight
-                    ? () => change(-1)
-                    : null,
-              ),
-              Expanded(
-                child: Semantics(
-                  liveRegion: true,
-                  child: Text(
-                    label(height),
-                    textAlign: TextAlign.center,
-                    style: AppTypography.headline,
-                  ),
-                ),
-              ),
-              NavIconButton(
-                icon: NumayaIcons.plus,
-                label: l10n.obHeightTaller,
-                onPressed: height < DetailRules.maxHeight
-                    ? () => change(1)
-                    : null,
-              ),
-            ],
-          ),
-          SliderTheme(
-            data: _sliderTheme(context),
-            child: Slider(
-              value: height.toDouble(),
-              min: DetailRules.minHeight.toDouble(),
-              max: DetailRules.maxHeight.toDouble(),
-              divisions: DetailRules.maxHeight - DetailRules.minHeight,
-              semanticFormatterCallback: (v) => label(v.round()),
-              onChanged: (v) => details.setHeight(v.round()),
-            ),
-          ),
+        const SizedBox(height: AppSpacing.s4),
+        HeightWheel(
+          // A new wheel per unit: the two units have different rows.
+          key: ValueKey(_feet),
+          feet: _feet,
+          heightCm: height,
+          label: l10n.obHeightTitle,
+          formatCm: l10n.heightValue,
+          formatFeet: l10n.obHeightFeet,
+          onChanged: details.setHeight,
+        ),
+        if (height != null) ...[
+          const SizedBox(height: AppSpacing.s3),
           Center(
             child: TextLink(
               label: l10n.obHeightRemove,
@@ -291,6 +251,111 @@ class _HeightScreenState extends ConsumerState<HeightScreen> {
           ),
         ],
       ],
+    );
+  }
+}
+
+/// The inline height wheel (UI-006): vertically stacked values the member scrolls, with a subtle
+/// grey band marking the selected row (the Cal AI / Flo pattern on Mobbin, in Ente's fill colour
+/// and 12pt corners). [onChanged] fires only when the member moves the wheel, with whole
+/// centimetres; in ft/in mode each row is a whole inch, converted by [HeightUnits].
+class HeightWheel extends StatefulWidget {
+  const HeightWheel({
+    super.key,
+    required this.feet,
+    required this.heightCm,
+    required this.label,
+    required this.formatCm,
+    required this.formatFeet,
+    required this.onChanged,
+  });
+
+  final bool feet;
+  final int? heightCm;
+  final String label;
+  final String Function(int cm) formatCm;
+  final String Function(int feet, int inches) formatFeet;
+  final ValueChanged<int> onChanged;
+
+  static const double rowExtent = 44;
+  static const int visibleRows = 5;
+
+  @override
+  State<HeightWheel> createState() => _HeightWheelState();
+}
+
+class _HeightWheelState extends State<HeightWheel> {
+  late final List<int> _rows = widget.feet
+      ? HeightUnits.inchOptions
+      : HeightUnits.cmOptions;
+
+  /// Rests on the saved height (or the unrecorded default) when the wheel is built.
+  late final FixedExtentScrollController _controller =
+      FixedExtentScrollController(initialItem: _rowFor(widget.heightCm));
+
+  int _rowFor(int? cm) {
+    final shown = cm ?? HeightUnits.defaultCm;
+    final value = widget.feet ? HeightUnits.inchesFromCm(shown) : shown;
+    return _rows.indexOf(value).clamp(0, _rows.length - 1);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  String _text(int row) {
+    if (!widget.feet) return widget.formatCm(_rows[row]);
+    final fi = HeightUnits.feetInches(_rows[row]);
+    return widget.formatFeet(fi.feet, fi.inches);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = _rows;
+    final feet = widget.feet;
+    final heightCm = widget.heightCm;
+    String text(int row) => _text(row);
+
+    return WhiteCard(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.s2),
+      child: Semantics(
+        label: widget.label,
+        value: heightCm == null ? null : text(_rowFor(heightCm)),
+        child: SizedBox(
+          height: HeightWheel.rowExtent * HeightWheel.visibleRows,
+          child: CupertinoPicker.builder(
+            scrollController: _controller,
+            itemExtent: HeightWheel.rowExtent,
+            diameterRatio: 1.6,
+            squeeze: 1,
+            useMagnifier: false,
+            // The band sits on top of the selected row, so it is a translucent grey wash (ink
+            // at 6%) that leaves the selected value readable.
+            selectionOverlay: Container(
+              margin: const EdgeInsets.symmetric(horizontal: AppSpacing.s2),
+              decoration: BoxDecoration(
+                color: AppColors.ink.withValues(alpha: 0.06),
+                borderRadius: AppRadii.all(AppRadii.iconButton),
+              ),
+            ),
+            childCount: rows.length,
+            onSelectedItemChanged: (row) => widget.onChanged(
+              feet ? HeightUnits.cmFromInches(rows[row]) : rows[row],
+            ),
+            itemBuilder: (context, row) => Center(
+              child: Text(
+                text(row),
+                style: AppTypography.weight(
+                  AppTypography.row,
+                  AppTypography.semibold,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -392,12 +457,6 @@ class LocationScreen extends ConsumerWidget {
           label: area == null ? l10n.obLocationChoose : l10n.obLocationChange,
           variant: NumayaButtonVariant.secondary,
           onPressed: () => _chooseArea(context, ref),
-        ),
-        const SizedBox(height: AppSpacing.s5),
-        InfoCard(
-          icon: NumayaIcons.info,
-          title: l10n.obDemoBuild,
-          body: l10n.obLocationDemo,
         ),
       ],
     );

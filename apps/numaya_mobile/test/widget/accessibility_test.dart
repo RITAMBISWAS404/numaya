@@ -22,9 +22,10 @@ void main() {
   ) async {
     await signUpToHome(tester, testAuth());
     await check(); // Home: a sample profile
-    await tapOn(tester, find.bySemanticsLabel('Like').last);
+    await swipeDecide(tester, like: true);
     await tester.pump(const Duration(milliseconds: 600));
     await check(); // It's a match
+    await openChatFromMatch(tester);
     await tester.enterText(find.byType(TextField), 'Hi there');
     await tester.pump();
     await tapOn(tester, find.bySemanticsLabel('Send'));

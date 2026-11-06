@@ -169,26 +169,31 @@ Future<int?> showHeightSheet(BuildContext context, int? current) {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            l10n.heightValue(value),
-            textAlign: TextAlign.center,
-            style: AppTypography.headline,
-          ),
-          SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              activeTrackColor: AppColors.accent,
-              inactiveTrackColor: AppColors.fill,
-              thumbColor: AppColors.surface,
-              trackHeight: 4,
-              thumbShape: const V16SliderThumb(),
-            ),
-            child: Slider(
-              value: value.toDouble(),
-              min: DetailRules.minHeight.toDouble(),
-              max: DetailRules.maxHeight.toDouble(),
-              divisions: DetailRules.maxHeight - DetailRules.minHeight,
-              semanticFormatterCallback: (v) => l10n.heightValue(v.round()),
-              onChanged: (v) => setSheet(() => value = v.round()),
+          // UI-023: the read-out and its slider share one white card on the grey sheet; the
+          // slider uses the shared full-width theme (UI-024).
+          WhiteCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  l10n.heightValue(value),
+                  textAlign: TextAlign.center,
+                  style: AppTypography.headline,
+                ),
+                const SizedBox(height: AppSpacing.s2),
+                SliderTheme(
+                  data: numayaSliderTheme(context),
+                  child: Slider(
+                    value: value.toDouble(),
+                    min: DetailRules.minHeight.toDouble(),
+                    max: DetailRules.maxHeight.toDouble(),
+                    divisions: DetailRules.maxHeight - DetailRules.minHeight,
+                    semanticFormatterCallback: (v) =>
+                        l10n.heightValue(v.round()),
+                    onChanged: (v) => setSheet(() => value = v.round()),
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: AppSpacing.s4),
@@ -238,9 +243,9 @@ Future<List<String>?> showLanguagesSheet(
                 runSpacing: AppSpacing.s2,
                 children: [
                   for (final lang in kLanguages)
+                    // On the grey sheet (UI-023) the chips are white, as on the page.
                     NumayaChip(
                       label: lang,
-                      onCard: true,
                       selected: picked.contains(lang),
                       available:
                           picked.contains(lang) ||

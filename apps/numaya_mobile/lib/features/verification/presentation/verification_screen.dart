@@ -127,12 +127,6 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
                 title: l10n.verifyIntroTitle,
                 body: l10n.verifyIntroBody,
               ),
-              const SizedBox(height: AppSpacing.s5),
-              InfoCard(
-                icon: NumayaIcons.camera,
-                title: l10n.verifyDemoTitle,
-                body: l10n.verifyDemoBody,
-              ),
               const SizedBox(height: AppSpacing.s3),
               Center(child: help),
             ];

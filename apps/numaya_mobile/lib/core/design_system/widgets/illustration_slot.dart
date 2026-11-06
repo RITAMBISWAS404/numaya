@@ -11,10 +11,34 @@ import 'primitives.dart';
 /// numaya-final-ux-polish/ILLUSTRATION_ASSET_BACKLOG.md lists every slot, its ratio and the
 /// mascot's purpose there).
 ///
-/// Until [asset] is set it draws a placeholder: a subtle neutral surface with a dashed edge, a small
-/// image glyph and "Illustration: <label>". The box keeps [aspectRatio] (width ÷ height) at any
+/// Until [asset] is set, the slot renders **nothing** on product screens (final design run, FD-A1:
+/// a dashed "Illustration: …" box is implementation scaffolding, and it pushed Safety and Opening
+/// Moves below the fold). Inside [IllustrationPlaceholders] (the Design Lab, slot tests) it draws
+/// the placeholder instead: a subtle neutral surface with a dashed edge, a small image glyph and
+/// "Illustration: <label>". The box keeps [aspectRatio] (width ÷ height) at any
 /// width, so the final SVG drops in without moving anything. Always decorative: the copy around it
 /// carries the meaning, so it is excluded from semantics.
+/// Shows [IllustrationSlot] placeholders for art that does not exist yet. Only the Design Lab and
+/// tests that check slot geometry turn this on; product screens never show a placeholder.
+class IllustrationPlaceholders extends InheritedWidget {
+  const IllustrationPlaceholders({
+    super.key,
+    this.show = true,
+    required super.child,
+  });
+
+  final bool show;
+
+  static bool showIn(BuildContext context) =>
+      context
+          .dependOnInheritedWidgetOfExactType<IllustrationPlaceholders>()
+          ?.show ??
+      false;
+
+  @override
+  bool updateShouldNotify(IllustrationPlaceholders old) => old.show != show;
+}
+
 class IllustrationSlot extends StatelessWidget {
   const IllustrationSlot({
     super.key,
@@ -48,6 +72,9 @@ class IllustrationSlot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (asset == null && !IllustrationPlaceholders.showIn(context)) {
+      return const SizedBox.shrink();
+    }
     final Widget content = asset != null
         ? SvgPicture.asset(asset!, fit: BoxFit.contain)
         : CustomPaint(

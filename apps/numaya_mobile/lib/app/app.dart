@@ -17,6 +17,13 @@ import 'routes.dart';
 class NumayaApp extends ConsumerWidget {
   const NumayaApp({super.key});
 
+  /// Development and test hook: wraps the app below `MaterialApp` (for example with
+  /// `AccessibilityTools` from the dev-only `accessibility_tools` package, set by
+  /// `test/widget/a11y_tools_audit_test.dart`). Always null in the app itself, so no development
+  /// package is imported from `lib/` and release builds are unaffected.
+  @visibleForTesting
+  static TransitionBuilder? debugWrapper;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final haptics = ref.watch(accountPrefsProvider.select((p) => p.haptics));
@@ -55,10 +62,7 @@ class NumayaApp extends ConsumerWidget {
           final l10n = context.l10n;
           app = Column(
             children: [
-              ConnectionBanner(
-                message: l10n.offlineBanner,
-                note: l10n.offlineBannerDemo,
-              ),
+              ConnectionBanner(message: l10n.offlineBanner),
               Expanded(
                 child: MediaQuery.removePadding(
                   context: context,
@@ -70,6 +74,8 @@ class NumayaApp extends ConsumerWidget {
           );
         }
         // Re-asserted on every frame from the root, so no route or sheet leaves the bars black.
+        final wrap = debugWrapper;
+        if (wrap != null) app = wrap(context, app);
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: AppSystemUi.style,
           child: app,

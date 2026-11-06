@@ -1,0 +1,15 @@
+family,figma_page,figma_node,variant,flutter_widget,consumers,brand_override,approved_exception,render_evidence,status
+Alert / banner,Design system,14590:125245,"info, pending, success, error; body-only and title+body","InfoCard, StatusBanner","22 call sites (onboarding phone/photos/verify, like, chat expiry, delete account, unmatch sheet, preview, premium, events, visibility, account on hold)",purple icon for info,UI-010 top-aligned icon,"ov2 after: a02, a11, a14, b04, c04, d08, e05, e09, f01, g03, o03","implemented, verified (test + harness)"
+Menu item list,Updated screens,12099:96480,"grouped card, single-row card",ListGroup + ListRow,"Settings, Profile, Edit profile, Help, Safety, Visibility, Notifications, Privacy, Event detail/form, Premium",,UI-003 options stay separate (OptionGroup),"ov2 after: e01, d01, d02, e06, e08, d10, e02, g03, g05","implemented, verified"
+Action sheet v2,Design system,25316:7380,"rows, destructive",showNumayaActionSheet,"chat menu, attach menu, Discover more, event more, photo options, settings",,Cancel row kept,"ov2 after: o02, o05","implemented, verified"
+Toast,Design system,9409:4000,neutral,NumayaToast,71 call sites,busy dots purple,,ov2_components_test,"implemented, verified"
+Text input,Design system,2275:11526,"default, focused, error, disabled","InputSurface, NumayaSearchField, Composer",all fields,2pt purple focus,UI-037,r3 + ov2,"implemented earlier, verified"
+Button Large,Design system,2207:41759,"primary, secondary, neutral, critical, disabled, loading",NumayaButton,app-wide,primary purple,UI-002,ov2 sheets,"implemented earlier, reviewed"
+Filter chip,Design system,9524:4352,"selected, idle, disabled",NumayaChip,"interests, event category, durations",,emoji pills (UI-019),"ov2 a10, d04, g05","implemented earlier, reviewed"
+Header v2,Design system,11439:5040,"back+title inline, large title","NumayaTopBar, TabHeader",all routes,,compact navigation,ov2 sheets,"implemented earlier, reviewed"
+Bottom sheet header,Design system,4809:7992,title + close,showNumayaSheet,"filters, report, unmatch, recovery email",grey sheet (UI-023),UI-023,"ov2 o01, o03, o04, o06","implemented earlier, reviewed"
+Toggle switch,Design system,2482:6644,"on, off, disabled",NumayaSwitch,"settings, filters, privacy",,UI-025 lighter off track,r3 a022,implemented (batch 3)
+Slider + tooltip,Design system,7442:2863 / tooltip variant,"range, tooltip",AgeRangeSlider,"filters, onboarding meet",,UI-005,r3 a022,implemented (batch 3)
+Comment bubble,Design system,5397:67775,"mine, theirs, quote","MessageBubble, SwipeableMessage",chat,purple mine,UI-040,r3,implemented (batch 3)
+Empty state,Updated screens,26580:259932,"title, body, action",EmptyState,"blocked, likes empty, chats empty",,,ov2 e04,"reviewed, unchanged"
+Skeleton / loading,Design system,9428:4039 / 7884:4001,,(none),,,,,gap: no async loading in the demo

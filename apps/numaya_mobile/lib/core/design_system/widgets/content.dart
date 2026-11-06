@@ -148,8 +148,9 @@ class IllustrationView extends StatelessWidget {
   }
 }
 
-/// Information box (Alan's explanation cards): the subtle purple surface, no border, a purple icon,
-/// a bold title and secondary body, so it reads as explanation, not a card you open.
+/// Information box, as Ente's Banner (14590:125245, OV-01): a white card on the grey page with no
+/// tint or border, the icon in Numaya purple aligned with the title (UI-010), a semibold ink title
+/// and a muted body. It explains; it is not a card you open.
 class InfoCard extends StatelessWidget {
   const InfoCard({
     super.key,
@@ -168,44 +169,39 @@ class InfoCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(AppLayout.cardPadding),
       decoration: BoxDecoration(
-        color: AppColors.accentTint,
+        color: AppColors.surface,
         borderRadius: AppRadii.all(AppRadii.card),
-        border: Border.all(
-          color: AppColors.tintBorder(AppColors.accent),
-          width: AppBorders.hairline,
-        ),
       ),
-      child: Column(
+      // UI-010: the icon sits at the top left, aligned with the first line of the content (a
+      // 20pt icon on a 20pt line), however many lines follow.
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              NumayaIcon(
-                icon,
-                size: AppSizes.iconMd,
-                color: AppColors.accentOnTint,
-              ),
-              const SizedBox(width: AppSpacing.s2),
-              Expanded(
-                child: Text(
+          NumayaIcon(icon, size: AppSizes.iconMd, color: AppColors.accent),
+          const SizedBox(width: AppSpacing.s3),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
                   title,
                   style: AppTypography.weight(
                     AppTypography.bodySm,
                     AppTypography.semibold,
                   ),
                 ),
-              ),
-            ],
-          ),
-          if (body != null) ...[
-            const SizedBox(height: AppSpacing.s1),
-            Text(
-              body!,
-              style: AppTypography.caption.copyWith(
-                color: AppColors.textSecondary,
-              ),
+                if (body != null) ...[
+                  const SizedBox(height: AppSpacing.s1),
+                  Text(
+                    body!,
+                    style: AppTypography.caption.copyWith(
+                      color: AppColors.textMuted,
+                    ),
+                  ),
+                ],
+              ],
             ),
-          ],
+          ),
         ],
       ),
     );
@@ -236,12 +232,7 @@ class PromptCard extends StatelessWidget {
     final hasAnswer = answer != null && answer!.isNotEmpty;
     final card = Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.s5,
-        AppSpacing.s4,
-        AppSpacing.s4,
-        AppSpacing.s6,
-      ),
+      padding: const EdgeInsets.all(AppSpacing.s4),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: AppRadii.all(AppRadii.card),
@@ -249,27 +240,34 @@ class PromptCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // UI-007: the prompt is a small secondary label, the response the dominant text; no
+          // leading decorative icon. The chevron stays: it says the card opens an editor.
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const PromptMark(),
-              const SizedBox(width: AppSpacing.s2),
-              Expanded(child: Text(question, style: AppTypography.card)),
+              Expanded(
+                child: Text(
+                  question,
+                  style: AppTypography.label.copyWith(
+                    color: AppColors.textMuted,
+                  ),
+                ),
+              ),
               if (onTap != null)
                 const NumayaIcon(
                   NumayaIcons.chevronRight,
                   size: AppSizes.iconMd,
-                  color: AppColors.textSecondary,
+                  color: AppColors.textMuted,
                 ),
             ],
           ),
-          const SizedBox(height: AppSpacing.s3),
+          const SizedBox(height: AppSpacing.s2),
+          // An empty card's affordance stays body-sized and muted, so it never reads as an answer.
           Text(
             hasAnswer ? answer! : (emptyLabel ?? ''),
             style: hasAnswer
                 ? AppTypography.promptAnswer
-                : AppTypography.promptAnswer.copyWith(
-                    color: AppColors.textMuted,
-                  ),
+                : AppTypography.body.copyWith(color: AppColors.textMuted),
           ),
         ],
       ),
@@ -410,7 +408,7 @@ class PhotoGrid extends StatelessWidget {
                 style: AppTypography.weight(
                   AppTypography.micro,
                   AppTypography.semibold,
-                ).copyWith(fontSize: 11, color: AppColors.textPrimary),
+                ).copyWith(color: AppColors.textPrimary),
               ),
             ),
           ),
@@ -768,8 +766,11 @@ class _SetupStepTile extends StatelessWidget {
   }
 }
 
-/// Bottom sheet (`.theme-withings .sheet`): white, 16pt top corners, a warm grabber, a 22pt bold
-/// title with no rule under it (premium refinement: space, not lines), and a bare ✕ to dismiss.
+/// Ente bottom sheet (Bottom Sheet Header 4809:7991, template 4809:8027). UI-023: the sheet uses
+/// the app's light-grey page surface, and related settings sit on white cards inside it (the same
+/// [ListGroup], [OptionGroup] and card rules as a page). 24pt top corners,
+/// no drag handle, 20pt padding, the title in H1 (20/28 semibold) on the left and a circular close
+/// button on the right, 16pt to the content. Swipe-down dismissal still works (a Numaya keep).
 Future<T?> showNumayaSheet<T>({
   required BuildContext context,
   required String title,
@@ -791,7 +792,7 @@ Future<T?> showNumayaSheet<T>({
           MediaQuery.paddingOf(context).top -
           AppSpacing.s2,
     ),
-    backgroundColor: AppColors.surface,
+    backgroundColor: AppColors.canvas,
     barrierColor: AppColors.scrim,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.sheet)),
@@ -811,23 +812,12 @@ Future<T?> showNumayaSheet<T>({
           mainAxisSize: tall ? MainAxisSize.max : MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
-              child: Container(
-                width: 36,
-                height: 5,
-                margin: const EdgeInsets.only(top: AppSpacing.s2, bottom: 14),
-                decoration: BoxDecoration(
-                  color: AppColors.borderStrong,
-                  borderRadius: AppRadii.all(AppRadii.pill),
-                ),
-              ),
-            ),
             Container(
               padding: const EdgeInsets.fromLTRB(
-                AppSpacing.gutter,
+                AppSpacing.s5,
+                AppSpacing.s5,
+                AppSpacing.s4,
                 0,
-                AppSpacing.s2,
-                AppSpacing.s3,
               ),
               child: Row(
                 children: [
@@ -840,7 +830,7 @@ Future<T?> showNumayaSheet<T>({
                   NavIconButton(
                     icon: NumayaIcons.close,
                     label: closeLabel,
-                    style: NavButtonStyle.plain,
+                    style: NavButtonStyle.circular,
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
@@ -850,9 +840,7 @@ Future<T?> showNumayaSheet<T>({
             Flexible(
               fit: tall ? FlexFit.tight : FlexFit.loose,
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.gutter,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s5),
                 child: SheetSurface(child: Builder(builder: builder)),
               ),
             ),
@@ -866,8 +854,9 @@ Future<T?> showNumayaSheet<T>({
   );
 }
 
-/// Marks content on a white sheet, so a [ListGroup] there lays its rows flush to the sheet's
-/// gutter instead of inside an invisible white card (BM-02).
+/// Marks content inside a Numaya sheet. Since UI-023 the sheet is the grey page surface, so groups
+/// inside it draw their white cards exactly as on a page; the marker stays for widgets that need
+/// to know they are in a sheet.
 class SheetSurface extends InheritedWidget {
   const SheetSurface({super.key, required super.child});
 

@@ -48,6 +48,7 @@ import '../features/settings/presentation/settings_screen.dart';
 import '../features/verification/presentation/verification_screen.dart';
 import 'not_found_screen.dart';
 import 'providers.dart';
+import 'release_scope.dart';
 import 'routes.dart';
 
 /// Re-runs the router's redirect whenever the session changes.
@@ -73,6 +74,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       if ((path == Routes.demo || path == Routes.designLab) &&
           ref.read(demoAuthProvider) == null) {
         return Routes.welcome;
+      }
+      // First release (UI-031): Opening Moves is excluded, so its route, deep links included,
+      // lands on Profile instead.
+      if (path == Routes.openingMoves && !ReleaseScope.openingMoves) {
+        return Routes.profile;
       }
       if (session == null) {
         if (Routes.requiresSession(path)) return Routes.welcome;

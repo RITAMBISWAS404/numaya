@@ -85,6 +85,18 @@ Future<void> loadAppFonts() async {
       ..addFont(Future.value(ByteData.view(bytes.buffer)));
     await loader.load();
   }
+  // Lucide (the app's icons since the Ente experiment) ships as a package font. Flutter's test
+  // runner does not register package fonts, so load it from the test asset bundle; without it
+  // every icon renders as a placeholder box in goldens.
+  try {
+    final lucide = FontLoader('packages/lucide_icons_flutter/Lucide')
+      ..addFont(
+        rootBundle.load('packages/lucide_icons_flutter/assets/lucide.ttf'),
+      );
+    await lucide.load();
+  } on Object {
+    // Not bundled (an older checkout): icons stay as boxes, as before.
+  }
 }
 
 /// Lets timers (toasts, hand-over delays) finish so no timer is pending at the end of a test.

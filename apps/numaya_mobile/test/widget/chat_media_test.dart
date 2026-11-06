@@ -110,7 +110,7 @@ void main() {
   );
 
   testWidgets(
-    'video without a caption: a file card; playback says it is not in this build',
+    'video without a caption: a file card; playback says it can’t be played yet',
     (tester) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(
@@ -129,7 +129,7 @@ void main() {
       await tapOn(tester, find.text('market-walk.mp4'));
       await tester.pump(const Duration(milliseconds: 300));
       expect(
-        find.textContaining('Video playback isn’t in this build'),
+        find.textContaining('This video can’t be played here yet.'),
         findsOneWidget,
       );
       await settle(tester);
@@ -167,7 +167,8 @@ void main() {
       expect(note.kind, AttachmentKind.voice);
       expect(note.duration, const Duration(seconds: 3));
       expect(note.sample, isTrue);
-      expect(find.text('Demo: no sound recorded'), findsOneWidget);
+      // UI-041: labelled as a voice note, without demo copy.
+      expect(find.text('Voice note'), findsOneWidget);
       await settle(tester);
     },
   );

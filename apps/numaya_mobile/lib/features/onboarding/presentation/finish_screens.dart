@@ -51,8 +51,6 @@ class VerifyOfferScreen extends ConsumerWidget {
       onSkip: () => continueFrom(context, ref, SetupStep.verify),
       children: [
         InfoCard(icon: NumayaIcons.shield, title: l10n.obVerifyPrivacy),
-        const SizedBox(height: AppSpacing.s3),
-        InfoCard(icon: NumayaIcons.info, title: l10n.obVerifyDemo),
         const SizedBox(height: AppSpacing.s6),
         if (started) ...[
           StatusBanner(
@@ -148,8 +146,6 @@ class NotificationsPrimerScreen extends ConsumerWidget {
           variant: NumayaButtonVariant.quiet,
           onPressed: () => continueFrom(context, ref, SetupStep.notifications),
         ),
-        const SizedBox(height: AppSpacing.s5),
-        InfoCard(icon: NumayaIcons.info, title: l10n.obNotifDemo),
       ],
     );
   }
@@ -264,12 +260,6 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
             loading: state.creating,
             onPressed: missing.isEmpty && !state.creating ? _create : null,
           ),
-          const SizedBox(height: AppSpacing.s3),
-          Text(
-            l10n.obReviewSaved,
-            textAlign: TextAlign.center,
-            style: AppTypography.caption,
-          ),
         ],
       ),
       body: Column(
@@ -380,15 +370,7 @@ class AllSetScreen extends ConsumerWidget {
       child: NumayaScreen(
         footer: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            NumayaButton(label: l10n.obDoneStart, onPressed: start),
-            const SizedBox(height: AppSpacing.s3),
-            Text(
-              l10n.obDoneSample,
-              textAlign: TextAlign.center,
-              style: AppTypography.caption,
-            ),
-          ],
+          children: [NumayaButton(label: l10n.obDoneStart, onPressed: start)],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

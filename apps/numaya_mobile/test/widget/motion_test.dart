@@ -129,14 +129,13 @@ void main() {
       await quickStartApp(tester, world: DemoWorld.fresh);
       final log = recordHaptics(tester);
       expect(find.text('Maya, 29'), findsOneWidget);
-      await tester.ensureVisible(find.bySemanticsLabel('Pass').last);
-      await tester.pump(const Duration(milliseconds: 300));
-      await tester.tap(find.bySemanticsLabel('Pass').last);
+      // UI-016: decisions are swipes; the Pass action is their non-gesture equivalent.
+      semanticDecide(tester, like: false);
       await tester.pump();
       await tester.pump(AppMotion.exit ~/ 2);
-      // Mid-exit: still Maya, fading out; a second tap is ignored.
+      // Mid-exit: still Maya, fading out; a second decision is ignored.
       expect(find.text('Maya, 29'), findsOneWidget);
-      await tester.tap(find.bySemanticsLabel('Pass').last, warnIfMissed: false);
+      semanticDecide(tester, like: false);
       await tester.pump(AppMotion.exit);
       await tester.pump(AppMotion.state);
       expect(find.text('Sam, 31'), findsOneWidget);
@@ -151,9 +150,8 @@ void main() {
       final c = await quickStartApp(tester, world: DemoWorld.fresh);
       c.read(demoReduceMotionProvider.notifier).set(true);
       await tester.pump();
-      await tester.ensureVisible(find.bySemanticsLabel('Pass').last);
+      semanticDecide(tester, like: false);
       await tester.pump();
-      await tester.tap(find.bySemanticsLabel('Pass').last);
       await tester.pump();
       expect(find.text('Sam, 31'), findsOneWidget);
       expect(c.read(datingProvider).seen, contains('maya'));
@@ -204,19 +202,21 @@ void main() {
 
   group('Match', () {
     Future<void> likeMaya(WidgetTester tester) async {
-      await tester.ensureVisible(find.bySemanticsLabel('Like').last);
-      await tester.pump(const Duration(milliseconds: 300));
-      await tester.tap(find.bySemanticsLabel('Like').last);
+      semanticDecide(tester, like: true);
       await tester.pump();
       await tester.pump(AppMotion.exit);
       await tester.pump(); // the match route starts
     }
 
+    // UI-028: the title is the app bar's now; the photo is what enters.
     double titleOpacity(WidgetTester tester) => tester
         .widget<Opacity>(
           find
               .ancestor(
-                of: find.text('It’s a match!', skipOffstage: false),
+                of: find.byKey(
+                  const ValueKey('match-photo'),
+                  skipOffstage: false,
+                ),
                 matching: find.byType(Opacity, skipOffstage: false),
               )
               .first,
@@ -248,9 +248,8 @@ void main() {
       final c = await quickStartApp(tester, world: DemoWorld.fresh);
       c.read(demoReduceMotionProvider.notifier).set(true);
       await tester.pump();
-      await tester.ensureVisible(find.bySemanticsLabel('Like').last);
+      semanticDecide(tester, like: true);
       await tester.pump();
-      await tester.tap(find.bySemanticsLabel('Like').last);
       await tester.pump();
       await tester.pump();
       expect(titleOpacity(tester), 1);
@@ -262,7 +261,9 @@ void main() {
     testWidgets('opens at the newest message and returns there on send', (
       tester,
     ) async {
-      await usePhoneSize(tester, size: const Size(375, 667));
+      // A short phone, so Sasha's thread is taller than the screen (since UI-035 the resting
+      // thread has no time lines, and the thread fits a 667pt screen).
+      await usePhoneSize(tester, size: const Size(360, 560));
       tester.platformDispatcher.textScaleFactorTestValue = 1.3;
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
       final c = await quickStartApp(tester);

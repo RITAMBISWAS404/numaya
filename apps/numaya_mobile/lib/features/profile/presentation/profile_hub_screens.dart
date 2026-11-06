@@ -84,65 +84,90 @@ class CompletionHubScreen extends ConsumerWidget {
         backLabel: l10n.back,
         title: l10n.completionTitle,
       ),
+      // UI-046: one summary card (a small muted label, the percentage as the large number, the
+      // bar, one line of encouragement), then the six parts as one list card. Each row names the
+      // part, gives its count in muted metadata (UI-045) and opens its editor; finished parts say
+      // Done. One column keeps every label whole at 320pt and 200% text, which the two-column
+      // grid could not. References: Bumble's and happn's completion pages on Mobbin, Ente Menu
+      // Item rows.
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
-          const IllustrationSlot(
-            slot: 'profile_completion',
-            label: 'A profile coming together',
-            aspectRatio: IllustrationSlot.header,
-          ),
-          const SizedBox(height: AppSpacing.s5),
-          Semantics(
-            header: true,
-            child: Text(
-              l10n.completionPercent(c.percent),
-              style: AppTypography.pageTitle,
+          Container(
+            padding: const EdgeInsets.all(AppLayout.heroPadding),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: AppRadii.all(AppRadii.card),
             ),
-          ),
-          const SizedBox(height: AppSpacing.s2),
-          Text(
-            c.percent >= 100 ? l10n.completionDone : l10n.completionLede,
-            style: AppTypography.body.copyWith(color: AppColors.textSecondary),
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          ClipRRect(
-            borderRadius: AppRadii.all(AppRadii.pill),
-            child: LinearProgressIndicator(
-              value: c.percent / 100,
-              minHeight: 6,
-              color: AppColors.accent,
-              backgroundColor: AppColors.fill,
-              semanticsLabel: l10n.completionPercent(c.percent),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.s5),
-          LayoutBuilder(
-            builder: (context, box) {
-              final w = (box.maxWidth - AppSpacing.s3) / 2;
-              return Wrap(
-                spacing: AppSpacing.s3,
-                runSpacing: AppSpacing.s3,
-                children: [
-                  for (final (icon, title, part, onTap) in tiles)
-                    SizedBox(
-                      width: w,
-                      child: CompletionTile(
-                        icon: icon,
-                        title: title,
-                        progress: l10n.completionProgress(
-                          part.done.clamp(0, part.total),
-                          part.total,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  l10n.completionYourProfile,
+                  style: AppTypography.label.copyWith(
+                    color: AppColors.textMuted,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.s1),
+                Semantics(
+                  header: true,
+                  label: l10n.completionPercent(c.percent),
+                  excludeSemantics: true,
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: '${c.percent}%',
+                          style: AppTypography.metric,
                         ),
-                        done: part.complete,
-                        onTap: onTap,
-                      ),
+                        TextSpan(
+                          text: '  ${l10n.completionUnit}',
+                          style: AppTypography.metricUnit,
+                        ),
+                      ],
                     ),
-                ],
-              );
-            },
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.s3),
+                ClipRRect(
+                  borderRadius: AppRadii.all(AppRadii.pill),
+                  child: LinearProgressIndicator(
+                    value: c.percent / 100,
+                    minHeight: 8,
+                    color: AppColors.accent,
+                    backgroundColor: AppColors.fill,
+                    semanticsLabel: l10n.completionPercent(c.percent),
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.s3),
+                Text(
+                  c.percent >= 100 ? l10n.completionDone : l10n.completionLede,
+                  style: AppTypography.bodySm.copyWith(
+                    color: AppColors.textMuted,
+                  ),
+                ),
+              ],
+            ),
           ),
+          const SizedBox(height: AppSpacing.s4),
+          ListGroup(
+            children: [
+              for (final (icon, title, part, onTap) in tiles)
+                ListRow(
+                  key: ValueKey('completion-$title'),
+                  leading: icon,
+                  label: title,
+                  detail: l10n.completionProgress(
+                    part.done.clamp(0, part.total),
+                    part.total,
+                  ),
+                  value: part.complete ? l10n.completionPartDone : null,
+                  onTap: onTap,
+                ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.s4),
         ],
       ),
     );
@@ -246,11 +271,13 @@ class OpeningMovesScreen extends ConsumerWidget {
             label: 'Start a new conversation',
             aspectRatio: IllustrationSlot.header,
           ),
-          ScreenHeader(
-            title: l10n.openingMovesHeading,
-            lede: l10n.openingMovesLede,
+          // The header already says "Opening Moves"; the page heading repeating it is gone (ER
+          // content pass). The lede stays: it says what an Opening Move is.
+          Text(
+            l10n.openingMovesLede,
+            style: AppTypography.body.copyWith(color: AppColors.textMuted),
           ),
-          const SizedBox(height: AppSpacing.s5),
+          const SizedBox(height: AppSpacing.s4),
           for (var i = 0; i < DetailRules.maxOpeningMoves; i++) ...[
             if (i < moves.length)
               PromptCard(
@@ -273,8 +300,6 @@ class OpeningMovesScreen extends ConsumerWidget {
               ),
             const SizedBox(height: AppSpacing.s3),
           ],
-          const SizedBox(height: AppSpacing.s2),
-          Text(l10n.openingMovesNote, style: AppTypography.caption),
         ],
       ),
     );

@@ -805,7 +805,7 @@ abstract class AppLocalizations {
   /// No description provided for @photosInfoBody.
   ///
   /// In en, this message translates to:
-  /// **'Photo upload isn’t connected in this build, so + adds a placeholder tile. You can choose a different main photo later in Edit profile.'**
+  /// **'You can choose a different main photo later in Edit profile.'**
   String get photosInfoBody;
 
   /// No description provided for @photosFinish.
@@ -1243,7 +1243,7 @@ abstract class AppLocalizations {
   /// No description provided for @discoverPhotoLabel.
   ///
   /// In en, this message translates to:
-  /// **'{name}, photo {position} (placeholder)'**
+  /// **'{name}, photo {position}'**
   String discoverPhotoLabel(Object name, int position);
 
   /// No description provided for @discoverAboutMe.
@@ -1309,7 +1309,7 @@ abstract class AppLocalizations {
   /// No description provided for @discoverUndo.
   ///
   /// In en, this message translates to:
-  /// **'Undo: bring back {name}'**
+  /// **'Backtrack: bring back {name}'**
   String discoverUndo(Object name);
 
   /// No description provided for @discoverOptions.
@@ -1321,7 +1321,7 @@ abstract class AppLocalizations {
   /// No description provided for @discoverSwipeHint.
   ///
   /// In en, this message translates to:
-  /// **'{name}. Swipe right to like, left to pass, or use the buttons at the end of the profile.'**
+  /// **'{name}. Swipe right to like or left to pass.'**
   String discoverSwipeHint(Object name);
 
   /// No description provided for @discoverNoFitTitle.
@@ -1351,7 +1351,7 @@ abstract class AppLocalizations {
   /// No description provided for @discoverSeenAllBody.
   ///
   /// In en, this message translates to:
-  /// **'That’s every sample profile. People you passed on can come back around.'**
+  /// **'You’ve seen everyone for now. People you passed on can come back around.'**
   String get discoverSeenAllBody;
 
   /// No description provided for @discoverShowAgain.
@@ -1387,7 +1387,7 @@ abstract class AppLocalizations {
   /// No description provided for @discoverErrorBody.
   ///
   /// In en, this message translates to:
-  /// **'This is a simulated connection problem. Try again, or turn it off in Settings › Prototype tools.'**
+  /// **'Check your connection and try again.'**
   String get discoverErrorBody;
 
   /// No description provided for @discoverRetry.
@@ -1858,6 +1858,54 @@ abstract class AppLocalizations {
   /// **'Send'**
   String get chatSend;
 
+  /// No description provided for @chatReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply'**
+  String get chatReply;
+
+  /// No description provided for @chatShowTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Show time'**
+  String get chatShowTime;
+
+  /// No description provided for @chatHideTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide time'**
+  String get chatHideTime;
+
+  /// No description provided for @chatSentAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent {time}'**
+  String chatSentAt(String time);
+
+  /// No description provided for @chatReplyingTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Replying to {name}'**
+  String chatReplyingTo(String name);
+
+  /// No description provided for @chatReplyingToYourself.
+  ///
+  /// In en, this message translates to:
+  /// **'Replying to yourself'**
+  String get chatReplyingToYourself;
+
+  /// No description provided for @chatYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get chatYou;
+
+  /// No description provided for @chatCancelReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel reply'**
+  String get chatCancelReply;
+
   /// No description provided for @chatStatusSending.
   ///
   /// In en, this message translates to:
@@ -1939,7 +1987,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatVideoNoPlayback.
   ///
   /// In en, this message translates to:
-  /// **'Video playback isn’t in this build. The file stays on your phone.'**
+  /// **'This video can’t be played here yet.'**
   String get chatVideoNoPlayback;
 
   /// No description provided for @chatVoiceLabel.
@@ -1951,7 +1999,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatVoiceDemo.
   ///
   /// In en, this message translates to:
-  /// **'Demo: no sound recorded'**
+  /// **'Voice note'**
   String get chatVoiceDemo;
 
   /// No description provided for @mediaPermissionDenied.
@@ -1981,7 +2029,7 @@ abstract class AppLocalizations {
   /// No description provided for @mediaUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Choosing photos isn’t available here. Turn on sample media in the Demo Hub to try it.'**
+  /// **'Choosing photos isn’t available here.'**
   String get mediaUnavailable;
 
   /// No description provided for @mediaMissing.
@@ -2197,7 +2245,7 @@ abstract class AppLocalizations {
   /// No description provided for @recoveryEmailUnverified.
   ///
   /// In en, this message translates to:
-  /// **'Not verified: no email service in this build'**
+  /// **'Not verified'**
   String get recoveryEmailUnverified;
 
   /// No description provided for @reauthTitle.
@@ -2500,6 +2548,12 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 person likes you. Open Likes} other{{count} people like you. Open Likes}}'**
   String queueLikesLabel(int count);
 
+  /// No description provided for @queueMatchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, new match, {timeLeft}. Open chat'**
+  String queueMatchLabel(String name, String timeLeft);
+
   /// No description provided for @queueExpired.
   ///
   /// In en, this message translates to:
@@ -2635,7 +2689,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatSampleConversationNote.
   ///
   /// In en, this message translates to:
-  /// **'Demo chat: {name}’s messages are scripted, and what you send stays on this device.'**
+  /// **'Demo: {name}’s replies are scripted and nothing you send leaves this device.'**
   String chatSampleConversationNote(Object name);
 
   /// No description provided for @reportWhere.
@@ -2653,7 +2707,7 @@ abstract class AppLocalizations {
   /// No description provided for @didMeetBody.
   ///
   /// In en, this message translates to:
-  /// **'Your answer stays on this device and helps you keep track. {name} won’t see it.'**
+  /// **'Your answer helps you keep track. {name} won’t see it.'**
   String didMeetBody(Object name);
 
   /// No description provided for @didMeetYes.
@@ -2671,7 +2725,7 @@ abstract class AppLocalizations {
   /// No description provided for @didMeetThanks.
   ///
   /// In en, this message translates to:
-  /// **'Thanks. Saved on this device.'**
+  /// **'Thanks. Saved.'**
   String get didMeetThanks;
 
   /// No description provided for @unmatchedReasonTitle.
@@ -2683,7 +2737,7 @@ abstract class AppLocalizations {
   /// No description provided for @unmatchedReasonBody.
   ///
   /// In en, this message translates to:
-  /// **'Could you tell us why? Your answer stays on this device and {name} won’t know.'**
+  /// **'Could you tell us why? {name} won’t know.'**
   String unmatchedReasonBody(Object name);
 
   /// No description provided for @unmatchReasonSkip.
@@ -2695,7 +2749,7 @@ abstract class AppLocalizations {
   /// No description provided for @unmatchReasonThanks.
   ///
   /// In en, this message translates to:
-  /// **'Thanks. Your answer is saved on this device.'**
+  /// **'Thanks for telling us.'**
   String get unmatchReasonThanks;
 
   /// No description provided for @filtersDone.
@@ -2785,7 +2839,7 @@ abstract class AppLocalizations {
   /// No description provided for @filtersAdvancedLockedBody.
   ///
   /// In en, this message translates to:
-  /// **'Narrow down by height, intentions and more. In this demo Premium is simulated: no payment is taken.'**
+  /// **'Narrow down by height, intentions and more.'**
   String get filtersAdvancedLockedBody;
 
   /// No description provided for @premiumSee.
@@ -2941,7 +2995,7 @@ abstract class AppLocalizations {
   /// No description provided for @forYouRationale.
   ///
   /// In en, this message translates to:
-  /// **'Based on your interests and who you’ve liked. Sample profiles.'**
+  /// **'Based on your interests and who you’ve liked.'**
   String get forYouRationale;
 
   /// No description provided for @likeAction.
@@ -3088,6 +3142,24 @@ abstract class AppLocalizations {
   /// **'{done} of {total} added'**
   String completionProgress(int done, int total);
 
+  /// No description provided for @completionYourProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile'**
+  String get completionYourProfile;
+
+  /// No description provided for @completionPartDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get completionPartDone;
+
+  /// No description provided for @completionUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'complete'**
+  String get completionUnit;
+
   /// No description provided for @contactTopic.
   ///
   /// In en, this message translates to:
@@ -3217,7 +3289,7 @@ abstract class AppLocalizations {
   /// No description provided for @deleteSubscriptionBody.
   ///
   /// In en, this message translates to:
-  /// **'Cancel it in your app store first. In this demo there is no real subscription.'**
+  /// **'Cancel it in your app store first.'**
   String get deleteSubscriptionBody;
 
   /// No description provided for @deleteContinue.
@@ -3271,7 +3343,7 @@ abstract class AppLocalizations {
   /// No description provided for @demoDesignLabDetail.
   ///
   /// In en, this message translates to:
-  /// **'Monochrome Meetup tokens, components and states'**
+  /// **'Ente design system tokens, components and states'**
   String get demoDesignLabDetail;
 
   /// No description provided for @demoStart.
@@ -3757,7 +3829,7 @@ abstract class AppLocalizations {
   /// No description provided for @logoutBody.
   ///
   /// In en, this message translates to:
-  /// **'In this demo, logging out clears your profile and sample data from this device.'**
+  /// **'Logging out clears your profile from this device.'**
   String get logoutBody;
 
   /// No description provided for @yes.
@@ -4405,7 +4477,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsSampleLocation.
   ///
   /// In en, this message translates to:
-  /// **'Hackney, London (sample)'**
+  /// **'Hackney, London'**
   String get settingsSampleLocation;
 
   /// No description provided for @settingsHelpLegal.
@@ -4477,7 +4549,7 @@ abstract class AppLocalizations {
   /// No description provided for @travelBody.
   ///
   /// In en, this message translates to:
-  /// **'Planning a trip? Meet people there before you go. Demo: changes the sample location only.'**
+  /// **'Planning a trip? Meet people there before you go.'**
   String get travelBody;
 
   /// No description provided for @travelPick.
@@ -4567,13 +4639,13 @@ abstract class AppLocalizations {
   /// No description provided for @verifyCameraOff.
   ///
   /// In en, this message translates to:
-  /// **'The camera isn’t connected in this demo. Take a demo selfie to continue.'**
+  /// **'Take a selfie to continue.'**
   String get verifyCameraOff;
 
   /// No description provided for @verifyTakeSelfie.
   ///
   /// In en, this message translates to:
-  /// **'Take demo selfie'**
+  /// **'Take selfie'**
   String get verifyTakeSelfie;
 
   /// No description provided for @verifyOtherPose.
@@ -4597,7 +4669,7 @@ abstract class AppLocalizations {
   /// No description provided for @verifyDemoSelfie.
   ///
   /// In en, this message translates to:
-  /// **'Demo selfie (placeholder)'**
+  /// **'Your selfie'**
   String get verifyDemoSelfie;
 
   /// No description provided for @verifyRetake.
@@ -4615,7 +4687,7 @@ abstract class AppLocalizations {
   /// No description provided for @verifyPendingBody.
   ///
   /// In en, this message translates to:
-  /// **'Usually a few minutes. In this demo the review is simulated and takes a few seconds.'**
+  /// **'Usually a few minutes.'**
   String get verifyPendingBody;
 
   /// No description provided for @verifyDoneTitle.
@@ -5209,7 +5281,7 @@ abstract class AppLocalizations {
   /// No description provided for @obLocationSetDevice.
   ///
   /// In en, this message translates to:
-  /// **'{area} (sample area)'**
+  /// **'{area}'**
   String obLocationSetDevice(String area);
 
   /// No description provided for @obLocationAreaLabel.
@@ -5263,7 +5335,7 @@ abstract class AppLocalizations {
   /// No description provided for @obOpenSettingsDemo.
   ///
   /// In en, this message translates to:
-  /// **'Demo build: this would open Numaya’s Android settings.'**
+  /// **'Settings can’t be opened from here yet.'**
   String get obOpenSettingsDemo;
 
   /// No description provided for @obLocationFooter.
@@ -5499,6 +5571,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Already answered'**
   String get promptAlreadyUsed;
+
+  /// No description provided for @promptCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current prompt'**
+  String get promptCurrent;
+
+  /// No description provided for @promptCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompt categories'**
+  String get promptCategories;
 
   /// No description provided for @obBioTitle.
   ///
@@ -5926,6 +6010,24 @@ abstract class AppLocalizations {
   /// **'{name} is back'**
   String discoverUndone(Object name);
 
+  /// No description provided for @discoverBacktrackNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Backtrack. Nothing to bring back yet: pass on someone first'**
+  String get discoverBacktrackNone;
+
+  /// No description provided for @matchViewProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View profile'**
+  String get matchViewProfile;
+
+  /// No description provided for @matchOpenChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Open chat'**
+  String get matchOpenChat;
+
   /// No description provided for @discoverCoach.
   ///
   /// In en, this message translates to:
@@ -5965,7 +6067,7 @@ abstract class AppLocalizations {
   /// No description provided for @discoverSeenAllLikedBody.
   ///
   /// In en, this message translates to:
-  /// **'You liked everyone you saw. New people don’t arrive in this demo, so check who likes you instead.'**
+  /// **'You liked everyone you saw. See who likes you in the meantime.'**
   String get discoverSeenAllLikedBody;
 
   /// No description provided for @discoverSeeLikes.
@@ -6517,7 +6619,7 @@ abstract class AppLocalizations {
   /// No description provided for @eventFailedBody.
   ///
   /// In en, this message translates to:
-  /// **'Nothing changed. This is the demo’s simulated connection problem.'**
+  /// **'Nothing changed. Check your connection and try again.'**
   String get eventFailedBody;
 
   /// No description provided for @eventFailedTitle.
@@ -6631,7 +6733,7 @@ abstract class AppLocalizations {
   /// No description provided for @eventFilterAreaOutside.
   ///
   /// In en, this message translates to:
-  /// **'Events in this demo are in London, not {area}'**
+  /// **'No events near {area} yet'**
   String eventFilterAreaOutside(Object area);
 
   /// No description provided for @eventFilterCategories.
@@ -7129,7 +7231,7 @@ abstract class AppLocalizations {
   /// No description provided for @eventShareToast.
   ///
   /// In en, this message translates to:
-  /// **'Sharing isn’t available in the demo. Nothing leaves this device.'**
+  /// **'Sharing isn’t available yet.'**
   String get eventShareToast;
 
   /// No description provided for @eventShowCount.
@@ -7303,7 +7405,7 @@ abstract class AppLocalizations {
   /// No description provided for @eventsErrorBody.
   ///
   /// In en, this message translates to:
-  /// **'This is a simulated connection problem. Try again, or turn it off in the Demo Hub.'**
+  /// **'Check your connection and try again.'**
   String get eventsErrorBody;
 
   /// No description provided for @eventsErrorStillTitle.
@@ -7543,13 +7645,13 @@ abstract class AppLocalizations {
   /// No description provided for @visVisibleLimits.
   ///
   /// In en, this message translates to:
-  /// **'Based on your settings and a demo notice source. How often a profile is shown also depends on who is nearby and what they’re looking for, which this page can’t see.'**
+  /// **'Based on your settings. How often a profile is shown also depends on who is nearby and what they’re looking for, which this page can’t see.'**
   String get visVisibleLimits;
 
   /// No description provided for @visSourceNote.
   ///
   /// In en, this message translates to:
-  /// **'Based on your own settings and a demo notice source.'**
+  /// **'Based on your own settings.'**
   String get visSourceNote;
 
   /// No description provided for @visPausedBody.

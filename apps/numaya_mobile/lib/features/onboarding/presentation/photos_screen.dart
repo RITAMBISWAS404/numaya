@@ -53,7 +53,6 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ListGroup(
-            footnote: l10n.photoSourceNote,
             children: [
               ListRow(
                 leading: NumayaIcons.camera,

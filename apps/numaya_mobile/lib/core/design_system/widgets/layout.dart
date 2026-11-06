@@ -192,9 +192,9 @@ class StepFooter extends StatelessWidget {
   }
 }
 
-/// Modal and flow header (`.theme-withings .topbar`): a bare ink back icon, centred progress
-/// segments or a title in tracked small capitals ("EDIT PROFILE"), optional actions. [NumayaScreen]
-/// draws it on a white bar with a hairline under it.
+/// Inner-page header, Ente Header (v2) in its Collapsed state (11441:5208): a bare back arrow,
+/// the title left-aligned beside it in Large (16/20 semibold), and up to three 38pt Icon Buttons on
+/// the right, 6-8pt apart. Flow steps put the progress segments in the title's place.
 class NumayaTopBar extends StatelessWidget {
   const NumayaTopBar({
     super.key,
@@ -228,29 +228,7 @@ class NumayaTopBar extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             if (step != null && steps != null)
-              StepProgress(step: step!, steps: steps!)
-            else if (title != null)
-              Padding(
-                // Keep the centred title clear of the buttons on both sides.
-                padding: EdgeInsets.symmetric(
-                  horizontal:
-                      (actions.length > 1 ? actions.length : 1) *
-                          (AppSizes.iconButton + AppSpacing.s1) +
-                      AppSpacing.s1,
-                ),
-                child: Semantics(
-                  header: true,
-                  label: title,
-                  child: ExcludeSemantics(
-                    child: Text(
-                      title!,
-                      style: AppTypography.headerCaps,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-              ),
+              StepProgress(step: step!, steps: steps!),
             Row(
               children: [
                 if (onBack != null)
@@ -259,12 +237,39 @@ class NumayaTopBar extends StatelessWidget {
                         ? NumayaIcons.close
                         : NumayaIcons.chevronLeft,
                     label: backLabel,
+                    style: NavButtonStyle.plain,
                     onPressed: onBack,
                   )
                 else
-                  const SizedBox(width: AppSizes.iconButton),
-                const Spacer(),
-                ...actions,
+                  const SizedBox(width: AppSizes.iconButtonSlot),
+                if (title != null && (step == null || steps == null))
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.s2,
+                      ),
+                      child: Semantics(
+                        header: true,
+                        label: title,
+                        child: ExcludeSemantics(
+                          child: Text(
+                            title!,
+                            style: AppTypography.headerCaps,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                else
+                  const Spacer(),
+                // Adjacent actions keep the 8pt gap the tab headers use, so two buttons never
+                // read as one (Event detail's Share and Save touched; FD-D1).
+                for (var i = 0; i < actions.length; i++) ...[
+                  if (i > 0) const SizedBox(width: AppSpacing.s2),
+                  actions[i],
+                ],
               ],
             ),
           ],
@@ -353,6 +358,9 @@ class ScreenHeader extends StatelessWidget {
   final Widget? art;
   final String? eyebrow;
 
+  /// The square region a heading illustration fills above the heading (UI-009).
+  static const double artSize = 96;
+
   @override
   Widget build(BuildContext context) {
     final heading = Semantics(
@@ -368,17 +376,21 @@ class ScreenHeader extends StatelessWidget {
             Text(eyebrow!.toUpperCase(), style: AppTypography.labelCaps),
             const SizedBox(height: AppSpacing.s3),
           ],
-          if (art == null)
-            heading
-          else
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: heading),
-                const SizedBox(width: AppSpacing.s4),
-                ExcludeSemantics(child: art!),
-              ],
+          // UI-009: a decorative illustration gets its own square region above the heading,
+          // upper left, instead of squeezing beside it.
+          if (art != null) ...[
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: ExcludeSemantics(
+                child: SizedBox.square(
+                  dimension: ScreenHeader.artSize,
+                  child: FittedBox(child: art),
+                ),
+              ),
             ),
+            const SizedBox(height: AppSpacing.s4),
+          ],
+          heading,
           if (lede != null || ledeWidget != null) ...[
             const SizedBox(height: AppSpacing.s3),
             ledeWidget ??

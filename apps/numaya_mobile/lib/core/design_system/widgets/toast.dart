@@ -162,7 +162,9 @@ class _ToastViewState extends State<_ToastView> with TickerProviderStateMixin {
                     vertical: AppSpacing.s3,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.accentTint,
+                    // OV-04: Ente's neutral Toast (9409:4000), a white pill with ink text, floating
+                    // on its shadow over any content.
+                    color: AppColors.surface,
                     // The card radius clamps to a pill on one line and stays soft when a message
                     // wraps (SP-05).
                     borderRadius: AppRadii.all(AppRadii.card),
@@ -176,15 +178,10 @@ class _ToastViewState extends State<_ToastView> with TickerProviderStateMixin {
                         child: Text(
                           widget.message,
                           textAlign: TextAlign.center,
-                          style:
-                              AppTypography.weight(
-                                AppTypography.bodySm,
-                                AppTypography.semibold,
-                              ).copyWith(
-                                fontSize: 14,
-                                height: 18 / 14,
-                                color: AppColors.accentOnTint,
-                              ),
+                          style: AppTypography.weight(
+                            AppTypography.bodySm,
+                            AppTypography.semibold,
+                          ).copyWith(color: AppColors.ink),
                         ),
                       ),
                       if (widget.busy) ...[
@@ -206,7 +203,7 @@ class _ToastViewState extends State<_ToastView> with TickerProviderStateMixin {
                                   width: 4,
                                   height: 4,
                                   decoration: const BoxDecoration(
-                                    color: AppColors.accentOnTint,
+                                    color: AppColors.accent,
                                     shape: BoxShape.circle,
                                   ),
                                 ),

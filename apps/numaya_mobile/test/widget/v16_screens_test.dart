@@ -50,6 +50,9 @@ void main() {
     await _tap(tester, find.text('Add a prompt'));
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.text('Your prompt'), findsOneWidget);
+    // UI-008: the answer is written in the prompt's sheet.
+    await _tap(tester, find.text('A perfect first date'));
+    await tester.pump(const Duration(milliseconds: 600));
     expect(find.text('Write an answer to save.'), findsOneWidget);
     expect(find.text('150 characters left'), findsOneWidget);
     await tester.enterText(find.byType(TextField).last, 'Hello');
@@ -62,8 +65,10 @@ void main() {
     await _tap(tester, find.text('Save prompt'));
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.text('Hello'), findsOneWidget);
-    // Reopening with nothing changed: no changes yet.
+    // Reopening the saved prompt with nothing changed: no changes yet.
     await _tap(tester, find.text('Hello'));
+    await tester.pump(const Duration(milliseconds: 600));
+    await _tap(tester, find.text('A perfect first date'));
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.text('No changes yet.'), findsOneWidget);
     await settle(tester);
@@ -103,10 +108,11 @@ void main() {
     await _toHome(tester);
     await _tap(tester, find.byTooltip('Profile'));
     expect(find.text('Sam, 31'), findsOneWidget);
-    // CL-04: the parts render with a vertical separator; screen readers hear them in order.
+    // UI-042: the summary holds the name, verification state and Edit profile; gender and
+    // intentions stay in Edit profile and the preview.
     expect(
       find.bySemanticsLabel('Woman, Looking for something casual'),
-      findsOneWidget,
+      findsNothing,
     );
     await _tap(tester, find.bySemanticsLabel('Settings'));
     await tester.pump(const Duration(milliseconds: 600));

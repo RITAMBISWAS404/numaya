@@ -580,8 +580,6 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
           textCapitalization: TextCapitalization.sentences,
           hint: l10n.eventQuestionHint,
         ),
-        gap(AppSpacing.s5),
-        Text(l10n.eventFormNote, style: AppTypography.caption),
         gap(),
       ],
     );

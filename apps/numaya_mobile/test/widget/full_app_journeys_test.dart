@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/router.dart';
@@ -68,12 +70,16 @@ void main() {
     await settle(tester);
   });
 
-  testWidgets('every tab and For you are reachable from the app itself', (
+  testWidgets('every tab, and For you by its route, work from the app', (
     tester,
   ) async {
     await usePhoneSize(tester);
-    await quickStartApp(tester);
-    await tapOn(tester, find.bySemanticsLabel('For you: today’s picks'));
+    final c = await quickStartApp(tester);
+    // UI-013 removed the sparkle that opened For you from the Discover header.
+    expect(find.bySemanticsLabel('For you: today’s picks'), findsNothing);
+    unawaited(c.read(routerProvider).push(Routes.forYou));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 600));
     await tester.pump(const Duration(milliseconds: 600));
     expect(
       find.text('People you have the most in common with, picked once a day.'),
@@ -83,7 +89,7 @@ void main() {
     // The match rises in as a modal; at its first frame it is still transparent.
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.text('It’s a match!'), findsOneWidget);
-    await tapOn(tester, find.text('Keep browsing'));
+    await closeMatch(tester);
     await tester.pump(const Duration(milliseconds: 600));
     await tapOn(tester, find.bySemanticsLabel('Back'));
     await tester.pump(const Duration(milliseconds: 600));
@@ -108,8 +114,8 @@ void main() {
     await tapOn(tester, find.bySemanticsLabel('Unread, 1'));
     await tapOn(tester, find.bySemanticsLabel(RegExp('^Priya')));
     await tester.pump(const Duration(milliseconds: 600));
-    // One demo notice replaces the badge, the footer and the per-message warning (CL-07).
-    expect(find.textContaining('Demo chat:'), findsOneWidget);
+    // UI-041: no demo notice in the conversation (it replaced CL-07's single notice).
+    expect(find.textContaining('Demo: '), findsNothing);
     expect(
       find.text('Yes! The cardamom buns sell out by ten.'),
       findsOneWidget,
@@ -217,7 +223,7 @@ void main() {
   );
 
   testWidgets(
-    'profile: bio, a second prompt and an Opening Move show in preview',
+    'profile: bio and a second prompt show in preview; no Opening Moves (UI-031)',
     (tester) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
@@ -235,6 +241,8 @@ void main() {
 
       await tapOn(tester, find.text('Add a prompt'));
       await tester.pump(const Duration(milliseconds: 600));
+      await tapOn(tester, find.text('Weekends')); // UI-008 category
+      await tester.pump(const Duration(milliseconds: 300));
       await tapOn(tester, find.text('My Sunday ritual'));
       await tester.enterText(
         find.byType(TextField).last,
@@ -265,16 +273,9 @@ void main() {
       await tester.pump(const Duration(milliseconds: 600));
       expect(find.bySemanticsLabel('Profile 28% complete'), findsNothing);
 
-      await tapOn(tester, find.text('Opening Moves'));
-      await tester.pump(const Duration(milliseconds: 600));
-      await tapOn(tester, find.text('First Opening Move'));
-      await sheetUp(tester);
-      await tapOn(tester, find.text('What’s your go-to order at a café?'));
-      await tapOn(tester, find.widgetWithText(NumayaButton, 'Save'));
-      await sheetUp(tester);
-      expect(c.read(profileDetailsProvider).openingMoves, [
-        'What’s your go-to order at a café?',
-      ]);
+      // UI-031: no Opening Moves entry in the first release.
+      expect(find.text('Opening Moves'), findsNothing);
+      expect(c.read(profileDetailsProvider).openingMoves, isEmpty);
       await settle(tester);
     },
   );
@@ -286,16 +287,17 @@ void main() {
     final c = await quickStartApp(tester);
     c.read(photoVerificationProvider.notifier).setApproveNext(false);
     await goTo(c, tester, Routes.verifyPhoto);
-    expect(find.text('Simulated in this demo'), findsOneWidget);
+    // UI-041: the verification intro carries no demo notice.
+    expect(find.text('Simulated in this demo'), findsNothing);
     await tapOn(tester, find.text('Let’s get verified'));
-    await tapOn(tester, find.text('Take demo selfie'));
+    await tapOn(tester, find.text('Take selfie'));
     await tapOn(tester, find.text('Submit for review'));
     expect(find.text('Checking your selfie'), findsOneWidget);
     await tester.pump(const Duration(seconds: 3));
     expect(find.text('We couldn’t verify you'), findsOneWidget);
     c.read(photoVerificationProvider.notifier).setApproveNext(true);
     await tapOn(tester, find.text('Try again'));
-    await tapOn(tester, find.text('Take demo selfie'));
+    await tapOn(tester, find.text('Take selfie'));
     await tapOn(tester, find.text('Submit for review'));
     await tester.pump(const Duration(seconds: 3));
     expect(find.text('You’re verified'), findsOneWidget);

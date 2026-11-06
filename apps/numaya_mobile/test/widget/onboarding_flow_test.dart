@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart' show CupertinoPicker;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
@@ -28,7 +29,12 @@ void main() {
     expect(find.text('Fewer swipes.\nBetter first dates.'), findsOneWidget);
     expect(find.text('Create an account'), findsOneWidget);
     expect(find.text('I have an account'), findsOneWidget);
-    expect(find.text('Demo build'), findsOneWidget);
+    // UI-001: no Demo build badge; in demo builds the brand image opens the Demo Hub instead.
+    expect(find.text('Demo build'), findsNothing);
+    expect(
+      find.bySemanticsLabel('Demo build. Open the demo hub'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('phone step: next stays disabled until the number is complete', (
@@ -169,8 +175,10 @@ void main() {
 
       // Height (added) and location (skipped).
       expect(find.text('How tall are you?'), findsOneWidget);
-      await tapText(tester, 'Add my height');
+      // UI-006: the inline wheel; one row up records 171 cm.
       expect(find.text('170 cm'), findsOneWidget);
+      await tester.drag(find.byType(CupertinoPicker), const Offset(0, -44));
+      await tester.pumpAndSettle();
       await tapNext(tester);
       expect(find.text('Where do you want to meet people?'), findsOneWidget);
       await tapText(tester, 'Skip');
@@ -198,6 +206,8 @@ void main() {
       expect(find.text('Pick prompts to share your story'), findsOneWidget);
       expect(fabEnabled(tester), isFalse);
       await tapText(tester, 'Add a prompt');
+      await tester.pumpAndSettle();
+      await tapText(tester, 'Weekends'); // UI-008 category
       await tester.pumpAndSettle();
       await tapText(tester, 'My Sunday ritual');
       await tester.enterText(
@@ -228,7 +238,10 @@ void main() {
       expect(find.text('Before you can finish'), findsNothing);
       expect(find.text('Sam, 31'), findsOneWidget);
       expect(find.text('Nonbinary · they/them'), findsOneWidget);
-      expect(find.text('170 cm'), findsOneWidget);
+      expect(
+        find.text('171 cm'),
+        findsOneWidget,
+      ); // the wheel moved one row (UI-006)
       expect(find.text('Weekend baker.'), findsOneWidget);
       expect(find.text('Pastries, then a very long walk.'), findsOneWidget);
       await tester.ensureVisible(find.text('Wants to meet'));
@@ -241,7 +254,8 @@ void main() {
       await tapText(tester, 'Start discovering');
       await tester.pumpAndSettle();
       expect(find.text('Maya, 29'), findsOneWidget);
-      expect(find.text('Sample profile'), findsOneWidget);
+      // UI-041: no "Sample profile" badge on the photo.
+      expect(find.text('Sample profile'), findsNothing);
       await tester.tap(find.byTooltip('Profile'));
       await tester.pumpAndSettle();
       expect(find.text('Sam, 31'), findsOneWidget);

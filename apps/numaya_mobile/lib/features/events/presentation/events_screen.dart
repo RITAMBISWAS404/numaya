@@ -249,12 +249,6 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
           )
         else
           for (final e in list) card(e),
-        const SizedBox(height: AppSpacing.s3),
-        Text(
-          l10n.eventsSampleNote,
-          textAlign: TextAlign.center,
-          style: AppTypography.caption,
-        ),
       ],
     );
   }

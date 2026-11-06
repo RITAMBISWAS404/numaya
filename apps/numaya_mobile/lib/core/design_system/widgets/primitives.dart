@@ -5,12 +5,13 @@ import '../foundations/app_colors.dart';
 import '../foundations/app_haptics.dart';
 import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
-import '../icons/material_icons.dart';
+import '../icons/lucide_icons.dart';
 import '../icons/numaya_icon_data.g.dart';
 
-/// A standard Material icon (Flutter's Material Icons, rounded), named by the shared icon set and
-/// mapped in [kMaterialIcons]: filled by default, outline where the unfilled drawing carries a
-/// different state. Decorative: icon-only controls carry their own label.
+/// A Lucide icon (Ente design-system experiment), named by the shared icon set and mapped in
+/// [kLucideIcons]. Lucide has one stroke drawing per glyph, so [outline] no longer changes the
+/// drawing; callers keep passing it so the state stays documented at the call site. Decorative:
+/// icon-only controls carry their own label.
 class NumayaIcon extends StatelessWidget {
   const NumayaIcon(
     this.icon, {
@@ -27,10 +28,9 @@ class NumayaIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (filled, open) = kMaterialIcons[icon]!;
     final tint = color ?? IconTheme.of(context).color ?? AppColors.textPrimary;
     return ExcludeSemantics(
-      child: Icon(outline ? open : filled, size: size, color: tint),
+      child: Icon(kLucideIcons[icon], size: size, color: tint),
     );
   }
 }
@@ -51,7 +51,7 @@ class MobileIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ExcludeSemantics(
     child: Icon(
-      kMobileIcons[icon],
+      kLucideMobileIcons[icon],
       size: size,
       color: color ?? IconTheme.of(context).color ?? AppColors.textPrimary,
     ),

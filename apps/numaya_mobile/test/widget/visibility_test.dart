@@ -30,7 +30,7 @@ void main() {
       final status = c.read(visibilityReportProvider).status;
       expect(status, VisibilityStatus.visible);
       expect(find.text('Visible'), findsOneWidget);
-      expect(find.text('Sample data'), findsOneWidget);
+      expect(find.text('Sample data'), findsNothing); // UI-041
       expect(find.text('Profile views'), findsOneWidget);
       expect(find.text('Not measured'), findsOneWidget);
       expect(find.textContaining('shadowban'), findsNothing);
@@ -146,7 +146,7 @@ void main() {
     await goTo(c, tester, Routes.visibility);
     await _tap(tester, find.text('How this works'));
     expect(find.text('What this page can’t tell you'), findsOneWidget);
-    expect(find.text('Demo sources'), findsOneWidget);
+    expect(find.text('Demo sources'), findsNothing); // UI-041
     await settle(tester);
   });
 

@@ -69,8 +69,9 @@ void main() {
     await tapOn(tester, find.text('Recovery email'));
     await tester.pump(const Duration(milliseconds: 600));
     expect(
+      // UI-041: no demo note in the recovery email sheet.
       find.textContaining('No email is sent and it isn’t verified'),
-      findsOneWidget,
+      findsNothing,
     );
 
     await tester.enterText(find.byType(TextField), 'alex@example');
@@ -89,10 +90,8 @@ void main() {
     await tester.pump(const Duration(milliseconds: 600));
     expect(c.read(accountPrefsProvider).recoveryEmail, 'alex@example.com');
     expect(find.text('alex@example.com'), findsOneWidget);
-    expect(
-      find.text('Not verified: no email service in this build'),
-      findsOneWidget,
-    );
+    // The truthful state stays; UI-041 drops the "in this build" explanation.
+    expect(find.text('Not verified'), findsOneWidget);
 
     await tapOn(tester, find.text('alex@example.com'));
     await tester.pump(const Duration(milliseconds: 600));

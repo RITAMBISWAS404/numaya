@@ -12,24 +12,16 @@ import '../helpers/test_app.dart';
 
 Finder _action(String label) => find.bySemanticsLabel(label);
 
-/// A Pass / Like / SuperSwipe pill of the inline or the floating decision bar that can be
-/// tapped right now (on screen and not hidden).
-Finder _tappable(String label, {required bool floating}) => find
-    .descendant(
-      of: find.byWidgetPredicate(
-        (w) => w is DecisionBar && w.floating == floating,
-      ),
-      matching: find.byWidgetPredicate(
-        (w) => w is Pressable && w.semanticLabel == label,
-      ),
-    )
-    .hitTestable();
+/// UI-016: decisions are swipes on the photo.
+Future<void> _decide(WidgetTester tester, String label) =>
+    swipeDecide(tester, like: label == 'Like');
 
-/// The Pass / Like / SuperSwipe pills of the decision bar under the photo card.
-Future<void> _decide(WidgetTester tester, String label) async {
-  await tapOn(tester, _action(label).last);
-  await tester.pump(const Duration(milliseconds: 300));
-}
+/// Whether Backtrack can be used right now (UI-013).
+bool _canBacktrack(WidgetTester tester) =>
+    tester
+        .widget<NavIconButton>(find.byKey(const ValueKey('discover-backtrack')))
+        .onPressed !=
+    null;
 
 /// Taps something already on screen without scrolling it into view first (tapOn aligns its
 /// target to the top, which would scroll Discover's profile).
@@ -59,20 +51,15 @@ void main() {
   setUpAll(loadAppFonts);
 
   testWidgets(
-    'from onboarding: the first card shows the swipe tip and a photo count; Hide tip removes it',
+    'from onboarding: no photo count on the first card and no tip card (ER-01, UI-014)',
     (tester) async {
       await usePhoneSize(tester);
       await signUpToHome(tester, testAuth());
       expect(find.text('Maya, 29'), findsOneWidget);
-      expect(
-        find.text(
-          'Swipe right to like, left to pass. Scroll for more about them.',
-        ),
-        findsOneWidget,
-      );
-      expect(find.text('4 photos'), findsOneWidget);
-      await _tapHere(tester, _action('Hide tip'));
+      // The coach card is gone: the swipe hint and the Like / Pass actions live in semantics.
       expect(find.textContaining('Swipe right to like'), findsNothing);
+      // UI-014: the photo count chip is gone.
+      expect(find.text('4 photos'), findsNothing);
       // Filters match the sign-up preferences: no "changed" mark.
       expect(_action('Filters'), findsOneWidget);
       await settle(tester);
@@ -113,99 +100,68 @@ void main() {
   );
 
   testWidgets(
-    'reading a profile: actions float over it, back returns to the photo, then Home stays',
+    'reading a profile: no decision buttons; back returns to the photo, then Home stays',
     (tester) async {
       await usePhoneSize(tester);
       await signUpToHome(tester, testAuth());
-      await _tapHere(tester, _action('Hide tip'));
-      // Over the photo card the inline bar sits right under it; the floating one is hidden.
-      expect(_tappable('Pass', floating: false), findsOneWidget);
-      expect(_tappable('Pass', floating: true), findsNothing);
+      // UI-016: no decision row, inline or floating.
+      expect(find.byType(DecisionBar), findsNothing);
 
-      // "Show more about Maya" on the name band scrolls to the profile.
+      // "Show more about Maya" on the name scrolls to the profile.
       await _tapHere(
         tester,
         find.bySemanticsLabel(RegExp('^Show more about Maya')),
       );
-      // Reading: the inline bar has scrolled away and the floating one is over the profile.
-      expect(_tappable('Pass', floating: true), findsOneWidget);
-      expect(_tappable('Pass', floating: false), findsNothing);
-      await _tapHere(tester, _tappable('Pass', floating: true));
-      // The next person starts at their photo, with the floating bar hidden again.
-      expect(find.text('Sam, 31'), findsOneWidget);
-      expect(_tappable('Pass', floating: true), findsNothing);
-      expect(_tappable('Pass', floating: false), findsOneWidget);
+      expect(find.byType(DecisionBar), findsNothing);
+      final pos = tester
+          .state<ScrollableState>(find.byType(Scrollable).first)
+          .position;
+      expect(pos.pixels, greaterThan(0));
 
       // Android back deep in a profile returns to the top first; at the top Home stays put
       // (the shell, not Discover, decides to leave the app).
-      await _scrollProfile(tester, 600);
-      expect(_tappable('Pass', floating: true), findsOneWidget);
       await _systemBack(tester);
-      expect(_tappable('Pass', floating: true), findsNothing);
-      expect(find.text('Sam, 31'), findsOneWidget);
+      expect(pos.pixels, 0);
+      expect(find.text('Maya, 29'), findsOneWidget);
       await settle(tester);
     },
   );
 
-  testWidgets('undo brings the pass back with a message; one step only', (
+  testWidgets('Backtrack brings the pass back with a message; one step only', (
     tester,
   ) async {
     await usePhoneSize(tester);
     await signUpToHome(tester, testAuth());
+    expect(_canBacktrack(tester), isFalse);
     await _decide(tester, 'Pass');
     await _decide(tester, 'Pass');
     expect(find.text('Noor, 28'), findsOneWidget);
-    await tapOn(tester, _action('Undo: bring back Sam'));
+    await tapOn(tester, _action('Backtrack: bring back Sam'));
     await tester.pump(const Duration(milliseconds: 300));
     expect(find.text('Sam, 31'), findsOneWidget);
     expect(find.text('Sam is back'), findsOneWidget);
-    expect(find.bySemanticsLabel(RegExp('^Undo')), findsNothing);
-    // A like is sent: nothing to undo after it.
+    expect(_canBacktrack(tester), isFalse);
+    // A like is sent: nothing to bring back after it.
     await _decide(tester, 'Like');
-    expect(find.bySemanticsLabel(RegExp('^Undo')), findsNothing);
+    expect(_canBacktrack(tester), isFalse);
     await settle(tester);
   });
 
-  testWidgets(
-    'SuperSwipe sends a like with a credit; out of credits opens the paywall',
-    (tester) async {
-      await usePhoneSize(tester);
-      final c = await quickStartApp(tester, world: DemoWorld.fresh);
-      c.read(datingProvider.notifier).dismissCoach();
-      await tester.pump();
-      for (var left = 2; left >= 0; left--) {
-        final person = c.read(datingProvider.notifier).queue().first;
-        await _decide(tester, 'SuperSwipe');
-        await tester.pump(const Duration(milliseconds: 600));
-        expect(c.read(datingProvider).superSwiped, contains(person.id));
-        expect(c.read(datingProvider).superSwipes, left);
-        if (person.likesYou) {
-          // Someone who liked you: a match. Keep browsing returns to Home.
-          expect(
-            c.read(routerProvider).state.uri.path,
-            startsWith(Routes.match),
-          );
-          await tapOn(tester, find.text('Keep browsing'));
-          await tester.pump(const Duration(milliseconds: 600));
-        } else {
-          expect(
-            find.textContaining('SuperSwipe sent to ${person.name}'),
-            findsOneWidget,
-          );
-        }
-        await tester.pump(const Duration(seconds: 4));
-      }
-      await _decide(tester, 'SuperSwipe');
-      await tester.pump(const Duration(milliseconds: 600));
-      expect(c.read(routerProvider).state.uri.path, Routes.paywall);
-      await settle(tester);
-    },
-  );
+  testWidgets('UI-016: SuperSwipe is not offered anywhere on Discover', (
+    tester,
+  ) async {
+    await usePhoneSize(tester);
+    final c = await quickStartApp(tester, world: DemoWorld.fresh);
+    expect(find.textContaining('SuperSwipe'), findsNothing);
+    final first = c.read(datingProvider.notifier).queue().first.id;
+    await _decide(tester, 'Like');
+    expect(c.read(datingProvider).superSwiped, isNot(contains(first)));
+    await settle(tester);
+  });
 
   testWidgets('report and block from the end of a profile', (tester) async {
     await usePhoneSize(tester);
     await signUpToHome(tester, testAuth());
-    await _tapHere(tester, _action('Hide tip'));
     await tapOn(tester, find.text('Report or block Maya'));
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.text('Report'), findsOneWidget);

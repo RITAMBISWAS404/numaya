@@ -29,7 +29,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.byType(DesignLabScreen), findsOneWidget);
-    expect(find.text('Monochrome Meetup'), findsOneWidget);
+    expect(find.text('Ente design system'), findsOneWidget);
     // Illustration slots are decorative: present in the tree, absent from semantics.
     await tester.scrollUntilVisible(
       find.byKey(const ValueKey('illustration-slot-events_explore')),

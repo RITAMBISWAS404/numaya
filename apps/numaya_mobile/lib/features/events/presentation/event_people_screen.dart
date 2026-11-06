@@ -185,12 +185,6 @@ class EventPeopleScreen extends ConsumerWidget {
               ),
           ],
           const SizedBox(height: AppSpacing.s4),
-          Text(
-            l10n.eventsSampleNote,
-            textAlign: TextAlign.center,
-            style: AppTypography.caption,
-          ),
-          const SizedBox(height: AppSpacing.s4),
         ],
       ),
     );

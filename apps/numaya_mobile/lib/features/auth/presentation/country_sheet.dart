@@ -88,7 +88,7 @@ class _CountryListState extends State<_CountryList> {
                                 style: AppTypography.weight(
                                   AppTypography.body,
                                   isSelected ? AppTypography.semibold : 400,
-                                ).copyWith(fontSize: 16, height: 22 / 16),
+                                ),
                               ),
                             ),
                             const SizedBox(width: 12),

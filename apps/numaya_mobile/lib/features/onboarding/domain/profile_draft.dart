@@ -19,14 +19,80 @@ const List<String> kPronouns = [
   'zir',
 ];
 
-/// One of the six prompt questions (ported from src/flows/data.js).
-const List<String> kPromptQuestions = [
-  'A perfect first date',
-  'I’m weirdly good at',
-  'Let’s debate this',
-  'My Sunday ritual',
-  'A green flag',
-  'I’ll never shut up about',
+/// Prompt categories (UI-008): a small set of browsable groups, each with at least ten prompts.
+/// The six original prompts (ported from src/flows/data.js) are kept, spread across the groups;
+/// the rest are original Numaya copy. Like the original six, prompt copy lives here as domain data
+/// (it is also what a saved answer stores), not in the ARB files.
+const List<({String name, List<String> prompts})> kPromptCategories = [
+  (
+    name: 'Dating',
+    prompts: [
+      'A perfect first date',
+      'A green flag',
+      'The way to win me over',
+      'We’ll get along if',
+      'The best date I’ve been on',
+      'I’m looking for someone who',
+      'A dealbreaker for me',
+      'I know it’s going well when',
+      'Together we could',
+      'My love language is',
+      'My most irrational dating fear',
+    ],
+  ),
+  (
+    name: 'About me',
+    prompts: [
+      'I’m weirdly good at',
+      'I’ll never shut up about',
+      'A fact about me that surprises people',
+      'My friends ask me for advice about',
+      'I get far too excited about',
+      'I recharge by',
+      'My simple pleasures',
+      'I’m quietly proud of',
+      'Something I’m learning',
+      'My go-to karaoke song',
+      'A random fact I love',
+    ],
+  ),
+  (
+    name: 'Opinions',
+    prompts: [
+      'Let’s debate this',
+      'My unpopular opinion',
+      'Pineapple on pizza: yes or no, and why',
+      'The most overrated thing',
+      'I could argue for hours about',
+      'The best film of all time is',
+      'A hill I’ll happily die on',
+      'Morning person or night owl, and why',
+      'The best way to spend a free tenner',
+      'Something everyone should try once',
+      'Cats, dogs or neither',
+    ],
+  ),
+  (
+    name: 'Weekends',
+    prompts: [
+      'My Sunday ritual',
+      'My ideal weekend',
+      'A perfect Saturday morning',
+      'The last great thing I ate',
+      'My favourite spot in the city',
+      'A trip I’d take tomorrow',
+      'What I’m listening to lately',
+      'Something I’d recommend watching',
+      'My go-to comfort meal',
+      'If I had a free afternoon',
+      'The best gig I’ve been to',
+    ],
+  ),
+];
+
+/// Every prompt, in category order. The first is the default question elsewhere.
+final List<String> kPromptQuestions = [
+  for (final c in kPromptCategories) ...c.prompts,
 ];
 
 /// Interest sets shown during setup, with each set's emoji mark and tone (ported from

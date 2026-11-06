@@ -4,6 +4,7 @@ import '../../../core/design_system/design_system.dart';
 import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
 import '../../onboarding/domain/profile_draft.dart';
+import '../domain/profile_fact_emoji.dart';
 import '../domain/sample_people.dart';
 
 /// The first photo of a sample profile (premium refinement): an image-first card in Meetup's manner.
@@ -20,7 +21,20 @@ class PersonHeroCard extends StatelessWidget {
     this.showAge = true,
     this.onOpenPhotos,
     this.onMore,
+    this.photoHeight,
+    this.photoAction,
   });
+
+  /// Bumble-style discovery card (Ente reconstruction, ER-01): non-null lays the name, verified
+  /// tick, job and shared interests over the bottom of the photo instead of below it. The frame is
+  /// the 3:4 portrait in both layouts (UI-011); the value itself is no longer used for height.
+  final double? photoHeight;
+
+  /// A control on the photo's top-right corner (Discover's options), as Ente's circular Icon
+  /// Button over photos. Only drawn with [photoHeight].
+  final Widget? photoAction;
+
+  bool get _overlay => photoHeight != null;
 
   /// Tapping the photo opens the photo viewer; a photo count shows on the photo.
   final VoidCallback? onOpenPhotos;
@@ -47,60 +61,55 @@ class PersonHeroCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ClipRRect(
-          borderRadius: AppRadii.all(AppRadii.photo),
-          child: AspectRatio(
-            aspectRatio: AppMedia.personPhoto,
-            child: Stack(
+          borderRadius: AppRadii.all(
+            _overlay ? AppRadii.heroCard : AppRadii.photo,
+          ),
+          child: _sized(
+            Stack(
               children: [
                 Positioned.fill(child: _photo(l10n)),
-                // Badges and the photo count share one row, so the count's real width (it grows
-                // with the text size) is reserved instead of a fixed 96pt that large text overran
-                // (OP-04).
-                Positioned(
-                  top: AppSpacing.s3,
-                  left: AppSpacing.s3,
-                  right: AppSpacing.s3,
-                  child: IgnorePointer(
-                    child: Builder(
-                      builder: (context) {
-                        final count =
-                            onOpenPhotos != null && person.photoCount > 1
-                            ? StatusBadge(
-                                label: l10n.discoverPhotoCount(
-                                  person.photoCount,
-                                ),
-                                icon: NumayaIcons.image,
-                                tone: BadgeTone.onPhoto,
-                              )
-                            : null;
-                        // At very large text the count goes under the badges, so neither
-                        // squeezes the other into breaking inside words.
-                        if (MediaQuery.textScalerOf(context).scale(10) > 16) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _badges(l10n),
-                              if (count != null) ...[
-                                const SizedBox(height: AppLayout.groupGap),
-                                count,
-                              ],
-                            ],
-                          );
-                        }
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(child: _badges(l10n)),
-                            if (count != null) ...[
-                              const SizedBox(width: AppSpacing.s2),
-                              count,
-                            ],
-                          ],
-                        );
-                      },
+                if (_overlay) ...[
+                  // Bumble's identity on the photo: a dark fade under white text, so the name
+                  // reads over any photo (white on the fade's base is over 7:1).
+                  const Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    height: 220,
+                    child: IgnorePointer(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Color(0x00000000), AppColors.photoPanel],
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Positioned(
+                    left: AppSpacing.s4,
+                    right: AppSpacing.s4,
+                    bottom: AppSpacing.s4,
+                    child: _overlayIdentity(context, l10n),
+                  ),
+                ],
+                // UI-014: no photo count on the photo. In the overlay layout the status tags sit
+                // with the name at the bottom; the plain layout keeps them top-left.
+                if (!_overlay)
+                  Positioned(
+                    top: AppSpacing.s3,
+                    left: AppSpacing.s3,
+                    right: AppSpacing.s3,
+                    child: IgnorePointer(child: _badges(l10n)),
+                  ),
+                if (_overlay && photoAction != null)
+                  Positioned(
+                    top: AppSpacing.s2,
+                    right: AppSpacing.s2,
+                    child: photoAction!,
+                  ),
                 if (swipe.abs() >= 0.25)
                   Positioned.fill(
                     child: IgnorePointer(
@@ -117,56 +126,113 @@ class PersonHeroCard extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.s3,
-            AppSpacing.s4,
-            AppSpacing.s3,
-            AppSpacing.s1,
+        if (!_overlay)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.s3,
+              AppSpacing.s4,
+              AppSpacing.s3,
+              AppSpacing.s1,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(child: _more(l10n, _identity(l10n))),
+                if (action != null) ...[
+                  const SizedBox(width: AppSpacing.s3),
+                  action!,
+                ],
+              ],
+            ),
           ),
+        // UI-015: shared interests are their own section below the photo (personSections),
+        // never on or under the photo card.
+      ],
+    );
+  }
+
+  // UI-011: every full profile photo is a 3:4 portrait frame across the content width, in both
+  // the overlay (discovery) and plain layouts.
+  Widget _sized(Widget child) =>
+      AspectRatio(aspectRatio: AppMedia.personPhoto, child: child);
+
+  /// UI-014: the identity group at the bottom of the photo, over its fade: the status tags
+  /// ("Sample profile", "New here") immediately above the name, then the name with its verified
+  /// tick, then the designation. Absent fields leave no gap. The profile has no college field, so
+  /// none is shown (nothing is invented).
+  Widget _overlayIdentity(BuildContext context, AppLocalizations l10n) {
+    final large = MediaQuery.textScalerOf(context).scale(10) > 16;
+    final nameStyle = AppTypography.hero.copyWith(
+      fontSize: large ? 24 : 28,
+      height: large ? 30 / 24 : 36 / 28,
+      color: AppColors.inkForeground,
+    );
+    final name = Text(
+      showAge && person.age > 0
+          ? l10n.profileNameAge(person.name, person.age)
+          : person.name,
+      textWidthBasis: TextWidthBasis.longestLine,
+      style: nameStyle,
+    );
+    final identity = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Semantics(
+          header: true,
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(child: _more(l10n, _identity(l10n))),
-              if (action != null) ...[
-                const SizedBox(width: AppSpacing.s3),
-                action!,
+              Flexible(child: name),
+              if (person.verified) ...[
+                const SizedBox(width: AppLayout.iconLabelGap),
+                Semantics(
+                  label: l10n.discoverVerified,
+                  child: const NumayaIcon(
+                    NumayaIcons.verified,
+                    size: AppSizes.iconMd,
+                    color: AppColors.inkForeground,
+                  ),
+                ),
               ],
             ],
           ),
         ),
-        // DX-02: shared ground sits with identity, before the decision (Bumble's "things in
-        // common" under the photo). The body no longer repeats it for other people.
-        // Above 160% text the chips would push the decision row under the tab bar, so they stay
-        // in the profile body instead.
-        if (!own &&
-            person.shared.isNotEmpty &&
-            MediaQuery.textScalerOf(context).scale(10) <= 16)
+        if (person.job != null)
           Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.s3,
-              AppSpacing.s3,
-              AppSpacing.s3,
-              AppSpacing.s1,
-            ),
-            child: Semantics(
-              container: true,
-              label: context.l10n.discoverYouBothLike,
-              child: Wrap(
-                spacing: AppLayout.groupGap,
-                runSpacing: AppLayout.groupGap,
-                crossAxisAlignment: WrapCrossAlignment.center,
+            padding: const EdgeInsets.only(top: AppSpacing.s1),
+            child: Text.rich(
+              TextSpan(
                 children: [
-                  Text(
-                    context.l10n.discoverYouBothLike,
-                    style: AppTypography.caption,
+                  const WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 6),
+                      child: NumayaIcon(
+                        NumayaIcons.user,
+                        size: AppSizes.iconSm,
+                        color: AppColors.inkForeground,
+                      ),
+                    ),
                   ),
-                  for (final s in person.shared)
-                    InfoChip(label: s, emoji: kInterestEmoji[s]),
+                  TextSpan(text: person.job!),
                 ],
+              ),
+              style: AppTypography.body.copyWith(
+                color: AppColors.inkForeground,
               ),
             ),
           ),
+      ],
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _badges(l10n),
+        const SizedBox(height: AppSpacing.s2),
+        _more(l10n, identity),
       ],
     );
   }
@@ -175,10 +241,8 @@ class PersonHeroCard extends StatelessWidget {
     spacing: AppLayout.groupGap,
     runSpacing: AppLayout.groupGap,
     children: [
-      StatusBadge(
-        label: own ? l10n.previewBadge : l10n.discoverSampleBadge,
-        tone: BadgeTone.onPhoto,
-      ),
+      // UI-041: no "Sample profile" badge; your own preview keeps its "Preview" label.
+      if (own) StatusBadge(label: l10n.previewBadge, tone: BadgeTone.onPhoto),
       // BM-01: Verified moved from the photo to a tick beside the name (Bumble), so the photo
       // carries at most the sample/preview notice, "New here" and the photo count.
       if (person.isNew)
@@ -356,17 +420,10 @@ List<Widget> personSections(
   ValueChanged<int>? onPhoto,
 }) {
   final l10n = context.l10n;
-  Widget prompt(({String question, String answer}) p) => ProfileSectionCard(
-    title: p.question,
-    leading: const PromptMark(),
-    child: Text(
-      p.answer,
-      style: AppTypography.weight(
-        AppTypography.section,
-        AppTypography.semibold,
-      ),
-    ),
-  );
+  // UI-007: a profile's prompt is the shared prompt card: small question, dominant answer, no
+  // decorative icon.
+  Widget prompt(({String question, String answer}) p) =>
+      PromptCard(question: p.question, answer: p.answer);
   Widget photo(int position) {
     final tile = PhotoPlaceholder(
       label: l10n.discoverPhotoLabel(person.name, position),
@@ -384,43 +441,58 @@ List<Widget> personSections(
           );
   }
 
+  // UI-019: every profile-detail pill leads with its emoji (ProfileFactEmoji).
   final facts = [
-    if (person.identity != null) (NumayaIcons.user, person.identity!),
-    if (person.lookingFor != null) (NumayaIcons.heart, person.lookingFor!),
+    if (person.identity != null) (ProfileFactEmoji.identity, person.identity!),
+    if (person.lookingFor != null)
+      (ProfileFactEmoji.lookingFor, person.lookingFor!),
     if (person.heightCm > 0)
-      (NumayaIcons.user, l10n.heightValue(person.heightCm)),
-    if (person.languages != null) (NumayaIcons.message, person.languages!),
-    for (final d in person.details.values) (NumayaIcons.tag, d),
+      (ProfileFactEmoji.height, l10n.heightValue(person.heightCm)),
+    if (person.languages != null)
+      (ProfileFactEmoji.languages, person.languages!),
+    for (final d in person.details.entries)
+      (ProfileFactEmoji.detail(d.key, d.value), d.value),
   ];
+  final hasBio = person.bio != null && person.bio!.isNotEmpty;
   final sections = <Widget>[
     if (person.prompt != null) prompt(person.prompt!),
-    if (facts.isNotEmpty)
+    // UI-018: one About me card, the bio first in the primary content style (UI-020), a divider,
+    // then the detail pills.
+    if (facts.isNotEmpty || hasBio)
       ProfileSectionCard(
         title: l10n.discoverAboutMe,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (person.bio != null) ...[
-              Text(person.bio!, style: AppTypography.body),
-              const SizedBox(height: AppSpacing.s3),
-            ],
-            Wrap(
-              spacing: AppSpacing.s2,
-              runSpacing: AppSpacing.s2,
-              children: [
-                for (final (icon, text) in facts)
-                  InfoChip(label: text, icon: icon),
-              ],
-            ),
+            if (hasBio) Text(person.bio!, style: AppTypography.cardPrimary),
+            if (hasBio && facts.isNotEmpty)
+              const Padding(
+                key: ValueKey('about-divider'),
+                padding: EdgeInsets.symmetric(vertical: AppSpacing.s4),
+                child: ExcludeSemantics(
+                  child: SizedBox(
+                    height: AppBorders.hairline,
+                    child: ColoredBox(color: AppColors.divider),
+                  ),
+                ),
+              ),
+            if (facts.isNotEmpty)
+              Wrap(
+                spacing: AppSpacing.s2,
+                runSpacing: AppSpacing.s2,
+                children: [
+                  for (final (emoji, text) in facts)
+                    InfoChip(label: text, emoji: emoji),
+                ],
+              ),
           ],
         ),
       ),
-    if (person.photoCount > 1) photo(2),
-    // Others' shared interests are in the hero card (DX-02), except above 160% text; your own
-    // stay here.
-    if (person.shared.isNotEmpty &&
-        (own || MediaQuery.textScalerOf(context).scale(10) > 16))
+    // UI-015: shared interests are their own section below the photo, after the bio, and only
+    // when there are some. The member's own preview lists their interests here too.
+    if (person.shared.isNotEmpty)
       ProfileSectionCard(
+        key: const ValueKey('shared-interests'),
         title: own ? l10n.profileInterestsTitle : l10n.discoverYouBothLike,
         child: Wrap(
           spacing: AppSpacing.s2,
@@ -431,6 +503,7 @@ List<Widget> personSections(
           ],
         ),
       ),
+    if (person.photoCount > 1) photo(2),
     if (person.photoCount > 2) photo(3),
     for (final p in person.morePrompts) prompt(p),
     if (showDistance || person.livesIn != null)
@@ -440,25 +513,16 @@ List<Widget> personSections(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (showDistance)
-              Row(
-                children: [
-                  const NumayaIcon(
-                    NumayaIcons.location,
-                    size: AppSizes.iconMd,
-                    color: AppColors.ink,
-                  ),
-                  const SizedBox(width: AppSpacing.s2),
-                  Flexible(
-                    child: Text(
-                      l10n.discoverDistance(person.distanceKm),
-                      style: AppTypography.row,
-                    ),
-                  ),
-                ],
+              Text(
+                l10n.discoverDistance(person.distanceKm),
+                style: AppTypography.cardPrimary,
               ),
             if (person.livesIn != null) ...[
               if (showDistance) const SizedBox(height: AppSpacing.s3),
-              InfoChip(label: l10n.discoverLivesIn(person.livesIn!)),
+              InfoChip(
+                label: l10n.discoverLivesIn(person.livesIn!),
+                emoji: ProfileFactEmoji.livesIn,
+              ),
             ],
           ],
         ),

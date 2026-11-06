@@ -21,12 +21,13 @@ void main() {
   }
 
   group('OP-01 to OP-03: type roles', () {
-    test('the semantic body is 14/20; option rows and typing keep 16', () {
+    test('the semantic body is 14/20; rows and typing use Ente Body too', () {
       expect(MonoType.scale, 'body14');
       expect(AppTypography.body.fontSize, 14);
       expect(AppTypography.body.height! * 14, closeTo(20, 0.001));
-      expect(AppTypography.row.fontSize, 16);
-      expect(AppTypography.input.fontSize, 16);
+      // Ente experiment: Menu Item titles and Text Input values are Body 14/20.
+      expect(AppTypography.row.fontSize, 14);
+      expect(AppTypography.input.fontSize, 14);
     });
 
     testWidgets('option rows use the row role, not the reading body', (
@@ -87,15 +88,16 @@ void main() {
       await settle(tester);
     });
 
-    testWidgets('at 100% text the avatar sits beside the name', (tester) async {
+    testWidgets('at 100% text the photo is centred above the name (UI-042)', (
+      tester,
+    ) async {
       await usePhoneSize(tester, size: const Size(390, 844));
       final c = await quickStartApp(tester);
       await goTo(c, tester, Routes.profile);
-      final name = find.textContaining('Alex');
-      expect(
-        tester.getTopLeft(name.first).dx,
-        greaterThan(tester.getTopRight(find.text('A').first).dx),
-      );
+      final name = tester.getRect(find.textContaining('Alex').first);
+      final photo = tester.getRect(find.text('A').first);
+      expect(name.top, greaterThan(photo.bottom));
+      expect(photo.center.dx, closeTo(name.center.dx, 1));
       await settle(tester);
     });
   });
@@ -106,13 +108,27 @@ void main() {
     );
 
     testWidgets('the frosted bar draws one top highlight', (tester) async {
+      // Ente experiment: the frosted bar is a comparison surface, no longer the app default.
       await usePhoneSize(tester);
-      await quickStartApp(tester);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            bottomNavigationBar: NumayaTabBar(
+              surface: TabBarSurface.frosted,
+              currentIndex: 0,
+              onSelect: (_) {},
+              items: const [
+                TabItem(label: 'Home', icon: NumayaIcons.home),
+                TabItem(label: 'Profile', icon: NumayaIcons.user),
+              ],
+            ),
+          ),
+        ),
+      );
       expect(
         find.descendant(of: find.byType(NumayaTabBar), matching: highlight()),
         findsOneWidget,
       );
-      await settle(tester);
     });
 
     testWidgets('High Contrast drops the glass and its highlight', (
@@ -252,6 +268,10 @@ void main() {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
       await goTo(c, tester, Routes.messages);
+      await tester.tap(
+        find.bySemanticsLabel('Search names and messages').first,
+      );
+      await tester.pump(const Duration(milliseconds: 300));
       await tester.tap(find.byType(TextField).first);
       // A 300pt keyboard (physical pixels at 3x).
       tester.view.viewInsets = const FakeViewPadding(bottom: 900);

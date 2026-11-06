@@ -14,7 +14,9 @@ enum NumayaButtonVariant {
   /// Filled neutral grey with ink text; also the cancel under a primary in sheets.
   secondary,
 
-  /// Text only, for the second choice under a primary on a page.
+  /// The second, standalone choice under a primary ("I have an account", "Maybe later"). UI-002:
+  /// drawn exactly as [secondary] (the light grey fill), so every standalone secondary action has
+  /// one recognisable button shape. Inline links stay [TextLink].
   quiet,
 
   /// The subtle purple surface with purple text (Meetup's tinted secondary).
@@ -27,9 +29,10 @@ enum NumayaButtonVariant {
   destructiveSolid,
 }
 
-/// Monochrome button: a 56pt full pill. Primary is brand purple with white text; secondary a
-/// filled neutral with ink text (no outlines); [small] is the compact 40pt pill ("Edit profile").
-/// Disabled: neutral grey fill with grey text.
+/// Ente Button Large / Small (2207:41759, 2207:41578): 52pt tall, 20pt corners, 24pt side insets,
+/// Body 14/20 label. Primary is Numaya purple (Ente's primary role) with white text; secondary the
+/// fill/dark neutral with ink text; [small] is the compact 40pt button. Disabled: fill/dark with
+/// grey text.
 class NumayaButton extends StatelessWidget {
   const NumayaButton({
     super.key,
@@ -53,22 +56,17 @@ class NumayaButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final disabled = onPressed == null && !loading;
-    final textOnly =
-        variant == NumayaButtonVariant.quiet ||
-        variant == NumayaButtonVariant.destructive;
+    final textOnly = variant == NumayaButtonVariant.destructive;
     final height = small
         ? AppSizes.buttonHeightSm
         : textOnly
         ? AppSizes.buttonHeightQuiet
         : AppSizes.buttonHeight;
-    // Every button is a pill (RD-02: pills for actions, rounded rectangles for surfaces).
-    const radius = AppRadii.pill;
+    // Ente Button Large (2207:41760): a 20pt rounded rectangle, not a pill.
+    const radius = AppRadii.control;
 
     // A small button that isn't primary, tint or solid red is the outlined pill.
-    final effective =
-        small &&
-            (variant == NumayaButtonVariant.quiet ||
-                variant == NumayaButtonVariant.destructive)
+    final effective = small && variant == NumayaButtonVariant.destructive
         ? NumayaButtonVariant.secondary
         : variant;
 
@@ -90,7 +88,7 @@ class NumayaButton extends StatelessWidget {
       ),
       // Filled neutral: surface contrast, not a stroke, says "less important".
       NumayaButtonVariant.secondary => (AppColors.field, AppColors.ink, null),
-      NumayaButtonVariant.quiet => (Colors.transparent, AppColors.ink, null),
+      NumayaButtonVariant.quiet => (AppColors.field, AppColors.ink, null),
       NumayaButtonVariant.brand => (
         AppColors.accentTint,
         AppColors.accentOnTint,
@@ -117,12 +115,15 @@ class NumayaButton extends StatelessWidget {
           NumayaIcon(icon!, size: small ? 18 : AppSizes.iconMd, color: fg),
           const SizedBox(width: AppSpacing.s2),
         ],
+        // Up to two centred lines: at large text on a narrow phone the label wraps instead of
+        // being cut off ("Create an accou…" on Welcome at 320pt and 200%, final design run FD-B1).
         Flexible(
           child: Text(
             label,
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: textStyle.copyWith(color: fg, height: 1),
+            textAlign: TextAlign.center,
+            style: textStyle.copyWith(color: fg, height: 1.2),
           ),
         ),
       ],
@@ -136,10 +137,12 @@ class NumayaButton extends StatelessWidget {
       child: AnimatedContainer(
         duration: AppMotion.duration(context, AppMotion.base),
         curve: AppMotion.easeOut,
-        height: height,
+        // At least the button height; taller only when the label wraps.
+        constraints: BoxConstraints(minHeight: height),
         width: expand && !small ? double.infinity : null,
         padding: EdgeInsets.symmetric(
           horizontal: small ? AppSpacing.s4 : AppSpacing.s6,
+          vertical: AppSpacing.s2,
         ),
         decoration: BoxDecoration(
           color: bg,
@@ -152,10 +155,11 @@ class NumayaButton extends StatelessWidget {
                   strokeAlign: BorderSide.strokeAlignInside,
                 ),
         ),
-        // A compact button hugs its label; only full-width buttons fill the row.
-        alignment: expand && !small ? Alignment.center : null,
+        // A compact button hugs its label; only full-width buttons fill the row. Both factors are
+        // 1 so the button never stretches to fill a tall parent (only `minHeight` applies).
         child: Center(
           widthFactor: 1,
+          heightFactor: 1,
           child: loading
               ? SizedBox.square(
                   dimension: 20,
@@ -229,8 +233,12 @@ enum NavButtonStyle {
   /// A grey rounded square.
   flat,
 
-  /// A bare ink icon: modal headers, sheet headers.
+  /// A bare ink icon: modal headers.
   plain,
+
+  /// Ente Icon Button Type=Circular (5518:37854): a 38pt fill/dark circle, the sheet close button
+  /// and controls over photos.
+  circular,
 }
 
 /// Round icon button (`.nav-button`). Always has an accessible [label].
@@ -261,6 +269,9 @@ class NavIconButton extends StatelessWidget {
     final size = style == NavButtonStyle.flat
         ? AppSizes.iconButtonSm
         : AppSizes.iconButton;
+    final radius = style == NavButtonStyle.circular
+        ? AppRadii.pill
+        : AppRadii.iconButton;
     final (Color bg, Color? ring) = brand
         ? (AppColors.accentTint, null)
         : switch (style) {
@@ -268,6 +279,7 @@ class NavIconButton extends StatelessWidget {
             NavButtonStyle.floating => (AppColors.surface, null),
             NavButtonStyle.flat => (AppColors.fill, null),
             NavButtonStyle.plain => (Colors.transparent, null),
+            NavButtonStyle.circular => (AppColors.fill, null),
           };
     return Tooltip(
       message: label,
@@ -276,14 +288,14 @@ class NavIconButton extends StatelessWidget {
         onTap: onPressed,
         semanticLabel: label,
         excludeChildSemantics: true,
-        pressedScale: 0.92,
-        borderRadius: AppRadii.all(AppRadii.iconButton),
+        pressedScale: 0.95,
+        borderRadius: AppRadii.all(radius),
         child: Container(
           width: size,
           height: size,
           decoration: BoxDecoration(
             color: bg,
-            borderRadius: AppRadii.all(AppRadii.iconButton),
+            borderRadius: AppRadii.all(radius),
             border: ring == null
                 ? null
                 : Border.all(
@@ -295,9 +307,9 @@ class NavIconButton extends StatelessWidget {
           alignment: Alignment.center,
           child: NumayaIcon(
             icon,
-            size: style == NavButtonStyle.flat
-                ? AppSizes.iconMd
-                : AppSizes.iconLg,
+            // Ente Icon: Small (18) inside a 38pt Icon Button; 20 here for Lucide's thinner
+            // stroke at phone density.
+            size: AppSizes.iconMd,
             outline: outline,
             // Unavailable (no handler): the icon greys out, the button keeps its place.
             color: onPressed == null

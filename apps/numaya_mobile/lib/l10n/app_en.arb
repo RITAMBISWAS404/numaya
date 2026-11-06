@@ -211,7 +211,7 @@
     }
   },
   "photosInfoTitle": "Your first photo leads your profile",
-  "photosInfoBody": "Photo upload isn’t connected in this build, so + adds a placeholder tile. You can choose a different main photo later in Edit profile.",
+  "photosInfoBody": "You can choose a different main photo later in Edit profile.",
   "photosFinish": "Finish profile",
   "tabDiscover": "Home",
   "tabLikes": "Likes",
@@ -314,7 +314,7 @@
   "discoverSampleBadge": "Sample profile",
   "discoverVerified": "Verified",
   "discoverNewHere": "New here",
-  "discoverPhotoLabel": "{name}, photo {position} (placeholder)",
+  "discoverPhotoLabel": "{name}, photo {position}",
   "@discoverPhotoLabel": {
     "placeholders": {
       "name": {},
@@ -355,14 +355,14 @@
       "name": {}
     }
   },
-  "discoverUndo": "Undo: bring back {name}",
+  "discoverUndo": "Backtrack: bring back {name}",
   "@discoverUndo": {
     "placeholders": {
       "name": {}
     }
   },
   "discoverOptions": "Profile options",
-  "discoverSwipeHint": "{name}. Swipe right to like, left to pass, or use the buttons at the end of the profile.",
+  "discoverSwipeHint": "{name}. Swipe right to like or left to pass.",
   "@discoverSwipeHint": {
     "placeholders": {
       "name": {}
@@ -388,13 +388,13 @@
   },
   "discoverWiden": "Widen age and distance",
   "discoverSeenAllTitle": "You’ve seen everyone for now",
-  "discoverSeenAllBody": "That’s every sample profile. People you passed on can come back around.",
+  "discoverSeenAllBody": "You’ve seen everyone for now. People you passed on can come back around.",
   "discoverShowAgain": "Show them again",
   "discoverPausedTitle": "Home is paused",
   "discoverPausedBody": "You’re snoozed, so you won’t see new people and they won’t see you. Your matches and chats are still here.",
   "discoverResume": "Resume",
   "discoverErrorTitle": "We couldn’t load profiles",
-  "discoverErrorBody": "This is a simulated connection problem. Try again, or turn it off in Settings › Prototype tools.",
+  "discoverErrorBody": "Check your connection and try again.",
   "discoverRetry": "Try again",
   "filtersShowCount": "{count, plural, =0{Apply filters} =1{Show 1 person} other{Show {count} people}}",
   "@filtersShowCount": {
@@ -630,6 +630,16 @@
     }
   },
   "chatSend": "Send",
+  "chatReply": "Reply",
+  "chatShowTime": "Show time",
+  "chatHideTime": "Hide time",
+  "chatSentAt": "Sent {time}",
+  "@chatSentAt": {"placeholders": {"time": {"type": "String"}}},
+  "chatReplyingTo": "Replying to {name}",
+  "@chatReplyingTo": {"placeholders": {"name": {"type": "String"}}},
+  "chatReplyingToYourself": "Replying to yourself",
+  "chatYou": "You",
+  "chatCancelReply": "Cancel reply",
   "chatStatusSending": "Sending…",
   "chatStatusOnDevice": "Not sent: saved on this device",
   "chatAttach": "Add a photo, video or voice note",
@@ -644,15 +654,15 @@
   "@chatPendingLabel": {"placeholders": {"what": {"type": "String"}}},
   "chatCaptionPlaceholder": "Add a caption",
   "chatOpenPhoto": "Open photo",
-  "chatVideoNoPlayback": "Video playback isn’t in this build. The file stays on your phone.",
+  "chatVideoNoPlayback": "This video can’t be played here yet.",
   "chatVoiceLabel": "Voice note, {duration}",
   "@chatVoiceLabel": {"placeholders": {"duration": {"type": "String"}}},
-  "chatVoiceDemo": "Demo: no sound recorded",
+  "chatVoiceDemo": "Voice note",
   "mediaPermissionDenied": "Numaya can’t see your photos. Allow access in your phone’s Settings, then try again.",
   "mediaUnsupported": "That file type isn’t supported. Choose a JPG, PNG, WebP or HEIC photo, or an MP4 or MOV video.",
   "mediaTooLarge": "That video is over 100 MB. Choose a shorter one.",
   "mediaUnreadable": "Couldn’t open that file. Try another one.",
-  "mediaUnavailable": "Choosing photos isn’t available here. Turn on sample media in the Demo Hub to try it.",
+  "mediaUnavailable": "Choosing photos isn’t available here.",
   "mediaMissing": "This file is no longer on your phone",
   "voiceTitle": "Voice note",
   "voiceDemoTitle": "Demo recorder",
@@ -697,7 +707,7 @@
   "recoveryEmailSaved": "Recovery email saved",
   "recoveryEmailRemoved": "Recovery email removed",
   "recoveryEmailRemove": "Remove email",
-  "recoveryEmailUnverified": "Not verified: no email service in this build",
+  "recoveryEmailUnverified": "Not verified",
   "reauthTitle": "Please sign in again",
   "reauthBody": "For your security, this session has ended. Confirm it’s you with a code sent to {phone} and you’ll be back where you were.",
   "@reauthBody": {
@@ -811,6 +821,8 @@
       }
     }
   },
+  "queueMatchLabel": "{name}, new match, {timeLeft}. Open chat",
+  "@queueMatchLabel": {"placeholders": {"name": {"type": "String"}, "timeLeft": {"type": "String"}}},
   "queueExpired": "Expired",
   "queueExpiredLabel": "{name}. Match expired",
   "@queueExpiredLabel": {
@@ -866,7 +878,7 @@
       "text": {}
     }
   },
-  "chatSampleConversationNote": "Demo chat: {name}’s messages are scripted, and what you send stays on this device.",
+  "chatSampleConversationNote": "Demo: {name}’s replies are scripted and nothing you send leaves this device.",
   "@chatSampleConversationNote": {
     "placeholders": {
       "name": {}
@@ -879,7 +891,7 @@
       "name": {}
     }
   },
-  "didMeetBody": "Your answer stays on this device and helps you keep track. {name} won’t see it.",
+  "didMeetBody": "Your answer helps you keep track. {name} won’t see it.",
   "@didMeetBody": {
     "placeholders": {
       "name": {}
@@ -887,21 +899,21 @@
   },
   "didMeetYes": "Yes, we met",
   "didMeetNo": "No, we didn’t meet",
-  "didMeetThanks": "Thanks. Saved on this device.",
+  "didMeetThanks": "Thanks. Saved.",
   "unmatchedReasonTitle": "You’ve unmatched {name}",
   "@unmatchedReasonTitle": {
     "placeholders": {
       "name": {}
     }
   },
-  "unmatchedReasonBody": "Could you tell us why? Your answer stays on this device and {name} won’t know.",
+  "unmatchedReasonBody": "Could you tell us why? {name} won’t know.",
   "@unmatchedReasonBody": {
     "placeholders": {
       "name": {}
     }
   },
   "unmatchReasonSkip": "Skip",
-  "unmatchReasonThanks": "Thanks. Your answer is saved on this device.",
+  "unmatchReasonThanks": "Thanks for telling us.",
   "filtersDone": "Done",
   "filtersWomen": "Women",
   "filtersMen": "Men",
@@ -916,7 +928,7 @@
   "filtersVerifiedNote": "Only people who have verified their photos.",
   "filtersWhatsThis": "What’s photo verification?",
   "filtersAdvancedLocked": "Advanced filters are part of Premium",
-  "filtersAdvancedLockedBody": "Narrow down by height, intentions and more. In this demo Premium is simulated: no payment is taken.",
+  "filtersAdvancedLockedBody": "Narrow down by height, intentions and more.",
   "premiumSee": "See Premium",
   "filtersHeightHeading": "What is their height?",
   "filtersHeight": "Height",
@@ -988,7 +1000,7 @@
       "name": {}
     }
   },
-  "forYouRationale": "Based on your interests and who you’ve liked. Sample profiles.",
+  "forYouRationale": "Based on your interests and who you’ve liked.",
   "likeAction": "Like",
   "personMissingTitle": "This profile isn’t available",
   "personMissingBody": "It may have been removed. Go back to keep exploring.",
@@ -1027,6 +1039,9 @@
   "completionAbout": "About you",
   "completionMore": "More about you",
   "completionProgress": "{done} of {total} added",
+  "completionYourProfile": "Your profile",
+  "completionPartDone": "Done",
+  "completionUnit": "complete",
   "@completionProgress": {
     "placeholders": {
       "done": {
@@ -1058,7 +1073,7 @@
   "deleteC2": "Your matches and messages are removed",
   "deleteC3": "You can restore everything for 28 days by signing in again",
   "deleteSubscriptionTitle": "Your Premium plan won’t be cancelled",
-  "deleteSubscriptionBody": "Cancel it in your app store first. In this demo there is no real subscription.",
+  "deleteSubscriptionBody": "Cancel it in your app store first.",
   "deleteContinue": "Continue",
   "deleteHelp": "What happens when I delete?",
   "deleteRestoreNote": "Changed your mind? Sign in with the same number within 28 days to restore it.",
@@ -1067,7 +1082,7 @@
   "demoHubBody": "Jump to any screen, switch the sample data and try each state. Everything here is local and simulated.",
   "demoDesignTitle": "Design",
   "demoDesignLab": "Design Lab",
-  "demoDesignLabDetail": "Monochrome Meetup tokens, components and states",
+  "demoDesignLabDetail": "Ente design system tokens, components and states",
   "demoStart": "Start",
   "demoQuickStart": "Quick start as Alex (sample account)",
   "demoQuickStartNote": "Skips sign-up with a finished sample profile and a fictional 555 number.",
@@ -1165,7 +1180,7 @@
   "incognitoOff": "Off",
   "incognitoNote": "With Incognito, only people you’ve liked can see your profile.",
   "logoutTitle": "Log out?",
-  "logoutBody": "In this demo, logging out clears your profile and sample data from this device.",
+  "logoutBody": "Logging out clears your profile from this device.",
   "yes": "yes",
   "no": "no",
   "notFoundTitle": "This page isn’t here",
@@ -1319,7 +1334,7 @@
   "settingsLocation": "Location",
   "settingsLocationNote": "Location isn’t read in this build; the sample area stands in for it.",
   "settingsCurrentLocation": "Current location",
-  "settingsSampleLocation": "Hackney, London (sample)",
+  "settingsSampleLocation": "Hackney, London",
   "settingsHelpLegal": "Help and legal",
   "snoozeTitle": "Snooze",
   "snoozeBody": "Hide your profile from new people for a while. You keep your matches and chats.",
@@ -1336,7 +1351,7 @@
     }
   },
   "travelTitle": "Travel",
-  "travelBody": "Planning a trip? Meet people there before you go. Demo: changes the sample location only.",
+  "travelBody": "Planning a trip? Meet people there before you go.",
   "travelPick": "Where are you going?",
   "travelOff": "Turn off Travel",
   "travelOffValue": "Off",
@@ -1361,15 +1376,15 @@
       "pose": {}
     }
   },
-  "verifyCameraOff": "The camera isn’t connected in this demo. Take a demo selfie to continue.",
-  "verifyTakeSelfie": "Take demo selfie",
+  "verifyCameraOff": "Take a selfie to continue.",
+  "verifyTakeSelfie": "Take selfie",
   "verifyOtherPose": "Show me a different pose",
   "verifyReviewTitle": "Happy with it?",
   "verifyReviewBody": "Your selfie is compared with your profile photos. It isn’t shown on your profile.",
-  "verifyDemoSelfie": "Demo selfie (placeholder)",
+  "verifyDemoSelfie": "Your selfie",
   "verifyRetake": "Retake",
   "verifyPendingTitle": "Checking your selfie",
-  "verifyPendingBody": "Usually a few minutes. In this demo the review is simulated and takes a few seconds.",
+  "verifyPendingBody": "Usually a few minutes.",
   "verifyDoneTitle": "You’re verified",
   "verifyDoneBody": "The badge is on your profile. People who filter for verified profiles can now see you.",
   "verifyRejectedTitle": "We couldn’t verify you",
@@ -1529,7 +1544,7 @@
   "obLocationUse": "Use my location",
   "obLocationChoose": "Choose my area instead",
   "obLocationDemo": "The phone’s location is never read in this build. Allowing sets a sample area.",
-  "obLocationSetDevice": "{area} (sample area)",
+  "obLocationSetDevice": "{area}",
   "@obLocationSetDevice": {
     "placeholders": {
       "area": {
@@ -1545,7 +1560,7 @@
   "obLocationBlockedTitle": "Location is blocked for Numaya",
   "obLocationBlockedBody": "Android won’t ask again. Turn location on in Settings, or choose your area.",
   "obOpenSettings": "Open settings",
-  "obOpenSettingsDemo": "Demo build: this would open Numaya’s Android settings.",
+  "obOpenSettingsDemo": "Settings can’t be opened from here yet.",
   "obLocationFooter": "Only your area is shown",
   "obLocationFooterNone": "You can set this later",
   "obAreaSheetTitle": "Choose your area",
@@ -1613,6 +1628,8 @@
   },
   "obPromptsFooterMissing": "Answer one to continue",
   "promptAlreadyUsed": "Already answered",
+  "promptCurrent": "Your current prompt",
+  "promptCategories": "Prompt categories",
   "obBioTitle": "Write a short bio",
   "obBioLede": "Optional. A few lines about you, in your own words.",
   "obBioLabel": "Bio",
@@ -1732,6 +1749,9 @@
   "obVerifyFooter": "Optional: you can verify later",
   "obDemoBuild": "Demo build",
   "discoverUndone": "{name} is back",
+  "discoverBacktrackNone": "Backtrack. Nothing to bring back yet: pass on someone first",
+  "matchViewProfile": "View profile",
+  "matchOpenChat": "Open chat",
   "@discoverUndone": {
     "placeholders": {
       "name": {}
@@ -1765,7 +1785,7 @@
       "name": {}
     }
   },
-  "discoverSeenAllLikedBody": "You liked everyone you saw. New people don’t arrive in this demo, so check who likes you instead.",
+  "discoverSeenAllLikedBody": "You liked everyone you saw. See who likes you in the meantime.",
   "discoverSeeLikes": "See who likes you",
   "discoverErrorStillTitle": "Still can’t load profiles",
   "discoverFiltersChanged": "Filters, changed from your preferences",
@@ -1955,7 +1975,7 @@
     }
   },
   "eventErrVenue": "Add the public place you’ll meet.",
-  "eventFailedBody": "Nothing changed. This is the demo’s simulated connection problem.",
+  "eventFailedBody": "Nothing changed. Check your connection and try again.",
   "eventFailedTitle": "Couldn’t save that",
   "eventFewer": "Fewer people",
   "eventFieldArea": "Area",
@@ -1974,7 +1994,7 @@
   "eventFieldWhen": "When",
   "eventFieldWhere": "Where",
   "eventFilterAreaBody": "Distance uses the area you choose. Your device location isn’t read.",
-  "eventFilterAreaOutside": "Events in this demo are in London, not {area}",
+  "eventFilterAreaOutside": "No events near {area} yet",
   "@eventFilterAreaOutside": {
     "placeholders": {
       "area": {}
@@ -2118,7 +2138,7 @@
   "eventSaved": "Saved",
   "eventSelected": "Selected",
   "eventShare": "Share",
-  "eventShareToast": "Sharing isn’t available in the demo. Nothing leaves this device.",
+  "eventShareToast": "Sharing isn’t available yet.",
   "eventShowCount": "{count, plural, =0{No events} =1{Show 1 event} other{Show {count} events}}",
   "@eventShowCount": {
     "placeholders": {
@@ -2207,7 +2227,7 @@
   "eventYoureGoing": "You’re going",
   "eventsAll": "All events",
   "eventsClear": "Clear search and filters",
-  "eventsErrorBody": "This is a simulated connection problem. Try again, or turn it off in the Demo Hub.",
+  "eventsErrorBody": "Check your connection and try again.",
   "eventsErrorStillTitle": "Still can’t load events",
   "eventsErrorTitle": "We couldn’t load events",
   "eventsExplore": "Explore",
@@ -2255,8 +2275,8 @@
   "visStatusAction": "Action needed",
   "visStatusCantCheck": "Can’t check right now",
   "visVisibleBody": "Your profile can appear in Discover.",
-  "visVisibleLimits": "Based on your settings and a demo notice source. How often a profile is shown also depends on who is nearby and what they’re looking for, which this page can’t see.",
-  "visSourceNote": "Based on your own settings and a demo notice source.",
+  "visVisibleLimits": "Based on your settings. How often a profile is shown also depends on who is nearby and what they’re looking for, which this page can’t see.",
+  "visSourceNote": "Based on your own settings.",
   "visPausedBody": "New people can’t see you while you’re paused. Your matches and chats are still here.",
   "visPausedUntil": "New people can’t see you while you’re paused. It ends {date}.",
   "@visPausedUntil": {

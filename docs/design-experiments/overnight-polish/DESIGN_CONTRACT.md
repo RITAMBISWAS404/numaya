@@ -90,3 +90,13 @@ large-text sweeps); 5 renderer-only goldens restored. Sheets:
 | Internal demo | **Go** once a debug APK is built on Windows |
 | Staging | **No-go:** no backend |
 | Public release | **No-go:** see FINAL_QA.md |
+
+## Contract additions: final design run (2026-11-05, device-verified)
+| Area | Rule |
+|---|---|
+| Art | Never show an unfinished illustration on a product screen: an `IllustrationSlot` without `asset` collapses. Placeholders appear only inside `IllustrationPlaceholders` (the Design Lab, slot tests) (FD-A1) |
+| Switch | Off: light track plus a 1.5pt `control` edge (≥ 3:1 on white and on the page). On: purple track. The thumb is always white (FD-A2) |
+| Buttons | Never truncate a button label: up to two centred lines; the height is a minimum (56 / 40) (FD-B1) |
+| Header actions | 8pt between adjacent header buttons; every header action uses the floating filled square (FD-D1, FD-D2) |
+
+Record: [../final-design-run/README.md](../final-design-run/README.md).

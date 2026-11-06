@@ -70,10 +70,8 @@ class TabHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // At very large text sizes the 32pt title steps down to 24pt (still 48pt at 200%) so a
-    // one-word title such as "Profile" fits beside its buttons instead of truncating (OP-04,
-    // the same rule as the Discover name, PR-12). The bar grows with its content.
-    final large = MediaQuery.textScalerOf(context).scale(10) > 16;
+    // The tab title is the page-title role (24/32) at every text size (UI-012); the bar grows
+    // with its content.
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 64),
       child: Padding(
@@ -83,15 +81,7 @@ class TabHeader extends StatelessWidget {
             Expanded(
               child: Semantics(
                 header: true,
-                child: Text(
-                  title,
-                  style: large
-                      ? AppTypography.pageTitle.copyWith(
-                          fontSize: 24,
-                          height: 30 / 24,
-                        )
-                      : AppTypography.pageTitle,
-                ),
+                child: Text(title, style: AppTypography.pageTitle),
               ),
             ),
             for (final a in actions) ...[

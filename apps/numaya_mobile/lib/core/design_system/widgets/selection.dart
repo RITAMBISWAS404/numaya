@@ -148,7 +148,7 @@ class _CodeInputState extends State<CodeInput> with TickerProviderStateMixin {
                   LengthLimitingTextInputFormatter(widget.length),
                 ],
                 decoration: InputDecoration.collapsed(hintText: widget.label),
-                style: const TextStyle(fontSize: 16),
+                style: AppTypography.input,
               ),
             ),
           ),
@@ -224,16 +224,11 @@ class _CodeCell extends StatelessWidget {
         child: filled
             ? Text(
                 digit!,
-                style:
-                    AppTypography.weight(
-                      AppTypography.input,
-                      AppTypography.semibold,
-                    ).copyWith(
-                      fontSize: 24,
-                      height: 1,
-                      color: fg,
-                      fontFeatures: const [FontFeature.tabularFigures()],
-                    ),
+                style: AppTypography.headline.copyWith(
+                  height: 1,
+                  color: fg,
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                ),
               )
             : active
             ? FadeTransition(
@@ -276,10 +271,10 @@ enum MarkTone {
       values.firstWhere((t) => t.name == name, orElse: () => butter);
 }
 
-/// V16 content chip (`.theme-withings .chip[data-emoji]`): a white 12pt-corner rectangle with an
-/// emoji and a 15pt medium label, a plus or minus at the end. Selected: the blue tint with deep-blue
-/// semibold text. On a white card or sheet ([onCard]) it takes the fill so it still reads as a chip.
-/// Unavailable (quota reached): the disabled foreground.
+/// Ente Filter Chip (9524:4352): a 40pt pill, Mini 12/16 label. Unselected: white (fill/dark on a
+/// white card or sheet, [onCard]), text/light label and an add glyph at the end. Selected: the
+/// reverse (ink) fill, white label and a small cross to clear. Unavailable (quota reached): the
+/// disabled foreground.
 class NumayaChip extends StatelessWidget {
   const NumayaChip({
     super.key,
@@ -301,12 +296,11 @@ class NumayaChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final unavailable = !available && !selected;
-    // Selected chips are solid accent with white text (RD-05); unselected stay neutral.
     final fg = selected
-        ? AppColors.accentForeground
+        ? AppColors.inkForeground
         : unavailable
         ? AppColors.disabledForeground
-        : AppColors.ink;
+        : AppColors.textMuted;
     return Pressable(
       onTap: unavailable ? null : onTap,
       haptic: HapticMoment.selection,
@@ -319,13 +313,16 @@ class NumayaChip extends StatelessWidget {
         duration: AppMotion.duration(context, AppMotion.base),
         curve: AppMotion.easeOut,
         constraints: const BoxConstraints(minHeight: AppSizes.chip),
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppLayout.pillInsetX,
-          vertical: AppLayout.pillInsetY,
+        // Ente: 16 before the label, 12 after the trailing glyph, 8 between.
+        padding: const EdgeInsetsDirectional.fromSTEB(
+          AppSpacing.s4,
+          AppSpacing.s2,
+          AppSpacing.s3,
+          AppSpacing.s2,
         ),
         decoration: BoxDecoration(
           color: selected
-              ? AppColors.accent
+              ? AppColors.ink
               : onCard
               ? AppColors.fill
               : AppColors.surface,
@@ -339,20 +336,14 @@ class NumayaChip extends StatelessWidget {
               const SizedBox(width: AppLayout.compactIconGap),
             ],
             Flexible(
-              child: Text(
-                label,
-                style: AppTypography.weight(
-                  AppTypography.pill,
-                  selected ? AppTypography.semibold : AppTypography.medium,
-                ).copyWith(color: fg),
-              ),
+              child: Text(label, style: AppTypography.pill.copyWith(color: fg)),
             ),
-            const SizedBox(width: AppLayout.compactIconGap),
+            const SizedBox(width: AppSpacing.s2),
             NumayaIcon(
-              selected ? NumayaIcons.minus : NumayaIcons.plus,
-              size: 18,
+              selected ? NumayaIcons.close : NumayaIcons.plus,
+              size: selected ? 14 : 18,
               color: selected
-                  ? AppColors.accentForeground
+                  ? AppColors.inkForeground
                   : unavailable
                   ? AppColors.borderStrong
                   : AppColors.textMuted,
@@ -416,7 +407,10 @@ class ChipSet extends StatelessWidget {
   }
 }
 
-enum OptionKind { radio, checkbox }
+/// [radio]: one choice (a ring with a dot, announced as a mutually exclusive group). [checkbox]:
+/// several (a square with a tick). [multiCircle]: several, drawn as a circle that fills with a
+/// tick (UI-021's round indicator) while announcing truthful multi-select (checked, not exclusive).
+enum OptionKind { radio, checkbox, multiCircle }
 
 /// One selection row (`.theme-withings .option-card`). Rows sit in one white card with hairline
 /// dividers ([OptionGroup]); the radio or checkbox carries the selection, so a selected row takes no
@@ -465,8 +459,7 @@ class OptionCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Option rows are tappable list rows: they share ListRow's 16/22 `row` role
-                    // rather than the 14/20 reading body (OP-02 exception).
+                    // Option rows share ListRow's `row` role (Body 14/20, UI-012).
                     Text(label, style: AppTypography.row.copyWith(color: fg)),
                     if (description != null) ...[
                       const SizedBox(height: 2),
@@ -485,8 +478,9 @@ class OptionCard extends StatelessWidget {
   }
 }
 
-/// V16 radio: a grey ring; selected an ink ring around an ink dot. Checkbox: a grey 6pt square;
-/// checked Withings blue with a white tick.
+/// Ente Radio Button and Checkbox (2482:6625, 2482:6649) at 20pt: an outlined ring or 5pt-corner
+/// square in the 3:1 control grey; selected Numaya purple (Ente's primary) with a white tick or a
+/// purple dot.
 class _ChoiceMark extends StatelessWidget {
   const _ChoiceMark({
     required this.kind,
@@ -501,6 +495,7 @@ class _ChoiceMark extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final radio = kind == OptionKind.radio;
+    final round = kind != OptionKind.checkbox;
     final checked = selected && !radio;
     return Opacity(
       opacity: enabled ? 1 : AppOpacity.disabled,
@@ -510,8 +505,8 @@ class _ChoiceMark extends StatelessWidget {
         height: AppSizes.choice,
         decoration: BoxDecoration(
           color: checked ? AppColors.accent : AppColors.surface,
-          shape: radio ? BoxShape.circle : BoxShape.rectangle,
-          borderRadius: radio ? null : AppRadii.all(AppRadii.tag),
+          shape: round ? BoxShape.circle : BoxShape.rectangle,
+          borderRadius: round ? null : AppRadii.all(AppRadii.checkbox),
           border: checked
               ? null
               : Border.all(
@@ -525,8 +520,8 @@ class _ChoiceMark extends StatelessWidget {
             ? null
             : radio
             ? Container(
-                width: 11,
-                height: 11,
+                width: 10,
+                height: 10,
                 decoration: const BoxDecoration(
                   color: AppColors.accent,
                   shape: BoxShape.circle,
@@ -534,7 +529,7 @@ class _ChoiceMark extends StatelessWidget {
               )
             : const NumayaIcon(
                 NumayaIcons.check,
-                size: 16,
+                size: 14,
                 color: AppColors.accentForeground,
               ),
       ),
@@ -561,14 +556,13 @@ class OptionGroup extends StatelessWidget {
             child: Text(legend, style: AppTypography.fieldLabel),
           ),
           const SizedBox(height: AppSpacing.s3),
-          WhiteCard(
-            padding: EdgeInsets.zero,
-            child: Column(
-              children: [
-                for (var i = 0; i < children.length; i++) ...[children[i]],
-              ],
-            ),
-          ),
+          // UI-003: adjacent options are visibly separate, each its own white card 8pt apart
+          // (Ente's menu item list, as `ListGroup`). Sheets are the grey page surface since UI-023,
+          // so the same cards read there too.
+          for (var i = 0; i < children.length; i++) ...[
+            if (i > 0) const SizedBox(height: AppSpacing.s2),
+            WhiteCard(padding: EdgeInsets.zero, child: children[i]),
+          ],
         ],
       ),
     );
