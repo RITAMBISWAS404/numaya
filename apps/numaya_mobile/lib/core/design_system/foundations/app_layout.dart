@@ -89,6 +89,17 @@ abstract final class AppLayout {
 
   /// Top bars and tab headers: side padding so their buttons line up with the gutter.
   static const double barPadding = AppSpacing.gutter;
+
+  /// UC-02 (UI consistency pass): the *visible* gap between adjacent header action tiles, the 8pt
+  /// header-action rule (FD-D1) applied to Ente's 38pt Icon Button tiles. Every header with
+  /// trailing actions lays them out through `HeaderActions`.
+  static const double headerActionGap = AppSpacing.s2;
+
+  /// [headerActionGap] in layout terms: each action lays out as its 44pt hit box with the 38pt
+  /// tile centred, so the tiles' own 3pt margins already supply 6 of the 8pt. The hit boxes stay
+  /// 2pt apart and never overlap.
+  static const double headerActionLayoutGap =
+      headerActionGap - (AppSizes.iconButtonSlot - AppSizes.iconButton);
 }
 
 /// Media proportions, width ÷ height (RD-10, RD-12).
@@ -211,9 +222,13 @@ abstract final class AppSizes {
   static const double tabItem = MonoSizes.tabItem;
   static const double tabItemWidth = MonoSizes.tabItemWidth;
   static const double tabPadding = MonoSizes.tabPadding;
-  static const double tabPaddingX = MonoSizes.tabPaddingX;
-  static const double tabGap = MonoSizes.tabGap;
+  static const double tabItemMin = MonoSizes.tabItemMin;
+  static const double tabItemInset = MonoSizes.tabItemInset;
   static const double topBar = 56;
+
+  /// Tab-root headers (UC-04): Likes, Messages and Profile's title row and Discover's wordmark
+  /// row share one height, so the header actions don't jump between tabs.
+  static const double tabHeader = 64;
 }
 
 /// Shadows. Flat by default: cards, groups and fields take none on the grey page. Only things that

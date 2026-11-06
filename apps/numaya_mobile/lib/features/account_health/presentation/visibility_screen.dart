@@ -683,7 +683,10 @@ class _HealthHero extends StatelessWidget {
             liveRegion: true,
             header: true,
             child: Container(
-              padding: const EdgeInsets.fromLTRB(10, 6, 14, 6),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppLayout.pillInsetX,
+                vertical: AppLayout.pillInsetY,
+              ),
               decoration: BoxDecoration(
                 color: bg,
                 borderRadius: AppRadii.all(AppRadii.pill),

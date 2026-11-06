@@ -1,4 +1,13 @@
-# Active task: owner visual review of the f6614fa device screenshots
+# Active task: owner review of the UI consistency pass
+
+> **2026-11-07:** UC-01 to UC-07 are on `experiment/numaya-ui-consistency-20261107` (record: `docs/design-experiments/ente-design-system/ui-consistency/README.md`). Device before/after: `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\UI consistency 2026-11-07`. **Next:**
+> 1. The owner reviews the compare boards.
+> 2. Authorise Figma (`/mcp`) to verify the switch knob and the header gap against Ente.
+> 3. Run a 320pt and three-button device check.
+> 4. Decide on merging.
+>
+> Still pending: the EXP-001–004 choices, the UI-001 artwork and the UI-008 phrase.
+
 
 > **2026-11-07:** 29 Pixel 10 emulator screenshots of `f6614fa` are in `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\Device review 2026-11-07` (INDEX.md). **Next:** the owner reviews them. Still pending: the EXP-001–004 choices, Welcome artwork (UI-001), the UI-008 phrase, the onboarding steps after Photos on a device, and a physical phone.
 

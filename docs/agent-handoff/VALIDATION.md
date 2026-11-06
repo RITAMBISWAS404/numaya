@@ -1,5 +1,17 @@
 # Validation
 
+> **UI consistency pass (2026-11-07, Windows, Flutter 3.47.8 / Dart 3.13.7):**
+> - `dart format --set-exit-if-changed lib test`: exit 0.
+> - `flutter analyze`: no issues.
+> - `node tool/generate_tokens.mjs --check`: up to date.
+> - `flutter test`: **489 passed, 21 skipped, 0 failed** (484 + 5 new in `ui_consistency_test`).
+> - Repo root `npm run check`: fails at `tokens:check` on line endings only. Regenerating gave no content diff, and the files were restored. No web file changed.
+> - `npm run test:e2e`: not run, because the `playwright` package is not installed.
+> - `sync_tabler_icons.py --check`: not applicable (no icon assets changed; the `@tabler/icons` package is not installed here).
+> - Pixel 10 AVD (API 36, 1080×2424, density 420): debug APK `59618d05…881b2ab5a` installed with `-r`. Captured 18 before and 18 after (1.0 and 2.0 text) plus 7 boards.
+> - One ANR on the first launch after install: an input-focus timeout under emulator CPU pressure right after the Gradle build, with no Flutter errors in logcat. The relaunch was clean.
+> - Not run: 320pt on the device, three-button navigation, the keyboard over the bar, Figma re-read, iOS, physical phone.
+
 > **Device screenshots (2026-11-07, Windows, Flutter 3.47.8):**
 > - `flutter build apk --debug` at `f6614fa`: OK, sha256 `c0c2d8ed…fec84da41`. `adb install -r`: Success.
 > - Pixel 10 AVD (`emulator-5554`, API 36, 1080×2424, density 420, font 1.0): Welcome → sign-up → onboarding through Photos; then Quick start → Discover, Filters, Likes, Match, Messages, Chat, Profile, Edit profile, Settings, Premium, Safety, Help. 29 PNGs, all checked by eye and none duplicated.

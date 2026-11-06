@@ -79,7 +79,7 @@ class _CountryListState extends State<_CountryList> {
                         child: Row(
                           children: [
                             CountryCodeBadge(country.iso),
-                            const SizedBox(width: 12),
+                            const SizedBox(width: AppSpacing.s3),
                             Expanded(
                               child: Text(
                                 country.name,
@@ -95,7 +95,6 @@ class _CountryListState extends State<_CountryList> {
                             Text(
                               '+${country.dialCode}',
                               style: AppTypography.body.copyWith(
-                                fontSize: 16,
                                 color: AppColors.textMuted,
                                 fontFeatures: const [
                                   FontFeature.tabularFigures(),

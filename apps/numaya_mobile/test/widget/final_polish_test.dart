@@ -577,30 +577,29 @@ void main() {
       },
     );
 
-    testWidgets(
-      'the selected tab is a light neutral tile with Ente icon-button corners',
-      (tester) async {
-        await usePhoneSize(tester);
-        await quickStartApp(tester);
-        final selected = find.descendant(
-          of: find.byType(NumayaTabBar),
-          matching: find.byWidgetPredicate(
-            (w) =>
-                w is AnimatedContainer &&
-                (w.decoration as BoxDecoration?)?.color ==
-                    AppColors.iconSelectedFill,
-          ),
-        );
-        expect(selected, findsOneWidget);
-        final deco =
-            tester.widget<AnimatedContainer>(selected).decoration!
-                as BoxDecoration;
-        // Tabler MVP pass (Ente Nav Bar 7634:54194): a 38pt tile with the Icon Button's 12pt
-        // corners inside the bar's rounder ones (supersedes UI-026's fully rounded tint).
-        expect(deco.borderRadius, AppRadii.all(AppRadii.iconButton));
-        await settle(tester);
-      },
-    );
+    testWidgets('the selected tab is a light neutral stadium pill (UC-03)', (
+      tester,
+    ) async {
+      await usePhoneSize(tester);
+      await quickStartApp(tester);
+      final selected = find.descendant(
+        of: find.byType(NumayaTabBar),
+        matching: find.byWidgetPredicate(
+          (w) =>
+              w is AnimatedContainer &&
+              (w.decoration as BoxDecoration?)?.color ==
+                  AppColors.iconSelectedFill,
+        ),
+      );
+      expect(selected, findsOneWidget);
+      final deco =
+          tester.widget<AnimatedContainer>(selected).decoration!
+              as BoxDecoration;
+      // UC-03: a fully rounded pill 4pt inside its item (supersedes the Tabler MVP's 12pt
+      // tile corners).
+      expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
+      await settle(tester);
+    });
 
     testWidgets('the Discover photo nests inside its hero card', (
       tester,

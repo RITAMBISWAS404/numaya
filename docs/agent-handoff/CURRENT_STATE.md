@@ -1,5 +1,19 @@
 # Current state
 
+> **UI consistency pass (2026-11-07, Windows):** branch `experiment/numaya-ui-consistency-20261107`
+> from `f6614fa`. `b0194d4` preserves the interrupted screenshot run's handoff edits; the pass
+> follows it.
+> - **UC-01:** Ente's solid grey switch off track (#8A8A8A).
+> - **UC-02:** a shared `HeaderActions` group (8pt between header tiles).
+> - **UC-03:** a stadium bottom nav (8 inside the bar, 4 inside each item, 48pt targets).
+> - **UC-04 and UC-05:** one tab-header height, and the chat header on the top-bar line.
+> - **UC-06 and UC-07:** the type and inset one-offs.
+>
+> Tests: 489 passed, 21 skipped. Record: `docs/design-experiments/ente-design-system/ui-consistency/`.
+> Device before/after: `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\UI consistency 2026-11-07`.
+> Figma was not re-read live (the connector needs authorisation).
+
+
 **Last verified:** 2026-11-07, on the owner's Windows 11 machine (Claude desktop session).
 
 ## Git

@@ -48,24 +48,27 @@ void main() {
     });
 
     testWidgets(
-      'off: the lighter neutral track, no outline, an edged white thumb (UI-025)',
+      'off: Ente solid grey track at 3:1, plain white thumb, no outline (UC-01)',
       (tester) async {
         await tester.pumpWidget(
           host(NumayaSwitch(value: false, onChanged: (_) {})),
         );
-        // UI-025 (review decision 2026-11-06): a lighter existing neutral for the off track than
-        // the earlier control grey (A-025), with no outline. The thumb carries the boundary: a
-        // white knob with a hairline ink edge and its shadow.
+        // UC-01 (2026-11-07): Ente 2482:6647, a solid grey track and a white knob, no outlines.
+        // The track keeps 3:1 against the white card and the grey page so the off state reads
+        // without the knob's help.
         expect(trackOf(tester).border, isNull);
         final track = trackOf(tester).color!;
         expect(track, AppColors.switchOff);
-        expect(
-          track.computeLuminance(),
-          greaterThan(AppColors.control.computeLuminance()),
-        );
+        double ratio(Color a, Color b) {
+          final la = a.computeLuminance(), lb = b.computeLuminance();
+          return ((la > lb ? la : lb) + 0.05) / ((la > lb ? lb : la) + 0.05);
+        }
+
+        expect(ratio(track, AppColors.surface), greaterThanOrEqualTo(3));
+        expect(ratio(track, AppColors.canvas), greaterThanOrEqualTo(3));
         final thumb = thumbOf(tester);
         expect(thumb.color, AppColors.surface);
-        expect((thumb.border! as Border).top.color.a, greaterThan(0));
+        expect(thumb.border, isNull);
         expect(thumb.boxShadow, isNotEmpty);
       },
     );

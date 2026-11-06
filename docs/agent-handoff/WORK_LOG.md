@@ -1,5 +1,18 @@
 # Work log
 
+## 2026-11-07 · UI consistency pass (Windows, Claude desktop)
+- Ran `NUMAYA_FINAL_UI_CONSISTENCY.zip` phases 00–05 on the new branch `experiment/numaya-ui-consistency-20261107`, from `f6614fa`. The interrupted run's edits were committed first as `b0194d4`.
+- Figma MCP needs authorisation, so recorded Figma maps were used and the unverified values are labelled.
+- **UC-01:** switch off track.
+- **UC-02:** `HeaderActions`.
+- **UC-03:** stadium nav.
+- **UC-04:** tab-header height.
+- **UC-05:** chat header.
+- **UC-06:** country dial-code role.
+- **UC-07:** status pill inset.
+- New `test/widget/ui_consistency_test.dart`; 6 older tests moved to the new rules.
+- Device: 18 before and 18 after captures, plus 7 compare boards, in `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\UI consistency 2026-11-07`.
+
 ## 2026-11-07 · Device screenshot review (Windows, Claude desktop)
 - Verified branch `experiment/numaya-typography-copy-20261106` at `f6614fa` (also on `origin`). Rewrote CURRENT_STATE: a verified current block for the Tabler MVP and typography passes, with the older entries moved under History.
 - Added a `final` set to `integration_test/ui_review_capture_test.dart`. Its harness run was interrupted, and its 10 partial PNGs sit at the root of the Desktop folder.

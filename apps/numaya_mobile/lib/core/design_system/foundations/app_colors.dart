@@ -35,9 +35,11 @@ abstract final class AppColors {
   /// white cards and the grey page without a second colour.
   static Color tintBorder(Color hue) => hue.withValues(alpha: 0.15);
 
-  /// Off switch track (CL-01): light grey (#DDDDE3), no outline. One step deeper than the card
-  /// fill so an off switch still reads on a white card; the thumb's edge does the rest.
-  static const Color switchOff = _M.fieldPressed;
+  /// Off switch track (UC-01, UI consistency pass 2026-11-07): Ente's Selected=False (2482:6647)
+  /// is a solid #969696 track with a white knob and no outline. Numaya uses its control grey
+  /// #8A8A8A (ED-06), the nearest token that keeps 3:1 against both white cards (3.45:1) and the
+  /// #F4F4F4 page (3.14:1). Supersedes CL-01's #DEDEDE, which faded on both surfaces.
+  static const Color switchOff = _M.outline;
 
   /// Filled fields and filled secondary buttons.
   static const Color field = _M.field;

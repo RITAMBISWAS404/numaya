@@ -188,17 +188,18 @@ abstract final class MonoSizes {
   static const double segment = 44;
   static const double segmentInset = 4;
 
-  /// The navigation bar, measured from Ente's Nav Bar (Figma 7634:54194, Tabler MVP pass): a
-  /// 62pt bar, 38pt square icon tiles whose centres are 82pt apart, the first and last tile 15pt
-  /// from the bar's ends. Each tile sits in a 48pt-wide slot (its tap target, 48 x 44 with the
-  /// reach into the padding), so slots are 34pt apart and the bar pads 10pt across and 12pt
-  /// down. Four destinations make a 302pt bar, which fits a 320pt phone with its margins.
-  static const double tabBar = 62;
-  static const double tabItem = 38;
-  static const double tabItemWidth = 48;
-  static const double tabPadding = 12;
-  static const double tabPaddingX = 10;
-  static const double tabGap = 34;
+  /// The navigation bar (UC-03, UI consistency pass 2026-11-07; supersedes the Tabler MVP's
+  /// square-tile geometry): a fully rounded (stadium) bar with [tabPadding] on all four sides,
+  /// holding four equal item surfaces edge to edge. Each item surface is its tap target,
+  /// [tabItem] tall and up to [tabItemWidth] wide (never under [tabItemMin]); inside it the
+  /// selected destination's stadium pill sits [tabItemInset] in on all four sides. The bar is
+  /// 8 + 48 + 8 = 64 tall; four items make a 304pt bar, and at 320pt they narrow to 68.
+  static const double tabBar = 64;
+  static const double tabItem = 48;
+  static const double tabItemWidth = 72;
+  static const double tabItemMin = 48;
+  static const double tabPadding = 8;
+  static const double tabItemInset = 4;
 
   /// Ente Toggle Switch (31 x 18) at 1.5x; Ente Checkbox and Radio (16) at 1.25x.
   static const double switchWidth = 46;

@@ -108,15 +108,15 @@ void main() {
       },
     );
 
-    testWidgets('the whole 48 x 44 slot is tappable, not just the glyph', (
+    testWidgets('the whole item surface is tappable, not just the pill', (
       tester,
     ) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
       await goTo(c, tester, Routes.home);
       final tile = tester.getRect(find.byKey(const ValueKey('tab-tile-2')));
-      // 4pt outside the visible 38pt tile, still inside the slot.
-      await tester.tapAt(Offset(tile.right + 4, tile.bottom + 2));
+      // 2pt outside the visible pill, still inside the item's 4pt inset (UC-03).
+      await tester.tapAt(Offset(tile.right + 2, tile.bottom + 2));
       await tester.pump(const Duration(milliseconds: 600));
       expect(location(c), Routes.messages);
       await settle(tester);
@@ -137,8 +137,8 @@ void main() {
       for (var i = 0; i < 4; i++) {
         final tile = tester.getRect(find.byKey(ValueKey('tab-tile-$i')));
         expect(tile.left, greaterThanOrEqualTo(bar.left), reason: '$i');
-        // Inside the bar's 16pt gutter and 10pt inner padding.
-        expect(tile.right, lessThanOrEqualTo(320 - 16 - 10), reason: '$i');
+        // Inside the bar's 16pt gutter, its 8pt inner padding and the item's 4pt inset.
+        expect(tile.right, lessThanOrEqualTo(320 - 16 - 8 - 4), reason: '$i');
         expect(tile.left, greaterThan(previousRight), reason: '$i');
         previousRight = tile.right;
       }

@@ -82,8 +82,8 @@ void main() {
         final pill = tester.widget<Container>(pillOf());
         final deco = pill.decoration! as BoxDecoration;
         expect(deco.color, AppColors.surface);
-        // Ente Nav Bar corners (Tabler MVP pass).
-        expect(deco.borderRadius, AppRadii.all(AppRadii.control));
+        // UC-03: a stadium at any width.
+        expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
         expect(deco.boxShadow, AppElevation.navigation);
         expect(tester.getSize(pillOf()).height, AppSizes.tabBar);
         await settle(tester);

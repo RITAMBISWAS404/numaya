@@ -18,6 +18,11 @@ File: [ENTE VISUAL DESIGN (Copy)](https://www.figma.com/design/22AeTw6QiPj2fNYHL
 Not verified in Figma: keyboard focus styling and the disabled icon colour. Ente shows neither, so the existing Numaya focus ring and `disabledText` role were kept.
 
 ## Decisions
+
+> **2026-11-07:** two decisions are superseded:
+> - TB-02's bar and tile *geometry* by UC-03, the stadium bar ([ui-consistency](../ui-consistency/README.md)). The colours and the filled/outline states are kept.
+> - TB-05's gap rule by UC-03's even item widths.
+
 | ID | Decision | Supersedes |
 |---|---|---|
 | TB-01 | Tabler Icons 3.50.0, bundled SVGs ([ICON_MAP.md](ICON_MAP.md)). | The Lucide requirement (`lucide_icons_flutter` 4.0.1 is removed) |

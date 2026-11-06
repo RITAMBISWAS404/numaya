@@ -374,41 +374,48 @@ void main() {
           )
           .map((a) => a.decoration! as BoxDecoration)
           .toList();
-      expect(tracks[0].color, AppColors.switchOff); // UI-025: lighter neutral
+      expect(tracks[0].color, AppColors.switchOff); // UC-01: Ente's solid grey
       expect(tracks[0].border, isNull);
       expect(tracks[1].color, AppColors.accent);
     });
   });
 
-  group('Navigation (Ente Nav Bar 7634:54194, Tabler MVP pass; supersedes UI-026/027 geometry)', () {
+  group('Navigation (UC-03 stadium bar; supersedes the Tabler MVP and UI-026/027 geometry)', () {
     testWidgets(
-      '62pt bar, 38pt tiles with centres 82pt apart, 15pt ends, four destinations',
+      'stadium bar, 8pt inside, four equal 48pt items, 4pt-inset pills, four destinations',
       (tester) async {
         final c = await home(tester);
         final pill = find.byKey(NumayaTabBar.pillKey);
         final deco =
             tester.widget<Container>(pill).decoration! as BoxDecoration;
         expect(deco.boxShadow, AppElevation.navigation);
-        expect(deco.borderRadius, AppRadii.all(AppRadii.control));
+        expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
         final bar = tester.getRect(pill);
         expect(bar.height, AppSizes.tabBar);
         // MVP: Discover, Likes, Messages and Profile; no Events tab.
+        final items = [
+          for (var i = 0; i < 4; i++)
+            tester.getRect(find.byKey(ValueKey('tab-item-$i'))),
+        ];
         final tiles = [
           for (var i = 0; i < 4; i++)
             tester.getRect(find.byKey(ValueKey('tab-tile-$i'))),
         ];
         expect(find.byKey(const ValueKey('tab-tile-4')), findsNothing);
-        for (final r in tiles) {
-          expect(r.size, const Size(38, 38));
-        }
-        expect(tiles.first.left - bar.left, closeTo(15, 0.01));
-        expect(bar.right - tiles.last.right, closeTo(15, 0.01));
-        expect(tiles.first.top - bar.top, closeTo(12, 0.01));
-        for (var i = 1; i < 4; i++) {
-          expect(
-            tiles[i].center.dx - tiles[i - 1].center.dx,
-            closeTo(82, 0.01),
-          );
+        // 8 inside the bar on all four sides.
+        expect(items.first.left - bar.left, closeTo(8, 0.01));
+        expect(bar.right - items.last.right, closeTo(8, 0.01));
+        expect(items.first.top - bar.top, closeTo(8, 0.01));
+        expect(bar.bottom - items.first.bottom, closeTo(8, 0.01));
+        for (var i = 0; i < 4; i++) {
+          expect(items[i].height, 48);
+          expect(items[i].width, closeTo(items[0].width, 0.01));
+          // 4 inside each item on all four sides.
+          expect(tiles[i].left - items[i].left, closeTo(4, 0.01));
+          expect(items[i].right - tiles[i].right, closeTo(4, 0.01));
+          expect(tiles[i].top - items[i].top, closeTo(4, 0.01));
+          expect(items[i].bottom - tiles[i].bottom, closeTo(4, 0.01));
+          if (i > 0) expect(items[i].left, closeTo(items[i - 1].right, 0.01));
         }
         // Every remaining destination still works, and the selected one is the filled glyph on
         // the light neutral tile.

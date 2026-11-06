@@ -227,26 +227,17 @@ class NumayaTabBar extends StatelessWidget {
     );
   }
 
-  /// The shipped bar: Ente's Nav Bar (Figma 7634:54194), Tabler MVP pass. A white bar with
-  /// Ente's corners and soft shadow, sized by its items: 38pt square tiles, centres 82pt apart,
-  /// 15pt from the ends, 62pt tall. Safe-area spacing sits outside the bar.
+  /// The shipped bar (UC-03, UI consistency pass): a white stadium with Ente's soft shadow,
+  /// sized by its items. [AppSizes.tabPadding] (8) on all four sides inside the bar, then four
+  /// equal item surfaces edge to edge, each its own tap target ([AppSizes.tabItem] = 48 tall,
+  /// [AppSizes.tabItemMin]..[AppSizes.tabItemWidth] wide, so never under 48 x 48 and never
+  /// overlapping a neighbour). Inside each item the selected destination's stadium pill sits
+  /// [AppSizes.tabItemInset] (4) in on all four sides. The bar's screen margin and the system
+  /// inset are applied outside it, once.
   ///
-  /// Hit areas: each tile sits in a 48pt-wide slot and its tap target reaches 3pt above and below
-  /// the 38pt tile into the bar's padding, so every target is 48 x 44 without touching a
-  /// neighbour's (they stay 34pt apart).
-  ///
-  /// On a narrow screen (320pt) the 34pt gaps shrink so the bar still fits; slots stay 48pt.
+  /// On a narrow screen the items narrow (to 68 at 320pt); the touch targets never shrink below
+  /// 48.
   Widget _compact(BuildContext context, double bottom) {
-    const reach = (AppSizes.touchMin - AppSizes.tabItem) / 2;
-    Widget row(double gap) => Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (var i = 0; i < items.length; i++) ...[
-          if (i > 0) SizedBox(width: gap),
-          _compactTab(context, i),
-        ],
-      ],
-    );
     return _frame(
       frosted: true,
       systemInset: bottom,
@@ -259,46 +250,47 @@ class NumayaTabBar extends StatelessWidget {
         ),
         child: Center(
           heightFactor: 1,
-          child: Container(
-            key: pillKey,
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSizes.tabPaddingX,
-              vertical: AppSizes.tabPadding - reach,
-            ),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: AppRadii.all(AppRadii.control),
-              boxShadow: AppElevation.navigation,
-            ),
-            // Gaps give way first; only if they run out does the row scroll rather than squeeze
-            // items below 48.
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final n = items.length;
-                final spare = constraints.maxWidth - n * AppSizes.tabItemWidth;
-                final gap = n < 2
-                    ? 0.0
-                    : (spare / (n - 1)).clamp(AppSpacing.s2, AppSizes.tabGap);
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: row(gap.toDouble()),
-                );
-              },
-            ),
+          child: LayoutBuilder(
+            builder: (context, box) {
+              final n = items.length;
+              final room = box.maxWidth - 2 * AppSizes.tabPadding;
+              final width = n == 0
+                  ? AppSizes.tabItemWidth
+                  : (room / n).clamp(
+                      AppSizes.tabItemMin,
+                      AppSizes.tabItemWidth,
+                    );
+              return Container(
+                key: pillKey,
+                padding: const EdgeInsets.all(AppSizes.tabPadding),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: AppRadii.all(AppRadii.pill),
+                  boxShadow: AppElevation.navigation,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (var i = 0; i < n; i++)
+                      _compactTab(context, i, width.toDouble()),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),
     );
   }
 
-  Widget _compactTab(BuildContext context, int i) {
+  Widget _compactTab(BuildContext context, int i, double width) {
     final item = items[i];
     final current = i == currentIndex;
     final duration = AppMotion.duration(context, AppMotion.state);
-    // Tabler MVP pass: the selected destination is Tabler's filled glyph in near-black on a very
-    // light neutral tile; the others are outline glyphs in a light grey (3.46:1 on white). The
-    // state is carried by shape (filled vs outline, tile vs none) as well as colour, and announced
-    // as selected.
+    // Tabler MVP pass, kept: the selected destination is Tabler's filled glyph in near-black on a
+    // very light neutral pill; the others are outline glyphs in a light grey (3.46:1 on white).
+    // The state is carried by shape (filled vs outline, pill vs none) as well as colour, and
+    // announced as selected.
     final fg = current ? AppColors.iconSelected : AppColors.iconInactive;
     return Semantics(
       selected: current,
@@ -313,22 +305,22 @@ class NumayaTabBar extends StatelessWidget {
               : item.label,
           excludeChildSemantics: true,
           pressedScale: 0.95,
-          borderRadius: AppRadii.all(AppRadii.iconButton),
+          borderRadius: AppRadii.all(AppRadii.pill),
           child: SizedBox(
-            width: AppSizes.tabItemWidth,
+            key: ValueKey('tab-item-$i'),
+            width: width,
             height: AppSizes.tabItem,
-            child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(AppSizes.tabItemInset),
               child: AnimatedContainer(
                 key: ValueKey('tab-tile-$i'),
                 duration: duration,
                 curve: AppMotion.easeOut,
-                width: AppSizes.tabItem,
-                height: AppSizes.tabItem,
                 decoration: BoxDecoration(
                   color: current
                       ? AppColors.iconSelectedFill
                       : const Color(0x00FFFFFF),
-                  borderRadius: AppRadii.all(AppRadii.iconButton),
+                  borderRadius: AppRadii.all(AppRadii.pill),
                 ),
                 alignment: Alignment.center,
                 child: Stack(
@@ -501,10 +493,8 @@ class NumayaSwitch extends StatelessWidget {
 
   /// Component cleanup (CL-01). States, resolved here so every switch matches:
   /// - **on:** brand track, white thumb with a soft shadow;
-  /// - **off** (UI-025, 2026-11-06 decision): the lighter existing neutral `switchOff` track, no
-  ///   outline, as the reviewer asked (A-025 showed the darker grey). The track alone is faint on
-  ///   white, so the white thumb keeps a hairline ink edge as well as its shadow: the knob, its
-  ///   position and the row's toggled semantics carry the state;
+  /// - **off** (UC-01, 2026-11-07): Ente's solid grey track (`switchOff`, 3:1 on white and on the
+  ///   grey page) with a plain white knob and no outline on either;
   /// - **disabled** (`onChanged == null`): the same shape at 45% opacity;
   /// - **pressed and focused:** owned by the row around the switch (`ListRow`/`Pressable`
   ///   press scale and focus ring), so the whole row is the hit area.
@@ -519,8 +509,8 @@ class NumayaSwitch extends StatelessWidget {
       height: AppSizes.switchHeight,
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        // UI-025: Ente's off state (2482:6647) is a solid grey track with a white knob and no
-        // outline, in the lighter existing neutral the review asked for.
+        // UC-01: Ente's off state (2482:6647) is a solid grey track with a white knob and no
+        // outline.
         color: value ? AppColors.accent : AppColors.switchOff,
         borderRadius: AppRadii.all(AppRadii.pill),
       ),
@@ -531,13 +521,9 @@ class NumayaSwitch extends StatelessWidget {
         child: Container(
           width: AppSizes.switchThumb,
           height: AppSizes.switchThumb,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: AppColors.surface,
             shape: BoxShape.circle,
-            border: Border.all(
-              color: AppColors.ink.withValues(alpha: 0.08),
-              width: AppBorders.hairline,
-            ),
             boxShadow: AppElevation.thumb,
           ),
         ),

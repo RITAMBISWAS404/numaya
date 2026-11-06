@@ -265,10 +265,15 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
     final wordmarkRoom =
         math.min(MediaQuery.sizeOf(context).width, AppSpacing.contentMax) -
         2 * AppLayout.screenGutter -
-        buttons * (AppSizes.iconButtonSlot + AppSpacing.s2);
+        (buttons == 0
+            ? 0
+            : AppSpacing.s2 +
+                  buttons * AppSizes.iconButtonSlot +
+                  (buttons - 1) * AppLayout.headerActionLayoutGap);
 
+    // UC-04: the tab-root header height, shared with Likes, Messages and Profile.
     final header = SizedBox(
-      height: AppSizes.topBar,
+      height: AppSizes.tabHeader,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppLayout.screenGutter),
         child: Row(
@@ -280,23 +285,28 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
               ),
             ),
             if (!state.snoozed) ...[
-              // Backtrack: one step, only for a pass (a like has been sent). Disabled, and
-              // announced as such, until there is someone to bring back.
-              NavIconButton(
-                key: const ValueKey('discover-backtrack'),
-                icon: NumayaIcons.undo,
-                label: lastPass == null
-                    ? l10n.discoverBacktrackNone
-                    : l10n.discoverUndo(lastPass.name),
-                onPressed: lastPass == null ? null : _undo,
-              ),
               const SizedBox(width: AppSpacing.s2),
-              _FiltersButton(
-                label: narrowed
-                    ? l10n.discoverFiltersChanged
-                    : l10n.discoverFilters,
-                changed: narrowed,
-                onPressed: () => showFiltersSheet(context, ref),
+              // UC-02: the shared header action group (8pt between tiles).
+              HeaderActions(
+                actions: [
+                  // Backtrack: one step, only for a pass (a like has been sent). Disabled, and
+                  // announced as such, until there is someone to bring back.
+                  NavIconButton(
+                    key: const ValueKey('discover-backtrack'),
+                    icon: NumayaIcons.undo,
+                    label: lastPass == null
+                        ? l10n.discoverBacktrackNone
+                        : l10n.discoverUndo(lastPass.name),
+                    onPressed: lastPass == null ? null : _undo,
+                  ),
+                  _FiltersButton(
+                    label: narrowed
+                        ? l10n.discoverFiltersChanged
+                        : l10n.discoverFilters,
+                    changed: narrowed,
+                    onPressed: () => showFiltersSheet(context, ref),
+                  ),
+                ],
               ),
             ],
           ],

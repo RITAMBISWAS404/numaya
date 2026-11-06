@@ -112,7 +112,14 @@ void main() {
       await goTo(c, tester, '${Routes.event}/e-jazz');
       final share = rectOf(tester, 'Share');
       final save = rectOf(tester, 'Save Late jazz at the Vortex');
-      expect(save.left - share.right, AppSpacing.s2);
+      // UC-02: the 44pt hit boxes sit 2pt apart, so the visible 38pt tiles show 8.
+      expect(save.left - share.right, AppLayout.headerActionLayoutGap);
+      expect(
+        save.left -
+            share.right +
+            (AppSizes.iconButtonSlot - AppSizes.iconButton),
+        AppLayout.headerActionGap,
+      );
       await settle(tester);
     });
 

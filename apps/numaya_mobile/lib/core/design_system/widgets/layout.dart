@@ -270,17 +270,36 @@ class NumayaTopBar extends StatelessWidget {
                   )
                 else
                   const Spacer(),
-                // Adjacent actions keep the 8pt gap the tab headers use, so two buttons never
-                // read as one (Event detail's Share and Save touched; FD-D1).
-                for (var i = 0; i < actions.length; i++) ...[
-                  if (i > 0) const SizedBox(width: AppSpacing.s2),
-                  actions[i],
-                ],
+                // UC-02: one shared action group, so every header spaces its actions alike.
+                if (actions.isNotEmpty) HeaderActions(actions: actions),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Trailing header actions (UC-02): the one place header buttons are spaced. Adjacent 38pt
+/// tiles show [AppLayout.headerActionGap] (8pt) between them; their 44pt hit boxes sit
+/// [AppLayout.headerActionLayoutGap] apart, so each keeps its own target. Order is as given.
+/// Used by [NumayaTopBar], the tab-root `TabHeader` and the Discover header.
+class HeaderActions extends StatelessWidget {
+  const HeaderActions({super.key, required this.actions});
+
+  final List<Widget> actions;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var i = 0; i < actions.length; i++) ...[
+          if (i > 0) const SizedBox(width: AppLayout.headerActionLayoutGap),
+          actions[i],
+        ],
+      ],
     );
   }
 }

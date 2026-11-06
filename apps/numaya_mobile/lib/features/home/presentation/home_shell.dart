@@ -75,7 +75,7 @@ class TabHeader extends StatelessWidget {
     // The tab title is the page-title role (24/32) at every text size (UI-012); the bar grows
     // with its content.
     return ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: 64),
+      constraints: const BoxConstraints(minHeight: AppSizes.tabHeader),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppLayout.screenGutter),
         child: Row(
@@ -86,9 +86,9 @@ class TabHeader extends StatelessWidget {
                 child: Text(title, style: AppTypography.pageTitle),
               ),
             ),
-            for (final a in actions) ...[
+            if (actions.isNotEmpty) ...[
               const SizedBox(width: AppSpacing.s2),
-              a,
+              HeaderActions(actions: actions),
             ],
           ],
         ),

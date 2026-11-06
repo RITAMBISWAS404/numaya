@@ -840,15 +840,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final expired = controller.isExpired(person.id);
     final now = ref.read(clockProvider)();
 
-    // V16 sets the chat header 8pt lower than the flow top bar (centre at 36pt).
+    // UC-05: the same height and centre line as `NumayaTopBar` (the V16 8pt drop is retired), so
+    // Back sits where it does on every other pushed page.
     final header = SizedBox(
-      height: AppSizes.topBar + AppSpacing.s2,
+      height: AppSizes.topBar,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          AppLayout.screenGutter,
-          AppSpacing.s2,
-          AppLayout.screenGutter,
-          0,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppLayout.barPadding,
+          vertical: AppSpacing.s1,
         ),
         child: Row(
           children: [
