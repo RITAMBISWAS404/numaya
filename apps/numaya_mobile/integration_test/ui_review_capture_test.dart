@@ -739,6 +739,94 @@ void main() {
     return;
   }
 
+  if (_set == 'final') {
+    // Final review set: each major screen once, in its normal state, at the top of the page.
+    // Files are numbered NN-<screen>.png in capture order.
+    var k = 0;
+    Future<void> shot(
+      WidgetTester tester,
+      String flow,
+      String screen,
+      String steps,
+    ) {
+      k++;
+      return cap(
+        tester,
+        flow: flow,
+        screen: screen,
+        state: 'default',
+        scroll: '-',
+        steps: steps,
+        settleMs: 1200,
+        fileName: '${k.toString().padLeft(2, '0')}-${_slug(screen)}.png',
+      );
+    }
+
+    testWidgets('final: signed out and onboarding', (tester) async {
+      await tester.pumpWidget(testApp(auth: testAuth()));
+      await _wait(tester, 1500);
+      final c = ProviderScope.containerOf(
+        tester.element(find.byType(MaterialApp).first),
+      );
+      await shot(tester, 'Welcome', 'welcome', 'Fresh install');
+      await goTo(c, tester, Routes.phone);
+      await shot(
+        tester,
+        'Sign up',
+        'phone number',
+        'Welcome; Create an account',
+      );
+      c.read(sessionProvider.notifier).quickStartOnboarding();
+      for (final (path, name) in [
+        (Routes.setup, 'onboarding name'),
+        (Routes.setupGender, 'onboarding gender'),
+        (Routes.setupIntentions, 'onboarding intentions'),
+        (Routes.interests, 'onboarding interests'),
+        (Routes.photos, 'onboarding photos'),
+        (Routes.setupPrompts, 'onboarding prompts'),
+      ]) {
+        await goTo(c, tester, path);
+        await shot(tester, 'Onboarding', name, 'Onboarding; open $path');
+      }
+    });
+
+    testWidgets('final: main app', (tester) async {
+      final c = await quickStartApp(tester);
+      await goTo(c, tester, Routes.home);
+      await shot(tester, 'Discover', 'discover', 'Quick start; Discover tab');
+      if (await tapLabel(tester, 'Filters')) {
+        await shot(tester, 'Discover', 'filters', 'Discover; Filters');
+        await closeSheet(tester);
+      }
+      for (final (flow, path, name) in [
+        ('Discover', Routes.forYou, 'for you'),
+        ('Discover', '${Routes.person}/maya', 'person profile'),
+        ('Likes', Routes.likes, 'likes'),
+        ('Likes', '${Routes.like}/kemi', 'liked profile'),
+        ('Likes', '${Routes.match}/amara', 'match'),
+        ('Messages', Routes.messages, 'messages'),
+        ('Messages', '${Routes.chat}/priya', 'chat'),
+        ('Profile', Routes.profile, 'profile'),
+        ('Profile', Routes.editProfile, 'edit profile'),
+        ('Profile', Routes.preview, 'profile preview'),
+        ('Profile', Routes.completion, 'profile completion'),
+        ('Profile', Routes.visibility, 'profile visibility'),
+        ('Profile', Routes.verifyPhoto, 'photo verification'),
+        ('Settings', Routes.settings, 'settings'),
+        ('Settings', Routes.notifications, 'notification settings'),
+        ('Settings', Routes.privacy, 'privacy'),
+        ('Safety', Routes.safety, 'safety'),
+        ('Safety', Routes.help, 'help centre'),
+        ('Premium', Routes.premium, 'premium'),
+        ('Premium', Routes.paywall, 'paywall'),
+      ]) {
+        await goTo(c, tester, path);
+        await shot(tester, flow, name, 'Quick start; open $path');
+      }
+    });
+    return;
+  }
+
   testWidgets('onboarding and account entry', (tester) async {
     const f = 'Onboarding';
     final auth = testAuth();

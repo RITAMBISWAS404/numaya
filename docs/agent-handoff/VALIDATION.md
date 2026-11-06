@@ -1,5 +1,11 @@
 # Validation
 
+> **Device screenshots (2026-11-07, Windows, Flutter 3.47.8):**
+> - `flutter build apk --debug` at `f6614fa`: OK, sha256 `c0c2d8ed…fec84da41`. `adb install -r`: Success.
+> - Pixel 10 AVD (`emulator-5554`, API 36, 1080×2424, density 420, font 1.0): Welcome → sign-up → onboarding through Photos; then Quick start → Discover, Filters, Likes, Match, Messages, Chat, Profile, Edit profile, Settings, Premium, Safety, Help. 29 PNGs, all checked by eye and none duplicated.
+> - `flutter analyze integration_test`: no issues (harness `final` set).
+> - Not run this session: `flutter test`, `npm run check`, `npm run test:e2e`. Not reached on device: onboarding after Photos.
+
 > **Review batch 2 (2026-11-06, Windows, Flutter 3.47.8, worktree `..\numaya-ente`):**
 > - Formatting, analysis and the token check are clean.
 > - `flutter test`: **393 passed, 15 skipped, 0 failed**. It includes the new 20-test

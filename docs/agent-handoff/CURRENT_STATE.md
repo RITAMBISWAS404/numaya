@@ -1,5 +1,71 @@
 # Current state
 
+**Last verified:** 2026-11-07, on the owner's Windows 11 machine (Claude desktop session).
+
+## Git
+| Item | Value |
+|---|---|
+| Repository | `RITAMBISWAS404/numaya` (`origin`, HTTPS) |
+| Permanent checkout | `C:\Users\biswa\Projects\Numaya` (the only worktree on this machine) |
+| Branch | `experiment/numaya-typography-copy-20261106`, on `origin` |
+| HEAD at session start | `f6614fa009de56b771926c5b29ba4140d6fafb7f` "Typography and copy pass: docs and before/after evidence"; the 2026-11-07 handoff and capture-tool commit sits on top (see WORK_LOG) |
+| Lineage | V4 `ea86a08` (on `origin`) → Tabler MVP `deda6dd`, `4cfb405`, `9f61314` → typography code `332c2b4` → docs and boards `f6614fa` |
+| Tabler branch | `experiment/numaya-tabler-mvp-20261106-1725` is **not on `origin` and not on this machine**; its three commits are contained in this branch |
+| Working tree | Clean at the start of the 2026-11-07 session |
+
+## What is built (checked against the commits and their records)
+- **Flutter app** `apps/numaya_mobile/`: the Ente design system with Numaya purple `#7262C7`, Figtree text and Plus Jakarta Sans headings, with the V3 experiments and V4 polish.
+- **Tabler MVP** ([record](../design-experiments/ente-design-system/tabler-mvp/README.md)):
+  - TB-01 Tabler Icons 3.50.0 as bundled SVGs (Lucide removed);
+  - TB-02 Ente-style tab bar: a filled near-black glyph on a light tile when selected, grey outlines otherwise;
+  - TB-03 filled alert glyphs centred on the full content height (supersedes UI-010);
+  - TB-04 Events gated off (`--dart-define=NUMAYA_EVENTS=true` re-enables it);
+  - TB-05 tab gaps shrink at 320pt.
+  - Linux harness and tests only: 473 passed, 21 skipped. No device evidence in that pass.
+- **Typography and copy pass** ([record](../design-experiments/ente-design-system/typography-copy/README.md)):
+  - TC-01 section headings 18/24, TC-02 semibold button labels, TC-03 caption 13/18 and eyebrow tracking;
+  - TC-04 two-line top-bar titles, TC-05 visibility score badge below the score, TC-06 Birthday sub-labels;
+  - TC-07 `PhotoScrim` on photo identities; TC-08 16 copy edits in `app_en.arb`.
+  - Linux: 484 passed, 21 skipped; `npm run check` OK; `npm run test:e2e` 143/144 (one Chromium-version-dependent squircle count). No APK or device run in that pass.
+- **Waiting on the owner:** EXP-001 to EXP-004 choices (every Current/A/B/C variant kept, none selected); final Welcome artwork (UI-001); the UI-008 phrase.
+- **Device status (2026-11-07):** the f6614fa debug APK runs on the Pixel 10 emulator; 29 device screenshots of the major screens are in `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\Device review 2026-11-07` with `INDEX.md`. Awaiting the owner's visual review. Physical phone, TalkBack speech and iOS: not verified.
+
+## Environment (this machine)
+| Tool | State |
+|---|---|
+| Flutter / Dart | 3.47.8 stable / 3.13.7 at `C:\src\flutter`, on `PATH`; matches `pubspec.yaml` (`sdk: ^3.13.7`) |
+| Android SDK | `C:\Users\biswa\AppData\Local\Android\sdk`. Flutter finds it without `ANDROID_HOME`. Platforms 36, 36.1, 37.0; build-tools 36.0.0; NDK 28.2.13676358; licences accepted |
+| JDK | Android Studio's bundled JBR (OpenJDK 25.0.3) |
+| Emulators | `Pixel_8`, `Pixel_9`, `Pixel_9_2`, `Pixel_10` are listed, but **only `Pixel_10` has its system image** (android-36.1). Boot `Pixel_10` with `-gpu swiftshader_indirect` if it is not running. On 2026-11-07 it was already running as `emulator-5554` (API 36, 1080×2424). The leftover `wm density 443` override from earlier 390dp passes was reset to the default 420 on 2026-11-07 |
+| adb | 1.0.41 in `sdk\platform-tools`, **not on `PATH`**. Call it by full path, or use `flutter devices` |
+| Node / npm | Node 24.20.0; `node_modules` installed. `npm run check` fails here only on CRLF line endings (`core.autocrlf=true`); the Playwright browser is not installed |
+| Visual Studio | Not installed. Only needed for Windows desktop builds; irrelevant here |
+| Shells | PowerShell 5.1 and Git Bash |
+
+## Connected tools
+| Tool | State |
+|---|---|
+| GitHub (`gh`) | Signed in as `RITAMBISWAS404`; admin on the repo; scopes `repo`, `workflow` |
+| Mobbin MCP | Working (test search returned results) |
+| Figma MCP | Needs authorisation via `/mcp` |
+| dossier, pencil, magic MCP | Failed to connect on 2026-11-04; not needed |
+
+## Skills
+34 project skills in `.claude/skills/`:
+- **Design:** impeccable, emil-design-eng, apple-design, ui-ux-pro-max, design, design-system,
+  design-system-structure, brand, ui-styling, liquid-glass, break-ui, design-review-workflow.
+- **Motion:** animate, review-animations, improve-animations, find-animation-opportunities,
+  animation-performance, animation-vocabulary, motion-and-haptics.
+- **Flutter:** flutter-conventions-index, widget-composition, state-management-riverpod,
+  navigation-and-routing, adaptive-layout, accessibility-as-code, forms-and-input,
+  ui-states-and-feedback, async-safety, flutter-performance, testing-strategy,
+  widget-golden-and-a11y-testing, dependency-hygiene.
+
+---
+
+## History (superseded; kept for reference)
+These entries describe earlier worktrees and branches, several in cloud containers or under `C:\Users\biswa\Downloads\numaya\`. They are not the current state.
+
 > **Overnight v4 (2026-11-06, cloud/Linux, local commits only):** branch
 > `experiment/numaya-ente-polish-v4-20261106-0724` (worktree `/home/user/numaya-ente-v4`) from the V3
 > candidate `fc72906`. Fixed and verified in the harness: V4-01 missing-photo fallback (Profile,
@@ -85,7 +151,7 @@
 
 **Last verified:** 2026-11-04, on the owner's Windows 11 machine, after the final UX polish.
 
-## Git
+### Git
 | Item | Value |
 |---|---|
 | Repository | `RITAMBISWAS404/numaya` (`origin`, HTTPS) |
@@ -108,7 +174,7 @@ work.
   branch or worktree** (checked 2026-11-04). If that checkout exists elsewhere, it is untouched
   and unreconciled with this branch.
 
-## What is built
+### What is built
 - **Flutter app:** `apps/numaya_mobile/`, in the Monochrome Premium design with the final UX
   polish:
   - Plus Jakarta Sans headings over Figtree, purple `#7262C7`, filled controls, an icon-only
@@ -131,34 +197,3 @@ work.
   - The previous report is the premium
     [VISUAL_QA_REPORT.md](../design-experiments/monochrome-meetup-premium/VISUAL_QA_REPORT.md).
 - **Research and specs:** [`docs/research/`](../research/README.md).
-
-## Environment (this machine)
-| Tool | State |
-|---|---|
-| Flutter / Dart | 3.47.8 stable / 3.13.7 at `C:\src\flutter`, on `PATH`; matches `pubspec.yaml` (`sdk: ^3.13.7`) |
-| Android SDK | `C:\Users\biswa\AppData\Local\Android\sdk`. Flutter finds it without `ANDROID_HOME`. Platforms 36, 36.1, 37.0; build-tools 36.0.0; NDK 28.2.13676358; licences accepted |
-| JDK | Android Studio's bundled JBR (OpenJDK 25.0.3) |
-| Emulators | `Pixel_8`, `Pixel_9`, `Pixel_9_2`, `Pixel_10` are listed, but **only `Pixel_10` has its system image** (android-36.1). The others point at a missing android-36 image. Boot `Pixel_10` with `-gpu swiftshader_indirect` (the hardware GPU path stayed offline) |
-| adb | 1.0.41 in `sdk\platform-tools`, **not on `PATH`**. Call it by full path, or use `flutter devices` |
-| Node / npm | Node 24.20.0; `node_modules` installed. `npm run check` fails here only on CRLF line endings (`core.autocrlf=true`); the Playwright browser is not installed |
-| Visual Studio | Not installed. Only needed for Windows desktop builds; irrelevant here |
-| Shells | PowerShell 5.1 and Git Bash |
-
-## Connected tools
-| Tool | State |
-|---|---|
-| GitHub (`gh`) | Signed in as `RITAMBISWAS404`; admin on the repo; scopes `repo`, `workflow` |
-| Mobbin MCP | Working (test search returned results) |
-| Figma MCP | Needs authorisation via `/mcp` |
-| dossier, pencil, magic MCP | Failed to connect on 2026-11-04; not needed |
-
-## Skills
-34 project skills in `.claude/skills/`:
-- **Design:** impeccable, emil-design-eng, apple-design, ui-ux-pro-max, design, design-system,
-  design-system-structure, brand, ui-styling, liquid-glass, break-ui, design-review-workflow.
-- **Motion:** animate, review-animations, improve-animations, find-animation-opportunities,
-  animation-performance, animation-vocabulary, motion-and-haptics.
-- **Flutter:** flutter-conventions-index, widget-composition, state-management-riverpod,
-  navigation-and-routing, adaptive-layout, accessibility-as-code, forms-and-input,
-  ui-states-and-feedback, async-safety, flutter-performance, testing-strategy,
-  widget-golden-and-a11y-testing, dependency-hygiene.

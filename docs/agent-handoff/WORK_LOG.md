@@ -1,5 +1,13 @@
 # Work log
 
+## 2026-11-07 · Device screenshot review (Windows, Claude desktop)
+- Verified branch `experiment/numaya-typography-copy-20261106` at `f6614fa` (also on `origin`). Rewrote CURRENT_STATE: a verified current block for the Tabler MVP and typography passes, with the older entries moved under History.
+- Added a `final` set to `integration_test/ui_review_capture_test.dart`. Its harness run was interrupted, and its 10 partial PNGs sit at the root of the Desktop folder.
+- Reset the Pixel 10 emulator's `wm density` override (443 → default 420).
+- Built the debug APK at `f6614fa` and installed it with `-r`; no signing conflict. Drove the app by hand over adb: 29 screencap/pull PNGs at 1080×2424 in `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\Device review 2026-11-07` (INDEX.md).
+- Not reached: the onboarding steps after Photos (they need two photos).
+- Uncommitted: CURRENT_STATE, this log, ACTIVE_TASK, VALIDATION, the capture harness.
+
 ## 2026-11-06 · Overnight v4 (cloud, Linux)
 - Branch `experiment/numaya-ente-polish-v4-20261106-0724` from `fc72906`.
 - Probes: keyboard over 7 forms, Back and double taps, failed send/retry, accessibility guidelines on 58 routes and 12 variants, focus order, long names, missing photos, reduced motion.

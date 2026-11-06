@@ -1,4 +1,8 @@
-# Active task: frosted-navigation experiment, handed off
+# Active task: owner visual review of the f6614fa device screenshots
+
+> **2026-11-07:** 29 Pixel 10 emulator screenshots of `f6614fa` are in `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\Device review 2026-11-07` (INDEX.md). **Next:** the owner reviews them. Still pending: the EXP-001–004 choices, Welcome artwork (UI-001), the UI-008 phrase, the onboarding steps after Photos on a device, and a physical phone.
+
+## Earlier entries
 
 > **Overnight v4 (2026-11-06, cloud/Linux, local commits only):** branch
 > `experiment/numaya-ente-polish-v4-20261106-0724` (worktree `/home/user/numaya-ente-v4`) from the V3
