@@ -106,6 +106,9 @@ class ProfileHeaderCover extends StatelessWidget {
   /// Room above the name for the Edit pill and, without a photo, the initial.
   static const double _topRoom = 150;
 
+  /// How far above the name the fade begins.
+  static const double _fade = 72;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -128,52 +131,57 @@ class ProfileHeaderCover extends StatelessWidget {
               ),
             ),
           ),
-          // The fade covers the lower part, whatever its height; the name always sits on its
-          // dark base (white on it is over 7:1).
-          const Positioned.fill(
-            child: IgnorePointer(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Color(0x00000000), AppColors.photoPanel],
-                    stops: [0.15, 0.5],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          // Sizes the cover: the name block, pushed to the bottom, with room above it.
+          // Sizes the cover: the name block at the bottom, with room above it. The fade belongs
+          // to the name block, so it always starts just above the name however tall the name is
+          // (white on its base is over 7:1), and the initial above stays on the light photo grey.
           ConstrainedBox(
             constraints: BoxConstraints(
               minHeight: minHeight,
               minWidth: double.infinity,
             ),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.s5,
-                _topRoom,
-                AppSpacing.s5,
-                AppSpacing.s5,
-              ),
+              padding: const EdgeInsets.only(top: _topRoom - _fade),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Semantics(
-                    header: true,
-                    child: Text(
-                      data.name,
-                      style: AppTypography.weight(
-                        AppTypography.hero,
-                        AppTypography.bold,
-                      ).copyWith(color: AppColors.accentForeground),
+                  DecoratedBox(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Color(0x00000000), AppColors.photoPanel],
+                        stops: [0, 0.5],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.s5,
+                        _fade,
+                        AppSpacing.s5,
+                        AppSpacing.s5,
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Semantics(
+                            header: true,
+                            child: Text(
+                              data.name,
+                              style: AppTypography.weight(
+                                AppTypography.hero,
+                                AppTypography.bold,
+                              ).copyWith(color: AppColors.accentForeground),
+                            ),
+                          ),
+                          const SizedBox(height: AppSpacing.s2),
+                          data.badge(context, tone: BadgeTone.onPhoto),
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.s2),
-                  data.badge(context, tone: BadgeTone.onPhoto),
                 ],
               ),
             ),
