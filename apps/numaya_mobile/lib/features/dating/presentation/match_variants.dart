@@ -65,7 +65,9 @@ class _Portrait extends StatelessWidget {
   Widget build(BuildContext context) {
     final glyph = ColoredBox(
       color: AppColors.photo,
-      child: Center(
+      // In the photo hero the name sits on the lower part; the initial stays above it.
+      child: Align(
+        alignment: fill ? const Alignment(0, -0.45) : Alignment.center,
         child: ExcludeSemantics(
           child: Text(
             initial,
@@ -275,7 +277,7 @@ class MatchIdentityHero extends StatelessWidget {
                     label: l10n.discoverPhotoLabel(person.name, 1),
                     initial: person.initial,
                     width: double.infinity,
-                    initialSize: height * 0.3,
+                    initialSize: height * 0.24,
                     fill: true,
                     image: personPhotoImage(person, 1),
                   ),

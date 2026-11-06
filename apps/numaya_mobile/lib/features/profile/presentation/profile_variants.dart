@@ -60,12 +60,16 @@ class ProfileHeaderData {
           );
   }
 
-  /// The member's photo, or their initial on the identity grey, filling [size].
-  Widget picture({required double initialSize}) => photo != null
+  /// The member's photo, or their initial on the identity grey, filling the space given.
+  Widget picture({
+    required double initialSize,
+    Alignment alignment = Alignment.center,
+  }) => photo != null
       ? Image(image: localImage(photo!, width: 720), fit: BoxFit.cover)
       : ColoredBox(
           color: AppColors.identity,
-          child: Center(
+          child: Align(
+            alignment: alignment,
             child: Text(
               initial,
               textScaler: TextScaler.noScaling,
@@ -90,10 +94,10 @@ class ProfileHeaderCover extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final height = (MediaQuery.sizeOf(context).height * 0.4).clamp(
-      220.0,
-      360.0,
-    );
+    // Taller at large text, so the two-line name keeps clear of the initial and the Edit pill.
+    final large = MediaQuery.textScalerOf(context).scale(14) > 21;
+    final height = (MediaQuery.sizeOf(context).height * (large ? 0.62 : 0.4))
+        .clamp(220.0, 440.0);
     return ClipRRect(
       key: const ValueKey('profile-header-cover'),
       borderRadius: AppRadii.all(AppRadii.heroCard),
@@ -102,19 +106,26 @@ class ProfileHeaderCover extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            ExcludeSemantics(child: data.picture(initialSize: 72)),
-            const Positioned(
+            ExcludeSemantics(
+              child: data.picture(
+                initialSize: 72,
+                alignment: const Alignment(0, -0.4),
+              ),
+            ),
+            // The fade reaches above the name at any text size (white on its base is over 7:1).
+            Positioned(
               left: 0,
               right: 0,
               bottom: 0,
-              height: 160,
-              child: IgnorePointer(
+              height: large ? height * 0.7 : 160,
+              child: const IgnorePointer(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [Color(0x00000000), AppColors.photoPanel],
+                      stops: [0, 0.55],
                     ),
                   ),
                 ),
@@ -243,39 +254,76 @@ class ProfileHeaderActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     const size = 104.0;
+    // At large text three tiles can't hold their labels without breaking words, so the actions
+    // become full-width rows.
+    final stacked = MediaQuery.textScalerOf(context).scale(14) > 21;
     Widget action(
       String key,
       NumayaIcons icon,
       String label,
       VoidCallback onTap,
-    ) => Expanded(
-      child: Pressable(
-        key: ValueKey('profile-action-$key'),
-        onTap: onTap,
-        semanticLabel: label,
-        excludeChildSemantics: true,
-        borderRadius: AppRadii.all(AppRadii.card),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.s3),
-          decoration: BoxDecoration(
-            color: AppColors.fill,
-            borderRadius: AppRadii.all(AppRadii.card),
-          ),
-          child: Column(
-            children: [
-              NumayaIcon(icon, size: AppSizes.iconMd, color: AppColors.ink),
-              const SizedBox(height: AppSpacing.s1),
-              Text(
-                label,
-                textAlign: TextAlign.center,
-                style: AppTypography.bodySm,
+    ) => stacked
+        ? Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.s2),
+            child: Pressable(
+              key: ValueKey('profile-action-$key'),
+              onTap: onTap,
+              semanticLabel: label,
+              excludeChildSemantics: true,
+              borderRadius: AppRadii.all(AppRadii.card),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(AppSpacing.s3),
+                decoration: BoxDecoration(
+                  color: AppColors.fill,
+                  borderRadius: AppRadii.all(AppRadii.card),
+                ),
+                child: Row(
+                  children: [
+                    NumayaIcon(
+                      icon,
+                      size: AppSizes.iconMd,
+                      color: AppColors.ink,
+                    ),
+                    const SizedBox(width: AppSpacing.s3),
+                    Expanded(child: Text(label, style: AppTypography.bodySm)),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          )
+        : Expanded(
+            child: Pressable(
+              key: ValueKey('profile-action-$key'),
+              onTap: onTap,
+              semanticLabel: label,
+              excludeChildSemantics: true,
+              borderRadius: AppRadii.all(AppRadii.card),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.s3),
+                decoration: BoxDecoration(
+                  color: AppColors.fill,
+                  borderRadius: AppRadii.all(AppRadii.card),
+                ),
+                child: Column(
+                  children: [
+                    NumayaIcon(
+                      icon,
+                      size: AppSizes.iconMd,
+                      color: AppColors.ink,
+                    ),
+                    const SizedBox(height: AppSpacing.s1),
+                    Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      style: AppTypography.bodySm,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
     return Container(
       key: const ValueKey('profile-header-actions'),
       padding: const EdgeInsets.all(AppLayout.heroPadding),
@@ -338,7 +386,11 @@ class ProfileHeaderActions extends StatelessWidget {
           const SizedBox(height: AppSpacing.s2),
           Center(child: data.badge(context)),
           const SizedBox(height: AppSpacing.s5),
-          Row(
+          Flex(
+            direction: stacked ? Axis.vertical : Axis.horizontal,
+            crossAxisAlignment: stacked
+                ? CrossAxisAlignment.stretch
+                : CrossAxisAlignment.start,
             children: [
               action('edit', NumayaIcons.edit, l10n.profileEdit, data.onEdit),
               const SizedBox(width: AppSpacing.s2),
@@ -584,6 +636,37 @@ class CompletionWithCat extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final done = percent >= 100;
+    // At large text the cat sits above the title, so the title keeps the card's full width.
+    final stacked = MediaQuery.textScalerOf(context).scale(14) > 21;
+    const cat = MascotArt(
+      MascotPurpose.completionEncouragement,
+      maxWidth: 96,
+      maxHeightFraction: 0.12,
+    );
+    final details = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(title, style: AppTypography.card),
+        const SizedBox(height: AppSpacing.s3),
+        _Bar(percent: percent),
+        const SizedBox(height: AppSpacing.s3),
+        if (done)
+          Text(
+            l10n.completionDone,
+            style: AppTypography.bodySm.copyWith(color: AppColors.textMuted),
+          )
+        else
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: NumayaButton(
+              label: actionLabel,
+              small: true,
+              expand: false,
+              onPressed: onAction,
+            ),
+          ),
+      ],
+    );
     return Container(
       key: const ValueKey('completion-cat'),
       padding: const EdgeInsets.all(AppLayout.cardPadding),
@@ -591,45 +674,22 @@ class CompletionWithCat extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: AppRadii.all(AppRadii.card),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const MascotArt(
-            MascotPurpose.completionEncouragement,
-            maxWidth: 96,
-            maxHeightFraction: 0.12,
-          ),
-          const SizedBox(width: AppSpacing.s3),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: stacked
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: AppTypography.card),
+                cat,
                 const SizedBox(height: AppSpacing.s3),
-                _Bar(percent: percent),
-                const SizedBox(height: AppSpacing.s3),
-                if (done)
-                  Text(
-                    l10n.completionDone,
-                    style: AppTypography.bodySm.copyWith(
-                      color: AppColors.textMuted,
-                    ),
-                  )
-                else
-                  Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: NumayaButton(
-                      label: actionLabel,
-                      small: true,
-                      expand: false,
-                      onPressed: onAction,
-                    ),
-                  ),
+                details,
+              ],
+            )
+          : Row(
+              children: [
+                cat,
+                const SizedBox(width: AppSpacing.s3),
+                Expanded(child: details),
               ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

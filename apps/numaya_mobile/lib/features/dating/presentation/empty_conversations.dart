@@ -127,7 +127,13 @@ class EmptyConversations extends StatelessWidget {
         const SizedBox(height: AppSpacing.s6),
         Semantics(
           header: true,
-          child: Text(l10n.chatsEmptyTitle, style: AppTypography.hero),
+          // At large text the display size would break "Connections" inside the word.
+          child: Text(
+            l10n.chatsEmptyTitle,
+            style: MediaQuery.textScalerOf(context).scale(14) > 21
+                ? AppTypography.emptyTitle
+                : AppTypography.hero,
+          ),
         ),
         const SizedBox(height: AppSpacing.s3),
         Text(

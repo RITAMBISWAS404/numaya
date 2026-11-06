@@ -1,0 +1,4 @@
+# Ente Figma source crops are review-only (artwork licensing, see overnight-v2 FIGMA_SOURCE_MAP). They ship in the review ZIP.
+components/*/source-vs-flutter.png
+# The gallery copies every image into assets/; rebuild it with tools/build_review_gallery.py.
+gallery/assets/

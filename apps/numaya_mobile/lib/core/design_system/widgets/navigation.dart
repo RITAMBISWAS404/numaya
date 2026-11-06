@@ -848,15 +848,15 @@ class EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // V3-D02: at large text the 24pt side insets left too little room, and the title broke
+    // inside a word ("Connection s") at 320pt and 200%. The insets narrow to 16pt there.
+    final side = MediaQuery.textScalerOf(context).scale(14) > 21
+        ? AppSpacing.s4
+        : AppSpacing.s6;
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(top: AppSpacing.s4),
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.s6,
-        AppSpacing.s8,
-        AppSpacing.s6,
-        AppSpacing.s8,
-      ),
+      padding: EdgeInsets.fromLTRB(side, AppSpacing.s8, side, AppSpacing.s8),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: AppRadii.all(AppRadii.card),
