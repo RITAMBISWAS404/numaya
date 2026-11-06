@@ -841,7 +841,14 @@ Future<T?> showNumayaSheet<T>({
               fit: tall ? FlexFit.tight : FlexFit.loose,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s5),
-                child: SheetSurface(child: Builder(builder: builder)),
+                // V3-D01: a content-height sheet scrolls when its content is taller than the
+                // space left (320pt at 200% text overflowed the Unmatch sheet by 31pt). Tall
+                // sheets fill their height and manage their own scrolling.
+                child: SheetSurface(
+                  child: tall
+                      ? Builder(builder: builder)
+                      : SingleChildScrollView(child: Builder(builder: builder)),
+                ),
               ),
             ),
           ],
