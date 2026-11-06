@@ -1,5 +1,19 @@
 # Active task: frosted-navigation experiment, handed off
 
+> **Overnight v3 (2026-11-06, cloud/Linux, committed locally, not pushed):** checkpoint
+> `e60504e` "checkpoint: Ente design system before V3 experiments" (annotated tag
+> `numaya-ente-design-system-finalized-20261106-0624`) in `/home/user/numaya-ente`; work on branch
+> `experiment/numaya-ente-delight-v3-20261106-0624` in worktree `/home/user/numaya-ente-v3`.
+> Baseline corrections V3-D01 (Unmatch/Block sheets pinned action at 320pt/200%), V3-D02
+> (EmptyState inset at large text), V3-F01 (tappable banner arrow). Four experiments, each with
+> Current/A/B/C behind the debug Experiment Lab: EXP-001 match, EXP-002 own-profile header, EXP-003
+> empty conversations, EXP-004 completion card; purple-cat slot with three provisional poses.
+> **Choices pending** (recommended: 001 A, 002 Current, 003 A, 004 A). Tests: 443 passed, 20 skipped.
+> Records: `docs/design-experiments/ente-design-system/overnight-v3/`; gallery
+> `artifacts/ente-design-system/overnight-v3/gallery/index.html`. **Next:** your choices, then a
+> device pass (sheets, keyboard, TalkBack, lab clipboard) and golden regeneration.
+
+
 > **Overnight v2 (2026-11-06, cloud/Linux, uncommitted):** package `NUMAYA_OVERNIGHT_V2.zip`
 > executed in `/home/user/numaya-ente` (base `f2e18e6`, local branch
 > `experiment/numaya-ente-design-system`). Figma primary pages fully indexed and inspected;

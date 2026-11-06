@@ -1,0 +1,67 @@
+view,flow,phone_390x844,narrow_320x693_200pct,changed_phone,changed_narrow,note
+a01-welcome,onboarding,captured,captured,False,False,
+a02-phone,onboarding,captured,captured,False,False,
+a03-setup-hub,onboarding,captured,captured,False,False,
+a04-setup-name,onboarding,captured,captured,False,False,
+a05-setup-gender,onboarding,captured,captured,False,False,
+a06-setup-meet,onboarding,captured,captured,False,False,
+a07-setup-intentions,onboarding,captured,captured,False,False,
+a08-setup-height,onboarding,captured,captured,False,False,
+a09-setup-location,onboarding,captured,captured,False,False,
+a10-setup-interests,onboarding,captured,captured,False,False,
+a11-setup-photos,onboarding,captured,captured,False,False,
+a12-setup-prompts,onboarding,captured,captured,False,False,
+a13-setup-bio,onboarding,captured,captured,False,False,
+a14-setup-verify,onboarding,captured,captured,False,False,
+a15-setup-notifications,onboarding,captured,captured,False,False,
+b01-discover,discover,captured,captured,False,False,
+b02-for-you,discover,captured,captured,False,False,
+b03-person-maya,discover,captured,captured,False,False,
+b04-like-kemi,discover,captured,captured,False,False,
+b05-match-maya,discover,captured,captured,False,False,
+c01-likes,likes-messages,captured,captured,False,False,
+c02-messages,likes-messages,captured,captured,False,False,
+c03-chat-priya,likes-messages,captured,captured,False,False,
+c04-chat-jo,likes-messages,captured,captured,False,False,
+d01-profile,profile,captured,captured,False,False,
+d02-edit-profile,profile,captured,captured,False,False,
+d03-edit-basics,profile,captured,captured,False,False,
+d04-edit-interests,profile,captured,captured,False,False,
+d05-edit-photos,profile,captured,captured,False,False,
+d06-edit-prompt,profile,captured,captured,False,False,
+d07-completion,profile,captured,captured,False,False,
+d08-preview,profile,captured,captured,False,False,
+d09-verify-photo,profile,captured,captured,False,False,
+d10-visibility,profile,captured,captured,False,False,
+d11-visibility-about,profile,captured,captured,False,False,
+e01-settings,settings-safety,captured,captured,False,False,
+e02-notifications,settings-safety,captured,captured,False,False,
+e03-privacy,settings-safety,captured,captured,False,False,
+e04-blocked,settings-safety,captured,captured,False,True,V3-D02 EmptyState inset at large text
+e05-delete-account,settings-safety,captured,captured,False,False,
+e06-help,settings-safety,captured,captured,False,False,
+e07-help-contact,settings-safety,captured,captured,False,False,
+e08-safety,settings-safety,captured,captured,False,False,
+e09-account-blocked,settings-safety,captured,captured,False,False,
+f01-premium,premium,captured,captured,False,False,
+f02-paywall,premium,captured,captured,False,False,
+g01-events,events,captured,captured,False,False,
+g02-events-mine,events,captured,captured,False,False,
+g03-event-jazz,events,captured,captured,False,False,
+g04-event-people,events,captured,captured,False,False,
+g05-event-new,events,captured,captured,False,False,
+h01-demo-hub,demo,captured,captured,True,False,Experiment Lab entry added (debug only)
+o01-filters,overlays,captured,captured,False,False,
+o02-chat-menu,overlays,captured,captured,False,False,
+o03-unmatch-sheet,overlays,captured,captured,True,True,V3-F01 arrow; V3-D01 pinned action at 320pt/200%
+o04-report-sheet,overlays,captured,captured,False,False,
+o05-attach-menu,overlays,captured,captured,False,False,
+o06-recovery-email,overlays,captured,captured,False,False,
+EXP-001-match-moment,experiment,captured x4 variants,captured x4 variants,,,plus tall continuation; Current from the frozen checkpoint
+EXP-002-own-profile-header,experiment,captured x4 variants,captured x4 variants,,,plus tall continuation; Current from the frozen checkpoint
+EXP-003-empty-conversations,experiment,captured x4 variants,captured x4 variants,,,plus tall continuation; Current from the frozen checkpoint
+EXP-004-profile-completion-card,experiment,captured x4 variants,captured x4 variants,,,plus tall continuation; Current from the frozen checkpoint
+likes-empty,not captured,,,,,Not reachable: every demo world has likes (DemoWorld.fresh has 5). Code path: LikeFilter.all EmptyState with the waiting cat.
+discover-exhausted,not captured,,,,,Not captured in this pass (needs swiping through the whole deck).
+design-lab,not captured,,,,,Debug-only; excluded from product coverage.
+experiment-lab,not captured,,,,,Debug-only; captured once as screens/refined/demo/experiment-lab.

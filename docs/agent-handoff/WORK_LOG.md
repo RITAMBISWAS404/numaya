@@ -1,5 +1,17 @@
 # Work log
 
+## 2026-11-06 · Overnight v3 (cloud, Linux)
+- Pre-run backup `numaya-ente-recovery-20261106-062350-prerun-v3-f2e18e6.zip` (sha256 cdc60fe2…7a8337).
+- Checkpoint commit `e60504e`; tag `numaya-ente-design-system-finalized-20261106-0624`; branch
+  `experiment/numaya-ente-delight-v3-20261106-0624` (worktree `/home/user/numaya-ente-v3`).
+- Skills installed project-locally: `prototype` (emilkowalski/skills c8a7962, MIT) and
+  `ux-researcher-designer` (alirezarezvani/claude-skills 8f08254, MIT, no persona script).
+- Fidelity: V3-D01, V3-D02, V3-F01; component boards; Figma Ducky catalog and banner, action-sheet,
+  toast and button sources re-read.
+- Experiments EXP-001 to EXP-004 (Current/A/B/C), Experiment Lab, MascotArt slot + 3 poses.
+- Two visual reviews (390x844; 320pt at 200%); 9 variant fixes.
+- Evidence and choices: `artifacts/ente-design-system/overnight-v3/`. Not pushed, merged or deployed.
+
 ## 2026-11-06: review batch 2, UI-013 to UI-032 (Windows, uncommitted)
 - Implemented across Discover, Filters, navigation, New Match and the first-release scope:
   - Backtrack and Filter header;

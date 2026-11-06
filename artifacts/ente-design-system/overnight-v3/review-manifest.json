@@ -1,0 +1,843 @@
+{
+ "run_id": "numaya-v3-20261106-0624",
+ "experiments": [
+  {
+   "id": "EXP-001-match-moment",
+   "title": "Match moment",
+   "task": "Someone liked you back: recognise who it is, feel the moment, then open the chat (or view their profile, or keep browsing).",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c. Order per option: phone, narrow 200% text, tall continuation.",
+   "recommendation": "A: Paired portraits keeps the person as the hero while adding the mutual \"you and them\" meaning, with no new feature. B is a safe fallback if photo recognisability matters most; C is best kept for empty states.",
+   "variants": {
+    "Current": {
+     "name": "Frozen checkpoint",
+     "rationale": "The pre-run candidate, exactly as tagged. A, B and C are built on the refined candidate, so they also carry this run's baseline corrections (V3-D01, V3-D02, V3-F01); open \"Refined control\" below to see the same layout with only those corrections.",
+     "images": [
+      "experiments/EXP-001-match-moment/current/phone.png",
+      "experiments/EXP-001-match-moment/current/narrow.png",
+      "experiments/EXP-001-match-moment/current/tall.png"
+     ]
+    },
+    "A": {
+     "name": "Paired portraits",
+     "rationale": "Axis: relationship: both people as two tilted portrait cards with a heart on the seam; headline names both. Says \"the two of you\" without words; familiar from Bumble. Costs: shows your own photo too (placeholder-heavy until real photos exist) and two cards are smaller than one.",
+     "images": [
+      "experiments/EXP-001-match-moment/A/phone.png",
+      "experiments/EXP-001-match-moment/A/narrow.png",
+      "experiments/EXP-001-match-moment/A/tall.png"
+     ]
+    },
+    "B": {
+     "name": "Identity-led photo hero",
+     "rationale": "Axis: scale and immersion: the person's photo fills 54% of the height with name, age and verification on it, as on their Discover card. Most recognisable: the match looks exactly like the card you liked. Costs: the photo dominates, the moment reads like a profile, and shared interests drop below the fold on short phones.",
+     "images": [
+      "experiments/EXP-001-match-moment/B/phone.png",
+      "experiments/EXP-001-match-moment/B/narrow.png",
+      "experiments/EXP-001-match-moment/B/tall.png"
+     ]
+    },
+    "C": {
+     "name": "Restrained cat celebration",
+     "rationale": "Axis: emotional tone through illustration: the celebrating cat leads; small round avatars and shared interests in one card. Warmest and lightest; the cat never covers a face. Costs: people are small, so the identity is weaker; the cat may feel playful for some users.",
+     "images": [
+      "experiments/EXP-001-match-moment/C/phone.png",
+      "experiments/EXP-001-match-moment/C/narrow.png",
+      "experiments/EXP-001-match-moment/C/tall.png"
+     ]
+    }
+   },
+   "refined_control_images": [
+    "experiments/EXP-001-match-moment/refined-control/phone.png",
+    "experiments/EXP-001-match-moment/refined-control/narrow.png",
+    "experiments/EXP-001-match-moment/comparison.png",
+    "experiments/EXP-001-match-moment/comparison-narrow-200pct.png"
+   ]
+  },
+  {
+   "id": "EXP-002-own-profile-header",
+   "title": "Own-profile upper section",
+   "task": "Check how you come across and get to editing quickly; see verification state.",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c. Order per option: phone, narrow 200% text, tall continuation.",
+   "recommendation": "Current: UI-042 is an approved review decision and the refined header already meets it. If you want change, C is the closest to UI-042 and adds one-tap Preview.",
+   "variants": {
+    "Current": {
+     "name": "Frozen checkpoint",
+     "rationale": "The pre-run candidate, exactly as tagged. A, B and C are built on the refined candidate, so they also carry this run's baseline corrections (V3-D01, V3-D02, V3-F01); open \"Refined control\" below to see the same layout with only those corrections.",
+     "images": [
+      "experiments/EXP-002-own-profile-header/current/phone.png",
+      "experiments/EXP-002-own-profile-header/current/narrow.png",
+      "experiments/EXP-002-own-profile-header/current/tall.png"
+     ]
+    },
+    "A": {
+     "name": "Photo-led cover",
+     "rationale": "Axis: photo emphasis: a wide cover photo with the name on it and Edit as a white pill. Shows how others first see you. Costs: departs from the approved UI-042 round photo; weak with no photo (initial on grey).",
+     "images": [
+      "experiments/EXP-002-own-profile-header/A/phone.png",
+      "experiments/EXP-002-own-profile-header/A/narrow.png",
+      "experiments/EXP-002-own-profile-header/A/tall.png"
+     ]
+    },
+    "B": {
+     "name": "Compact identity row",
+     "rationale": "Axis: density: 72pt photo beside name and verification, Edit as a small button; profile rows move up a third of a screen. Most efficient; everything important above the fold. Costs: less personal, departs from UI-042.",
+     "images": [
+      "experiments/EXP-002-own-profile-header/B/phone.png",
+      "experiments/EXP-002-own-profile-header/B/narrow.png",
+      "experiments/EXP-002-own-profile-header/B/tall.png"
+     ]
+    },
+    "C": {
+     "name": "Identity with quick actions",
+     "rationale": "Axis: action access: centred photo with an edit badge, then Edit, Preview and Verify as three equal actions. Keeps UI-042's centred round photo and adds Preview one tap away. Costs: Edit loses its full-width primary button; three tiles add visual weight.",
+     "images": [
+      "experiments/EXP-002-own-profile-header/C/phone.png",
+      "experiments/EXP-002-own-profile-header/C/narrow.png",
+      "experiments/EXP-002-own-profile-header/C/tall.png"
+     ]
+    }
+   },
+   "refined_control_images": [
+    "experiments/EXP-002-own-profile-header/refined-control/phone.png",
+    "experiments/EXP-002-own-profile-header/refined-control/narrow.png",
+    "experiments/EXP-002-own-profile-header/comparison.png",
+    "experiments/EXP-002-own-profile-header/comparison-narrow-200pct.png"
+   ]
+  },
+  {
+   "id": "EXP-003-empty-conversations",
+   "title": "Empty conversations",
+   "task": "New member with no matches opens Messages: understand why it is empty and know what to do next.",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c. Order per option: phone, narrow 200% text, tall continuation.",
+   "recommendation": "A: Cat says hello keeps the Ente card, adds the brand character where nothing sensitive is happening, and gives a second honest path.",
+   "variants": {
+    "Current": {
+     "name": "Frozen checkpoint",
+     "rationale": "The pre-run candidate, exactly as tagged. A, B and C are built on the refined candidate, so they also carry this run's baseline corrections (V3-D01, V3-D02, V3-F01); open \"Refined control\" below to see the same layout with only those corrections.",
+     "images": [
+      "experiments/EXP-003-empty-conversations/current/phone.png",
+      "experiments/EXP-003-empty-conversations/current/narrow.png",
+      "experiments/EXP-003-empty-conversations/current/tall.png"
+     ]
+    },
+    "A": {
+     "name": "Cat says hello",
+     "rationale": "Axis: character: the waving cat replaces the generic drawing; Discover plus a quieter Events path in the same card. Friendly and still contained in Ente's EmptyState card; adds a second real route. Costs: two buttons in an empty state.",
+     "images": [
+      "experiments/EXP-003-empty-conversations/A/phone.png",
+      "experiments/EXP-003-empty-conversations/A/narrow.png",
+      "experiments/EXP-003-empty-conversations/A/tall.png"
+     ]
+    },
+    "B": {
+     "name": "Next steps list",
+     "rationale": "Axis: actionable choices over mood: no art, short explanation, then Discover, Likes (when there are any) and Events as one list card. Most useful for someone who wants to act now; shows the real Likes count. Costs: no warmth; reads like a menu.",
+     "images": [
+      "experiments/EXP-003-empty-conversations/B/phone.png",
+      "experiments/EXP-003-empty-conversations/B/narrow.png",
+      "experiments/EXP-003-empty-conversations/B/tall.png"
+     ]
+    },
+    "C": {
+     "name": "Open page, one action",
+     "rationale": "Axis: page-level editorial composition: no card; left-aligned cat, large title, one pill-width primary. Calm and confident, like Bumble. Costs: a lot of open page; a single action.",
+     "images": [
+      "experiments/EXP-003-empty-conversations/C/phone.png",
+      "experiments/EXP-003-empty-conversations/C/narrow.png",
+      "experiments/EXP-003-empty-conversations/C/tall.png"
+     ]
+    }
+   },
+   "refined_control_images": [
+    "experiments/EXP-003-empty-conversations/refined-control/phone.png",
+    "experiments/EXP-003-empty-conversations/refined-control/narrow.png",
+    "experiments/EXP-003-empty-conversations/comparison.png",
+    "experiments/EXP-003-empty-conversations/comparison-narrow-200pct.png"
+   ]
+  },
+  {
+   "id": "EXP-004-profile-completion-card",
+   "title": "Profile completion card",
+   "task": "Understand how complete your profile is and finish the next part.",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c. Order per option: phone, narrow 200% text, tall continuation.",
+   "recommendation": "A: The progress banner is the Ente component for exactly this job and leaves Edit profile as the single primary action.",
+   "variants": {
+    "Current": {
+     "name": "Frozen checkpoint",
+     "rationale": "The pre-run candidate, exactly as tagged. A, B and C are built on the refined candidate, so they also carry this run's baseline corrections (V3-D01, V3-D02, V3-F01); open \"Refined control\" below to see the same layout with only those corrections.",
+     "images": [
+      "experiments/EXP-004-profile-completion-card/current/phone.png",
+      "experiments/EXP-004-profile-completion-card/current/narrow.png",
+      "experiments/EXP-004-profile-completion-card/current/tall.png"
+     ]
+    },
+    "A": {
+     "name": "Ente progress banner",
+     "rationale": "Axis: the number leads: muted label, large percentage, round arrow, bar; the whole card opens the hub (Ente banner). Directly from the Ente source; removes a second purple button. Costs: the action is an arrow, less explicit than a labelled button.",
+     "images": [
+      "experiments/EXP-004-profile-completion-card/A/phone.png",
+      "experiments/EXP-004-profile-completion-card/A/narrow.png",
+      "experiments/EXP-004-profile-completion-card/A/tall.png"
+     ]
+    },
+    "B": {
+     "name": "Next single task",
+     "rationale": "Axis: specificity: names the next unfinished part with its count; Continue opens that editor; See all opens the hub. Most actionable; one tap to the exact editor. Costs: more text; Bio opens the hub because its editor is a sheet there.",
+     "images": [
+      "experiments/EXP-004-profile-completion-card/B/phone.png",
+      "experiments/EXP-004-profile-completion-card/B/narrow.png",
+      "experiments/EXP-004-profile-completion-card/B/tall.png"
+     ]
+    },
+    "C": {
+     "name": "Cat encouragement",
+     "rationale": "Axis: warmth through illustration: the cheering cat beside the existing title, bar and action (optional UI-043 idea). Encouraging, small, and reuses the approved cat. Costs: one more illustration on a busy tab.",
+     "images": [
+      "experiments/EXP-004-profile-completion-card/C/phone.png",
+      "experiments/EXP-004-profile-completion-card/C/narrow.png",
+      "experiments/EXP-004-profile-completion-card/C/tall.png"
+     ]
+    }
+   },
+   "refined_control_images": [
+    "experiments/EXP-004-profile-completion-card/refined-control/phone.png",
+    "experiments/EXP-004-profile-completion-card/refined-control/narrow.png",
+    "experiments/EXP-004-profile-completion-card/comparison.png",
+    "experiments/EXP-004-profile-completion-card/comparison-narrow-200pct.png"
+   ]
+  }
+ ],
+ "screens": [
+  {
+   "title": "Mascot \u00b7 placement board and pose catalog",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "mascot/placement-board.png",
+    "mascot/pose-catalog.png"
+   ]
+  },
+  {
+   "title": "Component states \u00b7 banners",
+   "capture_context": "Flutter harness board, 390pt wide at 2x; source crops are Ente Figma renders (review only).",
+   "images": [
+    "components/banners/states/board.png",
+    "components/banners/source-vs-flutter.png"
+   ]
+  },
+  {
+   "title": "Component states \u00b7 buttons",
+   "capture_context": "Flutter harness board, 390pt wide at 2x; source crops are Ente Figma renders (review only).",
+   "images": [
+    "components/buttons/states/board.png"
+   ]
+  },
+  {
+   "title": "Component states \u00b7 empty",
+   "capture_context": "Flutter harness board, 390pt wide at 2x; source crops are Ente Figma renders (review only).",
+   "images": [
+    "components/empty/states/board.png"
+   ]
+  },
+  {
+   "title": "Component states \u00b7 inputs",
+   "capture_context": "Flutter harness board, 390pt wide at 2x; source crops are Ente Figma renders (review only).",
+   "images": [
+    "components/inputs/states/board.png"
+   ]
+  },
+  {
+   "title": "Component states \u00b7 lists",
+   "capture_context": "Flutter harness board, 390pt wide at 2x; source crops are Ente Figma renders (review only).",
+   "images": [
+    "components/lists/states/board.png",
+    "components/lists/source-vs-flutter.png"
+   ]
+  },
+  {
+   "title": "demo / experiment-lab (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/refined/demo/experiment-lab__two-choices__390x1400__2x-text100.png"
+   ]
+  },
+  {
+   "title": "demo / h01-demo-hub (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/demo/h01-demo-hub__default__320x693__2x-text200.png",
+    "screens/current/demo/h01-demo-hub__default__390x844__2x-text100.png",
+    "screens/refined/demo/h01-demo-hub__default__320x693__2x-text200.png",
+    "screens/refined/demo/h01-demo-hub__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "discover / b01-discover (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/discover/b01-discover__default__320x693__2x-text200.png",
+    "screens/current/discover/b01-discover__default__390x844__2x-text100.png",
+    "screens/refined/discover/b01-discover__default__320x693__2x-text200.png",
+    "screens/refined/discover/b01-discover__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "discover / b02-for-you (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/discover/b02-for-you__default__320x693__2x-text200.png",
+    "screens/current/discover/b02-for-you__default__390x844__2x-text100.png",
+    "screens/refined/discover/b02-for-you__default__320x693__2x-text200.png",
+    "screens/refined/discover/b02-for-you__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "discover / b03-person-maya (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/discover/b03-person-maya__default__320x693__2x-text200.png",
+    "screens/current/discover/b03-person-maya__default__390x844__2x-text100.png",
+    "screens/refined/discover/b03-person-maya__default__320x693__2x-text200.png",
+    "screens/refined/discover/b03-person-maya__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "discover / b04-like-kemi (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/discover/b04-like-kemi__default__320x693__2x-text200.png",
+    "screens/current/discover/b04-like-kemi__default__390x844__2x-text100.png",
+    "screens/refined/discover/b04-like-kemi__default__320x693__2x-text200.png",
+    "screens/refined/discover/b04-like-kemi__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "discover / b05-match-maya (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/discover/b05-match-maya__default__320x693__2x-text200.png",
+    "screens/current/discover/b05-match-maya__default__390x844__2x-text100.png",
+    "screens/refined/discover/b05-match-maya__default__320x693__2x-text200.png",
+    "screens/refined/discover/b05-match-maya__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "events / g01-events (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/events/g01-events__default__320x693__2x-text200.png",
+    "screens/current/events/g01-events__default__390x844__2x-text100.png",
+    "screens/refined/events/g01-events__default__320x693__2x-text200.png",
+    "screens/refined/events/g01-events__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "events / g02-events-mine (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/events/g02-events-mine__default__320x693__2x-text200.png",
+    "screens/current/events/g02-events-mine__default__390x844__2x-text100.png",
+    "screens/refined/events/g02-events-mine__default__320x693__2x-text200.png",
+    "screens/refined/events/g02-events-mine__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "events / g03-event-jazz (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/events/g03-event-jazz__default__320x693__2x-text200.png",
+    "screens/current/events/g03-event-jazz__default__390x844__2x-text100.png",
+    "screens/refined/events/g03-event-jazz__default__320x693__2x-text200.png",
+    "screens/refined/events/g03-event-jazz__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "events / g04-event-people (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/events/g04-event-people__default__320x693__2x-text200.png",
+    "screens/current/events/g04-event-people__default__390x844__2x-text100.png",
+    "screens/refined/events/g04-event-people__default__320x693__2x-text200.png",
+    "screens/refined/events/g04-event-people__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "events / g05-event-new (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/events/g05-event-new__default__320x693__2x-text200.png",
+    "screens/current/events/g05-event-new__default__390x844__2x-text100.png",
+    "screens/refined/events/g05-event-new__default__320x693__2x-text200.png",
+    "screens/refined/events/g05-event-new__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "likes-messages / c01-likes (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/likes-messages/c01-likes__default__320x693__2x-text200.png",
+    "screens/current/likes-messages/c01-likes__default__390x844__2x-text100.png",
+    "screens/refined/likes-messages/c01-likes__default__320x693__2x-text200.png",
+    "screens/refined/likes-messages/c01-likes__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "likes-messages / c02-messages (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/likes-messages/c02-messages__default__320x693__2x-text200.png",
+    "screens/current/likes-messages/c02-messages__default__390x844__2x-text100.png",
+    "screens/refined/likes-messages/c02-messages__default__320x693__2x-text200.png",
+    "screens/refined/likes-messages/c02-messages__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "likes-messages / c03-chat-priya (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/likes-messages/c03-chat-priya__default__320x693__2x-text200.png",
+    "screens/current/likes-messages/c03-chat-priya__default__390x844__2x-text100.png",
+    "screens/refined/likes-messages/c03-chat-priya__default__320x693__2x-text200.png",
+    "screens/refined/likes-messages/c03-chat-priya__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "likes-messages / c04-chat-jo (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/likes-messages/c04-chat-jo__default__320x693__2x-text200.png",
+    "screens/current/likes-messages/c04-chat-jo__default__390x844__2x-text100.png",
+    "screens/refined/likes-messages/c04-chat-jo__default__320x693__2x-text200.png",
+    "screens/refined/likes-messages/c04-chat-jo__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a01-welcome (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a01-welcome__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a01-welcome__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a01-welcome__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a01-welcome__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a02-phone (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a02-phone__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a02-phone__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a02-phone__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a02-phone__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a03-setup-hub (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a03-setup-hub__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a03-setup-hub__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a03-setup-hub__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a03-setup-hub__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a04-setup-name (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a04-setup-name__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a04-setup-name__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a04-setup-name__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a04-setup-name__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a05-setup-gender (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a05-setup-gender__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a05-setup-gender__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a05-setup-gender__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a05-setup-gender__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a06-setup-meet (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a06-setup-meet__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a06-setup-meet__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a06-setup-meet__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a06-setup-meet__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a07-setup-intentions (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a07-setup-intentions__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a07-setup-intentions__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a07-setup-intentions__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a07-setup-intentions__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a08-setup-height (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a08-setup-height__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a08-setup-height__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a08-setup-height__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a08-setup-height__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a09-setup-location (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a09-setup-location__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a09-setup-location__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a09-setup-location__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a09-setup-location__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a10-setup-interests (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a10-setup-interests__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a10-setup-interests__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a10-setup-interests__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a10-setup-interests__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a11-setup-photos (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a11-setup-photos__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a11-setup-photos__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a11-setup-photos__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a11-setup-photos__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a12-setup-prompts (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a12-setup-prompts__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a12-setup-prompts__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a12-setup-prompts__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a12-setup-prompts__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a13-setup-bio (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a13-setup-bio__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a13-setup-bio__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a13-setup-bio__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a13-setup-bio__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a14-setup-verify (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a14-setup-verify__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a14-setup-verify__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a14-setup-verify__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a14-setup-verify__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "onboarding / a15-setup-notifications (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/onboarding/a15-setup-notifications__default__320x693__2x-text200.png",
+    "screens/current/onboarding/a15-setup-notifications__default__390x844__2x-text100.png",
+    "screens/refined/onboarding/a15-setup-notifications__default__320x693__2x-text200.png",
+    "screens/refined/onboarding/a15-setup-notifications__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "overlays / o01-filters (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/overlays/o01-filters__default__320x693__2x-text200.png",
+    "screens/current/overlays/o01-filters__default__390x844__2x-text100.png",
+    "screens/refined/overlays/o01-filters__default__320x693__2x-text200.png",
+    "screens/refined/overlays/o01-filters__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "overlays / o02-chat-menu (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/overlays/o02-chat-menu__default__320x693__2x-text200.png",
+    "screens/current/overlays/o02-chat-menu__default__390x844__2x-text100.png",
+    "screens/refined/overlays/o02-chat-menu__default__320x693__2x-text200.png",
+    "screens/refined/overlays/o02-chat-menu__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "overlays / o03-unmatch-sheet (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/overlays/o03-unmatch-sheet__default__320x693__2x-text200.png",
+    "screens/current/overlays/o03-unmatch-sheet__default__390x844__2x-text100.png",
+    "screens/refined/overlays/o03-unmatch-sheet__default__320x693__2x-text200.png",
+    "screens/refined/overlays/o03-unmatch-sheet__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "overlays / o04-report-sheet (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/overlays/o04-report-sheet__default__320x693__2x-text200.png",
+    "screens/current/overlays/o04-report-sheet__default__390x844__2x-text100.png",
+    "screens/refined/overlays/o04-report-sheet__default__320x693__2x-text200.png",
+    "screens/refined/overlays/o04-report-sheet__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "overlays / o05-attach-menu (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/overlays/o05-attach-menu__default__320x693__2x-text200.png",
+    "screens/current/overlays/o05-attach-menu__default__390x844__2x-text100.png",
+    "screens/refined/overlays/o05-attach-menu__default__320x693__2x-text200.png",
+    "screens/refined/overlays/o05-attach-menu__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "overlays / o06-recovery-email (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/overlays/o06-recovery-email__default__320x693__2x-text200.png",
+    "screens/current/overlays/o06-recovery-email__default__390x844__2x-text100.png",
+    "screens/refined/overlays/o06-recovery-email__default__320x693__2x-text200.png",
+    "screens/refined/overlays/o06-recovery-email__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "premium / f01-premium (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/premium/f01-premium__default__320x693__2x-text200.png",
+    "screens/current/premium/f01-premium__default__390x844__2x-text100.png",
+    "screens/refined/premium/f01-premium__default__320x693__2x-text200.png",
+    "screens/refined/premium/f01-premium__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "premium / f02-paywall (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/premium/f02-paywall__default__320x693__2x-text200.png",
+    "screens/current/premium/f02-paywall__default__390x844__2x-text100.png",
+    "screens/refined/premium/f02-paywall__default__320x693__2x-text200.png",
+    "screens/refined/premium/f02-paywall__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "profile / d01-profile (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/profile/d01-profile__default__320x693__2x-text200.png",
+    "screens/current/profile/d01-profile__default__390x844__2x-text100.png",
+    "screens/refined/profile/d01-profile__default__320x693__2x-text200.png",
+    "screens/refined/profile/d01-profile__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "profile / d02-edit-profile (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/profile/d02-edit-profile__default__320x693__2x-text200.png",
+    "screens/current/profile/d02-edit-profile__default__390x844__2x-text100.png",
+    "screens/refined/profile/d02-edit-profile__default__320x693__2x-text200.png",
+    "screens/refined/profile/d02-edit-profile__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "profile / d03-edit-basics (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/profile/d03-edit-basics__default__320x693__2x-text200.png",
+    "screens/current/profile/d03-edit-basics__default__390x844__2x-text100.png",
+    "screens/refined/profile/d03-edit-basics__default__320x693__2x-text200.png",
+    "screens/refined/profile/d03-edit-basics__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "profile / d04-edit-interests (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/profile/d04-edit-interests__default__320x693__2x-text200.png",
+    "screens/current/profile/d04-edit-interests__default__390x844__2x-text100.png",
+    "screens/refined/profile/d04-edit-interests__default__320x693__2x-text200.png",
+    "screens/refined/profile/d04-edit-interests__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "profile / d05-edit-photos (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/profile/d05-edit-photos__default__320x693__2x-text200.png",
+    "screens/current/profile/d05-edit-photos__default__390x844__2x-text100.png",
+    "screens/refined/profile/d05-edit-photos__default__320x693__2x-text200.png",
+    "screens/refined/profile/d05-edit-photos__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "profile / d06-edit-prompt (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/profile/d06-edit-prompt__default__320x693__2x-text200.png",
+    "screens/current/profile/d06-edit-prompt__default__390x844__2x-text100.png",
+    "screens/refined/profile/d06-edit-prompt__default__320x693__2x-text200.png",
+    "screens/refined/profile/d06-edit-prompt__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "profile / d07-completion (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/profile/d07-completion__default__320x693__2x-text200.png",
+    "screens/current/profile/d07-completion__default__390x844__2x-text100.png",
+    "screens/refined/profile/d07-completion__default__320x693__2x-text200.png",
+    "screens/refined/profile/d07-completion__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "profile / d08-preview (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/profile/d08-preview__default__320x693__2x-text200.png",
+    "screens/current/profile/d08-preview__default__390x844__2x-text100.png",
+    "screens/refined/profile/d08-preview__default__320x693__2x-text200.png",
+    "screens/refined/profile/d08-preview__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "profile / d09-verify-photo (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/profile/d09-verify-photo__default__320x693__2x-text200.png",
+    "screens/current/profile/d09-verify-photo__default__390x844__2x-text100.png",
+    "screens/refined/profile/d09-verify-photo__default__320x693__2x-text200.png",
+    "screens/refined/profile/d09-verify-photo__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "profile / d10-visibility (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/profile/d10-visibility__default__320x693__2x-text200.png",
+    "screens/current/profile/d10-visibility__default__390x844__2x-text100.png",
+    "screens/refined/profile/d10-visibility__default__320x693__2x-text200.png",
+    "screens/refined/profile/d10-visibility__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "profile / d11-visibility-about (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/profile/d11-visibility-about__default__320x693__2x-text200.png",
+    "screens/current/profile/d11-visibility-about__default__390x844__2x-text100.png",
+    "screens/refined/profile/d11-visibility-about__default__320x693__2x-text200.png",
+    "screens/refined/profile/d11-visibility-about__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "settings-safety / e01-settings (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/settings-safety/e01-settings__default__320x693__2x-text200.png",
+    "screens/current/settings-safety/e01-settings__default__390x844__2x-text100.png",
+    "screens/refined/settings-safety/e01-settings__default__320x693__2x-text200.png",
+    "screens/refined/settings-safety/e01-settings__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "settings-safety / e02-notifications (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/settings-safety/e02-notifications__default__320x693__2x-text200.png",
+    "screens/current/settings-safety/e02-notifications__default__390x844__2x-text100.png",
+    "screens/refined/settings-safety/e02-notifications__default__320x693__2x-text200.png",
+    "screens/refined/settings-safety/e02-notifications__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "settings-safety / e03-privacy (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/settings-safety/e03-privacy__default__320x693__2x-text200.png",
+    "screens/current/settings-safety/e03-privacy__default__390x844__2x-text100.png",
+    "screens/refined/settings-safety/e03-privacy__default__320x693__2x-text200.png",
+    "screens/refined/settings-safety/e03-privacy__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "settings-safety / e04-blocked (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/settings-safety/e04-blocked__default__320x693__2x-text200.png",
+    "screens/current/settings-safety/e04-blocked__default__390x844__2x-text100.png",
+    "screens/refined/settings-safety/e04-blocked__default__320x693__2x-text200.png",
+    "screens/refined/settings-safety/e04-blocked__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "settings-safety / e05-delete-account (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/settings-safety/e05-delete-account__default__320x693__2x-text200.png",
+    "screens/current/settings-safety/e05-delete-account__default__390x844__2x-text100.png",
+    "screens/refined/settings-safety/e05-delete-account__default__320x693__2x-text200.png",
+    "screens/refined/settings-safety/e05-delete-account__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "settings-safety / e06-help (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/settings-safety/e06-help__default__320x693__2x-text200.png",
+    "screens/current/settings-safety/e06-help__default__390x844__2x-text100.png",
+    "screens/refined/settings-safety/e06-help__default__320x693__2x-text200.png",
+    "screens/refined/settings-safety/e06-help__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "settings-safety / e07-help-contact (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/settings-safety/e07-help-contact__default__320x693__2x-text200.png",
+    "screens/current/settings-safety/e07-help-contact__default__390x844__2x-text100.png",
+    "screens/refined/settings-safety/e07-help-contact__default__320x693__2x-text200.png",
+    "screens/refined/settings-safety/e07-help-contact__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "settings-safety / e08-safety (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/settings-safety/e08-safety__default__320x693__2x-text200.png",
+    "screens/current/settings-safety/e08-safety__default__390x844__2x-text100.png",
+    "screens/refined/settings-safety/e08-safety__default__320x693__2x-text200.png",
+    "screens/refined/settings-safety/e08-safety__default__390x844__2x-text100.png"
+   ]
+  },
+  {
+   "title": "settings-safety / e09-account-blocked (current then refined; phone, then 320pt at 200%)",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at 0f5dd7c.",
+   "images": [
+    "screens/current/settings-safety/e09-account-blocked__default__320x693__2x-text200.png",
+    "screens/current/settings-safety/e09-account-blocked__default__390x844__2x-text100.png",
+    "screens/refined/settings-safety/e09-account-blocked__default__320x693__2x-text200.png",
+    "screens/refined/settings-safety/e09-account-blocked__default__390x844__2x-text100.png"
+   ]
+  }
+ ]
+}
