@@ -127,14 +127,14 @@ const Map<NumayaIcons, TablerGlyph> kTablerIcons = {
   // maintenance
   NumayaIcons.maintenance: (outline: 'tool', filled: null),
   // public / visibility
-  NumayaIcons.public: (outline: 'world', filled: null),
+  NumayaIcons.public: (outline: 'world', filled: 'world'),
   // nearby
   NumayaIcons.nearby: (outline: 'navigation', filled: 'navigation'),
   // tag / details
   NumayaIcons.tag: (outline: 'tag', filled: 'tag'),
   // draft
   NumayaIcons.draft: (outline: 'file-text', filled: 'file-text'),
-  // pending state
+  // incomplete / pending state (dashed ring; no filled `progress` in Tabler, so alerts use clock)
   NumayaIcons.pending: (outline: 'progress', filled: null),
   // retry / refresh
   NumayaIcons.refresh: (outline: 'refresh', filled: null),

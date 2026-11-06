@@ -176,6 +176,25 @@ void main() {
   });
 
   group('Alerts', () {
+    test('every alert icon has Tabler filled artwork', () {
+      // StatusBanner tones and every InfoCard icon in the app (alerts draw the filled glyph).
+      for (final icon in [
+        NumayaIcons.info,
+        NumayaIcons.verified,
+        NumayaIcons.alert,
+        NumayaIcons.camera,
+        NumayaIcons.clock,
+        NumayaIcons.flag,
+        NumayaIcons.heart,
+        NumayaIcons.lock,
+        NumayaIcons.public,
+        NumayaIcons.shield,
+        NumayaIcons.sparkle,
+      ]) {
+        expect(kTablerIcons[icon]!.filled, isNotNull, reason: '$icon');
+      }
+    });
+
     for (final (name, title, body, action) in [
       ('short', 'Heads up', null, false),
       (

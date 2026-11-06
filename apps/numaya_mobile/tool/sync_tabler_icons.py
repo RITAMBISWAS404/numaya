@@ -24,7 +24,10 @@ def main() -> int:
         return 1
     src = MAP.read_text()
     wanted = set()
-    for outline, filled in re.findall(r"outline: '([a-z0-9-]+)', filled: (?:'([a-z0-9-]+)'|null)", src):
+    # Entries may be wrapped by dart format, so whitespace (including newlines) is allowed.
+    for outline, filled in re.findall(
+        r"outline:\s*'([a-z0-9-]+)',\s*filled:\s*(?:'([a-z0-9-]+)'|null)", src
+    ):
         wanted.add(('outline', outline))
         if filled:
             wanted.add(('filled', filled))
