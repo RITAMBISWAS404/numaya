@@ -451,7 +451,7 @@ abstract class AppLocalizations {
   /// No description provided for @setupVerifiedBody.
   ///
   /// In en, this message translates to:
-  /// **'{number} is confirmed. Now let’s make a profile people actually want to reply to.'**
+  /// **'{number} is confirmed. Now let’s set up your profile.'**
   String setupVerifiedBody(Object number);
 
   /// No description provided for @setupProfileTitle.
@@ -919,7 +919,7 @@ abstract class AppLocalizations {
   /// No description provided for @likesSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'People who liked you. Like them back to match.'**
+  /// **'Like them back to match.'**
   String get likesSubtitle;
 
   /// No description provided for @likesEmptyTitle.
@@ -949,7 +949,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatsEmptyBody.
   ///
   /// In en, this message translates to:
-  /// **'When you like each other, you’ll match. Here’s where you can chat.'**
+  /// **'When you like each other, you’ll match and can chat here.'**
   String get chatsEmptyBody;
 
   /// No description provided for @findYourPeople.
@@ -1195,7 +1195,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsSignOut.
   ///
   /// In en, this message translates to:
-  /// **'Log out'**
+  /// **'Sign out'**
   String get settingsSignOut;
 
   /// No description provided for @settingsDeleteNote.
@@ -2263,7 +2263,7 @@ abstract class AppLocalizations {
   /// No description provided for @recoveryEmailBody.
   ///
   /// In en, this message translates to:
-  /// **'If you ever lose access to your number, an email on file lets support help you back into your account.'**
+  /// **'If you lose access to your number, support can use this email to help you back into your account.'**
   String get recoveryEmailBody;
 
   /// No description provided for @recoveryEmailDemo.
@@ -2311,7 +2311,7 @@ abstract class AppLocalizations {
   /// No description provided for @reauthBody.
   ///
   /// In en, this message translates to:
-  /// **'For your security, this session has ended. Confirm it’s you with a code sent to {phone} and you’ll be back where you were.'**
+  /// **'Your session ended. Confirm it’s you with a code sent to {phone} to pick up where you left off.'**
   String reauthBody(String phone);
 
   /// No description provided for @reauthSend.
@@ -2383,7 +2383,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatRetry.
   ///
   /// In en, this message translates to:
-  /// **'Retry'**
+  /// **'Try again'**
   String get chatRetry;
 
   /// No description provided for @chatDelete.
@@ -3313,7 +3313,7 @@ abstract class AppLocalizations {
   /// No description provided for @deleteLede.
   ///
   /// In en, this message translates to:
-  /// **'Before you go, tell us why. It helps us improve.'**
+  /// **'Your answer helps us improve.'**
   String get deleteLede;
 
   /// No description provided for @deleteWhy.
@@ -3901,13 +3901,13 @@ abstract class AppLocalizations {
   /// No description provided for @logoutTitle.
   ///
   /// In en, this message translates to:
-  /// **'Log out?'**
+  /// **'Sign out?'**
   String get logoutTitle;
 
   /// No description provided for @logoutBody.
   ///
   /// In en, this message translates to:
-  /// **'Logging out clears your profile from this device.'**
+  /// **'Signing out clears your profile from this device.'**
   String get logoutBody;
 
   /// No description provided for @yes.
@@ -5113,7 +5113,7 @@ abstract class AppLocalizations {
   /// No description provided for @obConfirm.
   ///
   /// In en, this message translates to:
-  /// **'Confirm'**
+  /// **'That’s right'**
   String get obConfirm;
 
   /// No description provided for @obUnderageTitle.
@@ -7675,7 +7675,7 @@ abstract class AppLocalizations {
   /// No description provided for @visLede.
   ///
   /// In en, this message translates to:
-  /// **'What Numaya knows about whether people can see your profile, what you can change, and what it can’t tell you.'**
+  /// **'Whether people can see your profile, what you can change, and what this page can’t tell you.'**
   String get visLede;
 
   /// No description provided for @visVisibility.
@@ -7693,7 +7693,7 @@ abstract class AppLocalizations {
   /// No description provided for @visStatusPaused.
   ///
   /// In en, this message translates to:
-  /// **'Paused'**
+  /// **'Snoozed'**
   String get visStatusPaused;
 
   /// No description provided for @visStatusLimited.
@@ -7735,13 +7735,13 @@ abstract class AppLocalizations {
   /// No description provided for @visPausedBody.
   ///
   /// In en, this message translates to:
-  /// **'New people can’t see you while you’re paused. Your matches and chats are still here.'**
+  /// **'New people can’t see you while you’re snoozed. Your matches and chats are still here.'**
   String get visPausedBody;
 
   /// No description provided for @visPausedUntil.
   ///
   /// In en, this message translates to:
-  /// **'New people can’t see you while you’re paused. It ends {date}.'**
+  /// **'New people can’t see you while you’re snoozed. It ends {date}.'**
   String visPausedUntil(Object date);
 
   /// No description provided for @visResume.
@@ -8257,7 +8257,7 @@ abstract class AppLocalizations {
   /// No description provided for @visWhyResume.
   ///
   /// In en, this message translates to:
-  /// **'You’re paused, so new people can’t see you.'**
+  /// **'You’re snoozed, so new people can’t see you.'**
   String get visWhyResume;
 
   /// No description provided for @visWhyRequired.

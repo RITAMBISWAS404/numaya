@@ -716,22 +716,25 @@ class _HealthHero extends StatelessWidget {
             action!,
           ],
           const SizedBox(height: AppSpacing.s6),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          // TC-05: the score and its badge share a line while they fit. At large text on a narrow
+          // phone the badge moves under the score, which used to break inside itself ("28" / "%").
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.end,
+            spacing: AppSpacing.s3,
+            runSpacing: AppSpacing.s2,
             children: [
-              Expanded(
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: number,
-                        style: AppTypography.metric.copyWith(
-                          color: AppColors.accentOnTint,
-                        ),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: number,
+                      style: AppTypography.metric.copyWith(
+                        color: AppColors.accentOnTint,
                       ),
-                      TextSpan(text: rest, style: AppTypography.metricUnit),
-                    ],
-                  ),
+                    ),
+                    TextSpan(text: rest, style: AppTypography.metricUnit),
+                  ],
                 ),
               ),
               StatusBadge(label: completeLabel),

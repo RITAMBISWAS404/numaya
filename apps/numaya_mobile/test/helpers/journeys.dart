@@ -133,7 +133,7 @@ Future<void> enterNameAndBirthday(
   await tester.enterText(fields.at(3), year);
   await tester.pump();
   await tapNext(tester);
-  await tapOn(tester, find.text('Confirm'));
+  await tapOn(tester, find.text('That’s right'));
   await tester.pump(const Duration(milliseconds: 600));
 }
 

@@ -33,7 +33,9 @@ void main() {
     },
   );
 
-  testWidgets('Button Large: 52pt, 20pt corners, Body label', (tester) async {
+  testWidgets('Button Large: 52pt, 20pt corners, Body-Bold label', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -53,7 +55,8 @@ void main() {
     expect((box.decoration! as BoxDecoration).borderRadius, AppRadii.all(20));
     final label = tester.widget<Text>(find.text('Save')).style!;
     expect(label.fontSize, 14);
-    expect(label.fontWeight, FontWeight.w500);
+    // Typography pass: action labels are Body-Bold (600) so they lead the 14pt body.
+    expect(label.fontWeight, FontWeight.w600);
   });
 
   testWidgets('inner pages use Ente Header (v2): bare back arrow, title left', (

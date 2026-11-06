@@ -91,7 +91,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
     await settleShot('06-confirm-age');
-    await tap('Confirm');
+    await tap('That’s right');
 
     await settleShot('07-gender');
     await tap('Nonbinary');
@@ -225,7 +225,7 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Next'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
-    await tap('Confirm');
+    await tap('That’s right');
     await settleShot('39-underage');
   });
 }

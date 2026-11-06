@@ -77,7 +77,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 600));
       expect(find.text('Let’s start with an intro'), findsOneWidget);
       await tapNext(tester);
-      await tapOn(tester, find.text('Confirm'));
+      await tapOn(tester, find.text('That’s right'));
       await settle(tester);
       expect(find.text('Numaya is for adults'), findsOneWidget);
 
@@ -127,7 +127,7 @@ void main() {
 
       // Forward again: Gender keeps Woman; Interests keeps Jazz.
       await tapNext(tester);
-      await tapOn(tester, find.text('Confirm'));
+      await tapOn(tester, find.text('That’s right'));
       await tester.pump(const Duration(milliseconds: 600));
       expect(
         tester.getSemantics(find.bySemanticsLabel(RegExp('^Woman'))),

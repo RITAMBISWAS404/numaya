@@ -46,7 +46,7 @@ void main() {
     c.read(accountPrefsProvider.notifier).startSnooze(SnoozeLength.day);
     c.read(datingProvider.notifier).setSnoozed(true);
     await goTo(c, tester, Routes.visibility);
-    expect(find.text('Paused'), findsOneWidget);
+    expect(find.text('Snoozed'), findsOneWidget);
     expect(find.textContaining('It ends'), findsOneWidget);
     await _tap(tester, find.text('Resume').first);
     expect(c.read(datingProvider).snoozed, isFalse);

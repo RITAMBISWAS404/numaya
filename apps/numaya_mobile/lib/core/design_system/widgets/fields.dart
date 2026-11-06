@@ -97,7 +97,7 @@ class InputSurface extends StatelessWidget {
   }
 }
 
-/// Field label in V16's small bold capitals ("FIRST NAME"), ink.
+/// Field label ("First name"): Ente Body, 14/20 medium, ink, sentence case.
 class FieldLabel extends StatelessWidget {
   const FieldLabel(this.text, {super.key});
   final String text;
@@ -130,9 +130,15 @@ class NumayaTextField extends StatefulWidget {
     this.semanticsIdentifier,
     this.multiline = false,
     this.trailingNote,
+    this.subLabel = false,
   });
 
   final String label;
+
+  /// A part of a field group that already has its own label (Day, Month and Year under
+  /// "Birthday"): the label is drawn in the subordinate caption role, so the group's label leads
+  /// (TC-06). The semantic label is unchanged.
+  final bool subLabel;
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final String? placeholder;
@@ -194,8 +200,13 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        FieldLabel(widget.label),
-        const SizedBox(height: AppSpacing.s2),
+        if (widget.subLabel)
+          ExcludeSemantics(
+            child: Text(widget.label, style: AppTypography.caption),
+          )
+        else
+          FieldLabel(widget.label),
+        SizedBox(height: widget.subLabel ? AppSpacing.s1 : AppSpacing.s2),
         InputSurface(
           focused: _focus.hasFocus,
           invalid: invalid,

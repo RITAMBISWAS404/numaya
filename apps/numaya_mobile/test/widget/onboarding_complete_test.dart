@@ -107,8 +107,8 @@ void main() {
     await tester.tap(fab, warnIfMissed: false);
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
-    expect(find.text('Confirm'), findsOneWidget);
-    await tapOn(tester, find.text('Confirm'));
+    expect(find.text('That’s right'), findsOneWidget);
+    await tapOn(tester, find.text('That’s right'));
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.text('How do you identify?'), findsOneWidget);
     expect(draft(c).birthDate, DateTime(1995, 4, 12));
@@ -373,7 +373,7 @@ void main() {
       await tester.enterText(find.byType(TextField).first, 'Sam');
       await tester.pump();
       await tapNext(tester);
-      await tapOn(tester, find.text('Confirm'));
+      await tapOn(tester, find.text('That’s right'));
       await tester.pump(const Duration(milliseconds: 600));
       // Back on the review, not on to Gender.
       expect(find.text('Before you can finish'), findsNothing);

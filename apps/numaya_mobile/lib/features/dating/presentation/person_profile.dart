@@ -69,30 +69,22 @@ class PersonHeroCard extends StatelessWidget {
               children: [
                 Positioned.fill(child: _photo(l10n)),
                 if (_overlay) ...[
-                  // Bumble's identity on the photo: a dark fade under white text, so the name
-                  // reads over any photo (white on the fade's base is over 7:1).
-                  const Positioned(
+                  // Bumble's identity on the photo, on a scrim that grows with it (TC-07): the
+                  // name and job stay on the solid panel at any text size.
+                  Positioned(
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    height: 220,
-                    child: IgnorePointer(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [Color(0x00000000), AppColors.photoPanel],
-                          ),
-                        ),
+                    child: PhotoScrim(
+                      fade: 120,
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.s4,
+                        0,
+                        AppSpacing.s4,
+                        AppSpacing.s4,
                       ),
+                      child: _overlayIdentity(context, l10n),
                     ),
-                  ),
-                  Positioned(
-                    left: AppSpacing.s4,
-                    right: AppSpacing.s4,
-                    bottom: AppSpacing.s4,
-                    child: _overlayIdentity(context, l10n),
                   ),
                 ],
                 // UI-014: no photo count on the photo. In the overlay layout the status tags sit

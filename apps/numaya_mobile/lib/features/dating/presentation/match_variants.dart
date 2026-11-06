@@ -282,47 +282,40 @@ class MatchIdentityHero extends StatelessWidget {
                     fill: true,
                     image: personPhotoImage(person, 1),
                   ),
-                  const Positioned(
+                  // The name sits on a scrim that grows with it (TC-07).
+                  Positioned(
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    height: 180,
-                    child: IgnorePointer(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [Color(0x00000000), AppColors.photoPanel],
-                          ),
-                        ),
+                    child: PhotoScrim(
+                      fade: 120,
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.s5,
+                        0,
+                        AppSpacing.s5,
+                        AppSpacing.s5,
                       ),
-                    ),
-                  ),
-                  Positioned(
-                    left: AppSpacing.s5,
-                    right: AppSpacing.s5,
-                    bottom: AppSpacing.s5,
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            l10n.profileNameAge(person.name, person.age),
-                            style: AppTypography.weight(
-                              AppTypography.hero,
-                              AppTypography.bold,
-                            ).copyWith(color: AppColors.accentForeground),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              l10n.profileNameAge(person.name, person.age),
+                              style: AppTypography.weight(
+                                AppTypography.hero,
+                                AppTypography.bold,
+                              ).copyWith(color: AppColors.accentForeground),
+                            ),
                           ),
-                        ),
-                        if (person.verified) ...[
-                          const SizedBox(width: AppSpacing.s2),
-                          const NumayaIcon(
-                            NumayaIcons.verified,
-                            size: AppSizes.iconMd,
-                            color: AppColors.accentForeground,
-                          ),
+                          if (person.verified) ...[
+                            const SizedBox(width: AppSpacing.s2),
+                            const NumayaIcon(
+                              NumayaIcons.verified,
+                              size: AppSizes.iconMd,
+                              color: AppColors.accentForeground,
+                            ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
                   ),
                 ],

@@ -207,7 +207,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String setupVerifiedBody(Object number) {
-    return '$number is confirmed. Now let’s make a profile people actually want to reply to.';
+    return '$number is confirmed. Now let’s set up your profile.';
   }
 
   @override
@@ -486,7 +486,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filtersSaved => 'Filters saved';
 
   @override
-  String get likesSubtitle => 'People who liked you. Like them back to match.';
+  String get likesSubtitle => 'Like them back to match.';
 
   @override
   String get likesEmptyTitle => 'No new likes right now';
@@ -503,7 +503,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatsEmptyBody =>
-      'When you like each other, you’ll match. Here’s where you can chat.';
+      'When you like each other, you’ll match and can chat here.';
 
   @override
   String get findYourPeople => 'Find your people';
@@ -634,7 +634,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Push notifications aren’t connected in this build. These choices are kept for this session.';
 
   @override
-  String get settingsSignOut => 'Log out';
+  String get settingsSignOut => 'Sign out';
 
   @override
   String get settingsDeleteNote =>
@@ -1290,7 +1290,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recoveryEmailBody =>
-      'If you ever lose access to your number, an email on file lets support help you back into your account.';
+      'If you lose access to your number, support can use this email to help you back into your account.';
 
   @override
   String get recoveryEmailDemo =>
@@ -1317,7 +1317,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String reauthBody(String phone) {
-    return 'For your security, this session has ended. Confirm it’s you with a code sent to $phone and you’ll be back where you were.';
+    return 'Your session ended. Confirm it’s you with a code sent to $phone to pick up where you left off.';
   }
 
   @override
@@ -1357,7 +1357,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatStatusFailed => 'Not sent';
 
   @override
-  String get chatRetry => 'Retry';
+  String get chatRetry => 'Try again';
 
   @override
   String get chatDelete => 'Delete';
@@ -1943,7 +1943,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteHeading => 'Delete your account?';
 
   @override
-  String get deleteLede => 'Before you go, tell us why. It helps us improve.';
+  String get deleteLede => 'Your answer helps us improve.';
 
   @override
   String get deleteWhy => 'Why are you leaving?';
@@ -2262,10 +2262,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'With Incognito, only people you’ve liked can see your profile.';
 
   @override
-  String get logoutTitle => 'Log out?';
+  String get logoutTitle => 'Sign out?';
 
   @override
-  String get logoutBody => 'Logging out clears your profile from this device.';
+  String get logoutBody => 'Signing out clears your profile from this device.';
 
   @override
   String get yes => 'yes';
@@ -2940,7 +2940,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get obConfirmEdit => 'Edit';
 
   @override
-  String get obConfirm => 'Confirm';
+  String get obConfirm => 'That’s right';
 
   @override
   String get obUnderageTitle => 'Numaya is for adults';
@@ -4462,7 +4462,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get visLede =>
-      'What Numaya knows about whether people can see your profile, what you can change, and what it can’t tell you.';
+      'Whether people can see your profile, what you can change, and what this page can’t tell you.';
 
   @override
   String get visVisibility => 'Visibility';
@@ -4471,7 +4471,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get visStatusVisible => 'Visible';
 
   @override
-  String get visStatusPaused => 'Paused';
+  String get visStatusPaused => 'Snoozed';
 
   @override
   String get visStatusLimited => 'Limited';
@@ -4494,11 +4494,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get visPausedBody =>
-      'New people can’t see you while you’re paused. Your matches and chats are still here.';
+      'New people can’t see you while you’re snoozed. Your matches and chats are still here.';
 
   @override
   String visPausedUntil(Object date) {
-    return 'New people can’t see you while you’re paused. It ends $date.';
+    return 'New people can’t see you while you’re snoozed. It ends $date.';
   }
 
   @override
@@ -4787,7 +4787,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get visWhyNotice => 'There’s a notice on your account.';
 
   @override
-  String get visWhyResume => 'You’re paused, so new people can’t see you.';
+  String get visWhyResume => 'You’re snoozed, so new people can’t see you.';
 
   @override
   String get visWhyRequired =>

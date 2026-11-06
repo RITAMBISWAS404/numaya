@@ -152,7 +152,7 @@ void main() {
       expect(find.text('You’re 31'), findsOneWidget);
       await tapNext(tester);
       expect(find.text('Born April 12, 1995'), findsOneWidget);
-      await tapText(tester, 'Confirm');
+      await tapText(tester, 'That’s right');
       await tester.pumpAndSettle();
 
       // Gender (required) with optional pronouns.

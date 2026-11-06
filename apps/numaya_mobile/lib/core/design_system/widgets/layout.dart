@@ -219,11 +219,17 @@ class NumayaTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: AppSizes.topBar,
+    // TC-04: the bar is 56pt and grows when a title wraps at large text, so a title is never cut
+    // to "Safety and w…" (it takes two lines before it truncates; the full title is the header's
+    // semantic label either way).
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: AppSizes.topBar),
       child: Padding(
         // Back and action buttons are rounded squares that sit on the gutter (Alan, Meetup).
-        padding: const EdgeInsets.symmetric(horizontal: AppLayout.barPadding),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppLayout.barPadding,
+          vertical: AppSpacing.s1,
+        ),
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -255,7 +261,7 @@ class NumayaTopBar extends StatelessWidget {
                           child: Text(
                             title!,
                             style: AppTypography.headerCaps,
-                            maxLines: 1,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

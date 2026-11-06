@@ -93,16 +93,21 @@ void main() {
       expect(AppTypography.flowTitle.fontSize, 24);
       expect(AppTypography.headline.fontSize, 24);
       expect(AppTypography.card.fontSize, 18);
-      expect(AppTypography.section.fontSize, 20);
+      // Typography pass: sections are Ente H2 (18/24), a step under the 20pt sheet title.
+      expect(AppTypography.section.fontSize, 18);
+      expect(AppTypography.emptyTitle.fontSize, 20);
       expect(AppTypography.sheetTitle.fontSize, 20);
       expect(AppTypography.metric.fontSize, 40);
       expect(AppTypography.labelCaps.fontSize, 12);
-      // Ente Body 14/20 medium for body, typing and buttons; Mini 12/16 below it.
+      // Ente Body 14/20 medium for body and typing; buttons are Body-Bold (600); metadata is
+      // 13/18 (Ente Mini adapted to Figtree's x-height), still under the body.
       expect(AppTypography.body.fontSize, 14);
       expect(AppTypography.body.height! * AppTypography.body.fontSize!, 20);
       expect(AppTypography.body.fontWeight, FontWeight.w500);
       expect(AppTypography.input.fontSize, 14);
       expect(AppTypography.button.fontSize, 14);
+      expect(AppTypography.button.fontWeight, FontWeight.w600);
+      expect(AppTypography.caption.fontSize, 13);
       expect(
         AppTypography.caption.fontSize!,
         lessThan(AppTypography.body.fontSize!),

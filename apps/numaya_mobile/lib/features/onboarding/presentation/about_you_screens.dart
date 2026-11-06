@@ -123,6 +123,7 @@ class _NameBirthdayScreenState extends ConsumerState<NameBirthdayScreen> {
       flex: length,
       child: NumayaTextField(
         label: label,
+        subLabel: true,
         controller: c,
         focusNode: focus,
         placeholder: placeholder,

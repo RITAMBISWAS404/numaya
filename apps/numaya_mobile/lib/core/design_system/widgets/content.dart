@@ -44,7 +44,7 @@ class _BrandMarkPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// Mark plus the "numaya" wordmark in bold Hanken Grotesk ink.
+/// Mark plus the "numaya" wordmark ([AppTypography.wordmark]: Figtree bold, -0.03em) in ink.
 class Wordmark extends StatelessWidget {
   const Wordmark({super.key, this.small = false, this.maxWidth});
   final bool small;

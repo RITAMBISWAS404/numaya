@@ -1545,3 +1545,56 @@ class _Bleed extends StatelessWidget {
     );
   }
 }
+
+/// The scrim behind text on a photo (typography pass, TC-07): a [fade] band that runs from clear
+/// to [AppColors.photoPanel], then the solid panel behind [child], however tall the text grows. White
+/// text on the panel is at least 9.29:1 over a white photo; a fixed-height gradient left a name at
+/// 200% text on the faint top of the fade (about 1.4:1 over a bright photo).
+class PhotoScrim extends StatelessWidget {
+  const PhotoScrim({
+    super.key,
+    required this.child,
+    this.fade = 72,
+    this.padding = EdgeInsets.zero,
+  });
+
+  final Widget child;
+  final double fade;
+
+  /// Space around [child] inside the solid panel.
+  final EdgeInsets padding;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      IgnorePointer(
+        child: SizedBox(
+          height: fade,
+          child: const DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Color(0x00000000), AppColors.photoPanel],
+              ),
+            ),
+          ),
+        ),
+      ),
+      // The panel is painted behind the text and ignores touches, so the photo's own gestures
+      // still work through it (only [child] can take a tap).
+      Stack(
+        children: [
+          const Positioned.fill(
+            child: IgnorePointer(
+              child: ColoredBox(color: AppColors.photoPanel),
+            ),
+          ),
+          Padding(padding: padding, child: child),
+        ],
+      ),
+    ],
+  );
+}

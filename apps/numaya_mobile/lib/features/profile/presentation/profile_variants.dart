@@ -133,7 +133,7 @@ class ProfileHeaderCover extends StatelessWidget {
           ),
           // Sizes the cover: the name block at the bottom, with room above it. The fade belongs
           // to the name block, so it always starts just above the name however tall the name is
-          // (white on its base is over 7:1), and the initial above stays on the light photo grey.
+          // (white on the solid panel is 9.29:1 or more), and the initial above stays on the light photo grey.
           ConstrainedBox(
             constraints: BoxConstraints(
               minHeight: minHeight,
@@ -146,40 +146,33 @@ class ProfileHeaderCover extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  DecoratedBox(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Color(0x00000000), AppColors.photoPanel],
-                        stops: [0, 0.5],
-                      ),
+                  // TC-07: the fade sits above the name and the solid panel behind it, so a
+                  // name that wraps at large text never reaches the faint top of the fade.
+                  PhotoScrim(
+                    fade: _fade,
+                    padding: const EdgeInsets.fromLTRB(
+                      AppSpacing.s5,
+                      0,
+                      AppSpacing.s5,
+                      AppSpacing.s5,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSpacing.s5,
-                        _fade,
-                        AppSpacing.s5,
-                        AppSpacing.s5,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Semantics(
-                            header: true,
-                            child: Text(
-                              data.name,
-                              style: AppTypography.weight(
-                                AppTypography.hero,
-                                AppTypography.bold,
-                              ).copyWith(color: AppColors.accentForeground),
-                            ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Semantics(
+                          header: true,
+                          child: Text(
+                            data.name,
+                            style: AppTypography.weight(
+                              AppTypography.hero,
+                              AppTypography.bold,
+                            ).copyWith(color: AppColors.accentForeground),
                           ),
-                          const SizedBox(height: AppSpacing.s2),
-                          data.badge(context, tone: BadgeTone.onPhoto),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: AppSpacing.s2),
+                        data.badge(context, tone: BadgeTone.onPhoto),
+                      ],
                     ),
                   ),
                 ],
