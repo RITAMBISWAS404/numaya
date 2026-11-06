@@ -122,6 +122,32 @@ void main() {
       await settle(tester);
     });
 
+    testWidgets('at 320pt and 200% text all four tiles fit inside the bar', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(640, 1386);
+      tester.view.devicePixelRatio = 2;
+      tester.platformDispatcher.textScaleFactorTestValue = 2;
+      addTearDown(tester.view.reset);
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      final c = await quickStartApp(tester);
+      await goTo(c, tester, Routes.messages);
+      final bar = tester.getRect(find.byType(NumayaTabBar));
+      var previousRight = double.negativeInfinity;
+      for (var i = 0; i < 4; i++) {
+        final tile = tester.getRect(find.byKey(ValueKey('tab-tile-$i')));
+        expect(tile.left, greaterThanOrEqualTo(bar.left), reason: '$i');
+        // Inside the bar's 16pt gutter and 10pt inner padding.
+        expect(tile.right, lessThanOrEqualTo(320 - 16 - 10), reason: '$i');
+        expect(tile.left, greaterThan(previousRight), reason: '$i');
+        previousRight = tile.right;
+      }
+      await openTab(tester, 'Profile');
+      expect(location(c), Routes.profile);
+      expect(tester.takeException(), isNull);
+      await settle(tester);
+    });
+
     testWidgets('each tab keeps its own stack; back returns to Discover', (
       tester,
     ) async {

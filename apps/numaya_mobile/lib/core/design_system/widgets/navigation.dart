@@ -234,13 +234,15 @@ class NumayaTabBar extends StatelessWidget {
   /// Hit areas: each tile sits in a 48pt-wide slot and its tap target reaches 3pt above and below
   /// the 38pt tile into the bar's padding, so every target is 48 x 44 without touching a
   /// neighbour's (they stay 34pt apart).
+  ///
+  /// On a narrow screen (320pt) the 34pt gaps shrink so the bar still fits; slots stay 48pt.
   Widget _compact(BuildContext context, double bottom) {
     const reach = (AppSizes.touchMin - AppSizes.tabItem) / 2;
-    final row = Row(
+    Widget row(double gap) => Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < items.length; i++) ...[
-          if (i > 0) const SizedBox(width: AppSizes.tabGap),
+          if (i > 0) SizedBox(width: gap),
           _compactTab(context, i),
         ],
       ],
@@ -268,10 +270,20 @@ class NumayaTabBar extends StatelessWidget {
               borderRadius: AppRadii.all(AppRadii.control),
               boxShadow: AppElevation.navigation,
             ),
-            // A very narrow screen scrolls the row rather than squeezing items below 48.
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: row,
+            // Gaps give way first; only if they run out does the row scroll rather than squeeze
+            // items below 48.
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final n = items.length;
+                final spare = constraints.maxWidth - n * AppSizes.tabItemWidth;
+                final gap = n < 2
+                    ? 0.0
+                    : (spare / (n - 1)).clamp(AppSpacing.s2, AppSizes.tabGap);
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: row(gap.toDouble()),
+                );
+              },
             ),
           ),
         ),
