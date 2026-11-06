@@ -154,7 +154,11 @@ void main() {
     'Demo Hub: events and visibility rows work; reset restores events',
     (tester) async {
       await usePhoneSize(tester);
-      final c = await quickStartApp(tester, world: DemoWorld.full);
+      final c = await quickStartApp(
+        tester,
+        world: DemoWorld.full,
+        overrides: eventsOn,
+      );
       await goTo(c, tester, Routes.demo);
       await _tap(tester, find.text('Notices: hidden while reviewed'));
       expect(c.read(accountSignalsProvider).notice, NoticeState.restricted);

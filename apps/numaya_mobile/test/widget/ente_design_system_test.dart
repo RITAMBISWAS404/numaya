@@ -1,10 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show RenderParagraph;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
-import 'package:numaya_mobile/core/design_system/icons/lucide_icons.dart';
 
 import '../helpers/journeys.dart';
 import '../helpers/test_app.dart';
@@ -14,17 +14,24 @@ import '../helpers/test_app.dart';
 void main() {
   setUpAll(loadAppFonts);
 
-  test('every shared icon name has one Lucide glyph (ED-03)', () {
-    for (final icon in NumayaIcons.values) {
-      expect(kLucideIcons[icon], isNotNull, reason: icon.name);
-      expect(kLucideIcons[icon]!.fontFamily, 'Lucide', reason: icon.name);
-    }
-    for (final icon in NumayaMobileIcons.values) {
-      expect(kLucideMobileIcons[icon], isNotNull, reason: icon.name);
-    }
-    // Back controls draw Ente's arrow, not a chevron.
-    expect(kLucideIcons[NumayaIcons.chevronLeft], LucideIcons.arrowLeft);
-  });
+  test(
+    'every shared icon name has a bundled Tabler outline (Tabler MVP pass)',
+    () {
+      final glyphs = [...kTablerIcons.values, ...kTablerMobileIcons.values];
+      expect(kTablerIcons.keys.toSet(), NumayaIcons.values.toSet());
+      expect(kTablerMobileIcons.keys.toSet(), NumayaMobileIcons.values.toSet());
+      for (final g in glyphs) {
+        expect(File(tablerAsset(g)).existsSync(), isTrue, reason: g.outline);
+        if (g.filled != null) {
+          final filled = tablerAsset(g, filled: true);
+          expect(filled, contains('/filled/'));
+          expect(File(filled).existsSync(), isTrue, reason: filled);
+        }
+      }
+      // Back controls draw Ente's arrow, not a chevron.
+      expect(kTablerIcons[NumayaIcons.chevronLeft]!.outline, 'arrow-left');
+    },
+  );
 
   testWidgets('Button Large: 52pt, 20pt corners, Body label', (tester) async {
     await tester.pumpWidget(

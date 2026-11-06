@@ -108,7 +108,7 @@ void main() {
       tester,
     ) async {
       await usePhoneSize(tester);
-      final c = await quickStartApp(tester);
+      final c = await quickStartApp(tester, overrides: eventsOn);
       await goTo(c, tester, '${Routes.event}/e-jazz');
       final share = rectOf(tester, 'Share');
       final save = rectOf(tester, 'Save Late jazz at the Vortex');

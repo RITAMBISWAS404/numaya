@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../app/providers.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
@@ -394,7 +395,11 @@ class VisibilityScreen extends ConsumerWidget {
                   leading: NumayaIcons.location,
                   tone: r.areaSet ? AccentTone.positive : AccentTone.caution,
                   label: l10n.visArea,
-                  detail: r.areaSet ? null : l10n.visAreaMissing,
+                  detail: r.areaSet
+                      ? null
+                      : ref.watch(eventsAvailableProvider)
+                      ? l10n.visAreaMissing
+                      : l10n.visAreaMissingPeople,
                   value:
                       ref.watch(profileDetailsProvider).area ?? l10n.visNotSet,
                   onTap: () => unawaited(chooseArea()),

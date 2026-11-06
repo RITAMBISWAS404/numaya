@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/router.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
-import 'package:numaya_mobile/core/design_system/icons/lucide_icons.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 import 'package:numaya_mobile/features/dating/presentation/match_screen.dart';
 
@@ -52,7 +51,12 @@ void main() {
       final g = await dragPhoto(tester, 'Sam, 31', 160);
       // Mid-drag: the decision is named on the photo, with its icon.
       expect(find.text('Like'), findsWidgets);
-      expect(find.byIcon(kLucideIcons[NumayaIcons.check]!), findsOneWidget);
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is NumayaIcon && w.icon == NumayaIcons.check,
+        ),
+        findsOneWidget,
+      );
       await g.up();
       await afterDecision(tester);
       expect(find.text('You liked Sam'), findsOneWidget);
@@ -101,7 +105,12 @@ void main() {
         expect(find.text('Maya, 29'), findsOneWidget);
         // No stamp left on the photo (and no decision buttons since UI-016).
         expect(find.text('Like'), findsNothing);
-        expect(find.byIcon(kLucideIcons[NumayaIcons.check]!), findsNothing);
+        expect(
+          find.byWidgetPredicate(
+            (w) => w is NumayaIcon && w.icon == NumayaIcons.check,
+          ),
+          findsNothing,
+        );
         await settle(tester);
       },
     );
@@ -568,27 +577,30 @@ void main() {
       },
     );
 
-    testWidgets('the tab indicator is fully rounded inside the rounded bar', (
-      tester,
-    ) async {
-      await usePhoneSize(tester);
-      await quickStartApp(tester);
-      final selected = find.descendant(
-        of: find.byType(NumayaTabBar),
-        matching: find.byWidgetPredicate(
-          (w) =>
-              w is AnimatedContainer &&
-              (w.decoration as BoxDecoration?)?.color == AppColors.accentTint,
-        ),
-      );
-      expect(selected, findsOneWidget);
-      final deco =
-          tester.widget<AnimatedContainer>(selected).decoration!
-              as BoxDecoration;
-      // UI-026: the selected item is fully rounded, like the bar.
-      expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
-      await settle(tester);
-    });
+    testWidgets(
+      'the selected tab is a light neutral tile with Ente icon-button corners',
+      (tester) async {
+        await usePhoneSize(tester);
+        await quickStartApp(tester);
+        final selected = find.descendant(
+          of: find.byType(NumayaTabBar),
+          matching: find.byWidgetPredicate(
+            (w) =>
+                w is AnimatedContainer &&
+                (w.decoration as BoxDecoration?)?.color ==
+                    AppColors.iconSelectedFill,
+          ),
+        );
+        expect(selected, findsOneWidget);
+        final deco =
+            tester.widget<AnimatedContainer>(selected).decoration!
+                as BoxDecoration;
+        // Tabler MVP pass (Ente Nav Bar 7634:54194): a 38pt tile with the Icon Button's 12pt
+        // corners inside the bar's rounder ones (supersedes UI-026's fully rounded tint).
+        expect(deco.borderRadius, AppRadii.all(AppRadii.iconButton));
+        await settle(tester);
+      },
+    );
 
     testWidgets('the Discover photo nests inside its hero card', (
       tester,

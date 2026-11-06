@@ -102,6 +102,12 @@ abstract final class AppColors {
   static const Color textPrimary = ink;
   static const Color textSecondary = _M.text2;
   static const Color textMuted = _M.muted;
+
+  /// Icons (Tabler MVP pass): the selected tab's filled glyph is near-black on the very light
+  /// neutral selection fill; idle tabs and other inactive icons are a light grey outline.
+  static const Color iconSelected = _M.text2;
+  static const Color iconSelectedFill = _M.fill;
+  static const Color iconInactive = _M.iconInactive;
   static const Color textSubtle = disabledForeground;
   static const Color textBrand = accentOnTint;
   static const Color textBrandDeep = accentOnTint;

@@ -75,16 +75,17 @@ class _DesignLabScreenState extends ConsumerState<DesignLabScreen> {
                   surface: surface,
                   currentIndex: 2,
                   onSelect: (_) {},
-                  items: const [
-                    TabItem(label: 'Home', icon: NumayaIcons.home),
-                    TabItem(label: 'Events', icon: NumayaIcons.event),
-                    TabItem(
+                  items: [
+                    const TabItem(label: 'Home', icon: NumayaIcons.home),
+                    if (ref.watch(eventsAvailableProvider))
+                      const TabItem(label: 'Events', icon: NumayaIcons.event),
+                    const TabItem(
                       label: 'Likes',
                       icon: NumayaIcons.heart,
                       badgeCount: 2,
                     ),
-                    TabItem(label: 'Messages', icon: NumayaIcons.message),
-                    TabItem(label: 'Profile', icon: NumayaIcons.user),
+                    const TabItem(label: 'Messages', icon: NumayaIcons.message),
+                    const TabItem(label: 'Profile', icon: NumayaIcons.user),
                   ],
                 ),
               ),
@@ -199,7 +200,7 @@ class _DesignLabScreenState extends ConsumerState<DesignLabScreen> {
                 NavIconButton(
                   icon: NumayaIcons.heart,
                   label: 'Save',
-                  outline: !_saved,
+                  filled: _saved,
                   onPressed: () => setState(() => _saved = !_saved),
                 ),
                 NumayaFab(onPressed: () {}, semanticLabel: 'Next'),

@@ -329,7 +329,7 @@ class EventCard extends StatelessWidget {
                   label: saved
                       ? l10n.eventUnsave(e.title)
                       : l10n.eventSave(e.title),
-                  outline: !saved,
+                  filled: saved,
                   onPressed: onToggleSave,
                 ),
               ),

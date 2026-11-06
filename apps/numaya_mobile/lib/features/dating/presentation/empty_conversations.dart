@@ -6,8 +6,8 @@ import '../../experiments/experiments.dart';
 
 /// EXP-003 empty conversations: the alternatives to the refined candidate's illustrated card on
 /// Messages when there are no matches or chats yet. Same copy and the same main way forward
-/// (Discover); only what surrounds it changes. No variant invents a feature: Likes and Events
-/// are existing tabs.
+/// (Discover); only what surrounds it changes. No variant invents a feature: Likes is an existing
+/// tab, and Events is offered only when the release includes it ([events]).
 class EmptyConversations extends StatelessWidget {
   const EmptyConversations({
     super.key,
@@ -16,6 +16,7 @@ class EmptyConversations extends StatelessWidget {
     required this.onDiscover,
     required this.onLikes,
     required this.onEvents,
+    this.events = false,
   });
 
   final ExpVariant variant;
@@ -25,6 +26,10 @@ class EmptyConversations extends StatelessWidget {
   final VoidCallback onDiscover;
   final VoidCallback onLikes;
   final VoidCallback onEvents;
+
+  /// Whether the release includes Events ([eventsAvailableProvider]); off in the MVP, which hides
+  /// the Events path.
+  final bool events;
 
   @override
   Widget build(BuildContext context) => switch (variant) {
@@ -52,12 +57,15 @@ class EmptyConversations extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           NumayaButton(label: l10n.findYourPeople, onPressed: onDiscover),
-          const SizedBox(height: AppSpacing.s3),
-          NumayaButton(
-            label: l10n.chatsEmptyEvents,
-            variant: NumayaButtonVariant.secondary,
-            onPressed: onEvents,
-          ),
+          // MVP: the Events path shows only when the release includes Events.
+          if (events) ...[
+            const SizedBox(height: AppSpacing.s3),
+            NumayaButton(
+              label: l10n.chatsEmptyEvents,
+              variant: NumayaButtonVariant.secondary,
+              onPressed: onEvents,
+            ),
+          ],
         ],
       ),
     );
@@ -97,12 +105,13 @@ class EmptyConversations extends StatelessWidget {
                 value: '$likes',
                 onTap: onLikes,
               ),
-            ListRow(
-              leading: NumayaIcons.calendar,
-              label: l10n.chatsEmptyEvents,
-              detail: l10n.chatsEmptyEventsDetail,
-              onTap: onEvents,
-            ),
+            if (events)
+              ListRow(
+                leading: NumayaIcons.calendar,
+                label: l10n.chatsEmptyEvents,
+                detail: l10n.chatsEmptyEventsDetail,
+                onTap: onEvents,
+              ),
           ],
         ),
       ],

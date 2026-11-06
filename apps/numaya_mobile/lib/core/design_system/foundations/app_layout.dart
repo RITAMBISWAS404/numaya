@@ -211,6 +211,7 @@ abstract final class AppSizes {
   static const double tabItem = MonoSizes.tabItem;
   static const double tabItemWidth = MonoSizes.tabItemWidth;
   static const double tabPadding = MonoSizes.tabPadding;
+  static const double tabPaddingX = MonoSizes.tabPaddingX;
   static const double tabGap = MonoSizes.tabGap;
   static const double topBar = 56;
 }

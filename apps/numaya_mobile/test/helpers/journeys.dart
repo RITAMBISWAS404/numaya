@@ -92,9 +92,10 @@ Future<void> signUpToSetup(
   WidgetTester tester,
   DemoAuthRepository auth, {
   Future<void> Function()? onScreen,
+  List<Override> overrides = const [],
 }) async {
   final check = onScreen ?? () async {};
-  await tester.pumpWidget(testApp(auth: auth));
+  await tester.pumpWidget(testApp(auth: auth, overrides: overrides));
   await tester.pump();
   await check(); // Welcome
   await tapOn(tester, find.text('Create an account'));
@@ -142,8 +143,9 @@ Future<void> signUpToInterests(
   WidgetTester tester,
   DemoAuthRepository auth, {
   Future<void> Function()? onScreen,
+  List<Override> overrides = const [],
 }) async {
-  await signUpToSetup(tester, auth, onScreen: onScreen);
+  await signUpToSetup(tester, auth, onScreen: onScreen, overrides: overrides);
   await setupFromNameToInterests(tester, onScreen: onScreen);
 }
 
@@ -228,8 +230,12 @@ Future<void> finishProfileToHome(
   await settle(tester);
 }
 
-Future<void> signUpToHome(WidgetTester tester, DemoAuthRepository auth) async {
-  await signUpToInterests(tester, auth);
+Future<void> signUpToHome(
+  WidgetTester tester,
+  DemoAuthRepository auth, {
+  List<Override> overrides = const [],
+}) async {
+  await signUpToInterests(tester, auth, overrides: overrides);
   await finishProfileToHome(tester);
 }
 

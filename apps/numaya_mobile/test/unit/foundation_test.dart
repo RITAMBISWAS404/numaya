@@ -118,13 +118,13 @@ void main() {
       expect(AppRadii.photo, 16); // nested: hero 24 minus its 8pt inset
       expect(AppRadii.sheet, 24);
       expect(AppRadii.iconButton, 12);
-      // Button Large 52, Text Input 52, Menu Item 60, Icon Button 38; the compact nav bar (UI-026)
-      // is 38 + 2 x 8 = 54.
+      // Button Large 52, Text Input 52, Menu Item 60, Icon Button 38; the nav bar follows Ente's
+      // Nav Bar (7634:54194, Tabler MVP pass): 62 tall.
       expect(AppSizes.buttonHeight, 52);
       expect(AppSizes.field, 52);
       expect(AppSizes.row, 60);
       expect(AppSizes.iconButton, 38);
-      expect(AppSizes.tabBar, 54);
+      expect(AppSizes.tabBar, 62);
       // Visible tiles may be compact; every hit area stays at least 44 (Pressable.minSize).
       expect(AppSizes.touchMin, 44);
       expect(AppSizes.choice, 20);

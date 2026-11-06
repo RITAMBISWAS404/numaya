@@ -82,7 +82,8 @@ void main() {
         final pill = tester.widget<Container>(pillOf());
         final deco = pill.decoration! as BoxDecoration;
         expect(deco.color, AppColors.surface);
-        expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
+        // Ente Nav Bar corners (Tabler MVP pass).
+        expect(deco.borderRadius, AppRadii.all(AppRadii.control));
         expect(deco.boxShadow, AppElevation.navigation);
         expect(tester.getSize(pillOf()).height, AppSizes.tabBar);
         await settle(tester);
@@ -140,24 +141,29 @@ void main() {
       await settle(tester);
     });
 
-    testWidgets('unselected icons use the stronger ink on glass', (
-      tester,
-    ) async {
-      await usePhoneSize(tester);
-      await quickStartApp(tester);
-      final icons = tester
-          .widgetList<Icon>(
-            find.descendant(of: bar(), matching: find.byType(Icon)),
-          )
-          .toList();
-      expect(icons, hasLength(5));
-      // Home is selected (brand text on its tint); the other four are idle.
-      expect(icons.first.color, AppColors.accentOnTint);
-      for (final icon in icons.skip(1)) {
-        expect(icon.color, AppColors.textSecondary);
-      }
-      await settle(tester);
-    });
+    testWidgets(
+      'selected: filled near-black glyph; unselected: light grey outlines (Tabler MVP pass)',
+      (tester) async {
+        await usePhoneSize(tester);
+        await quickStartApp(tester);
+        final icons = tester
+            .widgetList<NumayaIcon>(
+              find.descendant(of: bar(), matching: find.byType(NumayaIcon)),
+            )
+            .toList();
+        // MVP: four destinations.
+        expect(icons, hasLength(4));
+        // Discover is selected: Tabler's filled glyph in near-black; the others are outlines in
+        // the light grey (3.46:1 on white, above WCAG 1.4.11's 3:1).
+        expect(icons.first.filled, isTrue);
+        expect(icons.first.color, AppColors.iconSelected);
+        for (final icon in icons.skip(1)) {
+          expect(icon.filled, isFalse);
+          expect(icon.color, AppColors.iconInactive);
+        }
+        await settle(tester);
+      },
+    );
 
     testWidgets('tab content can scroll clear of the bar', (tester) async {
       await usePhoneSize(tester);
@@ -183,24 +189,30 @@ void main() {
       await usePhoneSize(tester);
       final handle = tester.ensureSemantics();
       final c = await quickStartApp(tester);
-      await openTab(tester, 'Events');
-      expect(c.read(routerProvider).state.uri.path, Routes.events);
+      await openTab(tester, 'Messages');
+      expect(c.read(routerProvider).state.uri.path, Routes.messages);
       // The tab's label and its selected state, each on the node that owns it (as on baseline).
       expect(
-        find.descendant(of: bar(), matching: find.bySemanticsLabel('Events')),
+        find.descendant(
+          of: bar(),
+          matching: find.bySemanticsLabel(RegExp('^Messages')),
+        ),
         findsOneWidget,
       );
-      final events = find.ancestor(
-        of: find.descendant(of: bar(), matching: find.byTooltip('Events')),
+      final messages = find.ancestor(
+        of: find.descendant(of: bar(), matching: find.byTooltip('Messages')),
         matching: find.byWidgetPredicate(
           (w) => w is Semantics && w.properties.selected != null,
         ),
       );
       expect(
-        tester.widget<Semantics>(events.first).properties.selected,
+        tester.widget<Semantics>(messages.first).properties.selected,
         isTrue,
       );
-      expect(tester.widget<Semantics>(events.first).properties.button, isTrue);
+      expect(
+        tester.widget<Semantics>(messages.first).properties.button,
+        isTrue,
+      );
       await settle(tester);
       handle.dispose();
     });

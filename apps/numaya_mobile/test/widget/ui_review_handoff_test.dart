@@ -321,7 +321,9 @@ void main() {
       expect(art.height, ScreenHeader.artSize);
     });
 
-    testWidgets('alert icon aligns with the first line of multiline copy', (
+    // Superseded by the Tabler MVP pass: the alert icon is centred on the full content height
+    // (was UI-010's first-line alignment).
+    testWidgets('alert icon is centred on multiline copy (Tabler MVP pass)', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -340,7 +342,16 @@ void main() {
       final icon = tester.getRect(find.byType(NumayaIcon));
       final text = tester.getRect(find.textContaining('The selfie'));
       expect(text.height, greaterThan(icon.height * 1.5)); // multiline
-      expect((icon.top - text.top).abs(), lessThanOrEqualTo(1));
+      // Centred on the content column (the title block), not the first line.
+      final content = tester.getRect(
+        find
+            .ancestor(
+              of: find.textContaining('The selfie'),
+              matching: find.byType(Column),
+            )
+            .first,
+      );
+      expect((icon.center.dy - content.center.dy).abs(), lessThanOrEqualTo(1));
     });
   });
 }

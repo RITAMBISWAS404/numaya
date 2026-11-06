@@ -28,7 +28,7 @@ void main() {
     tester,
   ) async {
     await usePhoneSize(tester);
-    await signUpToHome(tester, testAuth());
+    await signUpToHome(tester, testAuth(), overrides: eventsOn);
     await openTab(tester, 'Events');
     expect(find.text('Late jazz at the Vortex'), findsWidgets);
     await tester.enterText(find.byType(TextField).first, 'castle');
@@ -47,7 +47,11 @@ void main() {
     tester,
   ) async {
     await usePhoneSize(tester);
-    final c = await quickStartApp(tester, world: DemoWorld.fresh);
+    final c = await quickStartApp(
+      tester,
+      world: DemoWorld.fresh,
+      overrides: eventsOn,
+    );
     await goTo(c, tester, '${Routes.event}/e-jazz');
     expect(find.text('Late jazz at the Vortex'), findsOneWidget);
     expect(find.text('7 going · 2 spots left'), findsOneWidget);
@@ -77,7 +81,11 @@ void main() {
     tester,
   ) async {
     await usePhoneSize(tester);
-    final c = await quickStartApp(tester, world: DemoWorld.fresh);
+    final c = await quickStartApp(
+      tester,
+      world: DemoWorld.fresh,
+      overrides: eventsOn,
+    );
     await goTo(c, tester, '${Routes.event}/e-board');
     expect(find.text('7 going · Full'), findsOneWidget);
     await _tap(tester, find.widgetWithText(NumayaButton, 'Join waitlist'));
@@ -99,7 +107,11 @@ void main() {
 
   testWidgets('the host’s question is answered before joining', (tester) async {
     await usePhoneSize(tester);
-    final c = await quickStartApp(tester, world: DemoWorld.fresh);
+    final c = await quickStartApp(
+      tester,
+      world: DemoWorld.fresh,
+      overrides: eventsOn,
+    );
     await goTo(c, tester, '${Routes.event}/e-climb');
     await _tap(tester, find.widgetWithText(NumayaButton, 'Join'));
     await _sheet(tester);
@@ -119,7 +131,11 @@ void main() {
     tester,
   ) async {
     await usePhoneSize(tester);
-    final c = await quickStartApp(tester, world: DemoWorld.fresh);
+    final c = await quickStartApp(
+      tester,
+      world: DemoWorld.fresh,
+      overrides: eventsOn,
+    );
     await goTo(c, tester, '${Routes.event}/e-swim');
     expect(find.text('Registration closed'), findsWidgets);
     expect(find.widgetWithText(NumayaButton, 'Join'), findsNothing);
@@ -143,7 +159,11 @@ void main() {
     tester,
   ) async {
     await usePhoneSize(tester);
-    final c = await quickStartApp(tester, world: DemoWorld.fresh);
+    final c = await quickStartApp(
+      tester,
+      world: DemoWorld.fresh,
+      overrides: eventsOn,
+    );
     c.read(datingProvider.notifier).setSimulateErrors(true);
     await goTo(c, tester, '${Routes.event}/e-jazz');
     await _tap(tester, find.widgetWithText(NumayaButton, 'Join'));
@@ -179,7 +199,11 @@ void main() {
     tester,
   ) async {
     await usePhoneSize(tester);
-    final c = await quickStartApp(tester, world: DemoWorld.fresh);
+    final c = await quickStartApp(
+      tester,
+      world: DemoWorld.fresh,
+      overrides: eventsOn,
+    );
     await goTo(c, tester, Routes.events);
     await _tap(tester, _label('Filters'));
     await _sheet(tester);
@@ -208,7 +232,11 @@ void main() {
     tester,
   ) async {
     await usePhoneSize(tester);
-    final c = await quickStartApp(tester, world: DemoWorld.fresh);
+    final c = await quickStartApp(
+      tester,
+      world: DemoWorld.fresh,
+      overrides: eventsOn,
+    );
     await goTo(c, tester, Routes.events);
     await _tap(tester, _label('Save Late jazz at the Vortex').first);
     expect(c.read(eventsProvider).saved, contains('e-jazz'));
@@ -223,7 +251,11 @@ void main() {
     tester,
   ) async {
     await usePhoneSize(tester);
-    final c = await quickStartApp(tester, world: DemoWorld.fresh);
+    final c = await quickStartApp(
+      tester,
+      world: DemoWorld.fresh,
+      overrides: eventsOn,
+    );
     await goTo(c, tester, Routes.events);
     await _tap(tester, _label('Create an event'));
     expect(find.text('New event'), findsOneWidget);
@@ -266,7 +298,11 @@ void main() {
     tester,
   ) async {
     await usePhoneSize(tester);
-    final c = await quickStartApp(tester, world: DemoWorld.fresh);
+    final c = await quickStartApp(
+      tester,
+      world: DemoWorld.fresh,
+      overrides: eventsOn,
+    );
     await goTo(c, tester, Routes.events);
     await _tap(tester, _label('Create an event'));
     await tester.enterText(find.byType(TextField).first, 'Picnic plan');
@@ -291,7 +327,11 @@ void main() {
     'host: remove an attendee promotes the waitlist; cancel the event',
     (tester) async {
       await usePhoneSize(tester);
-      final c = await quickStartApp(tester, world: DemoWorld.full);
+      final c = await quickStartApp(
+        tester,
+        world: DemoWorld.full,
+        overrides: eventsOn,
+      );
       await goTo(c, tester, '${Routes.event}/e-mine');
       expect(find.text('Hosting'), findsWidgets);
       await _tap(tester, find.widgetWithText(NumayaButton, 'Attendees'));
@@ -324,7 +364,11 @@ void main() {
     tester,
   ) async {
     await usePhoneSize(tester);
-    final c = await quickStartApp(tester, world: DemoWorld.fresh);
+    final c = await quickStartApp(
+      tester,
+      world: DemoWorld.fresh,
+      overrides: eventsOn,
+    );
     await goTo(c, tester, '${Routes.event}/e-jazz');
     await _tap(tester, find.text('Report this event'));
     await _sheet(tester);

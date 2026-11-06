@@ -22,7 +22,6 @@ dependencies:
   # Pinned by flutter_localizations.
   intl: ^0.20.2
   image_picker: ^1.2.4
-  lucide_icons_flutter: 4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -42,6 +41,10 @@ flutter:
     - assets/illustrations/mobile/
     # Sample media for the demo chat attachments (fictional, generated for this repo).
     - assets/demo/
+    # Tabler Icons 3.50.0 (MIT, assets/icons/tabler/LICENSE): official SVGs, synced by
+    # tool/sync_tabler_icons.py.
+    - assets/icons/tabler/outline/
+    - assets/icons/tabler/filled/
 
   # Monochrome Meetup type: one rounded geometric family, Figtree (variable, wght 300-900), from
   # github.com/google/fonts (ofl/figtree). Licence: assets/fonts/OFL-Figtree.txt (SIL OFL 1.1).

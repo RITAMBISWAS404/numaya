@@ -156,10 +156,16 @@ void main() {
       tester.widget<Text>(find.text('Body.').first).style!.color,
       AppColors.textMuted,
     );
-    // UI-010: icons top-aligned with the title.
+    // Tabler MVP pass (supersedes UI-010): the icon is centred on the content (title and body)
+    // and drawn with Tabler's filled artwork.
+    expect(infoIcon.filled, isTrue);
+    final contentMid =
+        (tester.getTopLeft(find.text('Tip')).dy +
+            tester.getBottomLeft(find.text('Body.').first).dy) /
+        2;
     expect(
-      tester.getTopLeft(find.byWidget(infoIcon)).dy,
-      closeTo(tester.getTopLeft(find.text('Tip')).dy, 1),
+      tester.getCenter(find.byWidget(infoIcon)).dy,
+      closeTo(contentMid, 1),
     );
   });
 

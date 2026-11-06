@@ -96,14 +96,12 @@ class ProfileScreen extends ConsumerWidget {
                   actions: [
                     NavIconButton(
                       icon: NumayaIcons.help,
-                      outline: true,
                       label: l10n.helpTitle,
                       onPressed: () => context.push(Routes.help),
                     ),
                     const SizedBox(width: AppSpacing.s2),
                     NavIconButton(
                       icon: NumayaIcons.settings,
-                      outline: true,
                       label: l10n.profileSettings,
                       onPressed: () => context.push(Routes.settings),
                     ),

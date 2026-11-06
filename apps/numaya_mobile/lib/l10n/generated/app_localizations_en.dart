@@ -4570,6 +4570,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get visAreaMissing => 'Needed for distances to people and events.';
 
   @override
+  String get visAreaMissingPeople => 'Needed for distances to people.';
+
+  @override
   String get visNotSet => 'Not set';
 
   @override

@@ -380,48 +380,65 @@ void main() {
     });
   });
 
-  group('UI-026 / UI-027: compact navigation', () {
-    testWidgets('8pt padding, 4pt gaps, 48 x 38 items, rounded, soft shadow', (
-      tester,
-    ) async {
-      final c = await home(tester);
-      final pill = find.byKey(NumayaTabBar.pillKey);
-      final deco = tester.widget<Container>(pill).decoration! as BoxDecoration;
-      expect(deco.boxShadow, AppElevation.navigation);
-      expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
-      final bar = tester.getRect(pill);
-      expect(bar.height, AppSizes.tabBar);
-      final tiles = find.descendant(
-        of: pill,
-        matching: find.byWidgetPredicate(
-          (w) =>
-              w is AnimatedContainer &&
-              w.constraints?.maxWidth == AppSizes.tabItemWidth,
-        ),
-      );
-      expect(tiles, findsNWidgets(5));
-      final rects = [for (var i = 0; i < 5; i++) tester.getRect(tiles.at(i))];
-      for (final r in rects) {
-        expect(r.size, const Size(48, 38));
-      }
-      expect(rects.first.left - bar.left, closeTo(8, 0.01));
-      expect(bar.right - rects.last.right, closeTo(8, 0.01));
-      expect(rects.first.top - bar.top, closeTo(8, 0.01));
-      for (var i = 1; i < 5; i++) {
-        expect(rects[i].left - rects[i - 1].right, closeTo(4, 0.01));
-      }
-      // Every destination still works.
-      for (final (label, path) in [
-        ('Events', Routes.events),
-        ('Likes', Routes.likes),
-        ('Messages', Routes.messages),
-        ('Profile', Routes.profile),
-        ('Home', Routes.home),
-      ]) {
-        await openTab(tester, label);
-        expect(c.read(routerProvider).state.uri.path, startsWith(path));
-      }
-    });
+  group('Navigation (Ente Nav Bar 7634:54194, Tabler MVP pass; supersedes UI-026/027 geometry)', () {
+    testWidgets(
+      '62pt bar, 38pt tiles with centres 82pt apart, 15pt ends, four destinations',
+      (tester) async {
+        final c = await home(tester);
+        final pill = find.byKey(NumayaTabBar.pillKey);
+        final deco =
+            tester.widget<Container>(pill).decoration! as BoxDecoration;
+        expect(deco.boxShadow, AppElevation.navigation);
+        expect(deco.borderRadius, AppRadii.all(AppRadii.control));
+        final bar = tester.getRect(pill);
+        expect(bar.height, AppSizes.tabBar);
+        // MVP: Discover, Likes, Messages and Profile; no Events tab.
+        final tiles = [
+          for (var i = 0; i < 4; i++)
+            tester.getRect(find.byKey(ValueKey('tab-tile-$i'))),
+        ];
+        expect(find.byKey(const ValueKey('tab-tile-4')), findsNothing);
+        for (final r in tiles) {
+          expect(r.size, const Size(38, 38));
+        }
+        expect(tiles.first.left - bar.left, closeTo(15, 0.01));
+        expect(bar.right - tiles.last.right, closeTo(15, 0.01));
+        expect(tiles.first.top - bar.top, closeTo(12, 0.01));
+        for (var i = 1; i < 4; i++) {
+          expect(
+            tiles[i].center.dx - tiles[i - 1].center.dx,
+            closeTo(82, 0.01),
+          );
+        }
+        // Every remaining destination still works, and the selected one is the filled glyph on
+        // the light neutral tile.
+        for (final (label, path, index) in [
+          ('Likes', Routes.likes, 1),
+          ('Messages', Routes.messages, 2),
+          ('Profile', Routes.profile, 3),
+          ('Home', Routes.home, 0),
+        ]) {
+          await openTab(tester, label);
+          expect(c.read(routerProvider).state.uri.path, startsWith(path));
+          final tile =
+              tester
+                      .widget<AnimatedContainer>(
+                        find.byKey(ValueKey('tab-tile-$index')),
+                      )
+                      .decoration!
+                  as BoxDecoration;
+          expect(tile.color, AppColors.iconSelectedFill);
+          final icon = tester.widget<NumayaIcon>(
+            find.descendant(
+              of: find.byKey(ValueKey('tab-tile-$index')),
+              matching: find.byType(NumayaIcon),
+            ),
+          );
+          expect(icon.filled, isTrue);
+          expect(icon.color, AppColors.iconSelected);
+        }
+      },
+    );
   });
 
   group('UI-028 to UI-031: New Match', () {
@@ -447,7 +464,16 @@ void main() {
         );
         final photo = tester.getSize(find.byKey(const ValueKey('match-photo')));
         expect(photo.width / photo.height, closeTo(3 / 4, 0.01));
-        expect(find.byIcon(Icons.favorite), findsNothing);
+        // No decorative heart badge on the match photo.
+        expect(
+          find.descendant(
+            of: find.byKey(const ValueKey('match-photo')),
+            matching: find.byWidgetPredicate(
+              (w) => w is NumayaIcon && w.icon == NumayaIcons.heart,
+            ),
+          ),
+          findsNothing,
+        );
       },
     );
 

@@ -249,7 +249,7 @@ class NavIconButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.style = NavButtonStyle.floating,
-    this.outline = false,
+    this.filled = false,
     this.brand = false,
   });
 
@@ -258,8 +258,9 @@ class NavIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final NavButtonStyle style;
 
-  /// The unfilled drawing (a toggle that is off, such as an unsaved heart).
-  final bool outline;
+  /// Tabler's filled artwork, for a toggle that is on (a saved heart). Neutral actions keep the
+  /// outline (Ente's toolbar icons are outlines).
+  final bool filled;
 
   /// A brand action (Like in a list): the subtle purple surface with a purple icon.
   final bool brand;
@@ -307,10 +308,10 @@ class NavIconButton extends StatelessWidget {
           alignment: Alignment.center,
           child: NumayaIcon(
             icon,
-            // Ente Icon: Small (18) inside a 38pt Icon Button; 20 here for Lucide's thinner
-            // stroke at phone density.
+            // Ente Icon: Small (18) inside a 38pt Icon Button; 20 here for the outline stroke's
+            // weight at phone density.
             size: AppSizes.iconMd,
-            outline: outline,
+            filled: filled,
             // Unavailable (no handler): the icon greys out, the button keeps its place.
             color: onPressed == null
                 ? AppColors.disabledForeground

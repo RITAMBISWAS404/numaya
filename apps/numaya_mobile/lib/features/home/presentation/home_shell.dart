@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/providers.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../dating/application/dating_controller.dart';
 
-/// Signed-in shell: five tabs (Home, Events, Likes, Messages, Profile; EVENTS_SCREEN_INVENTORY
-/// EN-1) on the stone page, each keeping its
-/// own stack, above V16's white tab bar.
+/// Signed-in shell: Discover, Likes, Messages and Profile (and Events second when the release
+/// includes it, [eventsAvailableProvider]; EVENTS_SCREEN_INVENTORY EN-1) on the stone page, each tab
+/// keeping its own stack, above the tab bar.
 class HomeShell extends ConsumerWidget {
   const HomeShell({super.key, required this.shell});
 
@@ -39,7 +40,8 @@ class HomeShell extends ConsumerWidget {
               shell.goBranch(i, initialLocation: i == shell.currentIndex),
           items: [
             TabItem(label: l10n.tabDiscover, icon: NumayaIcons.home),
-            TabItem(label: l10n.tabEvents, icon: NumayaIcons.event),
+            if (ref.watch(eventsAvailableProvider))
+              TabItem(label: l10n.tabEvents, icon: NumayaIcons.event),
             TabItem(
               label: l10n.tabLikes,
               icon: NumayaIcons.heart,

@@ -109,6 +109,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             onDiscover: () => context.go(Routes.home),
             onLikes: () => context.go(Routes.likes),
             onEvents: () => context.go(Routes.events),
+            events: ref.watch(eventsAvailableProvider),
           ),
         );
       }

@@ -87,7 +87,6 @@ class EditProfileScreen extends ConsumerWidget {
         actions: [
           NavIconButton(
             icon: NumayaIcons.public,
-            outline: true,
             label: l10n.editPreview,
             // The same filled square as Back beside it (FD-D2; it was the only bare header action).
             onPressed: () => context.push(Routes.preview),

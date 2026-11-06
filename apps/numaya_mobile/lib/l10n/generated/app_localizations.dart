@@ -7870,6 +7870,12 @@ abstract class AppLocalizations {
   /// **'Needed for distances to people and events.'**
   String get visAreaMissing;
 
+  /// No description provided for @visAreaMissingPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'Needed for distances to people.'**
+  String get visAreaMissingPeople;
+
   /// No description provided for @visNotSet.
   ///
   /// In en, this message translates to:

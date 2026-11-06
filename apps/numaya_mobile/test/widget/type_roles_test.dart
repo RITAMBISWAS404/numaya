@@ -121,7 +121,7 @@ void main() {
       tester,
     ) async {
       await usePhoneSize(tester);
-      final c = await quickStartApp(tester);
+      final c = await quickStartApp(tester, overrides: eventsOn);
       await goTo(c, tester, Routes.events);
       final explore = find.descendant(
         of: find.byType(ViewTabs).first,

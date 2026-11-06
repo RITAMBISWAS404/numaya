@@ -2326,6 +2326,7 @@
   "visDiscoveryNote": "These shape who you see, not who sees you.",
   "visArea": "Your area",
   "visAreaMissing": "Needed for distances to people and events.",
+  "visAreaMissingPeople": "Needed for distances to people.",
   "visNotSet": "Not set",
   "visSet": "Set",
   "visOpenTo": "Who you want to meet",

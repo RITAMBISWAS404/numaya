@@ -55,6 +55,11 @@ abstract final class MonoColors {
   static const Color disabled = Color(0xFFEAEAEA);
   static const Color disabledText = Color(0xFF8A8A8A);
 
+  /// An unselected icon that still works (the idle tabs): a light grey at 3.46:1 on white, above
+  /// the 3:1 needed by meaningful non-text graphics (WCAG 1.4.11). Same value as [disabledText],
+  /// a separate role so "idle" never reads as "unavailable" in code.
+  static const Color iconInactive = Color(0xFF8A8A8A);
+
   // Purple: the Numaya brand (#7262C7, canonical in tokens/numaya.tokens.json `purple.600`).
   /// Primary actions, selected pills and segments, active tab, switch on, progress.
   static const Color brand = Color(0xFF7262C7);
@@ -183,14 +188,17 @@ abstract final class MonoSizes {
   static const double segment = 44;
   static const double segmentInset = 4;
 
-  /// The compact navigation bar (UI-026): fully rounded, 8pt inner padding on every edge, items
-  /// 48 wide and 38 tall with 4pt between them, so the bar is 38 + 2 x 8 = 54 tall and as wide as
-  /// its items.
-  static const double tabBar = 54;
+  /// The navigation bar, measured from Ente's Nav Bar (Figma 7634:54194, Tabler MVP pass): a
+  /// 62pt bar, 38pt square icon tiles whose centres are 82pt apart, the first and last tile 15pt
+  /// from the bar's ends. Each tile sits in a 48pt-wide slot (its tap target, 48 x 44 with the
+  /// reach into the padding), so slots are 34pt apart and the bar pads 10pt across and 12pt
+  /// down. Four destinations make a 302pt bar, which fits a 320pt phone with its margins.
+  static const double tabBar = 62;
   static const double tabItem = 38;
   static const double tabItemWidth = 48;
-  static const double tabPadding = 8;
-  static const double tabGap = 4;
+  static const double tabPadding = 12;
+  static const double tabPaddingX = 10;
+  static const double tabGap = 34;
 
   /// Ente Toggle Switch (31 x 18) at 1.5x; Ente Checkbox and Radio (16) at 1.25x.
   static const double switchWidth = 46;

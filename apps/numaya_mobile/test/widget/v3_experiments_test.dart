@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/providers.dart';
 import 'package:numaya_mobile/app/router.dart';
@@ -30,11 +31,12 @@ void main() {
     ExpVariant v,
     String route, {
     DemoWorld world = DemoWorld.full,
+    List<Override> overrides = const [],
   }) async {
     tester.view.physicalSize = const Size(780, 1688);
     tester.view.devicePixelRatio = 2;
     addTearDown(tester.view.reset);
-    final c = await quickStartApp(tester, world: world);
+    final c = await quickStartApp(tester, world: world, overrides: overrides);
     c.read(experimentChoicesProvider.notifier).choose(e, v);
     await goTo(c, tester, Routes.profile);
     await goTo(c, tester, route);
@@ -229,13 +231,31 @@ void main() {
       });
     }
 
-    testWidgets('B: Find an event opens Events', (tester) async {
+    for (final v in [ExpVariant.a, ExpVariant.b]) {
+      testWidgets('${v.letter}: no Events path in the MVP', (tester) async {
+        await open(
+          tester,
+          Experiment.emptyChats,
+          v,
+          Routes.messages,
+          world: DemoWorld.fresh,
+        );
+        expect(find.text('Find an event'), findsNothing);
+        expect(find.text('Connections start here'), findsOneWidget);
+        await settle(tester);
+      });
+    }
+
+    testWidgets('B with Events available: Find an event opens Events', (
+      tester,
+    ) async {
       final c = await open(
         tester,
         Experiment.emptyChats,
         ExpVariant.b,
         Routes.messages,
         world: DemoWorld.fresh,
+        overrides: eventsOn,
       );
       await tapOn(tester, find.text('Find an event'));
       await tester.pump(const Duration(milliseconds: 600));

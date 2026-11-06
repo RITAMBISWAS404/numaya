@@ -227,13 +227,13 @@ class NumayaTabBar extends StatelessWidget {
     );
   }
 
-  /// The compact bar (UI-026/UI-027, A-013's lower example): sized by its items, never stretched.
-  /// 8pt of visible padding on every edge, 4pt between item bounds, 48 x 38 items, fully rounded
-  /// bar and items, and the shared soft navigation shadow. Safe-area spacing sits outside the bar.
+  /// The shipped bar: Ente's Nav Bar (Figma 7634:54194), Tabler MVP pass. A white bar with
+  /// Ente's corners and soft shadow, sized by its items: 38pt square tiles, centres 82pt apart,
+  /// 15pt from the ends, 62pt tall. Safe-area spacing sits outside the bar.
   ///
-  /// Hit areas: each item is 48 wide (above the 44pt minimum) and its tap target reaches 3pt above
-  /// and below the 38pt tile into the bar's padding, so every target is 48 x 44 without touching a
-  /// neighbour's (they stay 4pt apart).
+  /// Hit areas: each tile sits in a 48pt-wide slot and its tap target reaches 3pt above and below
+  /// the 38pt tile into the bar's padding, so every target is 48 x 44 without touching a
+  /// neighbour's (they stay 34pt apart).
   Widget _compact(BuildContext context, double bottom) {
     const reach = (AppSizes.touchMin - AppSizes.tabItem) / 2;
     final row = Row(
@@ -260,12 +260,12 @@ class NumayaTabBar extends StatelessWidget {
           child: Container(
             key: pillKey,
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSizes.tabPadding,
+              horizontal: AppSizes.tabPaddingX,
               vertical: AppSizes.tabPadding - reach,
             ),
             decoration: BoxDecoration(
               color: AppColors.surface,
-              borderRadius: AppRadii.all(AppRadii.pill),
+              borderRadius: AppRadii.all(AppRadii.control),
               boxShadow: AppElevation.navigation,
             ),
             // A very narrow screen scrolls the row rather than squeezing items below 48.
@@ -283,7 +283,11 @@ class NumayaTabBar extends StatelessWidget {
     final item = items[i];
     final current = i == currentIndex;
     final duration = AppMotion.duration(context, AppMotion.state);
-    final fg = current ? AppColors.accentOnTint : AppColors.textSecondary;
+    // Tabler MVP pass: the selected destination is Tabler's filled glyph in near-black on a very
+    // light neutral tile; the others are outline glyphs in a light grey (3.46:1 on white). The
+    // state is carried by shape (filled vs outline, tile vs none) as well as colour, and announced
+    // as selected.
+    final fg = current ? AppColors.iconSelected : AppColors.iconInactive;
     return Semantics(
       selected: current,
       button: true,
@@ -297,41 +301,53 @@ class NumayaTabBar extends StatelessWidget {
               : item.label,
           excludeChildSemantics: true,
           pressedScale: 0.95,
-          borderRadius: AppRadii.all(AppRadii.pill),
-          child: AnimatedContainer(
-            duration: duration,
-            curve: AppMotion.easeOut,
+          borderRadius: AppRadii.all(AppRadii.iconButton),
+          child: SizedBox(
             width: AppSizes.tabItemWidth,
             height: AppSizes.tabItem,
-            decoration: BoxDecoration(
-              color: current ? AppColors.accentTint : const Color(0x00FFFFFF),
-              borderRadius: AppRadii.all(AppRadii.pill),
-            ),
-            alignment: Alignment.center,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                NumayaIcon(
-                  item.icon,
-                  outline: !current,
-                  size: AppSizes.iconMd,
-                  color: fg,
+            child: Center(
+              child: AnimatedContainer(
+                key: ValueKey('tab-tile-$i'),
+                duration: duration,
+                curve: AppMotion.easeOut,
+                width: AppSizes.tabItem,
+                height: AppSizes.tabItem,
+                decoration: BoxDecoration(
+                  color: current
+                      ? AppColors.iconSelectedFill
+                      : const Color(0x00FFFFFF),
+                  borderRadius: AppRadii.all(AppRadii.iconButton),
                 ),
-                if (item.badgeCount > 0)
-                  Positioned(
-                    right: -3,
-                    top: -2,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        color: AppColors.negative,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.surface, width: 2),
-                      ),
+                alignment: Alignment.center,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    NumayaIcon(
+                      item.icon,
+                      filled: current,
+                      size: AppSizes.iconMd,
+                      color: fg,
                     ),
-                  ),
-              ],
+                    if (item.badgeCount > 0)
+                      Positioned(
+                        right: -3,
+                        top: -2,
+                        child: Container(
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppColors.negative,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.surface,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -435,7 +451,7 @@ class NumayaTabBar extends StatelessWidget {
               children: [
                 NumayaIcon(
                   item.icon,
-                  outline: !current,
+                  filled: current,
                   size: ente ? AppSizes.iconMd : 26,
                   color: fg,
                 ),

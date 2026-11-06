@@ -30,6 +30,12 @@ class FixedWorld extends DemoWorldController {
   DemoWorld build() => world;
 }
 
+/// Events is not in the MVP (Tabler MVP pass) but its implementation is kept for a later launch.
+/// Its own tests switch it on with this override.
+final List<Override> eventsOn = [
+  eventsAvailableProvider.overrideWithValue(true),
+];
+
 /// The real app with deterministic dependencies. [world] defaults to a brand-new account (no
 /// matches); the full demo world adds seeded matches and conversations.
 Widget testApp({
@@ -85,18 +91,8 @@ Future<void> loadAppFonts() async {
       ..addFont(Future.value(ByteData.view(bytes.buffer)));
     await loader.load();
   }
-  // Lucide (the app's icons since the Ente experiment) ships as a package font. Flutter's test
-  // runner does not register package fonts, so load it from the test asset bundle; without it
-  // every icon renders as a placeholder box in goldens.
-  try {
-    final lucide = FontLoader('packages/lucide_icons_flutter/Lucide')
-      ..addFont(
-        rootBundle.load('packages/lucide_icons_flutter/assets/lucide.ttf'),
-      );
-    await lucide.load();
-  } on Object {
-    // Not bundled (an older checkout): icons stay as boxes, as before.
-  }
+  // Icons are Tabler SVG assets (lib/core/design_system/icons/tabler_icons.dart): the test asset
+  // bundle serves them, so no icon font needs loading.
 }
 
 /// Lets timers (toasts, hand-over delays) finish so no timer is pending at the end of a test.

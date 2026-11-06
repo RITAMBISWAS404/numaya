@@ -395,7 +395,7 @@ enum BannerTone { info, pending, success, error }
 
 /// A status banner (states-and-recovery: `StatusBanner`): pending review, approved, rejected,
 /// offline. Ente's Banner (14590:125245, OV-01): a white card with no tint or border; the status
-/// shows in the icon (top-aligned with the title, UI-010) and, for errors and success, in the
+/// shows in the icon (centred on the content, Tabler MVP pass) and, for errors and success, in the
 /// title colour, as Ente's "Subscribe" and "Enable" banners do. Body muted; optional action below.
 class StatusBanner extends StatelessWidget {
   const StatusBanner({
@@ -443,10 +443,12 @@ class StatusBanner extends StatelessWidget {
           borderRadius: AppRadii.all(AppRadii.card),
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          // Tabler MVP pass (supersedes UI-010's top alignment): the leading icon is centred on
+          // the full content height, title, body and any action, as in Ente's Banners
+          // (14590:125245), and drawn with Tabler's filled artwork in the status colour.
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // UI-010: top-aligned with the first line (20pt icon, 20pt line).
-            NumayaIcon(icon, size: AppSizes.iconMd, color: mark),
+            NumayaIcon(icon, size: AppSizes.iconMd, color: mark, filled: true),
             const SizedBox(width: AppSpacing.s3),
             Expanded(
               child: Column(

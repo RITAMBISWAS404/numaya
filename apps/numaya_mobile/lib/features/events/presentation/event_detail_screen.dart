@@ -447,7 +447,7 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                 label: saved
                     ? l10n.eventUnsave(e.title)
                     : l10n.eventSave(e.title),
-                outline: !saved,
+                filled: saved,
                 onPressed: () {
                   _events.toggleSave(e.id);
                   AppHaptics.fire(context, HapticMoment.selection);

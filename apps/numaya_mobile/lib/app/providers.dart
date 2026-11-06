@@ -6,6 +6,7 @@ import '../features/auth/data/unconfigured_auth_repository.dart';
 import '../features/auth/domain/auth_repository.dart';
 import '../features/onboarding/data/in_memory_profile_repository.dart';
 import '../features/onboarding/domain/profile_repository.dart';
+import 'release_scope.dart';
 
 /// App-wide dependencies. Tests override these with fakes (ProviderScope overrides).
 
@@ -34,3 +35,8 @@ final authRepositoryProvider = Provider<AuthRepository>(
 final profileRepositoryProvider = Provider<ProfileRepository>(
   (ref) => InMemoryProfileRepository(),
 );
+
+/// Whether Events is available in this build (MVP: no). Defaults to the compile-time
+/// [ReleaseScope.events]; the router, the tab bar and every entry point read it, so one switch
+/// hides or restores the whole feature, and tests can turn Events on to keep its own suite running.
+final eventsAvailableProvider = Provider<bool>((ref) => ReleaseScope.events);

@@ -47,6 +47,13 @@ abstract final class Routes {
   static const event = '/event';
   static const eventNew = '/event/new';
 
+  /// The Events tab and every event page (`/events`, `/event/new`, `/event/:id`, `/event/:id/...`).
+  static bool isEvents(String path) =>
+      path == events ||
+      path.startsWith('$events/') ||
+      path == event ||
+      path.startsWith('$event/');
+
   /// Profile & visibility (account health) and its explanation page.
   static const visibility = '/profile/visibility';
   static const visibilityAbout = '/profile/visibility/about';

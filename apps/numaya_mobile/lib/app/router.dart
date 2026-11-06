@@ -60,6 +60,7 @@ class _SessionListenable extends ChangeNotifier {
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
+  final events = ref.read(eventsAvailableProvider);
   final refresh = _SessionListenable(ref);
   ref.onDispose(refresh.dispose);
 
@@ -83,6 +84,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (path == Routes.openingMoves && !ReleaseScope.openingMoves) {
         return Routes.profile;
       }
+      // MVP (Tabler MVP pass): Events is unavailable, so its tab route, event pages and their
+      // child routes (people, edit, new), deep links included, land on Discover.
+      if (!events && Routes.isEvents(path)) return Routes.home;
       if (session == null) {
         if (Routes.requiresSession(path)) return Routes.welcome;
         if (path == Routes.verify &&
@@ -181,16 +185,19 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: Routes.events,
-                builder: (_, state) => EventsScreen(
-                  mine: state.uri.queryParameters['view'] == 'mine',
+          // The Events tab exists only when the release includes Events; the tab bar is built from
+          // the same flag (HomeShell), so branch and tab indexes always line up.
+          if (events)
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: Routes.events,
+                  builder: (_, state) => EventsScreen(
+                    mine: state.uri.queryParameters['view'] == 'mine',
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
           StatefulShellBranch(
             routes: [
               GoRoute(

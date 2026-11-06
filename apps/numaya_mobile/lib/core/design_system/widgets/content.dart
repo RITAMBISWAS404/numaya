@@ -159,8 +159,8 @@ class IllustrationView extends StatelessWidget {
 }
 
 /// Information box, as Ente's Banner (14590:125245, OV-01): a white card on the grey page with no
-/// tint or border, the icon in Numaya purple aligned with the title (UI-010), a semibold ink title
-/// and a muted body. It explains; it is not a card you open.
+/// tint or border, a filled icon in Numaya purple centred on the content (Tabler MVP pass;
+/// supersedes UI-010), a semibold ink title and a muted body. It explains; it is not a card you open.
 class InfoCard extends StatelessWidget {
   const InfoCard({
     super.key,
@@ -189,12 +189,18 @@ class InfoCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: AppRadii.all(AppRadii.card),
       ),
-      // UI-010: the icon sits at the top left, aligned with the first line of the content (a
-      // 20pt icon on a 20pt line), however many lines follow.
+      // Tabler MVP pass (supersedes UI-010): the icon is centred on the full content height,
+      // however many lines the title and body take, and drawn with Tabler's filled artwork, as in
+      // Ente's Banners (14590:125245).
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          NumayaIcon(icon, size: AppSizes.iconMd, color: AppColors.accent),
+          NumayaIcon(
+            icon,
+            size: AppSizes.iconMd,
+            color: AppColors.accent,
+            filled: true,
+          ),
           const SizedBox(width: AppSpacing.s3),
           Expanded(
             child: Column(

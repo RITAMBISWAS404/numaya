@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/providers.dart';
 import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/connectivity/connectivity.dart';
@@ -256,53 +257,56 @@ class DemoHubScreen extends ConsumerWidget {
               link(l10n.paywallTitle, Routes.paywall),
             ],
           ),
-          const SizedBox(height: AppSpacing.sectionGap),
-          ListGroup(
-            title: l10n.demoAreaEvents,
-            footnote: l10n.demoEventsNote,
-            children: [
-              ListRow(
-                label: l10n.eventsExplore,
-                detail: signedIn ? null : needsSession,
-                onTap: signedIn ? () => context.go(Routes.events) : null,
-              ),
-              ListRow(
-                label: l10n.eventsMine,
-                detail: signedIn ? null : needsSession,
-                onTap: signedIn
-                    ? () => context.go('${Routes.events}?view=mine')
-                    : null,
-              ),
-              link(l10n.demoEventOpen, '${Routes.event}/e-jazz'),
-              link(l10n.demoEventFull, '${Routes.event}/e-board'),
-              link(l10n.demoEventCancelled, '${Routes.event}/e-poetry'),
-              link(l10n.eventCreate, Routes.eventNew),
-              ListRow(
-                label: l10n.demoEventOpenSpot,
-                detail: l10n.demoEventOpenSpotDetail,
-                onTap: signedIn
-                    ? () {
-                        final moved = ref
-                            .read(eventsProvider.notifier)
-                            .openSpot('e-board');
-                        NumayaToast.show(
-                          context,
-                          moved
-                              ? l10n.demoEventSpotYou
-                              : l10n.demoEventSpotOpened,
-                        );
-                      }
-                    : null,
-              ),
-              ListRow(
-                label: l10n.demoEventReset,
-                onTap: () {
-                  ref.read(eventsProvider.notifier).reset();
-                  NumayaToast.show(context, l10n.demoEventResetDone);
-                },
-              ),
-            ],
-          ),
+          // MVP: no Events shortcuts while the release excludes Events (eventsAvailableProvider).
+          if (ref.watch(eventsAvailableProvider)) ...[
+            const SizedBox(height: AppSpacing.sectionGap),
+            ListGroup(
+              title: l10n.demoAreaEvents,
+              footnote: l10n.demoEventsNote,
+              children: [
+                ListRow(
+                  label: l10n.eventsExplore,
+                  detail: signedIn ? null : needsSession,
+                  onTap: signedIn ? () => context.go(Routes.events) : null,
+                ),
+                ListRow(
+                  label: l10n.eventsMine,
+                  detail: signedIn ? null : needsSession,
+                  onTap: signedIn
+                      ? () => context.go('${Routes.events}?view=mine')
+                      : null,
+                ),
+                link(l10n.demoEventOpen, '${Routes.event}/e-jazz'),
+                link(l10n.demoEventFull, '${Routes.event}/e-board'),
+                link(l10n.demoEventCancelled, '${Routes.event}/e-poetry'),
+                link(l10n.eventCreate, Routes.eventNew),
+                ListRow(
+                  label: l10n.demoEventOpenSpot,
+                  detail: l10n.demoEventOpenSpotDetail,
+                  onTap: signedIn
+                      ? () {
+                          final moved = ref
+                              .read(eventsProvider.notifier)
+                              .openSpot('e-board');
+                          NumayaToast.show(
+                            context,
+                            moved
+                                ? l10n.demoEventSpotYou
+                                : l10n.demoEventSpotOpened,
+                          );
+                        }
+                      : null,
+                ),
+                ListRow(
+                  label: l10n.demoEventReset,
+                  onTap: () {
+                    ref.read(eventsProvider.notifier).reset();
+                    NumayaToast.show(context, l10n.demoEventResetDone);
+                  },
+                ),
+              ],
+            ),
+          ],
           const SizedBox(height: AppSpacing.sectionGap),
           ListGroup(
             title: l10n.visTitle,

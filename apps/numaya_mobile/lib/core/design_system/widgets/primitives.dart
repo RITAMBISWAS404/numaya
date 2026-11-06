@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../foundations/app_colors.dart';
 import '../foundations/app_haptics.dart';
 import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
-import '../icons/lucide_icons.dart';
 import '../icons/numaya_icon_data.g.dart';
+import '../icons/tabler_icons.dart';
 
-/// A Lucide icon (Ente design-system experiment), named by the shared icon set and mapped in
-/// [kLucideIcons]. Lucide has one stroke drawing per glyph, so [outline] no longer changes the
-/// drawing; callers keep passing it so the state stays documented at the call site. Decorative:
+/// A Tabler icon, named by the shared icon set and mapped in [kTablerIcons]: the outline by
+/// default, Tabler's filled artwork when [filled] (selected and emphasised states). Decorative:
 /// icon-only controls carry their own label.
 class NumayaIcon extends StatelessWidget {
   const NumayaIcon(
@@ -18,19 +18,26 @@ class NumayaIcon extends StatelessWidget {
     super.key,
     this.size = AppSizes.iconLg,
     this.color,
-    this.outline = false,
+    this.filled = false,
   });
 
   final NumayaIcons icon;
   final double size;
   final Color? color;
-  final bool outline;
+
+  /// Tabler's solid artwork for a selected or emphasised state (the current tab). Names without
+  /// a filled twin keep their outline ([kTablerIcons]).
+  final bool filled;
 
   @override
   Widget build(BuildContext context) {
     final tint = color ?? IconTheme.of(context).color ?? AppColors.textPrimary;
     return ExcludeSemantics(
-      child: Icon(kLucideIcons[icon], size: size, color: tint),
+      child: TablerSvg(
+        tablerAsset(kTablerIcons[icon]!, filled: filled),
+        size: size,
+        color: tint,
+      ),
     );
   }
 }
@@ -42,18 +49,47 @@ class MobileIcon extends StatelessWidget {
     super.key,
     this.size = AppSizes.iconLg,
     this.color,
+    this.filled = false,
   });
 
   final NumayaMobileIcons icon;
   final double size;
   final Color? color;
+  final bool filled;
 
   @override
   Widget build(BuildContext context) => ExcludeSemantics(
-    child: Icon(
-      kLucideMobileIcons[icon],
+    child: TablerSvg(
+      tablerAsset(kTablerMobileIcons[icon]!, filled: filled),
       size: size,
       color: color ?? IconTheme.of(context).color ?? AppColors.textPrimary,
+    ),
+  );
+}
+
+/// One bundled Tabler SVG in a [size] square, tinted [color] with `srcIn`: the colour replaces the
+/// artwork's own ink while transparent areas (a filled glyph's holes) stay transparent. The box
+/// is the icon's layout size; hit areas belong to the control around it.
+class TablerSvg extends StatelessWidget {
+  const TablerSvg(
+    this.asset, {
+    super.key,
+    required this.size,
+    required this.color,
+  });
+
+  final String asset;
+  final double size;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => SizedBox.square(
+    dimension: size,
+    child: SvgPicture.asset(
+      asset,
+      width: size,
+      height: size,
+      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
     ),
   );
 }
