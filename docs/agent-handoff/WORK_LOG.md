@@ -1,5 +1,11 @@
 # Work log
 
+## 2026-11-06 · Overnight v4 (cloud, Linux)
+- Branch `experiment/numaya-ente-polish-v4-20261106-0724` from `fc72906`.
+- Probes: keyboard over 7 forms, Back and double taps, failed send/retry, accessibility guidelines on 58 routes and 12 variants, focus order, long names, missing photos, reduced motion.
+- Fixes V4-01 to V4-05 with `v4_polish_test` (8 of 9 tests fail on V3).
+- Evidence: `artifacts/ente-design-system/overnight-v4/`. Not pushed.
+
 ## 2026-11-06 · Overnight v3 (cloud, Linux)
 - Pre-run backup `numaya-ente-recovery-20261106-062350-prerun-v3-f2e18e6.zip` (sha256 cdc60fe2…7a8337).
 - Checkpoint commit `e60504e`; tag `numaya-ente-design-system-finalized-20261106-0624`; branch

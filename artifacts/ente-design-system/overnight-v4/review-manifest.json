@@ -1,0 +1,311 @@
+{
+ "run_id": "numaya-v4-20261106-0724",
+ "experiments": [
+  {
+   "id": "EXP-001-match-moment",
+   "title": "Match moment",
+   "task": "Someone liked you back: recognise who it is, feel the moment, then open the chat (or view their profile, or keep browsing).",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at d564a8a (V4 polish branch experiment/numaya-ente-polish-v4-20261106-0724). Order per option: phone, narrow 200% text, tall continuation. Re-rendered in V4: A and B (V4-03 chips); other options are unchanged from V3.",
+   "recommendation": "A: Paired portraits keeps the person as the hero while adding the mutual \"you and them\" meaning, with no new feature. B is a safe fallback if photo recognisability matters most; C is best kept for empty states.",
+   "variants": {
+    "Current": {
+     "name": "Frozen checkpoint",
+     "rationale": "The pre-run candidate, exactly as tagged. A, B and C are built on the refined candidate, so they also carry this run's baseline corrections (V3-D01, V3-D02, V3-F01); open \"Refined control\" below to see the same layout with only those corrections.",
+     "images": [
+      "experiments/EXP-001-match-moment/current/phone.png",
+      "experiments/EXP-001-match-moment/current/narrow.png",
+      "experiments/EXP-001-match-moment/current/tall.png"
+     ]
+    },
+    "A": {
+     "name": "Paired portraits",
+     "rationale": "Axis: relationship: both people as two tilted portrait cards with a heart on the seam; headline names both. Says \"the two of you\" without words; familiar from Bumble. Costs: shows your own photo too (placeholder-heavy until real photos exist) and two cards are smaller than one.",
+     "images": [
+      "experiments/EXP-001-match-moment/A/phone.png",
+      "experiments/EXP-001-match-moment/A/narrow.png",
+      "experiments/EXP-001-match-moment/A/tall.png"
+     ]
+    },
+    "B": {
+     "name": "Identity-led photo hero",
+     "rationale": "Axis: scale and immersion: the person's photo fills 54% of the height with name, age and verification on it, as on their Discover card. Most recognisable: the match looks exactly like the card you liked. Costs: the photo dominates, the moment reads like a profile, and shared interests drop below the fold on short phones.",
+     "images": [
+      "experiments/EXP-001-match-moment/B/phone.png",
+      "experiments/EXP-001-match-moment/B/narrow.png",
+      "experiments/EXP-001-match-moment/B/tall.png"
+     ]
+    },
+    "C": {
+     "name": "Restrained cat celebration",
+     "rationale": "Axis: emotional tone through illustration: the celebrating cat leads; small round avatars and shared interests in one card. Warmest and lightest; the cat never covers a face. Costs: people are small, so the identity is weaker; the cat may feel playful for some users.",
+     "images": [
+      "experiments/EXP-001-match-moment/C/phone.png",
+      "experiments/EXP-001-match-moment/C/narrow.png",
+      "experiments/EXP-001-match-moment/C/tall.png"
+     ]
+    }
+   },
+   "refined_control_images": [
+    "experiments/EXP-001-match-moment/refined-control/phone.png",
+    "experiments/EXP-001-match-moment/refined-control/narrow.png",
+    "experiments/EXP-001-match-moment/comparison.png",
+    "experiments/EXP-001-match-moment/comparison-narrow-200pct.png"
+   ]
+  },
+  {
+   "id": "EXP-002-own-profile-header",
+   "title": "Own-profile upper section",
+   "task": "Check how you come across and get to editing quickly; see verification state.",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at d564a8a (V4 polish branch experiment/numaya-ente-polish-v4-20261106-0724). Order per option: phone, narrow 200% text, tall continuation. Re-rendered in V4: A (V4-01 photo fallback, V4-04 cover); other options are unchanged from V3.",
+   "recommendation": "Current: UI-042 is an approved review decision and the refined header already meets it. If you want change, C is the closest to UI-042 and adds one-tap Preview.",
+   "variants": {
+    "Current": {
+     "name": "Frozen checkpoint",
+     "rationale": "The pre-run candidate, exactly as tagged. A, B and C are built on the refined candidate, so they also carry this run's baseline corrections (V3-D01, V3-D02, V3-F01); open \"Refined control\" below to see the same layout with only those corrections.",
+     "images": [
+      "experiments/EXP-002-own-profile-header/current/phone.png",
+      "experiments/EXP-002-own-profile-header/current/narrow.png",
+      "experiments/EXP-002-own-profile-header/current/tall.png"
+     ]
+    },
+    "A": {
+     "name": "Photo-led cover",
+     "rationale": "Axis: photo emphasis: a wide cover photo with the name on it and Edit as a white pill. Shows how others first see you. Costs: departs from the approved UI-042 round photo; weak with no photo (initial on grey).",
+     "images": [
+      "experiments/EXP-002-own-profile-header/A/phone.png",
+      "experiments/EXP-002-own-profile-header/A/narrow.png",
+      "experiments/EXP-002-own-profile-header/A/tall.png"
+     ]
+    },
+    "B": {
+     "name": "Compact identity row",
+     "rationale": "Axis: density: 72pt photo beside name and verification, Edit as a small button; profile rows move up a third of a screen. Most efficient; everything important above the fold. Costs: less personal, departs from UI-042.",
+     "images": [
+      "experiments/EXP-002-own-profile-header/B/phone.png",
+      "experiments/EXP-002-own-profile-header/B/narrow.png",
+      "experiments/EXP-002-own-profile-header/B/tall.png"
+     ]
+    },
+    "C": {
+     "name": "Identity with quick actions",
+     "rationale": "Axis: action access: centred photo with an edit badge, then Edit, Preview and Verify as three equal actions. Keeps UI-042's centred round photo and adds Preview one tap away. Costs: Edit loses its full-width primary button; three tiles add visual weight.",
+     "images": [
+      "experiments/EXP-002-own-profile-header/C/phone.png",
+      "experiments/EXP-002-own-profile-header/C/narrow.png",
+      "experiments/EXP-002-own-profile-header/C/tall.png"
+     ]
+    }
+   },
+   "refined_control_images": [
+    "experiments/EXP-002-own-profile-header/refined-control/phone.png",
+    "experiments/EXP-002-own-profile-header/refined-control/narrow.png",
+    "experiments/EXP-002-own-profile-header/comparison.png",
+    "experiments/EXP-002-own-profile-header/comparison-narrow-200pct.png"
+   ]
+  },
+  {
+   "id": "EXP-003-empty-conversations",
+   "title": "Empty conversations",
+   "task": "New member with no matches opens Messages: understand why it is empty and know what to do next.",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at d564a8a (V4 polish branch experiment/numaya-ente-polish-v4-20261106-0724). Order per option: phone, narrow 200% text, tall continuation.",
+   "recommendation": "A: Cat says hello keeps the Ente card, adds the brand character where nothing sensitive is happening, and gives a second honest path.",
+   "variants": {
+    "Current": {
+     "name": "Frozen checkpoint",
+     "rationale": "The pre-run candidate, exactly as tagged. A, B and C are built on the refined candidate, so they also carry this run's baseline corrections (V3-D01, V3-D02, V3-F01); open \"Refined control\" below to see the same layout with only those corrections.",
+     "images": [
+      "experiments/EXP-003-empty-conversations/current/phone.png",
+      "experiments/EXP-003-empty-conversations/current/narrow.png",
+      "experiments/EXP-003-empty-conversations/current/tall.png"
+     ]
+    },
+    "A": {
+     "name": "Cat says hello",
+     "rationale": "Axis: character: the waving cat replaces the generic drawing; Discover plus a quieter Events path in the same card. Friendly and still contained in Ente's EmptyState card; adds a second real route. Costs: two buttons in an empty state.",
+     "images": [
+      "experiments/EXP-003-empty-conversations/A/phone.png",
+      "experiments/EXP-003-empty-conversations/A/narrow.png",
+      "experiments/EXP-003-empty-conversations/A/tall.png"
+     ]
+    },
+    "B": {
+     "name": "Next steps list",
+     "rationale": "Axis: actionable choices over mood: no art, short explanation, then Discover, Likes (when there are any) and Events as one list card. Most useful for someone who wants to act now; shows the real Likes count. Costs: no warmth; reads like a menu.",
+     "images": [
+      "experiments/EXP-003-empty-conversations/B/phone.png",
+      "experiments/EXP-003-empty-conversations/B/narrow.png",
+      "experiments/EXP-003-empty-conversations/B/tall.png"
+     ]
+    },
+    "C": {
+     "name": "Open page, one action",
+     "rationale": "Axis: page-level editorial composition: no card; left-aligned cat, large title, one pill-width primary. Calm and confident, like Bumble. Costs: a lot of open page; a single action.",
+     "images": [
+      "experiments/EXP-003-empty-conversations/C/phone.png",
+      "experiments/EXP-003-empty-conversations/C/narrow.png",
+      "experiments/EXP-003-empty-conversations/C/tall.png"
+     ]
+    }
+   },
+   "refined_control_images": [
+    "experiments/EXP-003-empty-conversations/refined-control/phone.png",
+    "experiments/EXP-003-empty-conversations/refined-control/narrow.png",
+    "experiments/EXP-003-empty-conversations/comparison.png",
+    "experiments/EXP-003-empty-conversations/comparison-narrow-200pct.png"
+   ]
+  },
+  {
+   "id": "EXP-004-profile-completion-card",
+   "title": "Profile completion card",
+   "task": "Understand how complete your profile is and finish the next part.",
+   "capture_context": "Flutter golden harness on Linux (not a device). 390x844 logical at 2x (780x1688 px), text 100%; narrow 320x693 at 2x, text 200%; tall 390x1400 at 2x for scroll continuation. Quick-start demo data (Alex; Maya match; fresh world for empty Messages). Photos are the app's grey placeholders (no licensed photography). Current = frozen checkpoint e60504e (tag numaya-ente-design-system-finalized-20261106-0624); A/B/C and refined control = branch experiment/numaya-ente-delight-v3-20261106-0624 at d564a8a (V4 polish branch experiment/numaya-ente-polish-v4-20261106-0724). Order per option: phone, narrow 200% text, tall continuation.",
+   "recommendation": "A: The progress banner is the Ente component for exactly this job and leaves Edit profile as the single primary action.",
+   "variants": {
+    "Current": {
+     "name": "Frozen checkpoint",
+     "rationale": "The pre-run candidate, exactly as tagged. A, B and C are built on the refined candidate, so they also carry this run's baseline corrections (V3-D01, V3-D02, V3-F01); open \"Refined control\" below to see the same layout with only those corrections.",
+     "images": [
+      "experiments/EXP-004-profile-completion-card/current/phone.png",
+      "experiments/EXP-004-profile-completion-card/current/narrow.png",
+      "experiments/EXP-004-profile-completion-card/current/tall.png"
+     ]
+    },
+    "A": {
+     "name": "Ente progress banner",
+     "rationale": "Axis: the number leads: muted label, large percentage, round arrow, bar; the whole card opens the hub (Ente banner). Directly from the Ente source; removes a second purple button. Costs: the action is an arrow, less explicit than a labelled button.",
+     "images": [
+      "experiments/EXP-004-profile-completion-card/A/phone.png",
+      "experiments/EXP-004-profile-completion-card/A/narrow.png",
+      "experiments/EXP-004-profile-completion-card/A/tall.png"
+     ]
+    },
+    "B": {
+     "name": "Next single task",
+     "rationale": "Axis: specificity: names the next unfinished part with its count; Continue opens that editor; See all opens the hub. Most actionable; one tap to the exact editor. Costs: more text; Bio opens the hub because its editor is a sheet there.",
+     "images": [
+      "experiments/EXP-004-profile-completion-card/B/phone.png",
+      "experiments/EXP-004-profile-completion-card/B/narrow.png",
+      "experiments/EXP-004-profile-completion-card/B/tall.png"
+     ]
+    },
+    "C": {
+     "name": "Cat encouragement",
+     "rationale": "Axis: warmth through illustration: the cheering cat beside the existing title, bar and action (optional UI-043 idea). Encouraging, small, and reuses the approved cat. Costs: one more illustration on a busy tab.",
+     "images": [
+      "experiments/EXP-004-profile-completion-card/C/phone.png",
+      "experiments/EXP-004-profile-completion-card/C/narrow.png",
+      "experiments/EXP-004-profile-completion-card/C/tall.png"
+     ]
+    }
+   },
+   "refined_control_images": [
+    "experiments/EXP-004-profile-completion-card/refined-control/phone.png",
+    "experiments/EXP-004-profile-completion-card/refined-control/narrow.png",
+    "experiments/EXP-004-profile-completion-card/comparison.png",
+    "experiments/EXP-004-profile-completion-card/comparison-narrow-200pct.png"
+   ]
+  }
+ ],
+ "screens": [
+  {
+   "title": "V4 change \u00b7 V4-01 \u00b7 exp002A-missing-photo (pair, then before, then after)",
+   "capture_context": "Before = V3 candidate fc72906; after = V4 d564a8a. Linux Flutter harness at 2x; 320 scenes at 200% text.",
+   "images": [
+    "before-after/V4-01__exp002A-missing-photo/pair.png",
+    "before-after/V4-01__exp002A-missing-photo/before.png",
+    "before-after/V4-01__exp002A-missing-photo/after.png"
+   ]
+  },
+  {
+   "title": "V4 change \u00b7 V4-01 \u00b7 profile-missing-photo (pair, then before, then after)",
+   "capture_context": "Before = V3 candidate fc72906; after = V4 d564a8a. Linux Flutter harness at 2x; 320 scenes at 200% text.",
+   "images": [
+    "before-after/V4-01__profile-missing-photo/pair.png",
+    "before-after/V4-01__profile-missing-photo/before.png",
+    "before-after/V4-01__profile-missing-photo/after.png"
+   ]
+  },
+  {
+   "title": "V4 change \u00b7 V4-02 \u00b7 edit-basics-320-200pct (pair, then before, then after)",
+   "capture_context": "Before = V3 candidate fc72906; after = V4 d564a8a. Linux Flutter harness at 2x; 320 scenes at 200% text.",
+   "images": [
+    "before-after/V4-02__edit-basics-320-200pct/pair.png",
+    "before-after/V4-02__edit-basics-320-200pct/before.png",
+    "before-after/V4-02__edit-basics-320-200pct/after.png"
+   ]
+  },
+  {
+   "title": "V4 change \u00b7 V4-02 \u00b7 edit-profile-320-200pct (pair, then before, then after)",
+   "capture_context": "Before = V3 candidate fc72906; after = V4 d564a8a. Linux Flutter harness at 2x; 320 scenes at 200% text.",
+   "images": [
+    "before-after/V4-02__edit-profile-320-200pct/pair.png",
+    "before-after/V4-02__edit-profile-320-200pct/before.png",
+    "before-after/V4-02__edit-profile-320-200pct/after.png"
+   ]
+  },
+  {
+   "title": "V4 change \u00b7 V4-02 \u00b7 notifications-320-200pct (pair, then before, then after)",
+   "capture_context": "Before = V3 candidate fc72906; after = V4 d564a8a. Linux Flutter harness at 2x; 320 scenes at 200% text.",
+   "images": [
+    "before-after/V4-02__notifications-320-200pct/pair.png",
+    "before-after/V4-02__notifications-320-200pct/before.png",
+    "before-after/V4-02__notifications-320-200pct/after.png"
+   ]
+  },
+  {
+   "title": "V4 change \u00b7 V4-02 \u00b7 settings-320-200pct (pair, then before, then after)",
+   "capture_context": "Before = V3 candidate fc72906; after = V4 d564a8a. Linux Flutter harness at 2x; 320 scenes at 200% text.",
+   "images": [
+    "before-after/V4-02__settings-320-200pct/pair.png",
+    "before-after/V4-02__settings-320-200pct/before.png",
+    "before-after/V4-02__settings-320-200pct/after.png"
+   ]
+  },
+  {
+   "title": "V4 change \u00b7 V4-02 \u00b7 settings-390-100pct-unchanged (pair, then before, then after)",
+   "capture_context": "Before = V3 candidate fc72906; after = V4 d564a8a. Linux Flutter harness at 2x; 320 scenes at 200% text.",
+   "images": [
+    "before-after/V4-02__settings-390-100pct-unchanged/pair.png",
+    "before-after/V4-02__settings-390-100pct-unchanged/before.png",
+    "before-after/V4-02__settings-390-100pct-unchanged/after.png"
+   ]
+  },
+  {
+   "title": "V4 change \u00b7 V4-03 \u00b7 exp001A-chips (pair, then before, then after)",
+   "capture_context": "Before = V3 candidate fc72906; after = V4 d564a8a. Linux Flutter harness at 2x; 320 scenes at 200% text.",
+   "images": [
+    "before-after/V4-03__exp001A-chips/pair.png",
+    "before-after/V4-03__exp001A-chips/before.png",
+    "before-after/V4-03__exp001A-chips/after.png"
+   ]
+  },
+  {
+   "title": "V4 change \u00b7 V4-03 \u00b7 exp001B-chips (pair, then before, then after)",
+   "capture_context": "Before = V3 candidate fc72906; after = V4 d564a8a. Linux Flutter harness at 2x; 320 scenes at 200% text.",
+   "images": [
+    "before-after/V4-03__exp001B-chips/pair.png",
+    "before-after/V4-03__exp001B-chips/before.png",
+    "before-after/V4-03__exp001B-chips/after.png"
+   ]
+  },
+  {
+   "title": "V4 change \u00b7 V4-04 \u00b7 exp002A-390 (pair, then before, then after)",
+   "capture_context": "Before = V3 candidate fc72906; after = V4 d564a8a. Linux Flutter harness at 2x; 320 scenes at 200% text.",
+   "images": [
+    "before-after/V4-04__exp002A-390/pair.png",
+    "before-after/V4-04__exp002A-390/before.png",
+    "before-after/V4-04__exp002A-390/after.png"
+   ]
+  },
+  {
+   "title": "V4 change \u00b7 V4-04 \u00b7 exp002A-long-name-320-200pct (pair, then before, then after)",
+   "capture_context": "Before = V3 candidate fc72906; after = V4 d564a8a. Linux Flutter harness at 2x; 320 scenes at 200% text.",
+   "images": [
+    "before-after/V4-04__exp002A-long-name-320-200pct/pair.png",
+    "before-after/V4-04__exp002A-long-name-320-200pct/before.png",
+    "before-after/V4-04__exp002A-long-name-320-200pct/after.png"
+   ]
+  }
+ ],
+ "title": "V4 review (V3 choices + V4 fixes)"
+}

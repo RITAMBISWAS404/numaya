@@ -1,5 +1,16 @@
 # Active task: frosted-navigation experiment, handed off
 
+> **Overnight v4 (2026-11-06, cloud/Linux, local commits only):** branch
+> `experiment/numaya-ente-polish-v4-20261106-0724` (worktree `/home/user/numaya-ente-v4`) from the V3
+> candidate `fc72906`. Fixed and verified in the harness: V4-01 missing-photo fallback (Profile,
+> EXP-002, attachment viewer), V4-02 whole-word ListRow labels at 320pt/200% (Settings,
+> Notifications, Edit profile, The basics), V4-03 EXP-001 A/B chips, V4-04 EXP-002 A cover,
+> V4-05 gallery status text. Tests: 452 passed, 21 skipped. Records:
+> `docs/design-experiments/ente-design-system/overnight-v4/`; gallery
+> `artifacts/ente-design-system/overnight-v4/gallery/index.html`. **Next:** your V3 choices and the
+> device checklist.
+
+
 > **Overnight v3 (2026-11-06, cloud/Linux, committed locally, not pushed):** checkpoint
 > `e60504e` "checkpoint: Ente design system before V3 experiments" (annotated tag
 > `numaya-ente-design-system-finalized-20261106-0624`) in `/home/user/numaya-ente`; work on branch

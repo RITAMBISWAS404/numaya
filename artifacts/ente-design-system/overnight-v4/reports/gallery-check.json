@@ -1,0 +1,30 @@
+{
+ "links": 97,
+ "missingTargets": 0,
+ "linksNewTab": true,
+ "unselectedAllNull": true,
+ "ids": [
+  "EXP-001-match-moment",
+  "EXP-002-own-profile-header",
+  "EXP-003-empty-conversations",
+  "EXP-004-profile-completion-card"
+ ],
+ "keyboardArrowSelects": "A",
+ "exportReachableByTab": true,
+ "radioFocusOutline": "solid 3px",
+ "filterHidesOthers": true,
+ "selectionsSurviveFilter": "A,C",
+ "clearOneLeavesOthers": true,
+ "exportAfter": [
+  "EXP-001-match-moment:null:",
+  "EXP-002-own-profile-header:null:",
+  "EXP-003-empty-conversations:C:disposable test note",
+  "EXP-004-profile-completion-card:null:"
+ ],
+ "clearIsButton": "BUTTON",
+ "status": "15 sections shown; 1 choice selected.",
+ "phoneOverflow": 0,
+ "optionsScrollable": true,
+ "optionsKeyboardScrollable": -1,
+ "errors": []
+}
