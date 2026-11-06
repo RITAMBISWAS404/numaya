@@ -388,6 +388,14 @@ class _PhotoViewer extends StatelessWidget {
                     image: _imageFor(attachment),
                     fit: BoxFit.contain,
                     semanticLabel: l10n.chatAttachmentPhoto,
+                    // V4-01: a missing file says so instead of drawing an error box.
+                    errorBuilder: (context, _, _) => Text(
+                      l10n.mediaMissing,
+                      textAlign: TextAlign.center,
+                      style: AppTypography.body.copyWith(
+                        color: AppColors.accentForeground,
+                      ),
+                    ),
                   ),
                 ),
               ),

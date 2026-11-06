@@ -60,27 +60,39 @@ class ProfileHeaderData {
           );
   }
 
-  /// The member's photo, or their initial on the identity grey, filling the space given.
+  /// The member's photo, or their initial on the identity grey, filling the space given. A
+  /// photo file that has gone also shows the initial (V4-01).
   Widget picture({
     required double initialSize,
     Alignment alignment = Alignment.center,
-  }) => photo != null
-      ? Image(image: localImage(photo!, width: 720), fit: BoxFit.cover)
-      : ColoredBox(
-          color: AppColors.identity,
-          child: Align(
-            alignment: alignment,
-            child: Text(
-              initial,
-              textScaler: TextScaler.noScaling,
-              style: AppTypography.hero.copyWith(
-                fontSize: initialSize,
-                height: 1,
-                color: AppColors.onIdentity,
-              ),
-            ),
+  }) {
+    final glyph = ColoredBox(
+      color: AppColors.identity,
+      child: Container(
+        // At the top, the initial sits below the Edit pill's row.
+        padding: alignment == Alignment.topCenter
+            ? const EdgeInsets.only(top: 64)
+            : EdgeInsets.zero,
+        alignment: alignment,
+        child: Text(
+          initial,
+          textScaler: TextScaler.noScaling,
+          style: AppTypography.hero.copyWith(
+            fontSize: initialSize,
+            height: 1,
+            color: AppColors.onIdentity,
           ),
-        );
+        ),
+      ),
+    );
+    return photo != null
+        ? Image(
+            image: localImage(photo!, width: 720),
+            fit: BoxFit.cover,
+            errorBuilder: (_, _, _) => glyph,
+          )
+        : glyph;
+  }
 }
 
 /// EXP-002 A — Photo-led cover (Hinge's photo-first identity; Numaya's own Discover card): the
@@ -91,64 +103,63 @@ class ProfileHeaderCover extends StatelessWidget {
 
   final ProfileHeaderData data;
 
+  /// Room above the name for the Edit pill and, without a photo, the initial.
+  static const double _topRoom = 150;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    // Taller at large text, so the two-line name keeps clear of the initial and the Edit pill.
-    final large = MediaQuery.textScalerOf(context).scale(14) > 21;
-    final height = (MediaQuery.sizeOf(context).height * (large ? 0.62 : 0.4))
-        .clamp(220.0, 440.0);
+    // At least 40% of the screen; taller when the name needs it (V4-04: a long name at large text
+    // ran into the initial and the Edit pill when the cover had a fixed height).
+    final minHeight = (MediaQuery.sizeOf(context).height * 0.4).clamp(
+      220.0,
+      360.0,
+    );
     return ClipRRect(
       key: const ValueKey('profile-header-cover'),
       borderRadius: AppRadii.all(AppRadii.heroCard),
-      child: SizedBox(
-        height: height,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            ExcludeSemantics(
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: ExcludeSemantics(
               child: data.picture(
                 initialSize: 72,
-                alignment: const Alignment(0, -0.4),
+                alignment: Alignment.topCenter,
               ),
             ),
-            // The fade reaches above the name at any text size (white on its base is over 7:1).
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              height: large ? height * 0.7 : 160,
-              child: const IgnorePointer(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Color(0x00000000), AppColors.photoPanel],
-                      stops: [0, 0.55],
-                    ),
+          ),
+          // The fade covers the lower part, whatever its height; the name always sits on its
+          // dark base (white on it is over 7:1).
+          const Positioned.fill(
+            child: IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color(0x00000000), AppColors.photoPanel],
+                    stops: [0.15, 0.5],
                   ),
                 ),
               ),
             ),
-            Positioned(
-              top: AppSpacing.s3,
-              right: AppSpacing.s3,
-              child: NumayaButton(
-                key: const ValueKey('profile-header-edit'),
-                label: l10n.profileEdit,
-                icon: NumayaIcons.edit,
-                small: true,
-                expand: false,
-                variant: NumayaButtonVariant.secondary,
-                onPressed: data.onEdit,
-              ),
+          ),
+          // Sizes the cover: the name block, pushed to the bottom, with room above it.
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: minHeight,
+              minWidth: double.infinity,
             ),
-            Positioned(
-              left: AppSpacing.s5,
-              right: AppSpacing.s5,
-              bottom: AppSpacing.s5,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.s5,
+                _topRoom,
+                AppSpacing.s5,
+                AppSpacing.s5,
+              ),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Semantics(
@@ -166,8 +177,21 @@ class ProfileHeaderCover extends StatelessWidget {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            top: AppSpacing.s3,
+            right: AppSpacing.s3,
+            child: NumayaButton(
+              key: const ValueKey('profile-header-edit'),
+              label: l10n.profileEdit,
+              icon: NumayaIcons.edit,
+              small: true,
+              expand: false,
+              variant: NumayaButtonVariant.secondary,
+              onPressed: data.onEdit,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -368,6 +368,14 @@ class _ProfileSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final outer = diameter + ring * 2;
+    final initialText = Text(
+      initial,
+      style: AppTypography.hero.copyWith(
+        fontSize: 48,
+        height: 1,
+        color: AppColors.onIdentity,
+      ),
+    );
     final verified = verification == PhotoVerificationStatus.verified;
     final status = switch (verification) {
       PhotoVerificationStatus.verified => l10n.verifyStatusVerified,
@@ -455,15 +463,11 @@ class _ProfileSummary extends StatelessWidget {
                         width: diameter,
                         height: diameter,
                         fit: BoxFit.cover,
+                        // V4-01: a photo file that has gone (cache cleared, file deleted) shows
+                        // the initial, never Flutter's red error box.
+                        errorBuilder: (_, _, _) => Center(child: initialText),
                       )
-                    : Text(
-                        initial,
-                        style: AppTypography.hero.copyWith(
-                          fontSize: 48,
-                          height: 1,
-                          color: AppColors.onIdentity,
-                        ),
-                      ),
+                    : initialText,
               ),
             ),
           ),

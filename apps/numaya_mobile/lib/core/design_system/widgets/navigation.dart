@@ -589,15 +589,39 @@ class ListRow extends StatelessWidget {
           // the label: beside it, the value took 60% and squeezed the label and detail into a
           // narrow column ("Recovery / email"). Short values stay trailing.
           var stack = false;
-          if (value != null && detail != null && detail!.isNotEmpty) {
-            final painter = TextPainter(
-              text: TextSpan(text: value, style: AppTypography.row),
-              textScaler: MediaQuery.textScalerOf(context),
-              textDirection: Directionality.of(context),
-              maxLines: 1,
-            )..layout();
-            stack = painter.width > room * 0.4;
-            painter.dispose();
+          if (value != null) {
+            double widthOf(String text) {
+              final painter = TextPainter(
+                text: TextSpan(text: text, style: AppTypography.row),
+                textScaler: MediaQuery.textScalerOf(context),
+                textDirection: Directionality.of(context),
+                maxLines: 1,
+              )..layout();
+              final w = painter.width;
+              painter.dispose();
+              return w;
+            }
+
+            final valueWidth = widthOf(value!);
+            if (detail != null && detail!.isNotEmpty) {
+              stack = valueWidth > room * 0.4;
+            }
+            // V4-02: at large text a trailing value could squeeze the label until a word broke
+            // inside itself ("Phone numb / er"). When the label's longest word can't fit beside
+            // the value (and the chevron), the value moves under the label instead.
+            if (!stack) {
+              final longestWord = label
+                  .split(RegExp(r'\s+'))
+                  .map(widthOf)
+                  .fold<double>(0, (a, b) => a > b ? a : b);
+              final beside =
+                  room -
+                  (valueWidth < room * 0.6 ? valueWidth : room * 0.6) -
+                  AppSpacing.s3 -
+                  AppSpacing.s2 -
+                  AppSizes.iconLg;
+              stack = longestWord > beside;
+            }
           }
           return _content(room * 0.6, stackValue: stack);
         },

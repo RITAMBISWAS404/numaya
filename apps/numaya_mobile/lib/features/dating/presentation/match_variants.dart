@@ -33,8 +33,9 @@ class _SharedChips extends StatelessWidget {
       spacing: AppSpacing.s2,
       runSpacing: AppSpacing.s2,
       children: [
+        // V4-03: on the grey page the chip is white (onPage), so its shape reads.
         for (final s in person.shared)
-          InfoChip(label: s, emoji: kInterestEmoji[s]),
+          InfoChip(label: s, emoji: kInterestEmoji[s], onPage: true),
       ],
     );
   }
