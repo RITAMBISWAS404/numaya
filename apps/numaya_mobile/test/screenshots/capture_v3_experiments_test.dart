@@ -80,4 +80,19 @@ void main() {
     );
     await settle(tester);
   });
+
+  // Mascot placement board: the existing waiting cat on the empty Likes tab.
+  testWidgets('v3 mascot likes-empty', (tester) async {
+    tester.view.physicalSize = const Size(780, 1688);
+    tester.view.devicePixelRatio = 2;
+    addTearDown(tester.view.reset);
+    final c = await quickStartApp(tester, world: DemoWorld.fresh);
+    await goTo(c, tester, Routes.likes);
+    await tester.pump(const Duration(milliseconds: 1200));
+    await expectLater(
+      find.byType(MaterialApp),
+      matchesGoldenFile('comparison/v3/exp/mascot-likes-empty.png'),
+    );
+    await settle(tester);
+  });
 }
