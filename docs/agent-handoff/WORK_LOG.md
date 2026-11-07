@@ -1,5 +1,13 @@
 # Work log
 
+## 2026-11-07 · Account-switch handoff (Windows, Claude desktop)
+- Owner approved the X15 15px typography and icon experiment as the working design baseline (H-08).
+- Verified: branch `experiment/numaya-15px-icons-20261107` at `4d713e3`, level with origin, clean;
+  no stashes; local-only files are the reference photos, the installed demo set and Flutter-generated files.
+- Reset the clone's fetch refspec to all branches (H-10).
+- Wrote `NUMAYA_ACCOUNT_HANDOFF.md` and refreshed START_HERE, HANDOFF_PROMPT, DECISIONS, NEXT_STEPS,
+  TOOLS_SKILLS_AND_INTEGRATIONS, CURRENT_STATE, ACTIVE_TASK and VALIDATION. No app code changed.
+
 ## 2026-11-07 · 15px type and icon experiment X15 (Windows, Claude desktop)
 - New branch `experiment/numaya-15px-icons-20261107` from `7eae060` (clean, on origin).
 - Re-read Ente Header v2 (`11439:5040`) live for the app-bar title size.

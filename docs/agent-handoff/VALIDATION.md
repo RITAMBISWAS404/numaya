@@ -1,5 +1,9 @@
 # Validation
 
+> **Account-switch handoff (2026-11-07):** docs only, no app-code change since `4d713e3` (format,
+> analyze and 507-test results there stand). Re-checked: `git status` clean apart from the handoff
+> files, `gh auth status` logged in as RITAMBISWAS404, remote branch equals local HEAD after push.
+
 > **X15 experiment (2026-11-07):** `dart format` clean; `flutter analyze` no issues; `flutter test`
 > **507 passed, 21 skipped, 0 failed**; `sync_tabler_icons.py` run against the official 3.50.0 package
 > (110 files, content identical; `--check` flags CRLF only). Pixel 10 AVD before/after at font 1.0

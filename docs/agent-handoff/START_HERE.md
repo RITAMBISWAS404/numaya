@@ -3,6 +3,10 @@
 This folder carries Numaya work across Claude sessions and accounts. A new session reads it before
 doing anything else, and the session that stops updates it before it ends.
 
+> **Account switch (2026-11-07):** read [`NUMAYA_ACCOUNT_HANDOFF.md`](../../NUMAYA_ACCOUNT_HANDOFF.md)
+> at the repo root first: working branch `experiment/numaya-15px-icons-20261107` (the approved
+> 15px design baseline), local-only files, tools, and the next task (revised PRD).
+
 ## Read in this order
 1. [CURRENT_STATE.md](CURRENT_STATE.md): branch, commit, what is built, environment.
 2. [ACTIVE_TASK.md](ACTIVE_TASK.md): the one task in progress and its acceptance criteria.

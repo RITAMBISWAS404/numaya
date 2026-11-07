@@ -1,5 +1,102 @@
 # Tools, skills and integrations
 
+## Verified inventory for the account switch (2026-11-07, Windows 11, Claude desktop)
+
+### 1. Reusable as-is: committed in this repo (project-local)
+All 39 skills live in `C:\Users\biswa\Projects\Numaya\.claude\skills\` and are tracked in Git, so any
+account opening this folder gets them. GitHub-sourced ones are pinned in `skills-lock.json`.
+
+| Skill | Source / revision |
+|---|---|
+| `accessibility-as-code` | zakariaf/Flutter-Skills (GitHub), hash `f15b3db3f463` |
+| `adaptive-layout` | zakariaf/Flutter-Skills (GitHub), hash `02e8012c5808` |
+| `animate` | emilkowalski/skills (GitHub), hash `7598d33e7f60` |
+| `animation-performance` | emilkowalski/skills (GitHub), hash `b68ba704106e` |
+| `animation-vocabulary` | emilkowalski/skills (GitHub), hash `0058036865ec` |
+| `apple-design` | emilkowalski/skills (GitHub), hash `0190417d092a` |
+| `apple-hig` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `async-safety` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `banner-design` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `brand` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `break-ui` | emilkowalski/skills (GitHub), hash `60ada6766292` |
+| `dependency-hygiene` | zakariaf/Flutter-Skills (GitHub), hash `33fd752937b3` |
+| `design` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `design-review-workflow` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `design-system` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `design-system-structure` | zakariaf/Flutter-Skills (GitHub), hash `0ec90e0e1e0d` |
+| `emil-design-eng` | emilkowalski/skills (GitHub), hash `51f2537e04d1` |
+| `find-animation-opportunities` | emilkowalski/skills (GitHub), hash `465d087c4176` |
+| `flutter-conventions-index` | zakariaf/Flutter-Skills (GitHub), hash `2afbc6ab45af` |
+| `flutter-performance` | zakariaf/Flutter-Skills (GitHub), hash `87eeb58ea986` |
+| `forms-and-input` | zakariaf/Flutter-Skills (GitHub), hash `eadea3bd9953` |
+| `impeccable` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `improve-animations` | emilkowalski/skills (GitHub), hash `524ea241e41d` |
+| `liquid-glass` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `liquid-glass-widgets` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `motion-and-haptics` | zakariaf/Flutter-Skills (GitHub), hash `5649e9d49b1f` |
+| `navigation-and-routing` | zakariaf/Flutter-Skills (GitHub), hash `4fc5b3950d40` |
+| `prototype` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `review-animations` | emilkowalski/skills (GitHub), hash `b4e5f0f4fe3e` |
+| `search` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `slides` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `state-management-riverpod` | zakariaf/Flutter-Skills (GitHub), hash `9e48c2a8edec` |
+| `testing-strategy` | zakariaf/Flutter-Skills (GitHub), hash `8c5d0323d70b` |
+| `ui-states-and-feedback` | zakariaf/Flutter-Skills (GitHub), hash `8f6e22b77318` |
+| `ui-styling` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `ui-ux-pro-max` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `ux-researcher-designer` | committed copy (see the skill folder; earlier passes record upstreams below) |
+| `widget-composition` | zakariaf/Flutter-Skills (GitHub), hash `097df65a85d4` |
+| `widget-golden-and-a11y-testing` | zakariaf/Flutter-Skills (GitHub), hash `9d467f8883c8` |
+
+### 2. Machine-level (Windows user `biswa`), probably reusable; confirm with `claude plugin list`
+Installed at user scope under `C:\Users\biswa\.claude\` (`plugins\installed_plugins.json`,
+`settings.json` → `enabledPlugins`). These files belong to the Windows user, not the Claude account,
+but whether a new account sees them depends on the client; verify, and reinstall if missing.
+
+| Plugin | Marketplace (source) | Version / commit | Installed path |
+|---|---|---|---|
+| `figma@claude-plugins-official` | anthropics/claude-plugins-official | 2.2.108, `f046182e` | `C:\Users\biswa\.claude\plugins\cache\claude-plugins-official\figma\2.2.108` |
+| `dart-flutter@dart-flutter` | flutter/agent-plugins | 1.0.7, `774dc2c1` | `C:\Users\biswa\.claude\plugins\cache\dart-flutter\dart-flutter\1.0.7` |
+| `ui-ux-pro-max@ui-ux-pro-max-skill` | nextlevelbuilder/ui-ux-pro-max-skill | 2.0.1, `07f4ef3a` | `C:\Users\biswa\.claude\plugins\cache\ui-ux-pro-max-skill\ui-ux-pro-max\2.0.1` |
+| `frontend-design@claude-plugins-official` | anthropics/claude-plugins-official | `ea10b213686c` | `C:\Users\biswa\.claude\plugins\cache\claude-plugins-official\frontend-design\ea10b213686c` |
+
+User skill outside the repo: `C:\Users\biswa\.claude\skills\emil-design-eng` (also committed in the repo).
+
+User MCP servers in `C:\Users\biswa\.claude.json` (`mcpServers`): `mobbin`, `magic` (21st.dev; key was
+reported missing/reset), `pencil` and `dossier` (failing to connect this session), `job-research-browser`.
+None has a project-level entry for Numaya.
+
+Reinstall a missing plugin:
+```
+claude plugin marketplace add anthropics/claude-plugins-official
+claude plugin install figma@claude-plugins-official
+claude plugin marketplace add flutter/agent-plugins
+claude plugin install dart-flutter@dart-flutter
+claude plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill
+claude plugin install ui-ux-pro-max@ui-ux-pro-max-skill
+claude plugin install frontend-design@claude-plugins-official
+```
+
+### 3. Account-specific: reconnect on the new account
+| Connector | Used for | State on the old account | New account |
+|---|---|---|---|
+| claude.ai **Figma** connector | Every live Figma read in the 2026-11-07 passes (variables, components, screenshots, SVG exports) | Connected (Figma handle RITAM) | Connect Figma in claude.ai settings; check it can open `22AeTw6QiPj2fNYHLhC7MK` |
+| Figma plugin MCP `plugin:figma:figma` | Not used (the connector above was) | Needs `/mcp` authorisation | Authorise via `/mcp` in a terminal session if wanted |
+| Mobbin (claude.ai connector and/or user MCP) | Reference research | Available | Reconnect if needed |
+| Notion, Gmail, Google Drive and other claude.ai connectors | Not used for Numaya | Present | Optional |
+| Claude desktop built-ins (in-app browser, Artifacts, Docs) | Browser checks, previews | Built into the app | Nothing to install |
+
+### 4. Machine tools (not Claude-specific)
+Flutter 3.47.8 stable (Dart 3.13.7) on PATH; Android SDK `C:\Users\biswa\AppData\Local\Android\sdk`
+(adb by full path: `...\platform-tools\adb.exe`); AVDs `Pixel_10` (used), `Pixel_8`, `Pixel_9`, `Pixel_9_2`;
+Python 3.12 with Pillow (capture boards, photo tool); Node 24 (repo web checks); GitHub CLI logged in
+as RITAMBISWAS404 (keyring, per machine); Microsoft Edge (headless HTML renders). No Java on PATH.
+`@tabler/icons@3.50.0` is fetched on demand with `npm pack` for `tool/sync_tabler_icons.py`.
+
+---
+
+## Earlier record
+
 > **Cloud session, 2026-11-03 UTC (Claude Code 2.1.317, Linux):**
 > - **`dart-flutter` plugin 1.0.7:** installed at user scope with
 >   `claude plugin marketplace add flutter/agent-plugins` and

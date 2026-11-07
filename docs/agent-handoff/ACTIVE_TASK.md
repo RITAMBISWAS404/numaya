@@ -1,4 +1,11 @@
-# Active task: owner review of the 15px type and icon experiment
+# Active task: revised PRD for additional features (waiting for the owner's brief)
+
+> **2026-11-07:** the X15 15px typography and icon experiment is **approved** as the design
+> baseline (H-08) on `experiment/numaya-15px-icons-20261107`. The account is switching. In the new
+> conversation: verify the repo against `NUMAYA_ACCOUNT_HANDOFF.md`, reconnect tools, then wait
+> for the owner's feature brief and help prepare the revised PRD. Acceptance: a PRD the owner
+> agrees, before feature work starts.
+
 
 > **2026-11-07:** X15 is on `experiment/numaya-15px-icons-20261107` (record: `docs/design-experiments/ente-design-system/x15-type-icons/README.md`; before/after: `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\15px icon experiment 2026-11-07`). **Next:** the owner compares the APK `Numaya-15px-Icon-Experiment-*.apk` on a phone and approves or rejects it. Integrate into the working branch only on approval; otherwise continue from `7eae060`.
 

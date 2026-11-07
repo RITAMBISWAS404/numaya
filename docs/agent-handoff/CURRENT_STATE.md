@@ -1,5 +1,12 @@
 # Current state
 
+> **Account switch, 2026-11-07 (Windows, `C:\Users\biswa\Projects\Numaya`):** working branch
+> **`experiment/numaya-15px-icons-20261107`**, level with origin. **The X15 15px typography and icon
+> experiment (`4d713e3`) is approved as the working design baseline** (H-08); the handoff commit sits
+> on top of it with no app-code change. Full transfer notes: [`NUMAYA_ACCOUNT_HANDOFF.md`](../../NUMAYA_ACCOUNT_HANDOFF.md).
+> Next task: the owner's feature brief, then a revised PRD.
+
+
 > **15px type and icon experiment X15 (2026-11-07), awaiting owner approval, not integrated:** branch
 > `experiment/numaya-15px-icons-20261107`, started from `7eae060` (the approved working line is still
 > `experiment/numaya-figma-type-icons-20261107`; switch back to it to revert).

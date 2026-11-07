@@ -1,6 +1,7 @@
 # 15px type and icon experiment (X15, 2026-11-07)
 
-A reversible experiment for the owner to compare on a phone. Not integrated.
+**Status: approved by the owner on 2026-11-07 as the working design baseline (H-08).** Further
+refinements build on `experiment/numaya-15px-icons-20261107`.
 
 | | |
 |---|---|

@@ -1,5 +1,16 @@
 # Next steps
 
+> **2026-11-07 (account switch), current queue:**
+> 1. Wait for the owner's feature brief; prepare the revised PRD with them (no feature building first).
+> 2. Owner decisions: SW-01 off-switch contrast; EXP-001–004; UI-001 artwork; UI-008 phrase; which
+>    branch becomes the shipping line.
+> 3. Device checks: physical phone; Visibility, Premium, Help, delete-account sheet; font size 2.0;
+>    three-button navigation; "The basics" at 320dp; onboarding after Photos.
+> 4. Environment: `npx playwright install chromium` for e2e; CRLF-safe `npm run check`; regenerate goldens.
+>
+> The list below is older and kept for history.
+
+
 1. **Owner review** of `experiment/numaya-final-ux-polish`:
    - Install the debug APK (VALIDATION.md has the commands).
    - Or read the before/after sheets in
