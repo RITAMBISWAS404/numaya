@@ -8,6 +8,7 @@ import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../application/dating_controller.dart';
 import '../domain/sample_people.dart';
+import 'person_profile.dart';
 
 /// "For you" (B-33, Mobbin "Discover": curated daily picks with a refresh countdown and a
 /// rationale line). Up to four undecided people with the most in common, ignoring the filters.
@@ -133,6 +134,7 @@ class _PickCard extends StatelessWidget {
                 label: l10n.discoverPhotoLabel(person.name, 1),
                 aspectRatio: AppMedia.listThumbnail,
                 radius: AppRadii.control,
+                child: personPhotoImage(person, 1),
               ),
             ),
           ),

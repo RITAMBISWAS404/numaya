@@ -23,9 +23,15 @@ class CountdownAvatar extends StatelessWidget {
     this.size = 72,
     this.expired = false,
     this.urgent = false,
+    this.image,
+    this.imageAlignment = Alignment.center,
   });
 
   final String initial;
+
+  /// See [InitialsAvatar.image].
+  final ImageProvider? image;
+  final Alignment imageAlignment;
 
   /// Time left as a fraction of the window (1 = just matched).
   final double fraction;
@@ -37,7 +43,12 @@ class CountdownAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final avatar = Opacity(
       opacity: expired ? 0.45 : 1,
-      child: InitialsAvatar(initial: initial, size: size - 10),
+      child: InitialsAvatar(
+        initial: initial,
+        size: size - 10,
+        image: image,
+        imageAlignment: imageAlignment,
+      ),
     );
     return SizedBox.square(
       dimension: size,

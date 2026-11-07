@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../dating/application/dating_controller.dart';
+import '../../dating/presentation/person_profile.dart';
 
 /// Settings › Blocked people (V16 112 "Privacy and safety"): everyone blocked or reported, with
 /// Unblock. Unblocking never restores a match or messages.
@@ -45,7 +46,12 @@ class BlockedScreen extends ConsumerWidget {
                       ),
                       child: Row(
                         children: [
-                          InitialsAvatar(initial: p.initial, size: 40),
+                          InitialsAvatar(
+                            initial: p.initial,
+                            size: 40,
+                            image: personAvatarImage(p),
+                            imageAlignment: personAvatarFocus(p),
+                          ),
                           const SizedBox(width: AppSpacing.s3),
                           Expanded(
                             child: Text(p.name, style: AppTypography.row),

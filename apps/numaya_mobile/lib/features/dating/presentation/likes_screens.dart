@@ -98,6 +98,8 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
                     ),
                     caption: l10n.likeTileCaption(like.person.distanceKm),
                     verified: like.person.verified,
+                    image: personTileImage(like.person),
+                    imageAlignment: personTileFocus(like.person),
                     semanticLabel: l10n.tileLabel(
                       like.person.name,
                       like.person.age,

@@ -3,3 +3,9 @@ dist
 .DS_Store
 *.log
 tests/e2e/artifacts
+
+# Local reference photos for the demo UI (never published). Install with
+# apps/numaya_mobile/tool/install_demo_photos.py; see apps/numaya_mobile/assets/demo/photos/README.md.
+/tarini pics/
+apps/numaya_mobile/assets/demo/photos/*
+!apps/numaya_mobile/assets/demo/photos/README.md

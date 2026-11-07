@@ -23,6 +23,8 @@ class InitialsAvatar extends StatelessWidget {
     this.size = 48,
     this.ring = false,
     this.verified = false,
+    this.image,
+    this.imageAlignment = Alignment.center,
   });
 
   final String initial;
@@ -30,8 +32,22 @@ class InitialsAvatar extends StatelessWidget {
   final bool ring;
   final bool verified;
 
+  /// A photo for the circle (a face crop works best); the initial shows while it loads, and if it
+  /// fails.
+  final ImageProvider? image;
+  final Alignment imageAlignment;
+
   @override
   Widget build(BuildContext context) {
+    final letter = Text(
+      initial,
+      style: AppTypography.weight(AppTypography.body, AppTypography.bold)
+          .copyWith(
+            fontSize: AppTypography.even(size * 0.42),
+            height: 1,
+            color: AppColors.onIdentity,
+          ),
+    );
     Widget circle = Container(
       width: size,
       height: size,
@@ -39,16 +55,23 @@ class InitialsAvatar extends StatelessWidget {
         color: AppColors.identity,
         shape: BoxShape.circle,
       ),
+      clipBehavior: image == null ? Clip.none : Clip.antiAlias,
       alignment: Alignment.center,
-      child: Text(
-        initial,
-        style: AppTypography.weight(AppTypography.body, AppTypography.bold)
-            .copyWith(
-              fontSize: AppTypography.even(size * 0.42),
-              height: 1,
-              color: AppColors.onIdentity,
+      child: image == null
+          ? letter
+          : Stack(
+              fit: StackFit.expand,
+              children: [
+                Center(child: letter),
+                Image(
+                  image: image!,
+                  fit: BoxFit.cover,
+                  alignment: imageAlignment,
+                  gaplessPlayback: true,
+                  errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                ),
+              ],
             ),
-      ),
     );
     if (ring) {
       circle = Container(
@@ -1465,6 +1488,8 @@ class PersonTile extends StatelessWidget {
     required this.onTap,
     this.verified = false,
     this.badge,
+    this.image,
+    this.imageAlignment = Alignment.center,
   });
 
   final String title;
@@ -1473,6 +1498,10 @@ class PersonTile extends StatelessWidget {
   final VoidCallback onTap;
   final bool verified;
   final Widget? badge;
+
+  /// The person's main photo; the tile stays the placeholder grey without one.
+  final ImageProvider? image;
+  final Alignment imageAlignment;
 
   @override
   Widget build(BuildContext context) {
@@ -1491,6 +1520,13 @@ class PersonTile extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.photo,
                 borderRadius: AppRadii.all(AppRadii.card),
+                image: image == null
+                    ? null
+                    : DecorationImage(
+                        image: image!,
+                        fit: BoxFit.cover,
+                        alignment: imageAlignment,
+                      ),
               ),
               padding: const EdgeInsets.all(AppSpacing.s2),
               alignment: Alignment.topLeft,

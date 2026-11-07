@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
+import '../../../core/media/demo_photos.dart';
 import '../../auth/application/session_controller.dart';
 import '../domain/profile_draft.dart';
 
@@ -283,10 +284,14 @@ class OnboardingController extends Notifier<OnboardingState> {
           question: 'A perfect first date',
           answer: 'A record shop, a long walk, and nowhere to be after.',
         ),
-        photos: const [
-          DraftPhoto(id: 1, tone: 0),
-          DraftPhoto(id: 2, tone: 1),
-          DraftPhoto(id: 3, tone: 2),
+        // The local demo photo set, when installed (null sources keep the grey slots).
+        photos: [
+          for (var i = 1; i <= 3; i++)
+            DraftPhoto(
+              id: i,
+              tone: i - 1,
+              source: DemoPhotoLibrary.instance.photoFor(0, i)?.source,
+            ),
         ],
       ),
       completed: SetupStep.values.toSet(),

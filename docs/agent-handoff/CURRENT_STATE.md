@@ -1,5 +1,21 @@
 # Current state
 
+> **Demo photos (2026-11-07, Windows):** on `experiment/numaya-figma-type-icons-20261107`, the local demo photo set. Real reference photos (one person, 13 JPEGs) now fill every demo
+> photo surface: Discover cards and galleries, the photo viewer, Likes tiles, new-match tiles,
+> conversation and chat-header avatars, the match screen, For you thumbnails, Alex's own profile,
+> Edit profile and onboarding photo grids.
+> - **The photos are local only, never in git.** Originals: `<repo>/tarini pics/` (git-ignored).
+>   Bundled copies: `apps/numaya_mobile/assets/demo/photos/` (git-ignored except its README).
+> - **To resume on another account or machine:** copy the `tarini pics` folder (it holds the
+>   photos and `numaya_demo_photos.json`, the local spec of each photo's role and face position)
+>   into the repo root, then from `apps/numaya_mobile` run
+>   `python tool/install_demo_photos.py "../../tarini pics"` and rebuild. Without a set the app
+>   shows its grey placeholders, as before, and every test still passes.
+> - Code: `lib/core/media/demo_photos.dart` (`DemoPhotoLibrary`, loaded in `main.dart`);
+>   `SamplePerson.photoAt` falls back to it deterministically (`demoPhotoIndex`), so a person keeps
+>   the same main photo and gallery on every screen; face crops (`face_NN.jpg`) for circles.
+
+
 > **Figma type and icons pass (2026-11-07, Windows):** branch `experiment/numaya-figma-type-icons-20261107`
 > from `b518a4a` (the UI consistency pass). Figma was read live this time (Ente copy `22AeTw6QiPj2fNYHLhC7MK`).
 > - **FT-01:** even font sizes only. The 13/18 caption is now Ente Mini 12/16; sentences moved to a new

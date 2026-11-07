@@ -1,5 +1,11 @@
 # Validation
 
+> **Local demo photos (2026-11-07):** `flutter analyze` no issues; `dart format` clean;
+> `flutter test` **506 passed, 21 skipped, 0 failed** (+4 in `demo_photos_test`; the suite runs with
+> no photo set loaded). Debug APK with the local set installed on the Pixel 10 AVD (`-r`, data
+> kept): Discover, photo viewer, gallery, Likes, Messages, chat header, match screen, Profile and
+> Edit profile checked on the device. `git check-ignore` confirms the photos are excluded.
+
 > **Figma type and icons pass (2026-11-07, Windows, Flutter 3.47.8 / Dart 3.13.7):**
 > - `dart format --set-exit-if-changed lib test`: exit 0.
 > - `flutter analyze`: no issues.

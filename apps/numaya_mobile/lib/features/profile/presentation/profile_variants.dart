@@ -89,6 +89,7 @@ class ProfileHeaderData {
         ? Image(
             image: localImage(photo!, width: 720),
             fit: BoxFit.cover,
+            alignment: localImageFocus(photo!),
             errorBuilder: (_, _, _) => glyph,
           )
         : glyph;

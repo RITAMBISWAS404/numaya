@@ -1,5 +1,12 @@
 # Work log
 
+## 2026-11-07 · Local demo photos (Windows, Claude desktop)
+- Populated the demo UI with the owner's local reference photos (`tarini pics`, 13 portrait JPEGs of one person): 5 chosen as portraits (main photo, avatar, thumbnail), 8 as gallery scenes; the one with burned-in text is last in the rotation.
+- New `tool/install_demo_photos.py` (copies originals unchanged as `photo_NN.jpg`, writes square face crops and `demo_photos.json`) and `lib/core/media/demo_photos.dart` (`DemoPhotoLibrary`).
+- `SamplePerson.photoAt` / `avatarPhoto` fall back to the set by a fixed per-person index; cover crops anchor on the recorded face (`localImageFocus`).
+- Avatars (`InitialsAvatar`, `CountdownAvatar`), `PersonTile`, `GridPhoto`, the photo viewer and For you thumbnails gained photo support; initials and grey placeholders remain the fallback.
+- Git: `/tarini pics/` and `apps/numaya_mobile/assets/demo/photos/*` (except README) are ignored. New `test/unit/demo_photos_test.dart` (4).
+
 ## 2026-11-07 · Figma type and icons pass (Windows, Claude desktop)
 - Ran `NUMAYA_FIGMA_TYPE_ICONS.zip` phases 01–04 on the new branch `experiment/numaya-figma-type-icons-20261107`, from `b518a4a` (clean, on origin).
 - Figma read live through the connector: Text styles, Menu Item, Toggle Switch, Icon, Buttons, Text Input, Header v2, chips, Banners, Badges, Bottom sheet, Settings and empty-state screens. Node map in `docs/design-experiments/ente-design-system/figma-type-icons/README.md`.

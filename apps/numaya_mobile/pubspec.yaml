@@ -41,6 +41,9 @@ flutter:
     - assets/illustrations/mobile/
     # Sample media for the demo chat attachments (fictional, generated for this repo).
     - assets/demo/
+    # Local reference photos for the demo UI: git-ignored, installed per machine by
+    # tool/install_demo_photos.py (assets/demo/photos/README.md). Only the README is committed.
+    - assets/demo/photos/
     # Tabler Icons 3.50.0 (MIT, assets/icons/tabler/LICENSE): official SVGs, synced by
     # tool/sync_tabler_icons.py.
     - assets/icons/tabler/outline/

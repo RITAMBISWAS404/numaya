@@ -529,6 +529,31 @@ List<Widget> personSections(
   ];
 }
 
+/// [person]'s photo for a circle or square (avatars, conversation rows, thumbnails): the demo
+/// set's face crop of the main photo, or null for the initial / placeholder.
+ImageProvider? personAvatarImage(SamplePerson person, {int width = 256}) {
+  final source = person.avatarPhoto;
+  return source == null ? null : localImage(source, width: width);
+}
+
+/// Where to anchor [person]'s avatar crop (centred for face crops).
+Alignment personAvatarFocus(SamplePerson person) {
+  final source = person.avatarPhoto;
+  return source == null ? Alignment.center : localImageFocus(source);
+}
+
+/// [person]'s main photo for a portrait tile (the Likes grid), or null for the placeholder.
+ImageProvider? personTileImage(SamplePerson person) {
+  final source = person.photoAt(1);
+  return source == null ? null : localImage(source, width: 540);
+}
+
+/// Where to anchor [person]'s main-photo crop so the face stays in frame.
+Alignment personTileFocus(SamplePerson person) {
+  final source = person.photoAt(1);
+  return source == null ? Alignment.center : localImageFocus(source);
+}
+
 /// A sample person's photo at [position] (1-based) for use inside a [PhotoPlaceholder], or null
 /// when there is none (the placeholder then shows).
 Widget? personPhotoImage(SamplePerson person, int position) =>
@@ -540,6 +565,7 @@ Widget? _real(String? source) => source == null
     : Image(
         image: localImage(source, width: 1080),
         fit: BoxFit.cover,
+        alignment: localImageFocus(source),
         gaplessPlayback: true,
         errorBuilder: (_, _, _) => const SizedBox.shrink(),
       );

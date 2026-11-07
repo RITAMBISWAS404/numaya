@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../domain/sample_people.dart';
+import 'person_profile.dart';
 
 /// A sample person's photos one at a time (happn's profile carousel, Hinge's expanded photo):
 /// swipe sideways or use the previous / next buttons; back closes. Opened from any photo on a
@@ -78,6 +79,7 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
                     itemBuilder: (context, i) => Center(
                       child: PhotoPlaceholder(
                         label: l10n.discoverPhotoLabel(person.name, i + 1),
+                        child: personPhotoImage(person, i + 1),
                       ),
                     ),
                   ),

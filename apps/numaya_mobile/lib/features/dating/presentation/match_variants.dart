@@ -413,6 +413,8 @@ class MatchCatCelebration extends StatelessWidget {
                                 child: InitialsAvatar(
                                   initial: person.initial,
                                   size: avatar - 6,
+                                  image: personAvatarImage(person),
+                                  imageAlignment: personAvatarFocus(person),
                                 ),
                               ),
                             ),

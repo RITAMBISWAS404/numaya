@@ -345,12 +345,20 @@ class PromptMark extends StatelessWidget {
 
 /// One photo in a grid, by id. [tone] picks the placeholder shade until real images exist.
 class GridPhoto {
-  const GridPhoto({required this.id, required this.tone, this.image});
+  const GridPhoto({
+    required this.id,
+    required this.tone,
+    this.image,
+    this.alignment = Alignment.center,
+  });
   final int id;
   final int tone;
 
   /// The real photo, when there is one; otherwise the tile is the placeholder grey.
   final ImageProvider? image;
+
+  /// Where to anchor the cover crop (the face, for the demo photo set).
+  final Alignment alignment;
 }
 
 /// 3 × 2 photo grid (`.theme-withings .photo-grid`): 14pt tiles in the warm photo grey with an order
@@ -414,6 +422,7 @@ class PhotoGrid extends StatelessWidget {
         : Image(
             image: photo.image!,
             fit: BoxFit.cover,
+            alignment: photo.alignment,
             gaplessPlayback: true,
             errorBuilder: (_, _, _) => const ColoredBox(color: AppColors.photo),
           ),

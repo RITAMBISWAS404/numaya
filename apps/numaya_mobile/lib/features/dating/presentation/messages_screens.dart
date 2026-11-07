@@ -546,6 +546,8 @@ class _ConversationRow extends StatelessWidget {
               initial: person.initial,
               size: 64,
               verified: person.verified,
+              image: personAvatarImage(person),
+              imageAlignment: personAvatarFocus(person),
             ),
             const SizedBox(width: AppSpacing.s4),
             Expanded(
@@ -866,7 +868,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 pressedScale: 1,
                 child: Row(
                   children: [
-                    InitialsAvatar(initial: person.initial, size: 36),
+                    InitialsAvatar(
+                      initial: person.initial,
+                      size: 36,
+                      image: personAvatarImage(person),
+                      imageAlignment: personAvatarFocus(person),
+                    ),
                     const SizedBox(width: AppSpacing.s3),
                     Flexible(
                       child: Text(
@@ -909,6 +916,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 fraction: 0,
                 expired: true,
                 size: 104,
+                image: personAvatarImage(person),
+                imageAlignment: personAvatarFocus(person),
               ),
             ),
             const SizedBox(height: AppSpacing.s4),
@@ -950,6 +959,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               initial: person.initial,
               size: 96,
               verified: person.verified,
+              image: personAvatarImage(person),
+              imageAlignment: personAvatarFocus(person),
             ),
           ),
           const SizedBox(height: AppSpacing.s4),

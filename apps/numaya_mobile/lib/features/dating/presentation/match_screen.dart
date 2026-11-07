@@ -119,6 +119,7 @@ class _MatchScreenState extends ConsumerState<MatchScreen>
         : Image(
             image: localImage(ownSource, width: 720),
             fit: BoxFit.cover,
+            alignment: localImageFocus(ownSource),
             errorBuilder: (_, _, _) => const SizedBox.shrink(),
           );
 

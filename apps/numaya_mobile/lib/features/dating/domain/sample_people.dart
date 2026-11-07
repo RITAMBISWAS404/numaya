@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../../../core/media/demo_photos.dart';
 import '../../onboarding/domain/profile_draft.dart';
 import '../../profile/domain/profile_details.dart';
 
@@ -49,11 +50,29 @@ class SamplePerson {
   final int photoCount;
 
   /// Real photos by position (the member's own, chosen on this phone); null or missing entries are
-  /// placeholders. Sample people have none.
+  /// placeholders. Sample people have none of their own: they take the local demo photo set when
+  /// one is installed ([DemoPhotoLibrary]), the same photos for the same person on every screen.
   final List<String?> photoSources;
 
-  String? photoAt(int position) =>
-      position <= photoSources.length ? photoSources[position - 1] : null;
+  String? photoAt(int position) {
+    if (photoSources.isNotEmpty) {
+      return position <= photoSources.length
+          ? photoSources[position - 1]
+          : null;
+    }
+    if (position > photoCount) return null;
+    return DemoPhotoLibrary.instance
+        .photoFor(demoPhotoIndex(id), position)
+        ?.source;
+  }
+
+  /// The photo for round avatars and square thumbnails: the main photo's face crop when the demo
+  /// set has one, else the main photo.
+  String? get avatarPhoto {
+    final main = photoAt(1);
+    if (main == null) return null;
+    return DemoPhotoLibrary.instance.faceOf(main) ?? main;
+  }
 
   /// Interests shared with the member (the web prototype's fixed "You both like").
   final List<String> shared;
@@ -243,6 +262,17 @@ const List<SamplePerson> kSamplePeople = [
     shared: ['Running'],
   ),
 ];
+
+/// A stable position for [id] in the demo photo rotation: its order across every sample list
+/// (the member's own profile, `me`, is 0). Unknown ids hash to a fixed slot.
+int demoPhotoIndex(String id) {
+  if (id == 'me') return 0;
+  final all = [...kSamplePeople, ...kExtraPeople, ...kSeedMatchPeople];
+  for (var i = 0; i < all.length; i++) {
+    if (all[i].id == id) return i + 1;
+  }
+  return id.codeUnits.fold(0, (a, c) => (a * 31 + c) & 0x7fffffff);
+}
 
 SamplePerson? personById(String id) {
   for (final p in [...kSamplePeople, ...kExtraPeople, ...kSeedMatchPeople]) {

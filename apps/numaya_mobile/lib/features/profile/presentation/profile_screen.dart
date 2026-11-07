@@ -456,10 +456,11 @@ class _ProfileSummary extends StatelessWidget {
                 clipBehavior: Clip.antiAlias,
                 child: photo != null
                     ? Image(
-                        image: localImage(photo!, width: 400),
+                        image: localImage(localImageAvatar(photo!), width: 400),
                         width: diameter,
                         height: diameter,
                         fit: BoxFit.cover,
+                        alignment: localImageFocus(localImageAvatar(photo!)),
                         // V4-01: a photo file that has gone (cache cleared, file deleted) shows
                         // the initial, never Flutter's red error box.
                         errorBuilder: (_, _, _) => Center(child: initialText),

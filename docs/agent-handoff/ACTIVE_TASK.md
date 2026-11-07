@@ -6,6 +6,9 @@
 > 3. Device check at 2.0 system font and 320pt; Visibility, Premium and Help on the device.
 > 4. Decide on merging (this branch sits on top of the UI consistency branch).
 >
+> 5. Judge the UI with the local demo photos (see CURRENT_STATE "Demo photos"; the photos are
+>    git-ignored and must be copied and installed on each machine).
+>
 > Still pending: the EXP-001–004 choices, the UI-001 artwork and the UI-008 phrase.
 
 

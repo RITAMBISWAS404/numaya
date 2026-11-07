@@ -159,6 +159,9 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
               image: p.source == null
                   ? null
                   : localImage(p.source!, width: 360),
+              alignment: p.source == null
+                  ? Alignment.center
+                  : localImageFocus(p.source!),
             ),
         ],
         slots: ProfileRules.maxPhotos,
