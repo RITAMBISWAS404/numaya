@@ -1,5 +1,18 @@
 # Validation
 
+> **MVP PRD v1 (2026-11-07, app commit `f6c4d8b`):** `dart format` clean; `flutter analyze` **no
+> issues**; `flutter test` **564 passed, 21 skipped, 0 failed** (507 before; new `mvp_rules_test`,
+> `mvp_controllers_test`, `mvp_screens_test`: every MVP route at 320/360/411 dp x 100/200% text plus
+> tap-target and label guidelines). Repo root: `npm ci` run (node_modules was absent); `npm test`
+> 121/122, `vite build` OK; `tokens:check`, `icons:check` and the tokens unit test fail only on CRLF
+> (`core.autocrlf=true`; no web files changed); `test:e2e` not run (Playwright Chromium not
+> installed). Backend SQL not executed (no database). Device: Pixel 10 AVD (API 36) ran the
+> 79-image gallery harness (`tool/capture_mvp_gallery.sh`) and the installed APK launched to
+> Welcome. **APK** `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-MVP-PRD-20261107-f6c4d8b.apk`,
+> debug, 222,135,345 bytes, SHA-256 `2e3d2aaddbb7a5ff4842d5661dd027d6b789cf03ad7d2877197e55a54b87e1b5`,
+> local demo photos installed. **Gallery** `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\MVP PRD 2026-11-07\`
+> (README.md + index.tsv; all 46 S-IDs). Not checked: physical phone, iOS, font 2.0 on a device.
+
 > **Account-switch handoff (2026-11-07):** docs only, no app-code change since `4d713e3` (format,
 > analyze and 507-test results there stand). Re-checked: `git status` clean apart from the handoff
 > files, `gh auth status` logged in as RITAMBISWAS404, remote branch equals local HEAD after push.

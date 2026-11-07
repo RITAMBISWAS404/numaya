@@ -3,6 +3,14 @@
 Read this first in a new Claude Code conversation opened at `C:\Users\biswa\Projects\Numaya`, then
 `CLAUDE.md` and `docs/agent-handoff/START_HERE.md`. Nothing here overrides `CLAUDE.md`.
 
+## Latest (2026-11-07, MVP PRD v1)
+Branch **`experiment/numaya-mvp-prd-20261107`** (from `c56e36b`, tag `checkpoint/pre-mvp-prd-20261107`)
+implements the owner's MVP PRD package as a labelled demo. Start with
+`docs/product/mvp-prd-v1/REPORT.md`, `TRACEABILITY.md`, `DECISIONS.md` and `LIVE_BLOCKERS.md`.
+APK `Numaya-MVP-PRD-20261107-f6c4d8b.apk` (Desktop > Numaya Test Builds); gallery
+`Numaya Final Screenshots\MVP PRD 2026-11-07`. Details: `docs/agent-handoff/VALIDATION.md`. The
+sections below describe the earlier X15 baseline and still apply to the design.
+
 ## Where things are
 | | |
 |---|---|

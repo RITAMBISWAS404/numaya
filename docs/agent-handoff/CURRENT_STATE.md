@@ -1,5 +1,15 @@
 # Current state
 
+> **MVP PRD v1 implementation (2026-11-07):** branch **`experiment/numaya-mvp-prd-20261107`**, cut from
+> `c56e36b` (checkpoint tag `checkpoint/pre-mvp-prd-20261107`; the working tree was clean, so no
+> checkpoint commit was needed). Implements the owner's `NUMAYA_PRD_IMPLEMENTATION_V1` package as a
+> deterministic **demo**: like allowance (5/15 a day, IST), Compliments and Requests, match lifecycle
+> (24 h, one extension, 7-day check-in, 14-day expiry, free reconnection), credit ledger, streak with
+> paid recovery, Profile Health v1, Insights, provisional INR commerce with a demo store, legal and
+> support screens, text-only chat. Backend is contracts only (`backend/`). Record:
+> [`docs/product/mvp-prd-v1/`](../product/mvp-prd-v1/TRACEABILITY.md) (traceability, decisions,
+> live blockers, report). Design baseline unchanged (X15, purple, Tabler).
+
 > **Account switch, 2026-11-07 (Windows, `C:\Users\biswa\Projects\Numaya`):** working branch
 > **`experiment/numaya-15px-icons-20261107`**, level with origin. **The X15 15px typography and icon
 > experiment (`4d713e3`) is approved as the working design baseline** (H-08); the handoff commit sits

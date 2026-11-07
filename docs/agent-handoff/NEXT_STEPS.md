@@ -1,5 +1,13 @@
 # Next steps
 
+> **2026-11-07 (after MVP PRD v1), queue:**
+> 1. Owner review of the MVP APK and gallery; decisions MVP-D07/D08/D18/D24/D25.
+> 2. Backend: provision the project, apply and test `backend/migrations`, then wire `NumayaApi`
+>    (LIVE_BLOCKERS 1-3).
+> 3. Store products and verification Edge Functions only after price validation (LIVE_BLOCKERS 4).
+> 4. Localise the sample people for the India pitch demo; coarse device location.
+> 5. Environment: `git config core.autocrlf input` (web checks), `npx playwright install chromium`.
+
 > **2026-11-07 (account switch), current queue:**
 > 1. Wait for the owner's feature brief; prepare the revised PRD with them (no feature building first).
 > 2. Owner decisions: SW-01 off-switch contrast; EXP-001–004; UI-001 artwork; UI-008 phrase; which

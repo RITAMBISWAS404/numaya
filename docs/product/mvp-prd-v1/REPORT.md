@@ -1,9 +1,11 @@
 # MVP PRD v1: implementation report (2026-11-07)
 
 **Branch** `experiment/numaya-mvp-prd-20261107` (from `c56e36b`, tag `checkpoint/pre-mvp-prd-20261107`).
-**Commit** the implementation commit on that branch (see `git log`; the handoff records the SHA).
-**APK** `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\` (name, SHA-256 and size in
-`docs/agent-handoff/VALIDATION.md`). Debug build, demo environment, local demo photos installed.
+**Commit** implementation `f6c4d8b` (handoff docs follow it).
+**APK** `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-MVP-PRD-20261107-f6c4d8b.apk`, debug,
+222,135,345 bytes, SHA-256 `2e3d2aaddbb7a5ff4842d5661dd027d6b789cf03ad7d2877197e55a54b87e1b5`, demo
+environment, local demo photos installed (git-ignored).
+**Tests** `flutter analyze` no issues; `flutter test` 564 passed, 21 skipped, 0 failed.
 **Screens** `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\MVP PRD 2026-11-07\`
 (`index.tsv`: file → S-ID → state). Real `adb screencap` from the Pixel 10 emulator (API 36,
 1080×2424), driven by `integration_test/mvp_gallery_test.dart` with the deterministic demo world;

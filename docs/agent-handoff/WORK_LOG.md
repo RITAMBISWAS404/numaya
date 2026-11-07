@@ -1,5 +1,25 @@
 # Work log
 
+## 2026-11-07 · MVP PRD v1 implementation (Windows, Claude desktop)
+- Verified start: `experiment/numaya-15px-icons-20261107` clean at `c56e36b`, equal to origin. Tagged
+  `checkpoint/pre-mvp-prd-20261107`; new branch `experiment/numaya-mvp-prd-20261107`.
+- Read every document of `NUMAYA_PRD_IMPLEMENTATION_V1.zip` (copied to `docs/product/mvp-prd-v1/source/`).
+- Figma live (Ente file, sheets `4809:8074`, banners `14590:125265`) and Mobbin references (LinkedIn
+  note, Bumble match, WHOOP/Cal AI streak, Cal AI/Flo/Locket/Hinge paywalls). Figma plugin MCP needs
+  `/mcp` sign-in; the claude.ai Figma connector worked.
+- Rules (pure Dart, clock-injected): IST calendar, catalog, credit ledger, like quota, extensions,
+  match lifecycle, Compliments, streak, Profile Health. Controllers: economy, compliments; dating
+  controller extended (quota, conversion, lifecycle, reconnect, mute, check-in, spam guard).
+- Screens: S14 composer, S17 allowance, S21 request, S23 check-in, S24 expired, S25 reconnect,
+  S29-S33 health/insights/streak/wallet, S34-S37 commerce, S43 support requests, S45 legal; changed
+  Discover, Likes, Chats, chat, Profile hub, Settings, Welcome links, onboarding (bio required,
+  interests optional, welcome credits), notification categories.
+- Backend contracts: `backend/` (schema + RLS, transactional functions, endpoint contracts, pgTAP
+  denial tests), `lib/app/backend/numaya_api.dart` (unconfigured live API).
+- 12 Tabler 3.50.0 SVGs added (official files, synced with the tool).
+- Tests: 564 passed, 21 skipped, 0 failed (from 507); new `mvp_rules_test`, `mvp_controllers_test`,
+  `mvp_screens_test`. Superseded expectations updated (bio Skip, rematch, free Likes grid, UI-033 timer).
+
 ## 2026-11-07 · Account-switch handoff (Windows, Claude desktop)
 - Owner approved the X15 15px typography and icon experiment as the working design baseline (H-08).
 - Verified: branch `experiment/numaya-15px-icons-20261107` at `4d713e3`, level with origin, clean;

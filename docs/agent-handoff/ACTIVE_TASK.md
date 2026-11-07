@@ -1,5 +1,12 @@
 # Active task: revised PRD for additional features (waiting for the owner's brief)
 
+> **2026-11-07, MVP PRD v1:** implemented on `experiment/numaya-mvp-prd-20261107` (all executable
+> phases of `07_EXECUTION.md`). **Next:** the owner reviews the APK and the screen gallery
+> (`C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\MVP PRD 2026-11-07\`) against
+> `docs/product/mvp-prd-v1/TRACEABILITY.md`, decides the open items in `DECISIONS.md` (MVP-D07, D08,
+> D18, D24, D25) and assigns the live blockers in `LIVE_BLOCKERS.md`. Acceptance for a pilot: every
+> blocker closed and verified; a debug APK is not a release.
+
 > **2026-11-07:** the X15 15px typography and icon experiment is **approved** as the design
 > baseline (H-08) on `experiment/numaya-15px-icons-20261107`. The account is switching. In the new
 > conversation: verify the repo against `NUMAYA_ACCOUNT_HANDOFF.md`, reconnect tools, then wait
