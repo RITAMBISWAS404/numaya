@@ -81,7 +81,7 @@ class SetupHubScreen extends ConsumerWidget {
           Text(
             next != null ? l10n.setupCaptionTime : l10n.setupCaptionReady,
             textAlign: TextAlign.center,
-            style: AppTypography.caption,
+            style: AppTypography.helper,
           ),
         ],
       ),

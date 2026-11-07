@@ -11,7 +11,15 @@ export 'foundations/app_transitions.dart';
 export 'foundations/app_typography.dart';
 export 'icons/numaya_icon_data.g.dart';
 export 'icons/tabler_icons.dart'
-    show NumayaMobileIcons, kTablerIcons, kTablerMobileIcons, tablerAsset;
+    show
+        NumayaMobileIcons,
+        kTablerIcons,
+        kTablerMobileIcons,
+        kTablerLargeMax,
+        kTablerLargeMin,
+        tablerAsset,
+        tablerOutlineStroke,
+        withTablerStroke;
 export 'widgets/age_range_slider.dart';
 export 'widgets/buttons.dart';
 export 'widgets/content.dart';

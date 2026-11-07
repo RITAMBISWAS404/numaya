@@ -290,7 +290,7 @@ class _PromptAnswerFormState extends State<_PromptAnswerForm> {
               ? l10n.promptSavedHint
               : l10n.promptNoChanges,
           textAlign: TextAlign.center,
-          style: AppTypography.caption,
+          style: AppTypography.helper,
         ),
       ],
     );

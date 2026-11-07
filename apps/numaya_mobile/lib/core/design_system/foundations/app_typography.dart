@@ -3,21 +3,22 @@ import 'package:flutter/painting.dart';
 import '../tokens/monochrome_tokens.dart';
 import 'app_colors.dart';
 
-/// Numaya type roles (typography and copy pass, 2026-11-06). Two families, both variable and
-/// bundled: **Figtree** (wght 300-900) for reading text, labels and controls, and **Plus Jakarta
-/// Sans** (wght 200-800) for headings, names and metrics.
+/// Numaya type roles. Two families, both variable and bundled: **Figtree** (wght 300-900) for
+/// reading text, labels and controls, and **Plus Jakarta Sans** (wght 200-800) for headings,
+/// names and metrics.
 ///
-/// The hierarchy is Ente's light-mode text styles (Figma 22AeTw6QiPj2fNYHLhC7MK, node 10854:4420),
-/// measured from the file: Display-1 32/40, Display-2 24/32, Display-3 and H1 20/28, H2 18/24,
-/// Large 16/20 (all SemiBold), Body 14/20 Medium, Body-Bold 14/20 SemiBold, Mini 12/16 Medium, all
-/// at 0 tracking. Ente sets these in Inter and Outfit; Numaya keeps its own faces, so two roles are
-/// adapted to Figtree's metrics (x-height 0.500 em against Inter's 0.546):
-/// - [caption] is 13/18, not Mini's 12/16, so metadata and field notes draw the x-height Ente's
-///   12pt Inter does (6.5 vs 6.55 px);
-/// - [button] and [buttonSm] are Body-Bold (600), not Ente's Body Medium, so action labels lead
-///   the 14pt body they share a size with.
-/// The full role map, with what was measured and what was decided, is in
-/// docs/design-experiments/ente-design-system/typography-copy/TYPE_ROLES.md.
+/// The hierarchy is Ente's light-mode text styles (Figma 22AeTw6QiPj2fNYHLhC7MK, Text styles
+/// 10854:4420, re-read live on 2026-11-07): Display-1 32/40, Display-2 24/32, Display-3 and H1
+/// 20/28, H2 18/24, Large 16/20 (all 600), Body 14/20 500, Body-Bold 14/20 600, Mini 12/16 500,
+/// Tiny 10/12 500, all at 0 tracking. Ente sets these in Inter and Outfit; Numaya keeps its own
+/// faces at Ente's sizes and weights (Figma type and icons pass, FT-01):
+/// - **Every authored font size is an even number of logical pixels.** The earlier 13/18 caption
+///   (an optical adjustment for Figtree's smaller x-height) is retired: metadata is Ente's Mini
+///   12/16, and explanatory sentences that used it are [helper] at Body 14/20.
+/// - [button] and [buttonSm] are Ente's Body (500), as Button Large and Button Small specify;
+///   the earlier Body-Bold (600) deviation is retired.
+/// - Dynamic sizes (avatar initials, the Welcome wordmark) go through [even].
+/// The role map is in docs/design-experiments/ente-design-system/figma-type-icons/README.md.
 ///
 /// Sizes are logical pixels and scale with the system text size. Every role sets its weight
 /// through the `wght` axis as well as [FontWeight]; restyle a role's weight with [weight], never
@@ -75,9 +76,10 @@ abstract final class AppTypography {
   /// Ente Large. Top-bar titles ("Settings", "Edit profile"): 16/20 semibold, sentence case.
   static final TextStyle headerCaps = _style(family, 16, 20, semibold, 0);
 
-  /// The "numaya" logotype: Figtree bold, -0.03em, 27 (21 small).
+  /// The "numaya" logotype: Figtree bold, -0.03em, 28 (22 small). Even sizes (FT-01; were 27
+  /// and 21).
   static TextStyle wordmark({bool small = false}) {
-    final size = small ? 21.0 : 27.0;
+    final size = small ? 22.0 : 28.0;
     return _style(family, size, size, bold, -0.03);
   }
 
@@ -104,13 +106,12 @@ abstract final class AppTypography {
   /// colour.
   static final TextStyle input = _style(family, 14, 20, medium, 0);
 
-  /// Ente Body-Bold. Full-width button labels: 14/20 semibold (Numaya decision: Ente's buttons
-  /// use Body Medium, but Figtree's smaller x-height left white-on-purple labels lighter than the
-  /// body around them).
-  static final TextStyle button = _style(family, 14, 20, semibold, 0);
+  /// Ente Body. Full-width button labels: 14/20 medium, as Button Large (2207:41759) specifies.
+  static final TextStyle button = _style(family, 14, 20, medium, 0);
 
-  /// Ente Body-Bold. Small pill buttons ("Complete profile", "Add a prompt"): 14/20 semibold.
-  static final TextStyle buttonSm = _style(family, 14, 20, semibold, 0);
+  /// Ente Body. Small pill buttons ("Complete profile", "Add a prompt"): 14/20 medium, as Button
+  /// Small (2207:41578) specifies.
+  static final TextStyle buttonSm = _style(family, 14, 20, medium, 0);
 
   /// Labels on chips and tiles: 14/20 medium, secondary.
   static final TextStyle label = _style(
@@ -125,19 +126,33 @@ abstract final class AppTypography {
   /// because the chip's text is the content. One chip type size across the app.
   static final TextStyle chip = pill.copyWith(color: AppColors.ink);
 
-  /// Ente Mini. Interactive pill labels (view tabs, filters, selectable chips): 12/16 medium;
-  /// selected pills use semibold (TR-03). Static fact chips share the size via [chip].
+  /// Ente Mini. Selectable chip labels (Ente Filter Chip 9524:4352): 12/16 medium in both states;
+  /// the selected chip changes fill and colour, not weight. Static fact chips share the size via
+  /// [chip]. View tabs are Ente's Tag chip and use [bodySm] (14).
   static final TextStyle pill = _style(family, 12, 16, medium, 0);
 
-  /// Metadata, timestamps, row details and field notes: 13/18 medium, muted (#666, 5.74:1 on
-  /// white, 5.22:1 on the canvas, 4.77:1 on the field fill). Ente Mini adapted to Figtree's x-height (see the class note).
+  /// Ente Mini. Metadata, timestamps, row details, counters, banner bodies and field notes:
+  /// 12/16 medium, secondary (#666: 5.74:1 on white, 5.22:1 on the canvas, 4.77:1 on the field
+  /// fill). Was 13/18 before FT-01.
   static final TextStyle caption = _style(
     family,
-    13,
-    18,
+    12,
+    16,
     medium,
     0,
-  ).copyWith(color: AppColors.textMuted);
+  ).copyWith(color: AppColors.textSecondary);
+
+  /// Ente Body in `text/light`. Explanatory sentences that stand on their own: the note under a
+  /// list card, a sheet's helper line, a tip under a step. 14/20 medium, secondary (#666). These
+  /// used the 13pt caption before FT-01; at Ente's Mini 12 a whole sentence was too small, so
+  /// they take the body size and keep the grey that marks them as supporting.
+  static final TextStyle helper = _style(
+    family,
+    14,
+    20,
+    medium,
+    0,
+  ).copyWith(color: AppColors.textSecondary);
 
   /// Ente Mini. The smallest text (count badges, photo-slot numbers): 12/16 medium, muted.
   static final TextStyle micro = _style(
@@ -186,6 +201,11 @@ abstract final class AppTypography {
     medium,
     0,
   ).copyWith(color: AppColors.textMuted);
+
+  /// Rounds a computed font size to the nearest even logical pixel (FT-01): avatar initials and
+  /// other proportional text are derived from a box size, so they go through here to keep the
+  /// even-size rule. System text scaling still applies on top.
+  static double even(double size) => (size / 2).roundToDouble() * 2;
 
   /// Returns [style] at a different variable-font weight.
   static TextStyle weight(TextStyle style, double weight) => style.copyWith(

@@ -1,4 +1,13 @@
-# Active task: owner review of the UI consistency pass
+# Active task: owner review of the Figma type and icons pass
+
+> **2026-11-07:** FT-01 to FT-04 are on `experiment/numaya-figma-type-icons-20261107` (record: `docs/design-experiments/ente-design-system/figma-type-icons/README.md`). Review folder: `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\Figma type and icons 2026-11-07`. **Next:**
+> 1. The owner reviews the compare boards, the updated typography HTML, the icon board and the switch pairs.
+> 2. Decide on exceptions E-01 (small icons lighter than Ente), E-04 (button line height) and E-05 (heading variants).
+> 3. Device check at 2.0 system font and 320pt; Visibility, Premium and Help on the device.
+> 4. Decide on merging (this branch sits on top of the UI consistency branch).
+>
+> Still pending: the EXP-001–004 choices, the UI-001 artwork and the UI-008 phrase.
+
 
 > **2026-11-07:** UC-01 to UC-07 are on `experiment/numaya-ui-consistency-20261107` (record: `docs/design-experiments/ente-design-system/ui-consistency/README.md`). Device before/after: `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\UI consistency 2026-11-07`. **Next:**
 > 1. The owner reviews the compare boards.

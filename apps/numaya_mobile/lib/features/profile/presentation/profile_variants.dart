@@ -78,7 +78,7 @@ class ProfileHeaderData {
           initial,
           textScaler: TextScaler.noScaling,
           style: AppTypography.hero.copyWith(
-            fontSize: initialSize,
+            fontSize: AppTypography.even(initialSize),
             height: 1,
             color: AppColors.onIdentity,
           ),

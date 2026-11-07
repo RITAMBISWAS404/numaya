@@ -396,9 +396,7 @@ class NumayaTabBar extends StatelessWidget {
     final duration = AppMotion.duration(context, AppMotion.state);
     // On glass, unselected icons take the stronger secondary ink: the muted grey drops to 3.38:1
     // over a dark photo, text2 stays at 5.46:1 or better.
-    final idle = frosted || ente
-        ? AppColors.textSecondary
-        : AppColors.textMuted;
+    final idle = frosted || ente ? AppColors.iconStrong : AppColors.textMuted;
     final (Color bg, Color fg) = !current
         ? (const Color(0x00FFFFFF), idle)
         : switch (indicator) {
@@ -507,12 +505,20 @@ class NumayaSwitch extends StatelessWidget {
       duration: duration,
       width: AppSizes.switchWidth,
       height: AppSizes.switchHeight,
-      padding: const EdgeInsets.all(2),
+      // 1pt of padding plus the 1pt edge (which Container adds to its padding) keeps the knob
+      // 2pt in from the track, as before.
+      padding: const EdgeInsets.all(2 - AppBorders.hairline),
       decoration: BoxDecoration(
-        // UC-01: Ente's off state (2482:6647) is a solid grey track with a white knob and no
-        // outline.
+        // FT-04: off is Ente's light fill track (2482:6644, "fill/dark") with a 1pt control-grey
+        // edge drawn inside it, so the boundary keeps 3:1 on white cards and the grey page. On
+        // keeps the brand track with no edge.
         color: value ? AppColors.accent : AppColors.switchOff,
         borderRadius: AppRadii.all(AppRadii.pill),
+        border: Border.all(
+          color: value ? AppColors.accent : AppColors.switchOffEdge,
+          width: AppBorders.hairline,
+          strokeAlign: BorderSide.strokeAlignInside,
+        ),
       ),
       child: AnimatedAlign(
         duration: duration,
@@ -533,9 +539,9 @@ class NumayaSwitch extends StatelessWidget {
   }
 }
 
-/// Grouped row (`.theme-withings .list-row`): 60pt minimum, a 16pt regular label, a secondary
-/// subtitle, and a trailing switch, value or chevron. A [leading] icon is a plain 24pt monochrome
-/// glyph (red on destructive rows).
+/// Grouped row (Ente Menu Item 4055:18734): 60pt minimum, a 14/20 medium label ([AppTypography.row]),
+/// a Mini 12/16 secondary detail, and a trailing switch, value or chevron. A [leading] icon is a
+/// plain 20pt glyph in a 36pt slot, secondary grey (red on destructive rows).
 class ListRow extends StatelessWidget {
   const ListRow({
     super.key,
@@ -860,8 +866,9 @@ class ListGroup extends StatelessWidget {
               AppSpacing.s1,
               0,
             ),
-            // UI-045: helper copy under a list card is the muted caption.
-            child: Text(footnote!, style: AppTypography.caption),
+            // UI-045 / FT-01: helper copy under a list card is a whole sentence: Body 14 in the
+            // secondary grey.
+            child: Text(footnote!, style: AppTypography.helper),
           ),
       ],
     );

@@ -35,11 +35,17 @@ abstract final class AppColors {
   /// white cards and the grey page without a second colour.
   static Color tintBorder(Color hue) => hue.withValues(alpha: 0.15);
 
-  /// Off switch track (UC-01, UI consistency pass 2026-11-07): Ente's Selected=False (2482:6647)
-  /// is a solid #969696 track with a white knob and no outline. Numaya uses its control grey
-  /// #8A8A8A (ED-06), the nearest token that keeps 3:1 against both white cards (3.45:1) and the
-  /// #F4F4F4 page (3.14:1). Supersedes CL-01's #DEDEDE, which faded on both surfaces.
-  static const Color switchOff = _M.outline;
+  /// Off switch track (FT-04, Figma type and icons pass 2026-11-07): the light neutral [fill]
+  /// (#EAEAEA), the colour Ente's Toggle Switch component specifies for Selected=False
+  /// ("fill/dark track", 2482:6644; its exported artwork draws #969696). It replaces UC-01's
+  /// #8A8A8A, which read as a dark grey slab. On its own the light track is only 1.20:1 on white
+  /// and 1.10:1 on the #F4F4F4 page, so the off track also takes [switchOffEdge].
+  static const Color switchOff = _M.fill;
+
+  /// The off track's 1pt edge: the control grey (#8A8A8A) that unselected radio and checkbox
+  /// rings use, 3.45:1 on white and 3.14:1 on the page, so an off switch keeps a visible boundary
+  /// (WCAG 1.4.11) and reads as the same family as the other unselected controls.
+  static const Color switchOffEdge = _M.outline;
 
   /// Filled fields and filled secondary buttons.
   static const Color field = _M.field;
@@ -77,7 +83,7 @@ abstract final class AppColors {
   /// Initials avatars: the neutral photo grey with a charcoal initial (purple is kept for
   /// actions; a dark disc was too heavy at profile size).
   static const Color identity = _M.fillStrong;
-  static const Color onIdentity = _M.text2;
+  static const Color onIdentity = iconStrong;
 
   /// Outline of secondary buttons and other quiet controls: ink at 30%.
   static const Color outlineSoft = Color(0x4D18181B);
@@ -101,13 +107,33 @@ abstract final class AppColors {
   static const Color surfaceBrand = accentTint;
   static const Color surfaceInverse = ink;
 
+  /// Text colour roles (FT-02, Figma type and icons pass 2026-11-07), mapped from Ente's
+  /// `text/base` and `text/light` (Design system 57:6281; Menu Item 4055:18734, Bottom sheet
+  /// 4809:8074, Settings 12099:96480):
+  /// - [textPrimary] #000000: titles, labels, row titles, values the user typed, reading text
+  ///   that is the content itself (21:1 on white, 19.3:1 on the page).
+  /// - [textSecondary] #666666: subtitles, descriptions, helper and supporting sentences, row
+  ///   values and details, metadata and timestamps (5.74:1 on white, 5.22:1 on the page, 4.77:1
+  ///   on the #EAEAEA fill). Ente uses the one `text/light` grey for all of these and separates
+  ///   metadata by size (Mini 12) rather than by a fainter grey.
+  /// - [textMuted]: the same grey, kept as the name most call sites already use.
+  /// - Placeholders: [textSecondary] at weight 400. Ente's `text/lighter` #969696 is 2.96:1 on
+  ///   white, below 4.5:1, so it is not used for text.
+  /// - Disabled: [disabledForeground] #8A8A8A (inactive controls are exempt from the minimum).
+  /// - Inverse: [inkForeground] white. Semantic: [negative], [success], [warning], [info].
+  /// Before this pass [textSecondary] was #1A1A1A, a near-black that made supporting text as
+  /// dark as titles.
   static const Color textPrimary = ink;
-  static const Color textSecondary = _M.text2;
-  static const Color textMuted = _M.muted;
+  static const Color textSecondary = _M.muted;
+  static const Color textMuted = textSecondary;
+
+  /// Strong neutral icon ink (#1A1A1A): the selected tab glyph and idle tab icons on the bar.
+  /// Over a dark photo the bar's idle icons need more than the grey's 3.38:1.
+  static const Color iconStrong = _M.text2;
 
   /// Icons (Tabler MVP pass): the selected tab's filled glyph is near-black on the very light
   /// neutral selection fill; idle tabs and other inactive icons are a light grey outline.
-  static const Color iconSelected = _M.text2;
+  static const Color iconSelected = iconStrong;
   static const Color iconSelectedFill = _M.fill;
   static const Color iconInactive = _M.iconInactive;
   static const Color textSubtle = disabledForeground;

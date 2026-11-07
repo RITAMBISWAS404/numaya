@@ -384,7 +384,7 @@ class _EventFormScreenState extends ConsumerState<EventFormScreen> {
           ),
         ),
         gap(AppSpacing.s2),
-        Text(l10n.eventCoverNote, style: AppTypography.caption),
+        Text(l10n.eventCoverNote, style: AppTypography.helper),
         gap(AppSpacing.s5),
         NumayaTextField(
           label: l10n.eventFieldTitle,

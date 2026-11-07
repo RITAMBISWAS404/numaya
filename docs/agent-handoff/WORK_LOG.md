@@ -1,5 +1,15 @@
 # Work log
 
+## 2026-11-07 · Figma type and icons pass (Windows, Claude desktop)
+- Ran `NUMAYA_FIGMA_TYPE_ICONS.zip` phases 01–04 on the new branch `experiment/numaya-figma-type-icons-20261107`, from `b518a4a` (clean, on origin).
+- Figma read live through the connector: Text styles, Menu Item, Toggle Switch, Icon, Buttons, Text Input, Header v2, chips, Banners, Badges, Bottom sheet, Settings and empty-state screens. Node map in `docs/design-experiments/ente-design-system/figma-type-icons/README.md`.
+- **FT-01** even font sizes and Ente weights (caption 12/16, new helper 14/20, buttons 500).
+- **FT-02** text colour roles (#000 / #666; `iconStrong`).
+- **FT-03** Tabler outline stroke classes via `TablerOutlineLoader`.
+- **FT-04** light off-switch track with a 3:1 edge.
+- New `test/widget/figma_type_icons_test.dart` (13 guards, including a lib/ scan for odd font sizes); 5 older tests moved to the new rules.
+- Device: 16 before and 16 after captures on the Pixel 10 AVD, 8 more after-only sweep screens, 12 compare boards, harness switch pairs and icon board, updated typography HTML, in `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\Figma type and icons 2026-11-07`.
+
 ## 2026-11-07 · UI consistency pass (Windows, Claude desktop)
 - Ran `NUMAYA_FINAL_UI_CONSISTENCY.zip` phases 00–05 on the new branch `experiment/numaya-ui-consistency-20261107`, from `f6614fa`. The interrupted run's edits were committed first as `b0194d4`.
 - Figma MCP needs authorisation, so recorded Figma maps were used and the unverified values are labelled.

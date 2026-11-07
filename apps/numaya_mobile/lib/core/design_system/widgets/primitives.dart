@@ -70,6 +70,9 @@ class MobileIcon extends StatelessWidget {
 /// One bundled Tabler SVG in a [size] square, tinted [color] with `srcIn`: the colour replaces the
 /// artwork's own ink while transparent areas (a filled glyph's holes) stay transparent. The box
 /// is the icon's layout size; hit areas belong to the control around it.
+///
+/// Outline assets are loaded through [TablerOutlineLoader], which sets the stroke for the size
+/// role ([tablerOutlineStroke], FT-03). Filled assets load as shipped.
 class TablerSvg extends StatelessWidget {
   const TablerSvg(
     this.asset, {
@@ -85,13 +88,58 @@ class TablerSvg extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SizedBox.square(
     dimension: size,
-    child: SvgPicture.asset(
-      asset,
-      width: size,
-      height: size,
-      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-    ),
+    child: isTablerOutline(asset)
+        ? SvgPicture(
+            TablerOutlineLoader(asset, stroke: tablerOutlineStroke(size)),
+            width: size,
+            height: size,
+            colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+          )
+        : SvgPicture.asset(
+            asset,
+            width: size,
+            height: size,
+            colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+          ),
   );
+}
+
+/// Whether [asset] is a Tabler outline file (the stroke classes apply only to these).
+bool isTablerOutline(String asset) =>
+    asset.startsWith('assets/icons/tabler/outline/');
+
+/// Loads a Tabler outline asset with its root `stroke-width` set to [stroke] (24-grid units).
+/// The stroke is part of the cache key, so the same glyph at two size classes caches twice.
+@immutable
+class TablerOutlineLoader extends SvgAssetLoader {
+  const TablerOutlineLoader(super.assetName, {required this.stroke});
+
+  /// Stroke width in the asset's 24 x 24 viewBox units.
+  final double stroke;
+
+  @override
+  String provideSvg(ByteData? message) =>
+      withTablerStroke(super.provideSvg(message), stroke);
+
+  @override
+  SvgCacheKey cacheKey(BuildContext? context) {
+    final base = super.cacheKey(context);
+    return SvgCacheKey(
+      theme: base.theme,
+      colorMapper: base.colorMapper,
+      keyData: (base.keyData, stroke),
+    );
+  }
+
+  @override
+  int get hashCode => Object.hash(super.hashCode, stroke);
+
+  @override
+  bool operator ==(Object other) =>
+      other is TablerOutlineLoader &&
+      other.assetName == assetName &&
+      other.stroke == stroke &&
+      super == other;
 }
 
 /// An emoji glyph, decorative (the adjacent label carries the meaning). Falls back to the platform

@@ -37,35 +37,47 @@ void main() {
           as BoxDecoration;
 
   group('CL-01 switch states', () {
-    testWidgets('on: purple track, white thumb, no outline', (tester) async {
+    testWidgets('on: purple track, white thumb, no visible outline', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         host(NumayaSwitch(value: true, onChanged: (_) {})),
       );
       expect(trackOf(tester).color, AppColors.accent);
-      expect(trackOf(tester).border, isNull);
+      // The 1pt edge is kept in both states (stable geometry) and matches the track when on.
+      final edge = (trackOf(tester).border! as Border).top;
+      expect(edge.color, AppColors.accent);
       expect(thumbOf(tester).color, AppColors.surface);
       expect(find.byType(Opacity), findsNothing);
     });
 
     testWidgets(
-      'off: Ente solid grey track at 3:1, plain white thumb, no outline (UC-01)',
+      'off: light fill track with a 3:1 control-grey edge, plain white thumb (FT-04)',
       (tester) async {
         await tester.pumpWidget(
           host(NumayaSwitch(value: false, onChanged: (_) {})),
         );
-        // UC-01 (2026-11-07): Ente 2482:6647, a solid grey track and a white knob, no outlines.
-        // The track keeps 3:1 against the white card and the grey page so the off state reads
-        // without the knob's help.
-        expect(trackOf(tester).border, isNull);
+        // FT-04 (2026-11-07): Ente 2482:6644 specifies a fill/dark track for Selected=False.
+        // The light track alone is under 3:1, so a 1pt control-grey edge keeps the boundary at
+        // 3:1 against the white card and the grey page.
         final track = trackOf(tester).color!;
         expect(track, AppColors.switchOff);
+        expect(track, AppColors.fill);
+        final edge = (trackOf(tester).border! as Border).top;
+        expect(edge.color, AppColors.switchOffEdge);
+        expect(edge.width, 1);
         double ratio(Color a, Color b) {
           final la = a.computeLuminance(), lb = b.computeLuminance();
           return ((la > lb ? la : lb) + 0.05) / ((la > lb ? lb : la) + 0.05);
         }
 
-        expect(ratio(track, AppColors.surface), greaterThanOrEqualTo(3));
-        expect(ratio(track, AppColors.canvas), greaterThanOrEqualTo(3));
+        expect(ratio(edge.color, AppColors.surface), greaterThanOrEqualTo(3));
+        expect(ratio(edge.color, AppColors.canvas), greaterThanOrEqualTo(3));
+        // Lighter than the UC-01 track it replaces.
+        expect(
+          track.computeLuminance(),
+          greaterThan(AppColors.outline.computeLuminance()),
+        );
         final thumb = thumbOf(tester);
         expect(thumb.color, AppColors.surface);
         expect(thumb.border, isNull);

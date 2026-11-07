@@ -201,7 +201,7 @@ class LikeProfileScreen extends ConsumerWidget {
       footer = Text(
         l10n.likePassed(person.name),
         textAlign: TextAlign.center,
-        style: AppTypography.caption,
+        style: AppTypography.helper,
       );
     } else {
       footer = Row(

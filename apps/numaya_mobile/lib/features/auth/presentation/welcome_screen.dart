@@ -242,7 +242,7 @@ class WelcomeBrandImage extends StatelessWidget {
                     Text(
                       brandName,
                       style: AppTypography.wordmark().copyWith(
-                        fontSize: mark * 0.5,
+                        fontSize: AppTypography.even(mark * 0.5),
                         height: 1,
                         color: AppColors.accentOnTint,
                       ),

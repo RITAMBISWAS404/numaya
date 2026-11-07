@@ -252,7 +252,7 @@ class _ContactSupportScreenState extends State<ContactSupportScreen> {
             trailingNote: l10n.promptCharsLeft(500 - _text.text.length),
           ),
           const SizedBox(height: AppSpacing.s3),
-          Text(l10n.contactDemoNote, style: AppTypography.caption),
+          Text(l10n.contactDemoNote, style: AppTypography.helper),
         ],
       ),
     );

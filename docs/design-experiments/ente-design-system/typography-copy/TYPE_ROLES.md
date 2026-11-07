@@ -1,5 +1,7 @@
 # Figma-to-Flutter type-role map
 
+> **2026-11-07:** superseded in part by the Figma type and icons pass ([figma-type-icons](../figma-type-icons/README.md)): `caption` is Ente Mini 12/16 (the 13/18 optical adjustment is retired), sentences use the new `helper` 14/20, and buttons are Body 500.
+
 Source: Ente Visual Design (copy), file `22AeTw6QiPj2fNYHLhC7MK`, read live through the Figma MCP connector on 2026-11-06.
 Text styles node `10854:4420`. Instances checked in:
 - Settings DS `12099:96480`

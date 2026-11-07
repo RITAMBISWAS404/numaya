@@ -1,5 +1,19 @@
 # Current state
 
+> **Figma type and icons pass (2026-11-07, Windows):** branch `experiment/numaya-figma-type-icons-20261107`
+> from `b518a4a` (the UI consistency pass). Figma was read live this time (Ente copy `22AeTw6QiPj2fNYHLhC7MK`).
+> - **FT-01:** even font sizes only. The 13/18 caption is now Ente Mini 12/16; sentences moved to a new
+>   14/20 `helper` role; buttons are Ente Body 500 (was 600); wordmark 28/22; emoji 16/18; computed sizes
+>   go through `AppTypography.even`.
+> - **FT-02:** text colours: primary #000, secondary/metadata #666 (`textSecondary` was #1A1A1A); new
+>   `iconStrong` #1A1A1A for the selected tab and bar icons.
+> - **FT-03:** Tabler outline stroke by size class (1.0 under 18pt, 1.5 at 18–24pt, 1.0 over 24pt),
+>   applied centrally by `TablerOutlineLoader`; assets and filled assignments unchanged.
+> - **FT-04:** off switch track #EAEAEA (`fill`) with a 1pt #8A8A8A edge (was solid #8A8A8A).
+>
+> Tests: 507 passed, 21 skipped. Record: `docs/design-experiments/ente-design-system/figma-type-icons/README.md`. Device before/after: `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\Figma type and icons 2026-11-07`.
+
+
 > **UI consistency pass (2026-11-07, Windows):** branch `experiment/numaya-ui-consistency-20261107`
 > from `f6614fa`. `b0194d4` preserves the interrupted screenshot run's handoff edits; the pass
 > follows it.

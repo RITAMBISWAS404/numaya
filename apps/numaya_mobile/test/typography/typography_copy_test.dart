@@ -30,7 +30,8 @@ void main() {
       double line(TextStyle s) => s.fontSize! * s.height!;
       expect(AppTypography.body.fontSize, 14);
       expect(line(AppTypography.body), 20);
-      // Display-1 > Display-2 > Display-3/H1 > H2 > Large > Body > metadata > Mini.
+      // Display-1 > Display-2 > Display-3/H1 > H2 > Large > Body > Mini (FT-01: metadata is
+      // Ente's Mini 12/16, the same size as micro).
       final ladder = [
         AppTypography.hero,
         AppTypography.pageTitle,
@@ -39,8 +40,8 @@ void main() {
         AppTypography.headerCaps,
         AppTypography.body,
         AppTypography.caption,
-        AppTypography.micro,
       ];
+      expect(AppTypography.micro.fontSize, AppTypography.caption.fontSize);
       for (var i = 1; i < ladder.length; i++) {
         expect(
           ladder[i].fontSize!,
@@ -69,9 +70,9 @@ void main() {
       ]) {
         expect(s.fontFamily, AppTypography.family);
       }
-      // Action labels lead the body they share a size with.
-      expect(AppTypography.button.fontWeight, FontWeight.w600);
-      expect(AppTypography.buttonSm.fontWeight, FontWeight.w600);
+      // FT-01: action labels are Ente's Body (500), as Button Large and Button Small specify.
+      expect(AppTypography.button.fontWeight, FontWeight.w500);
+      expect(AppTypography.buttonSm.fontWeight, FontWeight.w500);
       expect(AppTypography.body.fontWeight, FontWeight.w500);
     });
 

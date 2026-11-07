@@ -121,7 +121,7 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
             ),
             const SizedBox(height: AppSpacing.s3),
           ],
-          Text(l10n.photoTipsNote, style: AppTypography.caption),
+          Text(l10n.photoTipsNote, style: AppTypography.helper),
         ],
       ),
     );

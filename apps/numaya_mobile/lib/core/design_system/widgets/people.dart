@@ -44,7 +44,7 @@ class InitialsAvatar extends StatelessWidget {
         initial,
         style: AppTypography.weight(AppTypography.body, AppTypography.bold)
             .copyWith(
-              fontSize: size * 0.42,
+              fontSize: AppTypography.even(size * 0.42),
               height: 1,
               color: AppColors.onIdentity,
             ),
@@ -1172,7 +1172,7 @@ class ScallopPortrait extends StatelessWidget {
                 AppTypography.pageTitle,
                 AppTypography.bold,
               ).copyWith(
-                fontSize: size / 3,
+                fontSize: AppTypography.even(size / 3),
                 height: 1,
                 color: AppColors.accentOnTint,
               ),

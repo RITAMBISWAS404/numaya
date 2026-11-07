@@ -237,7 +237,7 @@ class DemoHubScreen extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.s2),
-          Text(l10n.demoRestoreHow, style: AppTypography.caption),
+          Text(l10n.demoRestoreHow, style: AppTypography.helper),
           const SizedBox(height: AppSpacing.sectionGap),
           ListGroup(
             title: l10n.demoAreaDiscover,

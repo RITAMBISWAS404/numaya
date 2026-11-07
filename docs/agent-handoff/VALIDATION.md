@@ -1,5 +1,17 @@
 # Validation
 
+> **Figma type and icons pass (2026-11-07, Windows, Flutter 3.47.8 / Dart 3.13.7):**
+> - `dart format --set-exit-if-changed lib test`: exit 0.
+> - `flutter analyze`: no issues.
+> - `node tool/generate_tokens.mjs --check` (app): Dart tokens up to date.
+> - `flutter test`: **507 passed, 21 skipped, 0 failed** (494 + 13 new in `figma_type_icons_test`).
+> - Repo root `npm run check`: fails at `tokens:check` on line endings only (as in the UI consistency pass; no token source changed).
+> - `npm run test:e2e`: not run, `playwright` is not installed.
+> - `sync_tabler_icons.py --check`: not run (npm `@tabler/icons` absent); `git status` shows no asset change.
+> - Pixel 10 AVD (API 36, 1080×2424, density 420, font scale 1.0): debug APK `57539e55…de72c476e4` installed with `-r` over the UI-consistency build (same debug key, data kept). 16 before + 16 after + 8 sweep captures.
+> - Harness renders (flutter test, DPR 2.625): switch pairs at 1.0 and 2.0 text, icon board.
+> - Not run: 2.0 system font and 320pt on the device, three-button navigation, iOS, physical phone, goldens.
+
 > **UI consistency pass (2026-11-07, Windows, Flutter 3.47.8 / Dart 3.13.7):**
 > - `dart format --set-exit-if-changed lib test`: exit 0.
 > - `flutter analyze`: no issues.

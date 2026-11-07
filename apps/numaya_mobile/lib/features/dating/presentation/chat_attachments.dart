@@ -102,7 +102,7 @@ class AttachmentImage extends StatelessWidget {
           child: Text(
             context.l10n.mediaMissing,
             textAlign: TextAlign.center,
-            style: AppTypography.caption,
+            style: AppTypography.helper,
           ),
         ),
       ),

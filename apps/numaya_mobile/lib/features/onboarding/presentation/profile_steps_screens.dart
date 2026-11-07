@@ -127,7 +127,7 @@ class _BioScreenState extends ConsumerState<BioScreen> {
           },
         ),
         const SizedBox(height: AppSpacing.s2),
-        Text(l10n.obBioTip, style: AppTypography.caption),
+        Text(l10n.obBioTip, style: AppTypography.helper),
         if (bio.isNotEmpty) ...[
           const SizedBox(height: AppSpacing.s3),
           Align(

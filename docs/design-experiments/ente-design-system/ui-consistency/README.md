@@ -21,6 +21,9 @@ Node IDs are cited from those records. Measurements Figma would add and the reco
 - Ente Header v2's exact action gap (the existing 8pt FD-D1 rule is applied).
 
 ## Ledger
+
+> **2026-11-07:** UC-01's off track (#8A8A8A) is superseded by FT-04 (#EAEAEA with a 1pt #8A8A8A edge), [figma-type-icons](../figma-type-icons/README.md).
+
 | ID | Route / component | State | Source | Finding | Fix | Evidence |
 |---|---|---|---|---|---|---|
 | UC-01 | `NumayaSwitch` (every `ListRow` switch: Settings, Notifications, Privacy, Filters sheet) | off, on, disabled; 1.0 and 2.0 text | Ente Toggle Switch 2482:6644, Selected=False 2482:6647 (recorded: solid #969696 track, white knob, no outline) | The off track was #DEDEDE with a hairline-edged knob, and faded against both the white card (1.3:1) and the #F4F4F4 page | `AppColors.switchOff` → control grey #8A8A8A (ED-06: the nearest token at 3:1; 3.45:1 on white, 3.14:1 on the page). The knob outline is removed (Ente has none) and its shadow kept. On state, geometry, semantics and the full-row target are unchanged; the switch has no gesture of its own, so a row tap toggles once | `component_cleanup_test` (contrast on both surfaces, no outlines); C04, C05, C07 |

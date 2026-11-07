@@ -123,7 +123,7 @@ class PremiumScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.s3),
-          Text(l10n.premiumDemoNote, style: AppTypography.caption),
+          Text(l10n.premiumDemoNote, style: AppTypography.helper),
           const SizedBox(height: AppSpacing.s2),
           Align(
             alignment: Alignment.centerLeft,

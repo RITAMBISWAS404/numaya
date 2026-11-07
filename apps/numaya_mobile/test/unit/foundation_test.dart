@@ -99,15 +99,19 @@ void main() {
       expect(AppTypography.sheetTitle.fontSize, 20);
       expect(AppTypography.metric.fontSize, 40);
       expect(AppTypography.labelCaps.fontSize, 12);
-      // Ente Body 14/20 medium for body and typing; buttons are Body-Bold (600); metadata is
-      // 13/18 (Ente Mini adapted to Figtree's x-height), still under the body.
+      // Ente Body 14/20 medium for body, typing and buttons (FT-01); metadata is Ente's Mini
+      // 12/16, under the body.
       expect(AppTypography.body.fontSize, 14);
       expect(AppTypography.body.height! * AppTypography.body.fontSize!, 20);
       expect(AppTypography.body.fontWeight, FontWeight.w500);
       expect(AppTypography.input.fontSize, 14);
       expect(AppTypography.button.fontSize, 14);
-      expect(AppTypography.button.fontWeight, FontWeight.w600);
-      expect(AppTypography.caption.fontSize, 13);
+      expect(AppTypography.button.fontWeight, FontWeight.w500);
+      expect(AppTypography.caption.fontSize, 12);
+      expect(
+        AppTypography.caption.height! * AppTypography.caption.fontSize!,
+        16,
+      );
       expect(
         AppTypography.caption.fontSize!,
         lessThan(AppTypography.body.fontSize!),

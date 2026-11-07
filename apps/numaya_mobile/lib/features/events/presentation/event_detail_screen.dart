@@ -831,7 +831,7 @@ class _ReportFormState extends State<_ReportForm> {
           ),
         ),
         const SizedBox(height: AppSpacing.s3),
-        Text(l10n.eventReportNote, style: AppTypography.caption),
+        Text(l10n.eventReportNote, style: AppTypography.helper),
         const SizedBox(height: AppSpacing.s4),
         NumayaButton(
           label: l10n.eventReportSend,

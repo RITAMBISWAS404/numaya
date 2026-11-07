@@ -91,7 +91,7 @@ class ForYouScreen extends ConsumerWidget {
               ),
               const SizedBox(width: AppSpacing.s2),
               Expanded(
-                child: Text(l10n.forYouRationale, style: AppTypography.caption),
+                child: Text(l10n.forYouRationale, style: AppTypography.helper),
               ),
             ],
           ),

@@ -141,7 +141,7 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
         AppSpacing.s1,
         0,
       ),
-      child: Text(text, style: AppTypography.caption),
+      child: Text(text, style: AppTypography.helper),
     );
     Widget label(String title, String value) => Row(
       children: [
@@ -397,7 +397,7 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
           Text(
             count == 0 ? l10n.filtersNoneFit : l10n.filtersUsingFallback,
             textAlign: TextAlign.center,
-            style: AppTypography.caption,
+            style: AppTypography.helper,
           ),
         ],
         const SizedBox(height: AppSpacing.s3),

@@ -454,7 +454,7 @@ class SettingsScreen extends ConsumerWidget {
               0,
               0,
             ),
-            child: Text(l10n.settingsDeleteNote, style: AppTypography.caption),
+            child: Text(l10n.settingsDeleteNote, style: AppTypography.helper),
           ),
         ],
       ),

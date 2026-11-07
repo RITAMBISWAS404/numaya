@@ -332,7 +332,7 @@ class NumayaChip extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (emoji != null) ...[
-              Emoji(emoji!, size: 15.5),
+              Emoji(emoji!, size: 16),
               const SizedBox(width: AppLayout.compactIconGap),
             ],
             Flexible(
@@ -380,7 +380,7 @@ class ChipSet extends StatelessWidget {
           children: [
             if (emoji != null) ...[
               // The emoji stands on its own beside the heading (RD-08: no passive holders).
-              Emoji(emoji!, size: 17),
+              Emoji(emoji!, size: 18),
               const SizedBox(width: AppLayout.iconLabelGap),
             ],
             // Flexible: a long group name wraps at large text instead of overflowing (found on

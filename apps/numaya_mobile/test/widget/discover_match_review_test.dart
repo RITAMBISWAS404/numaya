@@ -352,7 +352,7 @@ void main() {
       },
     );
 
-    testWidgets('switch off: a solid grey track, no outline; on stays purple', (
+    testWidgets('switch off: light track with a grey edge; on stays purple', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -374,8 +374,11 @@ void main() {
           )
           .map((a) => a.decoration! as BoxDecoration)
           .toList();
-      expect(tracks[0].color, AppColors.switchOff); // UC-01: Ente's solid grey
-      expect(tracks[0].border, isNull);
+      expect(
+        tracks[0].color,
+        AppColors.switchOff,
+      ); // FT-04: Ente's fill/dark track
+      expect((tracks[0].border! as Border).top.color, AppColors.switchOffEdge);
       expect(tracks[1].color, AppColors.accent);
     });
   });

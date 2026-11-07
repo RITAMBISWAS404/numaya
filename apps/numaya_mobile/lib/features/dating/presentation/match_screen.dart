@@ -269,7 +269,7 @@ class _MatchPhoto extends StatelessWidget {
                           AppTypography.hero,
                           AppTypography.bold,
                         ).copyWith(
-                          fontSize: box.maxWidth * 0.32,
+                          fontSize: AppTypography.even(box.maxWidth * 0.32),
                           height: 1,
                           color: AppColors.textSecondary,
                         ),

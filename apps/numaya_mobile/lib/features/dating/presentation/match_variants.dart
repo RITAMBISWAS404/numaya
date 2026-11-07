@@ -75,7 +75,7 @@ class _Portrait extends StatelessWidget {
             textScaler: TextScaler.noScaling,
             style: AppTypography.weight(AppTypography.hero, AppTypography.bold)
                 .copyWith(
-                  fontSize: initialSize ?? width * 0.3,
+                  fontSize: AppTypography.even(initialSize ?? width * 0.3),
                   height: 1,
                   color: AppColors.textSecondary,
                 ),

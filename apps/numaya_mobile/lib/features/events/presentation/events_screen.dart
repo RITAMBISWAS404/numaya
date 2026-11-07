@@ -214,7 +214,7 @@ class _EventsScreenState extends ConsumerState<EventsScreen> {
             child: Text(l10n.eventsPicked, style: AppTypography.section),
           ),
           const SizedBox(height: AppSpacing.s1),
-          Text(l10n.eventsPickedNote, style: AppTypography.caption),
+          Text(l10n.eventsPickedNote, style: AppTypography.helper),
           const SizedBox(height: AppSpacing.s3),
           for (final e in picks) card(e, reason: events.pickedBecause(e)),
           const SizedBox(height: AppSpacing.s3),
@@ -589,7 +589,7 @@ class _EventFiltersFormState extends ConsumerState<_EventFiltersForm> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: AppSpacing.s2),
-                  child: Text(l10n.eventSortNote, style: AppTypography.caption),
+                  child: Text(l10n.eventSortNote, style: AppTypography.helper),
                 ),
               ],
             ),

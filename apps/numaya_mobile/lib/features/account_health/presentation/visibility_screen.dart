@@ -184,7 +184,7 @@ class VisibilityScreen extends ConsumerWidget {
               ),
               if (note != null) ...[
                 const SizedBox(height: AppSpacing.s1),
-                Text(note, style: AppTypography.caption),
+                Text(note, style: AppTypography.helper),
               ],
               const SizedBox(height: AppSpacing.s3),
               child,
@@ -347,7 +347,7 @@ class VisibilityScreen extends ConsumerWidget {
               r.status == VisibilityStatus.visible
                   ? l10n.visVisibleLimits
                   : l10n.visSourceNote,
-              style: AppTypography.caption,
+              style: AppTypography.helper,
             ),
           ),
 
@@ -522,7 +522,7 @@ class VisibilityScreen extends ConsumerWidget {
               children: [
                 activityBody,
                 const SizedBox(height: AppSpacing.s2),
-                Text(l10n.visActivityMeaning, style: AppTypography.caption),
+                Text(l10n.visActivityMeaning, style: AppTypography.helper),
               ],
             ),
           ),

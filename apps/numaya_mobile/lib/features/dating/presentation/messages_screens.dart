@@ -965,7 +965,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           Text(
             l10n.chatIntro,
             textAlign: TextAlign.center,
-            style: AppTypography.caption,
+            style: AppTypography.helper,
           ),
           const SizedBox(height: AppSpacing.s4),
           StatusBanner(
