@@ -1178,7 +1178,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       body: l10n.chatArchivedBody,
                     ),
                   ),
-                if (expired)
+                // An expired initial match with no messages shows its state in the body; the bar
+                // is only for one that has history.
+                if (expired && messages.isEmpty)
+                  // The ended state is in the body; no composer and no empty bar.
+                  SizedBox(height: MediaQuery.paddingOf(context).bottom)
+                else if (expired)
                   ColoredBox(
                     key: const ValueKey('chat-expired-bar'),
                     color: AppColors.surface,
@@ -1189,9 +1194,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         AppLayout.screenGutter,
                         AppSpacing.s4 + MediaQuery.paddingOf(context).bottom,
                       ),
-                      child: messages.isEmpty
-                          ? const SizedBox.shrink()
-                          : _expiredPanel(person),
+                      child: _expiredPanel(person),
                     ),
                   )
                 else

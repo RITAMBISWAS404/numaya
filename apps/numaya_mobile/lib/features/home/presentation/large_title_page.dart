@@ -171,7 +171,9 @@ class _LargeTitlePageState extends State<LargeTitlePage> {
         ],
       ),
     );
-    return ColoredBox(
+    // A Material ancestor gives pushed pages (Insights) the app's text defaults; tab roots
+    // already sit in the shell's Scaffold.
+    return Material(
       color: AppColors.canvas,
       child: SafeArea(
         bottom: false,

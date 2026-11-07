@@ -7,6 +7,8 @@
 // file in the app's cache. Motion clips print `@@REC@@|start|<name>` / `@@REC@@|stop|<name>`; the
 // host records with `adb shell screenrecord`. Deterministic demo world and fixed demo clock; the
 // Lab state is reset between groups.
+// Capture-only script: compact `if (_want(...)) for (...)` guards read better here.
+// ignore_for_file: curly_braces_in_flow_control_structures
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -24,6 +26,15 @@ import 'package:numaya_mobile/features/profile/application/profile_details_contr
 import '../test/helpers/journeys.dart';
 
 final _ack = File('/data/user/0/com.numaya.numaya_mobile/cache/ui_review_ack');
+
+/// `--dart-define=ONLY=default,card,screen,large,motion,scenario` (or card group IDs such as
+/// `prompt-card`) limits a run to those parts, for targeted recaptures.
+const _only = String.fromEnvironment('ONLY');
+bool _want(String part, [String? group]) {
+  if (_only.isEmpty) return true;
+  final parts = _only.split(',');
+  return parts.contains(part) || (group != null && parts.contains(group));
+}
 
 Future<void> _wait(WidgetTester tester, int ms) async {
   for (var t = 0; t < ms; t += 100) {
@@ -124,118 +135,125 @@ void main() {
 
     // 1. Proposed default: the five priority screens and the required-change evidence.
     lab.reset();
-    for (final (path, name, dy) in [
-      (Routes.home, 'discover', 0.0),
-      (Routes.home, 'discover-prompt', 640.0),
-      (Routes.likes, 'heart-likes-free', 0.0),
-      ('${Routes.likes}?tab=compliments', 'heart-compliments', 0.0),
-      (Routes.messages, 'chats', 0.0),
-      (Routes.archive, 'archive', 0.0),
-      ('${Routes.chat}/rafa', 'chat-archived', 0.0),
-      ('${Routes.chat}/ollie', 'chat-expired-initial', 0.0),
-      ('${Routes.chat}/jo', 'chat-new-match-time', 0.0),
-      ('${Routes.chat}/priya', 'chat-header-verified', 0.0),
-      (Routes.profile, 'profile', 0.0),
-      (Routes.profile, 'profile-collapsed-title', 220.0),
-      (Routes.insights, 'insights', 0.0),
-      (Routes.insights, 'insights-scrolled', 600.0),
-      (Routes.wallet, 'wallet', 0.0),
-      (Routes.streak, 'streak', 0.0),
-      (Routes.paywall, 'paywall', 0.0),
-      (Routes.visualLab, 'design-lab', 0.0),
-    ]) {
-      await step(name, () async {
-        await go(path);
-        await scrollBy(dy);
+    if (_want('default'))
+      for (final (path, name, dy) in [
+        (Routes.home, 'discover', 0.0),
+        (Routes.home, 'discover-prompt', 640.0),
+        (Routes.likes, 'heart-likes-free', 0.0),
+        ('${Routes.likes}?tab=compliments', 'heart-compliments', 0.0),
+        (Routes.messages, 'chats', 0.0),
+        (Routes.archive, 'archive', 0.0),
+        ('${Routes.chat}/rafa', 'chat-archived', 0.0),
+        ('${Routes.chat}/ollie', 'chat-expired-initial', 0.0),
+        ('${Routes.chat}/jo', 'chat-new-match-time', 0.0),
+        ('${Routes.chat}/priya', 'chat-header-verified', 0.0),
+        (Routes.profile, 'profile', 0.0),
+        (Routes.profile, 'profile-collapsed-title', 220.0),
+        (Routes.insights, 'insights', 0.0),
+        (Routes.insights, 'insights-scrolled', 600.0),
+        (Routes.wallet, 'wallet', 0.0),
+        (Routes.streak, 'streak', 0.0),
+        (Routes.paywall, 'paywall', 0.0),
+        (Routes.visualLab, 'design-lab', 0.0),
+      ]) {
+        await step(name, () async {
+          await go(path);
+          await scrollBy(dy);
+          await cap(
+            tester,
+            file: 'default__$name',
+            group: 'default',
+            variant: 'proposed',
+            kind: 'screen',
+            label: name,
+          );
+        });
+      }
+    if (_want('default'))
+      await step('sheet', () async {
+        await go('${Routes.likes}?tab=compliments');
+        await tapOn(
+          tester,
+          find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
+        );
         await cap(
           tester,
-          file: 'default__$name',
+          file: 'default__sheet-close-squircle',
           group: 'default',
           variant: 'proposed',
           kind: 'screen',
-          label: name,
+          label: 'sheet close',
+          settleMs: 1200,
         );
+        await tester.pageBack();
+        await _wait(tester, 600);
       });
-    }
-    await step('sheet', () async {
-      await go('${Routes.likes}?tab=compliments');
-      await tapOn(
-        tester,
-        find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
-      );
-      await cap(
-        tester,
-        file: 'default__sheet-close-squircle',
-        group: 'default',
-        variant: 'proposed',
-        kind: 'screen',
-        label: 'sheet close',
-        settleMs: 1200,
-      );
-      await tester.pageBack();
-      await _wait(tester, 600);
-    });
-    await step('premium heart', () async {
-      c.read(premiumProvider.notifier).setActive(true);
-      await go(Routes.likes);
-      await cap(
-        tester,
-        file: 'default__heart-likes-premium',
-        group: 'default',
-        variant: 'proposed',
-        kind: 'screen',
-        fixture: 'premium',
-        label: 'heart likes premium',
-      );
-      await go(Routes.insights);
-      await tapOn(tester, find.byKey(const ValueKey('period-28')));
-      await cap(
-        tester,
-        file: 'default__insights-premium-28',
-        group: 'default',
-        variant: 'proposed',
-        kind: 'screen',
-        fixture: 'premium-28',
-        label: 'insights premium 28 days',
-      );
-      c.read(premiumProvider.notifier).setActive(false);
-    });
-    await step('free 28 locked', () async {
-      await go(Routes.profile);
-      await go(Routes.insights);
-      await tapOn(tester, find.byKey(const ValueKey('period-28')));
-      await cap(
-        tester,
-        file: 'default__insights-free-28-locked',
-        group: 'default',
-        variant: 'proposed',
-        kind: 'screen',
-        fixture: 'free',
-        label: 'insights 28 days locked',
-      );
-    });
-
-    // 2. Insights scenarios (all sample-labelled).
-    for (final s in InsightsScenario.values) {
-      await step('scenario ${s.name}', () async {
-        c.read(insightsScenarioProvider.notifier).choose(s);
-        await go(Routes.profile);
-        await go(Routes.insights);
+    if (_want('default'))
+      await step('premium heart', () async {
+        c.read(premiumProvider.notifier).setActive(true);
+        await go(Routes.likes);
         await cap(
           tester,
-          file: 'scenario__${s.name}',
-          group: 'insights-scenario',
-          variant: s.name,
+          file: 'default__heart-likes-premium',
+          group: 'default',
+          variant: 'proposed',
           kind: 'screen',
-          fixture: s.name,
-          label: s.name,
+          fixture: 'premium',
+          label: 'heart likes premium',
+        );
+        await go(Routes.insights);
+        await tapOn(tester, find.byKey(const ValueKey('period-28')));
+        await cap(
+          tester,
+          file: 'default__insights-premium-28',
+          group: 'default',
+          variant: 'proposed',
+          kind: 'screen',
+          fixture: 'premium-28',
+          label: 'insights premium 28 days',
+        );
+        c.read(premiumProvider.notifier).setActive(false);
+      });
+    if (_want('default'))
+      await step('free 28 locked', () async {
+        await go(Routes.profile);
+        await go(Routes.insights);
+        await tapOn(tester, find.byKey(const ValueKey('period-28')));
+        await cap(
+          tester,
+          file: 'default__insights-free-28-locked',
+          group: 'default',
+          variant: 'proposed',
+          kind: 'screen',
+          fixture: 'free',
+          label: 'insights 28 days locked',
         );
       });
-    }
+
+    // 2. Insights scenarios (all sample-labelled).
+    if (_want('scenario'))
+      for (final s in InsightsScenario.values) {
+        await step('scenario ${s.name}', () async {
+          c.read(insightsScenarioProvider.notifier).choose(s);
+          await go(Routes.profile);
+          await go(Routes.insights);
+          await cap(
+            tester,
+            file: 'scenario__${s.name}',
+            group: 'insights-scenario',
+            variant: s.name,
+            kind: 'screen',
+            fixture: s.name,
+            label: s.name,
+          );
+        });
+      }
     c.read(insightsScenarioProvider.notifier).choose(null);
 
     // 3. Card families: isolated crop (preview) and in context, every variant.
-    for (final g in kLabGroups.where((g) => g.kind == LabKind.component)) {
+    for (final g in kLabGroups.where(
+      (g) => g.kind == LabKind.component && _want('card', g.id),
+    )) {
       for (final v in g.ids) {
         await step('${g.id} $v', () async {
           lab.reset();
@@ -250,6 +268,8 @@ void main() {
           );
           lab.choose(g.id, v);
           final (path, dy) = _context[g.id]!;
+          // Like tiles are a Premium surface; free members see the locked count instead.
+          c.read(premiumProvider.notifier).setActive(g.id == 'like-tile');
           await go(Routes.demo);
           await go(path);
           await scrollBy(dy);
@@ -261,12 +281,15 @@ void main() {
             kind: 'context',
             label: '${g.title} $v in context',
           );
+          c.read(premiumProvider.notifier).setActive(false);
         });
       }
     }
 
     // 4. Screen directions: O, A, B, C for each priority screen (plus the Compliments part).
-    for (final g in kLabGroups.where((g) => g.kind == LabKind.screen)) {
+    for (final g in kLabGroups.where(
+      (g) => g.kind == LabKind.screen && _want('screen', g.id),
+    )) {
       for (final v in g.ids) {
         await step('${g.id} $v', () async {
           lab
@@ -309,99 +332,105 @@ void main() {
     // 5. Large text: the proposed default at 200%.
     lab.reset();
     tester.platformDispatcher.textScaleFactorTestValue = 2;
-    for (final (path, name) in [
-      (Routes.home, 'discover'),
-      ('${Routes.likes}?tab=compliments', 'heart-compliments'),
-      (Routes.messages, 'chats'),
-      (Routes.profile, 'profile'),
-      (Routes.insights, 'insights'),
-      ('${Routes.chat}/rafa', 'chat-archived'),
-    ]) {
-      await step('200 $name', () async {
-        await go(Routes.demo);
-        await go(path);
-        await cap(
-          tester,
-          file: 'large-text__$name',
-          group: 'large-text',
-          variant: 'proposed',
-          kind: 'screen',
-          scale: '2.0',
-          label: '$name at 200% text',
-        );
-      });
-    }
+    if (_want('large'))
+      for (final (path, name) in [
+        (Routes.home, 'discover'),
+        ('${Routes.likes}?tab=compliments', 'heart-compliments'),
+        (Routes.messages, 'chats'),
+        (Routes.profile, 'profile'),
+        (Routes.insights, 'insights'),
+        ('${Routes.chat}/rafa', 'chat-archived'),
+      ]) {
+        await step('200 $name', () async {
+          await go(Routes.demo);
+          await go(path);
+          await cap(
+            tester,
+            file: 'large-text__$name',
+            group: 'large-text',
+            variant: 'proposed',
+            kind: 'screen',
+            scale: '2.0',
+            label: '$name at 200% text',
+          );
+        });
+      }
     tester.platformDispatcher.clearTextScaleFactorTestValue();
 
     // 6. Motion clips: M1 (proposed), M2 and M0 (reduced) for the four key interactions.
-    for (final m in ['M1', 'M2', 'M0']) {
-      lab
-        ..reset()
-        ..choose('motion', m);
-      await _wait(tester, 400);
-      await step('motion $m tabs', () async {
-        await go(Routes.likes);
-        await _wait(tester, 600);
-        await rec(tester, 'start', 'tabs__$m');
-        await _wait(tester, 600);
-        await tapOn(
-          tester,
-          find.byKey(const ValueKey('heart-tab-compliments')),
-        );
-        await _wait(tester, 900);
-        await tapOn(tester, find.byKey(const ValueKey('heart-tab-likes')));
-        await _wait(tester, 900);
-        await tapOn(
-          tester,
-          find.byKey(const ValueKey('heart-tab-compliments')),
-        );
-        await _wait(tester, 900);
-        await rec(tester, 'stop', 'tabs__$m');
-      });
-      await step('motion $m title', () async {
-        await go(Routes.profile);
-        await _wait(tester, 600);
-        await rec(tester, 'start', 'title__$m');
-        await _wait(tester, 500);
-        final s = find.byType(Scrollable).first;
-        for (var i = 0; i < 6; i++) {
-          await tester.drag(s, const Offset(0, -60));
-          await _wait(tester, 120);
-        }
-        await _wait(tester, 600);
-        for (var i = 0; i < 6; i++) {
-          await tester.drag(s, const Offset(0, 60));
-          await _wait(tester, 120);
-        }
-        await _wait(tester, 700);
-        await rec(tester, 'stop', 'title__$m');
-      });
-      await step('motion $m sheet', () async {
-        await go('${Routes.likes}?tab=compliments');
-        await _wait(tester, 600);
-        await rec(tester, 'start', 'sheet__$m');
-        await _wait(tester, 500);
-        await tapOn(
-          tester,
-          find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
-        );
-        await _wait(tester, 1200);
-        await tapOn(tester, find.byKey(const ValueKey('sheet-close')));
-        await _wait(tester, 1000);
-        await rec(tester, 'stop', 'sheet__$m');
-      });
-      await step('motion $m route', () async {
-        await go(Routes.messages);
-        await _wait(tester, 600);
-        await rec(tester, 'start', 'route__$m');
-        await _wait(tester, 500);
-        await tapOn(tester, find.byKey(const ValueKey('chats-archive')));
-        await _wait(tester, 1000);
-        await tester.pageBack();
-        await _wait(tester, 1000);
-        await rec(tester, 'stop', 'route__$m');
-      });
-    }
+    if (_want('motion'))
+      for (final m in ['M1', 'M2', 'M0']) {
+        lab
+          ..reset()
+          ..choose('motion', m);
+        await _wait(tester, 400);
+        await step('motion $m tabs', () async {
+          await go(Routes.likes);
+          await _wait(tester, 600);
+          await rec(tester, 'start', 'tabs__$m');
+          await _wait(tester, 600);
+          await tapOn(
+            tester,
+            find.byKey(const ValueKey('heart-tab-compliments')),
+          );
+          await _wait(tester, 900);
+          await tapOn(tester, find.byKey(const ValueKey('heart-tab-likes')));
+          await _wait(tester, 900);
+          await tapOn(
+            tester,
+            find.byKey(const ValueKey('heart-tab-compliments')),
+          );
+          await _wait(tester, 900);
+          await rec(tester, 'stop', 'tabs__$m');
+        });
+        await step('motion $m title', () async {
+          await go(Routes.profile);
+          await _wait(tester, 600);
+          await rec(tester, 'start', 'title__$m');
+          await _wait(tester, 500);
+          final s = find.byType(Scrollable).first;
+          for (var i = 0; i < 6; i++) {
+            await tester.drag(s, const Offset(0, -60));
+            await _wait(tester, 120);
+          }
+          await _wait(tester, 600);
+          for (var i = 0; i < 6; i++) {
+            await tester.drag(s, const Offset(0, 60));
+            await _wait(tester, 120);
+          }
+          await _wait(tester, 700);
+          await rec(tester, 'stop', 'title__$m');
+        });
+        await step('motion $m sheet', () async {
+          await go('${Routes.likes}?tab=compliments');
+          await _wait(tester, 600);
+          await tester.ensureVisible(
+            find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
+          );
+          await _wait(tester, 300);
+          await rec(tester, 'start', 'sheet__$m');
+          await _wait(tester, 500);
+          await tapOn(
+            tester,
+            find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
+          );
+          await _wait(tester, 1200);
+          await tapOn(tester, find.byKey(const ValueKey('sheet-close')));
+          await _wait(tester, 1000);
+          await rec(tester, 'stop', 'sheet__$m');
+        });
+        await step('motion $m route', () async {
+          await go(Routes.messages);
+          await _wait(tester, 600);
+          await rec(tester, 'start', 'route__$m');
+          await _wait(tester, 500);
+          await tapOn(tester, find.byKey(const ValueKey('chats-archive')));
+          await _wait(tester, 1000);
+          await tester.pageBack();
+          await _wait(tester, 1000);
+          await rec(tester, 'stop', 'route__$m');
+        });
+      }
     lab.reset();
     // ignore: avoid_print
     print('@@DONE@@');

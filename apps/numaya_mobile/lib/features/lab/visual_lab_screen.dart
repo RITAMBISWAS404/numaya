@@ -406,7 +406,10 @@ class LabPreviewScreen extends ConsumerWidget {
         final data = ProfileHeaderData(
           photo: draft.photos.isEmpty ? null : draft.photos.first.source,
           initial: draft.firstName.isEmpty ? 'A' : draft.firstName[0],
-          name: draft.firstName.isEmpty ? 'Alex, 29' : '${draft.firstName}, 29',
+          name: context.l10n.profileNameAge(
+            draft.firstName.isEmpty ? 'Alex' : draft.firstName,
+            draft.ageOn(ref.read(onboardingProvider.notifier).today) ?? 30,
+          ),
           verification: ref.watch(photoVerificationProvider).status,
           onEdit: none,
           onVerify: none,

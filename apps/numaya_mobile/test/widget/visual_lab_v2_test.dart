@@ -318,6 +318,21 @@ void main() {
       expect(sampleInsights(InsightsScenario.newAccount, 7).change, isNull);
     });
 
+    testWidgets('the plain-sentence summary puts each number in its place', (
+      tester,
+    ) async {
+      await usePhoneSize(tester);
+      final c = await quickStartApp(tester);
+      await goTo(c, tester, '${Routes.visualLabPreview}/insights-summary?v=D');
+      expect(
+        find.text(
+          '77 people saw your profile in the last 7 days. 9 liked it and you matched with 3.',
+        ),
+        findsOneWidget,
+      );
+      await settle(tester);
+    });
+
     testWidgets('a restriction is explained free, with its reason', (
       tester,
     ) async {

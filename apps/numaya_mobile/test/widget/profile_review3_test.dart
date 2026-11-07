@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
+import 'package:numaya_mobile/features/profile/application/profile_details_controller.dart';
 import 'package:numaya_mobile/features/verification/application/verification_controller.dart';
 
 import '../helpers/journeys.dart';
@@ -185,7 +186,10 @@ void main() {
     testWidgets('finishing the bio updates the progress on return', (
       tester,
     ) async {
-      await open(tester, Routes.completion);
+      final c = await open(tester, Routes.completion);
+      // Starts without a bio (the quick-start demo now has one, Visual Lab V2).
+      c.read(profileDetailsProvider.notifier).setBio('');
+      await tester.pump();
       String percent() => tester
           .widgetList<Semantics>(find.byType(Semantics))
           .map((s) => s.properties.label)

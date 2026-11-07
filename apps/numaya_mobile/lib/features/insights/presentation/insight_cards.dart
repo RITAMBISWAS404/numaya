@@ -91,7 +91,11 @@ class ExposureBars extends StatelessWidget {
     required this.daily,
     required this.endDate,
     this.height = 96,
+    this.labels = true,
   });
+
+  /// Day labels under the bars; off for the small inline bars beside a value.
+  final bool labels;
 
   final List<int> daily;
 
@@ -142,8 +146,10 @@ class ExposureBars extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: AppSpacing.s1),
-          if (week)
+          if (labels) const SizedBox(height: AppSpacing.s1),
+          if (!labels)
+            const SizedBox.shrink()
+          else if (week)
             Row(
               children: [
                 for (final d in days)
@@ -448,7 +454,7 @@ class InsightsSummary extends ConsumerWidget {
           children: [
             Text(
               s.hasData
-                  ? l10n.insightsSentence(s.shown, s.liked, s.matched, s.days)
+                  ? l10n.insightsSentence(s.shown, s.days, s.liked, s.matched)
                   : l10n.insightsNoDataYet,
               style: AppTypography.answer,
             ),
@@ -591,7 +597,8 @@ class MetricWidget extends ConsumerWidget {
                             child: ExposureBars(
                               daily: daily!,
                               endDate: endDate!,
-                              height: 36,
+                              height: 32,
+                              labels: false,
                             ),
                           ),
                   ),

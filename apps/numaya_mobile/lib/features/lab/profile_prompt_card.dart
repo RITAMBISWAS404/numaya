@@ -31,9 +31,14 @@ class ProfilePromptCard extends ConsumerWidget {
       color: AppColors.textMuted,
     );
     // The footer reserves the action's full 48pt target; without an action, nothing is reserved.
+    // On the white card variants the action sits on the fill grey (OnWhiteSurface); the open
+    // editorial variant (A) sits on the grey page and keeps the white squircle.
     Widget footer() => action == null
         ? const SizedBox.shrink()
-        : Align(alignment: AlignmentDirectional.centerEnd, child: action);
+        : Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: v == 'A' ? action! : OnWhiteSurface(child: action!),
+          );
 
     final Widget body;
     switch (v) {

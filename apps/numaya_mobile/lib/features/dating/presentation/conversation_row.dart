@@ -198,7 +198,11 @@ class ConversationRow extends ConsumerWidget {
                     ),
                     if (yourMove || unread > 0) ...[
                       const SizedBox(height: AppSpacing.s2),
-                      trailingBadge(),
+                      // A Row lets the badge keep its own width under a stretching Column.
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [trailingBadge()],
+                      ),
                     ],
                   ],
                 ),

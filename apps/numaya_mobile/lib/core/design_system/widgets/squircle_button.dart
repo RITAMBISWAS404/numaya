@@ -44,6 +44,9 @@ class SquircleIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // On a white card the white squircle would vanish: it takes the fill grey, flat (Ente's icon
+    // button on a white surface).
+    final onWhite = OnWhiteSurface.of(context) && !onBrand;
     final glyphColor = onPressed == null
         ? AppColors.disabledForeground
         : onBrand
@@ -70,9 +73,15 @@ class SquircleIconButton extends StatelessWidget {
               width: size,
               height: size,
               decoration: BoxDecoration(
-                color: onBrand ? AppColors.accent : AppColors.surface,
+                color: onBrand
+                    ? AppColors.accent
+                    : onWhite
+                    ? AppColors.fill
+                    : AppColors.surface,
                 borderRadius: AppRadii.all(AppRadii.iconButton),
-                boxShadow: elevated ? AppElevation.subtle : AppElevation.none,
+                boxShadow: elevated && !onWhite
+                    ? AppElevation.subtle
+                    : AppElevation.none,
               ),
               alignment: Alignment.center,
               child: glyph,
@@ -82,4 +91,15 @@ class SquircleIconButton extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Marks a white surface (a card) so a [SquircleIconButton] inside draws on the fill grey.
+class OnWhiteSurface extends InheritedWidget {
+  const OnWhiteSurface({super.key, required super.child});
+
+  static bool of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<OnWhiteSurface>() != null;
+
+  @override
+  bool updateShouldNotify(OnWhiteSurface oldWidget) => false;
 }

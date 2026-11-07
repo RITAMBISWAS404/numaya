@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numaya Visual Lab V2: review gallery</title>
+<style>
+:root{--ink:#18181b;--muted:#6b6b72;--line:#e4e4e7;--page:#f4f4f4;--card:#fff;--brand:#7262c7;--brand-tint:#efedfa;--warn:#b45309;--ok:#15803d;--bad:#b91c1c}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--page);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--brand)}
+header.top{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:12px 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+header.top h1{font-size:18px;margin:0 12px 0 0}
+.meta{color:var(--muted);font-size:13px}
+.btn{font:inherit;font-size:14px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer}
+.btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+.btn:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.progress{font-weight:600}
+.wrap{display:grid;grid-template-columns:240px 1fr;gap:0}
+nav.side{position:sticky;top:64px;align-self:start;height:calc(100vh - 64px);overflow:auto;padding:16px;border-right:1px solid var(--line);background:#fafafa}
+nav.side a{display:block;text-decoration:none;color:var(--ink);padding:4px 6px;border-radius:6px;font-size:14px}
+nav.side a .st{float:right;color:var(--muted);font-size:12px}
+nav.side h3{font-size:12px;color:var(--muted);margin:16px 0 4px;font-weight:600}
+main{padding:20px;min-width:0}
+section.group{background:#fff;border-radius:16px;padding:18px;margin:0 0 20px;border:1px solid var(--line)}
+section.group h2{margin:0;font-size:20px}
+.q{color:var(--muted);margin:4px 0 8px}
+.deps{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:8px 10px;font-size:13px;margin:8px 0}
+.warn{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:8px 10px;font-size:13px;margin:8px 0;color:var(--bad)}
+.strip{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 12px}
+.variant{flex:0 0 300px;scroll-snap-align:start;border:1px solid var(--line);border-radius:14px;padding:10px;background:#fcfcfc;display:flex;flex-direction:column;gap:6px}
+.variant.sel{border:2px solid var(--brand);background:var(--brand-tint)}
+.variant h4{margin:0;font-size:15px}
+.badge{display:inline-block;font-size:12px;border-radius:999px;padding:1px 8px;background:#eee;color:#333;margin-right:4px}
+.badge.prop{background:var(--brand-tint);color:#4b3fa0;border:1px solid #c9c2ee}
+.badge.a11y{background:#ecfdf5;color:var(--ok)}
+.imgs{display:flex;gap:6px}
+.imgs figure{margin:0;flex:1}
+.imgs img{width:100%;border-radius:8px;border:1px solid var(--line);cursor:zoom-in;background:#ddd;display:block}
+.imgs figcaption{font-size:11px;color:var(--muted)}
+.note{font-size:13px;color:#333}
+label.choice{display:flex;gap:6px;align-items:center;font-weight:600;cursor:pointer;padding:6px 0;min-height:44px}
+.extra{display:flex;flex-wrap:wrap;gap:14px;margin:6px 0}
+textarea{width:100%;min-height:56px;border:1px solid var(--line);border-radius:10px;padding:8px;font:inherit}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.gallery figure{margin:0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px}
+.gallery img{width:100%;border-radius:8px;cursor:zoom-in;display:block}
+.gallery figcaption{font-size:12px;color:var(--muted);padding-top:4px}
+video{width:100%;border-radius:10px;background:#000}
+.clips{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.clips figure{margin:0}
+#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:10;cursor:zoom-out}
+#lightbox img{max-width:95vw;max-height:95vh;border-radius:8px}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 14px;border-radius:10px;display:none;z-index:11}
+.storage{background:#fffbeb;border-bottom:1px solid #fde68a;padding:8px 20px;font-size:13px;display:none}
+@media (max-width:760px){.wrap{grid-template-columns:1fr}nav.side{display:none}.variant{flex-basis:84vw}header.top{position:static}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Numaya Visual Lab V2</h1>
+  <span class="meta" id="metaline"></span>
+  <span class="progress" id="progress" aria-live="polite"></span>
+  <button class="btn primary" id="exportJson" type="button">Export choices (JSON)</button>
+  <button class="btn" id="exportText" type="button">Export summary (text)</button>
+  <label class="btn" for="importFile" tabindex="0">Import JSON</label>
+  <input id="importFile" type="file" accept="application/json,.json" hidden>
+  <button class="btn" id="reset" type="button">Reset</button>
+</header>
+<div class="storage" id="storageWarn" role="status">This browser isn’t saving choices for files opened from disk. Use <b>Export choices</b> before closing; you can import the file later.</div>
+<div class="wrap">
+<nav class="side" id="side" aria-label="Groups"></nav>
+<main id="main">
+  <section class="group" id="intro">
+    <h2>How to review</h2>
+    <p>Each group shows the current-rules baseline <b>O</b> and its alternatives on the same sample data and viewport. Pick one per group, or <i>Keep current (O)</i>, or leave it <i>Undecided</i>. The <span class="badge prop">Proposed</span> badge is Claude’s recommendation, not your approval, and nothing is preselected. Choosing O never restores reconnection or the old Compliment placement: the required changes apply to every option.</p>
+    <p>Images are real Flutter screenshots from the Android emulator (Pixel 10, API 36, debug build), driven by <code>integration_test/visual_lab_gallery_test.dart</code>; “crop” images are the family rendered alone in the debug Design Lab, “context” images are the real screen with that variant chosen. Sample insights and people are demo data. Choices are saved in this browser where possible; the exported JSON is the record to send back.</p>
+    <p>Next step: export your choices and send the JSON to Claude for a separate application pass (see NEXT_STEPS.txt).</p>
+  </section>
+  <div id="groups"></div>
+  <section class="group" id="evidence"><h2>Required changes: proposed default</h2><p class="q">R01–R12 as implemented, on the proposed default. Not selectable.</p><div class="gallery" id="evGallery"></div></section>
+  <section class="group" id="scenarios"><h2>Insights sample scenarios</h2><p class="q">All seven brief-03 fixtures, labelled sample data.</p><div class="gallery" id="scGallery"></div></section>
+  <section class="group" id="large"><h2>Large text (200%)</h2><div class="gallery" id="ltGallery"></div></section>
+  <section class="group" id="motionClips"><h2>Motion previews</h2><p class="q">Real screen recordings. Press play; nothing autoplays and there is no sound. M0 is the reduced/static preset (same behaviour as the system “remove animations”). Choose a preset in the “Motion preset” group above.</p><div class="clips" id="clipGrid"></div></section>
+  <section class="group" id="history"><h2>Original screens (historical, MVP PRD build 2026-11-07)</h2><p class="q">For context only. These include the retired reconnection and Requests-in-Chats flows and are not selectable.</p><div class="gallery" id="histGallery"></div></section>
+</main>
+</div>
+<div id="lightbox" role="dialog" aria-label="Full size image"><img alt=""></div>
+<div id="toast" role="status"></div>
+<script>
+const MANIFEST = __MANIFEST__;
+const KEY = 'numaya-visual-lab-v2:' + MANIFEST.reviewId;
+let storageOk = true;
+let state = {selections:{}, notes:{}, selectedAt:null};
+try { const t='__t'; localStorage.setItem(t,t); localStorage.removeItem(t); } catch(e){ storageOk=false; }
+if (location.protocol === 'file:' ) { try { localStorage.setItem('__p','1'); } catch(e){ storageOk=false; } }
+if (!storageOk) document.getElementById('storageWarn').style.display='block';
+function load(){ if(!storageOk) return; try{ const s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s&&s.selections) state=s; }catch(e){} }
+function save(){ if(!storageOk) return; try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){ storageOk=false; document.getElementById('storageWarn').style.display='block'; } }
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.style.display='block'; clearTimeout(toast._t); toast._t=setTimeout(()=>t.style.display='none',2600); }
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const groups = MANIFEST.groups;
+const validIds = Object.fromEntries(groups.map(g=>[g.id, new Set([...g.variants.map(v=>v.id),'keep-current','undecided'])]));
+function shotsFor(gid, vid, kind){ return MANIFEST.screenshots.filter(s=>s.family===gid && s.variant===vid && (!kind || s.kind===kind)); }
+function img(s, cap){ return `<figure><img loading="lazy" src="${esc(s.path)}" alt="${esc(s.label||cap)}" data-full="${esc(s.path)}"><figcaption>${esc(cap)}</figcaption></figure>`; }
+function render(){
+  const side = document.getElementById('side'); const host = document.getElementById('groups');
+  let nav = ''; let html='';
+  for (const kind of ['component','screen','motion']) {
+    nav += `<h3>${kind==='component'?'Card families':kind==='screen'?'Screens':'Motion'}</h3>`;
+    for (const g of groups.filter(g=>g.kind===kind)) {
+      const sel = state.selections[g.id];
+      nav += `<a href="#g-${g.id}">${esc(g.title)}<span class="st" id="st-${g.id}">${sel?esc(sel==='keep-current'?'O (keep)':sel):'–'}</span></a>`;
+      const deps = Object.entries(g.requires||{}).map(([v,list])=>`<div>${esc(v)} fixes inside this screen: ${list.map(esc).join(', ')}</div>`).join('');
+      html += `<section class="group" id="g-${g.id}" aria-labelledby="h-${g.id}"><h2 id="h-${g.id}">${esc(g.title)} <span class="meta">${esc(g.id)}</span></h2><p class="q">${esc(g.question)}</p>`;
+      if (deps) html += `<div class="deps"><b>Dependencies, shown before you choose.</b> ${deps}</div>`;
+      html += `<div class="warn" id="warn-${g.id}" hidden></div>`;
+      html += `<div class="strip" role="radiogroup" aria-label="${esc(g.title)}">`;
+      for (const v of g.variants) {
+        const crop = shotsFor(g.id, v.id, 'crop'); const ctx = shotsFor(g.id, v.id, 'context'); const scr = shotsFor(g.id, v.id, 'screen');
+        const pics = [...crop.map(s=>img(s,'Crop')), ...ctx.map(s=>img(s,'In context')), ...scr.map(s=>img(s,'Screen'))].join('');
+        const missing = (kind!=='motion' && !pics) ? '<div class="warn">No screenshot captured for this variant.</div>' : '';
+        const a11y = (MANIFEST.a11y && MANIFEST.a11y[g.id]) ? `<span class="badge a11y">${esc(MANIFEST.a11y[g.id])}</span>` : '';
+        html += `<div class="variant ${sel===v.id?'sel':''}" id="v-${g.id}-${v.id}">
+          <h4>${esc(v.id)} · ${esc(v.name)}</h4>
+          <div>${g.proposed===v.id?'<span class="badge prop">Proposed (not approved)</span>':''}<span class="badge">${esc(v.pass)}</span>${a11y}</div>
+          <div class="note">${esc(v.note)}</div>
+          <div class="imgs">${pics}</div>${missing}
+          <label class="choice"><input type="radio" name="sel-${g.id}" value="${esc(v.id)}" ${sel===v.id?'checked':''}> Choose ${esc(v.id)}</label>
+        </div>`;
+      }
+      html += `</div><div class="extra">
+        <label class="choice"><input type="radio" name="sel-${g.id}" value="keep-current" ${sel==='keep-current'?'checked':''}> Keep current (O)</label>
+        <label class="choice"><input type="radio" name="sel-${g.id}" value="undecided" ${!sel||sel==='undecided'?'checked':''}> Undecided</label></div>
+        <label for="note-${g.id}" class="meta">Notes for ${esc(g.title)}</label>
+        <textarea id="note-${g.id}" data-g="${esc(g.id)}">${esc(state.notes[g.id]||'')}</textarea></section>`;
+    }
+  }
+  side.innerHTML = nav; host.innerHTML = html;
+  host.querySelectorAll('input[type=radio]').forEach(r=>r.addEventListener('change', e=>{
+    const gid = e.target.name.slice(4); const val = e.target.value;
+    if (val==='undecided') delete state.selections[gid]; else state.selections[gid]=val;
+    state.selectedAt = new Date().toISOString(); save(); refresh();
+  }));
+  host.querySelectorAll('textarea').forEach(t=>t.addEventListener('input', e=>{ const g=e.target.dataset.g; const v=e.target.value; if(v) state.notes[g]=v; else delete state.notes[g]; save(); }));
+  const sec = (id, kind) => document.getElementById(id).innerHTML = MANIFEST.screenshots.filter(s=>s.family===kind).map(s=>img(s, s.label)).join('') || '<p class="meta">None captured.</p>';
+  sec('evGallery','default'); sec('scGallery','insights-scenario'); sec('ltGallery','large-text'); sec('histGallery','history');
+  document.getElementById('clipGrid').innerHTML = MANIFEST.videos.map(v=>`<figure><video controls preload="metadata" muted playsinline src="${esc(v.path)}"></video><figcaption>${esc(v.interaction)} · ${esc(v.motionVariant)}${v.reducedMotion?' (reduced)':''}</figcaption></figure>`).join('') || '<p class="meta">No clips captured.</p>';
+  refresh();
+}
+function refresh(){
+  const total = groups.length; const decided = Object.keys(state.selections).length;
+  document.getElementById('progress').textContent = `${decided} of ${total} decided`;
+  for (const g of groups) {
+    const sel = state.selections[g.id];
+    const st = document.getElementById('st-'+g.id); if (st) st.textContent = sel ? (sel==='keep-current'?'O (keep)':sel) : '–';
+    g.variants.forEach(v=>{ const el=document.getElementById(`v-${g.id}-${v.id}`); if(el) el.classList.toggle('sel', sel===v.id); });
+    // Compatibility: a screen choice that fixes components differently from your component choice.
+    const w = document.getElementById('warn-'+g.id); if (!w) continue;
+    const msgs = [];
+    if (g.kind==='screen' && sel && g.requires && g.requires[sel]) {
+      for (const need of g.requires[sel]) { const [cg,cv]=need.split(':'); const mine=state.selections[cg]; if (mine && mine!=='keep-current' && mine!==cv) msgs.push(`${g.title} ${sel} uses ${cg} ${cv} inside this screen; you chose ${cg} ${mine} elsewhere.`); if (mine==='keep-current' && cv!=='O') msgs.push(`${g.title} ${sel} uses ${cg} ${cv} inside this screen; you kept ${cg} O elsewhere.`); }
+    }
+    w.hidden = msgs.length===0; w.textContent = msgs.join(' ');
+  }
+}
+function exportObj(){
+  return { schemaVersion: 1, reviewId: MANIFEST.reviewId, codeCommit: MANIFEST.codeCommit, generatedAt: MANIFEST.generatedAt,
+    selectedAt: state.selectedAt, selections: Object.entries(state.selections).map(([groupId, variantId])=>({groupId, variantId, notes: state.notes[groupId]||''})),
+    undecidedGroups: groups.map(g=>g.id).filter(id=>!state.selections[id]),
+    notesWithoutSelection: Object.fromEntries(Object.entries(state.notes).filter(([g])=>!state.selections[g])) };
+}
+function download(name, text, type){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},500); }
+document.getElementById('exportJson').onclick = ()=>{ download(`numaya-visual-lab-choices-${MANIFEST.reviewId}.json`, JSON.stringify(exportObj(), null, 2), 'application/json'); toast('Choices exported'); };
+document.getElementById('exportText').onclick = ()=>{ const o=exportObj(); const lines=[`Numaya Visual Lab V2 choices (${o.reviewId}, code ${o.codeCommit})`, `Exported ${new Date().toISOString()}`, '']; for(const g of groups){ const s=state.selections[g.id]; lines.push(`${g.title} [${g.id}]: ${s? (s==='keep-current'?'keep current (O)': s+' – '+(g.variants.find(v=>v.id===s)||{}).name):'undecided'}${state.notes[g.id]?'\n  Notes: '+state.notes[g.id]:''}`);} download(`numaya-visual-lab-summary-${MANIFEST.reviewId}.txt`, lines.join('\n'), 'text/plain'); toast('Summary exported'); };
+document.getElementById('reset').onclick = ()=>{ if(!confirm('Clear every choice and note in this browser? Exported files are not affected.')) return; state={selections:{},notes:{},selectedAt:null}; save(); render(); toast('Cleared'); };
+document.getElementById('importFile').addEventListener('change', async e=>{
+  const f=e.target.files[0]; e.target.value=''; if(!f) return;
+  let data; try{ data=JSON.parse(await f.text()); }catch(err){ toast('That file isn’t valid JSON. Nothing changed.'); return; }
+  const problems=[];
+  if (data.schemaVersion!==1) problems.push('schemaVersion must be 1');
+  if (!Array.isArray(data.selections)) problems.push('selections must be a list');
+  if (data.reviewId!==MANIFEST.reviewId) problems.push(`reviewId ${String(data.reviewId).slice(0,40)} doesn’t match this gallery (${MANIFEST.reviewId})`);
+  const next={selections:{},notes:{},selectedAt:data.selectedAt||null};
+  for (const s of (data.selections||[])) {
+    if (!s || typeof s.groupId!=='string' || typeof s.variantId!=='string') { problems.push('a selection is missing groupId or variantId'); continue; }
+    if (!validIds[s.groupId]) { problems.push(`unknown group ${s.groupId.slice(0,40)}`); continue; }
+    if (!validIds[s.groupId].has(s.variantId)) { problems.push(`unknown variant ${s.variantId.slice(0,20)} in ${s.groupId}`); continue; }
+    if (s.variantId!=='undecided') next.selections[s.groupId]=s.variantId;
+    if (typeof s.notes==='string' && s.notes) next.notes[s.groupId]=s.notes.slice(0,4000);
+  }
+  for (const [g,n] of Object.entries(data.notesWithoutSelection||{})) if (validIds[g] && typeof n==='string') next.notes[g]=n.slice(0,4000);
+  if (problems.length) { toast('Import refused: '+problems[0]); console.warn(problems); return; }
+  state=next; save(); render(); toast(`Imported ${Object.keys(state.selections).length} choices`);
+});
+document.addEventListener('click', e=>{ const t=e.target; if (t.tagName==='IMG' && t.dataset.full){ const lb=document.getElementById('lightbox'); lb.querySelector('img').src=t.dataset.full; lb.querySelector('img').alt=t.alt; lb.style.display='flex'; } else if (t.closest('#lightbox')) { document.getElementById('lightbox').style.display='none'; } });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') document.getElementById('lightbox').style.display='none'; });
+document.getElementById('metaline').textContent = `review ${MANIFEST.reviewId} · code ${MANIFEST.codeCommit} · ${MANIFEST.screenshots.length} screenshots · ${MANIFEST.videos.length} clips`;
+load(); render();
+</script>
+</body>
+</html>

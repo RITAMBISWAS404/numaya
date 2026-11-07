@@ -100,6 +100,14 @@ class SessionController extends Notifier<AuthSession?> {
     _clear();
     final session = demo.quickStart();
     ref.read(onboardingProvider.notifier).loadSample();
+    // A finished demo profile meets the MVP minimum, which requires a bio (Visual Lab V2,
+    // brief 10: demo profiles must be valid in ordinary launch, not only in the screenshot run).
+    final details = ref.read(profileDetailsProvider.notifier);
+    if (ref.read(profileDetailsProvider).bio.trim().isEmpty) {
+      details.setBio(
+        'Weekend baker, weekday map nerd. Always up for a long walk.',
+      );
+    }
     state = session;
     await ref.read(onboardingProvider.notifier).finish();
   }

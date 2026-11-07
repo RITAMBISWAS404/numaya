@@ -262,6 +262,9 @@ void main() {
     (tester) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
+      // This journey writes the bio, so it starts from a profile without one (the quick-start
+      // demo now has one, Visual Lab V2).
+      c.read(profileDetailsProvider.notifier).setBio('');
       await openTab(tester, 'Profile');
       // R11: setup readiness is a supporting card, counted in parts, not a score.
       expect(find.byType(ProfileSetupCard), findsOneWidget);
