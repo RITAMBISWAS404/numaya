@@ -42,6 +42,40 @@ abstract final class Routes {
   static const safety = '/profile/safety';
   static const forYou = '/for-you';
 
+  // MVP PRD (2026-11-07) -------------------------------------------------------------------------
+  /// S17: today's likes are used.
+  static const allowance = '/allowance';
+
+  /// S14: `/compliment/:personId?kind=photo|prompt&index=n`.
+  static const compliment = '/compliment';
+
+  /// S21: `/request/:complimentId`.
+  static const request = '/request';
+
+  /// S24: expired chats.
+  static const expiredChats = '/chats/expired';
+
+  /// S25: `/reconnect/:personId`.
+  static const reconnect = '/reconnect';
+
+  /// S29-S33 in Profile.
+  static const health = '/profile/health';
+  static const healthAbout = '/profile/health/about';
+  static const insights = '/profile/insights';
+  static const streak = '/profile/streak';
+  static const wallet = '/profile/wallet';
+
+  /// S35-S37.
+  static const storeCompliments = '/store/compliments';
+  static const storeRecovery = '/store/recovery';
+  static const storeOutcome = '/store/outcome';
+
+  /// S45: `/legal` and `/legal/:doc` (readable signed out).
+  static const legal = '/legal';
+
+  /// S43: support and appeal requests.
+  static const supportRequests = '/help/requests';
+
   /// The Events tab (`?view=mine` opens My events) and full-screen event pages.
   static const events = '/events';
   static const event = '/event';
@@ -111,6 +145,12 @@ abstract final class Routes {
       path.startsWith(event) ||
       path.startsWith(forYou) ||
       path.startsWith(paywall) ||
+      path.startsWith(allowance) ||
+      path.startsWith(compliment) ||
+      path.startsWith(request) ||
+      path.startsWith('/chats') ||
+      path.startsWith(reconnect) ||
+      path.startsWith('/store') ||
       path.startsWith(restore) ||
       path == reauth;
 

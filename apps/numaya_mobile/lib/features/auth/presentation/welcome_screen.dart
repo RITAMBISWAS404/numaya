@@ -22,30 +22,15 @@ class WelcomeScreen extends ConsumerStatefulWidget {
 
 class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
   late final TapGestureRecognizer _terms = TapGestureRecognizer()
-    ..onTap = () => _showLegal(context.l10n.legalTermsTitle);
+    ..onTap = () => context.push('${Routes.legal}/terms');
   late final TapGestureRecognizer _privacy = TapGestureRecognizer()
-    ..onTap = () => _showLegal(context.l10n.legalPrivacyTitle);
+    ..onTap = () => context.push('${Routes.legal}/privacy');
 
   @override
   void dispose() {
     _terms.dispose();
     _privacy.dispose();
     super.dispose();
-  }
-
-  void _showLegal(String title) {
-    showNumayaSheet<void>(
-      context: context,
-      title: title,
-      closeLabel: context.l10n.close,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.only(bottom: AppSpacing.s4),
-        child: Text(
-          context.l10n.legalPending,
-          style: AppTypography.body.copyWith(color: AppColors.textSecondary),
-        ),
-      ),
-    );
   }
 
   void _start(AuthIntent intent) {

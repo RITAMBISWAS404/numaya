@@ -50,6 +50,8 @@ void main() {
     for (final i in ['Jazz', 'Poetry', 'Travel']) {
       o.toggleInterest(i);
     }
+    // MVP PRD: a short bio is required.
+    c.read(profileDetailsProvider.notifier).setBio('Weekend baker.');
   }
 
   testWidgets('every step opens from the Demo Hub and from the hub resume', (
@@ -358,6 +360,7 @@ void main() {
         'Choose who you want to meet',
         'Add at least 2 photos',
         'Answer a prompt',
+        'Add a short bio',
       ]) {
         expect(find.text(item), findsOneWidget, reason: item);
       }

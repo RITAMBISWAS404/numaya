@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
+import 'package:numaya_mobile/features/premium/application/premium_controller.dart';
 
 import '../helpers/journeys.dart';
 import '../helpers/test_app.dart';
@@ -169,6 +171,14 @@ void main() {
     await signUpToHome(tester, testAuth());
     expect(find.bySemanticsLabel('Likes, 5 new'), findsOneWidget);
     await openTab(tester, 'Likes');
+    // S18: free members see the count and a locked grid; Premium sees who.
+    expect(find.byKey(const ValueKey('likes-locked')), findsOneWidget);
+    expect(find.text('5 people like you'), findsOneWidget);
+    expect(find.text('Maya, 29'), findsNothing);
+    ProviderScope.containerOf(
+      tester.element(find.byKey(const ValueKey('likes-locked'))),
+    ).read(premiumProvider.notifier).setActive(true);
+    await tester.pump(const Duration(milliseconds: 600));
     expect(find.text('Maya, 29'), findsOneWidget);
     expect(find.text('Kemi, 27'), findsOneWidget);
 

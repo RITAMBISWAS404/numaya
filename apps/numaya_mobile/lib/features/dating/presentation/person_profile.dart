@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
+import '../../compliments/domain/compliment.dart';
 import '../../onboarding/domain/profile_draft.dart';
 import '../domain/profile_fact_emoji.dart';
 import '../domain/sample_people.dart';
@@ -410,13 +411,27 @@ List<Widget> personSections(
   bool own = false,
   bool showDistance = true,
   ValueChanged<int>? onPhoto,
+  ValueChanged<ComplimentTarget>? onCompliment,
 }) {
   final l10n = context.l10n;
   // UI-007: a profile's prompt is the shared prompt card: small question, dominant answer, no
-  // decorative icon.
-  Widget prompt(({String question, String answer}) p) =>
-      PromptCard(question: p.question, answer: p.answer);
-  Widget photo(int position) {
+  // decorative icon. With [onCompliment], each prompt and photo carries a Compliment anchor (S11).
+  var promptIndex = 0;
+  Widget prompt(({String question, String answer}) p) {
+    final card = PromptCard(question: p.question, answer: p.answer);
+    final index = promptIndex++;
+    if (onCompliment == null) return card;
+    return _WithAnchor(
+      anchor: ComplimentAnchor(
+        key: ValueKey('compliment-prompt-$index'),
+        name: person.name,
+        onPressed: () => onCompliment(ComplimentTarget.prompt(index)),
+      ),
+      child: card,
+    );
+  }
+
+  Widget photoTile(int position) {
     final tile = PhotoPlaceholder(
       label: l10n.discoverPhotoLabel(person.name, position),
       aspectRatio: AppMedia.personPhoto,
@@ -432,6 +447,17 @@ List<Widget> personSections(
             child: tile,
           );
   }
+
+  Widget photo(int position) => onCompliment == null
+      ? photoTile(position)
+      : _WithAnchor(
+          anchor: ComplimentAnchor(
+            key: ValueKey('compliment-photo-${position - 1}'),
+            name: person.name,
+            onPressed: () => onCompliment(ComplimentTarget.photo(position - 1)),
+          ),
+          child: photoTile(position),
+        );
 
   // UI-019: every profile-detail pill leads with its emoji (ProfileFactEmoji).
   final facts = [
@@ -527,6 +553,68 @@ List<Widget> personSections(
       sections[i],
     ],
   ];
+}
+
+/// The Compliment control on a photo or prompt: a round white button with the message-heart
+/// glyph, 48pt target, named for the person.
+class ComplimentAnchor extends StatelessWidget {
+  const ComplimentAnchor({
+    super.key,
+    required this.name,
+    required this.onPressed,
+  });
+
+  final String name;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: context.l10n.complimentActionOn(name),
+      excludeSemantics: true,
+      child: Pressable(
+        onTap: onPressed,
+        semanticLabel: context.l10n.complimentActionOn(name),
+        excludeChildSemantics: true,
+        child: SizedBox.square(
+          dimension: 48,
+          child: Center(
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: AppColors.surface,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: const MobileIcon(
+                NumayaMobileIcons.compliment,
+                size: 20,
+                color: AppColors.accent,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// [child] with [anchor] in its bottom-right corner.
+class _WithAnchor extends StatelessWidget {
+  const _WithAnchor({required this.anchor, required this.child});
+
+  final Widget anchor;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => Stack(
+    children: [
+      child,
+      Positioned(right: AppSpacing.s1, bottom: AppSpacing.s1, child: anchor),
+    ],
+  );
 }
 
 /// [person]'s photo for a circle or square (avatars, conversation rows, thumbnails): the demo

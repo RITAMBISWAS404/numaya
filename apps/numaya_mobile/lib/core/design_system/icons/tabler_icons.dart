@@ -162,7 +162,24 @@ const Map<NumayaIcons, TablerGlyph> kTablerIcons = {
 };
 
 /// Glyphs the mobile app needs beyond the shared web set.
-enum NumayaMobileIcons { video, play, stop, attach, logout }
+enum NumayaMobileIcons {
+  video,
+  play,
+  stop,
+  attach,
+  logout,
+  compliment,
+  flame,
+  wallet,
+  gift,
+  chart,
+  receipt,
+  legal,
+  hourglass,
+  bellOff,
+  extend,
+  reconnect,
+}
 
 /// Mobile-only glyphs, drawn with Tabler like [kTablerIcons].
 const Map<NumayaMobileIcons, TablerGlyph> kTablerMobileIcons = {
@@ -176,6 +193,29 @@ const Map<NumayaMobileIcons, TablerGlyph> kTablerMobileIcons = {
   NumayaMobileIcons.attach: (outline: 'plus', filled: null),
   // sign out (Settings)
   NumayaMobileIcons.logout: (outline: 'logout', filled: null),
+  // MVP PRD pass (2026-11-07):
+  // Compliment anchor and composer
+  NumayaMobileIcons.compliment: (outline: 'message-heart', filled: null),
+  // streak
+  NumayaMobileIcons.flame: (outline: 'flame', filled: 'flame'),
+  // credit wallet
+  NumayaMobileIcons.wallet: (outline: 'wallet', filled: null),
+  // streak reward
+  NumayaMobileIcons.gift: (outline: 'gift', filled: 'gift'),
+  // insights
+  NumayaMobileIcons.chart: (outline: 'chart-bar', filled: null),
+  // purchases
+  NumayaMobileIcons.receipt: (outline: 'receipt', filled: null),
+  // legal documents
+  NumayaMobileIcons.legal: (outline: 'scale', filled: null),
+  // timers and deadlines
+  NumayaMobileIcons.hourglass: (outline: 'hourglass', filled: 'hourglass'),
+  // mute
+  NumayaMobileIcons.bellOff: (outline: 'bell-off', filled: null),
+  // extend a match
+  NumayaMobileIcons.extend: (outline: 'clock-plus', filled: null),
+  // reconnect
+  NumayaMobileIcons.reconnect: (outline: 'heart-handshake', filled: null),
 };
 
 /// Outline stroke policy (X15-I, 15px experiment 2026-11-07), in Tabler's 24 x 24 viewBox units;

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../application/support_tickets.dart';
 import '../domain/help_articles.dart';
 
 /// Help centre (F29, Mobbin "Get help article"): search, the articles, and a way to contact
@@ -167,14 +169,15 @@ class HelpArticleScreen extends StatelessWidget {
 }
 
 /// Contact support: a topic and a message. Nothing is sent in this build, and the result says so.
-class ContactSupportScreen extends StatefulWidget {
+class ContactSupportScreen extends ConsumerStatefulWidget {
   const ContactSupportScreen({super.key});
 
   @override
-  State<ContactSupportScreen> createState() => _ContactSupportScreenState();
+  ConsumerState<ContactSupportScreen> createState() =>
+      _ContactSupportScreenState();
 }
 
-class _ContactSupportScreenState extends State<ContactSupportScreen> {
+class _ContactSupportScreenState extends ConsumerState<ContactSupportScreen> {
   final _text = TextEditingController();
   String? _topic;
   bool _sent = false;
@@ -225,7 +228,11 @@ class _ContactSupportScreenState extends State<ContactSupportScreen> {
         label: l10n.contactSend,
         onPressed: _topic == null || _text.text.trim().isEmpty
             ? null
-            : () => setState(() => _sent = true),
+            : () {
+                // S43: the request is tracked under Settings › Support requests.
+                ref.read(supportTicketsProvider.notifier).add(_topic!);
+                setState(() => _sent = true);
+              },
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -245,6 +245,9 @@ enum MissingItem {
   photos,
   interests,
   prompt,
+
+  /// PRD 01 (MVP): a short bio is required (1-300 characters).
+  bio,
 }
 
 /// The profile being built during onboarding. Held in memory only (see ARCHITECTURE.md: no
@@ -290,16 +293,20 @@ class ProfileDraft {
 
   bool get lookingForComplete => openTo != null && lookingFor.isNotEmpty;
 
+  /// Interests are optional in the MVP (PRD 01 requires photos, a bio and a prompt); when chosen,
+  /// pick 3 to 5.
   bool get interestsComplete =>
-      interests.length >= ProfileRules.minInterests &&
-      interests.length <= ProfileRules.maxInterests;
+      interests.isEmpty ||
+      (interests.length >= ProfileRules.minInterests &&
+          interests.length <= ProfileRules.maxInterests);
 
   bool get promptComplete => prompt?.answer.trim().isNotEmpty ?? false;
 
   bool get photosComplete => photos.length >= ProfileRules.minPhotos;
 
-  /// What still blocks creating the profile, in the order of the flow.
-  List<MissingItem> missing(DateTime today) => [
+  /// What still blocks creating the profile, in the order of the flow. The bio lives in the
+  /// profile details, so the caller says whether there is one ([hasBio]).
+  List<MissingItem> missing(DateTime today, {bool hasBio = true}) => [
     if (nameProblem(firstName) != null) MissingItem.name,
     if (birthDateProblem(birthDate, today) != null) MissingItem.birthday,
     if (gender == null) MissingItem.gender,
@@ -308,6 +315,7 @@ class ProfileDraft {
     if (!photosComplete) MissingItem.photos,
     if (!interestsComplete) MissingItem.interests,
     if (!promptComplete) MissingItem.prompt,
+    if (!hasBio) MissingItem.bio,
   ];
 
   ProfileDraft copyWith({

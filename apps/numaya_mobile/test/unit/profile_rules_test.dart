@@ -85,7 +85,16 @@ void main() {
     });
 
     test('each required item is named, in flow order', () {
-      expect(const ProfileDraft().missing(today), MissingItem.values);
+      // PRD 01 (MVP): interests are optional and the bio is required.
+      expect(const ProfileDraft().missing(today, hasBio: false), [
+        for (final m in MissingItem.values)
+          if (m != MissingItem.interests) m,
+      ]);
+      expect(complete.missing(today, hasBio: false), [MissingItem.bio]);
+      expect(complete.copyWith(interests: const []).missing(today), isEmpty);
+      expect(complete.copyWith(interests: const ['a']).missing(today), [
+        MissingItem.interests,
+      ]);
       expect(complete.copyWith(firstName: '  ').missing(today), [
         MissingItem.name,
       ]);

@@ -11,9 +11,12 @@ import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../compliments/application/compliments_controller.dart';
 import '../../experiments/experiments.dart';
 import '../../home/presentation/home_shell.dart';
 import '../../home/presentation/tab_screens.dart';
+import '../../matches/domain/match_lifecycle.dart';
+import '../../matches/presentation/lifecycle_screens.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../profile/application/profile_details_controller.dart';
 import '../application/dating_controller.dart';
@@ -73,6 +76,10 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     final expired = controller.expiredMatches();
     final convs = controller.conversations();
     final likes = controller.unansweredLikes();
+    // S20: Compliment requests and reconnection requests wait for the member's answer.
+    ref.watch(complimentsProvider);
+    final requests = ref.read(complimentsProvider.notifier).requests();
+    final reconnects = controller.reconnectRequests();
     final hasMoves = ref.watch(
       profileDetailsProvider.select((d) => d.openingMoves.isNotEmpty),
     );
@@ -95,7 +102,11 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
         ? null
         : _OpeningMovesCard(onTap: () => context.push(Routes.openingMoves));
 
-    if (queued.isEmpty && expired.isEmpty && convs.isEmpty) {
+    if (queued.isEmpty &&
+        expired.isEmpty &&
+        convs.isEmpty &&
+        requests.isEmpty &&
+        reconnects.isEmpty) {
       // EXP-003 (Experiment Lab only; release builds show the refined candidate).
       final variant = ref.watch(
         experimentVariantProvider(Experiment.emptyChats),
@@ -222,7 +233,36 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       );
     }
 
-    final queueCount = queueShown.length + expiredShown.length;
+    final queueCount = queueShown.length;
+    final requestRows = <Widget>[
+      for (final c in requests)
+        if (personById(c.personId) case final p?)
+          ListRow(
+            key: ValueKey('request-${c.id}'),
+            avatar: InitialsAvatar(
+              initial: p.initial,
+              size: 40,
+              image: personAvatarImage(p),
+              imageAlignment: personAvatarFocus(p),
+            ),
+            label: l10n.requestRowCompliment(p.name),
+            detail: c.text,
+            onTap: () => context.push('${Routes.request}/${c.id}'),
+          ),
+      for (final p in reconnects)
+        ListRow(
+          key: ValueKey('reconnect-${p.id}'),
+          avatar: InitialsAvatar(
+            initial: p.initial,
+            size: 40,
+            image: personAvatarImage(p),
+            imageAlignment: personAvatarFocus(p),
+          ),
+          label: l10n.requestRowReconnect(p.name),
+          leadingMobile: null,
+          onTap: () => context.push('${Routes.reconnect}/${p.id}'),
+        ),
+    ];
     return TabPage(
       header: header,
       child: Column(
@@ -249,6 +289,14 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               ],
             ),
             const SizedBox(height: AppSpacing.s4),
+          ],
+          if (requestRows.isNotEmpty && q.isEmpty) ...[
+            ListGroup(
+              key: const ValueKey('chats-requests'),
+              title: l10n.requestsTitle(requestRows.length),
+              children: requestRows,
+            ),
+            const SizedBox(height: AppSpacing.sectionGap),
           ],
           if (queueCount > 0) ...[
             Semantics(
@@ -283,15 +331,9 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                         m.person.name,
                         timeLeft(l10n, m.remaining),
                       ),
+                      // PRD S20 (supersedes UI-033's hidden countdown): time left is shown.
+                      caption: timeLeft(l10n, m.remaining),
                       onTap: () => _open(m.person),
-                    ),
-                  for (final p in expiredShown)
-                    _MatchTile(
-                      key: ValueKey('match-tile-${p.id}'),
-                      person: p,
-                      expired: true,
-                      semanticLabel: l10n.queueExpiredLabel(p.name),
-                      onTap: () => context.push('${Routes.chat}/${p.id}'),
                     ),
                 ],
               ),
@@ -316,6 +358,20 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
           ),
           const SizedBox(height: AppSpacing.s3),
           list,
+          if (expiredShown.isNotEmpty && q.isEmpty) ...[
+            const SizedBox(height: AppSpacing.sectionGap),
+            ListGroup(
+              children: [
+                ListRow(
+                  key: const ValueKey('chats-expired'),
+                  leadingMobile: NumayaMobileIcons.hourglass,
+                  label: l10n.chatsExpiredRow(expiredShown.length),
+                  detail: l10n.chatsExpiredDetail,
+                  onTap: () => context.push(Routes.expiredChats),
+                ),
+              ],
+            ),
+          ],
           // DX-03: the Opening Moves suggestion follows the conversations (Bumble's inbox keeps
           // matches and chats together); it no longer pushes them down.
           if (movesCard != null && q.isEmpty) ...[
@@ -340,13 +396,15 @@ class _MatchTile extends StatelessWidget {
     required this.person,
     required this.semanticLabel,
     required this.onTap,
-    this.expired = false,
+    this.caption,
   });
 
   final SamplePerson person;
   final String semanticLabel;
   final VoidCallback onTap;
-  final bool expired;
+
+  /// Time left, under the photo (spoken in [semanticLabel]).
+  final String? caption;
 
   @override
   Widget build(BuildContext context) {
@@ -359,7 +417,7 @@ class _MatchTile extends StatelessWidget {
         excludeChildSemantics: true,
         borderRadius: AppRadii.all(AppRadii.card),
         child: Opacity(
-          opacity: expired ? AppOpacity.disabled : 1,
+          opacity: 1,
           child: ClipRRect(
             borderRadius: AppRadii.all(AppRadii.card),
             child: SizedBox.square(
@@ -383,8 +441,34 @@ class _MatchTile extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ).withCaption(caption);
   }
+}
+
+extension on Padding {
+  /// The tile with its time-left line underneath (MVP S20).
+  Widget withCaption(String? caption) => caption == null
+      ? this
+      : Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            this,
+            const SizedBox(height: AppSpacing.s1),
+            ExcludeSemantics(
+              child: SizedBox(
+                width: _tileSize,
+                child: Text(
+                  caption,
+                  maxLines: 1,
+                  overflow: TextOverflow.fade,
+                  softWrap: false,
+                  style: AppTypography.micro,
+                ),
+              ),
+            ),
+          ],
+        );
 }
 
 /// The Likes tile (UI-034, A-016's illustrated first tile): the same rounded square, the real
@@ -677,7 +761,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) ref.read(datingProvider.notifier).openChat(widget.personId);
+      if (!mounted) return;
+      final dating = ref.read(datingProvider.notifier);
+      dating.openChat(widget.personId);
+      // S23: seven quiet days, once per quiet period.
+      final person = personById(widget.personId);
+      if (person != null && dating.checkInDue(widget.personId)) {
+        showCheckInSheet(context, ref, person, onWrite: _focus.requestFocus);
+      }
     });
   }
 
@@ -762,6 +853,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           destructive: false,
         ),
       (
+        icon: NumayaIcons.bell,
+        label: ref.read(datingProvider).muted.contains(person.id)
+            ? l10n.chatUnmute
+            : l10n.chatMute,
+        destructive: false,
+      ),
+      (
         icon: NumayaIcons.userMinus,
         label: l10n.optionUnmatch,
         destructive: false,
@@ -787,6 +885,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       await showShareDateSheet(context, ref, person);
     } else if (label == l10n.optionDidYouMeet) {
       await showDidYouMeetSheet(context, ref, person);
+    } else if (label == l10n.chatMute || label == l10n.chatUnmute) {
+      final mute = label == l10n.chatMute;
+      ref.read(datingProvider.notifier).setMuted(person.id, mute);
+      NumayaToast.show(
+        context,
+        mute ? l10n.chatMuted(person.name) : l10n.chatUnmuted(person.name),
+      );
     } else if (label == l10n.optionUnmatch) {
       final next = await showUnmatchSheet(context, person);
       if (!mounted) return;
@@ -806,16 +911,85 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Future<void> _extend(SamplePerson person) async {
     final l10n = context.l10n;
     final controller = ref.read(datingProvider.notifier);
-    final result = controller.isExpired(person.id)
-        ? controller.rematch(person.id)
-        : controller.extend(person.id);
-    if (result == ExtendResult.extended) {
-      NumayaToast.show(context, l10n.chatExtended);
-    } else if (result == ExtendResult.needsPremium) {
-      await context.push(
-        '${Routes.paywall}?feature=${PremiumFeature.rematch.name}',
+    switch (controller.extend(person.id)) {
+      case ExtendResult.extended:
+        AppHaptics.fire(context, HapticMoment.success);
+        NumayaToast.show(context, l10n.extendDone(person.name));
+      case ExtendResult.needsPremium:
+        await context.push(
+          '${Routes.paywall}?feature=${PremiumFeature.extension.name}',
+        );
+      case ExtendResult.usedToday:
+        NumayaToast.show(context, l10n.extendUsedToday);
+      case ExtendResult.alreadyExtended:
+        NumayaToast.show(context, l10n.extendAlready);
+      case ExtendResult.notNeeded:
+        break;
+    }
+  }
+
+  /// S22/S24: an expired chat keeps its history; either person may ask to reconnect once per
+  /// expiry, and the other must accept.
+  Widget _reconnectPanel(SamplePerson person) {
+    final l10n = context.l10n;
+    final controller = ref.read(datingProvider.notifier);
+    final status = controller.status(person.id);
+    final request = ref.read(datingProvider).reconnects[person.id];
+    final current = request != null && request.episode == status.expiredAt;
+    final Widget action;
+    if (controller.incomingReconnect(person.id) != null) {
+      action = NumayaButton(
+        key: const ValueKey('chat-reconnect-review'),
+        label: l10n.chatReconnectReview,
+        onPressed: () => context.push('${Routes.reconnect}/${person.id}'),
+      );
+    } else if (current && request.status == ReconnectStatus.pending) {
+      action = Text(
+        l10n.chatReconnectSent(person.name),
+        textAlign: TextAlign.center,
+        style: AppTypography.helper,
+      );
+    } else if (current && request.status == ReconnectStatus.declined) {
+      action = Text(
+        l10n.chatReconnectDeclined,
+        textAlign: TextAlign.center,
+        style: AppTypography.helper,
+      );
+    } else {
+      action = NumayaButton(
+        key: const ValueKey('chat-reconnect-ask'),
+        label: l10n.chatReconnectAsk,
+        onPressed: () {
+          if (controller.requestReconnect(person.id)) {
+            NumayaToast.show(context, l10n.chatReconnectToast);
+          }
+        },
       );
     }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Semantics(
+          header: true,
+          child: Text(
+            status.expiryKind == ExpiryKind.quiet
+                ? l10n.chatExpiredQuietTitle
+                : l10n.chatExpiredTitle(person.name),
+            textAlign: TextAlign.center,
+            style: AppTypography.sheetTitle,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.s2),
+        Text(
+          l10n.chatExpiredBody,
+          textAlign: TextAlign.center,
+          style: AppTypography.bodySm.copyWith(color: AppColors.textSecondary),
+        ),
+        const SizedBox(height: AppSpacing.s4),
+        action,
+      ],
+    );
   }
 
   @override
@@ -903,7 +1077,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     );
 
     final Widget body;
-    if (expired) {
+    if (expired && messages.isEmpty) {
       body = Padding(
         padding: const EdgeInsets.only(top: AppSpacing.s8),
         child: Column(
@@ -920,30 +1094,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               ),
             ),
             const SizedBox(height: AppSpacing.s4),
-            Semantics(
-              header: true,
-              child: Text(
-                l10n.chatExpiredTitle(person.name),
-                textAlign: TextAlign.center,
-                style: AppTypography.headline,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.s2),
-            Text(
-              l10n.chatExpiredBody,
-              textAlign: TextAlign.center,
-              style: AppTypography.body.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.s6),
-            NumayaButton(
-              label: premium.active
-                  ? l10n.chatRematch
-                  : l10n.chatRematchPremium,
-              icon: premium.active ? null : NumayaIcons.lock,
-              onPressed: () => _extend(person),
-            ),
+            _reconnectPanel(person),
           ],
         ),
       );
@@ -989,9 +1140,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               small: true,
               expand: false,
               variant: NumayaButtonVariant.secondary,
-              onPressed: controller.freeExtendAvailable || premium.active
-                  ? () => _extend(person)
-                  : null,
+              onPressed: state.extendedUntil.containsKey(person.id)
+                  ? null
+                  : () => _extend(person),
             ),
           ),
           // UI-031: ordinary messaging only; no Opening Move in the first release.
@@ -1268,7 +1419,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     ),
                   ),
                 ),
-                if (!expired)
+                if (expired)
+                  ColoredBox(
+                    key: const ValueKey('chat-expired-bar'),
+                    color: AppColors.surface,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        AppLayout.screenGutter,
+                        AppSpacing.s4,
+                        AppLayout.screenGutter,
+                        AppSpacing.s4 + MediaQuery.paddingOf(context).bottom,
+                      ),
+                      child: messages.isEmpty
+                          ? const SizedBox.shrink()
+                          : _reconnectPanel(person),
+                    ),
+                  )
+                else
                   // UI-038: Plus, the field and Send in one white bar, edge to edge. On a small
                   // phone with large text and the keyboard up, the bar takes at most a little over
                   // half the height and scrolls beyond that, so the conversation stays visible.
@@ -1327,6 +1494,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                     ),
                                     const SizedBox(height: AppSpacing.s2),
                                   ],
+                                  // PRD 02: one-sided spam guard.
+                                  if (!controller.canSendMore(person.id)) ...[
+                                    Text(
+                                      l10n.chatSpamLimit(person.name),
+                                      style: AppTypography.helper,
+                                    ),
+                                    const SizedBox(height: AppSpacing.s2),
+                                  ],
                                   // UI-041: no demo footer under the composer.
                                   Composer(
                                     controller: _text,
@@ -1337,12 +1512,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                     sendLabel: l10n.chatSend,
                                     onSend: _send,
                                     hasAttachment: _pending != null,
-                                    leading: NavIconButton(
-                                      icon: NumayaIcons.plus,
-                                      label: l10n.chatAttach,
-                                      style: NavButtonStyle.plain,
-                                      onPressed: _attach,
-                                    ),
+                                    enabled: controller.canSendMore(person.id),
+                                    // PRD 01: chat is text and emoji only in the MVP; attachments
+                                    // stay dormant behind ReleaseScope.chatAttachments.
+                                    leading: ref.watch(chatAttachmentsProvider)
+                                        ? NavIconButton(
+                                            icon: NumayaIcons.plus,
+                                            label: l10n.chatAttach,
+                                            style: NavButtonStyle.plain,
+                                            onPressed: _attach,
+                                          )
+                                        : null,
                                   ),
                                 ],
                               ),

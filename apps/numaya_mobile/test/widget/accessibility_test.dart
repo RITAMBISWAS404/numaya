@@ -36,7 +36,9 @@ void main() {
     await openTab(tester, 'Messages');
     await check(); // Messages
     await openTab(tester, 'Likes');
-    await check(); // Likes grid
+    await check(); // Likes, free: locked (S18)
+    await setPremium(tester);
+    await check(); // Likes grid (Premium)
     await tapOn(tester, find.bySemanticsLabel(RegExp('^Kemi, 27')));
     await tester.pump(const Duration(milliseconds: 600));
     await check(); // A like's profile

@@ -6,6 +6,7 @@ import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 import 'package:numaya_mobile/features/home/application/discovery_filters.dart';
+import 'package:numaya_mobile/features/premium/application/premium_controller.dart';
 
 import '../helpers/journeys.dart';
 import '../helpers/test_app.dart';
@@ -183,6 +184,8 @@ void main() {
       final c = await quickStartApp(tester, world: DemoWorld.fresh);
       final dating = c.read(datingProvider.notifier);
       c.read(discoveryFiltersProvider.notifier).broaden();
+      // Premium's 15 likes a day cover the whole sample deck (free has 5, PRD 01).
+      c.read(premiumProvider.notifier).setActive(true);
       for (final p in dating.queue()) {
         dating.decide(p.id, liked: true);
       }

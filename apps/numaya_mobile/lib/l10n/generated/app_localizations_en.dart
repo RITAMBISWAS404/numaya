@@ -1546,7 +1546,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatExpiredBody =>
-      'Neither of you wrote within 24 hours, so the match ended. Rematch to get another 24 hours.';
+      'Your messages are kept. Either of you can ask to reconnect once, for free.';
 
   @override
   String get chatRematch => 'Rematch';
@@ -1561,10 +1561,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatExtendFreeNote =>
-      'Need more time? You get one free Extend a day.';
+      'Need more time? One free extension a week, one per match.';
 
   @override
-  String get chatExtendPremiumNote => 'Premium: extend as often as you like.';
+  String get chatExtendPremiumNote =>
+      'Premium: one extension a day, one per match.';
 
   @override
   String get chatExtend => 'Extend 24 hours';
@@ -3253,7 +3254,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get obBioTitle => 'Write a short bio';
 
   @override
-  String get obBioLede => 'Optional. A few lines about you, in your own words.';
+  String get obBioLede =>
+      'A few lines about you, in your own words. Up to 300 characters.';
 
   @override
   String get obBioLabel => 'Bio';
@@ -4925,4 +4927,1081 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get demoVisInsightsOff => 'Activity: unavailable';
+
+  @override
+  String quotaLeft(int left, int limit) {
+    return '$left of $limit likes left today';
+  }
+
+  @override
+  String get quotaOut => 'No likes left today';
+
+  @override
+  String get quotaOutAction => 'See when they reset';
+
+  @override
+  String get allowanceTitle => 'You’ve used today’s likes';
+
+  @override
+  String get allowanceBody =>
+      'Likes reset at midnight India time. You can still pass, reply in Chats and send Compliments.';
+
+  @override
+  String allowanceResetsIn(Object time) {
+    return 'Resets in $time';
+  }
+
+  @override
+  String get allowancePremiumTitle => 'Premium gives you 15 likes a day';
+
+  @override
+  String get allowancePremiumBody =>
+      'Plus 3 Compliments a week, see who liked you, and a daily match extension.';
+
+  @override
+  String get allowancePremiumHas =>
+      'Premium includes 15 likes a day. They reset at midnight India time.';
+
+  @override
+  String get allowanceToChats => 'Go to Chats';
+
+  @override
+  String get allowanceBack => 'Back to Discover';
+
+  @override
+  String get allowanceNoMoreProfiles =>
+      'Paying never adds people. When new profiles near you join, they appear here.';
+
+  @override
+  String get complimentAction => 'Send a Compliment';
+
+  @override
+  String complimentActionOn(Object name) {
+    return 'Send $name a Compliment';
+  }
+
+  @override
+  String complimentTitle(Object name) {
+    return 'Compliment $name';
+  }
+
+  @override
+  String get complimentOnPhoto => 'On their photo';
+
+  @override
+  String get complimentOnPrompt => 'On their prompt';
+
+  @override
+  String get complimentFieldLabel => 'Your Compliment';
+
+  @override
+  String get complimentPlaceholder => 'Say what caught your eye';
+
+  @override
+  String complimentCounter(int used, int max) {
+    return '$used/$max';
+  }
+
+  @override
+  String complimentBalance(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Uses 1 credit. You have $count.',
+      one: 'Uses 1 credit. You have 1.',
+      zero: 'You have no Compliment credits',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String complimentRule(Object name) {
+    return '$name can reply to start a chat. You can send one Compliment to each person.';
+  }
+
+  @override
+  String get complimentSend => 'Send Compliment';
+
+  @override
+  String get complimentGetMore => 'Get Compliments';
+
+  @override
+  String complimentSent(Object name) {
+    return 'Compliment sent to $name';
+  }
+
+  @override
+  String get complimentFailedTitle => 'Your Compliment didn’t send';
+
+  @override
+  String get complimentFailedBody =>
+      'Your credit was returned. Check your connection and try again.';
+
+  @override
+  String complimentTooLong(int max) {
+    return 'Keep it to $max characters.';
+  }
+
+  @override
+  String complimentAlreadySent(Object name) {
+    return 'You’ve sent $name a Compliment. They can reply to start a chat.';
+  }
+
+  @override
+  String complimentAlreadyReceived(Object name) {
+    return '$name sent you a Compliment. Reply to it in Chats.';
+  }
+
+  @override
+  String complimentConnected(Object name) {
+    return 'You’re already connected with $name.';
+  }
+
+  @override
+  String get complimentUnavailable => 'This profile isn’t available any more.';
+
+  @override
+  String get complimentReferenceGone =>
+      'This photo or prompt is no longer on the profile.';
+
+  @override
+  String get complimentContextPhoto => 'Compliment on a photo';
+
+  @override
+  String requestsTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Requests ($count)',
+      one: 'Requests (1)',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String requestRowCompliment(Object name) {
+    return '$name sent a Compliment';
+  }
+
+  @override
+  String requestRowReconnect(Object name) {
+    return '$name wants to reconnect';
+  }
+
+  @override
+  String get requestTitle => 'Compliment';
+
+  @override
+  String get requestOnYourPhoto => 'On your photo';
+
+  @override
+  String get requestOnYourPrompt => 'On your prompt';
+
+  @override
+  String get requestReplyLabel => 'Reply to start chatting';
+
+  @override
+  String get requestReplyHint => 'Replying is free and opens your chat.';
+
+  @override
+  String get requestDismiss => 'Dismiss';
+
+  @override
+  String get requestDismissTitle => 'Dismiss this Compliment?';
+
+  @override
+  String requestDismissBody(Object name) {
+    return '$name won’t be told. They can’t send you another one.';
+  }
+
+  @override
+  String get requestDismissed => 'Compliment dismissed';
+
+  @override
+  String get requestViewProfile => 'View profile';
+
+  @override
+  String get requestGone => 'This request is no longer available.';
+
+  @override
+  String chatsExpiredRow(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count expired chats',
+      one: '1 expired chat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatsExpiredDetail =>
+      'History is kept. Either of you can ask to reconnect.';
+
+  @override
+  String matchTimeLeft(Object time) {
+    return '$time left';
+  }
+
+  @override
+  String get chatExpiredQuietTitle => 'This chat expired after 14 quiet days';
+
+  @override
+  String get chatExpiredFirstTitle => 'This match expired before anyone wrote';
+
+  @override
+  String get chatReconnectAsk => 'Ask to reconnect';
+
+  @override
+  String chatReconnectSent(Object name) {
+    return 'Request sent. If $name accepts, your chat reopens.';
+  }
+
+  @override
+  String get chatReconnectDeclined => 'This reconnection was declined.';
+
+  @override
+  String chatReconnectIncoming(Object name) {
+    return '$name asked to reconnect';
+  }
+
+  @override
+  String get chatReconnectReview => 'Review request';
+
+  @override
+  String get chatReconnectToast => 'Reconnection request sent';
+
+  @override
+  String chatSpamLimit(Object name) {
+    return 'Wait for $name to reply before sending more.';
+  }
+
+  @override
+  String get chatMute => 'Mute notifications';
+
+  @override
+  String get chatUnmute => 'Unmute notifications';
+
+  @override
+  String chatMuted(Object name) {
+    return 'Notifications muted for $name';
+  }
+
+  @override
+  String chatUnmuted(Object name) {
+    return 'Notifications on for $name';
+  }
+
+  @override
+  String get chatTextOnly => 'Chats are text and emoji for now.';
+
+  @override
+  String get extendAlready => 'This match has already been extended once.';
+
+  @override
+  String get extendUsedToday =>
+      'You’ve used today’s extension. Another one arrives at midnight India time.';
+
+  @override
+  String get extendFreeUsed =>
+      'You’ve used this week’s free extension. It resets on Monday.';
+
+  @override
+  String extendDone(Object name) {
+    return '24 hours added for $name';
+  }
+
+  @override
+  String checkInTitle(Object name) {
+    return 'It’s been quiet with $name';
+  }
+
+  @override
+  String get checkInBody =>
+      'No messages for a week. The chat expires after 14 quiet days. This never changes who sees your profile.';
+
+  @override
+  String get checkInReasonLabel => 'How’s it going? (optional)';
+
+  @override
+  String get checkInReasonInterested => 'Still interested';
+
+  @override
+  String get checkInReasonBusy => 'Busy right now';
+
+  @override
+  String get checkInReasonNotFeeling => 'Not feeling it';
+
+  @override
+  String get checkInReasonSkip => 'Prefer not to say';
+
+  @override
+  String get checkInWrite => 'Write a message';
+
+  @override
+  String get checkInPause => 'Pause my profile';
+
+  @override
+  String get checkInPreferences => 'Update preferences';
+
+  @override
+  String get checkInSkip => 'Not now';
+
+  @override
+  String get expiredTitle => 'Expired chats';
+
+  @override
+  String get expiredEmptyTitle => 'No expired chats';
+
+  @override
+  String get expiredEmptyBody =>
+      'Chats expire after 14 quiet days, and new matches after 24 hours without a message.';
+
+  @override
+  String expiredOn(Object date) {
+    return 'Expired $date';
+  }
+
+  @override
+  String get expiredStateCanAsk => 'You can ask to reconnect';
+
+  @override
+  String get expiredStatePending => 'Waiting for their answer';
+
+  @override
+  String get expiredStateIncoming => 'Asked to reconnect';
+
+  @override
+  String get expiredStateDeclined => 'Declined';
+
+  @override
+  String reconnectTitle(Object name) {
+    return '$name wants to reconnect';
+  }
+
+  @override
+  String get reconnectBody =>
+      'Accepting reopens your chat. Nothing is sent automatically, and it’s free.';
+
+  @override
+  String get reconnectPrevious => 'Your last messages';
+
+  @override
+  String get reconnectAccept => 'Accept';
+
+  @override
+  String get reconnectDecline => 'Decline';
+
+  @override
+  String get reconnectDeclineTitle => 'Decline this request?';
+
+  @override
+  String reconnectDeclineBody(Object name) {
+    return '$name won’t be able to ask again for this chat.';
+  }
+
+  @override
+  String reconnectAccepted(Object name) {
+    return 'Chat reopened with $name';
+  }
+
+  @override
+  String get reconnectDeclined => 'Request declined';
+
+  @override
+  String get walletTitle => 'Compliment credits';
+
+  @override
+  String walletTotal(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count credits',
+      one: '1 credit',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get walletWeekly => 'Weekly (Premium)';
+
+  @override
+  String walletWeeklyDetail(Object date) {
+    return 'Renews $date. Doesn’t roll over.';
+  }
+
+  @override
+  String get walletWeeklyNone => 'Premium adds 3 every week';
+
+  @override
+  String get walletEarned => 'Earned';
+
+  @override
+  String walletEarnedDetail(int earned, int cap) {
+    return '$earned of $cap. Welcome and streak rewards.';
+  }
+
+  @override
+  String get walletPurchased => 'Purchased';
+
+  @override
+  String get walletPurchasedDetail => 'Kept until you use them.';
+
+  @override
+  String get walletOrder =>
+      'Credits are used weekly first, then earned, then purchased.';
+
+  @override
+  String get walletHistory => 'History';
+
+  @override
+  String get walletHistoryEmpty =>
+      'Nothing yet. Credits you get and spend show here.';
+
+  @override
+  String get walletEntryWelcome => 'Welcome credits';
+
+  @override
+  String get walletEntryStreak => 'Streak reward';
+
+  @override
+  String get walletEntryWeekly => 'Premium weekly credits';
+
+  @override
+  String get walletEntryWeeklyExpiry => 'Unused weekly credits ended';
+
+  @override
+  String get walletEntryPurchase => 'Compliment pack';
+
+  @override
+  String get walletEntryCompliment => 'Compliment sent';
+
+  @override
+  String get walletEntryRefund => 'Credit returned';
+
+  @override
+  String get walletEntryOther => 'Adjustment';
+
+  @override
+  String get streakTitle => 'Streak';
+
+  @override
+  String streakDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count-day streak',
+      one: '1-day streak',
+      zero: 'No streak yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String streakCycle(int progress) {
+    return 'Day $progress of 7';
+  }
+
+  @override
+  String get streakReward => 'Every 7 days in a row earns 1 Compliment credit.';
+
+  @override
+  String get streakHowTitle => 'A day counts when you';
+
+  @override
+  String get streakHowDecide => 'Decide on 3 profiles';
+
+  @override
+  String get streakHowMessage => 'Send a message in a chat';
+
+  @override
+  String get streakHowReview =>
+      'Review your profile, when there’s no one to see or chat with';
+
+  @override
+  String get streakReviewAction => 'Review my profile';
+
+  @override
+  String get streakReviewDone => 'Today counts';
+
+  @override
+  String get streakToday => 'Today counts';
+
+  @override
+  String get streakTodayOpen => 'Today isn’t counted yet';
+
+  @override
+  String get streakKeep =>
+      'Credits you’ve earned stay, even if a streak resets.';
+
+  @override
+  String streakRecoverTitle(Object day) {
+    return 'Missed $day?';
+  }
+
+  @override
+  String streakRecoverBody(Object deadline, int length) {
+    return 'Repair it before $deadline and your streak becomes $length days.';
+  }
+
+  @override
+  String streakRecoverAction(Object price) {
+    return 'Repair for $price';
+  }
+
+  @override
+  String get streakCapTitle => 'Your earned credits are full';
+
+  @override
+  String streakCapBody(int cap) {
+    return 'You have $cap, the most you can hold, so this week’s reward was skipped. Spend one to make room. You never need to buy anything.';
+  }
+
+  @override
+  String get streakAwarded => 'You earned a Compliment credit';
+
+  @override
+  String get healthTitle => 'Profile Health';
+
+  @override
+  String get healthSubtitle => 'Profile setup';
+
+  @override
+  String healthScore(int score) {
+    return '$score out of 100';
+  }
+
+  @override
+  String get healthNotRanking =>
+      'It measures setup only. It never changes who sees you, and it can’t be bought.';
+
+  @override
+  String get healthHow => 'How the score works';
+
+  @override
+  String get healthStatusTitle => 'Discovery status';
+
+  @override
+  String get healthStatusVisible => 'Visible in Discover';
+
+  @override
+  String get healthStatusPaused => 'Paused by you';
+
+  @override
+  String get healthStatusIncomplete => 'Hidden until required setup is done';
+
+  @override
+  String get healthStatusReview => 'Photos waiting for review';
+
+  @override
+  String get healthStatusRestricted => 'Restricted. See why and appeal.';
+
+  @override
+  String get healthStatusUnknown => 'We can’t check right now';
+
+  @override
+  String get healthImprove => 'Improve your setup';
+
+  @override
+  String get healthAllDone => 'Every part of your setup is done.';
+
+  @override
+  String get healthWeek => 'Last 7 days';
+
+  @override
+  String get healthPremiumDepth => '28- and 90-day trends with Premium';
+
+  @override
+  String get healthSampleData => 'Sample data in this demo build';
+
+  @override
+  String get healthFactorBasics =>
+      'Name, age, gender and who you’re looking for';
+
+  @override
+  String get healthFactorPhotos => 'Two approved photos';
+
+  @override
+  String get healthFactorBio => 'A short bio';
+
+  @override
+  String get healthFactorPrompt => 'One prompt answer';
+
+  @override
+  String get healthFactorThirdPhoto => 'A third photo (optional)';
+
+  @override
+  String get healthFactorSecondPrompt => 'A second prompt answer (optional)';
+
+  @override
+  String healthPoints(int points, int max) {
+    return '$points of $max';
+  }
+
+  @override
+  String get healthAboutTitle => 'How Profile Health works';
+
+  @override
+  String get healthAboutBody =>
+      'Your score adds up the parts of your setup below. A profile with every required part starts at 80.';
+
+  @override
+  String get healthRestrictionsTitle => 'Account restrictions';
+
+  @override
+  String get healthNoRestrictions => 'No restrictions on your account.';
+
+  @override
+  String get healthRestricted =>
+      'Your account has a restriction. You can read why and appeal, free.';
+
+  @override
+  String get healthAppeal => 'Read and appeal';
+
+  @override
+  String get healthUnknownBody =>
+      'The status service didn’t answer. This isn’t a restriction. Try again later.';
+
+  @override
+  String get insightsTitle => 'Insights';
+
+  @override
+  String insightsRange(int range) {
+    return '$range days';
+  }
+
+  @override
+  String get insightsViews => 'Profile views';
+
+  @override
+  String get insightsViewsNote =>
+      'Approximate: someone saw at least half of your card for a second.';
+
+  @override
+  String get insightsLikes => 'Likes';
+
+  @override
+  String get insightsMatches => 'Matches';
+
+  @override
+  String get insightsConversations => 'Conversations';
+
+  @override
+  String get insightsRate => 'Views to likes';
+
+  @override
+  String insightsRateValue(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String insightsLowSample(int exposures) {
+    return 'Not enough views yet ($exposures of 20) for a fair rate';
+  }
+
+  @override
+  String get insightsPremium => 'Premium';
+
+  @override
+  String get insightsLocked =>
+      '28- and 90-day history and rates come with Premium.';
+
+  @override
+  String get insightsCaveat =>
+      'Counts can be imperfect. They never show who viewed you, and no single photo or chat explains them.';
+
+  @override
+  String get premiumBenefitLikes => '15 likes a day instead of 5';
+
+  @override
+  String get premiumBenefitCompliments => '3 Compliments every week';
+
+  @override
+  String get premiumBenefitSeeLikes => 'See who liked you';
+
+  @override
+  String get premiumBenefitFilters => 'Filter by intention and lifestyle';
+
+  @override
+  String get premiumBenefitExtend => 'Extend a match every day';
+
+  @override
+  String get premiumBenefitInsights => '28- and 90-day insights';
+
+  @override
+  String get premiumFreeStays =>
+      'Chatting, reporting, blocking and reconnecting are always free.';
+
+  @override
+  String get planWeekly => 'Weekly';
+
+  @override
+  String get planMonthly => 'Monthly';
+
+  @override
+  String get planYearly => 'Yearly';
+
+  @override
+  String planBilledWeekly(Object price) {
+    return '$price billed every week';
+  }
+
+  @override
+  String planBilledMonthly(Object price) {
+    return '$price billed every month';
+  }
+
+  @override
+  String planBilledYearly(Object price) {
+    return '$price billed every year';
+  }
+
+  @override
+  String planRenewal(Object price) {
+    return 'Renews automatically at $price until you cancel in Google Play.';
+  }
+
+  @override
+  String get pricesProvisional =>
+      'Prices are provisional. No store is connected in this build, so nothing is charged.';
+
+  @override
+  String paywallContinuePlan(Object plan) {
+    return 'Continue with $plan';
+  }
+
+  @override
+  String premiumRenews(Object date) {
+    return 'Renews $date';
+  }
+
+  @override
+  String premiumEnds(Object date) {
+    return 'Ends $date. You keep Premium until then.';
+  }
+
+  @override
+  String get premiumCancelRenewal => 'Cancel renewal';
+
+  @override
+  String premiumCancelledUntil(Object date) {
+    return 'Renewal cancelled. Premium stays until $date.';
+  }
+
+  @override
+  String premiumPlanName(Object plan) {
+    return '$plan plan';
+  }
+
+  @override
+  String get premiumForLikes => 'Get more likes each day';
+
+  @override
+  String get premiumForSeeLikes => 'See who liked you';
+
+  @override
+  String get premiumForExtension => 'Extend a match every day';
+
+  @override
+  String get premiumForInsights => 'See your longer trends';
+
+  @override
+  String get premiumForCompliments => 'Get 3 Compliments every week';
+
+  @override
+  String get packTitle => '3 Compliments';
+
+  @override
+  String packPrice(Object price) {
+    return '$price once';
+  }
+
+  @override
+  String get packBody =>
+      'Send a Compliment on a photo or prompt before you match. Purchased credits stay until you use them.';
+
+  @override
+  String packBalance(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'You have $count credits',
+      one: 'You have 1 credit',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String packBuy(Object price) {
+    return 'Buy for $price';
+  }
+
+  @override
+  String get recoveryTitle => 'Repair your streak';
+
+  @override
+  String recoveryMissed(Object day) {
+    return 'Missed day: $day';
+  }
+
+  @override
+  String recoveryResult(int length) {
+    return 'Your streak becomes $length days';
+  }
+
+  @override
+  String recoveryDeadline(Object deadline) {
+    return 'Available until $deadline';
+  }
+
+  @override
+  String get recoveryCheck =>
+      'We check again before charging. If the repair isn’t allowed any more, you won’t be charged.';
+
+  @override
+  String recoveryBuy(Object price) {
+    return 'Repair for $price';
+  }
+
+  @override
+  String get recoveryNone => 'There’s no missed day to repair right now.';
+
+  @override
+  String get recoveryNoneBody =>
+      'A missed day can be repaired within 48 hours, once a week, when the days around it count.';
+
+  @override
+  String get checkoutTitle => 'Demo checkout';
+
+  @override
+  String checkoutBody(Object item, Object price) {
+    return 'No store is connected and no money moves. Choose what the store reports for $item at $price.';
+  }
+
+  @override
+  String get checkoutSuccess => 'Purchase succeeds';
+
+  @override
+  String get checkoutPending => 'Payment pending';
+
+  @override
+  String get checkoutCancelled => 'Cancelled';
+
+  @override
+  String get checkoutFailed => 'Payment failed';
+
+  @override
+  String get outcomeSuccessTitle => 'You’re all set';
+
+  @override
+  String get outcomeSuccessBody => 'Demo purchase applied. No money was taken.';
+
+  @override
+  String get outcomePendingTitle => 'Payment pending';
+
+  @override
+  String get outcomePendingBody =>
+      'Nothing changes until the store confirms the payment. You won’t be charged twice.';
+
+  @override
+  String get outcomeCancelledTitle => 'Purchase cancelled';
+
+  @override
+  String get outcomeCancelledBody => 'Nothing was charged and nothing changed.';
+
+  @override
+  String get outcomeFailedTitle => 'Payment didn’t go through';
+
+  @override
+  String get outcomeFailedBody =>
+      'Nothing was charged. Try again or use another payment method.';
+
+  @override
+  String get outcomeUnavailableTitle => 'Purchases aren’t available yet';
+
+  @override
+  String get outcomeUnavailableBody =>
+      'Store billing isn’t set up in this build, so nothing was charged.';
+
+  @override
+  String get outcomeIneligibleTitle => 'Repair no longer available';
+
+  @override
+  String get outcomeIneligibleBody =>
+      'The missed day can’t be repaired any more, so nothing was charged.';
+
+  @override
+  String get outcomeRestore => 'Restore purchases';
+
+  @override
+  String get outcomeHelp => 'Get help';
+
+  @override
+  String get outcomeTryAgain => 'Try again';
+
+  @override
+  String get hubActivity => 'Your activity';
+
+  @override
+  String hubHealthDetail(int score) {
+    return '$score of 100';
+  }
+
+  @override
+  String hubCreditsDetail(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count credits',
+      one: '1 credit',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String hubStreakDetail(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '1 day',
+      zero: 'Start today',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get hubInsightsDetail => 'Views, likes and matches';
+
+  @override
+  String get settingsSubscription => 'Subscription';
+
+  @override
+  String get settingsLegal => 'Legal';
+
+  @override
+  String get settingsSupportRequests => 'Support requests';
+
+  @override
+  String get legalTitle => 'Legal';
+
+  @override
+  String get legalCommunity => 'Community standards';
+
+  @override
+  String get legalSafetyContacts => 'Safety contacts';
+
+  @override
+  String get legalDraft => 'Draft for review. Not the final legal text.';
+
+  @override
+  String get legalPrivacySummary =>
+      'What we keep: your phone number and date of birth privately; your profile publicly; your approximate city, never exact coordinates. Analytics never include message text or one-time codes. Proposed retention: raw analytics 30 days, aggregates 90 days, expired chats 90 days after expiry. Deleting your account hides you at once; we aim to delete your data within 30 days.';
+
+  @override
+  String get legalTermsSummary =>
+      'Numaya is for adults 18 and over. Premium renews until you cancel in your store account. Prices shown in this build are provisional. Safety tools stay free for everyone.';
+
+  @override
+  String get legalCommunitySummary =>
+      'Be real: your own photos and your own name. Be kind: no harassment, hate or pressure. Be safe: no money requests, no sharing others’ private details. Reports are reviewed by people, and the person you report is never told who reported them.';
+
+  @override
+  String get legalSafetyIntro =>
+      'If you’re in danger, call emergency services first. In India:';
+
+  @override
+  String get legalSafetyEmergency => 'Emergency: 112';
+
+  @override
+  String get legalSafetyWomen => 'Women helpline: 181';
+
+  @override
+  String get legalSafetyCyber => 'Cyber crime: 1930 or cybercrime.gov.in';
+
+  @override
+  String get legalSafetyVerify =>
+      'Check these numbers before launch. Report anyone in the app from their profile or chat.';
+
+  @override
+  String get supportRequestsTitle => 'Support requests';
+
+  @override
+  String get supportRequestsEmpty => 'No requests yet';
+
+  @override
+  String get supportRequestsEmptyBody =>
+      'Requests you send from Contact support show here with their status.';
+
+  @override
+  String get supportStatusReceived => 'Received';
+
+  @override
+  String get supportStatusDemo => 'Demo: not sent to a team';
+
+  @override
+  String get supportNew => 'New request';
+
+  @override
+  String get obPhotosModeration =>
+      'Demo build: photos are approved instantly. In the live app they’re checked before they appear in Discover.';
+
+  @override
+  String get obAgeRangeLabel => 'Age range';
+
+  @override
+  String obAgeRangeValue(int min, int max) {
+    return '$min to $max';
+  }
+
+  @override
+  String get obWelcomeCredits => 'You have 3 Compliment credits to start';
+
+  @override
+  String get obWelcomeCreditsBody =>
+      'Send one on a photo or prompt that catches your eye.';
+
+  @override
+  String get obBioRequired => 'Add a short bio to continue.';
+
+  @override
+  String demoLikesTool(int left) {
+    return 'Likes left today: $left';
+  }
+
+  @override
+  String get demoUseLikes => 'Use up today’s likes';
+
+  @override
+  String get demoFillBank => 'Fill earned credits to the cap';
+
+  @override
+  String likesLockedTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people like you',
+      one: '1 person likes you',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get likesLockedBody =>
+      'Premium shows who. Or keep going in Discover, where they can appear too.';
+
+  @override
+  String get likesLockedCta => 'See who with Premium';
+
+  @override
+  String get likesLockedTile => 'Hidden profile';
+
+  @override
+  String get notifCheckIns => 'Quiet chat check-ins';
+
+  @override
+  String get notifRewards => 'Streak rewards and credits';
+
+  @override
+  String get obMissingBio => 'Add a short bio';
 }

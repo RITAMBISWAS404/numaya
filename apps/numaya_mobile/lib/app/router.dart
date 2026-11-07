@@ -13,6 +13,9 @@ import '../features/auth/presentation/phone_screen.dart';
 import '../features/auth/presentation/reauth_screen.dart';
 import '../features/auth/presentation/verify_screen.dart';
 import '../features/auth/presentation/welcome_screen.dart';
+import '../features/commerce/presentation/store_screens.dart';
+import '../features/commerce/presentation/wallet_screen.dart';
+import '../features/compliments/presentation/compliment_screens.dart';
 import '../features/dating/presentation/discover_screen.dart';
 import '../features/dating/presentation/for_you_screen.dart';
 import '../features/dating/presentation/likes_screens.dart';
@@ -26,8 +29,10 @@ import '../features/events/presentation/event_form_screen.dart';
 import '../features/events/presentation/event_people_screen.dart';
 import '../features/events/presentation/events_screen.dart';
 import '../features/experiments/experiment_lab_screen.dart';
+import '../features/health/presentation/health_screens.dart';
 import '../features/help/presentation/help_screens.dart';
 import '../features/home/presentation/home_shell.dart';
+import '../features/matches/presentation/lifecycle_screens.dart';
 import '../features/onboarding/application/onboarding_controller.dart';
 import '../features/onboarding/presentation/about_you_screens.dart';
 import '../features/onboarding/presentation/basics_screen.dart';
@@ -44,8 +49,10 @@ import '../features/profile/presentation/edit_profile_screen.dart';
 import '../features/profile/presentation/profile_hub_screens.dart';
 import '../features/profile/presentation/profile_screen.dart';
 import '../features/settings/presentation/blocked_screen.dart';
+import '../features/settings/presentation/legal_screens.dart';
 import '../features/settings/presentation/settings_more_screens.dart';
 import '../features/settings/presentation/settings_screen.dart';
+import '../features/streaks/presentation/streak_screen.dart';
 import '../features/verification/presentation/verification_screen.dart';
 import 'not_found_screen.dart';
 import 'providers.dart';
@@ -283,6 +290,84 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const SafetyCentreScreen(),
       ),
       _route(path: Routes.forYou, builder: (_, _) => const ForYouScreen()),
+      // MVP PRD screens (docs/product/mvp-prd-v1/TRACEABILITY.md maps each S-ID).
+      GoRoute(
+        path: Routes.allowance,
+        pageBuilder: (_, state) => _modal(state, const AllowanceUsedScreen()),
+      ),
+      GoRoute(
+        path: '${Routes.compliment}/:id',
+        pageBuilder: (_, state) => _modal(
+          state,
+          ComplimentComposerScreen(
+            key: ValueKey(state.uri.toString()),
+            personId: state.pathParameters['id']!,
+            target: parseComplimentTarget(state.uri.queryParameters),
+          ),
+        ),
+      ),
+      _route(
+        path: '${Routes.request}/:id',
+        builder: (_, state) => RequestScreen(
+          key: ValueKey(state.uri.toString()),
+          complimentId: state.pathParameters['id']!,
+        ),
+      ),
+      _route(
+        path: Routes.expiredChats,
+        builder: (_, _) => const ExpiredChatsScreen(),
+      ),
+      _route(
+        path: '${Routes.reconnect}/:id',
+        builder: (_, state) => ReconnectRequestScreen(
+          key: ValueKey(state.uri.toString()),
+          personId: state.pathParameters['id']!,
+        ),
+      ),
+      _route(
+        path: Routes.health,
+        builder: (_, _) => const HealthScreen(),
+        routes: [
+          _route(path: 'about', builder: (_, _) => const HealthAboutScreen()),
+        ],
+      ),
+      _route(path: Routes.insights, builder: (_, _) => const InsightsScreen()),
+      _route(path: Routes.streak, builder: (_, _) => const StreakScreen()),
+      _route(path: Routes.wallet, builder: (_, _) => const WalletScreen()),
+      GoRoute(
+        path: Routes.storeCompliments,
+        pageBuilder: (_, state) => _modal(state, const ComplimentPackScreen()),
+      ),
+      GoRoute(
+        path: Routes.storeRecovery,
+        pageBuilder: (_, state) => _modal(state, const RecoveryScreen()),
+      ),
+      GoRoute(
+        path: Routes.storeOutcome,
+        pageBuilder: (_, state) {
+          final o = parseOutcome(state.uri.queryParameters);
+          return _modal(
+            state,
+            PurchaseOutcomeScreen(kind: o.kind, outcome: o.outcome),
+          );
+        },
+      ),
+      _route(
+        path: Routes.legal,
+        builder: (_, _) => const LegalScreen(),
+        routes: [
+          _route(
+            path: ':doc',
+            builder: (_, state) => LegalDocScreen(
+              doc:
+                  LegalDoc.values
+                      .where((d) => d.name == state.pathParameters['doc'])
+                      .firstOrNull ??
+                  LegalDoc.terms,
+            ),
+          ),
+        ],
+      ),
       _route(
         path: Routes.visibility,
         builder: (_, _) => const VisibilityScreen(),
@@ -336,6 +421,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, _) => const ContactSupportScreen(),
           ),
           _route(
+            path: 'requests',
+            builder: (_, _) => const SupportRequestsScreen(),
+          ),
+          _route(
             path: ':id',
             builder: (_, state) =>
                 HelpArticleScreen(id: state.pathParameters['id']!),
@@ -372,8 +461,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       _route(
         path: '${Routes.chat}/:id',
-        builder: (_, state) =>
-            ChatScreen(personId: state.pathParameters['id']!),
+        builder: (_, state) => ChatScreen(
+          key: ValueKey('chat-${state.pathParameters['id']}'),
+          personId: state.pathParameters['id']!,
+        ),
       ),
       _route(
         path: '${Routes.person}/:id',

@@ -5,12 +5,19 @@ import '../../../app/providers.dart';
 import '../../../core/config/app_config.dart';
 import '../../../core/connectivity/connectivity.dart';
 import '../../../core/logging/app_logger.dart';
+import '../../commerce/application/economy_controller.dart';
+import '../../commerce/domain/catalog.dart';
+import '../../compliments/application/compliments_controller.dart';
 import '../../home/application/discovery_filters.dart';
+import '../../matches/domain/match_lifecycle.dart';
 import '../../premium/application/premium_controller.dart';
 import '../data/media_picker.dart';
 import '../domain/sample_people.dart';
 
 enum EndReason { unmatched, blocked, reported }
+
+/// The context line above an opening Compliment on a photo.
+const String kComplimentPhotoContext = 'Compliment on a photo';
 
 enum MessageStatus { sending, onDevice, failed, waiting }
 
@@ -51,8 +58,12 @@ class DemoMessage {
     this.sample = false,
     this.attachment,
     this.replyToId,
+    this.context,
   });
   final int id;
+
+  /// What an opening Compliment was about (a photo, or the prompt it quoted); shown above it.
+  final String? context;
 
   /// The message this one replies to (UI-036), by id in the same thread; null for an ordinary
   /// message. Optional, so every existing message and fixture stays valid.
@@ -75,7 +86,11 @@ class DemoMessage {
     sample: sample,
     attachment: attachment,
     replyToId: replyToId,
+    context: context,
   );
+
+  /// Accepted by the service (sent, or a seeded sample message). Failed and queued sends are not.
+  bool get accepted => status == MessageStatus.onDevice;
 
   @override
   String toString() => 'DemoMessage($id, ${status.name})';
@@ -138,7 +153,23 @@ class DatingState {
     this.datePlans = const {},
     this.unmatchReasons = const {},
     this.nextMessageId = 1,
+    this.reopenedAt = const {},
+    this.reconnects = const {},
+    this.muted = const {},
+    this.checkInSeen = const {},
   });
+
+  /// When an accepted reconnection reopened each chat.
+  final Map<String, DateTime> reopenedAt;
+
+  /// The reconnection request of the current expiry episode, per match.
+  final Map<String, ReconnectRequest> reconnects;
+
+  /// Conversations whose notifications are muted (S26).
+  final Set<String> muted;
+
+  /// The quiet period whose check-in has been shown, per match (shown once per period).
+  final Map<String, DateTime> checkInSeen;
 
   /// Sample profiles already liked or passed in Discover.
   final Set<String> seen;
@@ -230,6 +261,10 @@ class DatingState {
     Map<String, DatePlan>? datePlans,
     Map<String, String>? unmatchReasons,
     int? nextMessageId,
+    Map<String, DateTime>? reopenedAt,
+    Map<String, ReconnectRequest>? reconnects,
+    Set<String>? muted,
+    Map<String, DateTime>? checkInSeen,
   }) {
     return DatingState(
       seen: seen ?? this.seen,
@@ -255,15 +290,37 @@ class DatingState {
       datePlans: datePlans ?? this.datePlans,
       unmatchReasons: unmatchReasons ?? this.unmatchReasons,
       nextMessageId: nextMessageId ?? this.nextMessageId,
+      reopenedAt: reopenedAt ?? this.reopenedAt,
+      reconnects: reconnects ?? this.reconnects,
+      muted: muted ?? this.muted,
+      checkInSeen: checkInSeen ?? this.checkInSeen,
     );
   }
 }
 
 /// What a decision in Discover or Likes led to.
-enum DecisionResult { liked, passed, matched }
+enum DecisionResult { liked, passed, matched, outOfLikes }
 
-/// What happened when the member tried to extend or rematch.
-enum ExtendResult { extended, needsPremium, notNeeded }
+/// What happened when the member tried to extend a new match.
+enum ExtendResult {
+  extended,
+
+  /// The free weekly extension is used: Premium has one a day.
+  needsPremium,
+
+  /// Premium's extension for today is used.
+  usedToday,
+
+  /// This match was already extended once (one per match).
+  alreadyExtended,
+
+  /// Nothing to extend (messaged, expired or ended).
+  notNeeded,
+}
+
+/// The most consecutive messages one person may send without a reply (one-sided spam guard;
+/// PRD 02 asks for a rate limit because each message resets the quiet timer).
+const int kMaxUnansweredMessages = 10;
 
 /// A new match in the queue (B-42): time left before it expires.
 @immutable
@@ -319,13 +376,26 @@ class DatingController extends Notifier<DatingState> {
       // Priya's latest messages are unread; the others have been read.
       if (m.person != 'priya') lastRead[m.person] = now;
     }
+    // Ade's chat went quiet and expired; Ade has asked to reconnect (S25).
+    final adeLast = threads['ade']?.last.at;
+    final reconnects = <String, ReconnectRequest>{
+      if (adeLast != null)
+        'ade': ReconnectRequest(
+          fromMe: false,
+          at: now.subtract(const Duration(hours: 6)),
+          episode: adeLast.add(
+            Duration(days: kProvisionalCatalog.policy.quietExpiryDays),
+          ),
+        ),
+    };
     return DatingState(
       matches: [for (final m in kSeedMatches) m.person],
       matchedAt: matchedAt,
       threads: threads,
       lastRead: lastRead,
-      openedMatches: {'lina'},
+      openedMatches: {'lina', 'ade', 'ollie'},
       nextMessageId: id,
+      reconnects: reconnects,
     );
   }
 
@@ -409,11 +479,22 @@ class DatingController extends Notifier<DatingState> {
   /// Candidates hidden only by the filters (for "No one fits your filters").
   int hiddenByFilters() => _candidates().length - queue().length;
 
-  /// Like or pass someone in Discover. Liking someone who liked you is a match.
+  EconomyController get _economy => ref.read(economyProvider.notifier);
+
+  /// Like or pass someone in Discover. Liking someone who liked you (or who sent you a pending
+  /// Compliment) is a match. A like spends the daily allowance (unique per person, so a repeated
+  /// tap never spends twice); a pass is free. Out of likes: nothing is recorded.
   DecisionResult decide(String id, {required bool liked}) {
     final person = personById(id);
-    if (person == null) return DecisionResult.passed;
-    final isMatch = liked && person.likesYou && !state.matches.contains(id);
+    if (person == null || !state.isActive(id)) return DecisionResult.passed;
+    if (liked && !_economy.spendLike(id)) return DecisionResult.outOfLikes;
+    _economy.recordDecision(id);
+    final pendingIntro =
+        ref.read(complimentsProvider.notifier).pendingFrom(id) != null;
+    final isMatch =
+        liked &&
+        (person.likesYou || pendingIntro) &&
+        !state.matches.contains(id);
     state = state.copyWith(
       seen: {...state.seen, id},
       liked: liked ? {...state.liked, id} : null,
@@ -428,6 +509,7 @@ class DatingController extends Notifier<DatingState> {
       matchedAt: isMatch ? {...state.matchedAt, id: _now} : null,
     );
     _log.info('Decision recorded (${liked ? 'like' : 'pass'})');
+    if (isMatch) _convertRequest(id);
     return isMatch
         ? DecisionResult.matched
         : liked
@@ -564,6 +646,11 @@ class DatingController extends Notifier<DatingState> {
       .length;
 
   DecisionResult likeBack(String id, {required bool liked}) {
+    if (!state.isActive(id)) return DecisionResult.passed;
+    if (liked && !state.matches.contains(id) && !_economy.spendLike(id)) {
+      return DecisionResult.outOfLikes;
+    }
+    _economy.recordDecision(id);
     final handled = {...state.likesHandled, id: liked};
     final seen = {...state.seen, id};
     if (!liked) {
@@ -577,91 +664,255 @@ class DatingController extends Notifier<DatingState> {
       matches: already ? null : [...state.matches, id],
       matchedAt: already ? null : {...state.matchedAt, id: _now},
     );
+    if (!already) _convertRequest(id);
     return DecisionResult.matched;
   }
 
+  /// A Compliment sent (S14) is a decision on that profile: it leaves the deck.
+  void markDecided(String id) {
+    state = state.copyWith(
+      seen: {...state.seen, id},
+      clearFront: state.front == id,
+      coachDone: true,
+    );
+    _economy.recordDecision(id);
+  }
+
+  /// A pending Compliment between the pair becomes the first message of the new match.
+  void _convertRequest(String id) {
+    final c = ref.read(complimentsProvider.notifier).convertOnMatch(id);
+    if (c == null) return;
+    final message = DemoMessage(
+      id: state.nextMessageId,
+      text: c.text,
+      status: MessageStatus.onDevice,
+      at: c.sentAt,
+      mine: c.fromMe,
+      sample: !c.fromMe,
+      context: c.referenceText ?? kComplimentPhotoContext,
+    );
+    state = state.copyWith(
+      nextMessageId: state.nextMessageId + 1,
+      threads: {
+        ...state.threads,
+        id: [message, ...?state.threads[id]],
+      },
+    );
+  }
+
+  /// Replying to a Compliment request (S21): match and conversation are created together, with
+  /// their Compliment first and the reply second. Free.
+  void openFromRequest(
+    String id, {
+    required String their,
+    required DateTime theirAt,
+    required String reply,
+    String? context,
+  }) {
+    final now = _now;
+    final first = DemoMessage(
+      id: state.nextMessageId,
+      text: their,
+      status: MessageStatus.onDevice,
+      at: theirAt,
+      mine: false,
+      sample: true,
+      context: context ?? kComplimentPhotoContext,
+    );
+    final second = DemoMessage(
+      id: state.nextMessageId + 1,
+      text: reply,
+      status: MessageStatus.onDevice,
+      at: now,
+    );
+    state = state.copyWith(
+      nextMessageId: state.nextMessageId + 2,
+      seen: {...state.seen, id},
+      matches: state.matches.contains(id) ? null : [...state.matches, id],
+      matchedAt: {...state.matchedAt, id: now},
+      threads: {
+        ...state.threads,
+        id: [first, second],
+      },
+      openedMatches: {...state.openedMatches, id},
+      lastRead: {...state.lastRead, id: now},
+    );
+    _economy.recordMessage();
+  }
+
   // Matches and expiry -----------------------------------------------------------------------
-  DateTime expiresAt(String id) =>
-      state.extendedUntil[id] ??
-      (state.matchedAt[id] ?? _now).add(
-        const Duration(hours: kMatchWindowHours),
-      );
+  AllowancePolicy get _policy => ref.read(catalogProvider).policy;
+
+  /// Everything the lifecycle needs for [id] (PRD 02 state machine).
+  MatchTimeline timeline(String id) {
+    final accepted = [
+      for (final m in state.threads[id] ?? const <DemoMessage>[])
+        if (m.accepted) m,
+    ];
+    final ended = state.ended[id];
+    return MatchTimeline(
+      matchedAt: state.matchedAt[id] ?? _now,
+      extendedUntil: state.extendedUntil[id],
+      firstMessageAt: accepted.firstOrNull?.at,
+      lastMessageAt: accepted.lastOrNull?.at,
+      reopenedAt: state.reopenedAt[id],
+      reconnect: state.reconnects[id],
+      ended: ended == null
+          ? null
+          : ended == EndReason.unmatched
+          ? MatchPhase.unmatched
+          : MatchPhase.blocked,
+    );
+  }
+
+  MatchStatus status(String id) => matchStatus(timeline(id), _now, _policy);
+
+  DateTime expiresAt(String id) => status(id).deadline ?? _now;
 
   bool _hasMessages(String id) => state.threads[id]?.isNotEmpty ?? false;
 
-  /// A new match nobody wrote to within the window (B-47).
+  /// Expired (either kind), with or without a pending reconnection.
   bool isExpired(String id) =>
-      state.matches.contains(id) &&
-      !_hasMessages(id) &&
-      !_now.isBefore(expiresAt(id));
+      state.matches.contains(id) && status(id).isExpired;
 
   Duration remaining(String id) {
     final left = expiresAt(id).difference(_now);
     return left.isNegative ? Duration.zero : left;
   }
 
-  /// Active matches with no messages yet, newest first.
+  /// Matches waiting for a first message, newest first.
   List<SamplePerson> newMatches() => [
     for (final id in state.matches.reversed)
-      if (state.isActive(id) && !_hasMessages(id) && !isExpired(id))
+      if (state.isActive(id) &&
+          status(id).phase == MatchPhase.awaitingFirstMessage &&
+          !_hasMessages(id))
         personById(id)!,
   ];
 
-  /// The queue with time left, for countdown rings.
+  /// The queue with time left, for countdowns.
   List<QueuedMatch> queuedMatches() => [
     for (final p in newMatches()) QueuedMatch(p, remaining(p.id)),
   ];
 
-  List<SamplePerson> expiredMatches() => [
-    for (final id in state.matches.reversed)
-      if (state.isActive(id) && isExpired(id)) personById(id)!,
-  ];
+  /// Expired matches and chats (S24), newest expiry first.
+  List<SamplePerson> expiredMatches() {
+    final ids = [
+      for (final id in state.matches)
+        if (state.isActive(id) && isExpired(id)) id,
+    ]..sort((a, b) => status(b).expiredAt!.compareTo(status(a).expiredAt!));
+    return [for (final id in ids) personById(id)!];
+  }
 
-  /// Extend a new match by another window: one free Extend a day, unlimited with premium.
+  /// Extends a new match by 24 hours: one extension per match; free members have one a week,
+  /// Premium one a day. Never for expired or ended matches.
   ExtendResult extend(String id) {
-    if (_hasMessages(id)) return ExtendResult.notNeeded;
-    final premium = ref.read(premiumProvider).active;
-    final today = DateTime(_now.year, _now.month, _now.day);
-    final usedToday = state.freeExtendUsedOn == today;
-    if (isExpired(id) && !premium) return ExtendResult.needsPremium;
-    if (usedToday && !premium) return ExtendResult.needsPremium;
+    final s = status(id);
+    if (s.phase != MatchPhase.awaitingFirstMessage) {
+      return ExtendResult.notNeeded;
+    }
+    if (state.extendedUntil.containsKey(id)) {
+      return ExtendResult.alreadyExtended;
+    }
+    if (!_economy.extensionAvailable()) {
+      return ref.read(premiumProvider).active
+          ? ExtendResult.usedToday
+          : ExtendResult.needsPremium;
+    }
+    _economy.useExtension();
     state = state.copyWith(
       extendedUntil: {
         ...state.extendedUntil,
-        id: _now.add(const Duration(hours: kMatchWindowHours)),
+        id: s.deadline!.add(Duration(hours: _policy.extensionHours)),
       },
-      freeExtendUsedOn: premium ? null : today,
     );
     _log.info('Match extended');
     return ExtendResult.extended;
   }
 
-  bool get freeExtendAvailable {
-    final today = DateTime(_now.year, _now.month, _now.day);
-    return state.freeExtendUsedOn != today;
+  bool get freeExtendAvailable => _economy.extensionAvailable();
+
+  /// Asks to reconnect an expired match (once per expiry episode). Free.
+  bool requestReconnect(String id) {
+    final s = status(id);
+    if (!state.isActive(id) || !canRequestReconnect(timeline(id), s)) {
+      return false;
+    }
+    state = state.copyWith(
+      reconnects: {
+        ...state.reconnects,
+        id: ReconnectRequest(fromMe: true, at: _now, episode: s.expiredAt!),
+      },
+    );
+    _log.info('Reconnect requested');
+    return true;
   }
 
-  /// Rematch an expired match (premium, B-47).
-  ExtendResult rematch(String id) {
-    if (!isExpired(id)) return ExtendResult.notNeeded;
-    if (!ref.read(premiumProvider).active) return ExtendResult.needsPremium;
-    state = state.copyWith(
-      matchedAt: {...state.matchedAt, id: _now},
-      extendedUntil: {...state.extendedUntil}..remove(id),
-    );
-    _log.info('Rematched');
-    return ExtendResult.extended;
+  /// The other person's pending request, if any (S25).
+  ReconnectRequest? incomingReconnect(String id) {
+    final r = state.reconnects[id];
+    return r != null &&
+            !r.fromMe &&
+            status(id).phase == MatchPhase.reconnectPending
+        ? r
+        : null;
   }
+
+  /// Requests waiting for the member's answer.
+  List<SamplePerson> reconnectRequests() => [
+    for (final id in state.matches)
+      if (state.isActive(id) && incomingReconnect(id) != null) personById(id)!,
+  ];
+
+  /// Accepting reopens the chat (no automatic message, no charge); declining ends this episode.
+  void respondReconnect(String id, {required bool accept}) {
+    final r = incomingReconnect(id);
+    if (r == null) return;
+    state = state.copyWith(
+      reconnects: {
+        ...state.reconnects,
+        id: r.withStatus(
+          accept ? ReconnectStatus.accepted : ReconnectStatus.declined,
+        ),
+      },
+      reopenedAt: accept ? {...state.reopenedAt, id: _now} : null,
+    );
+    _log.info('Reconnect ${accept ? 'accepted' : 'declined'}');
+  }
+
+  /// Seven quiet days: the check-in is due and not yet shown for this quiet period (S23).
+  bool checkInDue(String id) {
+    final s = status(id);
+    return s.phase == MatchPhase.active &&
+        s.checkInDue &&
+        state.checkInSeen[id] != s.quietSince;
+  }
+
+  /// The check-in was shown (answered or skipped). It never affects ranking.
+  void markCheckInSeen(String id) {
+    final since = status(id).quietSince;
+    if (since == null) return;
+    state = state.copyWith(checkInSeen: {...state.checkInSeen, id: since});
+  }
+
+  void setMuted(String id, bool muted) => state = state.copyWith(
+    muted: muted ? {...state.muted, id} : ({...state.muted}..remove(id)),
+  );
 
   // Messages --------------------------------------------------------------------------------
   /// Active matches with messages, most recent first.
   List<SamplePerson> conversations() {
     final ids = [
       for (final id in state.matches)
-        if (state.isActive(id) && _hasMessages(id)) id,
-    ]..sort((a, b) => lastMessage(b)!.at.compareTo(lastMessage(a)!.at));
+        if (state.isActive(id) &&
+            (_hasMessages(id) || state.reopenedAt.containsKey(id)) &&
+            status(id).phase == MatchPhase.active)
+          id,
+    ]..sort((a, b) => _activityAt(b).compareTo(_activityAt(a)));
     return [for (final id in ids) personById(id)!];
   }
+
+  DateTime _activityAt(String id) =>
+      lastMessage(id)?.at ?? state.reopenedAt[id] ?? state.matchedAt[id]!;
 
   DemoMessage? lastMessage(String id) {
     final t = state.threads[id];
@@ -704,6 +955,8 @@ class DatingController extends Notifier<DatingState> {
   }) async {
     final body = text.trim();
     if ((body.isEmpty && attachment == null) || !state.isActive(id)) return;
+    // Expired chats keep their history but cannot send (PRD 02).
+    if (!status(id).canSend || !canSendMore(id)) return;
     // A reply keeps its target only if that message is still in this thread.
     final target = replyToId == null
         ? null
@@ -723,12 +976,28 @@ class DatingController extends Notifier<DatingState> {
     if (!_online) return;
     await Future<void>.delayed(const Duration(milliseconds: 400));
     if (!ref.mounted) return;
+    _accept(id, message);
+  }
+
+  /// The service's answer to a send. A first message counts only if it is accepted before the
+  /// match's deadline; an accepted message resets the quiet timer and counts toward the streak.
+  void _accept(String id, DemoMessage message) {
+    final ok = !state.simulateErrors && status(id).canSend;
     _put(
       id,
-      message.withStatus(
-        state.simulateErrors ? MessageStatus.failed : MessageStatus.onDevice,
-      ),
+      message.withStatus(ok ? MessageStatus.onDevice : MessageStatus.failed),
     );
+    if (ok) _economy.recordMessage();
+  }
+
+  /// One-sided spam guard: false after [kMaxUnansweredMessages] unanswered messages in a row.
+  bool canSendMore(String id) {
+    var run = 0;
+    for (final m in (state.threads[id] ?? const <DemoMessage>[]).reversed) {
+      if (!m.mine) break;
+      run++;
+    }
+    return run < kMaxUnansweredMessages;
   }
 
   Future<void> retry(String id, int messageId) async {
@@ -741,12 +1010,7 @@ class DatingController extends Notifier<DatingState> {
     _put(id, message.withStatus(MessageStatus.sending));
     await Future<void>.delayed(const Duration(milliseconds: 400));
     if (!ref.mounted) return;
-    _put(
-      id,
-      message.withStatus(
-        state.simulateErrors ? MessageStatus.failed : MessageStatus.onDevice,
-      ),
-    );
+    _accept(id, message);
   }
 
   /// Sends every waiting message, in the order they were written.
@@ -789,6 +1053,9 @@ class DatingController extends Notifier<DatingState> {
 
   // Safety ----------------------------------------------------------------------------------
   void end(String id, EndReason reason) {
+    if (reason != EndReason.unmatched) {
+      ref.read(complimentsProvider.notifier).hideFrom(id);
+    }
     state = state.copyWith(
       ended: {...state.ended, id: reason},
       clearLastPass: state.lastPass == id,
@@ -818,6 +1085,7 @@ class DatingController extends Notifier<DatingState> {
     String? part,
     String details = '',
   }) {
+    if (block) ref.read(complimentsProvider.notifier).hideFrom(id);
     state = state.copyWith(
       reports: [
         ...state.reports,

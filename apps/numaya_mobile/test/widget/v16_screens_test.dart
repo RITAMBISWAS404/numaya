@@ -4,7 +4,7 @@ import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/auth/data/demo_auth_repository.dart';
 
 import '../helpers/journeys.dart'
-    show finishProfileToHome, signUpToInterests, tapNext;
+    show finishProfileToHome, setPremium, signUpToInterests, tapNext;
 import '../helpers/test_app.dart';
 
 Future<void> _tap(WidgetTester tester, Finder f) async {
@@ -81,6 +81,8 @@ void main() {
     await _toInterests(tester, testAuth());
     await _toHome(tester);
     await _tap(tester, find.byTooltip('Likes'));
+    // S18: answering likes from the grid is a Premium view.
+    await setPremium(tester);
     for (final name in [
       'Maya, 29',
       'Kemi, 27',

@@ -864,7 +864,7 @@
       "name": {}
     }
   },
-  "chatExpiredBody": "Neither of you wrote within 24 hours, so the match ended. Rematch to get another 24 hours.",
+  "chatExpiredBody": "Your messages are kept. Either of you can ask to reconnect once, for free.",
   "chatRematch": "Rematch",
   "chatRematchPremium": "Rematch with Premium",
   "chatExpiresIn": "{time} to start the conversation",
@@ -873,8 +873,8 @@
       "time": {}
     }
   },
-  "chatExtendFreeNote": "Need more time? You get one free Extend a day.",
-  "chatExtendPremiumNote": "Premium: extend as often as you like.",
+  "chatExtendFreeNote": "Need more time? One free extension a week, one per match.",
+  "chatExtendPremiumNote": "Premium: one extension a day, one per match.",
   "chatExtend": "Extend 24 hours",
   "chatTheirMove": "{name}’s Opening Move",
   "@chatTheirMove": {
@@ -1652,7 +1652,7 @@
   "promptCurrent": "Your current prompt",
   "promptCategories": "Prompt categories",
   "obBioTitle": "Write a short bio",
-  "obBioLede": "Optional. A few lines about you, in your own words.",
+  "obBioLede": "A few lines about you, in your own words. Up to 300 characters.",
   "obBioLabel": "Bio",
   "obBioPlaceholder": "Weekday baker, weekend hill walker…",
   "obBioTip": "Something specific says more than a list of adjectives.",
@@ -2453,5 +2453,678 @@
   "demoVisUnavailable": "Notices: source not answering",
   "demoVisInsightsLive": "Activity: up to date",
   "demoVisInsightsStale": "Activity: out of date",
-  "demoVisInsightsOff": "Activity: unavailable"
+  "demoVisInsightsOff": "Activity: unavailable",
+  "quotaLeft": "{left} of {limit} likes left today",
+  "@quotaLeft": {
+    "placeholders": {
+      "left": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "quotaOut": "No likes left today",
+  "quotaOutAction": "See when they reset",
+  "allowanceTitle": "You’ve used today’s likes",
+  "allowanceBody": "Likes reset at midnight India time. You can still pass, reply in Chats and send Compliments.",
+  "allowanceResetsIn": "Resets in {time}",
+  "@allowanceResetsIn": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "allowancePremiumTitle": "Premium gives you 15 likes a day",
+  "allowancePremiumBody": "Plus 3 Compliments a week, see who liked you, and a daily match extension.",
+  "allowancePremiumHas": "Premium includes 15 likes a day. They reset at midnight India time.",
+  "allowanceToChats": "Go to Chats",
+  "allowanceBack": "Back to Discover",
+  "allowanceNoMoreProfiles": "Paying never adds people. When new profiles near you join, they appear here.",
+  "complimentAction": "Send a Compliment",
+  "complimentActionOn": "Send {name} a Compliment",
+  "@complimentActionOn": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "complimentTitle": "Compliment {name}",
+  "@complimentTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "complimentOnPhoto": "On their photo",
+  "complimentOnPrompt": "On their prompt",
+  "complimentFieldLabel": "Your Compliment",
+  "complimentPlaceholder": "Say what caught your eye",
+  "complimentCounter": "{used}/{max}",
+  "@complimentCounter": {
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "complimentBalance": "{count, plural, =0{You have no Compliment credits} =1{Uses 1 credit. You have 1.} other{Uses 1 credit. You have {count}.}}",
+  "@complimentBalance": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "complimentRule": "{name} can reply to start a chat. You can send one Compliment to each person.",
+  "@complimentRule": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "complimentSend": "Send Compliment",
+  "complimentGetMore": "Get Compliments",
+  "complimentSent": "Compliment sent to {name}",
+  "@complimentSent": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "complimentFailedTitle": "Your Compliment didn’t send",
+  "complimentFailedBody": "Your credit was returned. Check your connection and try again.",
+  "complimentTooLong": "Keep it to {max} characters.",
+  "@complimentTooLong": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "complimentAlreadySent": "You’ve sent {name} a Compliment. They can reply to start a chat.",
+  "@complimentAlreadySent": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "complimentAlreadyReceived": "{name} sent you a Compliment. Reply to it in Chats.",
+  "@complimentAlreadyReceived": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "complimentConnected": "You’re already connected with {name}.",
+  "@complimentConnected": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "complimentUnavailable": "This profile isn’t available any more.",
+  "complimentReferenceGone": "This photo or prompt is no longer on the profile.",
+  "complimentContextPhoto": "Compliment on a photo",
+  "requestsTitle": "{count, plural, =1{Requests (1)} other{Requests ({count})}}",
+  "@requestsTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "requestRowCompliment": "{name} sent a Compliment",
+  "@requestRowCompliment": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "requestRowReconnect": "{name} wants to reconnect",
+  "@requestRowReconnect": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "requestTitle": "Compliment",
+  "requestOnYourPhoto": "On your photo",
+  "requestOnYourPrompt": "On your prompt",
+  "requestReplyLabel": "Reply to start chatting",
+  "requestReplyHint": "Replying is free and opens your chat.",
+  "requestDismiss": "Dismiss",
+  "requestDismissTitle": "Dismiss this Compliment?",
+  "requestDismissBody": "{name} won’t be told. They can’t send you another one.",
+  "@requestDismissBody": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "requestDismissed": "Compliment dismissed",
+  "requestViewProfile": "View profile",
+  "requestGone": "This request is no longer available.",
+  "chatsExpiredRow": "{count, plural, =1{1 expired chat} other{{count} expired chats}}",
+  "@chatsExpiredRow": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatsExpiredDetail": "History is kept. Either of you can ask to reconnect.",
+  "matchTimeLeft": "{time} left",
+  "@matchTimeLeft": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "chatExpiredQuietTitle": "This chat expired after 14 quiet days",
+  "chatExpiredFirstTitle": "This match expired before anyone wrote",
+  "chatReconnectAsk": "Ask to reconnect",
+  "chatReconnectSent": "Request sent. If {name} accepts, your chat reopens.",
+  "@chatReconnectSent": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chatReconnectDeclined": "This reconnection was declined.",
+  "chatReconnectIncoming": "{name} asked to reconnect",
+  "@chatReconnectIncoming": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chatReconnectReview": "Review request",
+  "chatReconnectToast": "Reconnection request sent",
+  "chatSpamLimit": "Wait for {name} to reply before sending more.",
+  "@chatSpamLimit": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chatMute": "Mute notifications",
+  "chatUnmute": "Unmute notifications",
+  "chatMuted": "Notifications muted for {name}",
+  "@chatMuted": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chatUnmuted": "Notifications on for {name}",
+  "@chatUnmuted": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "chatTextOnly": "Chats are text and emoji for now.",
+  "extendAlready": "This match has already been extended once.",
+  "extendUsedToday": "You’ve used today’s extension. Another one arrives at midnight India time.",
+  "extendFreeUsed": "You’ve used this week’s free extension. It resets on Monday.",
+  "extendDone": "24 hours added for {name}",
+  "@extendDone": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "checkInTitle": "It’s been quiet with {name}",
+  "@checkInTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "checkInBody": "No messages for a week. The chat expires after 14 quiet days. This never changes who sees your profile.",
+  "checkInReasonLabel": "How’s it going? (optional)",
+  "checkInReasonInterested": "Still interested",
+  "checkInReasonBusy": "Busy right now",
+  "checkInReasonNotFeeling": "Not feeling it",
+  "checkInReasonSkip": "Prefer not to say",
+  "checkInWrite": "Write a message",
+  "checkInPause": "Pause my profile",
+  "checkInPreferences": "Update preferences",
+  "checkInSkip": "Not now",
+  "expiredTitle": "Expired chats",
+  "expiredEmptyTitle": "No expired chats",
+  "expiredEmptyBody": "Chats expire after 14 quiet days, and new matches after 24 hours without a message.",
+  "expiredOn": "Expired {date}",
+  "@expiredOn": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "expiredStateCanAsk": "You can ask to reconnect",
+  "expiredStatePending": "Waiting for their answer",
+  "expiredStateIncoming": "Asked to reconnect",
+  "expiredStateDeclined": "Declined",
+  "reconnectTitle": "{name} wants to reconnect",
+  "@reconnectTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "reconnectBody": "Accepting reopens your chat. Nothing is sent automatically, and it’s free.",
+  "reconnectPrevious": "Your last messages",
+  "reconnectAccept": "Accept",
+  "reconnectDecline": "Decline",
+  "reconnectDeclineTitle": "Decline this request?",
+  "reconnectDeclineBody": "{name} won’t be able to ask again for this chat.",
+  "@reconnectDeclineBody": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "reconnectAccepted": "Chat reopened with {name}",
+  "@reconnectAccepted": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "reconnectDeclined": "Request declined",
+  "walletTitle": "Compliment credits",
+  "walletTotal": "{count, plural, =1{1 credit} other{{count} credits}}",
+  "@walletTotal": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "walletWeekly": "Weekly (Premium)",
+  "walletWeeklyDetail": "Renews {date}. Doesn’t roll over.",
+  "@walletWeeklyDetail": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "walletWeeklyNone": "Premium adds 3 every week",
+  "walletEarned": "Earned",
+  "walletEarnedDetail": "{earned} of {cap}. Welcome and streak rewards.",
+  "@walletEarnedDetail": {
+    "placeholders": {
+      "earned": {
+        "type": "int"
+      },
+      "cap": {
+        "type": "int"
+      }
+    }
+  },
+  "walletPurchased": "Purchased",
+  "walletPurchasedDetail": "Kept until you use them.",
+  "walletOrder": "Credits are used weekly first, then earned, then purchased.",
+  "walletHistory": "History",
+  "walletHistoryEmpty": "Nothing yet. Credits you get and spend show here.",
+  "walletEntryWelcome": "Welcome credits",
+  "walletEntryStreak": "Streak reward",
+  "walletEntryWeekly": "Premium weekly credits",
+  "walletEntryWeeklyExpiry": "Unused weekly credits ended",
+  "walletEntryPurchase": "Compliment pack",
+  "walletEntryCompliment": "Compliment sent",
+  "walletEntryRefund": "Credit returned",
+  "walletEntryOther": "Adjustment",
+  "streakTitle": "Streak",
+  "streakDays": "{count, plural, =0{No streak yet} =1{1-day streak} other{{count}-day streak}}",
+  "@streakDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "streakCycle": "Day {progress} of 7",
+  "@streakCycle": {
+    "placeholders": {
+      "progress": {
+        "type": "int"
+      }
+    }
+  },
+  "streakReward": "Every 7 days in a row earns 1 Compliment credit.",
+  "streakHowTitle": "A day counts when you",
+  "streakHowDecide": "Decide on 3 profiles",
+  "streakHowMessage": "Send a message in a chat",
+  "streakHowReview": "Review your profile, when there’s no one to see or chat with",
+  "streakReviewAction": "Review my profile",
+  "streakReviewDone": "Today counts",
+  "streakToday": "Today counts",
+  "streakTodayOpen": "Today isn’t counted yet",
+  "streakKeep": "Credits you’ve earned stay, even if a streak resets.",
+  "streakRecoverTitle": "Missed {day}?",
+  "@streakRecoverTitle": {
+    "placeholders": {
+      "day": {}
+    }
+  },
+  "streakRecoverBody": "Repair it before {deadline} and your streak becomes {length} days.",
+  "@streakRecoverBody": {
+    "placeholders": {
+      "deadline": {},
+      "length": {
+        "type": "int"
+      }
+    }
+  },
+  "streakRecoverAction": "Repair for {price}",
+  "@streakRecoverAction": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "streakCapTitle": "Your earned credits are full",
+  "streakCapBody": "You have {cap}, the most you can hold, so this week’s reward was skipped. Spend one to make room. You never need to buy anything.",
+  "@streakCapBody": {
+    "placeholders": {
+      "cap": {
+        "type": "int"
+      }
+    }
+  },
+  "streakAwarded": "You earned a Compliment credit",
+  "healthTitle": "Profile Health",
+  "healthSubtitle": "Profile setup",
+  "healthScore": "{score} out of 100",
+  "@healthScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "healthNotRanking": "It measures setup only. It never changes who sees you, and it can’t be bought.",
+  "healthHow": "How the score works",
+  "healthStatusTitle": "Discovery status",
+  "healthStatusVisible": "Visible in Discover",
+  "healthStatusPaused": "Paused by you",
+  "healthStatusIncomplete": "Hidden until required setup is done",
+  "healthStatusReview": "Photos waiting for review",
+  "healthStatusRestricted": "Restricted. See why and appeal.",
+  "healthStatusUnknown": "We can’t check right now",
+  "healthImprove": "Improve your setup",
+  "healthAllDone": "Every part of your setup is done.",
+  "healthWeek": "Last 7 days",
+  "healthPremiumDepth": "28- and 90-day trends with Premium",
+  "healthSampleData": "Sample data in this demo build",
+  "healthFactorBasics": "Name, age, gender and who you’re looking for",
+  "healthFactorPhotos": "Two approved photos",
+  "healthFactorBio": "A short bio",
+  "healthFactorPrompt": "One prompt answer",
+  "healthFactorThirdPhoto": "A third photo (optional)",
+  "healthFactorSecondPrompt": "A second prompt answer (optional)",
+  "healthPoints": "{points} of {max}",
+  "@healthPoints": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "healthAboutTitle": "How Profile Health works",
+  "healthAboutBody": "Your score adds up the parts of your setup below. A profile with every required part starts at 80.",
+  "healthRestrictionsTitle": "Account restrictions",
+  "healthNoRestrictions": "No restrictions on your account.",
+  "healthRestricted": "Your account has a restriction. You can read why and appeal, free.",
+  "healthAppeal": "Read and appeal",
+  "healthUnknownBody": "The status service didn’t answer. This isn’t a restriction. Try again later.",
+  "insightsTitle": "Insights",
+  "insightsRange": "{range} days",
+  "@insightsRange": {
+    "placeholders": {
+      "range": {
+        "type": "int"
+      }
+    }
+  },
+  "insightsViews": "Profile views",
+  "insightsViewsNote": "Approximate: someone saw at least half of your card for a second.",
+  "insightsLikes": "Likes",
+  "insightsMatches": "Matches",
+  "insightsConversations": "Conversations",
+  "insightsRate": "Views to likes",
+  "insightsRateValue": "{percent}%",
+  "@insightsRateValue": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "insightsLowSample": "Not enough views yet ({exposures} of 20) for a fair rate",
+  "@insightsLowSample": {
+    "placeholders": {
+      "exposures": {
+        "type": "int"
+      }
+    }
+  },
+  "insightsPremium": "Premium",
+  "insightsLocked": "28- and 90-day history and rates come with Premium.",
+  "insightsCaveat": "Counts can be imperfect. They never show who viewed you, and no single photo or chat explains them.",
+  "premiumBenefitLikes": "15 likes a day instead of 5",
+  "premiumBenefitCompliments": "3 Compliments every week",
+  "premiumBenefitSeeLikes": "See who liked you",
+  "premiumBenefitFilters": "Filter by intention and lifestyle",
+  "premiumBenefitExtend": "Extend a match every day",
+  "premiumBenefitInsights": "28- and 90-day insights",
+  "premiumFreeStays": "Chatting, reporting, blocking and reconnecting are always free.",
+  "planWeekly": "Weekly",
+  "planMonthly": "Monthly",
+  "planYearly": "Yearly",
+  "planBilledWeekly": "{price} billed every week",
+  "@planBilledWeekly": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "planBilledMonthly": "{price} billed every month",
+  "@planBilledMonthly": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "planBilledYearly": "{price} billed every year",
+  "@planBilledYearly": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "planRenewal": "Renews automatically at {price} until you cancel in Google Play.",
+  "@planRenewal": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "pricesProvisional": "Prices are provisional. No store is connected in this build, so nothing is charged.",
+  "paywallContinuePlan": "Continue with {plan}",
+  "@paywallContinuePlan": {
+    "placeholders": {
+      "plan": {}
+    }
+  },
+  "premiumRenews": "Renews {date}",
+  "@premiumRenews": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "premiumEnds": "Ends {date}. You keep Premium until then.",
+  "@premiumEnds": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "premiumCancelRenewal": "Cancel renewal",
+  "premiumCancelledUntil": "Renewal cancelled. Premium stays until {date}.",
+  "@premiumCancelledUntil": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "premiumPlanName": "{plan} plan",
+  "@premiumPlanName": {
+    "placeholders": {
+      "plan": {}
+    }
+  },
+  "premiumForLikes": "Get more likes each day",
+  "premiumForSeeLikes": "See who liked you",
+  "premiumForExtension": "Extend a match every day",
+  "premiumForInsights": "See your longer trends",
+  "premiumForCompliments": "Get 3 Compliments every week",
+  "packTitle": "3 Compliments",
+  "packPrice": "{price} once",
+  "@packPrice": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "packBody": "Send a Compliment on a photo or prompt before you match. Purchased credits stay until you use them.",
+  "packBalance": "{count, plural, =1{You have 1 credit} other{You have {count} credits}}",
+  "@packBalance": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "packBuy": "Buy for {price}",
+  "@packBuy": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "recoveryTitle": "Repair your streak",
+  "recoveryMissed": "Missed day: {day}",
+  "@recoveryMissed": {
+    "placeholders": {
+      "day": {}
+    }
+  },
+  "recoveryResult": "Your streak becomes {length} days",
+  "@recoveryResult": {
+    "placeholders": {
+      "length": {
+        "type": "int"
+      }
+    }
+  },
+  "recoveryDeadline": "Available until {deadline}",
+  "@recoveryDeadline": {
+    "placeholders": {
+      "deadline": {}
+    }
+  },
+  "recoveryCheck": "We check again before charging. If the repair isn’t allowed any more, you won’t be charged.",
+  "recoveryBuy": "Repair for {price}",
+  "@recoveryBuy": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "recoveryNone": "There’s no missed day to repair right now.",
+  "recoveryNoneBody": "A missed day can be repaired within 48 hours, once a week, when the days around it count.",
+  "checkoutTitle": "Demo checkout",
+  "checkoutBody": "No store is connected and no money moves. Choose what the store reports for {item} at {price}.",
+  "@checkoutBody": {
+    "placeholders": {
+      "item": {},
+      "price": {}
+    }
+  },
+  "checkoutSuccess": "Purchase succeeds",
+  "checkoutPending": "Payment pending",
+  "checkoutCancelled": "Cancelled",
+  "checkoutFailed": "Payment failed",
+  "outcomeSuccessTitle": "You’re all set",
+  "outcomeSuccessBody": "Demo purchase applied. No money was taken.",
+  "outcomePendingTitle": "Payment pending",
+  "outcomePendingBody": "Nothing changes until the store confirms the payment. You won’t be charged twice.",
+  "outcomeCancelledTitle": "Purchase cancelled",
+  "outcomeCancelledBody": "Nothing was charged and nothing changed.",
+  "outcomeFailedTitle": "Payment didn’t go through",
+  "outcomeFailedBody": "Nothing was charged. Try again or use another payment method.",
+  "outcomeUnavailableTitle": "Purchases aren’t available yet",
+  "outcomeUnavailableBody": "Store billing isn’t set up in this build, so nothing was charged.",
+  "outcomeIneligibleTitle": "Repair no longer available",
+  "outcomeIneligibleBody": "The missed day can’t be repaired any more, so nothing was charged.",
+  "outcomeRestore": "Restore purchases",
+  "outcomeHelp": "Get help",
+  "outcomeTryAgain": "Try again",
+  "hubActivity": "Your activity",
+  "hubHealthDetail": "{score} of 100",
+  "@hubHealthDetail": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "hubCreditsDetail": "{count, plural, =1{1 credit} other{{count} credits}}",
+  "@hubCreditsDetail": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hubStreakDetail": "{count, plural, =0{Start today} =1{1 day} other{{count} days}}",
+  "@hubStreakDetail": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hubInsightsDetail": "Views, likes and matches",
+  "settingsSubscription": "Subscription",
+  "settingsLegal": "Legal",
+  "settingsSupportRequests": "Support requests",
+  "legalTitle": "Legal",
+  "legalCommunity": "Community standards",
+  "legalSafetyContacts": "Safety contacts",
+  "legalDraft": "Draft for review. Not the final legal text.",
+  "legalPrivacySummary": "What we keep: your phone number and date of birth privately; your profile publicly; your approximate city, never exact coordinates. Analytics never include message text or one-time codes. Proposed retention: raw analytics 30 days, aggregates 90 days, expired chats 90 days after expiry. Deleting your account hides you at once; we aim to delete your data within 30 days.",
+  "legalTermsSummary": "Numaya is for adults 18 and over. Premium renews until you cancel in your store account. Prices shown in this build are provisional. Safety tools stay free for everyone.",
+  "legalCommunitySummary": "Be real: your own photos and your own name. Be kind: no harassment, hate or pressure. Be safe: no money requests, no sharing others’ private details. Reports are reviewed by people, and the person you report is never told who reported them.",
+  "legalSafetyIntro": "If you’re in danger, call emergency services first. In India:",
+  "legalSafetyEmergency": "Emergency: 112",
+  "legalSafetyWomen": "Women helpline: 181",
+  "legalSafetyCyber": "Cyber crime: 1930 or cybercrime.gov.in",
+  "legalSafetyVerify": "Check these numbers before launch. Report anyone in the app from their profile or chat.",
+  "supportRequestsTitle": "Support requests",
+  "supportRequestsEmpty": "No requests yet",
+  "supportRequestsEmptyBody": "Requests you send from Contact support show here with their status.",
+  "supportStatusReceived": "Received",
+  "supportStatusDemo": "Demo: not sent to a team",
+  "supportNew": "New request",
+  "obPhotosModeration": "Demo build: photos are approved instantly. In the live app they’re checked before they appear in Discover.",
+  "obAgeRangeLabel": "Age range",
+  "obAgeRangeValue": "{min} to {max}",
+  "@obAgeRangeValue": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "obWelcomeCredits": "You have 3 Compliment credits to start",
+  "obWelcomeCreditsBody": "Send one on a photo or prompt that catches your eye.",
+  "obBioRequired": "Add a short bio to continue.",
+  "demoLikesTool": "Likes left today: {left}",
+  "@demoLikesTool": {
+    "placeholders": {
+      "left": {
+        "type": "int"
+      }
+    }
+  },
+  "demoUseLikes": "Use up today’s likes",
+  "demoFillBank": "Fill earned credits to the cap",
+  "likesLockedTitle": "{count, plural, =1{1 person likes you} other{{count} people like you}}",
+  "@likesLockedTitle": {"placeholders": {"count": {"type": "int"}}},
+  "likesLockedBody": "Premium shows who. Or keep going in Discover, where they can appear too.",
+  "likesLockedCta": "See who with Premium",
+  "likesLockedTile": "Hidden profile",
+  "notifCheckIns": "Quiet chat check-ins",
+  "notifRewards": "Streak rewards and credits",
+  "obMissingBio": "Add a short bio"
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/config/app_config.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
@@ -197,7 +198,7 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
             : l10n.photosLookingGreat,
         canContinue: valid,
         onContinue: () => continueFrom(context, ref, SetupStep.photos),
-        children: content,
+        children: [...content, ..._moderationNote(l10n)],
       );
     }
     return EditGuard(
@@ -218,9 +219,19 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
           children: [
             const SizedBox(height: AppSpacing.s6),
             ...content,
+            ..._moderationNote(l10n),
           ],
         ),
       ),
     );
   }
 }
+
+/// S08: photo moderation. The demo approves photos instantly and says so; a live build shows each
+/// photo's review status from the server and counts only approved photos toward discovery.
+List<Widget> _moderationNote(AppLocalizations l10n) => [
+  if (AppConfig.demoAuthAllowed) ...[
+    const SizedBox(height: AppSpacing.s4),
+    Text(l10n.obPhotosModeration, style: AppTypography.helper),
+  ],
+];

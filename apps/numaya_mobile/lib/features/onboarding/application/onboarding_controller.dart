@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/providers.dart';
 import '../../../core/media/demo_photos.dart';
 import '../../auth/application/session_controller.dart';
+import '../../commerce/application/economy_controller.dart';
+import '../../profile/application/profile_details_controller.dart';
 import '../domain/profile_draft.dart';
 
 /// Every onboarding step after the code, in flow order (ONBOARDING_MASTER_INVENTORY "Final order").
@@ -31,7 +33,8 @@ enum SetupStep {
 
   /// Whether the member may move on without answering.
   bool get optional => switch (this) {
-    height || location || bio || verify || notifications => true,
+    // PRD 01: bio required, interests optional.
+    height || location || interests || verify || notifications => true,
     _ => false,
   };
 }
@@ -241,13 +244,19 @@ class OnboardingController extends Notifier<OnboardingState> {
   /// OB-22 "Create my profile": once at a time, only when nothing required is missing. Throws
   /// [ProfileCreationFailed] when the Demo Hub simulates connection problems.
   Future<bool> create({required bool simulateFailure}) async {
-    if (state.creating || state.draft.missing(today).isNotEmpty) return false;
+    final hasBio = ref.read(profileDetailsProvider).bio.trim().isNotEmpty;
+    if (state.creating ||
+        state.draft.missing(today, hasBio: hasBio).isNotEmpty) {
+      return false;
+    }
     state = state.copyWith(creating: true);
     try {
       await Future<void>.delayed(const Duration(milliseconds: 600));
       if (simulateFailure) throw const ProfileCreationFailed();
       completeStep(SetupStep.review);
       await finish();
+      // PRD 01: three welcome credits, once, after eligible profile completion.
+      if (ref.mounted) ref.read(economyProvider.notifier).grantWelcome();
       return true;
     } finally {
       if (ref.mounted) state = state.copyWith(creating: false);

@@ -140,7 +140,11 @@ void main() {
     'voice note: too short is refused; a timed demo note is sent and labelled',
     (tester) async {
       await usePhoneSize(tester);
-      final c = await quickStartApp(tester);
+      // The dormant attachment code, switched on for this test (MVP chat is text-only).
+      final c = await quickStartApp(
+        tester,
+        mediaPicker: const SampleMediaPicker(),
+      );
       await goTo(c, tester, '${Routes.chat}/priya');
       await _choose(tester, 'Voice note');
       expect(find.textContaining('doesn’t use the microphone'), findsOneWidget);

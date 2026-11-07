@@ -10,6 +10,7 @@ import 'package:numaya_mobile/features/auth/application/session_controller.dart'
 import 'package:numaya_mobile/features/auth/data/demo_auth_repository.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 import 'package:numaya_mobile/features/dating/data/media_picker.dart';
+import 'package:numaya_mobile/features/premium/application/premium_controller.dart';
 
 import 'test_app.dart';
 
@@ -186,7 +187,7 @@ Future<void> addLibraryPhoto(WidgetTester tester) async {
   await tester.pump(const Duration(milliseconds: 400));
 }
 
-/// From Interests to Home: three interests, one prompt, then skips bio, verification and
+/// From Interests to Home: three interests, one prompt, a short bio, then skips verification and
 /// notifications, creates the profile on the review and starts discovering.
 Future<void> finishProfileToHome(
   WidgetTester tester, {
@@ -212,8 +213,10 @@ Future<void> finishProfileToHome(
   await tapOn(tester, find.text('Save prompt'));
   await tester.pump(const Duration(milliseconds: 600));
   await tapNext(tester);
-  await check(); // Bio
-  await tapOn(tester, find.text('Skip'));
+  await check(); // Bio (required by the MVP PRD: no Skip)
+  await tester.enterText(find.byType(TextField).last, 'Plants, maps and jazz.');
+  await tester.pump();
+  await tapNext(tester);
   await tester.pump(const Duration(milliseconds: 600));
   await check(); // Verify your photos
   await tapOn(tester, find.text('Skip'));
@@ -285,4 +288,12 @@ Future<void> goTo(ProviderContainer c, WidgetTester tester, String path) async {
   c.read(routerProvider).go(path);
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 600));
+}
+
+/// Switches Premium on or off in the running app (the Demo Hub switch, without the UI).
+Future<void> setPremium(WidgetTester tester, {bool active = true}) async {
+  ProviderScope.containerOf(tester.element(find.byType(Navigator).first))
+      .read(premiumProvider.notifier)
+      .setActive(active);
+  await tester.pump(const Duration(milliseconds: 300));
 }

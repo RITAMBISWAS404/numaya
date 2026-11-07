@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/router.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
+import 'package:numaya_mobile/features/commerce/application/economy_controller.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 import 'package:numaya_mobile/features/premium/application/premium_controller.dart';
 import 'package:numaya_mobile/features/profile/application/profile_details_controller.dart';
@@ -136,16 +137,16 @@ void main() {
   });
 
   testWidgets(
-    'expiring match: Extend once free; expired: Rematch via paywall',
+    'expiring match: one extension per match; expired: reconnect, free (PRD 01/02)',
     (tester) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
       await goTo(c, tester, '${Routes.chat}/lina');
       expect(find.text('1h left to start the conversation'), findsOneWidget);
       await tapOn(tester, find.text('Extend 24 hours'));
-      expect(find.text('Extended: you have 24 more hours'), findsOneWidget);
-      expect(find.text('24h left to start the conversation'), findsOneWidget);
-      await goTo(c, tester, '${Routes.chat}/amara');
+      expect(find.text('24 hours added for Lina'), findsOneWidget);
+      expect(find.text('25h left to start the conversation'), findsOneWidget);
+      // One extension per match.
       expect(
         tester
             .widget<NumayaButton>(
@@ -154,34 +155,61 @@ void main() {
             .onPressed,
         isNull,
       );
+      // The free weekly extension is used: another match offers Premium.
+      await goTo(c, tester, '${Routes.chat}/amara');
+      await tapOn(tester, find.text('Extend 24 hours'));
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(find.text('Extend a match every day'), findsWidgets);
+      expect(c.read(premiumProvider).active, isFalse);
 
+      // Expired: no composer; asking to reconnect is free and happens once.
       await goTo(c, tester, '${Routes.chat}/ollie');
       expect(find.text('Your match with Ollie expired'), findsOneWidget);
       expect(find.byType(Composer), findsNothing);
-      await tapOn(tester, find.text('Rematch with Premium'));
-      await tester.pump(const Duration(milliseconds: 600));
-      expect(find.text('Rematch comes with Premium'), findsOneWidget);
+      await tapOn(tester, find.byKey(const ValueKey('chat-reconnect-ask')));
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(
+        find.text('Request sent. If Ollie accepts, your chat reopens.'),
+        findsOneWidget,
+      );
+      expect(find.byKey(const ValueKey('chat-reconnect-ask')), findsNothing);
+      await settle(tester);
+    },
+  );
+
+  testWidgets(
+    'Premium checkout: a failed payment changes nothing; success activates (demo store)',
+    (tester) async {
+      await usePhoneSize(tester);
+      final c = await quickStartApp(tester);
+      await goTo(c, tester, Routes.paywall);
       final buy = find.widgetWithText(
         NumayaButton,
         'Choose a plan to continue',
       );
       expect(tester.widget<NumayaButton>(buy).onPressed, isNull);
-      await tapOn(tester, find.bySemanticsLabel(RegExp('^1 month')));
-      await tapOn(tester, find.text('Continue with 1 month · £24.99'));
+      // Full billed amounts, no invented savings.
+      expect(find.text('₹299 billed every month'), findsOneWidget);
+      expect(find.textContaining('Save'), findsNothing);
+      await tapOn(tester, find.byKey(const ValueKey('plan-premiumMonthly')));
+      await tapOn(tester, find.text('Continue with Monthly'));
       await sheetUp(tester);
-      await tapOn(tester, find.text('Simulate a failed payment'));
+      await tapOn(tester, find.text('Payment failed'));
       await tester.pump(const Duration(milliseconds: 800));
-      expect(find.text('The payment didn’t go through'), findsOneWidget);
-      expect(c.read(premiumProvider).active, isFalse);
-      await tapOn(tester, find.text('Continue with 1 month · £24.99'));
-      await sheetUp(tester);
-      await tapOn(tester, find.text('Complete demo purchase'));
-      await tester.pump(const Duration(milliseconds: 800));
-      expect(find.text('You’re all set'), findsOneWidget);
-      await tapOn(tester, find.text('Done'));
       await tester.pump(const Duration(milliseconds: 600));
-      await tapOn(tester, find.text('Rematch'));
-      expect(find.text('24h left to start the conversation'), findsOneWidget);
+      expect(find.text('Payment didn’t go through'), findsOneWidget);
+      expect(c.read(premiumProvider).active, isFalse);
+      await tapOn(tester, find.text('Try again'));
+      await tester.pump(const Duration(milliseconds: 600));
+      await tapOn(tester, find.text('Continue with Monthly'));
+      await sheetUp(tester);
+      await tapOn(tester, find.text('Purchase succeeds'));
+      await tester.pump(const Duration(milliseconds: 800));
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(find.text('You’re all set'), findsOneWidget);
+      expect(c.read(premiumProvider).active, isTrue);
+      // Weekly Compliments arrive with the subscription.
+      expect(c.read(economyProvider).ledger.weekly, 3);
       await settle(tester);
     },
   );
@@ -193,16 +221,17 @@ void main() {
       final c = await quickStartApp(tester);
       await tapOn(tester, find.bySemanticsLabel('Filters'));
       await sheetUp(tester);
-      expect(find.text('Show 10 people'), findsOneWidget);
+      // Ade (verified) is a seeded expired match since the MVP PRD pass: 9 people, 5 verified.
+      expect(find.text('Show 9 people'), findsOneWidget);
       await tapOn(
         tester,
         find.bySemanticsLabel(RegExp('^Verified profiles only')),
       );
-      expect(find.text('Show 6 people'), findsOneWidget);
+      expect(find.text('Show 5 people'), findsOneWidget);
       await tapOn(tester, find.bySemanticsLabel('Advanced'));
       expect(find.text('Advanced filters are part of Premium'), findsOneWidget);
       await tapOn(tester, find.bySemanticsLabel('Basic'));
-      await tapOn(tester, find.text('Show 6 people'));
+      await tapOn(tester, find.text('Show 5 people'));
       await tester.pump(const Duration(milliseconds: 600));
       expect(
         c.read(datingProvider.notifier).queue().every((p) => p.verified),
@@ -217,7 +246,7 @@ void main() {
       );
       await sheetUp(tester);
       await tapOn(tester, find.text('Reset'));
-      expect(find.text('Show 10 people'), findsOneWidget);
+      expect(find.text('Show 9 people'), findsOneWidget);
       await settle(tester);
     },
   );

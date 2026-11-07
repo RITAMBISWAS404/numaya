@@ -5,8 +5,11 @@ import 'package:go_router/go_router.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../compliments/domain/compliment.dart';
+import '../../compliments/presentation/compliment_screens.dart';
 import '../../home/presentation/home_shell.dart';
 import '../../home/presentation/tab_screens.dart';
+import '../../premium/application/premium_controller.dart';
 import '../application/dating_controller.dart';
 import '../domain/sample_people.dart';
 import 'person_profile.dart';
@@ -32,6 +35,16 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
     final counts = {
       for (final f in LikeFilter.values) f: controller.likes(f).length,
     };
+    // S18: free members see how many people like them, not who (PRD 06: incoming profiles are a
+    // Premium benefit). Matches already made stay in Chats.
+    final premium = ref.watch(premiumProvider).active;
+    final hidden = controller.likes().where((l) => !l.matched).toList();
+    if (!premium && hidden.isNotEmpty) {
+      return TabPage(
+        header: TabHeader(title: l10n.tabLikes),
+        child: _LockedLikes(count: hidden.length),
+      );
+    }
 
     final Widget body;
     if (list.isEmpty) {
@@ -163,6 +176,73 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
   }
 }
 
+/// S18 free state: the count, locked tiles and the Premium offer; Discover stays the free path.
+class _LockedLikes extends StatelessWidget {
+  const _LockedLikes({required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Column(
+      key: const ValueKey('likes-locked'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        LayoutBuilder(
+          builder: (context, box) {
+            final w = (box.maxWidth - AppSpacing.s3) / 2;
+            return Wrap(
+              spacing: AppSpacing.s3,
+              runSpacing: AppSpacing.s3,
+              children: [
+                for (var i = 0; i < count.clamp(1, 4); i++)
+                  SizedBox(
+                    width: w,
+                    child: PhotoPlaceholder(
+                      label: l10n.likesLockedTile,
+                      aspectRatio: AppMedia.personPhoto,
+                      child: const Center(
+                        child: NumayaIcon(
+                          NumayaIcons.lock,
+                          size: 28,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: AppSpacing.s5),
+        Semantics(
+          header: true,
+          child: Text(
+            l10n.likesLockedTitle(count),
+            style: AppTypography.section,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.s2),
+        Text(l10n.likesLockedBody, style: AppTypography.bodySm),
+        const SizedBox(height: AppSpacing.s4),
+        NumayaButton(
+          label: l10n.likesLockedCta,
+          onPressed: () => context.push(
+            '${Routes.paywall}?feature=${PremiumFeature.seeLikes.name}',
+          ),
+        ),
+        const SizedBox(height: AppSpacing.s3),
+        NumayaButton(
+          label: l10n.goToHome,
+          variant: NumayaButtonVariant.secondary,
+          onPressed: () => context.go(Routes.home),
+        ),
+      ],
+    );
+  }
+}
+
 /// Someone who liked you (V16 059): an info box, their profile, and Pass / Like back. Once matched
 /// the footer is "Message {name}".
 class LikeProfileScreen extends ConsumerWidget {
@@ -191,6 +271,16 @@ class LikeProfileScreen extends ConsumerWidget {
     final matched = state.matches.contains(personId);
     final passed = state.likesHandled[personId] == false;
     final controller = ref.read(datingProvider.notifier);
+    // S19 is a Premium view: a free member reaching it (a stale link) gets the locked state.
+    if (!matched && !ref.watch(premiumProvider).active) {
+      return NumayaScreen(
+        top: NumayaTopBar(onBack: () => context.pop(), backLabel: l10n.back),
+        body: Padding(
+          padding: const EdgeInsets.only(top: AppSpacing.s6),
+          child: _LockedLikes(count: controller.likes().length),
+        ),
+      );
+    }
 
     final Widget footer;
     if (matched) {
@@ -226,7 +316,11 @@ class LikeProfileScreen extends ConsumerWidget {
               label: l10n.likeBack,
               icon: NumayaIcons.heart,
               onPressed: () {
-                controller.likeBack(personId, liked: true);
+                final result = controller.likeBack(personId, liked: true);
+                if (result == DecisionResult.outOfLikes) {
+                  context.push(Routes.allowance);
+                  return;
+                }
                 context.pushReplacement('${Routes.match}/$personId');
               },
             ),
@@ -312,6 +406,8 @@ class PersonProfileScreen extends ConsumerWidget {
                 final result = controller.decide(personId, liked: true);
                 if (result == DecisionResult.matched) {
                   context.pushReplacement('${Routes.match}/$personId');
+                } else if (result == DecisionResult.outOfLikes) {
+                  context.push(Routes.allowance);
                 } else {
                   NumayaToast.show(context, l10n.discoverLiked(person.name));
                   context.pop();
@@ -352,7 +448,15 @@ class PersonProfileScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: AppSpacing.s3),
-                ...personSections(context, person),
+                ...personSections(
+                  context,
+                  person,
+                  // S12: Compliment anchors while the member can still decide.
+                  onCompliment: canDecide && !decided
+                      ? (ComplimentTarget t) =>
+                            context.push(complimentRoute(person.id, t))
+                      : null,
+                ),
               ],
             ),
     );

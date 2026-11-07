@@ -40,3 +40,9 @@ final profileRepositoryProvider = Provider<ProfileRepository>(
 /// [ReleaseScope.events]; the router, the tab bar and every entry point read it, so one switch
 /// hides or restores the whole feature, and tests can turn Events on to keep its own suite running.
 final eventsAvailableProvider = Provider<bool>((ref) => ReleaseScope.events);
+
+/// Whether chat attachments are offered (MVP: no, text and emoji only). Defaults to the
+/// compile-time [ReleaseScope.chatAttachments]; tests of the dormant attachment code turn it on.
+final chatAttachmentsProvider = Provider<bool>(
+  (ref) => ReleaseScope.chatAttachments,
+);

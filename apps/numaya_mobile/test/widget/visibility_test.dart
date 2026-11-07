@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart' show ValueKey;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/router.dart';
 import 'package:numaya_mobile/app/routes.dart';
@@ -22,7 +23,10 @@ void main() {
     (tester) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester, world: DemoWorld.full);
+      // MVP PRD S27: the Profile tab shows Profile Health; Profile & visibility is in Settings.
       await openTab(tester, 'Profile');
+      expect(find.byKey(const ValueKey('hub-health')), findsOneWidget);
+      await goTo(c, tester, Routes.settings);
       final row = find.bySemanticsLabel(RegExp('^Profile & visibility'));
       expect(row, findsOneWidget);
       await _tap(tester, row);

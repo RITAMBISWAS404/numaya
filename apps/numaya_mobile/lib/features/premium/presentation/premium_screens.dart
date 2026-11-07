@@ -2,16 +2,70 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
-import '../../dating/application/dating_controller.dart';
+import '../../commerce/domain/catalog.dart';
+import '../../commerce/presentation/store_screens.dart';
 import '../../help/domain/help_articles.dart';
 import '../application/premium_controller.dart';
 
-/// Premium overview (B-60 pay plan, B-63 active state, B-64 comparison): what Premium adds, the
-/// SuperSwipes left, and the plan state. Simulated: no store is connected.
+/// What Premium adds (PRD 06): allowances and information, never ranking.
+List<(NumayaIcons?, NumayaMobileIcons?, String)> premiumBenefits(
+  AppLocalizations l10n,
+) => [
+  (NumayaIcons.heart, null, l10n.premiumBenefitLikes),
+  (null, NumayaMobileIcons.compliment, l10n.premiumBenefitCompliments),
+  (NumayaIcons.groups, null, l10n.premiumBenefitSeeLikes),
+  (NumayaIcons.filter, null, l10n.premiumBenefitFilters),
+  (null, NumayaMobileIcons.extend, l10n.premiumBenefitExtend),
+  (null, NumayaMobileIcons.chart, l10n.premiumBenefitInsights),
+];
+
+String planLabel(AppLocalizations l10n, Product p) => switch (p.kind) {
+  ProductKind.premiumWeekly => l10n.planWeekly,
+  ProductKind.premiumMonthly => l10n.planMonthly,
+  _ => l10n.planYearly,
+};
+
+String planBilling(AppLocalizations l10n, Product p) {
+  final price = formatInr(p.pricePaise);
+  return switch (p.kind) {
+    ProductKind.premiumWeekly => l10n.planBilledWeekly(price),
+    ProductKind.premiumMonthly => l10n.planBilledMonthly(price),
+    _ => l10n.planBilledYearly(price),
+  };
+}
+
+class _BenefitList extends StatelessWidget {
+  const _BenefitList();
+
+  @override
+  Widget build(BuildContext context) {
+    return WhiteCard(
+      child: Column(
+        children: [
+          for (final (icon, mobile, label) in premiumBenefits(context.l10n))
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Row(
+                children: [
+                  if (icon != null)
+                    NumayaIcon(icon, size: 20, color: AppColors.accent)
+                  else
+                    MobileIcon(mobile!, size: 20, color: AppColors.accent),
+                  const SizedBox(width: AppSpacing.s3),
+                  Expanded(child: Text(label, style: AppTypography.bodySm)),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// S34 overview: the member's plan state (renewal date, cancel renewal) and what Premium adds.
 class PremiumScreen extends ConsumerWidget {
   const PremiumScreen({super.key});
 
@@ -19,111 +73,57 @@ class PremiumScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final premium = ref.watch(premiumProvider);
-    ref.watch(datingProvider);
-    final superSwipes = ref.read(datingProvider.notifier).superSwipesLeft;
-    final rows = [
-      (l10n.featureLikes, true, true),
-      (l10n.featureSeeLikes, true, true),
-      (l10n.featureExtend, false, true),
-      (l10n.featureRematch, false, true),
-      (l10n.featureAdvancedFilters, false, true),
-      (l10n.featureIncognito, false, true),
-      (l10n.featureTravel, false, true),
-      // UI-016: SuperSwipe is excluded from the first release.
-      if (ReleaseScope.superSwipe) (l10n.featureSuperSwipes, false, true),
-    ];
+    final plan = premium.plan;
     return NumayaScreen(
       top: NumayaTopBar(
         onBack: () => context.pop(),
         backLabel: l10n.back,
         title: l10n.premiumName,
       ),
-      footer: premium.active
+      footer: plan == null
           ? NumayaButton(
-              label: l10n.premiumCancelDemo,
+              label: l10n.premiumSeePlans,
+              onPressed: () => context.push(Routes.paywall),
+            )
+          : premium.autoRenew
+          ? NumayaButton(
+              label: l10n.premiumCancelRenewal,
               variant: NumayaButtonVariant.secondary,
               onPressed: () {
                 ref.read(premiumProvider.notifier).cancel();
-                NumayaToast.show(context, l10n.premiumCancelled);
+                NumayaToast.show(
+                  context,
+                  l10n.premiumCancelledUntil(shortDate(premium.paidThrough!)),
+                );
               },
             )
-          : NumayaButton(
-              label: l10n.premiumSeePlans,
-              onPressed: () => context.push(Routes.paywall),
-            ),
+          : null,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
           StatusBanner(
-            tone: premium.active ? BannerTone.success : BannerTone.info,
-            title: premium.active
-                ? l10n.premiumActiveUntil(
-                    MaterialLocalizations.of(context)
-                        .formatMediumDate(premium.activeUntil!),
-                  )
+            tone: plan != null ? BannerTone.success : BannerTone.info,
+            title: plan != null
+                ? l10n.premiumPlanName(planLabel(l10n, plan))
                 : l10n.premiumHeroTitle,
-            body: premium.active
-                ? l10n.premiumActivePlan(premium.activePlan!.label)
-                : l10n.premiumHeroBody,
+            body: plan == null
+                ? l10n.premiumHeroBody
+                : premium.autoRenew
+                ? '${l10n.premiumRenews(shortDate(premium.paidThrough!))} · ${planBilling(l10n, plan)}'
+                : l10n.premiumEnds(shortDate(premium.paidThrough!)),
           ),
-          if (ReleaseScope.superSwipe) ...[
-            const SizedBox(height: AppSpacing.s4),
-            ListGroup(
-              title: l10n.premiumYourExtras,
-              children: [
-                ListRow(
-                  leading: NumayaIcons.star,
-                  tone: AccentTone.brand,
-                  label: l10n.premiumSuperSwipesLeft,
-                  value: '$superSwipes',
-                ),
-              ],
-            ),
-          ],
           const SizedBox(height: AppSpacing.sectionGap),
           Semantics(
             header: true,
             child: Text(l10n.premiumCompare, style: AppTypography.section),
           ),
           const SizedBox(height: AppSpacing.s3),
-          WhiteCard(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    const Expanded(child: SizedBox()),
-                    SizedBox(
-                      width: 72,
-                      child: Text(
-                        l10n.premiumFree,
-                        textAlign: TextAlign.center,
-                        style: AppTypography.labelCaps,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 72,
-                      child: Text(
-                        l10n.premiumShort,
-                        textAlign: TextAlign.center,
-                        style: AppTypography.labelCaps,
-                      ),
-                    ),
-                  ],
-                ),
-                for (final (label, free, plus) in rows)
-                  ComparisonRow(
-                    label: label,
-                    free: free,
-                    premium: plus,
-                    yesLabel: l10n.yes,
-                    noLabel: l10n.no,
-                  ),
-              ],
-            ),
-          ),
+          const _BenefitList(),
           const SizedBox(height: AppSpacing.s3),
-          Text(l10n.premiumDemoNote, style: AppTypography.helper),
+          Text(l10n.premiumFreeStays, style: AppTypography.helper),
+          const SizedBox(height: AppSpacing.s2),
+          const ProvisionalPriceNote(),
           const SizedBox(height: AppSpacing.s2),
           Align(
             alignment: Alignment.centerLeft,
@@ -139,10 +139,9 @@ class PremiumScreen extends ConsumerWidget {
   }
 }
 
-/// Paywall (B-61, D-14): names the feature that opened it, lists what Premium adds, shows plans as
-/// selectable cards with none pre-selected, keeps the terms visible and repeats the chosen plan on
-/// the button. "Buying" opens a confirmation that says no payment is taken; the demo can also show
-/// a failed payment (states-and-recovery: return with the plan still selected).
+/// S34 paywall: names what opened it, lists the benefits, offers weekly / monthly / yearly with the
+/// full billed amount and term (no invented savings or countdowns), and repeats the renewal terms
+/// beside the button. Checkout goes through [startPurchase]; restore is always available.
 class PaywallScreen extends ConsumerStatefulWidget {
   const PaywallScreen({super.key, this.feature});
 
@@ -153,76 +152,32 @@ class PaywallScreen extends ConsumerStatefulWidget {
 }
 
 class _PaywallScreenState extends ConsumerState<PaywallScreen> {
-  PremiumPlan? _plan;
-  bool _failed = false;
-  bool _done = false;
-
-  Future<void> _buy() async {
-    final l10n = context.l10n;
-    final plan = _plan;
-    if (plan == null) return;
-    final outcome = await showNumayaSheet<PurchaseOutcome>(
-      context: context,
-      title: l10n.paywallConfirmTitle,
-      closeLabel: l10n.close,
-      builder: (context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            l10n.paywallConfirmBody(plan.label, plan.price),
-            style: AppTypography.body.copyWith(color: AppColors.textSecondary),
-          ),
-          const SizedBox(height: AppSpacing.s5),
-          NumayaButton(
-            label: l10n.paywallConfirmBuy,
-            onPressed: () => Navigator.of(context).pop(PurchaseOutcome.success),
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          NumayaButton(
-            label: l10n.paywallConfirmFail,
-            variant: NumayaButtonVariant.secondary,
-            onPressed: () => Navigator.of(context).pop(PurchaseOutcome.failed),
-          ),
-        ],
-      ),
-    );
-    if (outcome == null || !mounted) return;
-    final result = await ref
-        .read(premiumProvider.notifier)
-        .purchase(plan, simulate: outcome);
-    if (!mounted) return;
-    // Success is felt; a declined payment is acknowledged on screen, not punished.
-    AppHaptics.fire(
-      context,
-      result == PurchaseOutcome.success
-          ? HapticMoment.success
-          : HapticMoment.reject,
-    );
-    setState(() {
-      _failed = result == PurchaseOutcome.failed;
-      _done = result == PurchaseOutcome.success;
-    });
-  }
+  Product? _plan;
 
   String _title(AppLocalizations l10n) => switch (widget.feature) {
+    PremiumFeature.likes => l10n.premiumForLikes,
+    PremiumFeature.seeLikes => l10n.premiumForSeeLikes,
     PremiumFeature.advancedFilters => l10n.paywallForFilters,
-    PremiumFeature.rematch => l10n.paywallForRematch,
-    PremiumFeature.extendUnlimited => l10n.paywallForExtend,
-    PremiumFeature.incognito => l10n.paywallForIncognito,
-    PremiumFeature.travel => l10n.paywallForTravel,
-    // A stale SuperSwipe deep link gets the general paywall in the first release.
-    PremiumFeature.superSwipes =>
-      ReleaseScope.superSwipe ? l10n.paywallForSuperSwipes : l10n.paywallTitle,
-    PremiumFeature.general || null => l10n.paywallTitle,
+    PremiumFeature.extension ||
+    PremiumFeature.extendUnlimited => l10n.premiumForExtension,
+    PremiumFeature.insights => l10n.premiumForInsights,
+    PremiumFeature.compliments => l10n.premiumForCompliments,
+    // Retired entry points get the general paywall.
+    PremiumFeature.rematch ||
+    PremiumFeature.incognito ||
+    PremiumFeature.travel ||
+    PremiumFeature.superSwipes ||
+    PremiumFeature.general ||
+    null => l10n.paywallTitle,
   };
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final premium = ref.watch(premiumProvider);
+    final plans = ref.watch(catalogProvider).plans;
 
-    if (_done || premium.active) {
+    if (premium.active) {
       return NumayaScreen(
         top: NumayaTopBar(
           onBack: () => context.pop(),
@@ -234,25 +189,16 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
           padding: const EdgeInsets.only(top: AppSpacing.s10),
           child: ResultPanel(
             illustration: NumayaIllustration.hello,
-            title: _done ? l10n.paywallSuccessTitle : l10n.paywallAlreadyTitle,
-            body: l10n.paywallSuccessBody(
-              MaterialLocalizations.of(context)
-                  .formatMediumDate(premium.activeUntil!),
-            ),
+            title: l10n.paywallAlreadyTitle,
+            body: premium.autoRenew
+                ? l10n.premiumRenews(shortDate(premium.paidThrough!))
+                : l10n.premiumEnds(shortDate(premium.paidThrough!)),
           ),
         ),
       );
     }
 
-    final benefits = [
-      (NumayaIcons.filter, l10n.featureAdvancedFilters),
-      (NumayaIcons.refresh, l10n.featureRematch),
-      (NumayaIcons.clock, l10n.featureExtend),
-      (NumayaIcons.eyeOff, l10n.featureIncognito),
-      (NumayaIcons.location, l10n.featureTravel),
-      if (ReleaseScope.superSwipe) (NumayaIcons.star, l10n.featureSuperSwipes),
-    ];
-
+    final plan = _plan;
     return NumayaScreen(
       top: NumayaTopBar(
         onBack: () => context.pop(),
@@ -264,15 +210,19 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           NumayaButton(
-            label: _plan == null
+            label: plan == null
                 ? l10n.paywallChoose
-                : l10n.paywallContinue(_plan!.label, _plan!.price),
+                : l10n.paywallContinuePlan(planLabel(l10n, plan)),
             loading: premium.purchasing,
-            onPressed: _plan == null || premium.purchasing ? null : _buy,
+            onPressed: plan == null || premium.purchasing
+                ? null
+                : () => startPurchase(context, ref, plan.kind),
           ),
           const SizedBox(height: AppSpacing.s2),
           Text(
-            l10n.paywallLegal,
+            plan == null
+                ? l10n.pricesProvisional
+                : '${l10n.planRenewal(formatInr(plan.pricePaise))} ${l10n.pricesProvisional}',
             textAlign: TextAlign.center,
             style: AppTypography.micro,
           ),
@@ -282,54 +232,25 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
-          const IllustrationSlot(
-            slot: 'premium_header',
-            label: 'More ways to meet the right people',
-            aspectRatio: IllustrationSlot.header,
-          ),
           ScreenHeader(title: _title(l10n), lede: l10n.paywallLede),
           const SizedBox(height: AppSpacing.s4),
-          WhiteCard(
-            child: Column(
-              children: [
-                for (final (icon, label) in benefits)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: Row(
-                      children: [
-                        NumayaIcon(icon, size: 20, color: AppColors.accent),
-                        const SizedBox(width: AppSpacing.s3),
-                        Expanded(
-                          child: Text(label, style: AppTypography.bodySm),
-                        ),
-                      ],
-                    ),
-                  ),
-              ],
-            ),
-          ),
+          const _BenefitList(),
           const SizedBox(height: AppSpacing.s5),
-          if (_failed) ...[
-            StatusBanner(
-              tone: BannerTone.error,
-              title: l10n.paywallFailedTitle,
-              body: l10n.paywallFailedBody,
-            ),
-            const SizedBox(height: AppSpacing.s4),
-          ],
           OptionGroupLabel(text: l10n.paywallPlans),
           const SizedBox(height: AppSpacing.s2),
-          for (final p in kPremiumPlans) ...[
+          for (final p in plans) ...[
             PlanCard(
-              title: p.label,
-              price: p.price,
-              perWeek: p.perWeek,
-              tag: p.saving,
+              key: ValueKey('plan-${p.kind.name}'),
+              title: planLabel(l10n, p),
+              price: formatInr(p.pricePaise),
+              perWeek: planBilling(l10n, p),
               selected: _plan == p,
               onTap: () => setState(() => _plan = p),
             ),
             const SizedBox(height: AppSpacing.s2),
           ],
+          const SizedBox(height: AppSpacing.s2),
+          Text(l10n.premiumFreeStays, style: AppTypography.helper),
           const SizedBox(height: AppSpacing.s2),
           Align(
             alignment: Alignment.centerLeft,

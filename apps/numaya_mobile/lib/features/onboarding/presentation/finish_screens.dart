@@ -8,6 +8,7 @@ import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../auth/presentation/auth_copy.dart';
+import '../../commerce/application/economy_controller.dart';
 import '../../dating/application/dating_controller.dart';
 import '../../dating/presentation/person_profile.dart';
 import '../../home/application/discovery_filters.dart';
@@ -160,6 +161,7 @@ SetupStep _stepFor(MissingItem item) => switch (item) {
   MissingItem.photos => SetupStep.photos,
   MissingItem.interests => SetupStep.interests,
   MissingItem.prompt => SetupStep.prompts,
+  MissingItem.bio => SetupStep.bio,
 };
 
 /// OB-22: the profile as others will see it, what's missing, the private choices, and Create my
@@ -210,7 +212,10 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
       ),
     );
     final draft = state.draft;
-    final missing = draft.missing(controller.today);
+    final missing = draft.missing(
+      controller.today,
+      hasBio: ref.watch(profileDetailsProvider).bio.trim().isNotEmpty,
+    );
     final me = memberAsPerson(
       draft: draft,
       details: details,
@@ -229,6 +234,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
         ProfileRules.maxInterests,
       ),
       MissingItem.prompt => l10n.obMissingPrompt,
+      MissingItem.bio => l10n.obMissingBio,
     };
     final openTo = draft.openTo;
     final meet = openTo == null
@@ -381,6 +387,16 @@ class AllSetScreen extends ConsumerWidget {
               title: l10n.obDoneTitle(name),
               body: l10n.obDoneBody,
             ),
+            // PRD 01: the welcome credits, granted once when the profile was created.
+            if (ref.watch(economyProvider).ledger.has('welcome')) ...[
+              const SizedBox(height: AppSpacing.s6),
+              StatusBanner(
+                key: const ValueKey('welcome-credits'),
+                tone: BannerTone.success,
+                title: l10n.obWelcomeCredits,
+                body: l10n.obWelcomeCreditsBody,
+              ),
+            ],
           ],
         ),
       ),

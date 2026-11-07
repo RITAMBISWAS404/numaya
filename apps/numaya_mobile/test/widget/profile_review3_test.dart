@@ -50,8 +50,10 @@ void main() {
         expect(size.width, closeTo(size.height, 0.5));
         expect(size.width, greaterThanOrEqualTo(80));
       }
-      // No names or countdowns under the tiles (they stay in the spoken label).
-      expect(find.textContaining('left'), findsNothing);
+      // MVP PRD S20 supersedes UI-033 here: each pending match shows its time left under the
+      // tile (names still stay in the spoken label only).
+      expect(find.text('21h left'), findsOneWidget);
+      expect(find.text('Jo'), findsNothing);
       await settle(tester);
     });
   });

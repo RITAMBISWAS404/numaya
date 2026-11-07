@@ -3,10 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/logging/app_logger.dart';
+import '../../commerce/domain/catalog.dart';
 
-/// Premium features the demo gates (P-05 is open; this is the recommended starting set).
+/// What opened the paywall (D-14), so its title can name it.
 enum PremiumFeature {
+  likes,
+  seeLikes,
   advancedFilters,
+  extension,
+  insights,
+  compliments,
+  // Retired from the MVP paywall; kept so stale deep links land on the general paywall.
   rematch,
   extendUnlimited,
   incognito,
@@ -15,86 +22,71 @@ enum PremiumFeature {
   general,
 }
 
-/// A plan on the paywall (B-61). Prices are illustrative and labelled as such: no store is
-/// connected and nothing is charged.
-@immutable
-class PremiumPlan {
-  const PremiumPlan({
-    required this.id,
-    required this.weeks,
-    required this.label,
-    required this.price,
-    required this.perWeek,
-    this.saving,
-  });
-  final String id;
-  final int weeks;
-  final String label;
-  final String price;
-  final String perWeek;
-  final String? saving;
+/// The catalog (served by the backend in a live build; the provisional demo catalog here).
+final catalogProvider = Provider<Catalog>((ref) => kProvisionalCatalog);
+
+enum PurchaseOutcome {
+  success,
+  pending,
+  failed,
+  cancelled,
+  unavailable,
+  ineligible,
 }
 
-const List<PremiumPlan> kPremiumPlans = [
-  PremiumPlan(
-    id: 'week',
-    weeks: 1,
-    label: '1 week',
-    price: '£9.99',
-    perWeek: '£9.99/week',
-  ),
-  PremiumPlan(
-    id: 'month',
-    weeks: 4,
-    label: '1 month',
-    price: '£24.99',
-    perWeek: '£6.25/week',
-    saving: 'Save 37%',
-  ),
-  PremiumPlan(
-    id: 'quarter',
-    weeks: 13,
-    label: '3 months',
-    price: '£49.99',
-    perWeek: '£3.85/week',
-    saving: 'Save 61%',
-  ),
-];
-
-enum PurchaseOutcome { success, failed, cancelled }
-
+/// One Premium tier, billed weekly, monthly or yearly (PRD 06). Entitlement:
+/// 15 likes a day, 3 weekly Compliments, incoming likes, advanced filters, a daily extension and
+/// deeper insights. Cancelling keeps it until [paidThrough]; expiry removes the advanced controls
+/// but keeps the saved preferences.
 @immutable
 class PremiumState {
   const PremiumState({
-    this.activePlan,
-    this.activeUntil,
+    this.plan,
+    this.activatedAt,
+    this.paidThrough,
+    this.autoRenew = true,
     this.purchasing = false,
     this.incognito = false,
     this.travelCity,
     this.extraSuperSwipes = 0,
   });
 
-  final PremiumPlan? activePlan;
-  final DateTime? activeUntil;
+  final Product? plan;
+
+  /// Anchors the weekly Compliment allowance (independent of the billing term).
+  final DateTime? activatedAt;
+  final DateTime? paidThrough;
+
+  /// False once cancelled: the plan stays active until [paidThrough].
+  final bool autoRenew;
   final bool purchasing;
+
+  /// Deferred features (not in the MVP); kept so their dormant code compiles.
   final bool incognito;
   final String? travelCity;
   final int extraSuperSwipes;
 
-  bool get active => activePlan != null;
+  bool get active => plan != null;
+
+  /// Kept for older call sites: the plan's renewal date.
+  DateTime? get activeUntil => paidThrough;
 
   PremiumState copyWith({
-    PremiumPlan? activePlan,
+    Product? plan,
     bool clearPlan = false,
-    DateTime? activeUntil,
+    DateTime? activatedAt,
+    DateTime? paidThrough,
+    bool? autoRenew,
     bool? purchasing,
     bool? incognito,
     String? travelCity,
     bool clearTravel = false,
     int? extraSuperSwipes,
   }) => PremiumState(
-    activePlan: clearPlan ? null : (activePlan ?? this.activePlan),
-    activeUntil: clearPlan ? null : (activeUntil ?? this.activeUntil),
+    plan: clearPlan ? null : (plan ?? this.plan),
+    activatedAt: clearPlan ? null : (activatedAt ?? this.activatedAt),
+    paidThrough: clearPlan ? null : (paidThrough ?? this.paidThrough),
+    autoRenew: clearPlan ? true : (autoRenew ?? this.autoRenew),
     purchasing: purchasing ?? this.purchasing,
     incognito: incognito ?? this.incognito,
     travelCity: clearTravel ? null : (travelCity ?? this.travelCity),
@@ -102,55 +94,50 @@ class PremiumState {
   );
 }
 
-/// Simulated premium (B-60–B-64). "Buying" a plan only flips local state after a short delay; the
-/// UI says that no payment is taken. Restore finds nothing because no store is connected.
+/// Premium entitlement as the app sees it. Changed only through [activate] (called by the
+/// purchase flow after verification, or the Demo Hub), [cancel] and [expire].
 class PremiumController extends Notifier<PremiumState> {
   static const _log = AppLogger('Premium');
+
+  DateTime get _now => ref.read(clockProvider)();
 
   @override
   PremiumState build() => const PremiumState();
 
-  Future<PurchaseOutcome> purchase(
-    PremiumPlan plan, {
-    PurchaseOutcome simulate = PurchaseOutcome.success,
-  }) async {
-    state = state.copyWith(purchasing: true);
-    await Future<void>.delayed(const Duration(milliseconds: 600));
-    if (!ref.mounted) return PurchaseOutcome.cancelled;
-    if (simulate != PurchaseOutcome.success) {
-      state = state.copyWith(purchasing: false);
-      _log.info('Demo purchase ${simulate.name}');
-      return simulate;
-    }
-    final now = ref.read(clockProvider)();
+  void setPurchasing(bool value) => state = state.copyWith(purchasing: value);
+
+  /// A verified subscription purchase (or the Demo Hub switch).
+  void activate(Product plan) {
+    final now = _now;
     state = state.copyWith(
+      plan: plan,
+      activatedAt: state.activatedAt ?? now,
+      paidThrough:
+          (state.paidThrough != null && state.paidThrough!.isAfter(now)
+                  ? state.paidThrough!
+                  : now)
+              .add(Duration(days: plan.billingDays ?? 30)),
+      autoRenew: true,
       purchasing: false,
-      activePlan: plan,
-      activeUntil: now.add(Duration(days: plan.weeks * 7)),
-      extraSuperSwipes: state.extraSuperSwipes + 5,
     );
-    _log.info('Demo plan active');
-    return PurchaseOutcome.success;
+    _log.info('Premium active (${plan.kind.name})');
   }
 
-  /// Demo Hub: switch premium on or off without the paywall.
+  /// Demo Hub: switch Premium on (monthly) or off without the paywall.
   void setActive(bool active) {
     if (active) {
-      final now = ref.read(clockProvider)();
-      state = state.copyWith(
-        activePlan: kPremiumPlans[1],
-        activeUntil: now.add(const Duration(days: 28)),
-      );
+      activate(ref.read(catalogProvider).product(ProductKind.premiumMonthly));
     } else {
-      state = state.copyWith(
-        clearPlan: true,
-        incognito: false,
-        clearTravel: true,
-      );
+      expire();
     }
   }
 
-  void cancel() => state = state.copyWith(
+  /// Cancels renewal; the benefits continue until the paid-through date.
+  void cancel() => state = state.copyWith(autoRenew: false);
+
+  /// The paid-through date passed (or the Demo Hub ended it): advanced controls stop applying;
+  /// saved preferences are kept by their owners.
+  void expire() => state = state.copyWith(
     clearPlan: true,
     incognito: false,
     clearTravel: true,
@@ -168,7 +155,7 @@ class PremiumController extends Notifier<PremiumState> {
         : state.copyWith(travelCity: city);
   }
 
-  /// Uses one bought SuperSwipe; false when none are left.
+  /// Uses one bought SuperSwipe (dormant feature); false when none are left.
   bool useSuperSwipe() {
     if (state.extraSuperSwipes <= 0) return false;
     state = state.copyWith(extraSuperSwipes: state.extraSuperSwipes - 1);
@@ -180,11 +167,11 @@ final premiumProvider = NotifierProvider<PremiumController, PremiumState>(
   PremiumController.new,
 );
 
-/// Cities for Travel mode (sample).
+/// Cities for Travel mode (dormant feature).
 const List<String> kTravelCities = [
-  'Manchester',
-  'Edinburgh',
-  'Lisbon',
-  'Berlin',
-  'New York',
+  'Mumbai',
+  'Delhi',
+  'Bengaluru',
+  'Hyderabad',
+  'Chennai',
 ];

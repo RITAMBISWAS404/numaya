@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/providers.dart';
 import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
-import '../../account_health/application/visibility_report.dart';
-import '../../account_health/presentation/visibility_screen.dart';
+import '../../commerce/application/economy_controller.dart';
 import '../../experiments/experiments.dart';
+import '../../health/application/health_providers.dart';
+import '../../health/presentation/health_screens.dart';
 import '../../home/presentation/home_shell.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../premium/application/premium_controller.dart';
@@ -173,15 +175,16 @@ class ProfileScreen extends ConsumerWidget {
                         ListGroup(
                           title: l10n.profileYourProfile,
                           children: [
+                            // S27: Profile Health replaces the visibility row here; the
+                            // visibility page stays in Settings.
                             ListRow(
+                              key: const ValueKey('hub-health'),
                               leading: NumayaIcons.explore,
                               tone: AccentTone.info,
-                              label: l10n.visTitle,
-                              detail: VisibilityScreen.statusLabel(
-                                l10n,
-                                ref.watch(visibilityReportProvider).status,
-                              ),
-                              onTap: () => context.push(Routes.visibility),
+                              label: l10n.healthTitle,
+                              detail:
+                                  '${l10n.hubHealthDetail(ref.watch(profileHealthProvider).score)} · ${discoveryStatusLabel(l10n, ref.watch(discoveryStatusProvider))}',
+                              onTap: () => context.push(Routes.health),
                             ),
                             if (ReleaseScope.openingMoves)
                               ListRow(
@@ -217,6 +220,45 @@ class ProfileScreen extends ConsumerWidget {
                                   ? l10n.premiumActive
                                   : l10n.premiumExplore,
                               onTap: () => context.push(Routes.premium),
+                            ),
+                          ],
+                        ),
+                        // S27: credits, streak and insights.
+                        const SizedBox(height: AppLayout.sectionGap),
+                        ListGroup(
+                          title: l10n.hubActivity,
+                          children: [
+                            ListRow(
+                              key: const ValueKey('hub-wallet'),
+                              leadingMobile: NumayaMobileIcons.wallet,
+                              tone: AccentTone.brand,
+                              label: l10n.walletTitle,
+                              detail: l10n.hubCreditsDetail(
+                                ref.watch(economyProvider).ledger.total,
+                              ),
+                              onTap: () => context.push(Routes.wallet),
+                            ),
+                            ListRow(
+                              key: const ValueKey('hub-streak'),
+                              leadingMobile: NumayaMobileIcons.flame,
+                              tone: AccentTone.caution,
+                              label: l10n.streakTitle,
+                              detail: l10n.hubStreakDetail(
+                                ref
+                                    .watch(economyProvider)
+                                    .streak
+                                    .run(ref.read(clockProvider)())
+                                    .length,
+                              ),
+                              onTap: () => context.push(Routes.streak),
+                            ),
+                            ListRow(
+                              key: const ValueKey('hub-insights'),
+                              leadingMobile: NumayaMobileIcons.chart,
+                              tone: AccentTone.info,
+                              label: l10n.insightsTitle,
+                              detail: l10n.hubInsightsDetail,
+                              onTap: () => context.push(Routes.insights),
                             ),
                           ],
                         ),

@@ -104,14 +104,10 @@ class _BioScreenState extends ConsumerState<BioScreen> {
       step: SetupStep.bio,
       title: l10n.obBioTitle,
       lede: l10n.obBioLede,
-      caption: bio.isEmpty ? l10n.obBioFooterNone : l10n.obBioFooter,
-      canContinue: true,
+      caption: bio.trim().isEmpty ? l10n.obBioRequired : l10n.obBioFooter,
+      // PRD 01: the bio is required (1-300 characters), so there is no Skip.
+      canContinue: bio.trim().isNotEmpty,
       onContinue: () => continueFrom(context, ref, SetupStep.bio),
-      onSkip: () {
-        _bio.clear();
-        details.setBio('');
-        continueFrom(context, ref, SetupStep.bio);
-      },
       children: [
         NumayaTextField(
           label: l10n.obBioLabel,

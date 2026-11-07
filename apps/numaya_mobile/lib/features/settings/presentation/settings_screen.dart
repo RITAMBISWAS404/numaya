@@ -386,14 +386,23 @@ class SettingsScreen extends ConsumerWidget {
                 onTap: () => context.push(Routes.help),
               ),
               ListRow(
+                key: const ValueKey('settings-support-requests'),
                 leading: NumayaIcons.draft,
-                label: l10n.legalTermsTitle,
-                onTap: () => showLegalSheet(context, l10n.legalTermsTitle),
+                label: l10n.settingsSupportRequests,
+                onTap: () => context.push(Routes.supportRequests),
               ),
               ListRow(
-                leading: NumayaIcons.draft,
-                label: l10n.legalPrivacyTitle,
-                onTap: () => showLegalSheet(context, l10n.legalPrivacyTitle),
+                key: const ValueKey('settings-legal'),
+                leadingMobile: NumayaMobileIcons.legal,
+                label: l10n.settingsLegal,
+                onTap: () => context.push(Routes.legal),
+              ),
+              ListRow(
+                key: const ValueKey('settings-subscription'),
+                leading: NumayaIcons.premium,
+                tone: AccentTone.brand,
+                label: l10n.settingsSubscription,
+                onTap: () => context.push(Routes.premium),
               ),
               ListRow(
                 leading: NumayaIcons.refresh,

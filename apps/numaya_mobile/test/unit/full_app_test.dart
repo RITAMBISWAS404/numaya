@@ -30,7 +30,8 @@ void main() {
   group('Full demo world', () {
     test('seeds matches, the queue with expiry and sample conversations', () {
       expect(dating().newMatches().map((p) => p.id), ['jo', 'amara', 'lina']);
-      expect(dating().expiredMatches().map((p) => p.id), ['ollie']);
+      // Ollie never got a first message; Ade's chat went quiet for 14 days (PRD 02).
+      expect(dating().expiredMatches().map((p) => p.id), ['ollie', 'ade']);
       expect(dating().remaining('jo'), const Duration(hours: 21));
       expect(dating().conversations().map((p) => p.id), [
         'priya',
@@ -59,30 +60,42 @@ void main() {
     test('the deck is larger and seeded matches never appear in it', () {
       container.read(discoveryFiltersProvider.notifier).broaden();
       final ids = dating().queue().map((p) => p.id).toList();
-      expect(ids, containsAll(['ben', 'chloe', 'ade', 'mira', 'finn']));
+      expect(ids, containsAll(['ben', 'chloe', 'mira', 'finn']));
       expect(ids, isNot(contains('priya')));
+      // Ade is a seeded (expired) match now, so never in the deck.
+      expect(ids, isNot(contains('ade')));
     });
   });
 
-  group('Expiry, Extend and Rematch', () {
-    test('one free Extend a day; then Premium is needed', () {
+  group('Expiry, extension and reconnection (PRD 02)', () {
+    test('one free extension a week, one per match; Premium one a day', () {
       expect(dating().extend('lina'), ExtendResult.extended);
-      expect(dating().remaining('lina'), const Duration(hours: 24));
+      // 1 hour was left: the deadline moves 24 hours later.
+      expect(dating().remaining('lina'), const Duration(hours: 25));
+      expect(dating().extend('lina'), ExtendResult.alreadyExtended);
       expect(dating().freeExtendAvailable, isFalse);
       expect(dating().extend('amara'), ExtendResult.needsPremium);
       container.read(premiumProvider.notifier).setActive(true);
-      expect(dating().extend('amara'), ExtendResult.extended);
+      // Premium's allowance is per IST day; the free use today already counts.
+      expect(dating().extend('amara'), ExtendResult.usedToday);
     });
 
-    test('Rematch needs Premium and restarts the window', () {
-      expect(dating().rematch('ollie'), ExtendResult.needsPremium);
-      container.read(premiumProvider.notifier).setActive(true);
-      expect(dating().rematch('ollie'), ExtendResult.extended);
-      expect(dating().isExpired('ollie'), isFalse);
-      expect(dating().newMatches().map((p) => p.id), contains('ollie'));
+    test('expired matches can ask to reconnect once; no Premium needed', () {
+      expect(dating().expiredMatches().map((p) => p.id), ['ollie', 'ade']);
+      expect(dating().requestReconnect('ollie'), isTrue);
+      expect(dating().requestReconnect('ollie'), isFalse);
+      expect(dating().status('ollie').phase.name, 'reconnectPending');
     });
 
-    test('a match with messages never expires', () {
+    test('accepting an incoming request reopens the chat with its history', () {
+      expect(dating().reconnectRequests().map((p) => p.id), ['ade']);
+      dating().respondReconnect('ade', accept: true);
+      expect(dating().isExpired('ade'), isFalse);
+      expect(dating().conversations().map((p) => p.id), contains('ade'));
+      expect(state().threads['ade']!.length, 3);
+    });
+
+    test('a match with messages never takes an extension', () {
       expect(dating().extend('priya'), ExtendResult.notNeeded);
       expect(dating().isExpired('priya'), isFalse);
     });
@@ -148,37 +161,29 @@ void main() {
   });
 
   group('Premium (simulated)', () {
-    test(
-      'a failed purchase changes nothing; a success activates a plan',
-      () async {
-        final premium = container.read(premiumProvider.notifier);
-        expect(
-          await premium.purchase(
-            kPremiumPlans[0],
-            simulate: PurchaseOutcome.failed,
-          ),
-          PurchaseOutcome.failed,
-        );
-        expect(container.read(premiumProvider).active, isFalse);
-        await premium.purchase(kPremiumPlans[1]);
-        final s = container.read(premiumProvider);
-        expect(s.active, isTrue);
-        expect(s.activeUntil, testNow.add(const Duration(days: 28)));
-        expect(s.extraSuperSwipes, 5);
-        premium.cancel();
-        expect(container.read(premiumProvider).active, isFalse);
-      },
-    );
+    test('activation sets the plan and paid-through date; cancel keeps it', () {
+      final premium = container.read(premiumProvider.notifier);
+      premium.setActive(true);
+      final s = container.read(premiumProvider);
+      expect(s.active, isTrue);
+      expect(s.plan!.kind.name, 'premiumMonthly');
+      expect(s.paidThrough, testNow.add(const Duration(days: 30)));
+      premium.cancel();
+      expect(container.read(premiumProvider).active, isTrue);
+      expect(container.read(premiumProvider).autoRenew, isFalse);
+      premium.expire();
+      expect(container.read(premiumProvider).active, isFalse);
+    });
 
     test('Incognito and Travel need Premium', () {
       final premium = container.read(premiumProvider.notifier);
       premium.setIncognito(true);
-      premium.setTravel('Lisbon');
+      premium.setTravel('Mumbai');
       expect(container.read(premiumProvider).incognito, isFalse);
       expect(container.read(premiumProvider).travelCity, isNull);
       premium.setActive(true);
-      premium.setTravel('Lisbon');
-      expect(container.read(premiumProvider).travelCity, 'Lisbon');
+      premium.setTravel('Mumbai');
+      expect(container.read(premiumProvider).travelCity, 'Mumbai');
     });
   });
 

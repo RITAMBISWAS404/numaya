@@ -11,6 +11,7 @@ import '../../../l10n/l10n.dart';
 import '../../account_health/application/visibility_report.dart';
 import '../../auth/application/session_controller.dart';
 import '../../auth/application/session_expiry.dart';
+import '../../commerce/application/economy_controller.dart';
 import '../../dating/application/dating_controller.dart';
 import '../../dating/data/media_picker.dart';
 import '../../events/application/events_controller.dart';
@@ -37,6 +38,7 @@ class DemoHubScreen extends ConsumerWidget {
     final signedIn = session != null && session.hasProfile;
     final world = ref.watch(demoWorldProvider);
     final premium = ref.watch(premiumProvider);
+    ref.watch(economyProvider);
     final dating = ref.watch(datingProvider);
     final verification = ref.watch(photoVerificationProvider);
     final needsSession = l10n.demoNeedsSession;
@@ -173,6 +175,20 @@ class DemoHubScreen extends ConsumerWidget {
                 detail: l10n.demoPremiumNote,
                 switchValue: premium.active,
                 onSwitch: ref.read(premiumProvider.notifier).setActive,
+              ),
+              // MVP PRD states (S17 allowance used, S32 capped award).
+              ListRow(
+                key: const ValueKey('demo-use-likes'),
+                label: l10n.demoUseLikes,
+                detail: l10n.demoLikesTool(
+                  ref.read(economyProvider.notifier).likesLeft(),
+                ),
+                onTap: ref.read(economyProvider.notifier).exhaustLikes,
+              ),
+              ListRow(
+                key: const ValueKey('demo-fill-bank'),
+                label: l10n.demoFillBank,
+                onTap: ref.read(economyProvider.notifier).fillEarnedBank,
               ),
               ListRow(
                 label: l10n.settingsSimulate,

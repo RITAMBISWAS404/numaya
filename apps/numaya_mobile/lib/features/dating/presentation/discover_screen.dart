@@ -11,6 +11,9 @@ import 'package:go_router/go_router.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../commerce/application/economy_controller.dart';
+import '../../compliments/domain/compliment.dart';
+import '../../compliments/presentation/compliment_screens.dart';
 import '../../home/application/discovery_filters.dart';
 import '../../home/presentation/filters_sheet.dart';
 import '../../home/presentation/tab_screens.dart';
@@ -152,6 +155,12 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
     // someone already decided.
     if (_exit.isAnimating || _deciding != null) return;
     if (ref.read(datingProvider).seen.contains(person.id)) return;
+    // S17: no likes left today. The card stays; passing is still free.
+    if (liked && ref.read(economyProvider.notifier).likesLeft() <= 0) {
+      AppHaptics.fire(context, HapticMoment.reject);
+      unawaited(context.push(Routes.allowance));
+      return;
+    }
     AppHaptics.fire(context, HapticMoment.commit);
     _deciding = person.id;
     try {
@@ -178,6 +187,8 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
         .decide(person.id, liked: liked);
     if (result == DecisionResult.matched) {
       unawaited(context.push('${Routes.match}/${person.id}'));
+    } else if (result == DecisionResult.outOfLikes) {
+      unawaited(context.push(Routes.allowance));
     } else if (liked) {
       NumayaToast.show(
         context,
@@ -248,6 +259,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
     final failing = state.simulateErrors && !_retrying;
     if (!state.simulateErrors) _failedRetries = 0;
     final narrowed = ref.read(discoveryFiltersProvider.notifier).narrowed;
+    ref.watch(economyProvider);
+    final economy = ref.read(economyProvider.notifier);
+    final likesLeft = economy.likesLeft();
 
     // The next person starts at their photo, not mid-scroll.
     if (person?.id != _shownId) {
@@ -416,6 +430,8 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
 
     void openPhotos(int start) =>
         unawaited(context.push(Routes.personPhotos(person.id, start: start)));
+    void compliment(ComplimentTarget target) =>
+        unawaited(context.push(complimentRoute(person.id, target)));
 
     final page = TabPage(
       header: header,
@@ -429,6 +445,13 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // S11: today's like allowance, always visible; out of likes links to S17.
+            _QuotaLine(
+              left: likesLeft,
+              limit: economy.likesLimit(),
+              onOut: () => context.push(Routes.allowance),
+            ),
+            const SizedBox(height: AppSpacing.s3),
             if (controller.showingFallback(filters)) ...[
               StatusBanner(
                 title: l10n.discoverFallbackTitle,
@@ -446,11 +469,23 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
                 key: ValueKey('swipe-${person.id}'),
                 person: person,
                 photoHeight: _photoHeight(context),
-                photoAction: NavIconButton(
-                  icon: NumayaIcons.more,
-                  label: l10n.discoverOptions,
-                  style: NavButtonStyle.circular,
-                  onPressed: () => _options(person),
+                photoAction: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ComplimentAnchor(
+                      key: const ValueKey('compliment-photo-0'),
+                      name: person.name,
+                      onPressed: () =>
+                          compliment(const ComplimentTarget.photo(0)),
+                    ),
+                    const SizedBox(width: AppSpacing.s2),
+                    NavIconButton(
+                      icon: NumayaIcons.more,
+                      label: l10n.discoverOptions,
+                      style: NavButtonStyle.circular,
+                      onPressed: () => _options(person),
+                    ),
+                  ],
                 ),
                 onOpenPhotos: () => openPhotos(1),
                 onMore: _toDetails,
@@ -459,7 +494,12 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
             ),
             // UI-016: no decision buttons; the photo is swiped.
             const SizedBox(height: AppLayout.itemGap),
-            ...personSections(context, person, onPhoto: openPhotos),
+            ...personSections(
+              context,
+              person,
+              onPhoto: openPhotos,
+              onCompliment: compliment,
+            ),
             const SizedBox(height: AppLayout.sectionGap),
             // happn's "Report & block" and Bumble's "Hide and Report" close the profile.
             Center(
@@ -486,6 +526,45 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
         child: child!,
       ),
       child: page,
+    );
+  }
+}
+
+/// The like allowance under the header: "4 of 5 likes left today", or the used-up state.
+class _QuotaLine extends StatelessWidget {
+  const _QuotaLine({
+    required this.left,
+    required this.limit,
+    required this.onOut,
+  });
+
+  final int left;
+  final int limit;
+  final VoidCallback onOut;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Semantics(
+      liveRegion: true,
+      child: Row(
+        key: const ValueKey('discover-quota'),
+        children: [
+          NumayaIcon(
+            NumayaIcons.heart,
+            size: 16,
+            color: left > 0 ? AppColors.accent : AppColors.textSecondary,
+          ),
+          const SizedBox(width: AppSpacing.s2),
+          Expanded(
+            child: Text(
+              left > 0 ? l10n.quotaLeft(left, limit) : l10n.quotaOut,
+              style: AppTypography.helper,
+            ),
+          ),
+          if (left <= 0) TextLink(label: l10n.quotaOutAction, onPressed: onOut),
+        ],
+      ),
     );
   }
 }

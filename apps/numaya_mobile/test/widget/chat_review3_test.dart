@@ -224,16 +224,16 @@ void main() {
       await openPriya(tester);
       final bar = find.byKey(const ValueKey('chat-composer-bar'));
       expect(tester.widget<ColoredBox>(bar).color, AppColors.surface);
-      // Edge to edge, and Plus, field and Send all inside it.
+      // Edge to edge, with the field and Send inside it. MVP PRD: text and emoji only, so no Plus.
       expect(
         tester.getSize(bar).width,
         tester.view.physicalSize.width / tester.view.devicePixelRatio,
       );
-      for (final f in [
+      expect(
         find.bySemanticsLabel('Add a photo, video or voice note'),
-        find.byType(TextField),
-        find.bySemanticsLabel('Send'),
-      ]) {
+        findsNothing,
+      );
+      for (final f in [find.byType(TextField), find.bySemanticsLabel('Send')]) {
         expect(find.descendant(of: bar, matching: f), findsWidgets);
       }
       final icons = tester

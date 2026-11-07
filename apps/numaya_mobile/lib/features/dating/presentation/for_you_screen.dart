@@ -28,6 +28,10 @@ class ForYouScreen extends ConsumerWidget {
 
     void like(SamplePerson p) {
       final result = controller.decide(p.id, liked: true);
+      if (result == DecisionResult.outOfLikes) {
+        context.push(Routes.allowance);
+        return;
+      }
       if (result == DecisionResult.matched) {
         context.push('${Routes.match}/${p.id}');
       } else {

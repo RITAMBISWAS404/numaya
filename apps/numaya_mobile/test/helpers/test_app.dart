@@ -51,6 +51,9 @@ Widget testApp({
       demoAuthProvider.overrideWithValue(repo),
       demoWorldProvider.overrideWith(() => FixedWorld(world)),
       mediaPickerProvider.overrideWithValue(mediaPicker),
+      // Attachments are off in the MVP (text and emoji only); tests that bring a picker are
+      // testing the dormant attachment code, so they turn it on.
+      chatAttachmentsProvider.overrideWithValue(mediaPicker is! NoPicker),
       ...overrides,
     ],
     child: const NumayaApp(),

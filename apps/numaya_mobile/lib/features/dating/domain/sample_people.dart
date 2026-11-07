@@ -588,8 +588,8 @@ class SeedMatch {
 }
 
 /// Seeded matches, oldest first. New matches with no messages expire [kMatchWindowHours] after the
-/// match (P-03 open; the observed 24 hours is used): Jo has 21 hours left, Amara 4, Lina 1, and
-/// Ollie's match has expired.
+/// match (PRD 01): Jo has 21 hours left, Amara 4, Lina 1, and Ollie's match has expired. Rafa's
+/// chat is quiet (check-in due) and Ade's expired after 14 quiet days.
 const List<SeedMatch> kSeedMatches = [
   SeedMatch('sasha', 120, [
     SeedMessage(true, 'Parkrun then pancakes is a perfect Sunday.', 7000),
@@ -599,10 +599,17 @@ const List<SeedMatch> kSeedMatches = [
     SeedMessage(true, 'Always. With far too much lemon.', 4380),
     SeedMessage(false, 'Coffee at the market on Saturday, maybe?', 1500),
   ]),
-  SeedMatch('rafa', 70, [
-    SeedMessage(false, 'Settlers of Catan or Codenames?', 3600),
-    SeedMessage(true, 'Codenames, but only if I can be the spymaster.', 3500),
-    SeedMessage(true, 'Same. Board games next week?', 2200),
+  // Quiet for eight days: the check-in is due (S23).
+  SeedMatch('rafa', 260, [
+    SeedMessage(false, 'Settlers of Catan or Codenames?', 13200),
+    SeedMessage(true, 'Codenames, but only if I can be the spymaster.', 12900),
+    SeedMessage(true, 'Same. Board games next week?', 11700),
+  ]),
+  // Quiet for fifteen days: the chat expired, history kept, and Ade has asked to reconnect (S25).
+  SeedMatch('ade', 600, [
+    SeedMessage(false, 'You climb too? Which wall do you go to?', 30000),
+    SeedMessage(true, 'The one near the station, most Thursdays.', 29500),
+    SeedMessage(false, 'We should go some time. I need a belay buddy.', 21700),
   ]),
   SeedMatch('priya', 26, [
     SeedMessage(true, 'That bakery on Columbia Road, right?', 300),

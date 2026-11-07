@@ -2677,7 +2677,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatExpiredBody.
   ///
   /// In en, this message translates to:
-  /// **'Neither of you wrote within 24 hours, so the match ended. Rematch to get another 24 hours.'**
+  /// **'Your messages are kept. Either of you can ask to reconnect once, for free.'**
   String get chatExpiredBody;
 
   /// No description provided for @chatRematch.
@@ -2701,13 +2701,13 @@ abstract class AppLocalizations {
   /// No description provided for @chatExtendFreeNote.
   ///
   /// In en, this message translates to:
-  /// **'Need more time? You get one free Extend a day.'**
+  /// **'Need more time? One free extension a week, one per match.'**
   String get chatExtendFreeNote;
 
   /// No description provided for @chatExtendPremiumNote.
   ///
   /// In en, this message translates to:
-  /// **'Premium: extend as often as you like.'**
+  /// **'Premium: one extension a day, one per match.'**
   String get chatExtendPremiumNote;
 
   /// No description provided for @chatExtend.
@@ -5671,7 +5671,7 @@ abstract class AppLocalizations {
   /// No description provided for @obBioLede.
   ///
   /// In en, this message translates to:
-  /// **'Optional. A few lines about you, in your own words.'**
+  /// **'A few lines about you, in your own words. Up to 300 characters.'**
   String get obBioLede;
 
   /// No description provided for @obBioLabel.
@@ -8505,6 +8505,1698 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Activity: unavailable'**
   String get demoVisInsightsOff;
+
+  /// No description provided for @quotaLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{left} of {limit} likes left today'**
+  String quotaLeft(int left, int limit);
+
+  /// No description provided for @quotaOut.
+  ///
+  /// In en, this message translates to:
+  /// **'No likes left today'**
+  String get quotaOut;
+
+  /// No description provided for @quotaOutAction.
+  ///
+  /// In en, this message translates to:
+  /// **'See when they reset'**
+  String get quotaOutAction;
+
+  /// No description provided for @allowanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve used today’s likes'**
+  String get allowanceTitle;
+
+  /// No description provided for @allowanceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Likes reset at midnight India time. You can still pass, reply in Chats and send Compliments.'**
+  String get allowanceBody;
+
+  /// No description provided for @allowanceResetsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resets in {time}'**
+  String allowanceResetsIn(Object time);
+
+  /// No description provided for @allowancePremiumTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium gives you 15 likes a day'**
+  String get allowancePremiumTitle;
+
+  /// No description provided for @allowancePremiumBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Plus 3 Compliments a week, see who liked you, and a daily match extension.'**
+  String get allowancePremiumBody;
+
+  /// No description provided for @allowancePremiumHas.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium includes 15 likes a day. They reset at midnight India time.'**
+  String get allowancePremiumHas;
+
+  /// No description provided for @allowanceToChats.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Chats'**
+  String get allowanceToChats;
+
+  /// No description provided for @allowanceBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Discover'**
+  String get allowanceBack;
+
+  /// No description provided for @allowanceNoMoreProfiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Paying never adds people. When new profiles near you join, they appear here.'**
+  String get allowanceNoMoreProfiles;
+
+  /// No description provided for @complimentAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a Compliment'**
+  String get complimentAction;
+
+  /// No description provided for @complimentActionOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Send {name} a Compliment'**
+  String complimentActionOn(Object name);
+
+  /// No description provided for @complimentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment {name}'**
+  String complimentTitle(Object name);
+
+  /// No description provided for @complimentOnPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'On their photo'**
+  String get complimentOnPhoto;
+
+  /// No description provided for @complimentOnPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'On their prompt'**
+  String get complimentOnPrompt;
+
+  /// No description provided for @complimentFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Compliment'**
+  String get complimentFieldLabel;
+
+  /// No description provided for @complimentPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Say what caught your eye'**
+  String get complimentPlaceholder;
+
+  /// No description provided for @complimentCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'{used}/{max}'**
+  String complimentCounter(int used, int max);
+
+  /// No description provided for @complimentBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{You have no Compliment credits} =1{Uses 1 credit. You have 1.} other{Uses 1 credit. You have {count}.}}'**
+  String complimentBalance(int count);
+
+  /// No description provided for @complimentRule.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} can reply to start a chat. You can send one Compliment to each person.'**
+  String complimentRule(Object name);
+
+  /// No description provided for @complimentSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Compliment'**
+  String get complimentSend;
+
+  /// No description provided for @complimentGetMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Compliments'**
+  String get complimentGetMore;
+
+  /// No description provided for @complimentSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment sent to {name}'**
+  String complimentSent(Object name);
+
+  /// No description provided for @complimentFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Compliment didn’t send'**
+  String get complimentFailedTitle;
+
+  /// No description provided for @complimentFailedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your credit was returned. Check your connection and try again.'**
+  String get complimentFailedBody;
+
+  /// No description provided for @complimentTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep it to {max} characters.'**
+  String complimentTooLong(int max);
+
+  /// No description provided for @complimentAlreadySent.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve sent {name} a Compliment. They can reply to start a chat.'**
+  String complimentAlreadySent(Object name);
+
+  /// No description provided for @complimentAlreadyReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} sent you a Compliment. Reply to it in Chats.'**
+  String complimentAlreadyReceived(Object name);
+
+  /// No description provided for @complimentConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re already connected with {name}.'**
+  String complimentConnected(Object name);
+
+  /// No description provided for @complimentUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This profile isn’t available any more.'**
+  String get complimentUnavailable;
+
+  /// No description provided for @complimentReferenceGone.
+  ///
+  /// In en, this message translates to:
+  /// **'This photo or prompt is no longer on the profile.'**
+  String get complimentReferenceGone;
+
+  /// No description provided for @complimentContextPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment on a photo'**
+  String get complimentContextPhoto;
+
+  /// No description provided for @requestsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Requests (1)} other{Requests ({count})}}'**
+  String requestsTitle(int count);
+
+  /// No description provided for @requestRowCompliment.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} sent a Compliment'**
+  String requestRowCompliment(Object name);
+
+  /// No description provided for @requestRowReconnect.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} wants to reconnect'**
+  String requestRowReconnect(Object name);
+
+  /// No description provided for @requestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment'**
+  String get requestTitle;
+
+  /// No description provided for @requestOnYourPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'On your photo'**
+  String get requestOnYourPhoto;
+
+  /// No description provided for @requestOnYourPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'On your prompt'**
+  String get requestOnYourPrompt;
+
+  /// No description provided for @requestReplyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply to start chatting'**
+  String get requestReplyLabel;
+
+  /// No description provided for @requestReplyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Replying is free and opens your chat.'**
+  String get requestReplyHint;
+
+  /// No description provided for @requestDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get requestDismiss;
+
+  /// No description provided for @requestDismissTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss this Compliment?'**
+  String get requestDismissTitle;
+
+  /// No description provided for @requestDismissBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} won’t be told. They can’t send you another one.'**
+  String requestDismissBody(Object name);
+
+  /// No description provided for @requestDismissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment dismissed'**
+  String get requestDismissed;
+
+  /// No description provided for @requestViewProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View profile'**
+  String get requestViewProfile;
+
+  /// No description provided for @requestGone.
+  ///
+  /// In en, this message translates to:
+  /// **'This request is no longer available.'**
+  String get requestGone;
+
+  /// No description provided for @chatsExpiredRow.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 expired chat} other{{count} expired chats}}'**
+  String chatsExpiredRow(int count);
+
+  /// No description provided for @chatsExpiredDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'History is kept. Either of you can ask to reconnect.'**
+  String get chatsExpiredDetail;
+
+  /// No description provided for @matchTimeLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{time} left'**
+  String matchTimeLeft(Object time);
+
+  /// No description provided for @chatExpiredQuietTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This chat expired after 14 quiet days'**
+  String get chatExpiredQuietTitle;
+
+  /// No description provided for @chatExpiredFirstTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This match expired before anyone wrote'**
+  String get chatExpiredFirstTitle;
+
+  /// No description provided for @chatReconnectAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask to reconnect'**
+  String get chatReconnectAsk;
+
+  /// No description provided for @chatReconnectSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Request sent. If {name} accepts, your chat reopens.'**
+  String chatReconnectSent(Object name);
+
+  /// No description provided for @chatReconnectDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'This reconnection was declined.'**
+  String get chatReconnectDeclined;
+
+  /// No description provided for @chatReconnectIncoming.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} asked to reconnect'**
+  String chatReconnectIncoming(Object name);
+
+  /// No description provided for @chatReconnectReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review request'**
+  String get chatReconnectReview;
+
+  /// No description provided for @chatReconnectToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnection request sent'**
+  String get chatReconnectToast;
+
+  /// No description provided for @chatSpamLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait for {name} to reply before sending more.'**
+  String chatSpamLimit(Object name);
+
+  /// No description provided for @chatMute.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute notifications'**
+  String get chatMute;
+
+  /// No description provided for @chatUnmute.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmute notifications'**
+  String get chatUnmute;
+
+  /// No description provided for @chatMuted.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications muted for {name}'**
+  String chatMuted(Object name);
+
+  /// No description provided for @chatUnmuted.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications on for {name}'**
+  String chatUnmuted(Object name);
+
+  /// No description provided for @chatTextOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Chats are text and emoji for now.'**
+  String get chatTextOnly;
+
+  /// No description provided for @extendAlready.
+  ///
+  /// In en, this message translates to:
+  /// **'This match has already been extended once.'**
+  String get extendAlready;
+
+  /// No description provided for @extendUsedToday.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve used today’s extension. Another one arrives at midnight India time.'**
+  String get extendUsedToday;
+
+  /// No description provided for @extendFreeUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve used this week’s free extension. It resets on Monday.'**
+  String get extendFreeUsed;
+
+  /// No description provided for @extendDone.
+  ///
+  /// In en, this message translates to:
+  /// **'24 hours added for {name}'**
+  String extendDone(Object name);
+
+  /// No description provided for @checkInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'It’s been quiet with {name}'**
+  String checkInTitle(Object name);
+
+  /// No description provided for @checkInBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages for a week. The chat expires after 14 quiet days. This never changes who sees your profile.'**
+  String get checkInBody;
+
+  /// No description provided for @checkInReasonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'How’s it going? (optional)'**
+  String get checkInReasonLabel;
+
+  /// No description provided for @checkInReasonInterested.
+  ///
+  /// In en, this message translates to:
+  /// **'Still interested'**
+  String get checkInReasonInterested;
+
+  /// No description provided for @checkInReasonBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'Busy right now'**
+  String get checkInReasonBusy;
+
+  /// No description provided for @checkInReasonNotFeeling.
+  ///
+  /// In en, this message translates to:
+  /// **'Not feeling it'**
+  String get checkInReasonNotFeeling;
+
+  /// No description provided for @checkInReasonSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefer not to say'**
+  String get checkInReasonSkip;
+
+  /// No description provided for @checkInWrite.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a message'**
+  String get checkInWrite;
+
+  /// No description provided for @checkInPause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause my profile'**
+  String get checkInPause;
+
+  /// No description provided for @checkInPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Update preferences'**
+  String get checkInPreferences;
+
+  /// No description provided for @checkInSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get checkInSkip;
+
+  /// No description provided for @expiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired chats'**
+  String get expiredTitle;
+
+  /// No description provided for @expiredEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No expired chats'**
+  String get expiredEmptyTitle;
+
+  /// No description provided for @expiredEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Chats expire after 14 quiet days, and new matches after 24 hours without a message.'**
+  String get expiredEmptyBody;
+
+  /// No description provided for @expiredOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired {date}'**
+  String expiredOn(Object date);
+
+  /// No description provided for @expiredStateCanAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'You can ask to reconnect'**
+  String get expiredStateCanAsk;
+
+  /// No description provided for @expiredStatePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for their answer'**
+  String get expiredStatePending;
+
+  /// No description provided for @expiredStateIncoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Asked to reconnect'**
+  String get expiredStateIncoming;
+
+  /// No description provided for @expiredStateDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get expiredStateDeclined;
+
+  /// No description provided for @reconnectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} wants to reconnect'**
+  String reconnectTitle(Object name);
+
+  /// No description provided for @reconnectBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepting reopens your chat. Nothing is sent automatically, and it’s free.'**
+  String get reconnectBody;
+
+  /// No description provided for @reconnectPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'Your last messages'**
+  String get reconnectPrevious;
+
+  /// No description provided for @reconnectAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get reconnectAccept;
+
+  /// No description provided for @reconnectDecline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get reconnectDecline;
+
+  /// No description provided for @reconnectDeclineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline this request?'**
+  String get reconnectDeclineTitle;
+
+  /// No description provided for @reconnectDeclineBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} won’t be able to ask again for this chat.'**
+  String reconnectDeclineBody(Object name);
+
+  /// No description provided for @reconnectAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat reopened with {name}'**
+  String reconnectAccepted(Object name);
+
+  /// No description provided for @reconnectDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Request declined'**
+  String get reconnectDeclined;
+
+  /// No description provided for @walletTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment credits'**
+  String get walletTitle;
+
+  /// No description provided for @walletTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 credit} other{{count} credits}}'**
+  String walletTotal(int count);
+
+  /// No description provided for @walletWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly (Premium)'**
+  String get walletWeekly;
+
+  /// No description provided for @walletWeeklyDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Renews {date}. Doesn’t roll over.'**
+  String walletWeeklyDetail(Object date);
+
+  /// No description provided for @walletWeeklyNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium adds 3 every week'**
+  String get walletWeeklyNone;
+
+  /// No description provided for @walletEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned'**
+  String get walletEarned;
+
+  /// No description provided for @walletEarnedDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{earned} of {cap}. Welcome and streak rewards.'**
+  String walletEarnedDetail(int earned, int cap);
+
+  /// No description provided for @walletPurchased.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchased'**
+  String get walletPurchased;
+
+  /// No description provided for @walletPurchasedDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept until you use them.'**
+  String get walletPurchasedDetail;
+
+  /// No description provided for @walletOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits are used weekly first, then earned, then purchased.'**
+  String get walletOrder;
+
+  /// No description provided for @walletHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get walletHistory;
+
+  /// No description provided for @walletHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing yet. Credits you get and spend show here.'**
+  String get walletHistoryEmpty;
+
+  /// No description provided for @walletEntryWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome credits'**
+  String get walletEntryWelcome;
+
+  /// No description provided for @walletEntryStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak reward'**
+  String get walletEntryStreak;
+
+  /// No description provided for @walletEntryWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium weekly credits'**
+  String get walletEntryWeekly;
+
+  /// No description provided for @walletEntryWeeklyExpiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Unused weekly credits ended'**
+  String get walletEntryWeeklyExpiry;
+
+  /// No description provided for @walletEntryPurchase.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment pack'**
+  String get walletEntryPurchase;
+
+  /// No description provided for @walletEntryCompliment.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment sent'**
+  String get walletEntryCompliment;
+
+  /// No description provided for @walletEntryRefund.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit returned'**
+  String get walletEntryRefund;
+
+  /// No description provided for @walletEntryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjustment'**
+  String get walletEntryOther;
+
+  /// No description provided for @streakTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak'**
+  String get streakTitle;
+
+  /// No description provided for @streakDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No streak yet} =1{1-day streak} other{{count}-day streak}}'**
+  String streakDays(int count);
+
+  /// No description provided for @streakCycle.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {progress} of 7'**
+  String streakCycle(int progress);
+
+  /// No description provided for @streakReward.
+  ///
+  /// In en, this message translates to:
+  /// **'Every 7 days in a row earns 1 Compliment credit.'**
+  String get streakReward;
+
+  /// No description provided for @streakHowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A day counts when you'**
+  String get streakHowTitle;
+
+  /// No description provided for @streakHowDecide.
+  ///
+  /// In en, this message translates to:
+  /// **'Decide on 3 profiles'**
+  String get streakHowDecide;
+
+  /// No description provided for @streakHowMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a message in a chat'**
+  String get streakHowMessage;
+
+  /// No description provided for @streakHowReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review your profile, when there’s no one to see or chat with'**
+  String get streakHowReview;
+
+  /// No description provided for @streakReviewAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Review my profile'**
+  String get streakReviewAction;
+
+  /// No description provided for @streakReviewDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Today counts'**
+  String get streakReviewDone;
+
+  /// No description provided for @streakToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today counts'**
+  String get streakToday;
+
+  /// No description provided for @streakTodayOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Today isn’t counted yet'**
+  String get streakTodayOpen;
+
+  /// No description provided for @streakKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits you’ve earned stay, even if a streak resets.'**
+  String get streakKeep;
+
+  /// No description provided for @streakRecoverTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed {day}?'**
+  String streakRecoverTitle(Object day);
+
+  /// No description provided for @streakRecoverBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair it before {deadline} and your streak becomes {length} days.'**
+  String streakRecoverBody(Object deadline, int length);
+
+  /// No description provided for @streakRecoverAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair for {price}'**
+  String streakRecoverAction(Object price);
+
+  /// No description provided for @streakCapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your earned credits are full'**
+  String get streakCapTitle;
+
+  /// No description provided for @streakCapBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {cap}, the most you can hold, so this week’s reward was skipped. Spend one to make room. You never need to buy anything.'**
+  String streakCapBody(int cap);
+
+  /// No description provided for @streakAwarded.
+  ///
+  /// In en, this message translates to:
+  /// **'You earned a Compliment credit'**
+  String get streakAwarded;
+
+  /// No description provided for @healthTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Health'**
+  String get healthTitle;
+
+  /// No description provided for @healthSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile setup'**
+  String get healthSubtitle;
+
+  /// No description provided for @healthScore.
+  ///
+  /// In en, this message translates to:
+  /// **'{score} out of 100'**
+  String healthScore(int score);
+
+  /// No description provided for @healthNotRanking.
+  ///
+  /// In en, this message translates to:
+  /// **'It measures setup only. It never changes who sees you, and it can’t be bought.'**
+  String get healthNotRanking;
+
+  /// No description provided for @healthHow.
+  ///
+  /// In en, this message translates to:
+  /// **'How the score works'**
+  String get healthHow;
+
+  /// No description provided for @healthStatusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discovery status'**
+  String get healthStatusTitle;
+
+  /// No description provided for @healthStatusVisible.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible in Discover'**
+  String get healthStatusVisible;
+
+  /// No description provided for @healthStatusPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused by you'**
+  String get healthStatusPaused;
+
+  /// No description provided for @healthStatusIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden until required setup is done'**
+  String get healthStatusIncomplete;
+
+  /// No description provided for @healthStatusReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos waiting for review'**
+  String get healthStatusReview;
+
+  /// No description provided for @healthStatusRestricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Restricted. See why and appeal.'**
+  String get healthStatusRestricted;
+
+  /// No description provided for @healthStatusUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'We can’t check right now'**
+  String get healthStatusUnknown;
+
+  /// No description provided for @healthImprove.
+  ///
+  /// In en, this message translates to:
+  /// **'Improve your setup'**
+  String get healthImprove;
+
+  /// No description provided for @healthAllDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Every part of your setup is done.'**
+  String get healthAllDone;
+
+  /// No description provided for @healthWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 7 days'**
+  String get healthWeek;
+
+  /// No description provided for @healthPremiumDepth.
+  ///
+  /// In en, this message translates to:
+  /// **'28- and 90-day trends with Premium'**
+  String get healthPremiumDepth;
+
+  /// No description provided for @healthSampleData.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample data in this demo build'**
+  String get healthSampleData;
+
+  /// No description provided for @healthFactorBasics.
+  ///
+  /// In en, this message translates to:
+  /// **'Name, age, gender and who you’re looking for'**
+  String get healthFactorBasics;
+
+  /// No description provided for @healthFactorPhotos.
+  ///
+  /// In en, this message translates to:
+  /// **'Two approved photos'**
+  String get healthFactorPhotos;
+
+  /// No description provided for @healthFactorBio.
+  ///
+  /// In en, this message translates to:
+  /// **'A short bio'**
+  String get healthFactorBio;
+
+  /// No description provided for @healthFactorPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'One prompt answer'**
+  String get healthFactorPrompt;
+
+  /// No description provided for @healthFactorThirdPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'A third photo (optional)'**
+  String get healthFactorThirdPhoto;
+
+  /// No description provided for @healthFactorSecondPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'A second prompt answer (optional)'**
+  String get healthFactorSecondPrompt;
+
+  /// No description provided for @healthPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'{points} of {max}'**
+  String healthPoints(int points, int max);
+
+  /// No description provided for @healthAboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How Profile Health works'**
+  String get healthAboutTitle;
+
+  /// No description provided for @healthAboutBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your score adds up the parts of your setup below. A profile with every required part starts at 80.'**
+  String get healthAboutBody;
+
+  /// No description provided for @healthRestrictionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account restrictions'**
+  String get healthRestrictionsTitle;
+
+  /// No description provided for @healthNoRestrictions.
+  ///
+  /// In en, this message translates to:
+  /// **'No restrictions on your account.'**
+  String get healthNoRestrictions;
+
+  /// No description provided for @healthRestricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account has a restriction. You can read why and appeal, free.'**
+  String get healthRestricted;
+
+  /// No description provided for @healthAppeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Read and appeal'**
+  String get healthAppeal;
+
+  /// No description provided for @healthUnknownBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The status service didn’t answer. This isn’t a restriction. Try again later.'**
+  String get healthUnknownBody;
+
+  /// No description provided for @insightsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights'**
+  String get insightsTitle;
+
+  /// No description provided for @insightsRange.
+  ///
+  /// In en, this message translates to:
+  /// **'{range} days'**
+  String insightsRange(int range);
+
+  /// No description provided for @insightsViews.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile views'**
+  String get insightsViews;
+
+  /// No description provided for @insightsViewsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Approximate: someone saw at least half of your card for a second.'**
+  String get insightsViewsNote;
+
+  /// No description provided for @insightsLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'Likes'**
+  String get insightsLikes;
+
+  /// No description provided for @insightsMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches'**
+  String get insightsMatches;
+
+  /// No description provided for @insightsConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversations'**
+  String get insightsConversations;
+
+  /// No description provided for @insightsRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Views to likes'**
+  String get insightsRate;
+
+  /// No description provided for @insightsRateValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}%'**
+  String insightsRateValue(int percent);
+
+  /// No description provided for @insightsLowSample.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough views yet ({exposures} of 20) for a fair rate'**
+  String insightsLowSample(int exposures);
+
+  /// No description provided for @insightsPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get insightsPremium;
+
+  /// No description provided for @insightsLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'28- and 90-day history and rates come with Premium.'**
+  String get insightsLocked;
+
+  /// No description provided for @insightsCaveat.
+  ///
+  /// In en, this message translates to:
+  /// **'Counts can be imperfect. They never show who viewed you, and no single photo or chat explains them.'**
+  String get insightsCaveat;
+
+  /// No description provided for @premiumBenefitLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'15 likes a day instead of 5'**
+  String get premiumBenefitLikes;
+
+  /// No description provided for @premiumBenefitCompliments.
+  ///
+  /// In en, this message translates to:
+  /// **'3 Compliments every week'**
+  String get premiumBenefitCompliments;
+
+  /// No description provided for @premiumBenefitSeeLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'See who liked you'**
+  String get premiumBenefitSeeLikes;
+
+  /// No description provided for @premiumBenefitFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by intention and lifestyle'**
+  String get premiumBenefitFilters;
+
+  /// No description provided for @premiumBenefitExtend.
+  ///
+  /// In en, this message translates to:
+  /// **'Extend a match every day'**
+  String get premiumBenefitExtend;
+
+  /// No description provided for @premiumBenefitInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'28- and 90-day insights'**
+  String get premiumBenefitInsights;
+
+  /// No description provided for @premiumFreeStays.
+  ///
+  /// In en, this message translates to:
+  /// **'Chatting, reporting, blocking and reconnecting are always free.'**
+  String get premiumFreeStays;
+
+  /// No description provided for @planWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get planWeekly;
+
+  /// No description provided for @planMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get planMonthly;
+
+  /// No description provided for @planYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get planYearly;
+
+  /// No description provided for @planBilledWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'{price} billed every week'**
+  String planBilledWeekly(Object price);
+
+  /// No description provided for @planBilledMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'{price} billed every month'**
+  String planBilledMonthly(Object price);
+
+  /// No description provided for @planBilledYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'{price} billed every year'**
+  String planBilledYearly(Object price);
+
+  /// No description provided for @planRenewal.
+  ///
+  /// In en, this message translates to:
+  /// **'Renews automatically at {price} until you cancel in Google Play.'**
+  String planRenewal(Object price);
+
+  /// No description provided for @pricesProvisional.
+  ///
+  /// In en, this message translates to:
+  /// **'Prices are provisional. No store is connected in this build, so nothing is charged.'**
+  String get pricesProvisional;
+
+  /// No description provided for @paywallContinuePlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with {plan}'**
+  String paywallContinuePlan(Object plan);
+
+  /// No description provided for @premiumRenews.
+  ///
+  /// In en, this message translates to:
+  /// **'Renews {date}'**
+  String premiumRenews(Object date);
+
+  /// No description provided for @premiumEnds.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends {date}. You keep Premium until then.'**
+  String premiumEnds(Object date);
+
+  /// No description provided for @premiumCancelRenewal.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel renewal'**
+  String get premiumCancelRenewal;
+
+  /// No description provided for @premiumCancelledUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Renewal cancelled. Premium stays until {date}.'**
+  String premiumCancelledUntil(Object date);
+
+  /// No description provided for @premiumPlanName.
+  ///
+  /// In en, this message translates to:
+  /// **'{plan} plan'**
+  String premiumPlanName(Object plan);
+
+  /// No description provided for @premiumForLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'Get more likes each day'**
+  String get premiumForLikes;
+
+  /// No description provided for @premiumForSeeLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'See who liked you'**
+  String get premiumForSeeLikes;
+
+  /// No description provided for @premiumForExtension.
+  ///
+  /// In en, this message translates to:
+  /// **'Extend a match every day'**
+  String get premiumForExtension;
+
+  /// No description provided for @premiumForInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'See your longer trends'**
+  String get premiumForInsights;
+
+  /// No description provided for @premiumForCompliments.
+  ///
+  /// In en, this message translates to:
+  /// **'Get 3 Compliments every week'**
+  String get premiumForCompliments;
+
+  /// No description provided for @packTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'3 Compliments'**
+  String get packTitle;
+
+  /// No description provided for @packPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'{price} once'**
+  String packPrice(Object price);
+
+  /// No description provided for @packBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a Compliment on a photo or prompt before you match. Purchased credits stay until you use them.'**
+  String get packBody;
+
+  /// No description provided for @packBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{You have 1 credit} other{You have {count} credits}}'**
+  String packBalance(int count);
+
+  /// No description provided for @packBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy for {price}'**
+  String packBuy(Object price);
+
+  /// No description provided for @recoveryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair your streak'**
+  String get recoveryTitle;
+
+  /// No description provided for @recoveryMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed day: {day}'**
+  String recoveryMissed(Object day);
+
+  /// No description provided for @recoveryResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Your streak becomes {length} days'**
+  String recoveryResult(int length);
+
+  /// No description provided for @recoveryDeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Available until {deadline}'**
+  String recoveryDeadline(Object deadline);
+
+  /// No description provided for @recoveryCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'We check again before charging. If the repair isn’t allowed any more, you won’t be charged.'**
+  String get recoveryCheck;
+
+  /// No description provided for @recoveryBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair for {price}'**
+  String recoveryBuy(Object price);
+
+  /// No description provided for @recoveryNone.
+  ///
+  /// In en, this message translates to:
+  /// **'There’s no missed day to repair right now.'**
+  String get recoveryNone;
+
+  /// No description provided for @recoveryNoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A missed day can be repaired within 48 hours, once a week, when the days around it count.'**
+  String get recoveryNoneBody;
+
+  /// No description provided for @checkoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo checkout'**
+  String get checkoutTitle;
+
+  /// No description provided for @checkoutBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No store is connected and no money moves. Choose what the store reports for {item} at {price}.'**
+  String checkoutBody(Object item, Object price);
+
+  /// No description provided for @checkoutSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase succeeds'**
+  String get checkoutSuccess;
+
+  /// No description provided for @checkoutPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment pending'**
+  String get checkoutPending;
+
+  /// No description provided for @checkoutCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get checkoutCancelled;
+
+  /// No description provided for @checkoutFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment failed'**
+  String get checkoutFailed;
+
+  /// No description provided for @outcomeSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re all set'**
+  String get outcomeSuccessTitle;
+
+  /// No description provided for @outcomeSuccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo purchase applied. No money was taken.'**
+  String get outcomeSuccessBody;
+
+  /// No description provided for @outcomePendingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment pending'**
+  String get outcomePendingTitle;
+
+  /// No description provided for @outcomePendingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing changes until the store confirms the payment. You won’t be charged twice.'**
+  String get outcomePendingBody;
+
+  /// No description provided for @outcomeCancelledTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase cancelled'**
+  String get outcomeCancelledTitle;
+
+  /// No description provided for @outcomeCancelledBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing was charged and nothing changed.'**
+  String get outcomeCancelledBody;
+
+  /// No description provided for @outcomeFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment didn’t go through'**
+  String get outcomeFailedTitle;
+
+  /// No description provided for @outcomeFailedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing was charged. Try again or use another payment method.'**
+  String get outcomeFailedBody;
+
+  /// No description provided for @outcomeUnavailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchases aren’t available yet'**
+  String get outcomeUnavailableTitle;
+
+  /// No description provided for @outcomeUnavailableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Store billing isn’t set up in this build, so nothing was charged.'**
+  String get outcomeUnavailableBody;
+
+  /// No description provided for @outcomeIneligibleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair no longer available'**
+  String get outcomeIneligibleTitle;
+
+  /// No description provided for @outcomeIneligibleBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The missed day can’t be repaired any more, so nothing was charged.'**
+  String get outcomeIneligibleBody;
+
+  /// No description provided for @outcomeRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get outcomeRestore;
+
+  /// No description provided for @outcomeHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Get help'**
+  String get outcomeHelp;
+
+  /// No description provided for @outcomeTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get outcomeTryAgain;
+
+  /// No description provided for @hubActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Your activity'**
+  String get hubActivity;
+
+  /// No description provided for @hubHealthDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{score} of 100'**
+  String hubHealthDetail(int score);
+
+  /// No description provided for @hubCreditsDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 credit} other{{count} credits}}'**
+  String hubCreditsDetail(int count);
+
+  /// No description provided for @hubStreakDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Start today} =1{1 day} other{{count} days}}'**
+  String hubStreakDetail(int count);
+
+  /// No description provided for @hubInsightsDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Views, likes and matches'**
+  String get hubInsightsDetail;
+
+  /// No description provided for @settingsSubscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription'**
+  String get settingsSubscription;
+
+  /// No description provided for @settingsLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal'**
+  String get settingsLegal;
+
+  /// No description provided for @settingsSupportRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Support requests'**
+  String get settingsSupportRequests;
+
+  /// No description provided for @legalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal'**
+  String get legalTitle;
+
+  /// No description provided for @legalCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Community standards'**
+  String get legalCommunity;
+
+  /// No description provided for @legalSafetyContacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety contacts'**
+  String get legalSafetyContacts;
+
+  /// No description provided for @legalDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft for review. Not the final legal text.'**
+  String get legalDraft;
+
+  /// No description provided for @legalPrivacySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'What we keep: your phone number and date of birth privately; your profile publicly; your approximate city, never exact coordinates. Analytics never include message text or one-time codes. Proposed retention: raw analytics 30 days, aggregates 90 days, expired chats 90 days after expiry. Deleting your account hides you at once; we aim to delete your data within 30 days.'**
+  String get legalPrivacySummary;
+
+  /// No description provided for @legalTermsSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Numaya is for adults 18 and over. Premium renews until you cancel in your store account. Prices shown in this build are provisional. Safety tools stay free for everyone.'**
+  String get legalTermsSummary;
+
+  /// No description provided for @legalCommunitySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Be real: your own photos and your own name. Be kind: no harassment, hate or pressure. Be safe: no money requests, no sharing others’ private details. Reports are reviewed by people, and the person you report is never told who reported them.'**
+  String get legalCommunitySummary;
+
+  /// No description provided for @legalSafetyIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'If you’re in danger, call emergency services first. In India:'**
+  String get legalSafetyIntro;
+
+  /// No description provided for @legalSafetyEmergency.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency: 112'**
+  String get legalSafetyEmergency;
+
+  /// No description provided for @legalSafetyWomen.
+  ///
+  /// In en, this message translates to:
+  /// **'Women helpline: 181'**
+  String get legalSafetyWomen;
+
+  /// No description provided for @legalSafetyCyber.
+  ///
+  /// In en, this message translates to:
+  /// **'Cyber crime: 1930 or cybercrime.gov.in'**
+  String get legalSafetyCyber;
+
+  /// No description provided for @legalSafetyVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Check these numbers before launch. Report anyone in the app from their profile or chat.'**
+  String get legalSafetyVerify;
+
+  /// No description provided for @supportRequestsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Support requests'**
+  String get supportRequestsTitle;
+
+  /// No description provided for @supportRequestsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No requests yet'**
+  String get supportRequestsEmpty;
+
+  /// No description provided for @supportRequestsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests you send from Contact support show here with their status.'**
+  String get supportRequestsEmptyBody;
+
+  /// No description provided for @supportStatusReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get supportStatusReceived;
+
+  /// No description provided for @supportStatusDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo: not sent to a team'**
+  String get supportStatusDemo;
+
+  /// No description provided for @supportNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New request'**
+  String get supportNew;
+
+  /// No description provided for @obPhotosModeration.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo build: photos are approved instantly. In the live app they’re checked before they appear in Discover.'**
+  String get obPhotosModeration;
+
+  /// No description provided for @obAgeRangeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Age range'**
+  String get obAgeRangeLabel;
+
+  /// No description provided for @obAgeRangeValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{min} to {max}'**
+  String obAgeRangeValue(int min, int max);
+
+  /// No description provided for @obWelcomeCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'You have 3 Compliment credits to start'**
+  String get obWelcomeCredits;
+
+  /// No description provided for @obWelcomeCreditsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Send one on a photo or prompt that catches your eye.'**
+  String get obWelcomeCreditsBody;
+
+  /// No description provided for @obBioRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a short bio to continue.'**
+  String get obBioRequired;
+
+  /// No description provided for @demoLikesTool.
+  ///
+  /// In en, this message translates to:
+  /// **'Likes left today: {left}'**
+  String demoLikesTool(int left);
+
+  /// No description provided for @demoUseLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'Use up today’s likes'**
+  String get demoUseLikes;
+
+  /// No description provided for @demoFillBank.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill earned credits to the cap'**
+  String get demoFillBank;
+
+  /// No description provided for @likesLockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 person likes you} other{{count} people like you}}'**
+  String likesLockedTitle(int count);
+
+  /// No description provided for @likesLockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium shows who. Or keep going in Discover, where they can appear too.'**
+  String get likesLockedBody;
+
+  /// No description provided for @likesLockedCta.
+  ///
+  /// In en, this message translates to:
+  /// **'See who with Premium'**
+  String get likesLockedCta;
+
+  /// No description provided for @likesLockedTile.
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden profile'**
+  String get likesLockedTile;
+
+  /// No description provided for @notifCheckIns.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiet chat check-ins'**
+  String get notifCheckIns;
+
+  /// No description provided for @notifRewards.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak rewards and credits'**
+  String get notifRewards;
+
+  /// No description provided for @obMissingBio.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a short bio'**
+  String get obMissingBio;
 }
 
 class _AppLocalizationsDelegate

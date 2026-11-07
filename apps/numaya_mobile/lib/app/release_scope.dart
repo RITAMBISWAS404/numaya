@@ -20,4 +20,11 @@ abstract final class ReleaseScope {
   /// `--dart-define=NUMAYA_EVENTS=true`, or at launch by setting the default to true
   /// (docs/design-experiments/ente-design-system/tabler-mvp/EVENTS_GATE.md).
   static const bool events = bool.fromEnvironment('NUMAYA_EVENTS');
+
+  /// Chat attachments (photo, video, voice). PRD 01: MVP chat is text and emoji only, so the
+  /// attach control is hidden; the attachment code stays dormant. Internal builds:
+  /// `--dart-define=NUMAYA_CHAT_ATTACHMENTS=true`.
+  static const bool chatAttachments = bool.fromEnvironment(
+    'NUMAYA_CHAT_ATTACHMENTS',
+  );
 }
