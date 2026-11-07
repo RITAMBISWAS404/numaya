@@ -398,7 +398,7 @@ class ScreenHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (eyebrow != null) ...[
-            Text(eyebrow!.toUpperCase(), style: AppTypography.labelCaps),
+            Text(eyebrow!, style: AppTypography.labelCaps),
             const SizedBox(height: AppSpacing.s3),
           ],
           // UI-009: a decorative illustration gets its own square region above the heading,

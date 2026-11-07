@@ -22,40 +22,44 @@ void main() {
   }
 
   group('UI-033/034 New matches', () {
-    testWidgets('Likes first with the real count; match tiles are equal '
-        'rounded squares with no visible name', (tester) async {
-      final c = await open(tester, Routes.messages);
-      final likes = c.read(datingProvider.notifier).unansweredLikes();
-      expect(
-        find.bySemanticsLabel(RegExp('^$likes people like you')),
-        findsOneWidget,
-      );
-      expect(find.text('$likes'), findsWidgets);
-      final tiles = find.byWidgetPredicate(
-        (w) =>
-            w.key is ValueKey<String> &&
-            (w.key! as ValueKey<String>).value.startsWith('match-tile-'),
-      );
-      expect(tiles, findsWidgets);
-      for (final e in tiles.evaluate()) {
-        // The clipped square itself (the tile adds its gap as padding on the right).
-        final size = tester.getSize(
-          find
+    testWidgets(
+      'Likes first with the real count; R02: each match is a photo in a '
+      'progress ring with no countdown or name below',
+      (tester) async {
+        final c = await open(tester, Routes.messages);
+        final likes = c.read(datingProvider.notifier).unansweredLikes();
+        expect(
+          find.bySemanticsLabel(RegExp('^$likes people like you')),
+          findsOneWidget,
+        );
+        expect(find.text('$likes'), findsWidgets);
+        final tiles = find.byWidgetPredicate(
+          (w) =>
+              w.key is ValueKey<String> &&
+              (w.key! as ValueKey<String>).value.startsWith('match-tile-'),
+        );
+        expect(tiles, findsWidgets);
+        for (final e in tiles.evaluate()) {
+          final ring = find
               .descendant(
                 of: find.byWidget(e.widget),
-                matching: find.byType(ClipRRect),
+                matching: find.byType(CountdownAvatar),
               )
-              .first,
+              .first;
+          final size = tester.getSize(ring);
+          expect(size.width, closeTo(size.height, 0.5));
+          expect(size.width, greaterThanOrEqualTo(72));
+        }
+        // R02 supersedes the MVP caption: no time under the avatar; it is spoken instead.
+        expect(find.text('21h left'), findsNothing);
+        expect(
+          find.bySemanticsLabel(RegExp('^Jo, new match, 21h left')),
+          findsOneWidget,
         );
-        expect(size.width, closeTo(size.height, 0.5));
-        expect(size.width, greaterThanOrEqualTo(80));
-      }
-      // MVP PRD S20 supersedes UI-033 here: each pending match shows its time left under the
-      // tile (names still stay in the spoken label only).
-      expect(find.text('21h left'), findsOneWidget);
-      expect(find.text('Jo'), findsNothing);
-      await settle(tester);
-    });
+        expect(find.text('Jo'), findsNothing);
+        await settle(tester);
+      },
+    );
   });
 
   group('UI-042 Profile summary', () {

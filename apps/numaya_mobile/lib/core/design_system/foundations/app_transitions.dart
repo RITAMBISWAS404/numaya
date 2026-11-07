@@ -10,10 +10,12 @@ class NumayaPageTransitionsBuilder extends PageTransitionsBuilder {
   const NumayaPageTransitionsBuilder();
 
   @override
-  Duration get transitionDuration => AppMotion.push;
+  Duration get transitionDuration =>
+      AppMotion.preset == MotionPreset.m0 ? Duration.zero : AppMotion.route;
 
   @override
-  Duration get reverseTransitionDuration => AppMotion.slow;
+  Duration get reverseTransitionDuration =>
+      AppMotion.preset == MotionPreset.m0 ? Duration.zero : AppMotion.state;
 
   @override
   Widget buildTransitions<T>(

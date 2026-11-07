@@ -32,7 +32,7 @@ void main() {
     for (final i in ['Natural wine', 'Cooking', 'Jazz', 'Poetry', 'Climbing']) {
       await _tap(tester, find.text(i));
     }
-    expect(find.text('5/5 SELECTED'), findsOneWidget);
+    expect(find.text('5/5 selected'), findsOneWidget); // R07 sentence case
     final travel = tester.widget<NumayaChip>(
       find.ancestor(of: find.text('Travel'), matching: find.byType(NumayaChip)),
     );

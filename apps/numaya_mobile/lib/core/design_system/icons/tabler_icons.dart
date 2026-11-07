@@ -178,7 +178,13 @@ enum NumayaMobileIcons {
   hourglass,
   bellOff,
   extend,
-  reconnect,
+  archive,
+  eye,
+  users,
+  bulb,
+  trendingUp,
+  trendingDown,
+  funnel,
 }
 
 /// Mobile-only glyphs, drawn with Tabler like [kTablerIcons].
@@ -214,8 +220,20 @@ const Map<NumayaMobileIcons, TablerGlyph> kTablerMobileIcons = {
   NumayaMobileIcons.bellOff: (outline: 'bell-off', filled: null),
   // extend a match
   NumayaMobileIcons.extend: (outline: 'clock-plus', filled: null),
-  // reconnect
-  NumayaMobileIcons.reconnect: (outline: 'heart-handshake', filled: null),
+  // Visual Lab V2 (2026-11-08):
+  // archived chats (R01)
+  NumayaMobileIcons.archive: (outline: 'archive', filled: 'archive'),
+  // profile appearances (insights)
+  NumayaMobileIcons.eye: (outline: 'eye', filled: 'eye'),
+  // eligible audience (insights)
+  NumayaMobileIcons.users: (outline: 'users', filled: null),
+  // evidence-linked suggestion (insights)
+  NumayaMobileIcons.bulb: (outline: 'bulb', filled: 'bulb'),
+  // period comparison up / down
+  NumayaMobileIcons.trendingUp: (outline: 'trending-up', filled: null),
+  NumayaMobileIcons.trendingDown: (outline: 'trending-down', filled: null),
+  // funnel (insights)
+  NumayaMobileIcons.funnel: (outline: 'chart-funnel', filled: null),
 };
 
 /// Outline stroke policy (X15-I, 15px experiment 2026-11-07), in Tabler's 24 x 24 viewBox units;

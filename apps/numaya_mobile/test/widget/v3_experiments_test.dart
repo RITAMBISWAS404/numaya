@@ -148,7 +148,11 @@ void main() {
       });
     }
 
-    testWidgets('C: Preview is one tap from the tab', (tester) async {
+    // Superseded on Profile by Visual Lab V2 group `profile-header` (C is now identity with
+    // streak); the EXP-002 C widget is still previewed in the Visual Lab.
+    testWidgets('C: Preview is one tap from the tab', skip: true, (
+      tester,
+    ) async {
       final c = await open(
         tester,
         Experiment.profileHeader,
@@ -162,7 +166,9 @@ void main() {
     });
   });
 
-  group('EXP-004 completion card', () {
+  // Superseded by R11 (Visual Lab V2): completion is the supporting Profile setup card, counted
+  // in parts (group `profile-setup`), not a percentage. Kept for history; not run.
+  group('EXP-004 completion card', skip: true, () {
     for (final v in ExpVariant.values) {
       testWidgets('${v.letter}: same percentage, reaches the hub', (
         tester,

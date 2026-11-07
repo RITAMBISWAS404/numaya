@@ -98,7 +98,8 @@ void main() {
       expect(AppTypography.emptyTitle.fontSize, 20);
       expect(AppTypography.sheetTitle.fontSize, 20);
       expect(AppTypography.metric.fontSize, 40);
-      expect(AppTypography.labelCaps.fontSize, 12);
+      // R07: the former caps eyebrow is a sentence-case 14pt label (even sizes, FT-01).
+      expect(AppTypography.labelCaps.fontSize, 14);
       // Ente Body 14/20 medium for body, typing and buttons (FT-01); metadata is Ente's Mini
       // 12/16, under the body.
       expect(AppTypography.body.fontSize, 15);

@@ -4,6 +4,7 @@ import '../../../core/design_system/design_system.dart';
 import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
 import '../../compliments/domain/compliment.dart';
+import '../../lab/profile_prompt_card.dart';
 import '../../onboarding/domain/profile_draft.dart';
 import '../domain/profile_fact_emoji.dart';
 import '../domain/sample_people.dart';
@@ -24,7 +25,18 @@ class PersonHeroCard extends StatelessWidget {
     this.onMore,
     this.photoHeight,
     this.photoAction,
+    this.complimentAction,
+    this.layout,
   });
+
+  /// R05: the Compliment squircle, bottom-right on the photo. The identity text reserves its
+  /// width, so the name never runs under it.
+  final Widget? complimentAction;
+
+  /// Card family `discover-photo` (Visual Lab V2) for the discovery card: 'O' name on the scrim,
+  /// 'A' name below the photo, 'B' name chip at the top, 'C' name with fact pills on the scrim,
+  /// 'D' framed photo with a caption. Null keeps the plain layout for other screens.
+  final String? layout;
 
   /// Bumble-style discovery card (Ente reconstruction, ER-01): non-null lays the name, verified
   /// tick, job and shared interests over the bottom of the photo instead of below it. The frame is
@@ -35,7 +47,11 @@ class PersonHeroCard extends StatelessWidget {
   /// Button over photos. Only drawn with [photoHeight].
   final Widget? photoAction;
 
-  bool get _overlay => photoHeight != null;
+  bool get _overlay =>
+      photoHeight != null && layout != 'A' && layout != 'B' && layout != 'D';
+
+  /// The discovery card's controls (overflow, Compliment) are drawn for every discover layout.
+  bool get _discover => photoHeight != null;
 
   /// Tapping the photo opens the photo viewer; a photo count shows on the photo.
   final VoidCallback? onOpenPhotos;
@@ -58,7 +74,8 @@ class PersonHeroCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Column(
+    final framed = layout == 'D' && _discover;
+    final card = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ClipRRect(
@@ -78,10 +95,13 @@ class PersonHeroCard extends StatelessWidget {
                     bottom: 0,
                     child: PhotoScrim(
                       fade: 120,
-                      padding: const EdgeInsets.fromLTRB(
+                      padding: EdgeInsets.fromLTRB(
                         AppSpacing.s4,
                         0,
-                        AppSpacing.s4,
+                        // R05: room for the 48pt Compliment target plus a gap.
+                        complimentAction == null
+                            ? AppSpacing.s4
+                            : SquircleIconButton.target + AppSpacing.s2,
                         AppSpacing.s4,
                       ),
                       child: _overlayIdentity(context, l10n),
@@ -91,17 +111,33 @@ class PersonHeroCard extends StatelessWidget {
                 // UI-014: no photo count on the photo. In the overlay layout the status tags sit
                 // with the name at the bottom; the plain layout keeps them top-left.
                 if (!_overlay)
+                  // `discover-photo` B keeps the name chip at the top, so its tags sit at the
+                  // bottom left, clear of the Compliment action.
+                  Positioned(
+                    top: layout == 'B' ? null : AppSpacing.s3,
+                    bottom: layout == 'B' ? AppSpacing.s3 : null,
+                    left: AppSpacing.s3,
+                    right: layout == 'B' ? 64 : AppSpacing.s3,
+                    child: IgnorePointer(child: _badges(l10n)),
+                  ),
+                if (layout == 'B' && _discover)
                   Positioned(
                     top: AppSpacing.s3,
                     left: AppSpacing.s3,
-                    right: AppSpacing.s3,
-                    child: IgnorePointer(child: _badges(l10n)),
+                    right: 64,
+                    child: _nameChip(context, l10n),
                   ),
-                if (_overlay && photoAction != null)
+                if (_discover && photoAction != null)
                   Positioned(
-                    top: AppSpacing.s2,
-                    right: AppSpacing.s2,
+                    top: AppSpacing.s1,
+                    right: AppSpacing.s1,
                     child: photoAction!,
+                  ),
+                if (_discover && complimentAction != null)
+                  Positioned(
+                    right: AppSpacing.s1,
+                    bottom: AppSpacing.s1,
+                    child: complimentAction!,
                   ),
                 if (swipe.abs() >= 0.25)
                   Positioned.fill(
@@ -142,7 +178,46 @@ class PersonHeroCard extends StatelessWidget {
         // never on or under the photo card.
       ],
     );
+    if (!framed) return card;
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.s2),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.heroCard),
+      ),
+      child: card,
+    );
   }
+
+  /// `discover-photo` B: a small white chip with the name and verified mark at the top left.
+  Widget _nameChip(BuildContext context, AppLocalizations l10n) => Align(
+    alignment: Alignment.topLeft,
+    child: _more(
+      l10n,
+      Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.s3,
+          vertical: AppSpacing.s1,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: AppRadii.all(AppRadii.pill),
+          boxShadow: AppElevation.subtle,
+        ),
+        child: NameWithBadge(
+          name: showAge && person.age > 0
+              ? l10n.profileNameAge(person.name, person.age)
+              : person.name,
+          verified: person.verified,
+          verifiedLabel: l10n.photoVerifiedLabel,
+          style: AppTypography.weight(
+            AppTypography.body,
+            AppTypography.semibold,
+          ),
+        ),
+      ),
+    ),
+  );
 
   // UI-011: every full profile photo is a 3:4 portrait frame across the content width, in both
   // the overlay (discovery) and plain layouts.
@@ -173,25 +248,35 @@ class PersonHeroCard extends StatelessWidget {
       children: [
         Semantics(
           header: true,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(child: name),
-              if (person.verified) ...[
-                const SizedBox(width: AppLayout.iconLabelGap),
-                Semantics(
-                  label: l10n.discoverVerified,
-                  child: const NumayaIcon(
-                    NumayaIcons.verified,
-                    size: AppSizes.iconMd,
-                    color: AppColors.inkForeground,
-                  ),
-                ),
-              ],
-            ],
+          // R06: the filled mark follows the name and wraps with its last word.
+          child: NameWithBadge(
+            name: name.data!,
+            verified: person.verified,
+            verifiedLabel: l10n.photoVerifiedLabel,
+            badgeColor: AppColors.inkForeground,
+            style: nameStyle,
           ),
         ),
+        // `discover-photo` C: distance and intention as pills on the scrim.
+        if (layout == 'C')
+          Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.s2),
+            child: Wrap(
+              spacing: AppSpacing.s2,
+              runSpacing: AppSpacing.s1,
+              children: [
+                StatusBadge(
+                  label: l10n.discoverDistanceKm(person.distanceKm),
+                  tone: BadgeTone.onPhoto,
+                ),
+                if (person.lookingFor != null)
+                  StatusBadge(
+                    label: person.lookingFor!,
+                    tone: BadgeTone.onPhoto,
+                  ),
+              ],
+            ),
+          ),
         if (person.job != null)
           Padding(
             padding: const EdgeInsets.only(top: AppSpacing.s1),
@@ -412,22 +497,27 @@ List<Widget> personSections(
   bool showDistance = true,
   ValueChanged<int>? onPhoto,
   ValueChanged<ComplimentTarget>? onCompliment,
+  String? promptVariant,
 }) {
   final l10n = context.l10n;
   // UI-007: a profile's prompt is the shared prompt card: small question, dominant answer, no
   // decorative icon. With [onCompliment], each prompt and photo carries a Compliment anchor (S11).
   var promptIndex = 0;
+  // R05: a prompt reserves a footer row for the Compliment action, so the answer never runs
+  // under it (card family `prompt-card`).
   Widget prompt(({String question, String answer}) p) {
-    final card = PromptCard(question: p.question, answer: p.answer);
     final index = promptIndex++;
-    if (onCompliment == null) return card;
-    return _WithAnchor(
-      anchor: ComplimentAnchor(
-        key: ValueKey('compliment-prompt-$index'),
-        name: person.name,
-        onPressed: () => onCompliment(ComplimentTarget.prompt(index)),
-      ),
-      child: card,
+    return ProfilePromptCard(
+      question: p.question,
+      answer: p.answer,
+      variant: promptVariant,
+      action: onCompliment == null
+          ? null
+          : ComplimentAnchor(
+              key: ValueKey('compliment-prompt-$index'),
+              name: person.name,
+              onPressed: () => onCompliment(ComplimentTarget.prompt(index)),
+            ),
     );
   }
 
@@ -482,7 +572,8 @@ List<Widget> personSections(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (hasBio) Text(person.bio!, style: AppTypography.cardPrimary),
+            // R07: the bio and prompt answers share one Figtree reading role.
+            if (hasBio) Text(person.bio!, style: AppTypography.answer),
             if (hasBio && facts.isNotEmpty)
               const Padding(
                 key: ValueKey('about-divider'),
@@ -567,41 +658,19 @@ class ComplimentAnchor extends StatelessWidget {
   final String name;
   final VoidCallback onPressed;
 
+  /// R05: the shared white squircle ([SquircleIconButton]) with the purple message-heart glyph:
+  /// legible on any photo, the same size and tap target as the overflow and close controls.
   @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: context.l10n.complimentActionOn(name),
-      excludeSemantics: true,
-      child: Pressable(
-        onTap: onPressed,
-        semanticLabel: context.l10n.complimentActionOn(name),
-        excludeChildSemantics: true,
-        child: SizedBox.square(
-          dimension: 48,
-          child: Center(
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: const BoxDecoration(
-                color: AppColors.surface,
-                shape: BoxShape.circle,
-              ),
-              alignment: Alignment.center,
-              child: const MobileIcon(
-                NumayaMobileIcons.compliment,
-                size: 20,
-                color: AppColors.accent,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => SquircleIconButton(
+    mobileIcon: NumayaMobileIcons.compliment,
+    brandGlyph: true,
+    label: context.l10n.complimentActionOn(name),
+    onPressed: onPressed,
+  );
 }
 
-/// [child] with [anchor] in its bottom-right corner.
+/// [child] (a photo) with [anchor] in its bottom-right corner. The 48pt target sits 4pt in, so the
+/// 38pt squircle is 9pt from the photo's edges.
 class _WithAnchor extends StatelessWidget {
   const _WithAnchor({required this.anchor, required this.child});
 

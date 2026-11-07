@@ -50,8 +50,7 @@ class AllowancePolicy {
     this.premiumExtensionsPerDay = 1,
     this.extensionHours = 24,
     this.matchWindowHours = 24,
-    this.quietCheckInDays = 7,
-    this.quietExpiryDays = 14,
+    this.archiveAfterDays = 7,
     this.welcomeCredits = 3,
     this.earnedCap = 5,
     this.premiumWeeklyCredits = 3,
@@ -69,8 +68,9 @@ class AllowancePolicy {
   final int premiumExtensionsPerDay;
   final int extensionHours;
   final int matchWindowHours;
-  final int quietCheckInDays;
-  final int quietExpiryDays;
+
+  /// Days without a genuine accepted message before a started conversation moves to Archive.
+  final int archiveAfterDays;
   final int welcomeCredits;
 
   /// Cap on the earned bank (welcome + streak rewards). Weekly and purchased credits are separate.

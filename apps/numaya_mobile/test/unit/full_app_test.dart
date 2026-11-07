@@ -30,14 +30,14 @@ void main() {
   group('Full demo world', () {
     test('seeds matches, the queue with expiry and sample conversations', () {
       expect(dating().newMatches().map((p) => p.id), ['jo', 'amara', 'lina']);
-      // Ollie never got a first message; Ade's chat went quiet for 14 days (PRD 02).
-      expect(dating().expiredMatches().map((p) => p.id), ['ollie', 'ade']);
-      expect(dating().remaining('jo'), const Duration(hours: 21));
-      expect(dating().conversations().map((p) => p.id), [
-        'priya',
-        'sasha',
+      // Ollie never got a first message (R02). Rafa and Ade went quiet: Archive (R01).
+      expect(dating().expiredMatches().map((p) => p.id), ['ollie']);
+      expect(dating().archivedConversations().map((p) => p.id), [
         'rafa',
+        'ade',
       ]);
+      expect(dating().remaining('jo'), const Duration(hours: 21));
+      expect(dating().conversations().map((p) => p.id), ['priya', 'sasha']);
       expect(dating().unread('priya'), 2);
       expect(dating().yourMove('priya'), isTrue);
       expect(dating().yourMove('rafa'), isFalse);
@@ -80,20 +80,29 @@ void main() {
       expect(dating().extend('amara'), ExtendResult.usedToday);
     });
 
-    test('expired matches can ask to reconnect once; no Premium needed', () {
-      expect(dating().expiredMatches().map((p) => p.id), ['ollie', 'ade']);
-      expect(dating().requestReconnect('ollie'), isTrue);
-      expect(dating().requestReconnect('ollie'), isFalse);
-      expect(dating().status('ollie').phase.name, 'reconnectPending');
+    test('R02: an initial match that ran out has no reconnection', () {
+      expect(dating().expiredMatches().map((p) => p.id), ['ollie']);
+      expect(dating().status('ollie').canSend, isFalse);
     });
 
-    test('accepting an incoming request reopens the chat with its history', () {
-      expect(dating().reconnectRequests().map((p) => p.id), ['ade']);
-      dating().respondReconnect('ade', accept: true);
-      expect(dating().isExpired('ade'), isFalse);
-      expect(dating().conversations().map((p) => p.id), contains('ade'));
-      expect(state().threads['ade']!.length, 3);
-    });
+    test(
+      'R01: quiet chats are archived, keep history and revive on send',
+      () async {
+        expect(dating().archivedConversations().map((p) => p.id), [
+          'rafa',
+          'ade',
+        ]);
+        expect(
+          dating().conversations().map((p) => p.id),
+          isNot(contains('ade')),
+        );
+        await dating().send('ade', 'Still up for climbing?');
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        expect(dating().isArchived('ade'), isFalse);
+        expect(dating().conversations().map((p) => p.id), contains('ade'));
+        expect(state().threads['ade']!.length, 4);
+      },
+    );
 
     test('a match with messages never takes an extension', () {
       expect(dating().extend('priya'), ExtendResult.notNeeded);

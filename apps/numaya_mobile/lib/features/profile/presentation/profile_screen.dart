@@ -7,17 +7,21 @@ import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../core/media/local_image.dart';
+import '../../../core/time/ist.dart';
 import '../../../l10n/l10n.dart';
 import '../../commerce/application/economy_controller.dart';
-import '../../experiments/experiments.dart';
 import '../../health/application/health_providers.dart';
 import '../../health/presentation/health_screens.dart';
-import '../../home/presentation/home_shell.dart';
+import '../../home/presentation/large_title_page.dart';
+import '../../insights/application/insights_providers.dart';
+import '../../insights/presentation/insight_cards.dart';
+import '../../lab/activity_cards.dart';
+import '../../lab/lab_registry.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../verification/application/verification_controller.dart';
 import '../application/profile_details_controller.dart';
-import '../domain/profile_details.dart';
+import 'profile_header_more.dart';
 import 'profile_variants.dart';
 
 /// B-23 Profile tab: the summary card (UI-042: a large round photo over the card, name,
@@ -35,15 +39,6 @@ class ProfileScreen extends ConsumerWidget {
     final details = ref.watch(profileDetailsProvider);
     final premium = ref.watch(premiumProvider);
     final verification = ref.watch(photoVerificationProvider).status;
-    final parts = ProfileCompletion.of(draft, details);
-    final completion = parts.percent;
-    // EXP-002 / EXP-004 (Experiment Lab only; release builds show the refined candidate).
-    final headerVariant = ref.watch(
-      experimentVariantProvider(Experiment.profileHeader),
-    );
-    final completionVariant = ref.watch(
-      experimentVariantProvider(Experiment.completionCard),
-    );
     final age = draft.ageOn(ref.read(onboardingProvider.notifier).today);
     final mainPhoto = draft.photos.isEmpty ? null : draft.photos.first.source;
     final initial = draft.firstName.trim().isEmpty
@@ -61,259 +56,265 @@ class ProfileScreen extends ConsumerWidget {
       onVerify: () => context.push(Routes.verifyPhoto),
       onPreview: () => context.push(Routes.preview),
     );
-    // EXP-004 B: the first unfinished part in the completion hub's order, and where its editor
-    // is (the bio editor is a sheet inside the hub, so Bio opens the hub).
-    final candidates = [
-      (l10n.completionPhotos, parts.photos, Routes.editProfile),
-      (
-        l10n.completionPrompts,
-        parts.prompts,
-        parts.prompts.done == 0
-            ? Routes.editPrompt
-            : '${Routes.editPrompt}?slot=${parts.prompts.done.clamp(1, 2)}',
-      ),
-      (l10n.completionInterests, parts.interests, Routes.editInterests),
-      (l10n.completionBio, parts.bio, Routes.completion),
-      (l10n.completionAbout, parts.about, Routes.editProfile),
-      (l10n.completionMore, parts.moreAbout, Routes.editProfile),
-    ];
-    final firstOpen = candidates
-        .where((c) => c.$2.done < c.$2.total)
-        .firstOrNull;
-    final next = firstOpen == null
-        ? null
-        : ((name: firstOpen.$1, part: firstOpen.$2), firstOpen.$3);
+    final direction = ref.watch(labVariantProvider('screen-profile'));
+    final economy = ref.watch(economyProvider);
+    final now = ref.read(clockProvider)();
+    final run = economy.streak.run(now);
+    final cycle = ref.read(economyProvider.notifier).policy.streakCycleDays;
+    final StreakData streak = (
+      length: run.length,
+      progress: run.progress(cycle),
+      cycle: cycle,
+      todayCounts: economy.streak.qualifies(istDay(now)),
+    );
+    final ledger = economy.ledger;
+    final WalletData wallet = (
+      weekly: ledger.weekly,
+      earned: ledger.earned,
+      purchased: ledger.purchased,
+      recent: [
+        for (final e in ledger.entries.reversed.take(3))
+          (label: e.source.split(':').first, amount: e.amount),
+      ],
+    );
+    final week = ref.watch(insightsSnapshotProvider(7));
+    final health = ref.watch(profileHealthProvider);
+    void toStreak() => context.push(Routes.streak);
+    void toWallet() => context.push(Routes.wallet);
+    void toInsights() => context.push(Routes.insights);
 
-    return ColoredBox(
-      color: AppColors.canvas,
-      child: SafeArea(
-        bottom: false,
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: AppSpacing.contentMax),
-            child: Column(
-              children: [
-                TabHeader(
-                  title: l10n.tabProfile,
-                  actions: [
-                    NavIconButton(
-                      icon: NumayaIcons.help,
-                      label: l10n.helpTitle,
-                      onPressed: () => context.push(Routes.help),
-                    ),
-                    NavIconButton(
-                      icon: NumayaIcons.settings,
-                      label: l10n.profileSettings,
-                      onPressed: () => context.push(Routes.settings),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  // Scrolls beneath the frosted tab bar and can always scroll clear of it.
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.fromLTRB(
-                      AppLayout.screenGutter,
-                      AppLayout.screenTop,
-                      AppLayout.screenGutter,
-                      AppSpacing.s8 + MediaQuery.paddingOf(context).bottom,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // 1. Identity (UI-042, A-019): a large round photo centred over the top
-                        // edge of a white card; name, verification state and Edit profile below.
-                        // Interests and details stay in Edit profile and the preview, which
-                        // Edit profile opens (so the old globe shortcut here is gone).
-                        switch (headerVariant) {
-                          ExpVariant.current => _ProfileSummary(
-                            photo: mainPhoto,
-                            initial: initial,
-                            name: age == null
-                                ? draft.firstName
-                                : l10n.profileNameAge(draft.firstName, age),
-                            verification: verification,
-                            onEdit: () => context.push(Routes.editProfile),
-                            onVerify: () => context.push(Routes.verifyPhoto),
-                          ),
-                          ExpVariant.a => ProfileHeaderCover(data: header()),
-                          ExpVariant.b => ProfileHeaderCompact(data: header()),
-                          ExpVariant.c => ProfileHeaderActions(data: header()),
-                        },
-                        const SizedBox(height: AppSpacing.s4),
-                        // 2. Completion: what's left, with the one way to finish it.
-                        switch (completionVariant) {
-                          ExpVariant.current => CompletionCard(
-                            percent: completion,
-                            title: l10n.profileCompletionLabel(completion),
-                            // The bar and "Complete profile" say it; only the finished state
-                            // needs words.
-                            body: completion < 100 ? null : l10n.completionDone,
-                            actionLabel: l10n.profileComplete,
-                            onAction: () => context.push(Routes.completion),
-                          ),
-                          ExpVariant.a => CompletionBanner(
-                            percent: completion,
-                            onOpen: () => context.push(Routes.completion),
-                          ),
-                          ExpVariant.b => CompletionNextTask(
-                            percent: completion,
-                            next: next?.$1,
-                            onContinue: () =>
-                                context.push(next?.$2 ?? Routes.completion),
-                            onSeeAll: () => context.push(Routes.completion),
-                          ),
-                          ExpVariant.c => CompletionWithCat(
-                            percent: completion,
-                            title: l10n.profileCompletionLabel(completion),
-                            actionLabel: l10n.profileComplete,
-                            onAction: () => context.push(Routes.completion),
-                          ),
-                        },
-                        // 3. Your profile: Ente Menu Items (ER-05). The four half-empty tiles became
-                        // rows with their status as the subtitle, the way Ente lists settings.
-                        const SizedBox(height: AppLayout.sectionGap),
-                        ListGroup(
-                          title: l10n.profileYourProfile,
-                          children: [
-                            // S27: Profile Health replaces the visibility row here; the
-                            // visibility page stays in Settings.
-                            ListRow(
-                              key: const ValueKey('hub-health'),
-                              leading: NumayaIcons.explore,
-                              tone: AccentTone.info,
-                              label: l10n.healthTitle,
-                              detail:
-                                  '${l10n.hubHealthDetail(ref.watch(profileHealthProvider).score)} · ${discoveryStatusLabel(l10n, ref.watch(discoveryStatusProvider))}',
-                              onTap: () => context.push(Routes.health),
-                            ),
-                            if (ReleaseScope.openingMoves)
-                              ListRow(
-                                leading: NumayaIcons.message,
-                                tone: AccentTone.social,
-                                label: l10n.openingMovesTitle,
-                                detail: l10n.openingMovesCount(
-                                  details.openingMoves.length,
-                                ),
-                                onTap: () => context.push(Routes.openingMoves),
-                              ),
-                            ListRow(
-                              leading: NumayaIcons.verified,
-                              tone: AccentTone.positive,
-                              label: l10n.editVerify,
-                              detail: switch (verification) {
-                                PhotoVerificationStatus.verified =>
-                                  l10n.verifyStatusVerified,
-                                PhotoVerificationStatus.pending =>
-                                  l10n.verifyStatusPending,
-                                PhotoVerificationStatus.rejected =>
-                                  l10n.verifyStatusRejected,
-                                PhotoVerificationStatus.notStarted =>
-                                  l10n.verifyStatusNone,
-                              },
-                              onTap: () => context.push(Routes.verifyPhoto),
-                            ),
-                            ListRow(
-                              leading: NumayaIcons.premium,
-                              tone: AccentTone.brand,
-                              label: l10n.premiumName,
-                              detail: premium.active
-                                  ? l10n.premiumActive
-                                  : l10n.premiumExplore,
-                              onTap: () => context.push(Routes.premium),
-                            ),
-                          ],
-                        ),
-                        // S27: credits, streak and insights.
-                        const SizedBox(height: AppLayout.sectionGap),
-                        ListGroup(
-                          title: l10n.hubActivity,
-                          children: [
-                            ListRow(
-                              key: const ValueKey('hub-wallet'),
-                              leadingMobile: NumayaMobileIcons.wallet,
-                              tone: AccentTone.brand,
-                              label: l10n.walletTitle,
-                              detail: l10n.hubCreditsDetail(
-                                ref.watch(economyProvider).ledger.total,
-                              ),
-                              onTap: () => context.push(Routes.wallet),
-                            ),
-                            ListRow(
-                              key: const ValueKey('hub-streak'),
-                              leadingMobile: NumayaMobileIcons.flame,
-                              tone: AccentTone.caution,
-                              label: l10n.streakTitle,
-                              detail: l10n.hubStreakDetail(
-                                ref
-                                    .watch(economyProvider)
-                                    .streak
-                                    .run(ref.read(clockProvider)())
-                                    .length,
-                              ),
-                              onTap: () => context.push(Routes.streak),
-                            ),
-                            ListRow(
-                              key: const ValueKey('hub-insights'),
-                              leadingMobile: NumayaMobileIcons.chart,
-                              tone: AccentTone.info,
-                              label: l10n.insightsTitle,
-                              detail: l10n.hubInsightsDetail,
-                              onTap: () => context.push(Routes.insights),
-                            ),
-                          ],
-                        ),
-                        if (draft.prompt != null) ...[
-                          const SizedBox(height: AppLayout.sectionGap),
-                          NumayaSection(
-                            title: l10n.profilePromptTitle,
-                            child: PromptCard(
-                              question: draft.prompt!.question,
-                              answer: draft.prompt!.answer,
-                              editLabel: l10n.promptEditLabel,
-                              onTap: () => context.push(Routes.editPrompt),
-                            ),
-                          ),
-                        ],
-                        if (premium.active) ...[
-                          const SizedBox(height: AppLayout.sectionGap),
-                          _PremiumCard(
-                            active: premium.active,
-                            until: premium.activeUntil,
-                            onTap: () => context.push(Routes.premium),
-                          ),
-                        ],
-                        // 4. Everything else in one quiet group.
-                        const SizedBox(height: AppLayout.sectionGap),
-                        ListGroup(
-                          title: l10n.profileSafetySupport,
-                          children: [
-                            ListRow(
-                              leading: NumayaIcons.shield,
-                              tone: AccentTone.positive,
-                              label: l10n.safetyTitle,
-                              onTap: () => context.push(Routes.safety),
-                            ),
-                            ListRow(
-                              leading: NumayaIcons.help,
-                              tone: AccentTone.info,
-                              label: l10n.helpTitle,
-                              onTap: () => context.push(Routes.help),
-                            ),
-                            ListRow(
-                              leading: NumayaIcons.settings,
-                              label: l10n.profileSettings,
-                              onTap: () => context.push(Routes.settings),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+    // Direction-fixed component variants inside this screen (registry `requires`).
+    final headerV = direction == 'C'
+        ? 'D'
+        : ref.watch(labVariantProvider('profile-header'));
+    final String? setupV = switch (direction) {
+      'A' => 'D',
+      'C' => 'A',
+      _ => null,
+    };
+
+    // 1. Identity. R06: the verified mark follows the name in every variant.
+    final Widget identity = switch (headerV) {
+      'A' => ProfileHeaderCover(data: header()),
+      'B' => ProfileHeaderCompact(data: header()),
+      'C' => ProfileHeaderWithStreak(
+        data: header(),
+        streakDays: run.length,
+        credits: ledger.total,
+        onStreak: toStreak,
+        onWallet: toWallet,
+      ),
+      'D' => ProfileHeaderWithInsights(
+        data: header(),
+        shown: week.shown,
+        liked: week.liked,
+        onInsights: toInsights,
+      ),
+      _ => _ProfileSummary(
+        photo: mainPhoto,
+        initial: initial,
+        name: age == null
+            ? draft.firstName
+            : l10n.profileNameAge(draft.firstName, age),
+        verification: verification,
+        onEdit: () => context.push(Routes.editProfile),
+        onVerify: () => context.push(Routes.verifyPhoto),
+      ),
+    };
+    final headerHasActivity = headerV == 'C' || headerV == 'D';
+
+    final profileGroup = ListGroup(
+      title: l10n.profileYourProfile,
+      children: [
+        // R11: Your insights replaces the score row (setup is a supporting card).
+        ListRow(
+          key: const ValueKey('hub-health'),
+          leadingMobile: NumayaMobileIcons.chart,
+          label: l10n.insightsDashTitle,
+          detail: discoveryStatusLabel(
+            l10n,
+            ref.watch(discoveryStatusProvider),
+          ),
+          onTap: toInsights,
+        ),
+        if (ReleaseScope.openingMoves)
+          ListRow(
+            leading: NumayaIcons.message,
+            label: l10n.openingMovesTitle,
+            detail: l10n.openingMovesCount(details.openingMoves.length),
+            onTap: () => context.push(Routes.openingMoves),
+          ),
+        ListRow(
+          leading: NumayaIcons.verified,
+          label: l10n.editVerify,
+          detail: switch (verification) {
+            PhotoVerificationStatus.verified => l10n.verifyStatusVerified,
+            PhotoVerificationStatus.pending => l10n.verifyStatusPending,
+            PhotoVerificationStatus.rejected => l10n.verifyStatusRejected,
+            PhotoVerificationStatus.notStarted => l10n.verifyStatusNone,
+          },
+          onTap: () => context.push(Routes.verifyPhoto),
+        ),
+        ListRow(
+          leading: NumayaIcons.premium,
+          label: l10n.premiumName,
+          detail: premium.active ? l10n.premiumActive : l10n.premiumExplore,
+          onTap: () => context.push(Routes.premium),
+        ),
+      ],
+    );
+    final activityGroup = ListGroup(
+      title: l10n.hubActivity,
+      children: [
+        ListRow(
+          key: const ValueKey('hub-wallet'),
+          leadingMobile: NumayaMobileIcons.wallet,
+          label: l10n.walletTitle,
+          detail: l10n.hubCreditsDetail(ledger.total),
+          onTap: toWallet,
+        ),
+        ListRow(
+          key: const ValueKey('hub-streak'),
+          leadingMobile: NumayaMobileIcons.flame,
+          label: l10n.streakTitle,
+          detail: l10n.hubStreakDetail(run.length),
+          onTap: toStreak,
+        ),
+      ],
+    );
+    final supportGroup = ListGroup(
+      title: l10n.profileSafetySupport,
+      children: [
+        ListRow(
+          leading: NumayaIcons.shield,
+          label: l10n.safetyTitle,
+          onTap: () => context.push(Routes.safety),
+        ),
+        ListRow(
+          leading: NumayaIcons.help,
+          label: l10n.helpTitle,
+          onTap: () => context.push(Routes.help),
+        ),
+        ListRow(
+          leading: NumayaIcons.settings,
+          label: l10n.profileSettings,
+          onTap: () => context.push(Routes.settings),
+        ),
+      ],
+    );
+    const gap = SizedBox(height: AppLayout.sectionGap);
+    const small = SizedBox(height: AppSpacing.s3);
+    final setup = ProfileSetupCard(health: health, variant: setupV);
+
+    final List<Widget> body = switch (direction) {
+      // Quiet editorial: one identity block, one line of activity, then plain groups.
+      'A' => [
+        identity,
+        small,
+        setup,
+        gap,
+        Text(
+          l10n.profileWeekLine(week.shown, week.liked, run.length),
+          style: AppTypography.answer,
+        ),
+        const SizedBox(height: AppSpacing.s1),
+        Text(l10n.profileStatSample, style: AppTypography.caption),
+        gap,
+        profileGroup,
+        gap,
+        activityGroup,
+        gap,
+        supportGroup,
+      ],
+      // Connected cards: each activity is its own card with one destination.
+      'B' => [
+        identity,
+        small,
+        setup,
+        gap,
+        if (!headerHasActivity) ...[
+          StreakSummaryCard(data: streak, onTap: toStreak),
+          small,
+          WalletSummaryCard(data: wallet, onTap: toWallet),
+          small,
+        ],
+        MetricWidget(
+          icon: NumayaMobileIcons.eye,
+          label: l10n.insightsMetricShown,
+          value: week.shown,
+          caption: '${periodLabel(l10n, 7)} · ${l10n.insightsSampleTag}',
+          onTap: toInsights,
+        ),
+        gap,
+        profileGroup,
+        gap,
+        supportGroup,
+      ],
+      // Visual insights: the identity carries this week's numbers; bars for streak and credits.
+      'C' => [
+        identity,
+        small,
+        StreakSummaryCard(data: streak, onTap: toStreak, variant: 'B'),
+        small,
+        WalletSummaryCard(data: wallet, onTap: toWallet, variant: 'A'),
+        small,
+        setup,
+        gap,
+        profileGroup,
+        gap,
+        supportGroup,
+      ],
+      // Current-rules baseline: today's order with Your insights and the setup card.
+      _ => [
+        identity,
+        const SizedBox(height: AppSpacing.s4),
+        setup,
+        gap,
+        profileGroup,
+        gap,
+        if (!headerHasActivity) ...[activityGroup, gap],
+        if (draft.prompt != null) ...[
+          NumayaSection(
+            title: l10n.profilePromptTitle,
+            child: PromptCard(
+              question: draft.prompt!.question,
+              answer: draft.prompt!.answer,
+              editLabel: l10n.promptEditLabel,
+              onTap: () => context.push(Routes.editPrompt),
             ),
           ),
+          gap,
+        ],
+        if (premium.active) ...[
+          _PremiumCard(
+            active: premium.active,
+            until: premium.activeUntil,
+            onTap: () => context.push(Routes.premium),
+          ),
+          gap,
+        ],
+        supportGroup,
+      ],
+    };
+
+    // R12: the expanded title collapses into the bar on scroll.
+    return LargeTitlePage(
+      title: l10n.tabProfile,
+      actions: [
+        NavIconButton(
+          icon: NumayaIcons.help,
+          label: l10n.helpTitle,
+          onPressed: () => context.push(Routes.help),
         ),
+        NavIconButton(
+          icon: NumayaIcons.settings,
+          label: l10n.profileSettings,
+          onPressed: () => context.push(Routes.settings),
+        ),
+      ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: body,
       ),
     );
   }
@@ -448,8 +449,10 @@ class _ProfileSummary extends StatelessWidget {
             children: [
               Semantics(
                 header: true,
-                child: Text(
-                  name,
+                child: NameWithBadge(
+                  name: name,
+                  verified: verification == PhotoVerificationStatus.verified,
+                  verifiedLabel: l10n.photoVerifiedLabel,
                   textAlign: TextAlign.center,
                   style: AppTypography.headline,
                 ),

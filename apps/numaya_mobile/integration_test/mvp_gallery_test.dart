@@ -224,18 +224,10 @@ void main() {
       await go('${Routes.chat}/ollie');
       await cap(tester, 'S22', 'Expired before first message');
     });
-    await step('S23', () async {
-      await go('${Routes.chat}/rafa');
-      await cap(tester, 'S23', 'Quiet chat check-in', settleMs: 1600);
-      await tapOn(tester, find.text('Not now'));
-    });
+    // Visual Lab V2 R01: S23-S25 (check-in, expired chats, reconnection) are replaced by Archive.
     await step('S24', () async {
-      await go(Routes.expiredChats);
-      await cap(tester, 'S24', 'Expired chats list');
-    });
-    await step('S25', () async {
-      await go('${Routes.reconnect}/ade');
-      await cap(tester, 'S25', 'Reconnect request');
+      await go(Routes.archive);
+      await cap(tester, 'S24', 'Archive');
     });
     await step('S26', () async {
       await go('${Routes.chat}/priya');

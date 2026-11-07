@@ -8,6 +8,7 @@ import '../../../l10n/l10n.dart';
 import '../../commerce/domain/catalog.dart';
 import '../../commerce/presentation/store_screens.dart';
 import '../../help/domain/help_articles.dart';
+import '../../lab/plan_picker.dart';
 import '../application/premium_controller.dart';
 
 /// What Premium adds (PRD 06): allowances and information, never ranking.
@@ -238,17 +239,31 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
           const SizedBox(height: AppSpacing.s5),
           OptionGroupLabel(text: l10n.paywallPlans),
           const SizedBox(height: AppSpacing.s2),
-          for (final p in plans) ...[
-            PlanCard(
-              key: ValueKey('plan-${p.kind.name}'),
-              title: planLabel(l10n, p),
-              price: formatInr(p.pricePaise),
-              perWeek: planBilling(l10n, p),
-              selected: _plan == p,
-              onTap: () => setState(() => _plan = p),
-            ),
-            const SizedBox(height: AppSpacing.s2),
-          ],
+          // Card family `plan-card` (Visual Lab V2): full billed amount and term together.
+          PlanPicker(
+            plans: [
+              for (final p in plans)
+                (
+                  key: ValueKey('plan-${p.kind.name}'),
+                  title: planLabel(l10n, p),
+                  price: formatInr(p.pricePaise),
+                  billing: planBilling(l10n, p),
+                ),
+            ],
+            selected: _plan == null ? -1 : plans.indexOf(_plan!),
+            onSelect: (i) => setState(() => _plan = plans[i]),
+            comparison: [
+              (l10n.planCompareLikes, '5', '15'),
+              (l10n.planCompareCompliments, '0', '3'),
+              (l10n.planCompareSeeLikes, '—', '✓'),
+              (
+                l10n.planCompareInsights,
+                l10n.insightsDays(7),
+                l10n.insightsDays(90),
+              ),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.s2),
           const SizedBox(height: AppSpacing.s2),
           Text(l10n.premiumFreeStays, style: AppTypography.helper),
           const SizedBox(height: AppSpacing.s2),
@@ -274,6 +289,6 @@ class OptionGroupLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Semantics(
     header: true,
-    child: Text(text.toUpperCase(), style: AppTypography.labelCaps),
+    child: Text(text, style: AppTypography.labelCaps),
   );
 }

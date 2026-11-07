@@ -44,6 +44,10 @@ abstract final class AppTypography {
   /// Ente Display-2. Tab-root titles ("Likes", "Messages"): 24/32 semibold.
   static final TextStyle pageTitle = _style(display, 24, 32, bold, 0);
 
+  /// R12 (Visual Lab V2): the expanded large title of Ente Header v2, under the leading control,
+  /// collapsing into [appBarTitle]. Plus Jakarta Sans 30/36 bold.
+  static final TextStyle largeTitle = _style(display, 30, 36, bold, 0);
+
   /// Ente Display-2. Onboarding and editorial page headings: 24/32 semibold.
   static final TextStyle flowTitle = _style(display, 24, 32, bold, 0);
 
@@ -73,6 +77,10 @@ abstract final class AppTypography {
   /// answer. H2 size at medium: larger than the label and the body, lighter than a heading so a
   /// paragraph stays comfortable to read. 18/24 medium.
   static final TextStyle cardPrimary = _style(family, 18, 24, medium, 0);
+
+  /// R07 (Visual Lab V2): what a person wrote about themselves, both the About me bio and prompt
+  /// answers, in one Figtree reading role (18/26 medium). Headings stay Plus Jakarta Sans.
+  static final TextStyle answer = _style(family, 18, 26, medium, 0);
 
   /// App-bar titles on pushed pages ("Settings", "Edit profile", a chat's name): Ente Header v2
   /// collapsed (back arrow, title inline; 11441:5188), Display-3 20/28, in Plus Jakarta Sans at
@@ -172,12 +180,15 @@ abstract final class AppTypography {
 
   /// Eyebrows ("CHOOSE A PLAN", "SAT, JUL 11"): 12/16 semibold, +0.04em, muted. Apply to
   /// upper-cased text; the tracking opens capitals that would otherwise sit tight at 12pt.
+  // R07 (Visual Lab V2): sentence case everywhere. The former all-caps eyebrow (12/16, +0.04em,
+  // upper-cased by callers) is now a sentence-case label at 14/20 semibold with no tracking;
+  // the name stays so every caller moves together.
   static final TextStyle labelCaps = _style(
     family,
-    12,
-    16,
+    14,
+    20,
     semibold,
-    0.04,
+    0,
   ).copyWith(color: AppColors.textMuted);
 
   /// Ente Body (the Create-account field labels). Field and option-group labels ("First name"):

@@ -69,7 +69,8 @@ void main() {
         ),
       );
       expect(AppMotion.duration(reduced, AppMotion.push), Duration.zero);
-      expect(AppMotion.duration(normal, AppMotion.push), AppMotion.push);
+      // MotionTokens M1 (Visual Lab V2): raw route tokens map onto the 280ms route role.
+      expect(AppMotion.duration(normal, AppMotion.push), AppMotion.route);
       expect(AppMotion.sheet(reduced).duration, Duration.zero);
       expect(AppMotion.sheet(normal).duration, AppMotion.sheetIn);
       expect(AppMotion.sheet(normal).reverseDuration, AppMotion.sheetOut);

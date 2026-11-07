@@ -22,7 +22,6 @@ class InitialsAvatar extends StatelessWidget {
     required this.initial,
     this.size = 48,
     this.ring = false,
-    this.verified = false,
     this.image,
     this.imageAlignment = Alignment.center,
   });
@@ -30,7 +29,6 @@ class InitialsAvatar extends StatelessWidget {
   final String initial;
   final double size;
   final bool ring;
-  final bool verified;
 
   /// A photo for the circle (a face crop works best); the initial shows while it loads, and if it
   /// fails.
@@ -90,38 +88,92 @@ class InitialsAvatar extends StatelessWidget {
         ),
       );
     }
-    return ExcludeSemantics(
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          circle,
-          if (verified)
-            Positioned(
-              right: -2,
-              bottom: -2,
-              child: Container(
-                padding: const EdgeInsets.all(1.5),
-                decoration: const BoxDecoration(
-                  color: AppColors.canvas,
-                  shape: BoxShape.circle,
-                ),
-                child: VerifiedMark(size: size * 0.32),
-              ),
-            ),
-        ],
-      ),
-    );
+    // R06: the verified mark follows the name ([NameWithBadge]); avatars carry no corner badge.
+    return ExcludeSemantics(child: circle);
   }
 }
 
-/// The verified mark: Withings blue (the web's `VerifiedBadge compact`).
+/// The verified mark: Tabler's filled rosette check in brand purple (R06). Decorative; the name
+/// beside it carries the spoken meaning ([NameWithBadge]).
 class VerifiedMark extends StatelessWidget {
-  const VerifiedMark({super.key, this.size = 18});
+  const VerifiedMark({super.key, this.size = 18, this.color});
   final double size;
 
+  /// Defaults to brand purple; white on a photo scrim.
+  final Color? color;
+
   @override
-  Widget build(BuildContext context) =>
-      NumayaIcon(NumayaIcons.verified, size: size, color: AppColors.accent);
+  Widget build(BuildContext context) => NumayaIcon(
+    NumayaIcons.verified,
+    size: size,
+    filled: true,
+    color: color ?? AppColors.accent,
+  );
+}
+
+/// A display name followed by the verified mark (R06): one gap ([AppLayout.iconLabelGap]), the
+/// mark sized to the type tier and centred on the last line's x-height band. The name hugs its
+/// longest line, so after a wrap the mark sits at the end of the text block's last line instead
+/// of the card edge. [verifiedLabel] is spoken after the name ("Maya, 29, photo verified"); it
+/// must say what was actually checked (photo, not identity).
+class NameWithBadge extends StatelessWidget {
+  const NameWithBadge({
+    super.key,
+    required this.name,
+    required this.style,
+    this.verified = false,
+    this.verifiedLabel,
+    this.maxLines,
+    this.badgeColor,
+    this.textAlign = TextAlign.start,
+  });
+
+  final String name;
+  final TextStyle style;
+  final bool verified;
+  final String? verifiedLabel;
+  final int? maxLines;
+  final Color? badgeColor;
+  final TextAlign textAlign;
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Text(
+      name,
+      maxLines: maxLines,
+      overflow: maxLines == null ? null : TextOverflow.ellipsis,
+      textAlign: textAlign,
+      textWidthBasis: TextWidthBasis.longestLine,
+      style: style,
+    );
+    if (!verified) return text;
+    final fontSize = style.fontSize ?? 15;
+    // 18 for body-sized names, 20 for titles, 24 for the hero: one step per type tier.
+    final badge = fontSize >= 28
+        ? 24.0
+        : fontSize >= 18
+        ? 20.0
+        : 18.0;
+    final line = MediaQuery.textScalerOf(context)
+        .scale(fontSize * (style.height ?? 1.3));
+    final row = Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Flexible(child: text),
+        const SizedBox(width: AppLayout.iconLabelGap),
+        Padding(
+          padding: EdgeInsets.only(bottom: ((line - badge) / 2).clamp(0, 40)),
+          child: VerifiedMark(size: badge, color: badgeColor),
+        ),
+      ],
+    );
+    return Semantics(
+      label: verifiedLabel == null ? name : '$name, $verifiedLabel',
+      excludeSemantics: true,
+      child: textAlign == TextAlign.center ? Center(child: row) : row,
+    );
+  }
 }
 
 /// A photo placeholder (no licensed photography exists): warm photo grey with an image glyph.

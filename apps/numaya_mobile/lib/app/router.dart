@@ -16,6 +16,7 @@ import '../features/auth/presentation/welcome_screen.dart';
 import '../features/commerce/presentation/store_screens.dart';
 import '../features/commerce/presentation/wallet_screen.dart';
 import '../features/compliments/presentation/compliment_screens.dart';
+import '../features/dating/presentation/archive_screen.dart';
 import '../features/dating/presentation/discover_screen.dart';
 import '../features/dating/presentation/for_you_screen.dart';
 import '../features/dating/presentation/likes_screens.dart';
@@ -32,6 +33,8 @@ import '../features/experiments/experiment_lab_screen.dart';
 import '../features/health/presentation/health_screens.dart';
 import '../features/help/presentation/help_screens.dart';
 import '../features/home/presentation/home_shell.dart';
+import '../features/insights/presentation/insights_dashboard.dart';
+import '../features/lab/visual_lab_screen.dart';
 import '../features/matches/presentation/lifecycle_screens.dart';
 import '../features/onboarding/application/onboarding_controller.dart';
 import '../features/onboarding/presentation/about_you_screens.dart';
@@ -82,7 +85,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       // builds).
       if ((path == Routes.demo ||
               path == Routes.designLab ||
-              path == Routes.experimentLab) &&
+              path == Routes.experimentLab ||
+              path.startsWith(Routes.visualLab)) &&
           ref.read(demoAuthProvider) == null) {
         return Routes.welcome;
       }
@@ -209,7 +213,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: Routes.likes,
-                builder: (_, _) => const LikesScreen(),
+                // R03: `?tab=compliments` opens the Compliments part (notification links).
+                builder: (_, state) => LikesScreen(
+                  initialTab: state.uri.queryParameters['tab'] == 'compliments'
+                      ? HeartTab.compliments
+                      : HeartTab.likes,
+                ),
               ),
             ],
           ),
@@ -313,25 +322,28 @@ final routerProvider = Provider<GoRouter>((ref) {
           complimentId: state.pathParameters['id']!,
         ),
       ),
-      _route(
-        path: Routes.expiredChats,
-        builder: (_, _) => const ExpiredChatsScreen(),
+      _route(path: Routes.archive, builder: (_, _) => const ArchiveScreen()),
+      // R01: retired routes redirect instead of 404 (old notifications, saved links).
+      GoRoute(
+        path: Routes.legacyExpiredChats,
+        redirect: (_, _) => Routes.archive,
       ),
-      _route(
-        path: '${Routes.reconnect}/:id',
-        builder: (_, state) => ReconnectRequestScreen(
-          key: ValueKey(state.uri.toString()),
-          personId: state.pathParameters['id']!,
-        ),
+      GoRoute(
+        path: '${Routes.legacyReconnect}/:id',
+        redirect: (_, state) => '${Routes.chat}/${state.pathParameters['id']}',
       ),
       _route(
         path: Routes.health,
-        builder: (_, _) => const HealthScreen(),
+        // R11: the old score page now opens Your insights (setup is a supporting card there).
+        builder: (_, _) => const InsightsDashboard(),
         routes: [
           _route(path: 'about', builder: (_, _) => const HealthAboutScreen()),
         ],
       ),
-      _route(path: Routes.insights, builder: (_, _) => const InsightsScreen()),
+      _route(
+        path: Routes.insights,
+        builder: (_, _) => const InsightsDashboard(),
+      ),
       _route(path: Routes.streak, builder: (_, _) => const StreakScreen()),
       _route(path: Routes.wallet, builder: (_, _) => const WalletScreen()),
       GoRoute(
@@ -441,6 +453,18 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (_, _) => const AccountBlockedScreen(),
       ),
       _route(path: Routes.demo, builder: (_, _) => const DemoHubScreen()),
+      _route(
+        path: Routes.visualLab,
+        builder: (_, _) => const VisualLabScreen(),
+      ),
+      _route(
+        path: '${Routes.visualLabPreview}/:group',
+        builder: (_, state) => LabPreviewScreen(
+          key: ValueKey(state.uri.toString()),
+          groupId: state.pathParameters['group']!,
+          variant: state.uri.queryParameters['v'],
+        ),
+      ),
       _route(
         path: Routes.experimentLab,
         builder: (_, _) => const ExperimentLabScreen(),

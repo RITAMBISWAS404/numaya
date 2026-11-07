@@ -5147,7 +5147,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatExpiredQuietTitle => 'This chat expired after 14 quiet days';
 
   @override
-  String get chatExpiredFirstTitle => 'This match expired before anyone wrote';
+  String get chatExpiredFirstTitle => 'This match ran out before anyone wrote';
 
   @override
   String get chatReconnectAsk => 'Ask to reconnect';
@@ -6004,4 +6004,422 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get obMissingBio => 'Add a short bio';
+
+  @override
+  String get chatsArchiveRow => 'Archive';
+
+  @override
+  String chatsArchiveDetail(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count quiet chats',
+      one: '1 quiet chat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String chatsArchiveExpiredOnly(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count matches ran out',
+      one: '1 match ran out',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get chatExpiredSimpleBody =>
+      'Neither of you sent a first message in time, so the match has ended.';
+
+  @override
+  String get backToDiscover => 'Back to Discover';
+
+  @override
+  String get photoVerifiedLabel => 'photo verified';
+
+  @override
+  String get archiveTitle => 'Archive';
+
+  @override
+  String get archiveEmptyTitle => 'Nothing in Archive';
+
+  @override
+  String get archiveEmptyBody =>
+      'Chats with no messages for 7 days move here. Write any time to bring one back.';
+
+  @override
+  String get archiveExplainer =>
+      'No messages for 7 days. Send one any time and the chat moves back to Chats for both of you.';
+
+  @override
+  String get expiredMatchesTitle => 'Matches that ran out';
+
+  @override
+  String get expiredMatchesFootnote =>
+      'No one wrote within the first 24 hours or the extension. These matches have ended.';
+
+  @override
+  String get chatArchivedTitle => 'This chat is in Archive';
+
+  @override
+  String get chatArchivedBody =>
+      'No messages for 7 days. Send one and it moves back to Chats for both of you.';
+
+  @override
+  String get heartTitle => 'Who’s interested';
+
+  @override
+  String get heartTabLikes => 'Likes';
+
+  @override
+  String get heartTabCompliments => 'Compliments';
+
+  @override
+  String get complimentsEmptyTitle => 'No Compliments yet';
+
+  @override
+  String get complimentsEmptyBody =>
+      'When someone writes about a photo or prompt of yours, it shows here. Reading and replying is free.';
+
+  @override
+  String get complimentsInboxNote =>
+      'Reading and replying is free. Replying starts a chat.';
+
+  @override
+  String get complimentNotNow => 'Not now';
+
+  @override
+  String get complimentReply => 'Reply';
+
+  @override
+  String deadlineToday(String time) {
+    return 'today at $time';
+  }
+
+  @override
+  String deadlineTomorrow(String time) {
+    return 'tomorrow at $time';
+  }
+
+  @override
+  String deadlineOn(String day, String time) {
+    return '$day at $time';
+  }
+
+  @override
+  String chatEndsAt(String when) {
+    return 'The match ends $when.';
+  }
+
+  @override
+  String get insightsSampleTag => 'Sample data';
+
+  @override
+  String insightsPeriod(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Last $days days',
+      one: 'Last day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get insightsStatusShown => 'You’re being shown in Discover';
+
+  @override
+  String insightsStatusShownBody(int count, int distance) {
+    return 'About $count people match your filters within $distance km.';
+  }
+
+  @override
+  String get insightsStatusLimited => 'Few new people fit your filters';
+
+  @override
+  String insightsStatusLimitedBody(int count, int distance) {
+    return 'About $count people match within $distance km, and many have already seen you.';
+  }
+
+  @override
+  String get insightsStatusPaused => 'Your profile is paused';
+
+  @override
+  String get insightsStatusPausedBody =>
+      'No one new sees you while paused. Your chats still work.';
+
+  @override
+  String get insightsStatusRestricted => 'Numaya has limited your profile';
+
+  @override
+  String get insightsStatusRestrictedBody =>
+      'See the reason and how to appeal. This is our decision, not another member’s.';
+
+  @override
+  String get insightsStatusNew => 'Not enough data yet';
+
+  @override
+  String get insightsStatusNewBody =>
+      'Trends appear after about 20 people have seen your profile.';
+
+  @override
+  String get insightsStatusMore => 'See details';
+
+  @override
+  String get insightsNoPrevious => 'No earlier period to compare';
+
+  @override
+  String insightsNoChange(int days) {
+    return 'Same as the previous $days days';
+  }
+
+  @override
+  String insightsUp(int count, int days) {
+    return '$count more than the previous $days days';
+  }
+
+  @override
+  String insightsDown(int count, int days) {
+    return '$count fewer than the previous $days days';
+  }
+
+  @override
+  String get insightsBarsLabel => 'New people shown your profile each day';
+
+  @override
+  String insightsBarsSummary(int days, int max, int total) {
+    return '$days days, highest $max in a day, $total in total';
+  }
+
+  @override
+  String get insightsFunnelShown => 'Saw you';
+
+  @override
+  String get insightsFunnelLiked => 'Liked you';
+
+  @override
+  String get insightsFunnelMatched => 'Matched';
+
+  @override
+  String get insightsFunnelTalked => 'Both wrote';
+
+  @override
+  String insightsFunnelCaption(int count, int days) {
+    return 'Of the $count people shown your profile in the last $days days';
+  }
+
+  @override
+  String insightsShownPeriod(int count, int days) {
+    return '$count people saw your profile in the last $days days';
+  }
+
+  @override
+  String insightsShownSpoken(int count, int days) {
+    return '$count people saw your profile in the last $days days';
+  }
+
+  @override
+  String get insightsShownUnit => 'people saw your profile';
+
+  @override
+  String get insightsNoDataYet => 'No data for this period yet.';
+
+  @override
+  String get insightsTileShown => 'Saw you';
+
+  @override
+  String get insightsTileLikes => 'Liked you';
+
+  @override
+  String get insightsTileMatches => 'Matches';
+
+  @override
+  String get insightsTileYourTurn => 'Your turn';
+
+  @override
+  String insightsSentence(int count, int days, int likes, int matches) {
+    return '$count people saw your profile in the last $days days. $likes liked it and you matched with $matches.';
+  }
+
+  @override
+  String get insightsMetricShown => 'Saw your profile';
+
+  @override
+  String get insightsMetricLikes => 'Liked your profile';
+
+  @override
+  String get insightsMetricMatches => 'Matches';
+
+  @override
+  String get insightsMetricConversations => 'Two-way chats';
+
+  @override
+  String get insightsMetricYourTurn => 'Waiting for your reply';
+
+  @override
+  String get insightsMetricArchived => 'Archived chats';
+
+  @override
+  String get insightsMetricActiveDays => 'Days you opened Numaya';
+
+  @override
+  String get insightsMetricAudience => 'People who fit your filters';
+
+  @override
+  String insightsConversationsCaption(int days) {
+    return 'Both wrote, last $days days';
+  }
+
+  @override
+  String get insightsRightNow => 'Right now';
+
+  @override
+  String insightsActiveCaption(int days) {
+    return 'Out of $days days';
+  }
+
+  @override
+  String insightsAudienceCaption(int distance) {
+    return 'Within $distance km, right now';
+  }
+
+  @override
+  String get insightsAdviceTitle => 'Something you could try';
+
+  @override
+  String get insightsAdviceSection => 'Suggestion';
+
+  @override
+  String get insightsActivityTitle => 'Activity';
+
+  @override
+  String get insightsDashTitle => 'Your insights';
+
+  @override
+  String get insightsHowItWorks => 'How this works';
+
+  @override
+  String get insightsPeriodLabel => 'Period';
+
+  @override
+  String insightsDays(int days) {
+    return '$days days';
+  }
+
+  @override
+  String insightsDaysLocked(int days) {
+    return '$days days 🔒';
+  }
+
+  @override
+  String insightsLockedTitle(int days) {
+    return '$days days of history comes with Premium';
+  }
+
+  @override
+  String get insightsLockedBody =>
+      'Your status and the last 7 days stay free and complete. Premium adds longer history and comparisons with earlier periods. It can’t increase who sees you.';
+
+  @override
+  String get insightsLockedCta => 'See Premium';
+
+  @override
+  String get insightsFootnote =>
+      'Sample data in this demo build. Numaya doesn’t read your messages for insights, and never shows who blocked or reported anyone.';
+
+  @override
+  String get setupTitle => 'Profile setup';
+
+  @override
+  String get setupSection => 'Profile setup';
+
+  @override
+  String setupProgress(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
+  String get setupAllDone => 'Your profile is set up';
+
+  @override
+  String get setupNext => 'Next step';
+
+  @override
+  String get setupAdd => 'Add';
+
+  @override
+  String get setupDone => 'Done';
+
+  @override
+  String get insightsLowSampleNote => 'Too few people yet to compare periods';
+
+  @override
+  String get streakRewardReady =>
+      'This cycle is complete: your credit is in your wallet.';
+
+  @override
+  String streakToReward(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more days to your next credit',
+      one: '1 more day to your next credit',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String streakDaysUnit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'days in a row',
+      one: 'day in a row',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get walletOrderShort =>
+      'Weekly credits are used first, then earned, then purchased.';
+
+  @override
+  String get walletCanSend => 'Compliments you can send';
+
+  @override
+  String get profileStatShown => 'saw you';
+
+  @override
+  String get profileStatLiked => 'liked you';
+
+  @override
+  String get profileStatSample => 'Last 7 days · sample data';
+
+  @override
+  String get profileSeeInsights => 'See insights';
+
+  @override
+  String profileWeekLine(int count, int likes, int days) {
+    return 'This week $count people saw your profile and $likes liked it. Your streak is at $days.';
+  }
+
+  @override
+  String discoverDistanceKm(int distance) {
+    return '$distance km away';
+  }
+
+  @override
+  String get planCompareLikes => 'Likes a day';
+
+  @override
+  String get planCompareCompliments => 'Compliments a week';
+
+  @override
+  String get planCompareSeeLikes => 'See who liked you';
+
+  @override
+  String get planCompareInsights => 'Insights history';
 }

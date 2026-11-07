@@ -75,7 +75,7 @@ class _InterestsScreenState extends ConsumerState<InterestsScreen> {
             child: Semantics(
               liveRegion: true,
               child: Text(
-                l10n.interestsSelected(count).toUpperCase(),
+                l10n.interestsSelected(count),
                 textAlign: TextAlign.end,
                 style: AppTypography.labelCaps.copyWith(
                   color: AppColors.textMuted,

@@ -7,6 +7,8 @@ import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/commerce/application/economy_controller.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
+import 'package:numaya_mobile/features/health/application/health_providers.dart';
+import 'package:numaya_mobile/features/insights/presentation/insight_cards.dart';
 import 'package:numaya_mobile/features/premium/application/premium_controller.dart';
 import 'package:numaya_mobile/features/profile/application/profile_details_controller.dart';
 import 'package:numaya_mobile/features/verification/application/verification_controller.dart';
@@ -109,7 +111,9 @@ void main() {
     await openTab(tester, 'Messages');
     expect(find.text('New matches (3)'), findsOneWidget);
     expect(
-      find.bySemanticsLabel(RegExp('^Priya. Have you been\\?')),
+      find.bySemanticsLabel(
+        RegExp('^Priya(, photo verified)?. Have you been\\?'),
+      ),
       findsOneWidget,
     );
     await tapOn(tester, find.bySemanticsLabel('Unread, 1'));
@@ -131,13 +135,14 @@ void main() {
     // The Unread view is now empty: Priya's messages have been read.
     expect(find.bySemanticsLabel('Unread, 0'), findsOneWidget);
     expect(find.text('You’re all caught up'), findsOneWidget);
-    await tapOn(tester, find.bySemanticsLabel('All, 3'));
+    // R01: Rafa's quiet chat is in Archive, so All counts two.
+    await tapOn(tester, find.bySemanticsLabel('All, 2'));
     expect(find.text('You: Not yet. Saturday?'), findsOneWidget);
     await settle(tester);
   });
 
   testWidgets(
-    'expiring match: one extension per match; expired: reconnect, free (PRD 01/02)',
+    'expiring match: one extension per match; expired: simple ended state (R02)',
     (tester) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
@@ -162,17 +167,18 @@ void main() {
       expect(find.text('Extend a match every day'), findsWidgets);
       expect(c.read(premiumProvider).active, isFalse);
 
-      // Expired: no composer; asking to reconnect is free and happens once.
+      // R02: expired before anyone wrote: a simple ended state, no composer, no reconnection.
       await goTo(c, tester, '${Routes.chat}/ollie');
-      expect(find.text('Your match with Ollie expired'), findsOneWidget);
-      expect(find.byType(Composer), findsNothing);
-      await tapOn(tester, find.byKey(const ValueKey('chat-reconnect-ask')));
-      await tester.pump(const Duration(milliseconds: 300));
       expect(
-        find.text('Request sent. If Ollie accepts, your chat reopens.'),
+        find.text('This match ran out before anyone wrote'),
         findsOneWidget,
       );
+      expect(find.byType(Composer), findsNothing);
       expect(find.byKey(const ValueKey('chat-reconnect-ask')), findsNothing);
+      expect(
+        find.byKey(const ValueKey('chat-expired-discover')),
+        findsOneWidget,
+      );
       await settle(tester);
     },
   );
@@ -257,7 +263,9 @@ void main() {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
       await openTab(tester, 'Profile');
-      expect(find.bySemanticsLabel('Profile 28% complete'), findsOneWidget);
+      // R11: setup readiness is a supporting card, counted in parts, not a score.
+      expect(find.byType(ProfileSetupCard), findsOneWidget);
+      final before = c.read(profileHealthProvider).done.length;
       await tapOn(tester, find.text('Edit profile'));
       await tester.pump(const Duration(milliseconds: 600));
       await tapOn(tester, find.bySemanticsLabel('Write a short intro'));
@@ -300,7 +308,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 600));
       await tapOn(tester, find.bySemanticsLabel('Back'));
       await tester.pump(const Duration(milliseconds: 600));
-      expect(find.bySemanticsLabel('Profile 28% complete'), findsNothing);
+      expect(c.read(profileHealthProvider).done.length, greaterThan(before));
 
       // UI-031: no Opening Moves entry in the first release.
       expect(find.text('Opening Moves'), findsNothing);

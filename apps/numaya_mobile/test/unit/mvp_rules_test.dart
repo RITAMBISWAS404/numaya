@@ -228,7 +228,6 @@ void main() {
       );
       final expired = at(t, const Duration(hours: 24));
       expect(expired.phase, MatchPhase.expired);
-      expect(expired.expiryKind, ExpiryKind.noFirstMessage);
       expect(expired.canSend, isFalse);
     });
 
@@ -243,54 +242,71 @@ void main() {
       );
     });
 
+    test('R01: a started chat never expires; 7 quiet days move it to Archive', () {
+      final first = noonIst.add(const Duration(hours: 2));
+      final t = MatchTimeline(
+        matchedAt: noonIst,
+        firstMessageAt: first,
+        lastMessageAt: first,
+      );
+      expect(at(t, const Duration(days: 3)).phase, MatchPhase.active);
+      // The boundary: just before 7 days since the last message, still active.
+      expect(
+        at(t, const Duration(days: 7, hours: 1, minutes: 59)).phase,
+        MatchPhase.active,
+      );
+      final archived = at(t, const Duration(days: 7, hours: 2));
+      expect(archived.phase, MatchPhase.archived);
+      expect(archived.canSend, isTrue);
+      expect(archived.isExpired, isFalse);
+      // Months later: still archived, never expired.
+      expect(at(t, const Duration(days: 120)).phase, MatchPhase.archived);
+    });
+
+    test('R01: a new message makes an archived chat active again', () {
+      final first = noonIst.add(const Duration(hours: 2));
+      final revived = MatchTimeline(
+        matchedAt: noonIst,
+        firstMessageAt: first,
+        lastMessageAt: noonIst.add(const Duration(days: 9)),
+      );
+      expect(
+        at(revived, const Duration(days: 9, hours: 1)).phase,
+        MatchPhase.active,
+      );
+    });
+
     test(
-      'a first message stops the timer; 7 quiet days check in, 14 expire',
+      'R02: an initial match that runs out stays expired; no reconnection',
       () {
-        final first = noonIst.add(const Duration(hours: 2));
-        final t = MatchTimeline(
-          matchedAt: noonIst,
-          firstMessageAt: first,
-          lastMessageAt: first,
-        );
-        expect(at(t, const Duration(days: 3)).phase, MatchPhase.active);
-        expect(at(t, const Duration(days: 3)).checkInDue, isFalse);
-        final week = at(t, const Duration(days: 7, hours: 3));
-        expect(week.phase, MatchPhase.active);
-        expect(week.checkInDue, isTrue);
-        final gone = at(t, const Duration(days: 14, hours: 3));
-        expect(gone.phase, MatchPhase.expired);
-        expect(gone.expiryKind, ExpiryKind.quiet);
+        final t = MatchTimeline(matchedAt: noonIst);
+        final s = at(t, const Duration(days: 30));
+        expect(s.phase, MatchPhase.expired);
+        expect(s.canSend, isFalse);
+        expect(s.archivedAt, isNull);
       },
     );
 
-    test('reconnection: one request per expiry episode; accept reopens', () {
+    test('R02: the ring fraction follows the original or extended window', () {
       final t = MatchTimeline(matchedAt: noonIst);
-      final s = at(t, const Duration(hours: 30));
-      expect(canRequestReconnect(t, s), isTrue);
-      final asked = MatchTimeline(
-        matchedAt: noonIst,
-        reconnect: ReconnectRequest(
-          fromMe: true,
-          at: noonIst.add(const Duration(hours: 30)),
-          episode: s.expiredAt!,
-        ),
+      expect(
+        at(
+          t,
+          const Duration(hours: 6),
+        ).remainingFraction(noonIst.add(const Duration(hours: 6))),
+        closeTo(0.75, 0.001),
       );
-      final pending = at(asked, const Duration(hours: 31));
-      expect(pending.phase, MatchPhase.reconnectPending);
-      expect(canRequestReconnect(asked, pending), isFalse);
-      final declined = MatchTimeline(
+      final ext = MatchTimeline(
         matchedAt: noonIst,
-        reconnect: asked.reconnect!.withStatus(ReconnectStatus.declined),
+        extendedUntil: noonIst.add(const Duration(hours: 48)),
       );
-      final afterDecline = at(declined, const Duration(hours: 32));
-      expect(afterDecline.phase, MatchPhase.expired);
-      expect(canRequestReconnect(declined, afterDecline), isFalse);
-      final reopened = MatchTimeline(
-        matchedAt: noonIst,
-        reopenedAt: noonIst.add(const Duration(hours: 32)),
-        reconnect: asked.reconnect!.withStatus(ReconnectStatus.accepted),
+      expect(
+        at(
+          ext,
+          const Duration(hours: 24),
+        ).remainingFraction(noonIst.add(const Duration(hours: 24))),
+        closeTo(0.5, 0.001),
       );
-      expect(at(reopened, const Duration(hours: 33)).phase, MatchPhase.active);
     });
 
     test('unmatch and block are terminal', () {

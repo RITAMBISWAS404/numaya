@@ -532,7 +532,8 @@ class CountBadge extends StatelessWidget {
       '$count',
       style: AppTypography.labelCaps.copyWith(
         color: AppColors.accentForeground,
-        letterSpacing: 0,
+        fontSize: 12,
+        height: 16 / 12,
       ),
     ),
   );

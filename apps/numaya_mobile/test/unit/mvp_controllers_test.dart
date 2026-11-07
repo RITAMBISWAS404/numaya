@@ -241,18 +241,23 @@ void main() {
   });
 
   group('Chats lifecycle (S22-S25)', () {
-    test('an expired chat cannot send', () async {
+    test('an expired initial match cannot send (R02)', () async {
       c = make(DemoWorld.full);
-      await dating().send('ade', 'Hello again');
-      expect(c.read(datingProvider).threads['ade']!.length, 3);
+      await dating().send('ollie', 'Hello');
+      expect(c.read(datingProvider).threads['ollie'] ?? const [], isEmpty);
     });
 
-    test('the quiet chat shows its check-in once', () {
-      c = make(DemoWorld.full);
-      expect(dating().checkInDue('rafa'), isTrue);
-      dating().markCheckInSeen('rafa');
-      expect(dating().checkInDue('rafa'), isFalse);
-    });
+    test(
+      'an archived chat can send; blocked cannot be revived (R01)',
+      () async {
+        c = make(DemoWorld.full);
+        expect(dating().isArchived('rafa'), isTrue);
+        await dating().send('rafa', 'Board games this week?');
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        expect(dating().isArchived('rafa'), isFalse);
+        expect(dating().status('rafa').phase.name, 'active');
+      },
+    );
 
     test('ten unanswered messages, then wait for a reply', () async {
       c = make(DemoWorld.full);

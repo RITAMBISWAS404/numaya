@@ -11,19 +11,20 @@ import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
-import '../../compliments/application/compliments_controller.dart';
 import '../../experiments/experiments.dart';
 import '../../home/presentation/home_shell.dart';
 import '../../home/presentation/tab_screens.dart';
-import '../../matches/domain/match_lifecycle.dart';
-import '../../matches/presentation/lifecycle_screens.dart';
+import '../../lab/lab_banners.dart';
+import '../../lab/lab_registry.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../profile/application/profile_details_controller.dart';
 import '../application/dating_controller.dart';
 import '../data/media_picker.dart';
 import '../domain/sample_people.dart';
 import 'chat_attachments.dart';
+import 'conversation_row.dart';
 import 'empty_conversations.dart';
+import 'match_avatar.dart';
 import 'person_profile.dart';
 import 'safety_sheets.dart';
 import 'time_format.dart';
@@ -73,13 +74,18 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     ref.watch(premiumProvider);
     final controller = ref.read(datingProvider.notifier);
     final queued = controller.queuedMatches();
+    // Screen group `screen-chats`: directions fix the row and avatar variants in this screen.
+    final direction = ref.watch(labVariantProvider('screen-chats'));
+    final (String? avatarV, String? rowV) = switch (direction) {
+      'A' => ('B', 'D'),
+      'B' => (null, 'B'),
+      'C' => ('D', 'C'),
+      _ => (null, null),
+    };
     final expired = controller.expiredMatches();
+    final archived = controller.archivedConversations();
     final convs = controller.conversations();
     final likes = controller.unansweredLikes();
-    // S20: Compliment requests and reconnection requests wait for the member's answer.
-    ref.watch(complimentsProvider);
-    final requests = ref.read(complimentsProvider.notifier).requests();
-    final reconnects = controller.reconnectRequests();
     final hasMoves = ref.watch(
       profileDetailsProvider.select((d) => d.openingMoves.isNotEmpty),
     );
@@ -102,11 +108,11 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
         ? null
         : _OpeningMovesCard(onTap: () => context.push(Routes.openingMoves));
 
+    // R03: Compliment requests live on the Heart tab, not here. R01: quiet chats are in Archive.
     if (queued.isEmpty &&
         expired.isEmpty &&
-        convs.isEmpty &&
-        requests.isEmpty &&
-        reconnects.isEmpty) {
+        archived.isEmpty &&
+        convs.isEmpty) {
       // EXP-003 (Experiment Lab only; release builds show the refined candidate).
       final variant = ref.watch(
         experimentVariantProvider(Experiment.emptyChats),
@@ -161,9 +167,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     final queueShown = queued
         .where((m) => q.isEmpty || m.person.name.toLowerCase().contains(q))
         .toList();
-    final expiredShown = expired
-        .where((p) => q.isEmpty || p.name.toLowerCase().contains(q))
-        .toList();
+    final laterCount = archived.length + expired.length;
     final all = convs.where(matches).toList();
     final unread = all.where((p) => controller.unread(p.id) > 0).toList();
     final yourMove = all.where((p) => controller.yourMove(p.id)).toList();
@@ -179,13 +183,14 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       list = Column(
         children: [
           for (var i = 0; i < rows.length; i++) ...[
-            _ConversationRow(
+            ConversationRow(
               person: rows[i],
               last: controller.lastMessage(rows[i].id)!,
               unread: controller.unread(rows[i].id),
               yourMove: controller.yourMove(rows[i].id),
               now: now,
               onTap: () => _open(rows[i]),
+              variant: rowV,
             ),
           ],
         ],
@@ -234,35 +239,6 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     }
 
     final queueCount = queueShown.length;
-    final requestRows = <Widget>[
-      for (final c in requests)
-        if (personById(c.personId) case final p?)
-          ListRow(
-            key: ValueKey('request-${c.id}'),
-            avatar: InitialsAvatar(
-              initial: p.initial,
-              size: 40,
-              image: personAvatarImage(p),
-              imageAlignment: personAvatarFocus(p),
-            ),
-            label: l10n.requestRowCompliment(p.name),
-            detail: c.text,
-            onTap: () => context.push('${Routes.request}/${c.id}'),
-          ),
-      for (final p in reconnects)
-        ListRow(
-          key: ValueKey('reconnect-${p.id}'),
-          avatar: InitialsAvatar(
-            initial: p.initial,
-            size: 40,
-            image: personAvatarImage(p),
-            imageAlignment: personAvatarFocus(p),
-          ),
-          label: l10n.requestRowReconnect(p.name),
-          leadingMobile: null,
-          onTap: () => context.push('${Routes.reconnect}/${p.id}'),
-        ),
-    ];
     return TabPage(
       header: header,
       child: Column(
@@ -290,14 +266,6 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             ),
             const SizedBox(height: AppSpacing.s4),
           ],
-          if (requestRows.isNotEmpty && q.isEmpty) ...[
-            ListGroup(
-              key: const ValueKey('chats-requests'),
-              title: l10n.requestsTitle(requestRows.length),
-              children: requestRows,
-            ),
-            const SizedBox(height: AppSpacing.sectionGap),
-          ],
           if (queueCount > 0) ...[
             Semantics(
               header: true,
@@ -321,18 +289,19 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                       semanticLabel: l10n.queueLikesLabel(likes),
                       onTap: () => context.go(Routes.likes),
                     ),
-                  // UI-033: each match is a larger rounded-square photo with no visible name,
-                  // countdown or ring. Name and time left stay in the spoken label.
+                  // R02: the photo carries a ring showing the fraction of the (possibly
+                  // extended) window left; no number under it. The exact time and the
+                  // extension are inside the chat; the spoken label includes the time left.
                   for (final m in queueShown)
-                    _MatchTile(
+                    MatchAvatarTile(
                       key: ValueKey('match-tile-${m.person.id}'),
                       person: m.person,
+                      fraction: m.fraction,
+                      variant: avatarV,
                       semanticLabel: l10n.queueMatchLabel(
                         m.person.name,
                         timeLeft(l10n, m.remaining),
                       ),
-                      // PRD S20 (supersedes UI-033's hidden countdown): time left is shown.
-                      caption: timeLeft(l10n, m.remaining),
                       onTap: () => _open(m.person),
                     ),
                 ],
@@ -358,16 +327,18 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
           ),
           const SizedBox(height: AppSpacing.s3),
           list,
-          if (expiredShown.isNotEmpty && q.isEmpty) ...[
+          if (laterCount > 0 && q.isEmpty) ...[
             const SizedBox(height: AppSpacing.sectionGap),
             ListGroup(
               children: [
                 ListRow(
-                  key: const ValueKey('chats-expired'),
-                  leadingMobile: NumayaMobileIcons.hourglass,
-                  label: l10n.chatsExpiredRow(expiredShown.length),
-                  detail: l10n.chatsExpiredDetail,
-                  onTap: () => context.push(Routes.expiredChats),
+                  key: const ValueKey('chats-archive'),
+                  leadingMobile: NumayaMobileIcons.archive,
+                  label: l10n.chatsArchiveRow,
+                  detail: archived.isEmpty
+                      ? l10n.chatsArchiveExpiredOnly(expired.length)
+                      : l10n.chatsArchiveDetail(archived.length),
+                  onTap: () => context.push(Routes.archive),
                 ),
               ],
             ),
@@ -384,92 +355,9 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   }
 }
 
-/// The New matches row's tile size and corner (UI-033, A-016): a rounded square the photo fills.
+/// The New matches row's tile size (UI-033, A-016), shared with the Likes tile.
 const double _tileSize = 96;
 const double _tileGap = AppSpacing.s3;
-
-/// One new match (UI-033): their first photo in a rounded square, or their initial on the photo
-/// grey. An expired match is dimmed; its state is in the spoken label.
-class _MatchTile extends StatelessWidget {
-  const _MatchTile({
-    super.key,
-    required this.person,
-    required this.semanticLabel,
-    required this.onTap,
-    this.caption,
-  });
-
-  final SamplePerson person;
-  final String semanticLabel;
-  final VoidCallback onTap;
-
-  /// Time left, under the photo (spoken in [semanticLabel]).
-  final String? caption;
-
-  @override
-  Widget build(BuildContext context) {
-    final image = personPhotoImage(person, 1);
-    return Padding(
-      padding: const EdgeInsets.only(right: _tileGap),
-      child: Pressable(
-        onTap: onTap,
-        semanticLabel: semanticLabel,
-        excludeChildSemantics: true,
-        borderRadius: AppRadii.all(AppRadii.card),
-        child: Opacity(
-          opacity: 1,
-          child: ClipRRect(
-            borderRadius: AppRadii.all(AppRadii.card),
-            child: SizedBox.square(
-              dimension: _tileSize,
-              child:
-                  image ??
-                  ColoredBox(
-                    color: AppColors.photo,
-                    child: Center(
-                      child: Text(
-                        person.initial,
-                        textScaler: TextScaler.noScaling,
-                        style: AppTypography.weight(
-                          AppTypography.headline,
-                          AppTypography.semibold,
-                        ).copyWith(color: AppColors.textSecondary),
-                      ),
-                    ),
-                  ),
-            ),
-          ),
-        ),
-      ),
-    ).withCaption(caption);
-  }
-}
-
-extension on Padding {
-  /// The tile with its time-left line underneath (MVP S20).
-  Widget withCaption(String? caption) => caption == null
-      ? this
-      : Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            this,
-            const SizedBox(height: AppSpacing.s1),
-            ExcludeSemantics(
-              child: SizedBox(
-                width: _tileSize,
-                child: Text(
-                  caption,
-                  maxLines: 1,
-                  overflow: TextOverflow.fade,
-                  softWrap: false,
-                  style: AppTypography.micro,
-                ),
-              ),
-            ),
-          ],
-        );
-}
 
 /// The Likes tile (UI-034, A-016's illustrated first tile): the same rounded square, the real
 /// count large at the top, and the Numaya mascot (existing approved artwork) anchored at the foot.
@@ -582,118 +470,6 @@ class _OpeningMovesCard extends StatelessWidget {
   }
 }
 
-class _ConversationRow extends StatelessWidget {
-  const _ConversationRow({
-    required this.person,
-    required this.last,
-    required this.unread,
-    required this.yourMove,
-    required this.now,
-    required this.onTap,
-  });
-
-  final SamplePerson person;
-  final DemoMessage last;
-  final int unread;
-  final bool yourMove;
-  final DateTime now;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final text = last.attachment == null
-        ? last.text
-        : [
-            attachmentSummary(l10n, last.attachment!),
-            if (last.text.isNotEmpty) last.text,
-          ].join(': ');
-    final preview = last.mine ? l10n.youPrefix(text) : text;
-    final time = shortTime(l10n, last.at, now);
-    return Pressable(
-      onTap: onTap,
-      semanticLabel: [
-        person.name,
-        preview,
-        time,
-        if (unread > 0) l10n.unreadCount(unread),
-        if (yourMove) l10n.yourMoveTag,
-      ].join('. '),
-      excludeChildSemantics: true,
-      pressedScale: 0.99,
-      borderRadius: AppRadii.all(AppRadii.card),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.s3),
-        child: Row(
-          children: [
-            InitialsAvatar(
-              initial: person.initial,
-              size: 64,
-              verified: person.verified,
-              image: personAvatarImage(person),
-              imageAlignment: personAvatarFocus(person),
-            ),
-            const SizedBox(width: AppSpacing.s4),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          person.name,
-                          style: AppTypography.weight(
-                            AppTypography.row,
-                            AppTypography.semibold,
-                          ),
-                        ),
-                      ),
-                      Text(time, style: AppTypography.micro),
-                    ],
-                  ),
-                  const SizedBox(height: 2),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          preview,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style:
-                              AppTypography.weight(
-                                AppTypography.bodySm,
-                                unread > 0
-                                    ? AppTypography.semibold
-                                    : AppTypography.regular,
-                              ).copyWith(
-                                // UI-045: a read preview is muted metadata; unread stays ink.
-                                color: unread > 0
-                                    ? AppColors.ink
-                                    : AppColors.textMuted,
-                              ),
-                        ),
-                      ),
-                      if (yourMove && unread == 0) ...[
-                        const SizedBox(width: AppSpacing.s2),
-                        StatusBadge(label: l10n.yourMoveTag),
-                      ],
-                      if (unread > 0) ...[
-                        const SizedBox(width: AppSpacing.s2),
-                        CountBadge(count: unread),
-                      ],
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 /// Conversation (B-44, V16 038 / 039 / 042). Before the first message: the person, time left with
 /// Extend, their Opening Move and openers. Sample conversations show both sides, labelled; the
 /// member's own messages stay on this device. An expired match offers Rematch. The ⋯ menu offers
@@ -764,11 +540,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       if (!mounted) return;
       final dating = ref.read(datingProvider.notifier);
       dating.openChat(widget.personId);
-      // S23: seven quiet days, once per quiet period.
-      final person = personById(widget.personId);
-      if (person != null && dating.checkInDue(widget.personId)) {
-        showCheckInSheet(context, ref, person, onWrite: _focus.requestFocus);
-      }
     });
   }
 
@@ -928,44 +699,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     }
   }
 
-  /// S22/S24: an expired chat keeps its history; either person may ask to reconnect once per
-  /// expiry, and the other must accept.
-  Widget _reconnectPanel(SamplePerson person) {
+  /// R02: an initial match that ran out before anyone wrote. A simple expired state: no
+  /// reconnection, no countdown, one way back.
+  Widget _expiredPanel(SamplePerson person) {
     final l10n = context.l10n;
-    final controller = ref.read(datingProvider.notifier);
-    final status = controller.status(person.id);
-    final request = ref.read(datingProvider).reconnects[person.id];
-    final current = request != null && request.episode == status.expiredAt;
-    final Widget action;
-    if (controller.incomingReconnect(person.id) != null) {
-      action = NumayaButton(
-        key: const ValueKey('chat-reconnect-review'),
-        label: l10n.chatReconnectReview,
-        onPressed: () => context.push('${Routes.reconnect}/${person.id}'),
-      );
-    } else if (current && request.status == ReconnectStatus.pending) {
-      action = Text(
-        l10n.chatReconnectSent(person.name),
-        textAlign: TextAlign.center,
-        style: AppTypography.helper,
-      );
-    } else if (current && request.status == ReconnectStatus.declined) {
-      action = Text(
-        l10n.chatReconnectDeclined,
-        textAlign: TextAlign.center,
-        style: AppTypography.helper,
-      );
-    } else {
-      action = NumayaButton(
-        key: const ValueKey('chat-reconnect-ask'),
-        label: l10n.chatReconnectAsk,
-        onPressed: () {
-          if (controller.requestReconnect(person.id)) {
-            NumayaToast.show(context, l10n.chatReconnectToast);
-          }
-        },
-      );
-    }
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -973,21 +710,24 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         Semantics(
           header: true,
           child: Text(
-            status.expiryKind == ExpiryKind.quiet
-                ? l10n.chatExpiredQuietTitle
-                : l10n.chatExpiredTitle(person.name),
+            l10n.chatExpiredFirstTitle,
             textAlign: TextAlign.center,
             style: AppTypography.sheetTitle,
           ),
         ),
         const SizedBox(height: AppSpacing.s2),
         Text(
-          l10n.chatExpiredBody,
+          l10n.chatExpiredSimpleBody,
           textAlign: TextAlign.center,
           style: AppTypography.bodySm.copyWith(color: AppColors.textSecondary),
         ),
         const SizedBox(height: AppSpacing.s4),
-        action,
+        NumayaButton(
+          key: const ValueKey('chat-expired-discover'),
+          label: l10n.backToDiscover,
+          variant: NumayaButtonVariant.secondary,
+          onPressed: () => context.go(Routes.home),
+        ),
       ],
     );
   }
@@ -1014,6 +754,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final messages = state.threads[person.id] ?? const <DemoMessage>[];
     final known = _known ??= {for (final m in messages) m.id};
     final expired = controller.isExpired(person.id);
+    final archived = controller.isArchived(person.id);
     final now = ref.read(clockProvider)();
 
     // UC-05: the same height and centre line as `NumayaTopBar` (the V16 8pt drop is retired), so
@@ -1094,7 +835,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               ),
             ),
             const SizedBox(height: AppSpacing.s4),
-            _reconnectPanel(person),
+            _expiredPanel(person),
           ],
         ),
       );
@@ -1108,7 +849,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             child: InitialsAvatar(
               initial: person.initial,
               size: 96,
-              verified: person.verified,
               image: personAvatarImage(person),
               imageAlignment: personAvatarFocus(person),
             ),
@@ -1132,9 +872,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           StatusBanner(
             tone: left.inHours < 2 ? BannerTone.pending : BannerTone.info,
             title: l10n.chatExpiresIn(timeLeft(l10n, left)),
-            body: premium.active
-                ? l10n.chatExtendPremiumNote
-                : l10n.chatExtendFreeNote,
+            // R02: the exact end, then the extension rule (one per match).
+            body:
+                '${l10n.chatEndsAt(deadlineWhen(l10n, controller.expiresAt(person.id), now))} '
+                '${premium.active ? l10n.chatExtendPremiumNote : l10n.chatExtendFreeNote}',
             action: NumayaButton(
               label: l10n.chatExtend,
               small: true,
@@ -1419,6 +1160,24 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     ),
                   ),
                 ),
+                // R01: an archived chat stays fully usable; the note says why it moved and that
+                // sending brings it back. No timer, request or fee.
+                if (archived)
+                  Padding(
+                    key: const ValueKey('chat-archived-note'),
+                    padding: const EdgeInsets.fromLTRB(
+                      AppLayout.screenGutter,
+                      AppSpacing.s2,
+                      AppLayout.screenGutter,
+                      AppSpacing.s2,
+                    ),
+                    child: LabStatusBanner(
+                      tone: BannerTone.info,
+                      icon: NumayaMobileIcons.archive,
+                      title: l10n.chatArchivedTitle,
+                      body: l10n.chatArchivedBody,
+                    ),
+                  ),
                 if (expired)
                   ColoredBox(
                     key: const ValueKey('chat-expired-bar'),
@@ -1432,7 +1191,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       ),
                       child: messages.isEmpty
                           ? const SizedBox.shrink()
-                          : _reconnectPanel(person),
+                          : _expiredPanel(person),
                     ),
                   )
                 else

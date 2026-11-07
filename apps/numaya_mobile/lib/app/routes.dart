@@ -52,11 +52,14 @@ abstract final class Routes {
   /// S21: `/request/:complimentId`.
   static const request = '/request';
 
-  /// S24: expired chats.
-  static const expiredChats = '/chats/expired';
+  /// R01: Archive (quiet conversations, and initial matches that ran out).
+  static const archive = '/chats/archive';
 
-  /// S25: `/reconnect/:personId`.
-  static const reconnect = '/reconnect';
+  /// Retired by R01 (no expiry or reconnection for started chats). Kept only so old links and
+  /// notifications land somewhere sensible: `/chats/expired` opens Archive, `/reconnect/:id`
+  /// opens that chat.
+  static const legacyExpiredChats = '/chats/expired';
+  static const legacyReconnect = '/reconnect';
 
   /// S29-S33 in Profile.
   static const health = '/profile/health';
@@ -118,6 +121,10 @@ abstract final class Routes {
   /// DEVELOPMENT ONLY: overnight v3 layout experiments (Current / A / B / C per experiment).
   static const experimentLab = '/experiment-lab';
 
+  /// DEVELOPMENT ONLY. Visual Lab V2 Design Lab and its per-family previews.
+  static const visualLab = '/visual-lab';
+  static const visualLabPreview = '/visual-lab/preview';
+
   /// Full-screen dating routes, outside the tab shell; each takes a sample person id.
   static const like = '/like';
   static const match = '/match';
@@ -149,7 +156,7 @@ abstract final class Routes {
       path.startsWith(compliment) ||
       path.startsWith(request) ||
       path.startsWith('/chats') ||
-      path.startsWith(reconnect) ||
+      path.startsWith(legacyReconnect) ||
       path.startsWith('/store') ||
       path.startsWith(restore) ||
       path == reauth;

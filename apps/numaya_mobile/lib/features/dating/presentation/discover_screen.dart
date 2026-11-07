@@ -17,6 +17,7 @@ import '../../compliments/presentation/compliment_screens.dart';
 import '../../home/application/discovery_filters.dart';
 import '../../home/presentation/filters_sheet.dart';
 import '../../home/presentation/tab_screens.dart';
+import '../../lab/lab_registry.dart';
 import '../../settings/presentation/settings_screen.dart';
 import '../application/dating_controller.dart';
 import '../domain/sample_people.dart';
@@ -433,6 +434,16 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
     void compliment(ComplimentTarget target) =>
         unawaited(context.push(complimentRoute(person.id, target)));
 
+    // Screen group `screen-discover`: directions fix the photo and prompt variants here.
+    final direction = ref.watch(labVariantProvider('screen-discover'));
+    final (String? photoV, String? promptV) = switch (direction) {
+      'A' => ('A', 'A'),
+      'B' => ('O', 'C'),
+      'C' => ('C', 'B'),
+      _ => (null, null),
+    };
+    final discoverPhotoV =
+        photoV ?? ref.watch(labVariantProvider('discover-photo'));
     final page = TabPage(
       header: header,
       scrollController: _scroll,
@@ -445,13 +456,16 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // S11: today's like allowance, always visible; out of likes links to S17.
-            _QuotaLine(
-              left: likesLeft,
-              limit: economy.likesLimit(),
-              onOut: () => context.push(Routes.allowance),
-            ),
-            const SizedBox(height: AppSpacing.s3),
+            // R04: no persistent "likes left" line. The allowance is still enforced by the
+            // controller; once it is used, this explains it and links to the reset time (S17).
+            if (likesLeft <= 0) ...[
+              _QuotaLine(
+                left: likesLeft,
+                limit: economy.likesLimit(),
+                onOut: () => context.push(Routes.allowance),
+              ),
+              const SizedBox(height: AppSpacing.s3),
+            ],
             if (controller.showingFallback(filters)) ...[
               StatusBanner(
                 title: l10n.discoverFallbackTitle,
@@ -469,24 +483,19 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
                 key: ValueKey('swipe-${person.id}'),
                 person: person,
                 photoHeight: _photoHeight(context),
-                photoAction: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ComplimentAnchor(
-                      key: const ValueKey('compliment-photo-0'),
-                      name: person.name,
-                      onPressed: () =>
-                          compliment(const ComplimentTarget.photo(0)),
-                    ),
-                    const SizedBox(width: AppSpacing.s2),
-                    NavIconButton(
-                      icon: NumayaIcons.more,
-                      label: l10n.discoverOptions,
-                      style: NavButtonStyle.circular,
-                      onPressed: () => _options(person),
-                    ),
-                  ],
+                // R05: the overflow stays top-right; the Compliment squircle sits bottom-right,
+                // the same size and target as the overflow.
+                photoAction: SquircleIconButton(
+                  icon: NumayaIcons.more,
+                  label: l10n.discoverOptions,
+                  onPressed: () => _options(person),
                 ),
+                complimentAction: ComplimentAnchor(
+                  key: const ValueKey('compliment-photo-0'),
+                  name: person.name,
+                  onPressed: () => compliment(const ComplimentTarget.photo(0)),
+                ),
+                layout: discoverPhotoV,
                 onOpenPhotos: () => openPhotos(1),
                 onMore: _toDetails,
                 onDecide: (liked) => unawaited(_decide(person, liked: liked)),
@@ -499,6 +508,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
               person,
               onPhoto: openPhotos,
               onCompliment: compliment,
+              promptVariant: promptV,
             ),
             const SizedBox(height: AppLayout.sectionGap),
             // happn's "Report & block" and Bumble's "Hide and Report" close the profile.
@@ -530,7 +540,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
   }
 }
 
-/// The like allowance under the header: "4 of 5 likes left today", or the used-up state.
+/// The used-up like allowance under the header (R04: shown only once today's likes are used).
 class _QuotaLine extends StatelessWidget {
   const _QuotaLine({
     required this.left,
@@ -675,11 +685,15 @@ class _SwipeCard extends StatefulWidget {
     required this.onMore,
     this.photoHeight,
     this.photoAction,
+    this.complimentAction,
+    this.layout,
   });
 
   final SamplePerson person;
   final double? photoHeight;
   final Widget? photoAction;
+  final Widget? complimentAction;
+  final String? layout;
   final VoidCallback onOpenPhotos;
   final VoidCallback onMore;
   final ValueChanged<bool> onDecide;
@@ -780,6 +794,8 @@ class _SwipeCardState extends State<_SwipeCard> {
           onMore: widget.onMore,
           photoHeight: widget.photoHeight,
           photoAction: widget.photoAction,
+          complimentAction: widget.complimentAction,
+          layout: widget.layout,
         ),
       ),
     );

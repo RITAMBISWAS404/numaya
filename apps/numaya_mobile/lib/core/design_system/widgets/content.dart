@@ -6,8 +6,8 @@ import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
-import 'buttons.dart';
 import 'primitives.dart';
+import 'squircle_button.dart';
 
 /// The Numaya mark: a soft square with a bite out of its corner and a rose dot in the bite. In V16
 /// the square is Withings blue (COMPONENT_RULES.md: "mark in accent blue, rose dot kept").
@@ -864,10 +864,12 @@ Future<T?> showNumayaSheet<T>({
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
+              // The close's 48pt target overhangs its 38pt squircle by 5pt, so 15pt here puts
+              // the visible squircle on the sheet's 20pt content edge (Ente 4809:8027).
               padding: const EdgeInsets.fromLTRB(
                 AppSpacing.s5,
-                AppSpacing.s5,
                 AppSpacing.s4,
+                15,
                 0,
               ),
               child: Row(
@@ -878,10 +880,12 @@ Future<T?> showNumayaSheet<T>({
                       child: Text(title, style: AppTypography.sheetTitle),
                     ),
                   ),
-                  NavIconButton(
+                  // R08: the shared white squircle with a dark X (Ente's sheet close is a white
+                  // control on the grey sheet; the squircle matches the header buttons).
+                  SquircleIconButton(
+                    key: const ValueKey('sheet-close'),
                     icon: NumayaIcons.close,
                     label: closeLabel,
-                    style: NavButtonStyle.circular,
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],

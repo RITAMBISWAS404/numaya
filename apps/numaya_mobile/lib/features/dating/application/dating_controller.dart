@@ -153,23 +153,11 @@ class DatingState {
     this.datePlans = const {},
     this.unmatchReasons = const {},
     this.nextMessageId = 1,
-    this.reopenedAt = const {},
-    this.reconnects = const {},
     this.muted = const {},
-    this.checkInSeen = const {},
   });
-
-  /// When an accepted reconnection reopened each chat.
-  final Map<String, DateTime> reopenedAt;
-
-  /// The reconnection request of the current expiry episode, per match.
-  final Map<String, ReconnectRequest> reconnects;
 
   /// Conversations whose notifications are muted (S26).
   final Set<String> muted;
-
-  /// The quiet period whose check-in has been shown, per match (shown once per period).
-  final Map<String, DateTime> checkInSeen;
 
   /// Sample profiles already liked or passed in Discover.
   final Set<String> seen;
@@ -261,10 +249,7 @@ class DatingState {
     Map<String, DatePlan>? datePlans,
     Map<String, String>? unmatchReasons,
     int? nextMessageId,
-    Map<String, DateTime>? reopenedAt,
-    Map<String, ReconnectRequest>? reconnects,
     Set<String>? muted,
-    Map<String, DateTime>? checkInSeen,
   }) {
     return DatingState(
       seen: seen ?? this.seen,
@@ -290,10 +275,7 @@ class DatingState {
       datePlans: datePlans ?? this.datePlans,
       unmatchReasons: unmatchReasons ?? this.unmatchReasons,
       nextMessageId: nextMessageId ?? this.nextMessageId,
-      reopenedAt: reopenedAt ?? this.reopenedAt,
-      reconnects: reconnects ?? this.reconnects,
       muted: muted ?? this.muted,
-      checkInSeen: checkInSeen ?? this.checkInSeen,
     );
   }
 }
@@ -322,16 +304,16 @@ enum ExtendResult {
 /// PRD 02 asks for a rate limit because each message resets the quiet timer).
 const int kMaxUnansweredMessages = 10;
 
-/// A new match in the queue (B-42): time left before it expires.
+/// A new match in the queue (B-42): time left before it expires, and the fraction of its
+/// original or extended window that is left (the avatar ring, R02).
 @immutable
 class QueuedMatch {
-  const QueuedMatch(this.person, this.remaining);
+  const QueuedMatch(this.person, this.remaining, this.fraction);
   final SamplePerson person;
   final Duration remaining;
 
-  /// Fraction of the window left, for the countdown ring.
-  double get fraction =>
-      (remaining.inMinutes / (kMatchWindowHours * 60)).clamp(0.0, 1.0);
+  /// Fraction of the (possibly extended) window left, 0–1, for the progress ring.
+  final double fraction;
 }
 
 /// View model for the dating demo: Discover, Likes, matches, conversations and safety actions.
@@ -376,18 +358,6 @@ class DatingController extends Notifier<DatingState> {
       // Priya's latest messages are unread; the others have been read.
       if (m.person != 'priya') lastRead[m.person] = now;
     }
-    // Ade's chat went quiet and expired; Ade has asked to reconnect (S25).
-    final adeLast = threads['ade']?.last.at;
-    final reconnects = <String, ReconnectRequest>{
-      if (adeLast != null)
-        'ade': ReconnectRequest(
-          fromMe: false,
-          at: now.subtract(const Duration(hours: 6)),
-          episode: adeLast.add(
-            Duration(days: kProvisionalCatalog.policy.quietExpiryDays),
-          ),
-        ),
-    };
     return DatingState(
       matches: [for (final m in kSeedMatches) m.person],
       matchedAt: matchedAt,
@@ -395,7 +365,6 @@ class DatingController extends Notifier<DatingState> {
       lastRead: lastRead,
       openedMatches: {'lina', 'ade', 'ollie'},
       nextMessageId: id,
-      reconnects: reconnects,
     );
   }
 
@@ -755,8 +724,6 @@ class DatingController extends Notifier<DatingState> {
       extendedUntil: state.extendedUntil[id],
       firstMessageAt: accepted.firstOrNull?.at,
       lastMessageAt: accepted.lastOrNull?.at,
-      reopenedAt: state.reopenedAt[id],
-      reconnect: state.reconnects[id],
       ended: ended == null
           ? null
           : ended == EndReason.unmatched
@@ -771,9 +738,16 @@ class DatingController extends Notifier<DatingState> {
 
   bool _hasMessages(String id) => state.threads[id]?.isNotEmpty ?? false;
 
-  /// Expired (either kind), with or without a pending reconnection.
+  /// An initial match that ran out without a first message (no reconnection, R02).
   bool isExpired(String id) =>
       state.matches.contains(id) && status(id).isExpired;
+
+  /// A started conversation that has been quiet for the archive period (R01).
+  bool isArchived(String id) =>
+      state.matches.contains(id) && status(id).isArchived;
+
+  /// Fraction of the first-message window left (the avatar ring), 0–1.
+  double windowFraction(String id) => status(id).remainingFraction(_now);
 
   Duration remaining(String id) {
     final left = expiresAt(id).difference(_now);
@@ -791,15 +765,26 @@ class DatingController extends Notifier<DatingState> {
 
   /// The queue with time left, for countdowns.
   List<QueuedMatch> queuedMatches() => [
-    for (final p in newMatches()) QueuedMatch(p, remaining(p.id)),
+    for (final p in newMatches())
+      QueuedMatch(p, remaining(p.id), windowFraction(p.id)),
   ];
 
-  /// Expired matches and chats (S24), newest expiry first.
+  /// Initial matches that expired without a first message, newest first. Shown only as a simple
+  /// expired state; they cannot be revived (R02).
   List<SamplePerson> expiredMatches() {
     final ids = [
       for (final id in state.matches)
         if (state.isActive(id) && isExpired(id)) id,
     ]..sort((a, b) => status(b).expiredAt!.compareTo(status(a).expiredAt!));
+    return [for (final id in ids) personById(id)!];
+  }
+
+  /// Archived conversations (R01), most recent activity first.
+  List<SamplePerson> archivedConversations() {
+    final ids = [
+      for (final id in state.matches)
+        if (state.isActive(id) && isArchived(id)) id,
+    ]..sort((a, b) => _activityAt(b).compareTo(_activityAt(a)));
     return [for (final id in ids) personById(id)!];
   }
 
@@ -831,69 +816,6 @@ class DatingController extends Notifier<DatingState> {
 
   bool get freeExtendAvailable => _economy.extensionAvailable();
 
-  /// Asks to reconnect an expired match (once per expiry episode). Free.
-  bool requestReconnect(String id) {
-    final s = status(id);
-    if (!state.isActive(id) || !canRequestReconnect(timeline(id), s)) {
-      return false;
-    }
-    state = state.copyWith(
-      reconnects: {
-        ...state.reconnects,
-        id: ReconnectRequest(fromMe: true, at: _now, episode: s.expiredAt!),
-      },
-    );
-    _log.info('Reconnect requested');
-    return true;
-  }
-
-  /// The other person's pending request, if any (S25).
-  ReconnectRequest? incomingReconnect(String id) {
-    final r = state.reconnects[id];
-    return r != null &&
-            !r.fromMe &&
-            status(id).phase == MatchPhase.reconnectPending
-        ? r
-        : null;
-  }
-
-  /// Requests waiting for the member's answer.
-  List<SamplePerson> reconnectRequests() => [
-    for (final id in state.matches)
-      if (state.isActive(id) && incomingReconnect(id) != null) personById(id)!,
-  ];
-
-  /// Accepting reopens the chat (no automatic message, no charge); declining ends this episode.
-  void respondReconnect(String id, {required bool accept}) {
-    final r = incomingReconnect(id);
-    if (r == null) return;
-    state = state.copyWith(
-      reconnects: {
-        ...state.reconnects,
-        id: r.withStatus(
-          accept ? ReconnectStatus.accepted : ReconnectStatus.declined,
-        ),
-      },
-      reopenedAt: accept ? {...state.reopenedAt, id: _now} : null,
-    );
-    _log.info('Reconnect ${accept ? 'accepted' : 'declined'}');
-  }
-
-  /// Seven quiet days: the check-in is due and not yet shown for this quiet period (S23).
-  bool checkInDue(String id) {
-    final s = status(id);
-    return s.phase == MatchPhase.active &&
-        s.checkInDue &&
-        state.checkInSeen[id] != s.quietSince;
-  }
-
-  /// The check-in was shown (answered or skipped). It never affects ranking.
-  void markCheckInSeen(String id) {
-    final since = status(id).quietSince;
-    if (since == null) return;
-    state = state.copyWith(checkInSeen: {...state.checkInSeen, id: since});
-  }
-
   void setMuted(String id, bool muted) => state = state.copyWith(
     muted: muted ? {...state.muted, id} : ({...state.muted}..remove(id)),
   );
@@ -904,7 +826,7 @@ class DatingController extends Notifier<DatingState> {
     final ids = [
       for (final id in state.matches)
         if (state.isActive(id) &&
-            (_hasMessages(id) || state.reopenedAt.containsKey(id)) &&
+            _hasMessages(id) &&
             status(id).phase == MatchPhase.active)
           id,
     ]..sort((a, b) => _activityAt(b).compareTo(_activityAt(a)));
@@ -912,7 +834,7 @@ class DatingController extends Notifier<DatingState> {
   }
 
   DateTime _activityAt(String id) =>
-      lastMessage(id)?.at ?? state.reopenedAt[id] ?? state.matchedAt[id]!;
+      lastMessage(id)?.at ?? state.matchedAt[id]!;
 
   DemoMessage? lastMessage(String id) {
     final t = state.threads[id];
@@ -955,7 +877,7 @@ class DatingController extends Notifier<DatingState> {
   }) async {
     final body = text.trim();
     if ((body.isEmpty && attachment == null) || !state.isActive(id)) return;
-    // Expired chats keep their history but cannot send (PRD 02).
+    // Expired initial matches keep their history but cannot send; archived chats can (R01).
     if (!status(id).canSend || !canSendMore(id)) return;
     // A reply keeps its target only if that message is still in this thread.
     final target = replyToId == null

@@ -8821,7 +8821,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatExpiredFirstTitle.
   ///
   /// In en, this message translates to:
-  /// **'This match expired before anyone wrote'**
+  /// **'This match ran out before anyone wrote'**
   String get chatExpiredFirstTitle;
 
   /// No description provided for @chatReconnectAsk.
@@ -10197,6 +10197,642 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add a short bio'**
   String get obMissingBio;
+
+  /// No description provided for @chatsArchiveRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive'**
+  String get chatsArchiveRow;
+
+  /// No description provided for @chatsArchiveDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 quiet chat} other{{count} quiet chats}}'**
+  String chatsArchiveDetail(int count);
+
+  /// No description provided for @chatsArchiveExpiredOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 match ran out} other{{count} matches ran out}}'**
+  String chatsArchiveExpiredOnly(int count);
+
+  /// No description provided for @chatExpiredSimpleBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Neither of you sent a first message in time, so the match has ended.'**
+  String get chatExpiredSimpleBody;
+
+  /// No description provided for @backToDiscover.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Discover'**
+  String get backToDiscover;
+
+  /// No description provided for @photoVerifiedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'photo verified'**
+  String get photoVerifiedLabel;
+
+  /// No description provided for @archiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive'**
+  String get archiveTitle;
+
+  /// No description provided for @archiveEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing in Archive'**
+  String get archiveEmptyTitle;
+
+  /// No description provided for @archiveEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Chats with no messages for 7 days move here. Write any time to bring one back.'**
+  String get archiveEmptyBody;
+
+  /// No description provided for @archiveExplainer.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages for 7 days. Send one any time and the chat moves back to Chats for both of you.'**
+  String get archiveExplainer;
+
+  /// No description provided for @expiredMatchesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches that ran out'**
+  String get expiredMatchesTitle;
+
+  /// No description provided for @expiredMatchesFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'No one wrote within the first 24 hours or the extension. These matches have ended.'**
+  String get expiredMatchesFootnote;
+
+  /// No description provided for @chatArchivedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This chat is in Archive'**
+  String get chatArchivedTitle;
+
+  /// No description provided for @chatArchivedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages for 7 days. Send one and it moves back to Chats for both of you.'**
+  String get chatArchivedBody;
+
+  /// No description provided for @heartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Who’s interested'**
+  String get heartTitle;
+
+  /// No description provided for @heartTabLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'Likes'**
+  String get heartTabLikes;
+
+  /// No description provided for @heartTabCompliments.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliments'**
+  String get heartTabCompliments;
+
+  /// No description provided for @complimentsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No Compliments yet'**
+  String get complimentsEmptyTitle;
+
+  /// No description provided for @complimentsEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'When someone writes about a photo or prompt of yours, it shows here. Reading and replying is free.'**
+  String get complimentsEmptyBody;
+
+  /// No description provided for @complimentsInboxNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading and replying is free. Replying starts a chat.'**
+  String get complimentsInboxNote;
+
+  /// No description provided for @complimentNotNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get complimentNotNow;
+
+  /// No description provided for @complimentReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply'**
+  String get complimentReply;
+
+  /// No description provided for @deadlineToday.
+  ///
+  /// In en, this message translates to:
+  /// **'today at {time}'**
+  String deadlineToday(String time);
+
+  /// No description provided for @deadlineTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'tomorrow at {time}'**
+  String deadlineTomorrow(String time);
+
+  /// No description provided for @deadlineOn.
+  ///
+  /// In en, this message translates to:
+  /// **'{day} at {time}'**
+  String deadlineOn(String day, String time);
+
+  /// No description provided for @chatEndsAt.
+  ///
+  /// In en, this message translates to:
+  /// **'The match ends {when}.'**
+  String chatEndsAt(String when);
+
+  /// No description provided for @insightsSampleTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample data'**
+  String get insightsSampleTag;
+
+  /// No description provided for @insightsPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =1{Last day} other{Last {days} days}}'**
+  String insightsPeriod(int days);
+
+  /// No description provided for @insightsStatusShown.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re being shown in Discover'**
+  String get insightsStatusShown;
+
+  /// No description provided for @insightsStatusShownBody.
+  ///
+  /// In en, this message translates to:
+  /// **'About {count} people match your filters within {distance} km.'**
+  String insightsStatusShownBody(int count, int distance);
+
+  /// No description provided for @insightsStatusLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Few new people fit your filters'**
+  String get insightsStatusLimited;
+
+  /// No description provided for @insightsStatusLimitedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'About {count} people match within {distance} km, and many have already seen you.'**
+  String insightsStatusLimitedBody(int count, int distance);
+
+  /// No description provided for @insightsStatusPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile is paused'**
+  String get insightsStatusPaused;
+
+  /// No description provided for @insightsStatusPausedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No one new sees you while paused. Your chats still work.'**
+  String get insightsStatusPausedBody;
+
+  /// No description provided for @insightsStatusRestricted.
+  ///
+  /// In en, this message translates to:
+  /// **'Numaya has limited your profile'**
+  String get insightsStatusRestricted;
+
+  /// No description provided for @insightsStatusRestrictedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'See the reason and how to appeal. This is our decision, not another member’s.'**
+  String get insightsStatusRestrictedBody;
+
+  /// No description provided for @insightsStatusNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough data yet'**
+  String get insightsStatusNew;
+
+  /// No description provided for @insightsStatusNewBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Trends appear after about 20 people have seen your profile.'**
+  String get insightsStatusNewBody;
+
+  /// No description provided for @insightsStatusMore.
+  ///
+  /// In en, this message translates to:
+  /// **'See details'**
+  String get insightsStatusMore;
+
+  /// No description provided for @insightsNoPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'No earlier period to compare'**
+  String get insightsNoPrevious;
+
+  /// No description provided for @insightsNoChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Same as the previous {days} days'**
+  String insightsNoChange(int days);
+
+  /// No description provided for @insightsUp.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} more than the previous {days} days'**
+  String insightsUp(int count, int days);
+
+  /// No description provided for @insightsDown.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} fewer than the previous {days} days'**
+  String insightsDown(int count, int days);
+
+  /// No description provided for @insightsBarsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New people shown your profile each day'**
+  String get insightsBarsLabel;
+
+  /// No description provided for @insightsBarsSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days, highest {max} in a day, {total} in total'**
+  String insightsBarsSummary(int days, int max, int total);
+
+  /// No description provided for @insightsFunnelShown.
+  ///
+  /// In en, this message translates to:
+  /// **'Saw you'**
+  String get insightsFunnelShown;
+
+  /// No description provided for @insightsFunnelLiked.
+  ///
+  /// In en, this message translates to:
+  /// **'Liked you'**
+  String get insightsFunnelLiked;
+
+  /// No description provided for @insightsFunnelMatched.
+  ///
+  /// In en, this message translates to:
+  /// **'Matched'**
+  String get insightsFunnelMatched;
+
+  /// No description provided for @insightsFunnelTalked.
+  ///
+  /// In en, this message translates to:
+  /// **'Both wrote'**
+  String get insightsFunnelTalked;
+
+  /// No description provided for @insightsFunnelCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Of the {count} people shown your profile in the last {days} days'**
+  String insightsFunnelCaption(int count, int days);
+
+  /// No description provided for @insightsShownPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} people saw your profile in the last {days} days'**
+  String insightsShownPeriod(int count, int days);
+
+  /// No description provided for @insightsShownSpoken.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} people saw your profile in the last {days} days'**
+  String insightsShownSpoken(int count, int days);
+
+  /// No description provided for @insightsShownUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'people saw your profile'**
+  String get insightsShownUnit;
+
+  /// No description provided for @insightsNoDataYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No data for this period yet.'**
+  String get insightsNoDataYet;
+
+  /// No description provided for @insightsTileShown.
+  ///
+  /// In en, this message translates to:
+  /// **'Saw you'**
+  String get insightsTileShown;
+
+  /// No description provided for @insightsTileLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'Liked you'**
+  String get insightsTileLikes;
+
+  /// No description provided for @insightsTileMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches'**
+  String get insightsTileMatches;
+
+  /// No description provided for @insightsTileYourTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Your turn'**
+  String get insightsTileYourTurn;
+
+  /// No description provided for @insightsSentence.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} people saw your profile in the last {days} days. {likes} liked it and you matched with {matches}.'**
+  String insightsSentence(int count, int days, int likes, int matches);
+
+  /// No description provided for @insightsMetricShown.
+  ///
+  /// In en, this message translates to:
+  /// **'Saw your profile'**
+  String get insightsMetricShown;
+
+  /// No description provided for @insightsMetricLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'Liked your profile'**
+  String get insightsMetricLikes;
+
+  /// No description provided for @insightsMetricMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches'**
+  String get insightsMetricMatches;
+
+  /// No description provided for @insightsMetricConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-way chats'**
+  String get insightsMetricConversations;
+
+  /// No description provided for @insightsMetricYourTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for your reply'**
+  String get insightsMetricYourTurn;
+
+  /// No description provided for @insightsMetricArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived chats'**
+  String get insightsMetricArchived;
+
+  /// No description provided for @insightsMetricActiveDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Days you opened Numaya'**
+  String get insightsMetricActiveDays;
+
+  /// No description provided for @insightsMetricAudience.
+  ///
+  /// In en, this message translates to:
+  /// **'People who fit your filters'**
+  String get insightsMetricAudience;
+
+  /// No description provided for @insightsConversationsCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Both wrote, last {days} days'**
+  String insightsConversationsCaption(int days);
+
+  /// No description provided for @insightsRightNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Right now'**
+  String get insightsRightNow;
+
+  /// No description provided for @insightsActiveCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of {days} days'**
+  String insightsActiveCaption(int days);
+
+  /// No description provided for @insightsAudienceCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Within {distance} km, right now'**
+  String insightsAudienceCaption(int distance);
+
+  /// No description provided for @insightsAdviceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Something you could try'**
+  String get insightsAdviceTitle;
+
+  /// No description provided for @insightsAdviceSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestion'**
+  String get insightsAdviceSection;
+
+  /// No description provided for @insightsActivityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get insightsActivityTitle;
+
+  /// No description provided for @insightsDashTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your insights'**
+  String get insightsDashTitle;
+
+  /// No description provided for @insightsHowItWorks.
+  ///
+  /// In en, this message translates to:
+  /// **'How this works'**
+  String get insightsHowItWorks;
+
+  /// No description provided for @insightsPeriodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get insightsPeriodLabel;
+
+  /// No description provided for @insightsDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days'**
+  String insightsDays(int days);
+
+  /// No description provided for @insightsDaysLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days 🔒'**
+  String insightsDaysLocked(int days);
+
+  /// No description provided for @insightsLockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} days of history comes with Premium'**
+  String insightsLockedTitle(int days);
+
+  /// No description provided for @insightsLockedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your status and the last 7 days stay free and complete. Premium adds longer history and comparisons with earlier periods. It can’t increase who sees you.'**
+  String get insightsLockedBody;
+
+  /// No description provided for @insightsLockedCta.
+  ///
+  /// In en, this message translates to:
+  /// **'See Premium'**
+  String get insightsLockedCta;
+
+  /// No description provided for @insightsFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample data in this demo build. Numaya doesn’t read your messages for insights, and never shows who blocked or reported anyone.'**
+  String get insightsFootnote;
+
+  /// No description provided for @setupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile setup'**
+  String get setupTitle;
+
+  /// No description provided for @setupSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile setup'**
+  String get setupSection;
+
+  /// No description provided for @setupProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} done'**
+  String setupProgress(int done, int total);
+
+  /// No description provided for @setupAllDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile is set up'**
+  String get setupAllDone;
+
+  /// No description provided for @setupNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next step'**
+  String get setupNext;
+
+  /// No description provided for @setupAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get setupAdd;
+
+  /// No description provided for @setupDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get setupDone;
+
+  /// No description provided for @insightsLowSampleNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Too few people yet to compare periods'**
+  String get insightsLowSampleNote;
+
+  /// No description provided for @streakRewardReady.
+  ///
+  /// In en, this message translates to:
+  /// **'This cycle is complete: your credit is in your wallet.'**
+  String get streakRewardReady;
+
+  /// No description provided for @streakToReward.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 more day to your next credit} other{{count} more days to your next credit}}'**
+  String streakToReward(int count);
+
+  /// No description provided for @streakDaysUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{day in a row} other{days in a row}}'**
+  String streakDaysUnit(int count);
+
+  /// No description provided for @walletOrderShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly credits are used first, then earned, then purchased.'**
+  String get walletOrderShort;
+
+  /// No description provided for @walletCanSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliments you can send'**
+  String get walletCanSend;
+
+  /// No description provided for @profileStatShown.
+  ///
+  /// In en, this message translates to:
+  /// **'saw you'**
+  String get profileStatShown;
+
+  /// No description provided for @profileStatLiked.
+  ///
+  /// In en, this message translates to:
+  /// **'liked you'**
+  String get profileStatLiked;
+
+  /// No description provided for @profileStatSample.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 7 days · sample data'**
+  String get profileStatSample;
+
+  /// No description provided for @profileSeeInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'See insights'**
+  String get profileSeeInsights;
+
+  /// No description provided for @profileWeekLine.
+  ///
+  /// In en, this message translates to:
+  /// **'This week {count} people saw your profile and {likes} liked it. Your streak is at {days}.'**
+  String profileWeekLine(int count, int likes, int days);
+
+  /// No description provided for @discoverDistanceKm.
+  ///
+  /// In en, this message translates to:
+  /// **'{distance} km away'**
+  String discoverDistanceKm(int distance);
+
+  /// No description provided for @planCompareLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'Likes a day'**
+  String get planCompareLikes;
+
+  /// No description provided for @planCompareCompliments.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliments a week'**
+  String get planCompareCompliments;
+
+  /// No description provided for @planCompareSeeLikes.
+  ///
+  /// In en, this message translates to:
+  /// **'See who liked you'**
+  String get planCompareSeeLikes;
+
+  /// No description provided for @planCompareInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights history'**
+  String get planCompareInsights;
 }
 
 class _AppLocalizationsDelegate

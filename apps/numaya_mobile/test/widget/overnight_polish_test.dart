@@ -4,7 +4,6 @@ import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/core/design_system/tokens/monochrome_tokens.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
-import 'package:numaya_mobile/features/home/presentation/home_shell.dart';
 
 import '../helpers/journeys.dart';
 import '../helpers/test_app.dart';
@@ -50,19 +49,16 @@ void main() {
   });
 
   group('OP-04: large text on a 320pt phone', () {
-    testWidgets('the tab title steps down to 24pt and is not truncated', (
+    testWidgets('R12: the large title is not truncated at 200% text', (
       tester,
     ) async {
       await usePhoneSize(tester, size: const Size(320, 693));
       await largeText(tester);
       final c = await quickStartApp(tester);
       await goTo(c, tester, Routes.profile);
-      final title = find.descendant(
-        of: find.byType(TabHeader),
-        matching: find.text('Profile'),
-      );
+      final title = find.byKey(const ValueKey('large-title'));
       expect(title, findsOneWidget);
-      expect(tester.widget<Text>(title).style?.fontSize, 24);
+      expect(tester.widget<Text>(title).style?.fontSize, 30);
       final painter = TextPainter(
         text: TextSpan(
           text: 'Profile',
@@ -258,7 +254,8 @@ void main() {
       final c = await quickStartApp(tester);
       await goTo(c, tester, Routes.designLab);
       // testNow is Tue 27 Oct 2026; the Lab no longer reads the wall clock.
-      expect(find.textContaining('TUE 27 OCT'), findsWidgets);
+      // R07: sentence case, no upper-cased date eyebrow.
+      expect(find.textContaining('Tue 27 Oct'), findsWidgets);
       await settle(tester);
     });
 

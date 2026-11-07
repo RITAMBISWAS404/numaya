@@ -550,9 +550,17 @@ class ListRow extends StatelessWidget {
     this.inlineIcon = false,
     this.avatar,
     this.leadingMobile,
+    this.verifiedLabel,
   });
 
   final String label;
+
+  /// R06: a person row whose [label] is a verified name shows the mark after it and speaks this
+  /// (for example "photo verified"). Null for everything else.
+  final String? verifiedLabel;
+
+  String get _spokenLabel =>
+      verifiedLabel == null ? label : '$label, $verifiedLabel';
   final String? detail;
   final String? value;
   final VoidCallback? onTap;
@@ -684,8 +692,9 @@ class ListRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                label,
+              NameWithBadge(
+                name: label,
+                verified: verifiedLabel != null,
                 style: AppTypography.row.copyWith(
                   color: danger ? AppColors.negative : AppColors.ink,
                 ),
@@ -758,7 +767,7 @@ class ListRow extends StatelessWidget {
     }
     if (onTap == null) {
       return Semantics(
-        label: '$label${value == null ? '' : ', $value'}',
+        label: '$_spokenLabel${value == null ? '' : ', $value'}',
         excludeSemantics: true,
         child: row,
       );
@@ -767,7 +776,7 @@ class ListRow extends StatelessWidget {
     return Pressable(
       onTap: onTap,
       semanticLabel: [
-        [label, ?value].join(', '),
+        [_spokenLabel, ?value].join(', '),
         if (detail != null && detail!.isNotEmpty)
           detail!.replaceAll(MetaText.joiner, ', '),
       ].join('. '),

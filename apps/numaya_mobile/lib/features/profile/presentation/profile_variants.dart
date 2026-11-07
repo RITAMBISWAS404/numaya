@@ -163,8 +163,11 @@ class ProfileHeaderCover extends StatelessWidget {
                       children: [
                         Semantics(
                           header: true,
-                          child: Text(
-                            data.name,
+                          child: NameWithBadge(
+                            name: data.name,
+                            verified: data.verified,
+                            verifiedLabel: context.l10n.photoVerifiedLabel,
+                            badgeColor: AppColors.accentForeground,
                             style: AppTypography.weight(
                               AppTypography.hero,
                               AppTypography.bold,
@@ -250,7 +253,12 @@ class ProfileHeaderCompact extends StatelessWidget {
                   children: [
                     Semantics(
                       header: true,
-                      child: Text(data.name, style: AppTypography.section),
+                      child: NameWithBadge(
+                        name: data.name,
+                        verified: data.verified,
+                        verifiedLabel: context.l10n.photoVerifiedLabel,
+                        style: AppTypography.section,
+                      ),
                     ),
                     const SizedBox(height: AppSpacing.s2),
                     data.badge(context),
@@ -403,8 +411,10 @@ class ProfileHeaderActions extends StatelessWidget {
           const SizedBox(height: AppSpacing.s3),
           Semantics(
             header: true,
-            child: Text(
-              data.name,
+            child: NameWithBadge(
+              name: data.name,
+              verified: data.verified,
+              verifiedLabel: context.l10n.photoVerifiedLabel,
               textAlign: TextAlign.center,
               style: AppTypography.headline,
             ),

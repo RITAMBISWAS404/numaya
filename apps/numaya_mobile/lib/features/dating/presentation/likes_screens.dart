@@ -5,10 +5,13 @@ import 'package:go_router/go_router.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../compliments/application/compliments_controller.dart';
 import '../../compliments/domain/compliment.dart';
 import '../../compliments/presentation/compliment_screens.dart';
-import '../../home/presentation/home_shell.dart';
-import '../../home/presentation/tab_screens.dart';
+import '../../compliments/presentation/compliments_inbox.dart';
+import '../../home/presentation/large_title_page.dart';
+import '../../lab/lab_registry.dart';
+import '../../lab/likes_grid.dart';
 import '../../premium/application/premium_controller.dart';
 import '../application/dating_controller.dart';
 import '../domain/sample_people.dart';
@@ -17,17 +20,100 @@ import 'person_profile.dart';
 /// Likes (B-46, V16 054 / 058): people who liked you as tiles, with All / New / Nearby view tabs
 /// and an empty state per tab.
 class LikesScreen extends ConsumerStatefulWidget {
-  const LikesScreen({super.key});
+  const LikesScreen({super.key, this.initialTab = HeartTab.likes});
+
+  /// `/likes?tab=compliments` opens Compliments (notification deep links, R03).
+  final HeartTab initialTab;
 
   @override
   ConsumerState<LikesScreen> createState() => _LikesScreenState();
 }
 
+/// R03: the Heart tab's two parts. No third Matches tab: matches live in Chats.
+enum HeartTab { likes, compliments }
+
 class _LikesScreenState extends ConsumerState<LikesScreen> {
   LikeFilter _filter = LikeFilter.all;
+  late HeartTab _tab = widget.initialTab;
+  String? _likeVariant;
+
+  /// One scroll position per part, kept across switches (MOT02).
+  final _offsets = <HeartTab, double>{};
+  late ScrollController _scroll = ScrollController();
+
+  @override
+  void didUpdateWidget(LikesScreen old) {
+    super.didUpdateWidget(old);
+    if (old.initialTab != widget.initialTab) _switch(widget.initialTab);
+  }
+
+  void _switch(HeartTab tab) {
+    if (tab == _tab) return;
+    if (_scroll.hasClients) _offsets[_tab] = _scroll.offset;
+    final old = _scroll;
+    setState(() {
+      _tab = tab;
+      _scroll = ScrollController(initialScrollOffset: _offsets[tab] ?? 0);
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => old.dispose());
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    ref.watch(complimentsProvider);
+    final requests = ref.read(complimentsProvider.notifier).requests();
+    ref.watch(datingProvider);
+    final likeCount = ref
+        .read(datingProvider.notifier)
+        .likes()
+        .where((l) => !l.matched)
+        .length;
+    // Screen group `screen-heart`: directions fix the card variants inside this screen.
+    final direction = ref.watch(labVariantProvider('screen-heart'));
+    final (String? likeV, String? complimentV) = switch (direction) {
+      'A' => ('B', 'C'),
+      'B' => (null, 'B'),
+      'C' => ('A', 'D'),
+      _ => (null, null),
+    };
+    _likeVariant = likeV;
+    return LargeTitlePage(
+      title: l10n.heartTitle,
+      scrollController: _scroll,
+      pinned: NumayaSegmented(
+        label: l10n.heartTitle,
+        selected: _tab.index,
+        onSelect: (i) => _switch(HeartTab.values[i]),
+        options: [
+          (
+            label: l10n.heartTabLikes,
+            count: likeCount,
+            key: const ValueKey('heart-tab-likes'),
+          ),
+          (
+            label: l10n.heartTabCompliments,
+            count: requests.length,
+            key: const ValueKey('heart-tab-compliments'),
+          ),
+        ],
+      ),
+      child: KeyedSubtree(
+        key: ValueKey('heart-${_tab.name}'),
+        child: _tab == HeartTab.likes
+            ? _likesBody(context)
+            : ComplimentsInbox(requests: requests, cardVariant: complimentV),
+      ),
+    );
+  }
+
+  Widget _likesBody(BuildContext context) {
     final l10n = context.l10n;
     ref.watch(datingProvider);
     final controller = ref.read(datingProvider.notifier);
@@ -40,10 +126,7 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
     final premium = ref.watch(premiumProvider).active;
     final hidden = controller.likes().where((l) => !l.matched).toList();
     if (!premium && hidden.isNotEmpty) {
-      return TabPage(
-        header: TabHeader(title: l10n.tabLikes),
-        child: _LockedLikes(count: hidden.length),
-      );
+      return _LockedLikes(count: hidden.length);
     }
 
     final Widget body;
@@ -94,62 +177,46 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
         ),
       };
     } else {
-      body = LayoutBuilder(
-        builder: (context, box) {
-          final w = (box.maxWidth - AppSpacing.s3) / 2;
-          return Wrap(
-            spacing: AppSpacing.s3,
-            runSpacing: AppSpacing.s5,
-            children: [
-              for (final like in list)
-                SizedBox(
-                  width: w,
-                  child: PersonTile(
-                    title: l10n.profileNameAge(
-                      like.person.name,
-                      like.person.age,
-                    ),
-                    caption: l10n.likeTileCaption(like.person.distanceKm),
-                    verified: like.person.verified,
-                    image: personTileImage(like.person),
-                    imageAlignment: personTileFocus(like.person),
-                    semanticLabel: l10n.tileLabel(
-                      like.person.name,
-                      like.person.age,
-                      like.matched
-                          ? l10n.likeMatched
-                          : like.isNew
-                          ? l10n.likeNew
-                          : l10n
-                                .likeTileCaption(like.person.distanceKm)
-                                .replaceAll(MetaText.joiner, ', '),
-                    ),
-                    badge: like.matched
-                        ? StatusBadge(
-                            label: l10n.likeMatched,
-                            icon: NumayaIcons.check,
-                            tone: BadgeTone.onPhoto,
-                          )
-                        : like.isNew
-                        ? StatusBadge(
-                            label: l10n.likeNew,
-                            icon: NumayaIcons.star,
-                            tone: BadgeTone.onPhoto,
-                          )
-                        : null,
-                    onTap: () =>
-                        context.push('${Routes.like}/${like.person.id}'),
-                  ),
-                ),
-            ],
-          );
-        },
+      // Card family `like-tile` (Visual Lab V2).
+      body = LikesGrid(
+        variant: _likeVariant,
+        items: [
+          for (final like in list)
+            (
+              person: like.person,
+              caption: l10n.likeTileCaption(like.person.distanceKm),
+              semanticLabel: l10n.tileLabel(
+                like.person.name,
+                like.person.age,
+                like.matched
+                    ? l10n.likeMatched
+                    : like.isNew
+                    ? l10n.likeNew
+                    : l10n
+                          .likeTileCaption(like.person.distanceKm)
+                          .replaceAll(MetaText.joiner, ', '),
+              ),
+              badge: like.matched
+                  ? StatusBadge(
+                      label: l10n.likeMatched,
+                      icon: NumayaIcons.check,
+                      tone: BadgeTone.onPhoto,
+                    )
+                  : like.isNew
+                  ? StatusBadge(
+                      label: l10n.likeNew,
+                      icon: NumayaIcons.star,
+                      tone: BadgeTone.onPhoto,
+                    )
+                  : null,
+              onTap: () => context.push('${Routes.like}/${like.person.id}'),
+            ),
+        ],
       );
     }
 
-    return TabPage(
+    return KeyedSubtree(
       // Bumble's Liked You has no lede: the title and the counted chips say it (ER-04).
-      header: TabHeader(title: l10n.tabLikes),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

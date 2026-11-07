@@ -589,7 +589,7 @@ class SeedMatch {
 
 /// Seeded matches, oldest first. New matches with no messages expire [kMatchWindowHours] after the
 /// match (PRD 01): Jo has 21 hours left, Amara 4, Lina 1, and Ollie's match has expired. Rafa's
-/// chat is quiet (check-in due) and Ade's expired after 14 quiet days.
+/// and Ade's chats have been quiet for more than 7 days, so they are in Archive (R01).
 const List<SeedMatch> kSeedMatches = [
   SeedMatch('sasha', 120, [
     SeedMessage(true, 'Parkrun then pancakes is a perfect Sunday.', 7000),
@@ -599,13 +599,13 @@ const List<SeedMatch> kSeedMatches = [
     SeedMessage(true, 'Always. With far too much lemon.', 4380),
     SeedMessage(false, 'Coffee at the market on Saturday, maybe?', 1500),
   ]),
-  // Quiet for eight days: the check-in is due (S23).
+  // Quiet for eight days: archived (R01). Sending a message makes it active again.
   SeedMatch('rafa', 260, [
     SeedMessage(false, 'Settlers of Catan or Codenames?', 13200),
     SeedMessage(true, 'Codenames, but only if I can be the spymaster.', 12900),
     SeedMessage(true, 'Same. Board games next week?', 11700),
   ]),
-  // Quiet for fifteen days: the chat expired, history kept, and Ade has asked to reconnect (S25).
+  // Quiet for fifteen days: archived, history kept, Ade's message waiting for a reply (R01).
   SeedMatch('ade', 600, [
     SeedMessage(false, 'You climb too? Which wall do you go to?', 30000),
     SeedMessage(true, 'The one near the station, most Thursdays.', 29500),

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/experiments/experiments.dart';
+import 'package:numaya_mobile/features/lab/lab_registry.dart';
 import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
 
 import '../helpers/journeys.dart';
@@ -121,9 +122,8 @@ void main() {
     phone(tester, narrow: true);
     final c = await quickStartApp(tester);
     c.read(onboardingProvider.notifier).setFirstName('Maximiliana-Alexandria');
-    c
-        .read(experimentChoicesProvider.notifier)
-        .choose(Experiment.profileHeader, ExpVariant.a);
+    // The cover is Visual Lab V2 `profile-header` A (was EXP-002 A).
+    c.read(labChoicesProvider.notifier).choose('profile-header', 'A');
     await goTo(c, tester, Routes.profile);
     await tester.pump(const Duration(seconds: 1));
     expect(tester.takeException(), isNull);

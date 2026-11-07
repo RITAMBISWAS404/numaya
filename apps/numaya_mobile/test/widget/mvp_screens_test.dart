@@ -19,11 +19,12 @@ const _routes = <String, String>{
   'S14 Compliment composer': '${Routes.compliment}/noor?kind=prompt&index=0',
   'S17 Allowance used': Routes.allowance,
   'S18 Likes (free, locked)': Routes.likes,
-  'S20 Chats with requests': Routes.messages,
+  'S20 Chats with archive': Routes.messages,
   'S21 Request': '${Routes.request}/seed-sam',
-  'S22 Expired conversation': '${Routes.chat}/ade',
-  'S24 Expired chats': Routes.expiredChats,
-  'S25 Reconnect request': '${Routes.reconnect}/ade',
+  'S22 Archived conversation': '${Routes.chat}/ade',
+  'S22 Expired initial match': '${Routes.chat}/ollie',
+  'R01 Archive': Routes.archive,
+  'R03 Compliments tab': '${Routes.likes}?tab=compliments',
   'S27 Profile hub': Routes.profile,
   'S29 Profile Health': Routes.health,
   'S30 Health explanation': Routes.healthAbout,
@@ -95,8 +96,9 @@ void main() {
     final c = await quickStartApp(tester);
     final before = c.read(creditBalanceProvider);
     final first = c.read(datingProvider.notifier).queue().first;
-    expect(find.byKey(const ValueKey('discover-quota')), findsOneWidget);
-    expect(find.text('5 of 5 likes left today'), findsOneWidget);
+    // R04: no persistent likes-left line while likes remain.
+    expect(find.byKey(const ValueKey('discover-quota')), findsNothing);
+    expect(find.text('5 of 5 likes left today'), findsNothing);
     await tapOn(tester, find.byKey(const ValueKey('compliment-prompt-0')));
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.text('Compliment ${first.name}'), findsOneWidget);
@@ -120,26 +122,33 @@ void main() {
     await settle(tester);
   });
 
-  testWidgets('S20 → S21: replying to a request opens the chat', (
-    tester,
-  ) async {
-    await usePhoneSize(tester);
-    final c = await quickStartApp(tester);
-    await openTab(tester, 'Messages');
-    expect(find.byKey(const ValueKey('chats-requests')), findsOneWidget);
-    await tapOn(tester, find.byKey(const ValueKey('request-seed-sam')));
-    await tester.pump(const Duration(milliseconds: 600));
-    await tester.enterText(
-      find.byType(TextField),
-      'Thank you! Goa, last March.',
-    );
-    await tester.pump();
-    await tapOn(tester, find.bySemanticsLabel('Send'));
-    await tester.pump(const Duration(milliseconds: 600));
-    expect(c.read(datingProvider).threads['sam'], hasLength(2));
-    expect(find.byKey(const ValueKey('chat-composer-bar')), findsOneWidget);
-    await settle(tester);
-  });
+  testWidgets(
+    'R03: replying to a Compliment from the Heart tab opens one chat',
+    (tester) async {
+      await usePhoneSize(tester);
+      final c = await quickStartApp(tester);
+      // Requests are no longer in Chats.
+      await openTab(tester, 'Messages');
+      expect(find.byKey(const ValueKey('chats-requests')), findsNothing);
+      await goTo(c, tester, '${Routes.likes}?tab=compliments');
+      await tester.pump(const Duration(milliseconds: 600));
+      await tapOn(
+        tester,
+        find.byKey(const ValueKey('compliment-reply-seed-sam')),
+      );
+      await tester.pump(const Duration(milliseconds: 600));
+      await tester.enterText(
+        find.byType(TextField),
+        'Thank you! Goa, last March.',
+      );
+      await tester.pump();
+      await tapOn(tester, find.bySemanticsLabel('Send'));
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(c.read(datingProvider).threads['sam'], hasLength(2));
+      expect(find.byKey(const ValueKey('chat-composer-bar')), findsOneWidget);
+      await settle(tester);
+    },
+  );
 
   testWidgets('S17: out of likes, a right swipe opens the allowance page', (
     tester,
@@ -156,26 +165,31 @@ void main() {
     await settle(tester);
   });
 
-  testWidgets('S25: accepting a reconnection reopens the chat', (tester) async {
-    await usePhoneSize(tester);
-    final c = await quickStartApp(tester);
-    await goTo(c, tester, '${Routes.reconnect}/ade');
-    await tapOn(tester, find.byKey(const ValueKey('reconnect-accept')));
-    await tester.pump(const Duration(milliseconds: 600));
-    expect(c.read(datingProvider.notifier).isExpired('ade'), isFalse);
-    expect(find.byKey(const ValueKey('chat-composer-bar')), findsOneWidget);
-    await settle(tester);
-  });
-
-  testWidgets('S23: a quiet chat shows its check-in once', (tester) async {
+  testWidgets('R01: an archived chat says so and keeps the composer', (
+    tester,
+  ) async {
     await usePhoneSize(tester);
     final c = await quickStartApp(tester);
     await goTo(c, tester, '${Routes.chat}/rafa');
     await tester.pump(const Duration(milliseconds: 600));
-    expect(find.text('It’s been quiet with Rafa'), findsOneWidget);
-    await tapOn(tester, find.text('Not now'));
-    await tester.pump(const Duration(milliseconds: 600));
-    expect(c.read(datingProvider.notifier).checkInDue('rafa'), isFalse);
+    expect(find.byKey(const ValueKey('chat-archived-note')), findsOneWidget);
+    expect(find.byKey(const ValueKey('chat-composer-bar')), findsOneWidget);
+    expect(find.textContaining('reconnect', findRichText: true), findsNothing);
     await settle(tester);
   });
+
+  testWidgets(
+    'R01: legacy reconnect and expired links land somewhere sensible',
+    (tester) async {
+      await usePhoneSize(tester);
+      final c = await quickStartApp(tester);
+      await goTo(c, tester, '/reconnect/ade');
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(find.byKey(const ValueKey('chat-composer-bar')), findsOneWidget);
+      await goTo(c, tester, '/chats/expired');
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(find.byKey(const ValueKey('archived-ade')), findsOneWidget);
+      await settle(tester);
+    },
+  );
 }

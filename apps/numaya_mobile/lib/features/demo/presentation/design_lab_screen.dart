@@ -133,7 +133,7 @@ class _DesignLabScreenState extends ConsumerState<DesignLabScreen> {
                     style: AppTypography.body,
                   ),
                   Text('Liked you · 4 km away', style: AppTypography.caption),
-                  Text('SAT, 31 OCT · 19:00', style: AppTypography.labelCaps),
+                  Text('Sat 31 Oct · 19:00', style: AppTypography.labelCaps),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
@@ -365,7 +365,7 @@ class _DesignLabScreenState extends ConsumerState<DesignLabScreen> {
             _section('People and messages'),
             const Row(
               children: [
-                InitialsAvatar(initial: 'P', verified: true),
+                InitialsAvatar(initial: 'P'),
                 SizedBox(width: AppSpacing.s3),
                 InitialsAvatar(initial: 'J', ring: true),
                 SizedBox(width: AppSpacing.s3),

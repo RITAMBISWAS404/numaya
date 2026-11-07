@@ -22,11 +22,11 @@ void main() {
       find.descendant(of: card, matching: find.text('Verified')),
       findsNothing,
     );
-    // Screen readers still hear it, with the name.
+    // Screen readers still hear it, with the name and what was checked (R06: photo verified).
     expect(
       find.descendant(
         of: card,
-        matching: find.bySemanticsLabel(RegExp(r'Maya, 29\s+Verified')),
+        matching: find.bySemanticsLabel(RegExp(r'Maya, 29, photo verified')),
       ),
       findsWidgets,
     );

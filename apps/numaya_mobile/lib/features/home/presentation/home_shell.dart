@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../app/providers.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../compliments/application/compliments_controller.dart';
 import '../../dating/application/dating_controller.dart';
 
 /// Signed-in shell: Discover, Likes, Messages and Profile (and Events second when the release
@@ -20,7 +21,11 @@ class HomeShell extends ConsumerWidget {
     final l10n = context.l10n;
     ref.watch(datingProvider);
     final dating = ref.read(datingProvider.notifier);
-    final newLikes = dating.unansweredLikes();
+    // R03: the Heart tab counts unanswered likes and pending Compliments together.
+    ref.watch(complimentsProvider);
+    final newLikes =
+        dating.unansweredLikes() +
+        ref.read(complimentsProvider.notifier).requests().length;
     final newMatches = dating.unopenedMatches();
     // Android back on another tab's root returns to Home first; back on Home leaves the app.
     return PopScope(

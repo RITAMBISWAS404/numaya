@@ -284,7 +284,7 @@ class EventCard extends StatelessWidget {
                       children: [
                         // Meetup's date eyebrow: when it is, in small capitals, above the title.
                         Text(
-                          when.toUpperCase(),
+                          when,
                           style: AppTypography.labelCaps.copyWith(
                             color: AppColors.accentOnTint,
                           ),

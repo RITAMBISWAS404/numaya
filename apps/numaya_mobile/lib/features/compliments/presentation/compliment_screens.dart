@@ -79,7 +79,7 @@ class ComplimentReference extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(caption.toUpperCase(), style: AppTypography.labelCaps),
+        Text(caption, style: AppTypography.labelCaps),
         const SizedBox(height: AppSpacing.s2),
         if (prompt != null)
           PromptCard(question: prompt.question, answer: prompt.answer)

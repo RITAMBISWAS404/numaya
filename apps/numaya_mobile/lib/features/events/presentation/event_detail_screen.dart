@@ -336,7 +336,6 @@ class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                 initial: e.mine ? l10n.eventYou[0] : (host?.initial ?? '?'),
                 // The icon tiles' width, so every row's text starts on one line.
                 size: AppSizes.iconTile,
-                verified: host?.verified ?? false,
               ),
               label: l10n.eventHostedBy(eventHostName(l10n, e)),
               detail: e.mine ? l10n.eventHostYou : null,

@@ -9,6 +9,7 @@ import '../core/connectivity/connectivity.dart';
 import '../core/design_system/design_system.dart';
 import '../features/auth/application/session_expiry.dart';
 import '../features/demo/application/demo_motion.dart';
+import '../features/lab/lab_registry.dart';
 import '../features/settings/application/account_prefs.dart';
 import '../l10n/l10n.dart';
 import 'router.dart';
@@ -36,6 +37,12 @@ class NumayaApp extends ConsumerWidget {
         unawaited(ref.read(routerProvider).push<void>(Routes.reauth));
       }
     });
+    // Visual Lab V2 motion preset (MOT07): debug Design Lab choice, M1 everywhere else.
+    AppMotion.preset = switch (ref.watch(labVariantProvider('motion'))) {
+      'M0' => MotionPreset.m0,
+      'M2' => MotionPreset.m2,
+      _ => MotionPreset.m1,
+    };
     return MaterialApp.router(
       onGenerateTitle: (context) => context.l10n.appName,
       debugShowCheckedModeBanner: false,

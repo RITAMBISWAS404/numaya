@@ -27,3 +27,15 @@ String dayLine(AppLocalizations l10n, DateTime at, DateTime now) {
 String timeLeft(AppLocalizations l10n, Duration d) => d.inHours >= 1
     ? l10n.hoursLeft(d.inHours)
     : l10n.minutesLeft(d.inMinutes.clamp(1, 59));
+
+/// R02: the exact end of a first-message window, "today at 18:40", "tomorrow at 09:05" or
+/// "Tue 10 Nov at 09:05".
+String deadlineWhen(AppLocalizations l10n, DateTime at, DateTime now) {
+  final day = DateTime(at.year, at.month, at.day);
+  final today = DateTime(now.year, now.month, now.day);
+  final days = day.difference(today).inDays;
+  final time = DateFormat('HH:mm').format(at);
+  if (days <= 0) return l10n.deadlineToday(time);
+  if (days == 1) return l10n.deadlineTomorrow(time);
+  return l10n.deadlineOn(DateFormat('EEE d MMM').format(at), time);
+}

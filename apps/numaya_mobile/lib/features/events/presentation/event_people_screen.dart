@@ -81,11 +81,7 @@ class EventPeopleScreen extends ConsumerWidget {
       final p = personById(id);
       final name = p?.name ?? l10n.eventHostUnknown;
       return ListRow(
-        avatar: InitialsAvatar(
-          initial: p?.initial ?? '?',
-          size: 36,
-          verified: p?.verified ?? false,
-        ),
+        avatar: InitialsAvatar(initial: p?.initial ?? '?', size: 36),
         label: name,
         detail: detail,
         value: hostView ? l10n.eventRemove : null,
@@ -122,7 +118,6 @@ class EventPeopleScreen extends ConsumerWidget {
                 avatar: InitialsAvatar(
                   initial: e.mine ? l10n.eventYou[0] : (host?.initial ?? '?'),
                   size: 36,
-                  verified: host?.verified ?? false,
                 ),
                 label: eventHostName(l10n, e),
                 value: l10n.eventHostBadge,
