@@ -19,7 +19,6 @@ String _categoryLabel(AppLocalizations l10n, NotificationCategory c) =>
       NotificationCategory.likes => l10n.settingsNewLikes,
       NotificationCategory.matches => l10n.notifMatches,
       NotificationCategory.expiring => l10n.notifExpiring,
-      NotificationCategory.checkIns => l10n.notifCheckIns,
       NotificationCategory.rewards => l10n.notifRewards,
       NotificationCategory.tips => l10n.notifTips,
     };

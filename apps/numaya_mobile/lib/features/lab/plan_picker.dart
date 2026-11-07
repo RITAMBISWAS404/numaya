@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/design_system/design_system.dart';
+import '../../l10n/l10n.dart';
 import 'lab_registry.dart';
 
 /// One plan as shown to the member: the full billed amount and its term, always together.
@@ -117,7 +118,8 @@ class PlanPicker extends ConsumerWidget {
 
     switch (v) {
       case 'A':
-        final p = plans[selected];
+        // Nothing is preselected (no pressure): until a term is chosen the panel says so.
+        final p = selected < 0 ? null : plans[selected];
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -137,10 +139,17 @@ class PlanPicker extends ConsumerWidget {
                 liveRegion: true,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(p.price, style: AppTypography.pageTitle),
-                    Text(p.billing, style: AppTypography.bodySm),
-                  ],
+                  children: p == null
+                      ? [
+                          Text(
+                            context.l10n.planChooseTerm,
+                            style: AppTypography.bodySm,
+                          ),
+                        ]
+                      : [
+                          Text(p.price, style: AppTypography.pageTitle),
+                          Text(p.billing, style: AppTypography.bodySm),
+                        ],
                 ),
               ),
             ),
@@ -171,7 +180,10 @@ class PlanPicker extends ConsumerWidget {
                     2: FlexColumnWidth(),
                   },
                   children: [
-                    for (final (f, free, prem) in comparison)
+                    for (final (f, free, prem) in [
+                      ('', context.l10n.premiumFree, context.l10n.premiumName),
+                      ...comparison,
+                    ])
                       TableRow(
                         children: [
                           Padding(

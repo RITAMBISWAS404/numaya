@@ -9,6 +9,7 @@ import '../../core/time/ist.dart';
 import '../../l10n/l10n.dart';
 import '../commerce/application/economy_controller.dart';
 import '../commerce/domain/catalog.dart';
+import '../commerce/presentation/wallet_screen.dart';
 import '../compliments/domain/compliment.dart';
 import '../compliments/presentation/compliments_inbox.dart';
 import '../dating/application/dating_controller.dart';
@@ -527,7 +528,7 @@ class LabPreviewScreen extends ConsumerWidget {
             purchased: l.purchased,
             recent: [
               for (final e in l.entries.reversed.take(3))
-                (label: e.source.split(':').first, amount: e.amount),
+                (label: walletEntryLabel(context.l10n, e), amount: e.amount),
             ],
           ),
         );
@@ -548,7 +549,6 @@ class LabPreviewScreen extends ConsumerWidget {
               ),
           ],
           comparison: const [
-            ('', 'Free', 'Premium'),
             ('Likes a day', '5', '15'),
             ('Compliments a week', '0', '3'),
           ],

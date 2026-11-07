@@ -1,5 +1,10 @@
 # MVP PRD v1: requirements traceability
 
+> **Amended 2026-11-08 (Visual Lab V2):** S20, S21, S23, S24, S25, S29 and the S11 likes line changed
+> (Archive replaces expiry and reconnection; Compliments moved to the Heart tab; Your insights replaces
+> the Health score). See [AMENDMENTS_VISUAL_LAB_V2.md](AMENDMENTS_VISUAL_LAB_V2.md). Rows below describe
+> PRD v1 as built on `f6c4d8b`.
+
 Every S-ID from [`source/03_SCREENS_AND_FLOWS.md`](source/03_SCREENS_AND_FLOWS.md) mapped to its route and
 widget, the tests that cover it, and its gallery screenshots (folder
 `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\MVP PRD 2026-11-07\`, `index.tsv` lists every

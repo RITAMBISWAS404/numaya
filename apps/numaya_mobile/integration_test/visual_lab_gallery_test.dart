@@ -125,6 +125,26 @@ void main() {
         .setBio('Weekend baker, weekday map nerd. Always up for a long walk.');
     final lab = c.read(labChoicesProvider.notifier);
     Future<void> go(String path) => goTo(c, tester, path);
+    // The Compliments part, scrolled to the first dismiss button, then the sheet opened.
+    Future<void> openDismissSheet() async {
+      await go(Routes.home);
+      await go(Routes.likes);
+      await _wait(tester, 500);
+      await tapOn(tester, find.byKey(const ValueKey('heart-tab-compliments')));
+      await _wait(tester, 600);
+      final dismiss = find.byWidgetPredicate(
+        (w) =>
+            w.key is ValueKey<String> &&
+            (w.key! as ValueKey<String>).value.startsWith(
+              'compliment-dismiss-',
+            ),
+      );
+      await tester.ensureVisible(dismiss.first);
+      await _wait(tester, 400);
+      await tester.tap(dismiss.first);
+      await _wait(tester, 300);
+    }
+
     Future<void> scrollBy(double dy) async {
       if (dy <= 0) return;
       final s = find.byType(Scrollable);
@@ -169,13 +189,9 @@ void main() {
           );
         });
       }
-    if (_want('default'))
+    if (_want('default') || _want('sheet'))
       await step('sheet', () async {
-        await go('${Routes.likes}?tab=compliments');
-        await tapOn(
-          tester,
-          find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
-        );
+        await openDismissSheet();
         await cap(
           tester,
           file: 'default__sheet-close-squircle',
@@ -185,7 +201,7 @@ void main() {
           label: 'sheet close',
           settleMs: 1200,
         );
-        await tester.pageBack();
+        await tapOn(tester, find.byKey(const ValueKey('sheet-close')));
         await _wait(tester, 600);
       });
     if (_want('default'))
@@ -235,8 +251,14 @@ void main() {
       for (final s in InsightsScenario.values) {
         await step('scenario ${s.name}', () async {
           c.read(insightsScenarioProvider.notifier).choose(s);
+          final premium = s == InsightsScenario.premiumHistory;
+          c.read(premiumProvider.notifier).setActive(premium);
           await go(Routes.profile);
           await go(Routes.insights);
+          if (premium) {
+            await tapOn(tester, find.byKey(const ValueKey('period-28')));
+            await _wait(tester, 500);
+          }
           await cap(
             tester,
             file: 'scenario__${s.name}',
@@ -249,6 +271,7 @@ void main() {
         });
       }
     c.read(insightsScenarioProvider.notifier).choose(null);
+    c.read(premiumProvider.notifier).setActive(false);
 
     // 3. Card families: isolated crop (preview) and in context, every variant.
     for (final g in kLabGroups.where(
@@ -358,78 +381,72 @@ void main() {
     tester.platformDispatcher.clearTextScaleFactorTestValue();
 
     // 6. Motion clips: M1 (proposed), M2 and M0 (reduced) for the four key interactions.
-    if (_want('motion'))
+    if (_want('motion') || _want('motion-sheet'))
       for (final m in ['M1', 'M2', 'M0']) {
         lab
           ..reset()
           ..choose('motion', m);
         await _wait(tester, 400);
-        await step('motion $m tabs', () async {
-          await go(Routes.likes);
-          await _wait(tester, 600);
-          await rec(tester, 'start', 'tabs__$m');
-          await _wait(tester, 600);
-          await tapOn(
-            tester,
-            find.byKey(const ValueKey('heart-tab-compliments')),
-          );
-          await _wait(tester, 900);
-          await tapOn(tester, find.byKey(const ValueKey('heart-tab-likes')));
-          await _wait(tester, 900);
-          await tapOn(
-            tester,
-            find.byKey(const ValueKey('heart-tab-compliments')),
-          );
-          await _wait(tester, 900);
-          await rec(tester, 'stop', 'tabs__$m');
-        });
-        await step('motion $m title', () async {
-          await go(Routes.profile);
-          await _wait(tester, 600);
-          await rec(tester, 'start', 'title__$m');
-          await _wait(tester, 500);
-          final s = find.byType(Scrollable).first;
-          for (var i = 0; i < 6; i++) {
-            await tester.drag(s, const Offset(0, -60));
-            await _wait(tester, 120);
-          }
-          await _wait(tester, 600);
-          for (var i = 0; i < 6; i++) {
-            await tester.drag(s, const Offset(0, 60));
-            await _wait(tester, 120);
-          }
-          await _wait(tester, 700);
-          await rec(tester, 'stop', 'title__$m');
-        });
+        if (_want('motion'))
+          await step('motion $m tabs', () async {
+            await go(Routes.likes);
+            await _wait(tester, 600);
+            await rec(tester, 'start', 'tabs__$m');
+            await _wait(tester, 600);
+            await tapOn(
+              tester,
+              find.byKey(const ValueKey('heart-tab-compliments')),
+            );
+            await _wait(tester, 900);
+            await tapOn(tester, find.byKey(const ValueKey('heart-tab-likes')));
+            await _wait(tester, 900);
+            await tapOn(
+              tester,
+              find.byKey(const ValueKey('heart-tab-compliments')),
+            );
+            await _wait(tester, 900);
+            await rec(tester, 'stop', 'tabs__$m');
+          });
+        if (_want('motion'))
+          await step('motion $m title', () async {
+            await go(Routes.profile);
+            await _wait(tester, 600);
+            await rec(tester, 'start', 'title__$m');
+            await _wait(tester, 500);
+            final s = find.byType(Scrollable).first;
+            for (var i = 0; i < 6; i++) {
+              await tester.drag(s, const Offset(0, -60));
+              await _wait(tester, 120);
+            }
+            await _wait(tester, 600);
+            for (var i = 0; i < 6; i++) {
+              await tester.drag(s, const Offset(0, 60));
+              await _wait(tester, 120);
+            }
+            await _wait(tester, 700);
+            await rec(tester, 'stop', 'title__$m');
+          });
         await step('motion $m sheet', () async {
-          await go('${Routes.likes}?tab=compliments');
-          await _wait(tester, 600);
-          await tester.ensureVisible(
-            find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
-          );
-          await _wait(tester, 300);
           await rec(tester, 'start', 'sheet__$m');
-          await _wait(tester, 500);
-          await tapOn(
-            tester,
-            find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
-          );
+          await _wait(tester, 300);
+          await openDismissSheet();
           await _wait(tester, 1200);
           await tapOn(tester, find.byKey(const ValueKey('sheet-close')));
           await _wait(tester, 1000);
           await rec(tester, 'stop', 'sheet__$m');
         });
-        await step('motion $m route', () async {
-          await go(Routes.messages);
-          await _wait(tester, 600);
-          await rec(tester, 'start', 'route__$m');
-          await _wait(tester, 500);
-          await tapOn(tester, find.byKey(const ValueKey('chats-archive')));
-          await _wait(tester, 1000);
-          await tester.pageBack();
-          await _wait(tester, 1000);
-          await rec(tester, 'stop', 'route__$m');
-        });
+        if (_want('motion'))
+          await step('motion $m route', () async {
+            await go(Routes.messages);
+            await _wait(tester, 600);
+            await rec(tester, 'start', 'route__$m');
+            await _wait(tester, 500);
+            await tapOn(tester, find.byKey(const ValueKey('chats-archive')));
+            await _wait(tester, 1000);
+            await tester.pageBack();
+            await _wait(tester, 1000);
+            await rec(tester, 'stop', 'route__$m');
+          });
       }
     lab.reset();
     // ignore: avoid_print

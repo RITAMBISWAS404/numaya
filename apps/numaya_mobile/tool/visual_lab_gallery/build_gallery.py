@@ -108,7 +108,7 @@ for g in groups:
         for k in sorted(need - kinds):
             missing.append(f"{g['id']} {v['id']}: no {k} screenshot")
 
-generated = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat()
+generated = datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()
 review_id = f"vl2-{args.commit[:7]}-{generated[:10]}"
 manifest = {
     'schemaVersion': 1,
@@ -119,7 +119,7 @@ manifest = {
     'generatedAt': generated,
     'groups': groups,
     'compatibility': {g['id']: g.get('requires', {}) for g in groups if g.get('requires')},
-    'a11y': {g['id']: 'Checked: 320dp + 200% text, labels' for g in groups if g['kind'] != 'motion'},
+    'a11y': {g['id']: 'Layout tested: 320dp, 200% text' for g in groups if g['kind'] != 'motion'},
     'screenshots': shots,
     'videos': videos,
     'missingItems': missing,

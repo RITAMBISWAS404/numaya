@@ -81,6 +81,49 @@ void main() {
       },
     );
 
+    testWidgets(
+      'every component variant works in its real screen at 320dp and 200% text',
+      (tester) async {
+        const where = <String, String>{
+          'match-avatar': Routes.messages,
+          'conversation-row': Routes.messages,
+          'compliment-card': '${Routes.likes}?tab=compliments',
+          'like-tile': Routes.likes,
+          'profile-header': Routes.profile,
+          'insights-summary': Routes.insights,
+          'metric-widget': Routes.insights,
+          'profile-setup': Routes.profile,
+          'prompt-card': Routes.home,
+          'discover-photo': Routes.home,
+          'streak-card': Routes.profile,
+          'wallet-card': Routes.profile,
+          'plan-card': Routes.paywall,
+          'status-banner': '${Routes.chat}/rafa',
+          'empty-state': '${Routes.likes}?tab=compliments',
+        };
+        await usePhoneSize(tester, size: const Size(320, 568));
+        tester.platformDispatcher.textScaleFactorTestValue = 2;
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        final c = await quickStartApp(tester);
+        c.read(onboardingProvider.notifier).loadSample();
+        final failures = <String>[];
+        for (final g in kLabGroups.where((g) => g.kind == LabKind.component)) {
+          for (final v in g.ids) {
+            c.read(labChoicesProvider.notifier)
+              ..reset()
+              ..chooseAll('B', kind: LabKind.screen)
+              ..choose(g.id, v);
+            await goTo(c, tester, Routes.demo);
+            await goTo(c, tester, where[g.id]!);
+            final e = tester.takeException();
+            if (e != null) failures.add('${g.id} $v: $e');
+          }
+        }
+        expect(failures, isEmpty);
+        await settle(tester);
+      },
+    );
+
     testWidgets('every screen direction lays out at 320dp and 200% text', (
       tester,
     ) async {

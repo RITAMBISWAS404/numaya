@@ -29,17 +29,6 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
     });
   }
 
-  String _entryLabel(AppLocalizations l10n, LedgerEntry e) {
-    if (e.source == 'welcome') return l10n.walletEntryWelcome;
-    if (e.source.startsWith('streak')) return l10n.walletEntryStreak;
-    if (e.source.startsWith('premium_week')) return l10n.walletEntryWeekly;
-    if (e.kind == LedgerKind.expiry) return l10n.walletEntryWeeklyExpiry;
-    if (e.source.startsWith('purchase')) return l10n.walletEntryPurchase;
-    if (e.source.startsWith('compliment')) return l10n.walletEntryCompliment;
-    if (e.kind == LedgerKind.reversal) return l10n.walletEntryRefund;
-    return l10n.walletEntryOther;
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -115,7 +104,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
               else
                 for (final e in history.take(20))
                   ListRow(
-                    label: _entryLabel(l10n, e),
+                    label: walletEntryLabel(l10n, e),
                     detail: shortDateTime(e.at),
                     value: e.amount > 0 ? '+${e.amount}' : '${e.amount}',
                   ),
@@ -127,4 +116,16 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
       ),
     );
   }
+}
+
+/// The member-facing name of a ledger entry (wallet history, wallet card variant D).
+String walletEntryLabel(AppLocalizations l10n, LedgerEntry e) {
+  if (e.source == 'welcome') return l10n.walletEntryWelcome;
+  if (e.source.startsWith('streak')) return l10n.walletEntryStreak;
+  if (e.source.startsWith('premium_week')) return l10n.walletEntryWeekly;
+  if (e.kind == LedgerKind.expiry) return l10n.walletEntryWeeklyExpiry;
+  if (e.source.startsWith('purchase')) return l10n.walletEntryPurchase;
+  if (e.source.startsWith('compliment')) return l10n.walletEntryCompliment;
+  if (e.kind == LedgerKind.reversal) return l10n.walletEntryRefund;
+  return l10n.walletEntryOther;
 }

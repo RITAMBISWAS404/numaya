@@ -10,6 +10,7 @@ import '../../../core/media/local_image.dart';
 import '../../../core/time/ist.dart';
 import '../../../l10n/l10n.dart';
 import '../../commerce/application/economy_controller.dart';
+import '../../commerce/presentation/wallet_screen.dart';
 import '../../health/application/health_providers.dart';
 import '../../health/presentation/health_screens.dart';
 import '../../home/presentation/large_title_page.dart';
@@ -74,7 +75,7 @@ class ProfileScreen extends ConsumerWidget {
       purchased: ledger.purchased,
       recent: [
         for (final e in ledger.entries.reversed.take(3))
-          (label: e.source.split(':').first, amount: e.amount),
+          (label: walletEntryLabel(context.l10n, e), amount: e.amount),
       ],
     );
     final week = ref.watch(insightsSnapshotProvider(7));

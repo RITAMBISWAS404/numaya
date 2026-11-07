@@ -4,16 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/providers.dart';
 
 /// Notification categories (B-74, Mobbin "New messages settings").
-/// S39 (MVP PRD): messages, matches, quiet-chat check-ins and rewards, plus the earlier categories.
-enum NotificationCategory {
-  messages,
-  likes,
-  matches,
-  expiring,
-  checkIns,
-  rewards,
-  tips,
-}
+/// S39 (MVP PRD): messages, matches and rewards, plus the earlier categories. Visual Lab V2 R01
+/// removed quiet-chat check-ins (started chats archive instead of expiring).
+enum NotificationCategory { messages, likes, matches, expiring, rewards, tips }
 
 enum NotificationChannel { push, inApp, email }
 

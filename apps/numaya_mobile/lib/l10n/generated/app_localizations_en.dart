@@ -1545,10 +1545,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get chatExpiredBody =>
-      'Your messages are kept. Either of you can ask to reconnect once, for free.';
-
-  @override
   String get chatRematch => 'Rematch';
 
   @override
@@ -5084,11 +5080,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String requestRowReconnect(Object name) {
-    return '$name wants to reconnect';
-  }
-
-  @override
   String get requestTitle => 'Compliment';
 
   @override
@@ -5124,21 +5115,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get requestGone => 'This request is no longer available.';
 
   @override
-  String chatsExpiredRow(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count expired chats',
-      one: '1 expired chat',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get chatsExpiredDetail =>
-      'History is kept. Either of you can ask to reconnect.';
-
-  @override
   String matchTimeLeft(Object time) {
     return '$time left';
   }
@@ -5148,28 +5124,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatExpiredFirstTitle => 'This match ran out before anyone wrote';
-
-  @override
-  String get chatReconnectAsk => 'Ask to reconnect';
-
-  @override
-  String chatReconnectSent(Object name) {
-    return 'Request sent. If $name accepts, your chat reopens.';
-  }
-
-  @override
-  String get chatReconnectDeclined => 'This reconnection was declined.';
-
-  @override
-  String chatReconnectIncoming(Object name) {
-    return '$name asked to reconnect';
-  }
-
-  @override
-  String get chatReconnectReview => 'Review request';
-
-  @override
-  String get chatReconnectToast => 'Reconnection request sent';
 
   @override
   String chatSpamLimit(Object name) {
@@ -5212,48 +5166,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String checkInTitle(Object name) {
-    return 'It’s been quiet with $name';
-  }
-
-  @override
-  String get checkInBody =>
-      'No messages for a week. The chat expires after 14 quiet days. This never changes who sees your profile.';
-
-  @override
-  String get checkInReasonLabel => 'How’s it going? (optional)';
-
-  @override
-  String get checkInReasonInterested => 'Still interested';
-
-  @override
-  String get checkInReasonBusy => 'Busy right now';
-
-  @override
-  String get checkInReasonNotFeeling => 'Not feeling it';
-
-  @override
-  String get checkInReasonSkip => 'Prefer not to say';
-
-  @override
-  String get checkInWrite => 'Write a message';
-
-  @override
-  String get checkInPause => 'Pause my profile';
-
-  @override
-  String get checkInPreferences => 'Update preferences';
-
-  @override
-  String get checkInSkip => 'Not now';
-
-  @override
-  String get expiredTitle => 'Expired chats';
-
-  @override
-  String get expiredEmptyTitle => 'No expired chats';
-
-  @override
   String get expiredEmptyBody =>
       'Chats expire after 14 quiet days, and new matches after 24 hours without a message.';
 
@@ -5263,50 +5175,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get expiredStateCanAsk => 'You can ask to reconnect';
-
-  @override
   String get expiredStatePending => 'Waiting for their answer';
 
   @override
-  String get expiredStateIncoming => 'Asked to reconnect';
-
-  @override
   String get expiredStateDeclined => 'Declined';
-
-  @override
-  String reconnectTitle(Object name) {
-    return '$name wants to reconnect';
-  }
-
-  @override
-  String get reconnectBody =>
-      'Accepting reopens your chat. Nothing is sent automatically, and it’s free.';
-
-  @override
-  String get reconnectPrevious => 'Your last messages';
-
-  @override
-  String get reconnectAccept => 'Accept';
-
-  @override
-  String get reconnectDecline => 'Decline';
-
-  @override
-  String get reconnectDeclineTitle => 'Decline this request?';
-
-  @override
-  String reconnectDeclineBody(Object name) {
-    return '$name won’t be able to ask again for this chat.';
-  }
-
-  @override
-  String reconnectAccepted(Object name) {
-    return 'Chat reopened with $name';
-  }
-
-  @override
-  String get reconnectDeclined => 'Request declined';
 
   @override
   String get walletTitle => 'Compliment credits';
@@ -5630,7 +5502,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get premiumFreeStays =>
-      'Chatting, reporting, blocking and reconnecting are always free.';
+      'Chatting, archived chats, reporting and blocking are always free.';
 
   @override
   String get planWeekly => 'Weekly';
@@ -5896,7 +5768,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get legalPrivacySummary =>
-      'What we keep: your phone number and date of birth privately; your profile publicly; your approximate city, never exact coordinates. Analytics never include message text or one-time codes. Proposed retention: raw analytics 30 days, aggregates 90 days, expired chats 90 days after expiry. Deleting your account hides you at once; we aim to delete your data within 30 days.';
+      'What we keep: your phone number and date of birth privately; your profile publicly; your approximate city, never exact coordinates. Analytics never include message text or one-time codes. Proposed retention: raw analytics 30 days, aggregates 90 days, matches that ran out 90 days after they end. Deleting your account hides you at once; we aim to delete your data within 30 days.';
 
   @override
   String get legalTermsSummary =>
@@ -5995,9 +5867,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get likesLockedTile => 'Hidden profile';
-
-  @override
-  String get notifCheckIns => 'Quiet chat check-ins';
 
   @override
   String get notifRewards => 'Streak rewards and credits';
@@ -6422,4 +6291,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planCompareInsights => 'Insights history';
+
+  @override
+  String get planChooseTerm =>
+      'Choose a term to see its full price and renewal.';
 }

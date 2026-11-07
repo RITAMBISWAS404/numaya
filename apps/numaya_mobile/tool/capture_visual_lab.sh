@@ -3,6 +3,8 @@
 # stills and `adb shell screenrecord` clips. Usage: tool/capture_visual_lab.sh <device> <out-dir>
 # Drives integration_test/visual_lab_gallery_test.dart; writes shots.tsv and clips.tsv.
 set -u
+# Git Bash on Windows rewrites /sdcard/... arguments into Windows paths; keep them as given.
+export MSYS_NO_PATHCONV=1
 DEVICE="${1:?device id}"
 OUT="${2:?output dir}"
 ADB="${ADB:-adb}"
@@ -11,7 +13,7 @@ mkdir -p "$OUT/shots" "$OUT/clips"
 printf 'file\tgroup\tvariant\tkind\ttextScale\tfixture\tlabel\n' > "$OUT/shots.tsv"
 printf 'file\tinteraction\tmotion\n' > "$OUT/clips.tsv"
 ack() { "$ADB" -s "$DEVICE" shell run-as "$APP" touch cache/ui_review_ack; }
-flutter test integration_test/visual_lab_gallery_test.dart -d "$DEVICE" 2>&1 | tee "${RAW:-/dev/null}" | while IFS= read -r line; do
+flutter test integration_test/visual_lab_gallery_test.dart -d "$DEVICE" ${ONLY:+--dart-define=ONLY=$ONLY} 2>&1 | tee "${RAW:-/dev/null}" | while IFS= read -r line; do
   case "$line" in
     *@@CAP@@*)
       rest="${line#*@@CAP@@|}"

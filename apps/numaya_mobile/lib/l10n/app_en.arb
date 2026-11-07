@@ -522,7 +522,11 @@
   "matchPairTitle": "You and {name}",
   "@matchPairTitle": {
     "description": "EXP-001 match moment variants: the headline naming both people.",
-    "placeholders": {"name": {"type": "String"}}
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
   },
   "matchPairBody": "You liked each other. Now say hello.",
   "matchBody": "You and {name} liked each other. Now say hello.",
@@ -548,7 +552,7 @@
   "likesFilterAll": "All",
   "likesFilterNew": "New",
   "likesFilterNearby": "Nearby",
-  "likeTileCaption": "Liked you\u2063{km} km away",
+  "likeTileCaption": "Liked you⁣{km} km away",
   "@likeTileCaption": {
     "placeholders": {
       "km": {
@@ -647,9 +651,21 @@
   "chatShowTime": "Show time",
   "chatHideTime": "Hide time",
   "chatSentAt": "Sent {time}",
-  "@chatSentAt": {"placeholders": {"time": {"type": "String"}}},
+  "@chatSentAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "chatReplyingTo": "Replying to {name}",
-  "@chatReplyingTo": {"placeholders": {"name": {"type": "String"}}},
+  "@chatReplyingTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "chatReplyingToYourself": "Replying to yourself",
   "chatYou": "You",
   "chatCancelReply": "Cancel reply",
@@ -664,12 +680,24 @@
   "chatAttachmentSample": "Sample",
   "chatAttachmentRemove": "Remove attachment",
   "chatPendingLabel": "Ready to send: {what}",
-  "@chatPendingLabel": {"placeholders": {"what": {"type": "String"}}},
+  "@chatPendingLabel": {
+    "placeholders": {
+      "what": {
+        "type": "String"
+      }
+    }
+  },
   "chatCaptionPlaceholder": "Add a caption",
   "chatOpenPhoto": "Open photo",
   "chatVideoNoPlayback": "This video can’t be played here yet.",
   "chatVoiceLabel": "Voice note, {duration}",
-  "@chatVoiceLabel": {"placeholders": {"duration": {"type": "String"}}},
+  "@chatVoiceLabel": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
   "chatVoiceDemo": "Voice note",
   "mediaPermissionDenied": "Numaya can’t see your photos. Allow access in your phone’s Settings, then try again.",
   "mediaUnsupported": "That file type isn’t supported. Choose a JPG, PNG, WebP or HEIC photo, or an MP4 or MOV video.",
@@ -686,7 +714,13 @@
   "voiceRedo": "Record again",
   "voiceRecording": "Recording…",
   "voiceRecordingLabel": "Recording, {time}",
-  "@voiceRecordingLabel": {"placeholders": {"time": {"type": "String"}}},
+  "@voiceRecordingLabel": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "voiceMaxNote": "Up to 2 minutes",
   "voiceTooShort": "Too short. Record for at least a second.",
   "demoSampleMedia": "Use sample media",
@@ -703,10 +737,18 @@
   "shareDatePreview": "I’m meeting {name}, {age}, from Numaya at {where}, {when}. I’ll check in afterwards.",
   "@shareDatePreview": {
     "placeholders": {
-      "name": {"type": "String"},
-      "age": {"type": "int"},
-      "where": {"type": "String"},
-      "when": {"type": "String"}
+      "name": {
+        "type": "String"
+      },
+      "age": {
+        "type": "int"
+      },
+      "where": {
+        "type": "String"
+      },
+      "when": {
+        "type": "String"
+      }
     }
   },
   "shareDateDemo": "Sharing isn’t connected in this build: the details stay on this device and nothing is sent.",
@@ -835,7 +877,16 @@
     }
   },
   "queueMatchLabel": "{name}, new match, {timeLeft}. Open chat",
-  "@queueMatchLabel": {"placeholders": {"name": {"type": "String"}, "timeLeft": {"type": "String"}}},
+  "@queueMatchLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "timeLeft": {
+        "type": "String"
+      }
+    }
+  },
   "queueExpired": "Expired",
   "queueExpiredLabel": "{name}. Match expired",
   "@queueExpiredLabel": {
@@ -864,7 +915,6 @@
       "name": {}
     }
   },
-  "chatExpiredBody": "Your messages are kept. Either of you can ask to reconnect once, for free.",
   "chatRematch": "Rematch",
   "chatRematchPremium": "Rematch with Premium",
   "chatExpiresIn": "{time} to start the conversation",
@@ -1057,7 +1107,11 @@
   "completionNext": "Next: {part}",
   "@completionNext": {
     "description": "EXP-004 B: the single next profile part to finish.",
-    "placeholders": {"part": {"type": "String"}}
+    "placeholders": {
+      "part": {
+        "type": "String"
+      }
+    }
   },
   "completionContinue": "Continue",
   "completionSeeAll": "See all",
@@ -2198,7 +2252,7 @@
   },
   "eventUnsaved": "Removed from saved",
   "eventUntitled": "Untitled event",
-  "eventVenueDistance": "{venue}\u2063about {km} km",
+  "eventVenueDistance": "{venue}⁣about {km} km",
   "@eventVenueDistance": {
     "placeholders": {
       "venue": {},
@@ -2576,12 +2630,6 @@
       "name": {}
     }
   },
-  "requestRowReconnect": "{name} wants to reconnect",
-  "@requestRowReconnect": {
-    "placeholders": {
-      "name": {}
-    }
-  },
   "requestTitle": "Compliment",
   "requestOnYourPhoto": "On your photo",
   "requestOnYourPrompt": "On your prompt",
@@ -2598,15 +2646,6 @@
   "requestDismissed": "Compliment dismissed",
   "requestViewProfile": "View profile",
   "requestGone": "This request is no longer available.",
-  "chatsExpiredRow": "{count, plural, =1{1 expired chat} other{{count} expired chats}}",
-  "@chatsExpiredRow": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "chatsExpiredDetail": "History is kept. Either of you can ask to reconnect.",
   "matchTimeLeft": "{time} left",
   "@matchTimeLeft": {
     "placeholders": {
@@ -2615,22 +2654,6 @@
   },
   "chatExpiredQuietTitle": "This chat expired after 14 quiet days",
   "chatExpiredFirstTitle": "This match ran out before anyone wrote",
-  "chatReconnectAsk": "Ask to reconnect",
-  "chatReconnectSent": "Request sent. If {name} accepts, your chat reopens.",
-  "@chatReconnectSent": {
-    "placeholders": {
-      "name": {}
-    }
-  },
-  "chatReconnectDeclined": "This reconnection was declined.",
-  "chatReconnectIncoming": "{name} asked to reconnect",
-  "@chatReconnectIncoming": {
-    "placeholders": {
-      "name": {}
-    }
-  },
-  "chatReconnectReview": "Review request",
-  "chatReconnectToast": "Reconnection request sent",
   "chatSpamLimit": "Wait for {name} to reply before sending more.",
   "@chatSpamLimit": {
     "placeholders": {
@@ -2661,24 +2684,6 @@
       "name": {}
     }
   },
-  "checkInTitle": "It’s been quiet with {name}",
-  "@checkInTitle": {
-    "placeholders": {
-      "name": {}
-    }
-  },
-  "checkInBody": "No messages for a week. The chat expires after 14 quiet days. This never changes who sees your profile.",
-  "checkInReasonLabel": "How’s it going? (optional)",
-  "checkInReasonInterested": "Still interested",
-  "checkInReasonBusy": "Busy right now",
-  "checkInReasonNotFeeling": "Not feeling it",
-  "checkInReasonSkip": "Prefer not to say",
-  "checkInWrite": "Write a message",
-  "checkInPause": "Pause my profile",
-  "checkInPreferences": "Update preferences",
-  "checkInSkip": "Not now",
-  "expiredTitle": "Expired chats",
-  "expiredEmptyTitle": "No expired chats",
   "expiredEmptyBody": "Chats expire after 14 quiet days, and new matches after 24 hours without a message.",
   "expiredOn": "Expired {date}",
   "@expiredOn": {
@@ -2686,34 +2691,8 @@
       "date": {}
     }
   },
-  "expiredStateCanAsk": "You can ask to reconnect",
   "expiredStatePending": "Waiting for their answer",
-  "expiredStateIncoming": "Asked to reconnect",
   "expiredStateDeclined": "Declined",
-  "reconnectTitle": "{name} wants to reconnect",
-  "@reconnectTitle": {
-    "placeholders": {
-      "name": {}
-    }
-  },
-  "reconnectBody": "Accepting reopens your chat. Nothing is sent automatically, and it’s free.",
-  "reconnectPrevious": "Your last messages",
-  "reconnectAccept": "Accept",
-  "reconnectDecline": "Decline",
-  "reconnectDeclineTitle": "Decline this request?",
-  "reconnectDeclineBody": "{name} won’t be able to ask again for this chat.",
-  "@reconnectDeclineBody": {
-    "placeholders": {
-      "name": {}
-    }
-  },
-  "reconnectAccepted": "Chat reopened with {name}",
-  "@reconnectAccepted": {
-    "placeholders": {
-      "name": {}
-    }
-  },
-  "reconnectDeclined": "Request declined",
   "walletTitle": "Compliment credits",
   "walletTotal": "{count, plural, =1{1 credit} other{{count} credits}}",
   "@walletTotal": {
@@ -2902,7 +2881,7 @@
   "premiumBenefitFilters": "Filter by intention and lifestyle",
   "premiumBenefitExtend": "Extend a match every day",
   "premiumBenefitInsights": "28- and 90-day insights",
-  "premiumFreeStays": "Chatting, reporting, blocking and reconnecting are always free.",
+  "premiumFreeStays": "Chatting, archived chats, reporting and blocking are always free.",
   "planWeekly": "Weekly",
   "planMonthly": "Monthly",
   "planYearly": "Yearly",
@@ -3079,7 +3058,7 @@
   "legalCommunity": "Community standards",
   "legalSafetyContacts": "Safety contacts",
   "legalDraft": "Draft for review. Not the final legal text.",
-  "legalPrivacySummary": "What we keep: your phone number and date of birth privately; your profile publicly; your approximate city, never exact coordinates. Analytics never include message text or one-time codes. Proposed retention: raw analytics 30 days, aggregates 90 days, expired chats 90 days after expiry. Deleting your account hides you at once; we aim to delete your data within 30 days.",
+  "legalPrivacySummary": "What we keep: your phone number and date of birth privately; your profile publicly; your approximate city, never exact coordinates. Analytics never include message text or one-time codes. Proposed retention: raw analytics 30 days, aggregates 90 days, matches that ran out 90 days after they end. Deleting your account hides you at once; we aim to delete your data within 30 days.",
   "legalTermsSummary": "Numaya is for adults 18 and over. Premium renews until you cancel in your store account. Prices shown in this build are provisional. Safety tools stay free for everyone.",
   "legalCommunitySummary": "Be real: your own photos and your own name. Be kind: no harassment, hate or pressure. Be safe: no money requests, no sharing others’ private details. Reports are reviewed by people, and the person you report is never told who reported them.",
   "legalSafetyIntro": "If you’re in danger, call emergency services first. In India:",
@@ -3120,18 +3099,35 @@
   "demoUseLikes": "Use up today’s likes",
   "demoFillBank": "Fill earned credits to the cap",
   "likesLockedTitle": "{count, plural, =1{1 person likes you} other{{count} people like you}}",
-  "@likesLockedTitle": {"placeholders": {"count": {"type": "int"}}},
+  "@likesLockedTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "likesLockedBody": "Premium shows who. Or keep going in Discover, where they can appear too.",
   "likesLockedCta": "See who with Premium",
   "likesLockedTile": "Hidden profile",
-  "notifCheckIns": "Quiet chat check-ins",
   "notifRewards": "Streak rewards and credits",
   "obMissingBio": "Add a short bio",
   "chatsArchiveRow": "Archive",
   "chatsArchiveDetail": "{count, plural, =1{1 quiet chat} other{{count} quiet chats}}",
-  "@chatsArchiveDetail": {"placeholders": {"count": {"type": "int"}}},
+  "@chatsArchiveDetail": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "chatsArchiveExpiredOnly": "{count, plural, =1{1 match ran out} other{{count} matches ran out}}",
-  "@chatsArchiveExpiredOnly": {"placeholders": {"count": {"type": "int"}}},
+  "@chatsArchiveExpiredOnly": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "chatExpiredSimpleBody": "Neither of you sent a first message in time, so the match has ended.",
   "backToDiscover": "Back to Discover",
   "photoVerifiedLabel": "photo verified",
@@ -3152,22 +3148,73 @@
   "complimentNotNow": "Not now",
   "complimentReply": "Reply",
   "deadlineToday": "today at {time}",
-  "@deadlineToday": {"placeholders": {"time": {"type": "String"}}},
+  "@deadlineToday": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "deadlineTomorrow": "tomorrow at {time}",
-  "@deadlineTomorrow": {"placeholders": {"time": {"type": "String"}}},
+  "@deadlineTomorrow": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "deadlineOn": "{day} at {time}",
-  "@deadlineOn": {"placeholders": {"day": {"type": "String"}, "time": {"type": "String"}}},
+  "@deadlineOn": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "chatEndsAt": "The match ends {when}.",
-  "@chatEndsAt": {"placeholders": {"when": {"type": "String"}}},
+  "@chatEndsAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
   "insightsSampleTag": "Sample data",
   "insightsPeriod": "{days, plural, =1{Last day} other{Last {days} days}}",
-  "@insightsPeriod": {"placeholders": {"days": {"type": "int"}}},
+  "@insightsPeriod": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "insightsStatusShown": "You’re being shown in Discover",
   "insightsStatusShownBody": "About {count} people match your filters within {distance} km.",
-  "@insightsStatusShownBody": {"placeholders": {"count": {"type": "int"}, "distance": {"type": "int"}}},
+  "@insightsStatusShownBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "distance": {
+        "type": "int"
+      }
+    }
+  },
   "insightsStatusLimited": "Few new people fit your filters",
   "insightsStatusLimitedBody": "About {count} people match within {distance} km, and many have already seen you.",
-  "@insightsStatusLimitedBody": {"placeholders": {"count": {"type": "int"}, "distance": {"type": "int"}}},
+  "@insightsStatusLimitedBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "distance": {
+        "type": "int"
+      }
+    }
+  },
   "insightsStatusPaused": "Your profile is paused",
   "insightsStatusPausedBody": "No one new sees you while paused. Your chats still work.",
   "insightsStatusRestricted": "Numaya has limited your profile",
@@ -3177,24 +3224,87 @@
   "insightsStatusMore": "See details",
   "insightsNoPrevious": "No earlier period to compare",
   "insightsNoChange": "Same as the previous {days} days",
-  "@insightsNoChange": {"placeholders": {"days": {"type": "int"}}},
+  "@insightsNoChange": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "insightsUp": "{count} more than the previous {days} days",
-  "@insightsUp": {"placeholders": {"count": {"type": "int"}, "days": {"type": "int"}}},
+  "@insightsUp": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "insightsDown": "{count} fewer than the previous {days} days",
-  "@insightsDown": {"placeholders": {"count": {"type": "int"}, "days": {"type": "int"}}},
+  "@insightsDown": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "insightsBarsLabel": "New people shown your profile each day",
   "insightsBarsSummary": "{days} days, highest {max} in a day, {total} in total",
-  "@insightsBarsSummary": {"placeholders": {"days": {"type": "int"}, "max": {"type": "int"}, "total": {"type": "int"}}},
+  "@insightsBarsSummary": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "insightsFunnelShown": "Saw you",
   "insightsFunnelLiked": "Liked you",
   "insightsFunnelMatched": "Matched",
   "insightsFunnelTalked": "Both wrote",
   "insightsFunnelCaption": "Of the {count} people shown your profile in the last {days} days",
-  "@insightsFunnelCaption": {"placeholders": {"count": {"type": "int"}, "days": {"type": "int"}}},
+  "@insightsFunnelCaption": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "insightsShownPeriod": "{count} people saw your profile in the last {days} days",
-  "@insightsShownPeriod": {"placeholders": {"count": {"type": "int"}, "days": {"type": "int"}}},
+  "@insightsShownPeriod": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "insightsShownSpoken": "{count} people saw your profile in the last {days} days",
-  "@insightsShownSpoken": {"placeholders": {"count": {"type": "int"}, "days": {"type": "int"}}},
+  "@insightsShownSpoken": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "insightsShownUnit": "people saw your profile",
   "insightsNoDataYet": "No data for this period yet.",
   "insightsTileShown": "Saw you",
@@ -3202,7 +3312,22 @@
   "insightsTileMatches": "Matches",
   "insightsTileYourTurn": "Your turn",
   "insightsSentence": "{count} people saw your profile in the last {days} days. {likes} liked it and you matched with {matches}.",
-  "@insightsSentence": {"placeholders": {"count": {"type": "int"}, "days": {"type": "int"}, "likes": {"type": "int"}, "matches": {"type": "int"}}},
+  "@insightsSentence": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      },
+      "likes": {
+        "type": "int"
+      },
+      "matches": {
+        "type": "int"
+      }
+    }
+  },
   "insightsMetricShown": "Saw your profile",
   "insightsMetricLikes": "Liked your profile",
   "insightsMetricMatches": "Matches",
@@ -3212,12 +3337,30 @@
   "insightsMetricActiveDays": "Days you opened Numaya",
   "insightsMetricAudience": "People who fit your filters",
   "insightsConversationsCaption": "Both wrote, last {days} days",
-  "@insightsConversationsCaption": {"placeholders": {"days": {"type": "int"}}},
+  "@insightsConversationsCaption": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "insightsRightNow": "Right now",
   "insightsActiveCaption": "Out of {days} days",
-  "@insightsActiveCaption": {"placeholders": {"days": {"type": "int"}}},
+  "@insightsActiveCaption": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "insightsAudienceCaption": "Within {distance} km, right now",
-  "@insightsAudienceCaption": {"placeholders": {"distance": {"type": "int"}}},
+  "@insightsAudienceCaption": {
+    "placeholders": {
+      "distance": {
+        "type": "int"
+      }
+    }
+  },
   "insightsAdviceTitle": "Something you could try",
   "insightsAdviceSection": "Suggestion",
   "insightsActivityTitle": "Activity",
@@ -3225,18 +3368,45 @@
   "insightsHowItWorks": "How this works",
   "insightsPeriodLabel": "Period",
   "insightsDays": "{days} days",
-  "@insightsDays": {"placeholders": {"days": {"type": "int"}}},
+  "@insightsDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "insightsDaysLocked": "{days} days 🔒",
-  "@insightsDaysLocked": {"placeholders": {"days": {"type": "int"}}},
+  "@insightsDaysLocked": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "insightsLockedTitle": "{days} days of history comes with Premium",
-  "@insightsLockedTitle": {"placeholders": {"days": {"type": "int"}}},
+  "@insightsLockedTitle": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "insightsLockedBody": "Your status and the last 7 days stay free and complete. Premium adds longer history and comparisons with earlier periods. It can’t increase who sees you.",
   "insightsLockedCta": "See Premium",
   "insightsFootnote": "Sample data in this demo build. Numaya doesn’t read your messages for insights, and never shows who blocked or reported anyone.",
   "setupTitle": "Profile setup",
   "setupSection": "Profile setup",
   "setupProgress": "{done} of {total} done",
-  "@setupProgress": {"placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}},
+  "@setupProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "setupAllDone": "Your profile is set up",
   "setupNext": "Next step",
   "setupAdd": "Add",
@@ -3244,9 +3414,21 @@
   "insightsLowSampleNote": "Too few people yet to compare periods",
   "streakRewardReady": "This cycle is complete: your credit is in your wallet.",
   "streakToReward": "{count, plural, =1{1 more day to your next credit} other{{count} more days to your next credit}}",
-  "@streakToReward": {"placeholders": {"count": {"type": "int"}}},
+  "@streakToReward": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "streakDaysUnit": "{count, plural, =1{day in a row} other{days in a row}}",
-  "@streakDaysUnit": {"placeholders": {"count": {"type": "int"}}},
+  "@streakDaysUnit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "walletOrderShort": "Weekly credits are used first, then earned, then purchased.",
   "walletCanSend": "Compliments you can send",
   "profileStatShown": "saw you",
@@ -3254,11 +3436,30 @@
   "profileStatSample": "Last 7 days · sample data",
   "profileSeeInsights": "See insights",
   "profileWeekLine": "This week {count} people saw your profile and {likes} liked it. Your streak is at {days}.",
-  "@profileWeekLine": {"placeholders": {"count": {"type": "int"}, "likes": {"type": "int"}, "days": {"type": "int"}}},
+  "@profileWeekLine": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "likes": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "discoverDistanceKm": "{distance} km away",
-  "@discoverDistanceKm": {"placeholders": {"distance": {"type": "int"}}},
+  "@discoverDistanceKm": {
+    "placeholders": {
+      "distance": {
+        "type": "int"
+      }
+    }
+  },
   "planCompareLikes": "Likes a day",
   "planCompareCompliments": "Compliments a week",
   "planCompareSeeLikes": "See who liked you",
-  "planCompareInsights": "Insights history"
+  "planCompareInsights": "Insights history",
+  "planChooseTerm": "Choose a term to see its full price and renewal."
 }

@@ -24,6 +24,8 @@ class NumayaSegmented extends StatelessWidget {
   });
 
   final List<({String label, int? count, Key? key})> options;
+
+  /// The selected option, or -1 for none yet.
   final int selected;
   final ValueChanged<int> onSelect;
 
@@ -50,21 +52,23 @@ class NumayaSegmented extends StatelessWidget {
             final w = box.maxWidth / n;
             return Stack(
               children: [
-                AnimatedPositionedDirectional(
-                  duration: AppMotion.duration(context, AppMotion.state),
-                  curve: AppMotion.easeOut,
-                  start: w * selected,
-                  top: 0,
-                  bottom: 0,
-                  width: w,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: AppRadii.all(AppRadii.pill),
-                      boxShadow: AppElevation.subtle,
+                // -1: nothing selected yet, no thumb.
+                if (selected >= 0)
+                  AnimatedPositionedDirectional(
+                    duration: AppMotion.duration(context, AppMotion.state),
+                    curve: AppMotion.easeOut,
+                    start: w * selected,
+                    top: 0,
+                    bottom: 0,
+                    width: w,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: AppRadii.all(AppRadii.pill),
+                        boxShadow: AppElevation.subtle,
+                      ),
                     ),
                   ),
-                ),
                 Row(
                   children: [
                     for (var i = 0; i < n; i++)

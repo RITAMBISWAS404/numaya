@@ -2674,12 +2674,6 @@ abstract class AppLocalizations {
   /// **'Your match with {name} expired'**
   String chatExpiredTitle(Object name);
 
-  /// No description provided for @chatExpiredBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Your messages are kept. Either of you can ask to reconnect once, for free.'**
-  String get chatExpiredBody;
-
   /// No description provided for @chatRematch.
   ///
   /// In en, this message translates to:
@@ -8722,12 +8716,6 @@ abstract class AppLocalizations {
   /// **'{name} sent a Compliment'**
   String requestRowCompliment(Object name);
 
-  /// No description provided for @requestRowReconnect.
-  ///
-  /// In en, this message translates to:
-  /// **'{name} wants to reconnect'**
-  String requestRowReconnect(Object name);
-
   /// No description provided for @requestTitle.
   ///
   /// In en, this message translates to:
@@ -8794,18 +8782,6 @@ abstract class AppLocalizations {
   /// **'This request is no longer available.'**
   String get requestGone;
 
-  /// No description provided for @chatsExpiredRow.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =1{1 expired chat} other{{count} expired chats}}'**
-  String chatsExpiredRow(int count);
-
-  /// No description provided for @chatsExpiredDetail.
-  ///
-  /// In en, this message translates to:
-  /// **'History is kept. Either of you can ask to reconnect.'**
-  String get chatsExpiredDetail;
-
   /// No description provided for @matchTimeLeft.
   ///
   /// In en, this message translates to:
@@ -8823,42 +8799,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This match ran out before anyone wrote'**
   String get chatExpiredFirstTitle;
-
-  /// No description provided for @chatReconnectAsk.
-  ///
-  /// In en, this message translates to:
-  /// **'Ask to reconnect'**
-  String get chatReconnectAsk;
-
-  /// No description provided for @chatReconnectSent.
-  ///
-  /// In en, this message translates to:
-  /// **'Request sent. If {name} accepts, your chat reopens.'**
-  String chatReconnectSent(Object name);
-
-  /// No description provided for @chatReconnectDeclined.
-  ///
-  /// In en, this message translates to:
-  /// **'This reconnection was declined.'**
-  String get chatReconnectDeclined;
-
-  /// No description provided for @chatReconnectIncoming.
-  ///
-  /// In en, this message translates to:
-  /// **'{name} asked to reconnect'**
-  String chatReconnectIncoming(Object name);
-
-  /// No description provided for @chatReconnectReview.
-  ///
-  /// In en, this message translates to:
-  /// **'Review request'**
-  String get chatReconnectReview;
-
-  /// No description provided for @chatReconnectToast.
-  ///
-  /// In en, this message translates to:
-  /// **'Reconnection request sent'**
-  String get chatReconnectToast;
 
   /// No description provided for @chatSpamLimit.
   ///
@@ -8920,84 +8860,6 @@ abstract class AppLocalizations {
   /// **'24 hours added for {name}'**
   String extendDone(Object name);
 
-  /// No description provided for @checkInTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'It’s been quiet with {name}'**
-  String checkInTitle(Object name);
-
-  /// No description provided for @checkInBody.
-  ///
-  /// In en, this message translates to:
-  /// **'No messages for a week. The chat expires after 14 quiet days. This never changes who sees your profile.'**
-  String get checkInBody;
-
-  /// No description provided for @checkInReasonLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'How’s it going? (optional)'**
-  String get checkInReasonLabel;
-
-  /// No description provided for @checkInReasonInterested.
-  ///
-  /// In en, this message translates to:
-  /// **'Still interested'**
-  String get checkInReasonInterested;
-
-  /// No description provided for @checkInReasonBusy.
-  ///
-  /// In en, this message translates to:
-  /// **'Busy right now'**
-  String get checkInReasonBusy;
-
-  /// No description provided for @checkInReasonNotFeeling.
-  ///
-  /// In en, this message translates to:
-  /// **'Not feeling it'**
-  String get checkInReasonNotFeeling;
-
-  /// No description provided for @checkInReasonSkip.
-  ///
-  /// In en, this message translates to:
-  /// **'Prefer not to say'**
-  String get checkInReasonSkip;
-
-  /// No description provided for @checkInWrite.
-  ///
-  /// In en, this message translates to:
-  /// **'Write a message'**
-  String get checkInWrite;
-
-  /// No description provided for @checkInPause.
-  ///
-  /// In en, this message translates to:
-  /// **'Pause my profile'**
-  String get checkInPause;
-
-  /// No description provided for @checkInPreferences.
-  ///
-  /// In en, this message translates to:
-  /// **'Update preferences'**
-  String get checkInPreferences;
-
-  /// No description provided for @checkInSkip.
-  ///
-  /// In en, this message translates to:
-  /// **'Not now'**
-  String get checkInSkip;
-
-  /// No description provided for @expiredTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Expired chats'**
-  String get expiredTitle;
-
-  /// No description provided for @expiredEmptyTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'No expired chats'**
-  String get expiredEmptyTitle;
-
   /// No description provided for @expiredEmptyBody.
   ///
   /// In en, this message translates to:
@@ -9010,83 +8872,17 @@ abstract class AppLocalizations {
   /// **'Expired {date}'**
   String expiredOn(Object date);
 
-  /// No description provided for @expiredStateCanAsk.
-  ///
-  /// In en, this message translates to:
-  /// **'You can ask to reconnect'**
-  String get expiredStateCanAsk;
-
   /// No description provided for @expiredStatePending.
   ///
   /// In en, this message translates to:
   /// **'Waiting for their answer'**
   String get expiredStatePending;
 
-  /// No description provided for @expiredStateIncoming.
-  ///
-  /// In en, this message translates to:
-  /// **'Asked to reconnect'**
-  String get expiredStateIncoming;
-
   /// No description provided for @expiredStateDeclined.
   ///
   /// In en, this message translates to:
   /// **'Declined'**
   String get expiredStateDeclined;
-
-  /// No description provided for @reconnectTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'{name} wants to reconnect'**
-  String reconnectTitle(Object name);
-
-  /// No description provided for @reconnectBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Accepting reopens your chat. Nothing is sent automatically, and it’s free.'**
-  String get reconnectBody;
-
-  /// No description provided for @reconnectPrevious.
-  ///
-  /// In en, this message translates to:
-  /// **'Your last messages'**
-  String get reconnectPrevious;
-
-  /// No description provided for @reconnectAccept.
-  ///
-  /// In en, this message translates to:
-  /// **'Accept'**
-  String get reconnectAccept;
-
-  /// No description provided for @reconnectDecline.
-  ///
-  /// In en, this message translates to:
-  /// **'Decline'**
-  String get reconnectDecline;
-
-  /// No description provided for @reconnectDeclineTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Decline this request?'**
-  String get reconnectDeclineTitle;
-
-  /// No description provided for @reconnectDeclineBody.
-  ///
-  /// In en, this message translates to:
-  /// **'{name} won’t be able to ask again for this chat.'**
-  String reconnectDeclineBody(Object name);
-
-  /// No description provided for @reconnectAccepted.
-  ///
-  /// In en, this message translates to:
-  /// **'Chat reopened with {name}'**
-  String reconnectAccepted(Object name);
-
-  /// No description provided for @reconnectDeclined.
-  ///
-  /// In en, this message translates to:
-  /// **'Request declined'**
-  String get reconnectDeclined;
 
   /// No description provided for @walletTitle.
   ///
@@ -9625,7 +9421,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumFreeStays.
   ///
   /// In en, this message translates to:
-  /// **'Chatting, reporting, blocking and reconnecting are always free.'**
+  /// **'Chatting, archived chats, reporting and blocking are always free.'**
   String get premiumFreeStays;
 
   /// No description provided for @planWeekly.
@@ -10021,7 +9817,7 @@ abstract class AppLocalizations {
   /// No description provided for @legalPrivacySummary.
   ///
   /// In en, this message translates to:
-  /// **'What we keep: your phone number and date of birth privately; your profile publicly; your approximate city, never exact coordinates. Analytics never include message text or one-time codes. Proposed retention: raw analytics 30 days, aggregates 90 days, expired chats 90 days after expiry. Deleting your account hides you at once; we aim to delete your data within 30 days.'**
+  /// **'What we keep: your phone number and date of birth privately; your profile publicly; your approximate city, never exact coordinates. Analytics never include message text or one-time codes. Proposed retention: raw analytics 30 days, aggregates 90 days, matches that ran out 90 days after they end. Deleting your account hides you at once; we aim to delete your data within 30 days.'**
   String get legalPrivacySummary;
 
   /// No description provided for @legalTermsSummary.
@@ -10179,12 +9975,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hidden profile'**
   String get likesLockedTile;
-
-  /// No description provided for @notifCheckIns.
-  ///
-  /// In en, this message translates to:
-  /// **'Quiet chat check-ins'**
-  String get notifCheckIns;
 
   /// No description provided for @notifRewards.
   ///
@@ -10833,6 +10623,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Insights history'**
   String get planCompareInsights;
+
+  /// No description provided for @planChooseTerm.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a term to see its full price and renewal.'**
+  String get planChooseTerm;
 }
 
 class _AppLocalizationsDelegate
