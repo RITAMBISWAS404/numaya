@@ -1,5 +1,16 @@
 # Work log
 
+## 2026-11-08 · Visual Lab V2 (Windows, Claude desktop)
+- Verified start: `experiment/numaya-mvp-prd-20261107` clean at `0df9ec3` = origin; tagged and pushed
+  `checkpoint/pre-visual-lab-20261108`; branch `experiment/numaya-visual-lab-20261108`.
+- Read START_HERE and 01–11. Figma (Ente) read live: Header v2, Tabs, Bottom sheet, Segments, Banners,
+  Icon Button. Mobbin: 6 targeted searches (requests inbox, insights, own profile, Bumble chats).
+- R01–R12 implemented (lifecycle rewrite to archive; Heart tab; Your insights fixtures; shared squircle,
+  segmented control, NameWithBadge, LargeTitlePage, motion presets). Registry + Visual Lab + previews.
+- 15 card families × 5 variants, 5 screens × 4 directions. Two screenshot refinement loops (CRITIQUE.md).
+- Capture harness and gallery builder (`tool/capture_visual_lab.sh`, `tool/visual_lab_gallery/`).
+- Commits: `d15b9d0` (WIP), `9d4ed30` (loop 1), `8510778` (loop 2, final code), then docs.
+
 ## 2026-11-07 · MVP PRD v1 implementation (Windows, Claude desktop)
 - Verified start: `experiment/numaya-15px-icons-20261107` clean at `c56e36b`, equal to origin. Tagged
   `checkpoint/pre-mvp-prd-20261107`; new branch `experiment/numaya-mvp-prd-20261107`.

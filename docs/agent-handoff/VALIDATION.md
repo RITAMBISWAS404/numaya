@@ -1,5 +1,21 @@
 # Validation
 
+> **Visual Lab V2 (2026-11-08, app commit `8510778`):** `dart format` clean; `flutter analyze` **no
+> issues**; `flutter test` **579 passed, 27 skipped, 0 failed** (new `visual_lab_v2_test`: registry
+> integrity, release ignores Lab choices, every component variant in isolation and in its real screen
+> and every screen direction at 320dp/200% text, Archive/expired/Heart/Compliments flows, Compliment
+> action geometry, badge placement, sheet close, insights honesty and funnel cohort, large-title
+> collapse, motion presets; superseded EXP-002 C and EXP-004 tests skipped with reasons; obsolete
+> reconnect/check-in tests rewritten to R01/R02). Web: `npm test` 121/122 and `vite build` OK;
+> `tokens:check` and its unit test fail only on CRLF (no web files changed); `test:e2e` not run
+> (Playwright Chromium not installed). Device: Pixel 10 AVD (API 36) ran
+> `integration_test/visual_lab_gallery_test.dart` (237 stills, 12 screenrecord clips, 0 missing items);
+> the installed APK launched to Welcome and applied a Visual Lab direction. Gallery JS verified in the
+> in-app browser over HTTP: two choices + note exported, storage cleared, imported back identical;
+> corrupt JSON, unknown variant, changed reviewId and path-like IDs refused; reset confirm; empty
+> export; all 237 images and 12 clips load; no autoplay. Not checked: physical phone, iOS,
+> profile-mode frame timing, backend (contracts still PRD v1).
+
 > **MVP PRD v1 (2026-11-07, app commit `f6c4d8b`):** `dart format` clean; `flutter analyze` **no
 > issues**; `flutter test` **564 passed, 21 skipped, 0 failed** (507 before; new `mvp_rules_test`,
 > `mvp_controllers_test`, `mvp_screens_test`: every MVP route at 320/360/411 dp x 100/200% text plus

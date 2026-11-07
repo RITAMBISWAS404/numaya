@@ -1,5 +1,12 @@
 # Next steps
 
+> **2026-11-08 (after Visual Lab V2), queue:**
+> 1. Owner: choose in the gallery, export JSON, send it back; then the application pass.
+> 2. Update `backend/` contracts to the archive lifecycle (no reconnect, no 14-day expiry).
+> 3. Physical-device checks incl. profile-mode frame timing; iOS reduced motion.
+> 4. Carried over: MVP live blockers; localise sample people; `git config core.autocrlf input`;
+>    `npx playwright install chromium`.
+
 > **2026-11-07 (after MVP PRD v1), queue:**
 > 1. Owner review of the MVP APK and gallery; decisions MVP-D07/D08/D18/D24/D25.
 > 2. Backend: provision the project, apply and test `backend/migrations`, then wire `NumayaApi`

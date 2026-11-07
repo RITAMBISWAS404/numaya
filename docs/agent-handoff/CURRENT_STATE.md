@@ -1,5 +1,16 @@
 # Current state
 
+> **Visual Lab V2 (2026-11-08):** branch **`experiment/numaya-visual-lab-20261108`** from `0df9ec3`
+> (MVP PRD v1 head; tag `checkpoint/pre-visual-lab-20261108`, pushed). App code for screenshots, clips
+> and APK: **`8510778`**; later commits are docs only. Implements the owner's `NUMAYA_VISUAL_LAB_V2`
+> brief: required changes R01–R12 (Archive replaces expiry/reconnection; ring avatars; Heart tab with
+> Likes and Compliments; no likes-left line; Compliment squircle bottom-right with prompt footers;
+> badge after names; sentence case; squircle sheet close; illustration boxes; Your insights with labelled
+> samples; collapsing large titles), 15 card families with O + A–D, 5 screens with O + three directions,
+> MotionTokens M0/M1/M2, and a debug **Visual Lab V2** (Demo Hub). Proposed defaults are not owner
+> approvals. Record: [`docs/design-experiments/visual-lab-v2/`](../design-experiments/visual-lab-v2/README.md).
+> APK `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-Visual-Lab-20261108-8510778.apk`; gallery `C:\Users\biswa\OneDrive\Desktop\Numaya Visual Lab\2026-11-08\index.html`; ZIP `C:\Users\biswa\OneDrive\Desktop\Numaya Visual Lab\Numaya-Visual-Lab-20261108-8510778.zip`.
+
 > **MVP PRD v1 implementation (2026-11-07):** branch **`experiment/numaya-mvp-prd-20261107`**, cut from
 > `c56e36b` (checkpoint tag `checkpoint/pre-mvp-prd-20261107`; the working tree was clean, so no
 > checkpoint commit was needed). Implements the owner's `NUMAYA_PRD_IMPLEMENTATION_V1` package as a

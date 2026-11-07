@@ -35,3 +35,40 @@ Scores for the proposed variant, then notable alternatives. Evidence = the scree
 
 Remaining families (prompt-card, discover-photo, streak-card, wallet-card, plan-card, status-banner,
 empty-state) and the five screen directions are scored in loop 2 below from the final capture.
+
+## Refinement loop 2 (capture run 2 → fixes → targeted recaptures on `8510778`)
+| Seen in run 2 | Fix |
+|---|---|
+| `plan-card` A crashed on the real paywall (no plan chosen yet: index −1); previews always passed a plan | Panel says "Choose a term…" until one is picked; the segmented control accepts no selection; new test renders every variant in its real screen at 320dp/200% |
+| `wallet-card` D listed raw ledger keys ("weekly_rollover", "premium_week") | Uses the wallet history's member-facing labels |
+| `plan-card` C comparison had no Free / Premium header on the paywall | Header row built in |
+| Paywall still said "reconnecting … always free"; privacy summary said "expired chats"; a "Quiet chat check-ins" notification switch remained | Copy updated; the check-in category removed; 35 unused reconnect/expiry strings deleted |
+| Screen recordings were empty (Git Bash rewrote `/sdcard/...` paths) | `MSYS_NO_PATHCONV=1` in the capture script; 12 clips recaptured |
+| "Premium, 28-day history" scenario was shown as a free member with locks | Captured with Premium on the 28-day period |
+
+## Remaining families (after loop 2)
+| Family | Proposed | C | T | H | B | Evidence and trade-off |
+|---|---|---|---|---|---|---|
+| prompt-card | O | 4 | 4 | 4 | 5 | Footer row keeps the action clear of a long answer (crop shows a 3-line answer); B quote is warmest; A editorial loses card grouping in long profiles. |
+| discover-photo | O | 4 | 4 | 4 | 5 | Name on the scrim with the Compliment squircle bottom-right and overflow top-right; A (name below) is the most legible but pushes the profile down; C adds useful distance/intention pills. |
+| streak-card | O | 4 | 4 | 4 | 5 | Approved card kept; B states days to the next credit; D placeholder only. |
+| wallet-card | A | 4 | 4 | 4 | 5 | Stacked bar in spend order with legend (Ente Segments) answers "which credits go first"; B is simplest. |
+| plan-card | B | 4 | 4 | 4 | 5 | Radio rows: full billed amount and term on every row, nothing preselected; A hides the other prices until chosen; C adds a useful Free/Premium comparison. |
+| status-banner | O | 4 | 4 | 4 | 5 | Tinted card is consistent; B inline note is lightest for chat; A arrow suits tappable status. |
+| empty-state | A | 4 | 4 | 4 | 5 | Side placeholder keeps empty states short (R10 restraint); D next steps is most actionable. |
+
+## Screens (directions, proposed default O everywhere except where noted in DECISIONS)
+| Screen | O | A quiet editorial | B connected cards | C visual insights |
+|---|---|---|---|---|
+| Profile | Familiar order, setup card, groups | Calm; one sentence of activity; fewest cards | Activity as tappable cards; longest | Identity carries this week's numbers; streak bar and wallet bar; densest |
+| Your insights | Bars + status, two-column metrics | Sentence + large numbers; least visual | Change cards one per row; clear periods | Bars + one-cohort funnel; most explanatory, longest |
+| Likes / Compliments | Two-column tiles; sender-quote cards | List rows; compact Compliment rows | Compliments show what they noticed | Name-on-photo tiles; photo-led Compliments |
+| Chats | Ring avatars, Ente rows | Named avatars; dense rows | Card rows | Portrait avatars; large-avatar rows |
+| Discover | Name on scrim, card prompts | Name below photo, editorial prompts | Chip-question prompts | Fact pills on photo, quote prompts |
+
+Limitation: the Heart "Likes" shots in each direction were captured as a free member (locked count), so
+they look the same; the Compliments shots and the Premium `like-tile` contexts show the differences.
+Rubric questions from brief 10 (primary task in 5 s, tappable clear, units and windows obvious, one
+focal point, icons balanced, grouping meaningful, no-data sensible, illustration slots purposeful,
+still Ente, motion helps) were applied to each; no screen passed with clipping, misleading charts or
+dead-end actions in the final capture.

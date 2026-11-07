@@ -1,5 +1,10 @@
 # Active task: revised PRD for additional features (waiting for the owner's brief)
 
+> **2026-11-08, Visual Lab V2:** built and delivered on `experiment/numaya-visual-lab-20261108`.
+> **Next:** the owner opens the offline gallery, chooses per group (or keeps O / leaves undecided),
+> exports the JSON and sends it back. Then a separate application pass (RUN_STATE.md, "After the
+> owner's choices"). Do not start that pass without the JSON. Do not merge into any baseline.
+
 > **2026-11-07, MVP PRD v1:** implemented on `experiment/numaya-mvp-prd-20261107` (all executable
 > phases of `07_EXECUTION.md`). **Next:** the owner reviews the APK and the screen gallery
 > (`C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\MVP PRD 2026-11-07\`) against

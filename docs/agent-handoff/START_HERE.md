@@ -3,6 +3,9 @@
 This folder carries Numaya work across Claude sessions and accounts. A new session reads it before
 doing anything else, and the session that stops updates it before it ends.
 
+> **Latest work (2026-11-08):** Visual Lab V2 on `experiment/numaya-visual-lab-20261108`; read
+> CURRENT_STATE first. The account-switch note below is historical.
+
 > **Account switch (2026-11-07):** read [`NUMAYA_ACCOUNT_HANDOFF.md`](../../NUMAYA_ACCOUNT_HANDOFF.md)
 > at the repo root first: working branch `experiment/numaya-15px-icons-20261107` (the approved
 > 15px design baseline), local-only files, tools, and the next task (revised PRD).
