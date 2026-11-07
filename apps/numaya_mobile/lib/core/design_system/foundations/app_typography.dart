@@ -12,11 +12,12 @@ import 'app_colors.dart';
 /// 20/28, H2 18/24, Large 16/20 (all 600), Body 14/20 500, Body-Bold 14/20 600, Mini 12/16 500,
 /// Tiny 10/12 500, all at 0 tracking. Ente sets these in Inter and Outfit; Numaya keeps its own
 /// faces at Ente's sizes and weights (Figma type and icons pass, FT-01):
-/// - **Every authored font size is an even number of logical pixels.** The earlier 13/18 caption
-///   (an optical adjustment for Figtree's smaller x-height) is retired: metadata is Ente's Mini
-///   12/16, and explanatory sentences that used it are [helper] at Body 14/20.
-/// - [button] and [buttonSm] are Ente's Body (500), as Button Large and Button Small specify;
-///   the earlier Body-Bold (600) deviation is retired.
+/// - **Authored font sizes are even, with one exception: the body tier is 15** (X15, the 15px
+///   experiment, 2026-11-07). Every role that was 14 (body, bodySm, row, input, buttons, label,
+///   helper, fieldLabel, metricUnit) is 15 and keeps its 20pt line (multiplier 20/15). Metadata
+///   stays Ente's Mini 12/16.
+/// - Weights (X15-H): page titles and app-bar titles are Bold (700); buttons are SemiBold (600)
+///   so actions lead the 15pt body; reading text, rows and supporting text stay Medium (500).
 /// - Dynamic sizes (avatar initials, the Welcome wordmark) go through [even].
 /// The role map is in docs/design-experiments/ente-design-system/figma-type-icons/README.md.
 ///
@@ -41,13 +42,13 @@ abstract final class AppTypography {
   static final TextStyle hero = _style(display, 32, 40, semibold, 0);
 
   /// Ente Display-2. Tab-root titles ("Likes", "Messages"): 24/32 semibold.
-  static final TextStyle pageTitle = _style(display, 24, 32, semibold, 0);
+  static final TextStyle pageTitle = _style(display, 24, 32, bold, 0);
 
   /// Ente Display-2. Onboarding and editorial page headings: 24/32 semibold.
-  static final TextStyle flowTitle = _style(display, 24, 32, semibold, 0);
+  static final TextStyle flowTitle = _style(display, 24, 32, bold, 0);
 
   /// Ente Display-2. Result titles and the Profile name: 24/32 semibold.
-  static final TextStyle headline = _style(display, 24, 32, semibold, 0);
+  static final TextStyle headline = _style(display, 24, 32, bold, 0);
 
   /// Ente H2 (the Details sheet's "People", "Location"). Section headings inside a page
   /// ("Account", "Your tools", "Photos"): 18/24 semibold. One step under the 20pt sheet and empty
@@ -73,7 +74,14 @@ abstract final class AppTypography {
   /// paragraph stays comfortable to read. 18/24 medium.
   static final TextStyle cardPrimary = _style(family, 18, 24, medium, 0);
 
-  /// Ente Large. Top-bar titles ("Settings", "Edit profile"): 16/20 semibold, sentence case.
+  /// App-bar titles on pushed pages ("Settings", "Edit profile", a chat's name): Ente Header v2
+  /// collapsed (back arrow, title inline; 11441:5188), Display-3 20/28, in Plus Jakarta Sans at
+  /// Bold (X15-H). Was [headerCaps] 16/20 600, which read weaker than the 18pt section headings
+  /// below it.
+  static final TextStyle appBarTitle = _style(display, 20, 28, bold, 0);
+
+  /// Ente Large. Small headings inside a page (Messages list labels, Filters questions). Was also
+  /// the top-bar title before X15. 16/20 semibold, sentence case.
   static final TextStyle headerCaps = _style(family, 16, 20, semibold, 0);
 
   /// The "numaya" logotype: Figtree bold, -0.03em, 28 (22 small). Even sizes (FT-01; were 27
@@ -97,26 +105,25 @@ abstract final class AppTypography {
 
   /// Ente Body. Secondary body (supporting paragraphs, list text): 14/20 medium, the same face
   /// as [body]; callers set the muted or secondary colour.
-  static final TextStyle bodySm = _style(family, 14, 20, medium, 0);
+  static final TextStyle bodySm = _style(family, 15, 20, medium, 0);
 
   /// Ente Body (menu item label). Grouped-row labels: 14/20 medium, ink.
-  static final TextStyle row = _style(family, 14, 20, medium, 0);
+  static final TextStyle row = _style(family, 15, 20, medium, 0);
 
   /// Ente Body. Typed field text: 14/20 medium; placeholders use it at regular in the muted
   /// colour.
-  static final TextStyle input = _style(family, 14, 20, medium, 0);
+  static final TextStyle input = _style(family, 15, 20, medium, 0);
 
-  /// Ente Body. Full-width button labels: 14/20 medium, as Button Large (2207:41759) specifies.
-  static final TextStyle button = _style(family, 14, 20, medium, 0);
+  /// Full-width button labels: 15/20 SemiBold (X15-H; Ente's Button Large is Body 14/20 500).
+  static final TextStyle button = _style(family, 15, 20, semibold, 0);
 
-  /// Ente Body. Small pill buttons ("Complete profile", "Add a prompt"): 14/20 medium, as Button
-  /// Small (2207:41578) specifies.
-  static final TextStyle buttonSm = _style(family, 14, 20, medium, 0);
+  /// Small pill buttons ("Complete profile", "Add a prompt"): 15/20 SemiBold (X15-H).
+  static final TextStyle buttonSm = _style(family, 15, 20, semibold, 0);
 
   /// Labels on chips and tiles: 14/20 medium, secondary.
   static final TextStyle label = _style(
     family,
-    14,
+    15,
     20,
     medium,
     0,
@@ -148,7 +155,7 @@ abstract final class AppTypography {
   /// they take the body size and keep the grey that marks them as supporting.
   static final TextStyle helper = _style(
     family,
-    14,
+    15,
     20,
     medium,
     0,
@@ -177,7 +184,7 @@ abstract final class AppTypography {
   /// 14/20 medium, ink, sentence case.
   static final TextStyle fieldLabel = _style(
     family,
-    14,
+    15,
     20,
     medium,
     0,
@@ -196,7 +203,7 @@ abstract final class AppTypography {
   /// The unit beside a metric ("complete", "%"): 14/20 medium, muted.
   static final TextStyle metricUnit = _style(
     family,
-    14,
+    15,
     20,
     medium,
     0,

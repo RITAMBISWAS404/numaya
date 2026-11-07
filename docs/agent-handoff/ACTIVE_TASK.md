@@ -1,4 +1,7 @@
-# Active task: owner review of the Figma type and icons pass
+# Active task: owner review of the 15px type and icon experiment
+
+> **2026-11-07:** X15 is on `experiment/numaya-15px-icons-20261107` (record: `docs/design-experiments/ente-design-system/x15-type-icons/README.md`; before/after: `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\15px icon experiment 2026-11-07`). **Next:** the owner compares the APK `Numaya-15px-Icon-Experiment-*.apk` on a phone and approves or rejects it. Integrate into the working branch only on approval; otherwise continue from `7eae060`.
+
 
 > **2026-11-07:** FT-01 to FT-04 are on `experiment/numaya-figma-type-icons-20261107` (record: `docs/design-experiments/ente-design-system/figma-type-icons/README.md`). Review folder: `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\Figma type and icons 2026-11-07`. **Next:**
 > 1. The owner reviews the compare boards, the updated typography HTML, the icon board and the switch pairs.

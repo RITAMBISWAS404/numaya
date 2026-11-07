@@ -433,19 +433,36 @@ class SettingsScreen extends ConsumerWidget {
           ],
           ListGroup(
             title: l10n.settingsAbout,
-            children: [ListRow(label: l10n.settingsVersion(version))],
+            children: [
+              ListRow(
+                label: l10n.settingsVersion(version),
+                leading: NumayaIcons.info,
+              ),
+            ],
           ),
           const SizedBox(height: AppSpacing.sectionGap),
-          // V16 (screenshot 112): Log out and Delete account are white blocks on the page.
-          _ActionBlock(
-            label: l10n.settingsSignOut,
-            onTap: () => _logOut(context, ref),
+          // V16 (screenshot 112): Log out and Delete account are separate white blocks on the page.
+          // X15-I: each is the standard icon row, so its glyph lines up with every other row's.
+          ListGroup(
+            children: [
+              ListRow(
+                label: l10n.settingsSignOut,
+                leadingMobile: NumayaMobileIcons.logout,
+                showChevron: false,
+                onTap: () => _logOut(context, ref),
+              ),
+            ],
           ),
           const SizedBox(height: AppSpacing.sectionGap),
-          _ActionBlock(
-            label: l10n.settingsDelete,
-            danger: true,
-            onTap: () => context.push(Routes.deleteAccount),
+          ListGroup(
+            children: [
+              ListRow(
+                label: l10n.settingsDelete,
+                leading: NumayaIcons.trash,
+                danger: true,
+                onTap: () => context.push(Routes.deleteAccount),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(
@@ -474,42 +491,4 @@ Future<void> showLegalSheet(BuildContext context, String title) {
       style: AppTypography.body.copyWith(color: AppColors.textSecondary),
     ),
   );
-}
-
-class _ActionBlock extends StatelessWidget {
-  const _ActionBlock({
-    required this.label,
-    required this.onTap,
-    this.danger = false,
-  });
-
-  final String label;
-  final VoidCallback onTap;
-  final bool danger;
-
-  @override
-  Widget build(BuildContext context) {
-    return Pressable(
-      onTap: onTap,
-      semanticLabel: label,
-      excludeChildSemantics: true,
-      pressedScale: 0.99,
-      borderRadius: AppRadii.all(AppRadii.card),
-      child: Container(
-        width: double.infinity,
-        height: AppSizes.row,
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: AppRadii.all(AppRadii.card),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          label,
-          style: AppTypography.row.copyWith(
-            color: danger ? AppColors.negative : AppColors.ink,
-          ),
-        ),
-      ),
-    );
-  }
 }

@@ -260,7 +260,7 @@ class NumayaTopBar extends StatelessWidget {
                         child: ExcludeSemantics(
                           child: Text(
                             title!,
-                            style: AppTypography.headerCaps,
+                            style: AppTypography.appBarTitle,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),

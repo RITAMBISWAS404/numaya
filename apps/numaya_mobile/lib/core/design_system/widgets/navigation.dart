@@ -8,6 +8,7 @@ import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
+import '../icons/tabler_icons.dart' show NumayaMobileIcons;
 import '../tokens/monochrome_tokens.dart';
 import 'content.dart' show MetaText;
 import 'icon_tile.dart';
@@ -548,6 +549,7 @@ class ListRow extends StatelessWidget {
     this.tone = AccentTone.neutral,
     this.inlineIcon = false,
     this.avatar,
+    this.leadingMobile,
   });
 
   final String label;
@@ -559,6 +561,9 @@ class ListRow extends StatelessWidget {
   final bool danger;
   final bool? showChevron;
   final NumayaIcons? leading;
+
+  /// A mobile-only leading glyph ([NumayaMobileIcons]), drawn exactly like [leading].
+  final NumayaMobileIcons? leadingMobile;
 
   /// Kept for API compatibility: rows no longer colour their icon (CL-02). Tiles elsewhere
   /// (Profile's grid) still use [AccentTone].
@@ -572,7 +577,7 @@ class ListRow extends StatelessWidget {
   double get textInset => avatar != null
       ? (avatar is InitialsAvatar ? (avatar! as InitialsAvatar).size : 0) +
             AppLayout.tileLabelGap
-      : leading == null
+      : leading == null && leadingMobile == null
       ? 0
       : AppSizes.iconTile + AppLayout.tileLabelGap;
 
@@ -649,17 +654,27 @@ class ListRow extends StatelessWidget {
         if (avatar != null) ...[
           avatar!,
           const SizedBox(width: AppLayout.tileLabelGap),
-        ] else if (leading != null) ...[
-          // Ente Menu Item Icon (4055:5652): a 36pt slot, the glyph alone in text/light (no tile
-          // background), red on a destructive row.
+        ] else if (leading != null || leadingMobile != null) ...[
+          // Ente Menu Item Icon (4055:5652): a 36pt slot, the glyph alone (no tile background) in
+          // the supporting icon grey (X15-I), red on a destructive row to match its label.
           SizedBox.square(
             dimension: AppSizes.iconTile,
             child: Center(
-              child: NumayaIcon(
-                leading!,
-                size: AppSizes.iconMd,
-                color: danger ? AppColors.negative : AppColors.textMuted,
-              ),
+              child: leading != null
+                  ? NumayaIcon(
+                      leading!,
+                      size: AppSizes.iconMd,
+                      color: danger
+                          ? AppColors.negative
+                          : AppColors.iconSupporting,
+                    )
+                  : MobileIcon(
+                      leadingMobile!,
+                      size: AppSizes.iconMd,
+                      color: danger
+                          ? AppColors.negative
+                          : AppColors.iconSupporting,
+                    ),
             ),
           ),
           const SizedBox(width: AppLayout.tileLabelGap),
@@ -721,7 +736,7 @@ class ListRow extends StatelessWidget {
             child: NumayaIcon(
               NumayaIcons.chevronRight,
               size: AppSizes.iconLg,
-              color: AppColors.textMuted,
+              color: AppColors.iconSupporting,
             ),
           ),
       ],

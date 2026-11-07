@@ -26,9 +26,9 @@ void main() {
   }
 
   group('type roles', () {
-    test('the hierarchy steps down by purpose; body stays 14/20', () {
+    test('the hierarchy steps down by purpose; body is 15/20 (X15)', () {
       double line(TextStyle s) => s.fontSize! * s.height!;
-      expect(AppTypography.body.fontSize, 14);
+      expect(AppTypography.body.fontSize, 15);
       expect(line(AppTypography.body), 20);
       // Display-1 > Display-2 > Display-3/H1 > H2 > Large > Body > Mini (FT-01: metadata is
       // Ente's Mini 12/16, the same size as micro).
@@ -71,8 +71,9 @@ void main() {
         expect(s.fontFamily, AppTypography.family);
       }
       // FT-01: action labels are Ente's Body (500), as Button Large and Button Small specify.
-      expect(AppTypography.button.fontWeight, FontWeight.w500);
-      expect(AppTypography.buttonSm.fontWeight, FontWeight.w500);
+      // X15-H: action labels are SemiBold so they lead the 15pt body.
+      expect(AppTypography.button.fontWeight, FontWeight.w600);
+      expect(AppTypography.buttonSm.fontWeight, FontWeight.w600);
       expect(AppTypography.body.fontWeight, FontWeight.w500);
     });
 

@@ -243,10 +243,10 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
                 onChanged: widget.onChanged,
                 onSubmitted: widget.onSubmitted,
                 style:
-                    // Typed text is Ente Body (14/20) in every field; multi-line keeps a 22pt
+                    // Typed text is the 15/20 body in every field (X15); multi-line keeps a 22pt
                     // reading line.
                     (widget.multiline
-                            ? AppTypography.input.copyWith(height: 22 / 14)
+                            ? AppTypography.input.copyWith(height: 22 / 15)
                             : AppTypography.input)
                         .copyWith(
                           color: widget.enabled

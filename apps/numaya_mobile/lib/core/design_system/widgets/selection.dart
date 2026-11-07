@@ -341,7 +341,9 @@ class NumayaChip extends StatelessWidget {
             const SizedBox(width: AppSpacing.s2),
             NumayaIcon(
               selected ? NumayaIcons.close : NumayaIcons.plus,
-              size: selected ? 14 : 18,
+              // X15-I: one glyph size in both states, so the stroke weight doesn't jump when a
+              // chip is selected (was 14 for the close mark, 18 for the plus).
+              size: AppSizes.iconSm,
               color: selected
                   ? AppColors.inkForeground
                   : unavailable

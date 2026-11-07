@@ -19,7 +19,7 @@ void main() {
   }
 
   void expectBody(TextStyle s, String what) {
-    expect(s.fontSize, 14, reason: '$what: size');
+    expect(s.fontSize, 15, reason: '$what: size');
     expect(s.height! * s.fontSize!, closeTo(20, 0.001), reason: '$what: line');
     // Regression: the old 16/24 default must not come back through an override.
     expect(s.fontSize, isNot(16), reason: '$what: not the old 16');
@@ -27,7 +27,7 @@ void main() {
     expect(s.fontWeight, FontWeight.w500, reason: '$what: Figtree 500');
   }
 
-  group('TR-01: body copy is 14/20', () {
+  group('TR-01: body copy is 15/20 (X15)', () {
     test('the semantic body role', () {
       expectBody(AppTypography.body, 'AppTypography.body');
       expect(AppTypography.body.fontFamily, 'Figtree');
@@ -55,9 +55,9 @@ void main() {
         'That bakery on Columbia Road, right?',
         'Have you been?',
       ]) {
-        expect(resolved(tester, find.text(m)).fontSize, 14, reason: m);
+        expect(resolved(tester, find.text(m)).fontSize, 15, reason: m);
         expect(
-          resolved(tester, find.text(m)).height! * 14,
+          resolved(tester, find.text(m)).height! * 15,
           closeTo(20, 0.001),
           reason: m,
         );
@@ -79,8 +79,8 @@ void main() {
         ),
       );
       final s = resolved(tester, find.text('A short description.'));
-      expect(s.fontSize, 14);
-      expect(s.height! * 14, closeTo(20, 0.001));
+      expect(s.fontSize, 15);
+      expect(s.height! * 15, closeTo(20, 0.001));
     });
   });
 
@@ -117,7 +117,7 @@ void main() {
       );
     });
 
-    testWidgets('view tabs: Ente Tag Chip, Body 14/20 labels in a 44pt chip', (
+    testWidgets('view tabs: Ente Tag Chip, 15/20 body labels in a 44pt chip', (
       tester,
     ) async {
       await usePhoneSize(tester);
@@ -134,7 +134,7 @@ void main() {
           .toList();
       expect(styles, isNotEmpty);
       for (final s in styles) {
-        expect(s.fontSize, 14);
+        expect(s.fontSize, 15);
       }
       expect(
         tester.getSize(find.byType(ViewTabs).first).height,

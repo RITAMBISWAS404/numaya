@@ -1,5 +1,10 @@
 # Validation
 
+> **X15 experiment (2026-11-07):** `dart format` clean; `flutter analyze` no issues; `flutter test`
+> **507 passed, 21 skipped, 0 failed**; `sync_tabler_icons.py` run against the official 3.50.0 package
+> (110 files, content identical; `--check` flags CRLF only). Pixel 10 AVD before/after at font 1.0
+> (16 screens), 1.3 and 320dp (5 screens each); no clipping found.
+
 > **SW-01 off switch (2026-11-07):** `dart format` clean; `flutter analyze` no issues; `flutter test`
 > **506 passed, 21 skipped, 0 failed**. Pixel 10 AVD: Settings (Snooze, Incognito, notifications,
 > Simulate connection problems) and the Filters sheet, before and after; harness render of

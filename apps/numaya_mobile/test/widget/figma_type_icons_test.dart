@@ -51,31 +51,56 @@ void main() {
       'metricUnit': AppTypography.metricUnit,
     };
 
-    test(
-      'every shared role is an even size, and readable roles are at least 12',
-      () {
-        for (final e in roles.entries) {
-          final size = e.value.fontSize!;
-          expect(size % 2, 0, reason: '${e.key} is $size');
-          expect(size, greaterThanOrEqualTo(12), reason: e.key);
-        }
-      },
-    );
+    test('every shared role is even except the 15pt body tier (X15), and none is under 12', () {
+      for (final e in roles.entries) {
+        final size = e.value.fontSize!;
+        expect(
+          size % 2 == 0 || size == 15,
+          isTrue,
+          reason: '${e.key} is $size',
+        );
+        expect(size, greaterThanOrEqualTo(12), reason: e.key);
+      }
+      // X15: every former 14pt role is 15 and keeps its 20pt line.
+      for (final s in [
+        AppTypography.body,
+        AppTypography.bodySm,
+        AppTypography.row,
+        AppTypography.input,
+        AppTypography.button,
+        AppTypography.buttonSm,
+        AppTypography.label,
+        AppTypography.helper,
+        AppTypography.fieldLabel,
+        AppTypography.metricUnit,
+      ]) {
+        expect(s.fontSize, 15);
+        expect(s.fontSize! * s.height!, closeTo(20, 0.001));
+      }
+    });
 
     test('Ente measured sizes and weights (Text styles 10854:4420)', () {
       double line(TextStyle s) => s.fontSize! * s.height!;
-      // Mini 12/16 500 for metadata; Body 14/20 500 for helper sentences and buttons.
+      // Mini 12/16 500 for metadata; helper 15/20 500 (X15); buttons 15/20 600 (X15-H).
       expect(AppTypography.caption.fontSize, 12);
       expect(line(AppTypography.caption), 16);
       expect(AppTypography.caption.fontWeight, FontWeight.w500);
-      expect(AppTypography.helper.fontSize, 14);
-      expect(line(AppTypography.helper), 20);
-      expect(AppTypography.button.fontWeight, FontWeight.w500);
-      expect(AppTypography.buttonSm.fontWeight, FontWeight.w500);
+      expect(AppTypography.helper.fontSize, 15);
+      expect(line(AppTypography.helper), closeTo(20, 0.001));
+      expect(AppTypography.button.fontWeight, FontWeight.w600);
+      expect(AppTypography.buttonSm.fontWeight, FontWeight.w600);
       // The variable axis carries the same weight as FontWeight.
       expect(AppTypography.button.fontVariations, const [
-        FontVariation('wght', 500),
+        FontVariation('wght', 600),
       ]);
+      // X15-H: page and app-bar titles are Bold; the app-bar title is Ente's Display-3 size.
+      expect(AppTypography.appBarTitle.fontSize, 20);
+      expect(line(AppTypography.appBarTitle), closeTo(28, 0.001));
+      expect(AppTypography.appBarTitle.fontWeight, FontWeight.w700);
+      expect(AppTypography.appBarTitle.fontFamily, AppTypography.display);
+      expect(AppTypography.pageTitle.fontWeight, FontWeight.w700);
+      expect(AppTypography.section.fontWeight, FontWeight.w600);
+      expect(AppTypography.row.fontWeight, FontWeight.w500);
     });
 
     test('dynamic sizes round to even numbers', () {
@@ -97,7 +122,7 @@ void main() {
         final src = f.readAsStringSync();
         for (final m in literal.allMatches(src)) {
           final v = double.parse(m.group(1)!);
-          if (v % 2 != 0) odd.add('${f.path}: ${m.group(0)}');
+          if (v % 2 != 0 && v != 15) odd.add('${f.path}: ${m.group(0)}');
         }
         // A computed size must go through AppTypography.even, or be the Emoji's own parameter.
         for (final m in dynamicSize.allMatches(src)) {
@@ -107,7 +132,8 @@ void main() {
               .hasMatch(expr);
           if (isLiteral || isConditional) {
             for (final n in RegExp(r'\d+(?:\.\d+)?').allMatches(expr)) {
-              if (double.parse(n.group(0)!) % 2 != 0) {
+              final n2 = double.parse(n.group(0)!);
+              if (n2 % 2 != 0 && n2 != 15) {
                 odd.add('${f.path}: fontSize: $expr');
               }
             }
@@ -199,24 +225,33 @@ void main() {
         ),
       );
       final note = tester.widget<Text>(find.text('Snooze hides your profile.'));
-      expect(note.style!.fontSize, 14);
+      expect(note.style!.fontSize, 15);
       expect(note.style!.color, AppColors.textSecondary);
     });
   });
 
-  group('FT-03 Tabler outline strokes', () {
-    test('size classes: small 1, large 1.5, display 1; never above 1.5', () {
-      expect(tablerOutlineStroke(14), 1.0);
-      expect(tablerOutlineStroke(16), 1.0);
-      expect(tablerOutlineStroke(kTablerLargeMin), 1.5);
+  group('X15-I Tabler outline strokes', () {
+    test('1.5 up to 24pt, 1.25 for larger art; always within 1.25-1.5', () {
+      expect(tablerOutlineStroke(14), 1.5);
+      expect(tablerOutlineStroke(16), 1.5);
       expect(tablerOutlineStroke(AppSizes.iconMd), 1.5);
       expect(tablerOutlineStroke(AppSizes.iconLg), 1.5);
-      expect(tablerOutlineStroke(36), 1.0);
+      expect(tablerOutlineStroke(36), 1.25);
       for (var s = 8.0; s <= 64; s += 2) {
-        expect(tablerOutlineStroke(s), lessThanOrEqualTo(1.5));
-        // Rendered logical stroke never exceeds 2.67pt (64 at 1.0).
-        expect(tablerOutlineStroke(s) * s / 24, lessThanOrEqualTo(2.67));
+        expect(tablerOutlineStroke(s), inInclusiveRange(1.25, 1.5));
       }
+    });
+
+    test('supporting icons are the lighter control grey at 3:1 on cards and the page', () {
+      expect(AppColors.iconSupporting, const Color(0xFF8A8A8A));
+      expect(
+        ratio(AppColors.iconSupporting, AppColors.surface),
+        greaterThanOrEqualTo(3),
+      );
+      expect(
+        ratio(AppColors.iconSupporting, AppColors.canvas),
+        greaterThanOrEqualTo(3),
+      );
     });
 
     test(

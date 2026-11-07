@@ -879,10 +879,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       child: Text(
                         person.name,
                         overflow: TextOverflow.ellipsis,
-                        style: AppTypography.weight(
-                          AppTypography.row,
-                          AppTypography.semibold,
-                        ),
+                        // X15-H: the chat header is an app bar; its name takes the app-bar
+                        // title role like every other pushed page.
+                        style: AppTypography.appBarTitle,
                       ),
                     ),
                     if (person.verified) ...[

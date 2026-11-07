@@ -6,7 +6,7 @@ import 'numaya_icon_data.g.dart';
 ///   MIT; notice in `assets/icons/tabler/LICENSE`), copied unmodified into
 ///   `assets/icons/tabler/{outline,filled}/` by `tool/sync_tabler_icons.py`. Nothing is fetched at
 ///   runtime.
-/// - Outline glyphs are drawn with a stroke set by size role ([tablerOutlineStroke], FT-03), not
+/// - Outline glyphs are drawn with a stroke set by size role ([tablerOutlineStroke], X15-I), not
 ///   Tabler's shipped 2. The bundled files are unchanged; the shared renderer rewrites the root
 ///   `stroke-width` when it loads an outline asset. Filled artwork is never touched.
 /// - [NumayaIcon] tints with `BlendMode.srcIn`, so holes stay transparent and the silhouette is
@@ -162,7 +162,7 @@ const Map<NumayaIcons, TablerGlyph> kTablerIcons = {
 };
 
 /// Glyphs the mobile app needs beyond the shared web set.
-enum NumayaMobileIcons { video, play, stop, attach }
+enum NumayaMobileIcons { video, play, stop, attach, logout }
 
 /// Mobile-only glyphs, drawn with Tabler like [kTablerIcons].
 const Map<NumayaMobileIcons, TablerGlyph> kTablerMobileIcons = {
@@ -174,27 +174,20 @@ const Map<NumayaMobileIcons, TablerGlyph> kTablerMobileIcons = {
   NumayaMobileIcons.stop: (outline: 'player-stop', filled: 'player-stop'),
   // attach
   NumayaMobileIcons.attach: (outline: 'plus', filled: null),
+  // sign out (Settings)
+  NumayaMobileIcons.logout: (outline: 'logout', filled: null),
 };
 
-/// Outline stroke classes (FT-03, Figma type and icons pass 2026-11-07), in Tabler's 24 x 24
-/// viewBox units. The rendered stroke in logical pixels is `stroke * size / 24`.
-/// - **Small** (under 18pt: the 14 and 16 meta, chip and badge glyphs): 1.0, so 0.58-0.67pt.
-/// - **Large** (18-24pt: rows, buttons, headers, tabs, chevrons): 1.5, so 1.13-1.5pt.
-/// - **Display** (over 24pt: empty-state and placeholder art): 1.0, so 1.17-2.33pt. Ente's own
-///   Large (36) icon is drawn at 1.5px, which is 1.0 on a 24 grid; holding 1.5 here would draw
-///   36pt art at 2.25pt, heavier than any other glyph on screen.
-/// 1.5 is the maximum authored stroke. Ente's icons (Icons 4770:20086) keep a constant 1.5px
-/// stroke at every size; Numaya's small class is deliberately lighter, per the owner's brief.
-double tablerOutlineStroke(double size) {
-  if (size < kTablerLargeMin) return 1.0;
-  if (size <= kTablerLargeMax) return 1.5;
-  return 1.0;
-}
+/// Outline stroke policy (X15-I, 15px experiment 2026-11-07), in Tabler's 24 x 24 viewBox units;
+/// the rendered stroke in logical pixels is `stroke * size / 24`. The policy stays within
+/// 1.25-1.5 (supersedes FT-03's 1.0 small class, which drew 14-16pt glyphs at 0.58-0.67pt):
+/// - **Normal** (up to 24pt: meta, chips, rows, buttons, headers, tabs, chevrons): 1.5, so
+///   0.88pt at 14, 1.0 at 16, 1.13 at 18, 1.25 at 20 and 1.5 at 24.
+/// - **Light** (over 24pt: empty-state and placeholder art): 1.25, so 1.5pt at 28.8 and 1.88 at 36.
+///   Art is drawn large, so the lighter source stroke keeps it from out-weighing the text.
+double tablerOutlineStroke(double size) => size <= kTablerLargeMax ? 1.5 : 1.25;
 
-/// The smallest size in the large stroke class (Ente's Small icon, 18).
-const double kTablerLargeMin = 18;
-
-/// The largest size in the large stroke class (Ente's Medium icon, 24).
+/// The largest size drawn at the normal 1.5 stroke (Ente's Medium icon, 24); larger art is light.
 const double kTablerLargeMax = 24;
 
 /// Rewrites the root `stroke-width` of a Tabler outline SVG. Tabler outline files declare the

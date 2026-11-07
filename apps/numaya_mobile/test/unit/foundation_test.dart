@@ -89,7 +89,7 @@ void main() {
       // Ente text styles: Display-1 32/40, Display-2 24/32, Display-3 / H1 20/28, H2 18/24.
       expect(AppTypography.hero.fontSize, 32);
       expect(AppTypography.pageTitle.fontSize, 24);
-      expect(AppTypography.pageTitle.fontWeight, FontWeight.w600);
+      expect(AppTypography.pageTitle.fontWeight, FontWeight.w700); // X15-H
       expect(AppTypography.flowTitle.fontSize, 24);
       expect(AppTypography.headline.fontSize, 24);
       expect(AppTypography.card.fontSize, 18);
@@ -101,12 +101,12 @@ void main() {
       expect(AppTypography.labelCaps.fontSize, 12);
       // Ente Body 14/20 medium for body, typing and buttons (FT-01); metadata is Ente's Mini
       // 12/16, under the body.
-      expect(AppTypography.body.fontSize, 14);
+      expect(AppTypography.body.fontSize, 15);
       expect(AppTypography.body.height! * AppTypography.body.fontSize!, 20);
       expect(AppTypography.body.fontWeight, FontWeight.w500);
-      expect(AppTypography.input.fontSize, 14);
-      expect(AppTypography.button.fontSize, 14);
-      expect(AppTypography.button.fontWeight, FontWeight.w500);
+      expect(AppTypography.input.fontSize, 15);
+      expect(AppTypography.button.fontSize, 15);
+      expect(AppTypography.button.fontWeight, FontWeight.w600);
       expect(AppTypography.caption.fontSize, 12);
       expect(
         AppTypography.caption.height! * AppTypography.caption.fontSize!,

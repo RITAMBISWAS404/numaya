@@ -16,7 +16,6 @@ export 'icons/tabler_icons.dart'
         kTablerIcons,
         kTablerMobileIcons,
         kTablerLargeMax,
-        kTablerLargeMin,
         tablerAsset,
         tablerOutlineStroke,
         withTablerStroke;

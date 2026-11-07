@@ -122,6 +122,11 @@ abstract final class AppColors {
   static const Color textSecondary = _M.muted;
   static const Color textMuted = textSecondary;
 
+  /// Supporting icons (X15-I): list-row leading glyphs and row chevrons, the control grey #8A8A8A
+  /// (3.45:1 on white cards, 3.14:1 on the page; meaningful graphics need 3:1). One step lighter
+  /// than the #666 supporting text, so the row's words lead. Not for icons on the #EAEAEA fill.
+  static const Color iconSupporting = _M.iconInactive;
+
   /// Strong neutral icon ink (#1A1A1A): the selected tab glyph and idle tab icons on the bar.
   /// Over a dark photo the bar's idle icons need more than the grey's 3.38:1.
   static const Color iconStrong = _M.text2;

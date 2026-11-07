@@ -1,5 +1,15 @@
 # Current state
 
+> **15px type and icon experiment X15 (2026-11-07), awaiting owner approval, not integrated:** branch
+> `experiment/numaya-15px-icons-20261107`, started from `7eae060` (the approved working line is still
+> `experiment/numaya-figma-type-icons-20261107`; switch back to it to revert).
+> - Every 14pt text role is 15 (line height kept at 20); app-bar titles use a new `appBarTitle`
+>   (Plus Jakarta Sans 20/28 700); page titles 700; buttons 15/600.
+> - Tabler outline stroke 1.5 up to 24pt, 1.25 above; row icons and chevrons `iconSupporting` #8A8A8A;
+>   Settings gains Version, Sign out (new `logout`) and Delete account icon rows.
+> - Tests 507 passed, 21 skipped. Record: `docs/design-experiments/ente-design-system/x15-type-icons/README.md`. Before/after: `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\15px icon experiment 2026-11-07`.
+
+
 > **Switch off state SW-01 (2026-11-07, owner decision):** the enabled off track is solid #D6D6D6
 > (`MonoColors.switchOff` → `AppColors.switchOff`) with no border or stroke; white thumb, on state,
 > 45% disabled opacity and the row's focus ring and toggled semantics unchanged. Supersedes FT-04's

@@ -130,7 +130,8 @@ abstract final class MonoType {
   static const bool body14 = scale != 'base';
 
   /// The semantic default body role (`AppTypography.body`).
-  static const double bodySize = body14 ? 14 : 16;
+  // X15 (15px experiment, 2026-11-07): the default body is 15/20 (was 14/20); `base` keeps 16/24.
+  static const double bodySize = body14 ? 15 : 16;
   static const double bodyLine = body14 ? 20 : 24;
 }
 

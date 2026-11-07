@@ -1,5 +1,13 @@
 # Work log
 
+## 2026-11-07 · 15px type and icon experiment X15 (Windows, Claude desktop)
+- New branch `experiment/numaya-15px-icons-20261107` from `7eae060` (clean, on origin).
+- Re-read Ente Header v2 (`11439:5040`) live for the app-bar title size.
+- 14 → 15 for body, bodySm, row, input, buttons, label, helper, fieldLabel, metricUnit (line 20 kept; multi-line input `22 / 15`).
+- New `appBarTitle` (PJS 20/28 700) for the top bar and chat header; page titles 700; buttons 600.
+- Icons: stroke 1.5 (≤24pt) / 1.25 (>24pt); `iconSupporting` #8A8A8A for row icons and chevrons; chip glyph one size (16); Settings Version, Sign out (`logout`, synced from `@tabler/icons@3.50.0`) and Delete account icon rows.
+- Seven tests updated to the experiment's values; device before/after at 1.0, 1.3 and 320dp in `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\15px icon experiment 2026-11-07`.
+
 ## 2026-11-07 · Switch off state #D6D6D6 (SW-01)
 - Owner direction: enabled off track #D6D6D6, no border or stroke; keep the white thumb and the on state.
 - New `MonoColors.switchOff`; `AppColors.switchOff` points at it; `switchOffEdge` and the switch border removed (knob inset back to 2pt padding). `NumayaSwitch` is the only switch and `ListRow` its only consumer (Settings visibility, notifications, privacy and app rows; Filters sheet; Design Lab), so there were no per-screen overrides to remove.

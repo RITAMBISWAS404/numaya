@@ -319,7 +319,10 @@ void main() {
       // Ente Menu Item Icon: a plain glyph in text/light in a 36pt slot, no tile behind it.
       expect(find.byType(IconTile), findsNothing);
       final icon = tester.widget<NumayaIcon>(find.byType(NumayaIcon));
-      expect(icon.color, AppColors.textMuted);
+      expect(
+        icon.color,
+        AppColors.iconSupporting,
+      ); // X15-I: the lighter supporting grey
       expect(icon.size, AppSizes.iconMd);
       // The text starts after the list-card inset (UI-044: 16pt), the 36pt slot and its gap.
       final row = tester.getTopLeft(find.byType(ListRow));

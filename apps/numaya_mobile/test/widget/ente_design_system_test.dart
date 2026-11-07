@@ -52,9 +52,9 @@ void main() {
     );
     expect((box.decoration! as BoxDecoration).borderRadius, AppRadii.all(20));
     final label = tester.widget<Text>(find.text('Save')).style!;
-    expect(label.fontSize, 14);
+    expect(label.fontSize, 15);
     // FT-01: Ente Button Large (2207:41759) labels are Body, 14/20 medium.
-    expect(label.fontWeight, FontWeight.w500);
+    expect(label.fontWeight, FontWeight.w600); // X15-H
   });
 
   testWidgets('inner pages use Ente Header (v2): bare back arrow, title left', (

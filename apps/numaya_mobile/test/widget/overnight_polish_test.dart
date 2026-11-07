@@ -21,13 +21,13 @@ void main() {
   }
 
   group('OP-01 to OP-03: type roles', () {
-    test('the semantic body is 14/20; rows and typing use Ente Body too', () {
+    test('the semantic body is 15/20 (X15); rows and typing match it', () {
       expect(MonoType.scale, 'body14');
-      expect(AppTypography.body.fontSize, 14);
-      expect(AppTypography.body.height! * 14, closeTo(20, 0.001));
+      expect(AppTypography.body.fontSize, 15);
+      expect(AppTypography.body.height! * 15, closeTo(20, 0.001));
       // Ente experiment: Menu Item titles and Text Input values are Body 14/20.
-      expect(AppTypography.row.fontSize, 14);
-      expect(AppTypography.input.fontSize, 14);
+      expect(AppTypography.row.fontSize, 15);
+      expect(AppTypography.input.fontSize, 15);
     });
 
     testWidgets('option rows use the row role, not the reading body', (
