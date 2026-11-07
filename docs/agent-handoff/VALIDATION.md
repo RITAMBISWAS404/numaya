@@ -1,5 +1,10 @@
 # Validation
 
+> **SW-01 off switch (2026-11-07):** `dart format` clean; `flutter analyze` no issues; `flutter test`
+> **506 passed, 21 skipped, 0 failed**. Pixel 10 AVD: Settings (Snooze, Incognito, notifications,
+> Simulate connection problems) and the Filters sheet, before and after; harness render of
+> off/on/disabled on a white card and on the grey page at DPR 2.625.
+
 > **Local demo photos (2026-11-07):** `flutter analyze` no issues; `dart format` clean;
 > `flutter test` **506 passed, 21 skipped, 0 failed** (+4 in `demo_photos_test`; the suite runs with
 > no photo set loaded). Debug APK with the local set installed on the Pixel 10 AVD (`-r`, data

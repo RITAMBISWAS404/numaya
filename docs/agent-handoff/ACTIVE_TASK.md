@@ -9,6 +9,8 @@
 > 5. Judge the UI with the local demo photos (see CURRENT_STATE "Demo photos"; the photos are
 >    git-ignored and must be copied and installed on each machine).
 >
+> 6. Review the SW-01 off-switch contrast flag (#D6D6D6: 1.45:1 on white, 1.32:1 on the page).
+>
 > Still pending: the EXP-001–004 choices, the UI-001 artwork and the UI-008 phrase.
 
 

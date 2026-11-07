@@ -38,6 +38,11 @@ abstract final class MonoColors {
   /// Dashed add slots, grabber, decorative strong lines (not a control boundary).
   static const Color lineStrong = Color(0xFFD2D2D2);
 
+  /// Enabled off-switch track (SW-01, owner decision 2026-11-07): Ente's `text/lightest` grey,
+  /// solid, with no outline. 1.45:1 against a white card and 1.32:1 against the #F4F4F4 page,
+  /// under the 3:1 non-text target; recorded for owner review, not compensated.
+  static const Color switchOff = Color(0xFFD6D6D6);
+
   /// Control boundaries that must meet 3:1: fields, unselected radios and checkboxes (3.38:1 on
   /// white, 3.07:1 on the canvas).
   static const Color outline = Color(0xFF8A8A8A);

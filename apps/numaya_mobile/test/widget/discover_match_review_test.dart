@@ -352,35 +352,34 @@ void main() {
       },
     );
 
-    testWidgets('switch off: light track with a grey edge; on stays purple', (
-      tester,
-    ) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Column(
-            children: [
-              NumayaSwitch(value: false, onChanged: _noop),
-              NumayaSwitch(value: true, onChanged: _noop),
-            ],
-          ),
-        ),
-      );
-      final tracks = tester
-          .widgetList<AnimatedContainer>(
-            find.descendant(
-              of: find.byType(NumayaSwitch),
-              matching: find.byType(AnimatedContainer),
+    testWidgets(
+      'switch off: solid #D6D6D6 track, no outline; on stays purple',
+      (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Column(
+              children: [
+                NumayaSwitch(value: false, onChanged: _noop),
+                NumayaSwitch(value: true, onChanged: _noop),
+              ],
             ),
-          )
-          .map((a) => a.decoration! as BoxDecoration)
-          .toList();
-      expect(
-        tracks[0].color,
-        AppColors.switchOff,
-      ); // FT-04: Ente's fill/dark track
-      expect((tracks[0].border! as Border).top.color, AppColors.switchOffEdge);
-      expect(tracks[1].color, AppColors.accent);
-    });
+          ),
+        );
+        final tracks = tester
+            .widgetList<AnimatedContainer>(
+              find.descendant(
+                of: find.byType(NumayaSwitch),
+                matching: find.byType(AnimatedContainer),
+              ),
+            )
+            .map((a) => a.decoration! as BoxDecoration)
+            .toList();
+        expect(tracks[0].color, AppColors.switchOff); // SW-01: solid #D6D6D6
+        expect(tracks[0].border, isNull);
+        expect(tracks[1].color, AppColors.accent);
+        expect(tracks[1].border, isNull);
+      },
+    );
   });
 
   group('Navigation (UC-03 stadium bar; supersedes the Tabler MVP and UI-026/027 geometry)', () {

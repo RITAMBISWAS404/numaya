@@ -1,5 +1,13 @@
 # Current state
 
+> **Switch off state SW-01 (2026-11-07, owner decision):** the enabled off track is solid #D6D6D6
+> (`MonoColors.switchOff` → `AppColors.switchOff`) with no border or stroke; white thumb, on state,
+> 45% disabled opacity and the row's focus ring and toggled semantics unchanged. Supersedes FT-04's
+> #EAEAEA track with a #8A8A8A edge (`switchOffEdge` removed). **Contrast flag for owner review:**
+> #D6D6D6 is 1.45:1 on a white card (and against the white thumb) and 1.32:1 on the #F4F4F4 page,
+> under the 3:1 non-text target; no border was added. Before/after: `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\Switch off D6D6D6 2026-11-07`.
+
+
 > **Demo photos (2026-11-07, Windows):** on `experiment/numaya-figma-type-icons-20261107`, the local demo photo set. Real reference photos (one person, 13 JPEGs) now fill every demo
 > photo surface: Discover cards and galleries, the photo viewer, Likes tiles, new-match tiles,
 > conversation and chat-header avatars, the match screen, For you thumbnails, Alex's own profile,

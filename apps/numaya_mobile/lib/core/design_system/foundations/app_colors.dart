@@ -35,17 +35,12 @@ abstract final class AppColors {
   /// white cards and the grey page without a second colour.
   static Color tintBorder(Color hue) => hue.withValues(alpha: 0.15);
 
-  /// Off switch track (FT-04, Figma type and icons pass 2026-11-07): the light neutral [fill]
-  /// (#EAEAEA), the colour Ente's Toggle Switch component specifies for Selected=False
-  /// ("fill/dark track", 2482:6644; its exported artwork draws #969696). It replaces UC-01's
-  /// #8A8A8A, which read as a dark grey slab. On its own the light track is only 1.20:1 on white
-  /// and 1.10:1 on the #F4F4F4 page, so the off track also takes [switchOffEdge].
-  static const Color switchOff = _M.fill;
-
-  /// The off track's 1pt edge: the control grey (#8A8A8A) that unselected radio and checkbox
-  /// rings use, 3.45:1 on white and 3.14:1 on the page, so an off switch keeps a visible boundary
-  /// (WCAG 1.4.11) and reads as the same family as the other unselected controls.
-  static const Color switchOffEdge = _M.outline;
+  /// Enabled off-switch track (SW-01, owner decision 2026-11-07): solid #D6D6D6 with no border or
+  /// stroke, a white thumb. Replaces FT-04's #EAEAEA track with a #8A8A8A edge. Measured contrast:
+  /// 1.45:1 on a white card (and against the white thumb), 1.32:1 on the #F4F4F4 page; below the
+  /// 3:1 non-text target (WCAG 1.4.11). Flagged for owner review; no border is added to make up
+  /// for it. State is also carried by thumb position and the row's toggled semantics.
+  static const Color switchOff = _M.switchOff;
 
   /// Filled fields and filled secondary buttons.
   static const Color field = _M.field;

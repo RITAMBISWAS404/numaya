@@ -1,5 +1,11 @@
 # Work log
 
+## 2026-11-07 · Switch off state #D6D6D6 (SW-01)
+- Owner direction: enabled off track #D6D6D6, no border or stroke; keep the white thumb and the on state.
+- New `MonoColors.switchOff`; `AppColors.switchOff` points at it; `switchOffEdge` and the switch border removed (knob inset back to 2pt padding). `NumayaSwitch` is the only switch and `ListRow` its only consumer (Settings visibility, notifications, privacy and app rows; Filters sheet; Design Lab), so there were no per-screen overrides to remove.
+- Measured: 1.45:1 on white, 1.32:1 on #F4F4F4, 1.21:1 on #EAEAEA, 3.37:1 against the brand on-track. Flagged, not compensated.
+- Tests `component_cleanup_test` and `discover_match_review_test` now pin the colour, no border, and the measured ratios. Device before/after and a harness render on the grey page in `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\Switch off D6D6D6 2026-11-07`.
+
 ## 2026-11-07 · Local demo photos (Windows, Claude desktop)
 - Populated the demo UI with the owner's local reference photos (`tarini pics`, 13 portrait JPEGs of one person): 5 chosen as portraits (main photo, avatar, thumbnail), 8 as gallery scenes; the one with burned-in text is last in the rotation.
 - New `tool/install_demo_photos.py` (copies originals unchanged as `photo_NN.jpg`, writes square face crops and `demo_photos.json`) and `lib/core/media/demo_photos.dart` (`DemoPhotoLibrary`).

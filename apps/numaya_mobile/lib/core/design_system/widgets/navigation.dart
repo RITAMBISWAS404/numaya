@@ -481,8 +481,8 @@ class NumayaTabBar extends StatelessWidget {
 }
 
 /// Ente Toggle Switch (2482:6644) at 1.5x its 31 x 18 drawing (46 x 27, a Numaya extension so the
-/// knob reads on a phone). On: Numaya purple (Ente's primary) with a white knob. Off (UI-025): a
-/// solid grey track with a white knob and no outline, as Ente's Selected=False (2482:6647).
+/// knob reads on a phone). On: Numaya purple (Ente's primary) with a white knob. Off (SW-01): a
+/// solid #D6D6D6 track with a white knob and no outline.
 class NumayaSwitch extends StatelessWidget {
   const NumayaSwitch({super.key, required this.value, required this.onChanged});
 
@@ -491,8 +491,8 @@ class NumayaSwitch extends StatelessWidget {
 
   /// Component cleanup (CL-01). States, resolved here so every switch matches:
   /// - **on:** brand track, white thumb with a soft shadow;
-  /// - **off** (UC-01, 2026-11-07): Ente's solid grey track (`switchOff`, 3:1 on white and on the
-  ///   grey page) with a plain white knob and no outline on either;
+  /// - **off** (SW-01, 2026-11-07): a solid #D6D6D6 track (`switchOff`) with a plain white knob
+  ///   and no border or stroke on either (1.45:1 on white, 1.32:1 on the page; flagged for review);
   /// - **disabled** (`onChanged == null`): the same shape at 45% opacity;
   /// - **pressed and focused:** owned by the row around the switch (`ListRow`/`Pressable`
   ///   press scale and focus ring), so the whole row is the hit area.
@@ -505,20 +505,11 @@ class NumayaSwitch extends StatelessWidget {
       duration: duration,
       width: AppSizes.switchWidth,
       height: AppSizes.switchHeight,
-      // 1pt of padding plus the 1pt edge (which Container adds to its padding) keeps the knob
-      // 2pt in from the track, as before.
-      padding: const EdgeInsets.all(2 - AppBorders.hairline),
+      padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        // FT-04: off is Ente's light fill track (2482:6644, "fill/dark") with a 1pt control-grey
-        // edge drawn inside it, so the boundary keeps 3:1 on white cards and the grey page. On
-        // keeps the brand track with no edge.
+        // SW-01: off is a solid #D6D6D6 track, on the brand track; neither has a border.
         color: value ? AppColors.accent : AppColors.switchOff,
         borderRadius: AppRadii.all(AppRadii.pill),
-        border: Border.all(
-          color: value ? AppColors.accent : AppColors.switchOffEdge,
-          width: AppBorders.hairline,
-          strokeAlign: BorderSide.strokeAlignInside,
-        ),
       ),
       child: AnimatedAlign(
         duration: duration,
