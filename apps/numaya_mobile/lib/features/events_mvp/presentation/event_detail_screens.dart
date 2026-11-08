@@ -582,7 +582,8 @@ class ReservationScreen extends ConsumerWidget {
           NumayaButton(
             key: const ValueKey('ev-cancel-confirm'),
             label: l10n.evCancel,
-            variant: NumayaButtonVariant.secondary,
+            // Ente yes/no sheet: the main action on top, Critical for a removal (EA-B02).
+            variant: NumayaButtonVariant.destructiveSolid,
             onPressed: () => Navigator.of(sheet).pop(true),
           ),
           const SizedBox(height: AppSpacing.s3),

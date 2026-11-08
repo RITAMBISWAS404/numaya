@@ -16,7 +16,7 @@ printf 'file\tinteraction\tmotion\n' > "$OUT/clips.tsv"
 clear_anr() {
   if "$ADB" -s "$DEVICE" shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1 &&
     "$ADB" -s "$DEVICE" shell cat /sdcard/ui.xml | grep -q aerr_wait; then
-    b=$("$ADB" -s "$DEVICE" shell cat /sdcard/ui.xml | grep -o 'aerr_wait[^>]*bounds="\[[0-9]*,[0-9]*\]\[[0-9]*,[0-9]*\]"' | grep -o '\[[0-9,]*\]\[[0-9,]*\]' | tr -d '[]' | tr ',' ' ')
+    b=$("$ADB" -s "$DEVICE" shell cat /sdcard/ui.xml | grep -o 'aerr_wait[^>]*bounds="\[[0-9]*,[0-9]*\]\[[0-9]*,[0-9]*\]"' | grep -o '\[[0-9,]*\]\[[0-9,]*\]' | sed 's/[^0-9]/ /g')
     set -- $b
     [ $# -eq 4 ] && "$ADB" -s "$DEVICE" shell input tap $(( ($1 + $3) / 2 )) $(( ($2 + $4) / 2 ))
     echo "@@ANR@@ dismissed before capture" >> "$OUT/skipped.txt"

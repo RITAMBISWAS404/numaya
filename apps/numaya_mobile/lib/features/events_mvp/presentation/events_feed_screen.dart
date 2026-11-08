@@ -162,23 +162,21 @@ class EventsFeedScreen extends ConsumerWidget {
         ];
       case 'B':
         return [
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            clipBehavior: Clip.none,
-            child: Row(
-              children: [
-                cityChip,
-                const SizedBox(width: AppSpacing.s2),
-                for (final f in EvDateFilter.values) ...[
-                  NumayaChip(
-                    label: dateLabels[f.index],
-                    selected: s.dateFilter == f,
-                    onTap: () => c.setDateFilter(f),
-                  ),
-                  const SizedBox(width: AppSpacing.s2),
-                ],
-              ],
-            ),
+          Row(
+            children: [
+              cityChip,
+              const SizedBox(width: AppSpacing.s2),
+              Expanded(
+                child: ViewTabs(
+                  label: l10n.evDateAny,
+                  selected: s.dateFilter.index,
+                  onSelect: (i) => c.setDateFilter(EvDateFilter.values[i]),
+                  options: [
+                    for (final d in dateLabels) (label: d, count: null),
+                  ],
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: AppSpacing.s2),
           categoryTabs,

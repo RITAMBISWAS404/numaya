@@ -31,6 +31,7 @@ import '../features/events_mvp/presentation/proposal_staff_screens.dart';
 import '../features/experiments/experiment_lab_screen.dart';
 import '../features/help/presentation/help_screens.dart';
 import '../features/home/presentation/home_shell.dart';
+import '../features/lab/semantic_specimen_screen.dart';
 import '../features/lab/visual_lab_screen.dart';
 import '../features/matches/presentation/lifecycle_screens.dart';
 import '../features/onboarding/application/onboarding_controller.dart';
@@ -492,6 +493,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       _route(
         path: Routes.visualLab,
         builder: (_, _) => const VisualLabScreen(),
+      ),
+      _route(
+        path: Routes.visualLabSpecimen,
+        builder: (_, _) => const SemanticSpecimenScreen(),
       ),
       _route(
         path: '${Routes.visualLabPreview}/:group',

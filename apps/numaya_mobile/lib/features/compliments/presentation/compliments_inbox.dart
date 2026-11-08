@@ -93,6 +93,7 @@ Future<bool> confirmComplimentDismiss(
         NumayaButton(
           key: const ValueKey('dismiss-confirm'),
           label: l10n.requestDismiss,
+          variant: NumayaButtonVariant.destructiveSolid,
           onPressed: () => Navigator.of(sheet).pop(true),
         ),
         const SizedBox(height: AppSpacing.s3),

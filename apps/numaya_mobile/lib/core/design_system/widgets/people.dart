@@ -234,6 +234,12 @@ enum BadgeTone {
 
   /// On the dark photo band: translucent white text pill.
   onDark,
+
+  /// Ente alignment V3 semantic statuses: the subtle tint with the derived text role (4.99:1 or
+  /// better). Pair with a filled icon or a word that states the status; colour is never alone.
+  success,
+  warning,
+  error,
 }
 
 /// Status label (`.theme-withings .badge`).
@@ -272,6 +278,21 @@ class StatusBadge extends StatelessWidget {
       BadgeTone.onDark => (
         const Color(0x33FFFFFF),
         AppColors.inkForeground,
+        AppTypography.semibold,
+      ),
+      BadgeTone.success => (
+        AppColors.successTint,
+        AppColors.success,
+        AppTypography.semibold,
+      ),
+      BadgeTone.warning => (
+        AppColors.warningTint,
+        AppColors.warning,
+        AppTypography.semibold,
+      ),
+      BadgeTone.error => (
+        AppColors.dangerTint,
+        AppColors.danger,
         AppTypography.semibold,
       ),
     };

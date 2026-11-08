@@ -141,6 +141,7 @@ abstract final class Routes {
   /// DEVELOPMENT ONLY. Visual Lab V2 Design Lab and its per-family previews.
   static const visualLab = '/visual-lab';
   static const visualLabPreview = '/visual-lab/preview';
+  static const visualLabSpecimen = '/visual-lab/specimen';
 
   /// Full-screen dating routes, outside the tab shell; each takes a sample person id.
   static const like = '/like';

@@ -111,6 +111,10 @@ void main() {
           'plan-card': Routes.paywall,
           'status-banner': '${Routes.chat}/rafa',
           'empty-state': '${Routes.likes}?tab=compliments',
+          'ea-event-card': Routes.events,
+          'ea-event-filters': Routes.events,
+          'ea-event-action': '${Routes.evEvent}/ev-board-games-bandra',
+          'ea-met-card': '${Routes.evMet}/ev-book-swap',
         };
         await usePhoneSize(tester, size: const Size(320, 568));
         tester.platformDispatcher.textScaleFactorTestValue = 2;

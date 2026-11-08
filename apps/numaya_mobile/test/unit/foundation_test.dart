@@ -126,7 +126,8 @@ void main() {
       expect(AppRadii.card, 20);
       expect(AppRadii.heroCard, 24);
       expect(AppRadii.photo, 16); // nested: hero 24 minus its 8pt inset
-      expect(AppRadii.sheet, 24);
+      // Ente alignment V3 (EA-S01): sheet corners are radius/xl 20, as Ente's rules state.
+      expect(AppRadii.sheet, 20);
       expect(AppRadii.iconButton, 12);
       // Button Large 52, Text Input 52, Menu Item 60, Icon Button 38; the nav bar is the UC-03
       // stadium: 8 + 48pt items + 8 = 64 tall.
