@@ -1,5 +1,13 @@
 # Current state
 
+> **Backup checkpoint (2026-11-08):** branch `experiment/numaya-visual-lab-20261108` pushed and verified;
+> baseline tag `checkpoint/pre-visual-lab-20261108` pushed. Moving machines: follow
+> [NEW_MACHINE_SETUP.md](NEW_MACHINE_SETUP.md). **Private reference photos moved:** the originals and
+> `numaya_demo_photos.json` are now in `<repo>\pics\` (git-ignored); `tarini pics\` is empty. They, the
+> APKs and the screenshot galleries (all of which show those photos) are **not** on GitHub (public repo)
+> and need a separate private backup. Visual Lab V2 is complete; the next action is the owner's gallery
+> selection (ACTIVE_TASK).
+
 > **Visual Lab V2 (2026-11-08):** branch **`experiment/numaya-visual-lab-20261108`** from `0df9ec3`
 > (MVP PRD v1 head; tag `checkpoint/pre-visual-lab-20261108`, pushed). App code for screenshots, clips
 > and APK: **`8510778`**; later commits are docs only. Implements the owner's `NUMAYA_VISUAL_LAB_V2`
