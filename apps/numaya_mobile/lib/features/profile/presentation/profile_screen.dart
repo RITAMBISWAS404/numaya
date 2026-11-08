@@ -13,15 +13,15 @@ import '../../commerce/application/economy_controller.dart';
 import '../../commerce/presentation/wallet_screen.dart';
 import '../../health/application/health_providers.dart';
 import '../../home/presentation/large_title_page.dart';
-import '../../lab/lab_banners.dart';
-import 'profile_setup_card.dart';
 import '../../lab/activity_cards.dart';
+import '../../lab/lab_banners.dart';
 import '../../lab/lab_registry.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../verification/application/verification_controller.dart';
 import '../application/profile_details_controller.dart';
 import 'profile_header_more.dart';
+import 'profile_setup_card.dart';
 import 'profile_variants.dart';
 
 /// B-23 Profile tab: the summary card (UI-042: a large round photo over the card, name,

@@ -8,9 +8,9 @@ import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/commerce/application/economy_controller.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 import 'package:numaya_mobile/features/health/application/health_providers.dart';
-import 'package:numaya_mobile/features/insights/presentation/insight_cards.dart';
 import 'package:numaya_mobile/features/premium/application/premium_controller.dart';
 import 'package:numaya_mobile/features/profile/application/profile_details_controller.dart';
+import 'package:numaya_mobile/features/profile/presentation/profile_setup_card.dart';
 import 'package:numaya_mobile/features/verification/application/verification_controller.dart';
 
 import '../helpers/journeys.dart';

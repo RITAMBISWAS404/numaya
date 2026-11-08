@@ -309,6 +309,7 @@ class _RequestScreenState extends ConsumerState<RequestScreen> {
           ),
           const SizedBox(height: AppSpacing.s5),
           NumayaButton(
+            key: const ValueKey('dismiss-confirm'),
             label: l10n.requestDismiss,
             onPressed: () => Navigator.of(sheet).pop(true),
           ),

@@ -586,8 +586,9 @@ const List<LabGroup> kLabGroups = [
     variants: _directions,
     requires: {
       'A': ['profile-setup:D'],
+      // profile-header D (the Insights header) was removed with Insights (H-13); C keeps A.
       'C': [
-        'profile-header:D',
+        'profile-header:A',
         'streak-card:B',
         'wallet-card:A',
         'profile-setup:A',

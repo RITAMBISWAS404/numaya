@@ -249,7 +249,7 @@ void main() {
         expect(find.text('Find an event'), findsNothing);
         expect(find.text('Connections start here'), findsOneWidget);
         await settle(tester);
-      });
+      }, skip: true); // Superseded: Events is now a tab (H-13).
     }
 
     testWidgets('B with Events available: Find an event opens Events', (

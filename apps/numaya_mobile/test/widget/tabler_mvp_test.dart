@@ -63,24 +63,26 @@ void main() {
 
   group('Navigation', () {
     testWidgets(
-      'four destinations; selected is filled near-black on a light tile, announced as selected',
+      'five destinations (Events MVP); selected is filled near-black on a light tile, announced as selected',
       (tester) async {
         await usePhoneSize(tester);
         final handle = tester.ensureSemantics();
         final c = await quickStartApp(tester);
         await goTo(c, tester, Routes.home);
         final bar = find.byType(NumayaTabBar);
-        for (final label in ['Home', 'Likes', 'Messages', 'Profile']) {
+        for (final label in [
+          'Home',
+          'Likes',
+          'Messages',
+          'Events',
+          'Profile',
+        ]) {
           expect(
             find.descendant(of: bar, matching: find.byTooltip(label)),
             findsOneWidget,
             reason: label,
           );
         }
-        expect(
-          find.descendant(of: bar, matching: find.byTooltip('Events')),
-          findsNothing,
-        );
         // Discover (labelled Home) is announced as a selected button: the selected flag sits on
         // the tab's own Semantics node, as on the V4 baseline.
         final home = find.ancestor(
@@ -100,7 +102,10 @@ void main() {
               find.descendant(of: bar, matching: find.byType(NumayaIcon)),
             )
             .toList();
-        expect([for (final i in icons) i.filled], [false, false, false, true]);
+        expect(
+          [for (final i in icons) i.filled],
+          [false, false, false, false, true],
+        );
         expect(icons.last.color, AppColors.iconSelected);
         expect(icons.first.color, AppColors.iconInactive);
         handle.dispose();
@@ -281,7 +286,7 @@ void main() {
     });
   });
 
-  group('Events is unavailable in the MVP', () {
+  group('Events is unavailable in the MVP', skip: 'Superseded: Events MVP replaces Health/Insights (H-13); old event routes redirect to /events', () {
     for (final path in [
       Routes.events,
       '${Routes.events}?view=mine',

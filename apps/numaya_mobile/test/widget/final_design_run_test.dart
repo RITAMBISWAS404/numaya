@@ -121,7 +121,7 @@ void main() {
         AppLayout.headerActionGap,
       );
       await settle(tester);
-    });
+    }, skip: true); // Superseded: old Event detail removed; Events MVP detail is covered in events_mvp_test.
 
     testWidgets('D2: Edit profile header follows Ente Header (v2)', (
       tester,

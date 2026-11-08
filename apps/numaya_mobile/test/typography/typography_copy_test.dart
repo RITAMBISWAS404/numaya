@@ -252,7 +252,8 @@ void main() {
         final panel = Color.alphaBlend(AppColors.photoPanel, photo);
         expect(
           ratio(Colors.white, panel),
-          greaterThanOrEqualTo(7),
+          // Owner selection (subtle scrim, Visual Lab): AA 4.5:1 is the floor, not AAA 7:1.
+          greaterThanOrEqualTo(4.5),
           reason: '$photo',
         );
       }
@@ -276,45 +277,47 @@ void main() {
       await settle(tester);
     });
 
-    testWidgets('TC-05: the visibility score never breaks inside "28%"', (
-      tester,
-    ) async {
-      narrow(tester);
-      final c = await quickStartApp(tester);
-      await goTo(c, tester, Routes.visibility);
-      bool hasMetric(InlineSpan root) {
-        var found = false;
-        root.visitChildren((span) {
-          if (span.style?.fontSize == AppTypography.metric.fontSize) {
-            found = true;
-          }
-          return !found;
-        });
-        return found;
-      }
+    testWidgets(
+      'TC-05: the visibility score never breaks inside "28%"',
+      (tester) async {
+        narrow(tester);
+        final c = await quickStartApp(tester);
+        await goTo(c, tester, Routes.visibility);
+        bool hasMetric(InlineSpan root) {
+          var found = false;
+          root.visitChildren((span) {
+            if (span.style?.fontSize == AppTypography.metric.fontSize) {
+              found = true;
+            }
+            return !found;
+          });
+          return found;
+        }
 
-      final score = find.byWidgetPredicate(
-        (w) =>
-            w is RichText &&
-            hasMetric(w.text) &&
-            w.text.toPlainText().contains('%'),
-      );
-      expect(score, findsOneWidget);
-      final paragraph = tester.renderObject<RenderParagraph>(score);
-      // The score is the first word ("28%"), drawn in the metric role.
-      final number = paragraph.text.toPlainText().split(' ').first;
-      expect(number, contains('%'));
-      final boxes = paragraph.getBoxesForSelection(
-        TextSelection(baseOffset: 0, extentOffset: number.length),
-      );
-      expect(
-        boxes.map((b) => b.top).toSet(),
-        hasLength(1),
-        reason: 'the number "$number" must sit on one line',
-      );
-      expect(tester.takeException(), isNull);
-      await settle(tester);
-    });
+        final score = find.byWidgetPredicate(
+          (w) =>
+              w is RichText &&
+              hasMetric(w.text) &&
+              w.text.toPlainText().contains('%'),
+        );
+        expect(score, findsOneWidget);
+        final paragraph = tester.renderObject<RenderParagraph>(score);
+        // The score is the first word ("28%"), drawn in the metric role.
+        final number = paragraph.text.toPlainText().split(' ').first;
+        expect(number, contains('%'));
+        final boxes = paragraph.getBoxesForSelection(
+          TextSelection(baseOffset: 0, extentOffset: number.length),
+        );
+        expect(
+          boxes.map((b) => b.top).toSet(),
+          hasLength(1),
+          reason: 'the number "$number" must sit on one line',
+        );
+        expect(tester.takeException(), isNull);
+        await settle(tester);
+      },
+      skip: true,
+    ); // Superseded: the visibility score screen was removed (H-13).
 
     testWidgets('TC-07: a name on a photo stays on the solid scrim', (
       tester,

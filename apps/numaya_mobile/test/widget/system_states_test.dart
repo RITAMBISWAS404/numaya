@@ -8,8 +8,7 @@ import 'package:numaya_mobile/features/auth/application/session_controller.dart'
 import 'package:numaya_mobile/features/auth/application/session_expiry.dart';
 import 'package:numaya_mobile/features/auth/presentation/verify_screen.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
-import 'package:numaya_mobile/features/events/application/events_controller.dart';
-import 'package:numaya_mobile/features/events/domain/event.dart';
+import 'package:numaya_mobile/features/events_mvp/application/events_mvp_controller.dart';
 
 import '../helpers/journeys.dart';
 import '../helpers/test_app.dart';
@@ -19,10 +18,10 @@ void main() {
   setUpAll(loadAppFonts);
 
   testWidgets(
-    'offline: a banner on every screen, messages wait and send on reconnect, joins fail safely',
+    'offline: a banner on every screen, messages wait and send on reconnect, reservations fail safely',
     (tester) async {
       await usePhoneSize(tester);
-      final c = await quickStartApp(tester, overrides: eventsOn);
+      final c = await quickStartApp(tester);
       expect(find.byType(ConnectionBanner), findsNothing);
 
       c.read(connectivityProvider.notifier).setOnline(false);
@@ -59,23 +58,22 @@ void main() {
       );
       expect(find.text('Not sent: saved on this device'), findsOneWidget);
 
-      // Events: a join needs the service's answer, so offline it fails and nothing changes.
+      // Events MVP: a reservation needs the service's answer, so offline it fails and nothing
+      // changes; back online the same screen reserves.
+      const board = 'ev-board-games-bandra';
       c.read(connectivityProvider.notifier).setOnline(false);
-      await goTo(c, tester, '${Routes.event}/e-jazz');
-      await tapOn(tester, find.widgetWithText(NumayaButton, 'Join'));
-      await tester.pump(const Duration(milliseconds: 400));
-      expect(find.text('Couldn’t save that'), findsOneWidget);
-      expect(
-        c.read(eventsProvider).byId('e-jazz')!.participation,
-        Participation.none,
-      );
+      await goTo(c, tester, '${Routes.evEvent}/$board/reserve');
+      await tapOn(tester, find.byKey(const ValueKey('ev-ack')));
+      final confirm = find.byKey(const ValueKey('ev-confirm'));
+      await tapOn(tester, confirm);
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(find.byKey(const ValueKey('ev-result-error')), findsOneWidget);
+      expect(c.read(eventsMvpProvider).reservations[board], isNull);
       c.read(connectivityProvider.notifier).setOnline(true);
-      await tapOn(tester, find.widgetWithText(NumayaButton, 'Try again'));
-      await tester.pump(const Duration(milliseconds: 400));
-      expect(
-        c.read(eventsProvider).byId('e-jazz')!.participation,
-        Participation.going,
-      );
+      await tapOn(tester, confirm);
+      await tester.pump(const Duration(milliseconds: 600));
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(find.byKey(const ValueKey('ev-reserved')), findsOneWidget);
       await settle(tester);
     },
   );

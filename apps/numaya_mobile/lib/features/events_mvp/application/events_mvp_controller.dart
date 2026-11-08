@@ -594,10 +594,12 @@ class EventsMvpController extends Notifier<EvState> {
     if (!followUpOpen(id)) return InterestResult.closed;
     final sent = state.interests[id] ?? const <String>{};
     if (sent.contains(personId)) return InterestResult.duplicate;
-    if (!peers(id).any((p) => p.id == personId))
+    if (!peers(id).any((p) => p.id == personId)) {
       return InterestResult.notEligible;
-    if (sent.length >= EvPolicy.interestsPerEvent)
+    }
+    if (sent.length >= EvPolicy.interestsPerEvent) {
       return InterestResult.exhausted;
+    }
     state = state.copyWith(
       interests: {
         ...state.interests,

@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
+import 'package:numaya_mobile/features/dating/presentation/match_avatar.dart';
+import 'package:numaya_mobile/features/lab/lab_registry.dart';
 import 'package:numaya_mobile/features/profile/application/profile_details_controller.dart';
 import 'package:numaya_mobile/features/verification/application/verification_controller.dart';
 
@@ -24,31 +26,30 @@ void main() {
 
   group('UI-033/034 New matches', () {
     testWidgets(
-      'Likes first with the real count; R02: each match is a photo in a '
-      'progress ring with no countdown or name below',
+      'no Likes tile (owner selection); R02: each match is a 3:4 photo in a '
+      'squircle progress ring with no countdown or name below',
       (tester) async {
         final c = await open(tester, Routes.messages);
         final likes = c.read(datingProvider.notifier).unansweredLikes();
+        // The Likes tile was removed from Chats (Likes has its own tab).
         expect(
           find.bySemanticsLabel(RegExp('^$likes people like you')),
-          findsOneWidget,
+          findsNothing,
         );
-        expect(find.text('$likes'), findsWidgets);
-        final tiles = find.byWidgetPredicate(
-          (w) =>
-              w.key is ValueKey<String> &&
-              (w.key! as ValueKey<String>).value.startsWith('match-tile-'),
-        );
+        final tiles = find.byType(MatchAvatarTile);
         expect(tiles, findsWidgets);
         for (final e in tiles.evaluate()) {
           final ring = find
               .descendant(
                 of: find.byWidget(e.widget),
-                matching: find.byType(CountdownAvatar),
+                matching: find.byWidgetPredicate(
+                  (w) => w is CustomPaint && w.foregroundPainter != null,
+                ),
               )
               .first;
           final size = tester.getSize(ring);
-          expect(size.width, closeTo(size.height, 0.5));
+          // 3:4 width to height (the brief's "4:3 vertical").
+          expect(size.width / size.height, closeTo(3 / 4, 0.03));
           expect(size.width, greaterThanOrEqualTo(72));
         }
         // R02 supersedes the MVP caption: no time under the avatar; it is spoken instead.
@@ -66,7 +67,10 @@ void main() {
   group('UI-042 Profile summary', () {
     testWidgets('large round photo over the card; name, state, Edit profile; '
         'no interests, details or globe', (tester) async {
-      await open(tester, Routes.profile);
+      final c = await open(tester, Routes.profile);
+      // Pins the O header this test describes; the owner's A is covered in visual_lab_v2.
+      c.read(labChoicesProvider.notifier).choose('profile-header', 'O');
+      await tester.pump(const Duration(milliseconds: 300));
       expect(find.text('Alex, 30'), findsOneWidget);
       expect(find.text('Not verified'), findsWidgets);
       // The removed elements.

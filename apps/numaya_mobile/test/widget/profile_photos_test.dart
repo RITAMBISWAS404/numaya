@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/features/dating/data/media_picker.dart';
+import 'package:numaya_mobile/features/lab/lab_registry.dart';
 import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
 
 import '../helpers/journeys.dart';
@@ -36,6 +37,8 @@ void main() {
       await usePhoneSize(tester);
       final picker = _Picker('photo');
       final c = await quickStartApp(tester, mediaPicker: picker);
+      // Pins the O profile header this test describes (owner picked A; see visual_lab_v2).
+      c.read(labChoicesProvider.notifier).choose('profile-header', 'O');
       int count() => c.read(onboardingProvider).draft.photos.length;
       final before = count();
 

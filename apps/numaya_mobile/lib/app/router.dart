@@ -24,13 +24,13 @@ import '../features/dating/presentation/messages_screens.dart';
 import '../features/dating/presentation/photo_viewer_screen.dart';
 import '../features/demo/presentation/demo_hub_screen.dart';
 import '../features/demo/presentation/design_lab_screen.dart';
-import '../features/experiments/experiment_lab_screen.dart';
-import '../features/help/presentation/help_screens.dart';
-import '../features/home/presentation/home_shell.dart';
 import '../features/events_mvp/presentation/event_detail_screens.dart';
 import '../features/events_mvp/presentation/events_feed_screen.dart';
 import '../features/events_mvp/presentation/my_events_screens.dart';
 import '../features/events_mvp/presentation/proposal_staff_screens.dart';
+import '../features/experiments/experiment_lab_screen.dart';
+import '../features/help/presentation/help_screens.dart';
+import '../features/home/presentation/home_shell.dart';
 import '../features/lab/visual_lab_screen.dart';
 import '../features/matches/presentation/lifecycle_screens.dart';
 import '../features/onboarding/application/onboarding_controller.dart';
@@ -43,6 +43,7 @@ import '../features/onboarding/presentation/photos_screen.dart';
 import '../features/onboarding/presentation/profile_steps_screens.dart';
 import '../features/onboarding/presentation/prompt_editor_screen.dart';
 import '../features/onboarding/presentation/setup_hub_screen.dart';
+import '../features/premium/application/premium_controller.dart';
 import '../features/premium/presentation/premium_screens.dart';
 import '../features/profile/presentation/edit_profile_screen.dart';
 import '../features/profile/presentation/profile_hub_screens.dart';
@@ -387,6 +388,20 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(path: 'about', redirect: (_, _) => Routes.profileUnavailable),
         ],
+      ),
+      GoRoute(
+        path: Routes.paywall,
+        pageBuilder: (_, state) {
+          final name = state.uri.queryParameters['feature'];
+          return _modal(
+            state,
+            PaywallScreen(
+              feature: PremiumFeature.values
+                  .where((f) => f.name == name)
+                  .firstOrNull,
+            ),
+          );
+        },
       ),
       // Events MVP routes (PRD E02–E07, M01/M02; H01–H04 demo).
       _route(path: Routes.evMine, builder: (_, _) => const MyEventsScreen()),

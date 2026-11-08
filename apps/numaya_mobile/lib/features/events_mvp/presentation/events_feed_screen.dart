@@ -58,8 +58,9 @@ class EventsFeedScreen extends ConsumerWidget {
 
     String status(NumayaEvent e) {
       final r = s.reservations[e.id];
-      if (r?.status == ResStatus.reconfirmRequired)
+      if (r?.status == ResStatus.reconfirmRequired) {
         return l10n.evReconfirmNeeded;
+      }
       if (r?.active ?? false) return l10n.evReservedByYou;
       if (c.isFull(e.id)) return l10n.evFull;
       return l10n.evPlacesLeft(c.placesLeft(e.id));

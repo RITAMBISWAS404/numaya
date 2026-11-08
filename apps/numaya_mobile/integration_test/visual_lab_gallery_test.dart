@@ -16,8 +16,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/media/demo_photos.dart';
-import 'package:numaya_mobile/features/insights/application/insights_providers.dart';
-import 'package:numaya_mobile/features/insights/domain/insights_fixture.dart';
 import 'package:numaya_mobile/features/lab/lab_registry.dart';
 import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
 import 'package:numaya_mobile/features/premium/application/premium_controller.dart';
@@ -246,31 +244,6 @@ void main() {
         );
       });
 
-    // 2. Insights scenarios (all sample-labelled).
-    if (_want('scenario'))
-      for (final s in InsightsScenario.values) {
-        await step('scenario ${s.name}', () async {
-          c.read(insightsScenarioProvider.notifier).choose(s);
-          final premium = s == InsightsScenario.premiumHistory;
-          c.read(premiumProvider.notifier).setActive(premium);
-          await go(Routes.profile);
-          await go(Routes.insights);
-          if (premium) {
-            await tapOn(tester, find.byKey(const ValueKey('period-28')));
-            await _wait(tester, 500);
-          }
-          await cap(
-            tester,
-            file: 'scenario__${s.name}',
-            group: 'insights-scenario',
-            variant: s.name,
-            kind: 'screen',
-            fixture: s.name,
-            label: s.name,
-          );
-        });
-      }
-    c.read(insightsScenarioProvider.notifier).choose(null);
     c.read(premiumProvider.notifier).setActive(false);
 
     // 3. Card families: isolated crop (preview) and in context, every variant.

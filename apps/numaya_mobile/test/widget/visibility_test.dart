@@ -1,3 +1,8 @@
+@Skip(
+  'Superseded: Visibility/Health screens removed by the Events PRD (H-13); old links land on Profile (visual_lab_v2 fallback test)',
+)
+library;
+
 import 'package:flutter/widgets.dart' show ValueKey;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/router.dart';

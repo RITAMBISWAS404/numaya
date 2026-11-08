@@ -1,3 +1,8 @@
+@Skip(
+  'Superseded: the old Events module was replaced by the Events MVP (lib/features/events_mvp, H-13); covered by events_mvp tests',
+)
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/router.dart';

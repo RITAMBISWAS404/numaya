@@ -610,12 +610,17 @@ void main() {
       await usePhoneSize(tester);
       await signUpToHome(tester, testAuth());
       final photo = find.byWidgetPredicate(
-        (w) => w is ClipRRect && w.borderRadius == AppRadii.all(AppRadii.photo),
+        (w) =>
+            w is ClipRRect &&
+            w.borderRadius == AppRadii.all(SquircleIconButton.photoRadius),
       );
       expect(photo, findsWidgets);
-      // The hero card is 24 with an 8pt inset: the photo's 16 (Ente radius/lg) is what the rule
-      // asks.
-      expect(AppRadii.nested(AppRadii.heroCard, AppSpacing.s2), AppRadii.photo);
+      // Discover photo O (owner selection): the controls sit inside the card padding and the
+      // radii are concentric: photo radius = squircle radius + its inset.
+      expect(
+        SquircleIconButton.photoRadius,
+        AppRadii.iconButton + SquircleIconButton.photoInset,
+      );
       await settle(tester);
     });
   });

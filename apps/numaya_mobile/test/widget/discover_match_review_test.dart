@@ -394,22 +394,22 @@ void main() {
         expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
         final bar = tester.getRect(pill);
         expect(bar.height, AppSizes.tabBar);
-        // MVP: Discover, Likes, Messages and Profile; no Events tab.
+        // Events MVP: Discover, Likes, Chats, Events and Profile.
         final items = [
-          for (var i = 0; i < 4; i++)
+          for (var i = 0; i < 5; i++)
             tester.getRect(find.byKey(ValueKey('tab-item-$i'))),
         ];
         final tiles = [
-          for (var i = 0; i < 4; i++)
+          for (var i = 0; i < 5; i++)
             tester.getRect(find.byKey(ValueKey('tab-tile-$i'))),
         ];
-        expect(find.byKey(const ValueKey('tab-tile-4')), findsNothing);
+        expect(find.byKey(const ValueKey('tab-tile-5')), findsNothing);
         // 8 inside the bar on all four sides.
         expect(items.first.left - bar.left, closeTo(8, 0.01));
         expect(bar.right - items.last.right, closeTo(8, 0.01));
         expect(items.first.top - bar.top, closeTo(8, 0.01));
         expect(bar.bottom - items.first.bottom, closeTo(8, 0.01));
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 5; i++) {
           expect(items[i].height, 48);
           expect(items[i].width, closeTo(items[0].width, 0.01));
           // 4 inside each item on all four sides.
@@ -424,7 +424,8 @@ void main() {
         for (final (label, path, index) in [
           ('Likes', Routes.likes, 1),
           ('Messages', Routes.messages, 2),
-          ('Profile', Routes.profile, 3),
+          ('Events', Routes.events, 3),
+          ('Profile', Routes.profile, 4),
           ('Home', Routes.home, 0),
         ]) {
           await openTab(tester, label);

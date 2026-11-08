@@ -6,8 +6,7 @@ import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/compliments/application/compliments_controller.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
-import 'package:numaya_mobile/features/insights/application/insights_providers.dart';
-import 'package:numaya_mobile/features/insights/domain/insights_fixture.dart';
+import 'package:numaya_mobile/features/dating/presentation/match_avatar.dart';
 import 'package:numaya_mobile/features/lab/lab_registry.dart';
 import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
 
@@ -26,7 +25,12 @@ void main() {
         expect(g.ids, contains(g.proposed), reason: g.id);
         if (g.kind == LabKind.component) {
           expect(g.ids.first, 'O', reason: g.id);
-          expect(g.ids.length, greaterThanOrEqualTo(5), reason: g.id);
+          // profile-header lost D (the Insights header) when Insights was removed (H-13).
+          expect(
+            g.ids.length,
+            greaterThanOrEqualTo(g.id == 'profile-header' ? 4 : 5),
+            reason: g.id,
+          );
         }
         if (g.kind == LabKind.screen) {
           expect(g.ids, ['O', 'A', 'B', 'C'], reason: g.id);
@@ -162,7 +166,9 @@ void main() {
       await openTab(tester, 'Messages');
       expect(find.byKey(const ValueKey('chats-archive')), findsOneWidget);
       expect(find.byKey(const ValueKey('chats-requests')), findsNothing);
-      expect(find.byType(CountdownAvatar), findsWidgets);
+      // Owner selection A: a squircle progress ring on a 3:4 portrait.
+      expect(find.byType(MatchAvatarTile), findsWidgets);
+      expect(find.byType(CountdownAvatar), findsNothing);
       await tapOn(tester, find.byKey(const ValueKey('chats-archive')));
       await tester.pump(const Duration(milliseconds: 600));
       expect(find.byKey(const ValueKey('archived-rafa')), findsOneWidget);
@@ -202,11 +208,13 @@ void main() {
       await tapOn(tester, find.byKey(const ValueKey('heart-tab-compliments')));
       await tester.pump(const Duration(milliseconds: 400));
       expect(find.byKey(const ValueKey('compliment-seed-sam')), findsOneWidget);
-      // Reply opens the request page; its reply makes exactly one conversation.
-      await tapOn(
-        tester,
+      // O card (owner selection): no inline buttons; the card opens the request page, whose
+      // reply makes exactly one conversation.
+      expect(
         find.byKey(const ValueKey('compliment-reply-seed-sam')),
+        findsNothing,
       );
+      await tapOn(tester, find.byKey(const ValueKey('compliment-seed-sam')));
       await tester.pump(const Duration(milliseconds: 600));
       await tester.enterText(find.byType(TextField), 'Thank you!');
       await tester.pump();
@@ -225,10 +233,10 @@ void main() {
       final c = await quickStartApp(tester);
       await goTo(c, tester, '${Routes.likes}?tab=compliments');
       await tester.pump(const Duration(milliseconds: 400));
-      await tapOn(
-        tester,
-        find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
-      );
+      // O card: dismiss lives on the request page the card opens.
+      await tapOn(tester, find.byKey(const ValueKey('compliment-seed-chloe')));
+      await tester.pump(const Duration(milliseconds: 600));
+      await tapOn(tester, find.byKey(const ValueKey('request-dismiss')));
       await tester.pump(const Duration(milliseconds: 600));
       await tapOn(tester, find.byKey(const ValueKey('dismiss-confirm')));
       await tester.pump(const Duration(milliseconds: 600));
@@ -303,10 +311,10 @@ void main() {
       final c = await quickStartApp(tester);
       await goTo(c, tester, '${Routes.likes}?tab=compliments');
       await tester.pump(const Duration(milliseconds: 400));
-      await tapOn(
-        tester,
-        find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
-      );
+      // O card: dismiss lives on the request page the card opens.
+      await tapOn(tester, find.byKey(const ValueKey('compliment-seed-chloe')));
+      await tester.pump(const Duration(milliseconds: 600));
+      await tapOn(tester, find.byKey(const ValueKey('request-dismiss')));
       await tester.pump(const Duration(milliseconds: 600));
       final close = find.byKey(const ValueKey('sheet-close'));
       expect(close, findsOneWidget);
@@ -317,78 +325,29 @@ void main() {
     });
   });
 
-  group('R11 Your insights', () {
+  group('Health/Insights removed (Events PRD)', () {
     testWidgets(
-      'sample-labelled; status first; no score; 28 days locked when free',
+      'old Health, Insights and visibility links land on Profile with a note',
       (tester) async {
         await usePhoneSize(tester);
         final c = await quickStartApp(tester);
-        await goTo(c, tester, Routes.insights);
-        expect(find.text('Sample data'), findsWidgets);
-        expect(find.byKey(const ValueKey('insights-status')), findsOneWidget);
-        expect(find.textContaining('Health'), findsNothing);
-        await tapOn(tester, find.byKey(const ValueKey('period-28')));
-        await tester.pump(const Duration(milliseconds: 400));
-        expect(find.byKey(const ValueKey('insights-locked')), findsOneWidget);
+        for (final path in [
+          Routes.health,
+          Routes.healthAbout,
+          Routes.insights,
+          Routes.visibility,
+        ]) {
+          await goTo(c, tester, path);
+          expect(
+            find.byKey(const ValueKey('profile-unavailable')),
+            findsOneWidget,
+            reason: path,
+          );
+        }
+        expect(find.textContaining('Your insights'), findsNothing);
         await settle(tester);
-        expect(c.read(insightsSnapshotProvider(7)).days, 7);
       },
     );
-
-    test('fixture funnels share one cohort and never exceed it', () {
-      for (final s in InsightsScenario.values) {
-        for (final d in [7, 28, 90]) {
-          final x = sampleInsights(s, d);
-          expect(x.liked, lessThanOrEqualTo(x.shown), reason: '$s $d');
-          expect(x.matched, lessThanOrEqualTo(x.liked), reason: '$s $d');
-          expect(
-            x.conversations,
-            lessThanOrEqualTo(x.matched),
-            reason: '$s $d',
-          );
-          expect(x.daily.length, x.days, reason: '$s $d');
-          final advice = x.advice;
-          if (advice != null) {
-            expect(advice.uncertainty, isNotEmpty);
-            for (final t in [advice.evidence, advice.reading, advice.action]) {
-              expect(t.toLowerCase(), isNot(contains('guarantee')));
-              expect(t.toLowerCase(), isNot(contains('shadowban')));
-            }
-          }
-        }
-      }
-      expect(sampleInsights(InsightsScenario.newAccount, 7).lowSample, isTrue);
-      expect(sampleInsights(InsightsScenario.newAccount, 7).change, isNull);
-    });
-
-    testWidgets('the plain-sentence summary puts each number in its place', (
-      tester,
-    ) async {
-      await usePhoneSize(tester);
-      final c = await quickStartApp(tester);
-      await goTo(c, tester, '${Routes.visualLabPreview}/insights-summary?v=D');
-      expect(
-        find.text(
-          '77 people saw your profile in the last 7 days. 9 liked it and you matched with 3.',
-        ),
-        findsOneWidget,
-      );
-      await settle(tester);
-    });
-
-    testWidgets('a restriction is explained free, with its reason', (
-      tester,
-    ) async {
-      await usePhoneSize(tester);
-      final c = await quickStartApp(tester);
-      c
-          .read(insightsScenarioProvider.notifier)
-          .choose(InsightsScenario.restricted);
-      await goTo(c, tester, Routes.insights);
-      expect(find.text('Numaya has limited your profile'), findsWidgets);
-      expect(find.textContaining('A photo is being checked'), findsWidgets);
-      await settle(tester);
-    });
   });
 
   group('R12 large title', () {

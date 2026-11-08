@@ -152,8 +152,9 @@ class _EventNoticeScreenState extends ConsumerState<EventNoticeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted)
+      if (mounted) {
         ref.read(eventsMvpProvider.notifier).markRead(widget.noticeId);
+      }
     });
   }
 
@@ -196,8 +197,9 @@ class _EventNoticeScreenState extends ConsumerState<EventNoticeScreen> {
             key: const ValueKey('ev-reconfirm'),
             label: l10n.evNoticeReconfirm,
             onPressed: () {
-              if (c.reconfirm(n.id))
+              if (c.reconfirm(n.id)) {
                 NumayaToast.show(context, l10n.evNoticeReconfirmed);
+              }
             },
           ),
           const SizedBox(height: AppSpacing.s2),
@@ -206,8 +208,9 @@ class _EventNoticeScreenState extends ConsumerState<EventNoticeScreen> {
             label: l10n.evNoticeDecline,
             variant: NumayaButtonVariant.secondary,
             onPressed: () {
-              if (c.decline(n.id))
+              if (c.decline(n.id)) {
                 NumayaToast.show(context, l10n.evNoticeDeclined);
+              }
             },
           ),
         ],
