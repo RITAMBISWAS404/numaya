@@ -108,7 +108,7 @@ class ProfileHeaderCover extends StatelessWidget {
   static const double _topRoom = 150;
 
   /// How far above the name the fade begins.
-  static const double _fade = 72;
+  static const double _fade = 40;
 
   @override
   Widget build(BuildContext context) {
@@ -161,6 +161,9 @@ class ProfileHeaderCover extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Owner note: the verification pill sits above the name and age.
+                        data.badge(context, tone: BadgeTone.onPhoto),
+                        const SizedBox(height: AppSpacing.s2),
                         Semantics(
                           header: true,
                           child: NameWithBadge(
@@ -174,8 +177,6 @@ class ProfileHeaderCover extends StatelessWidget {
                             ).copyWith(color: AppColors.accentForeground),
                           ),
                         ),
-                        const SizedBox(height: AppSpacing.s2),
-                        data.badge(context, tone: BadgeTone.onPhoto),
                       ],
                     ),
                   ),

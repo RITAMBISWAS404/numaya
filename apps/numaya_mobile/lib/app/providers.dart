@@ -39,7 +39,9 @@ final profileRepositoryProvider = Provider<ProfileRepository>(
 /// Whether Events is available in this build (MVP: no). Defaults to the compile-time
 /// [ReleaseScope.events]; the router, the tab bar and every entry point read it, so one switch
 /// hides or restores the whole feature, and tests can turn Events on to keep its own suite running.
-final eventsAvailableProvider = Provider<bool>((ref) => ReleaseScope.events);
+/// Events MVP (co-founder PRD, 2026-11-08): Events is in scope, as the fourth tab. The old
+/// dormant module in `lib/features/events/` stays unrouted.
+final eventsAvailableProvider = Provider<bool>((ref) => true);
 
 /// Whether chat attachments are offered (MVP: no, text and emoji only). Defaults to the
 /// compile-time [ReleaseScope.chatAttachments]; tests of the dormant attachment code turn it on.

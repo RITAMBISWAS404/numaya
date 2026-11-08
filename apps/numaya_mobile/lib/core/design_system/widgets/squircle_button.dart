@@ -42,6 +42,14 @@ class SquircleIconButton extends StatelessWidget {
   static const double size = AppSizes.iconButton;
   static const double target = 48;
 
+  /// Visual inset from a photo's edge for controls laid over it, and the photo radius that keeps
+  /// the corners concentric (outer = inner + inset: 12 + 12 = 24, owner note).
+  static const double photoInset = 12;
+  static const double photoRadius = AppRadii.iconButton + photoInset;
+
+  /// Positioned offset of the 48pt target so the 38pt squircle sits [photoInset] in.
+  static const double photoOffset = photoInset - (target - size) / 2;
+
   @override
   Widget build(BuildContext context) {
     // On a white card the white squircle would vanish: it takes the fill grey, flat (Ente's icon

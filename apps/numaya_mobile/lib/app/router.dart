@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/design_system/design_system.dart';
-import '../features/account_health/presentation/visibility_screen.dart';
 import '../features/auth/application/session_controller.dart';
 import '../features/auth/application/session_expiry.dart';
 import '../features/auth/application/verification_controller.dart';
@@ -25,15 +24,13 @@ import '../features/dating/presentation/messages_screens.dart';
 import '../features/dating/presentation/photo_viewer_screen.dart';
 import '../features/demo/presentation/demo_hub_screen.dart';
 import '../features/demo/presentation/design_lab_screen.dart';
-import '../features/events/presentation/event_detail_screen.dart';
-import '../features/events/presentation/event_form_screen.dart';
-import '../features/events/presentation/event_people_screen.dart';
-import '../features/events/presentation/events_screen.dart';
 import '../features/experiments/experiment_lab_screen.dart';
-import '../features/health/presentation/health_screens.dart';
 import '../features/help/presentation/help_screens.dart';
 import '../features/home/presentation/home_shell.dart';
-import '../features/insights/presentation/insights_dashboard.dart';
+import '../features/events_mvp/presentation/event_detail_screens.dart';
+import '../features/events_mvp/presentation/events_feed_screen.dart';
+import '../features/events_mvp/presentation/my_events_screens.dart';
+import '../features/events_mvp/presentation/proposal_staff_screens.dart';
 import '../features/lab/visual_lab_screen.dart';
 import '../features/matches/presentation/lifecycle_screens.dart';
 import '../features/onboarding/application/onboarding_controller.dart';
@@ -46,7 +43,6 @@ import '../features/onboarding/presentation/photos_screen.dart';
 import '../features/onboarding/presentation/profile_steps_screens.dart';
 import '../features/onboarding/presentation/prompt_editor_screen.dart';
 import '../features/onboarding/presentation/setup_hub_screen.dart';
-import '../features/premium/application/premium_controller.dart';
 import '../features/premium/presentation/premium_screens.dart';
 import '../features/profile/presentation/edit_profile_screen.dart';
 import '../features/profile/presentation/profile_hub_screens.dart';
@@ -70,7 +66,6 @@ class _SessionListenable extends ChangeNotifier {
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final events = ref.read(eventsAvailableProvider);
   final refresh = _SessionListenable(ref);
   ref.onDispose(refresh.dispose);
 
@@ -97,7 +92,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
       // MVP (Tabler MVP pass): Events is unavailable, so its tab route, event pages and their
       // child routes (people, edit, new), deep links included, land on Discover.
-      if (!events && Routes.isEvents(path)) return Routes.home;
+      // Events MVP: the old dormant module's links (`/event/...`) land on the new feed.
+      if (path == Routes.event || path.startsWith('${Routes.event}/')) {
+        return Routes.events;
+      }
+      // Internal tools demo exists only where the Demo Hub does.
+      if (path.startsWith(Routes.staff) && ref.read(demoAuthProvider) == null) {
+        return Routes.events;
+      }
       if (session == null) {
         if (Routes.requiresSession(path)) return Routes.welcome;
         if (path == Routes.verify &&
@@ -196,19 +198,6 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-          // The Events tab exists only when the release includes Events; the tab bar is built from
-          // the same flag (HomeShell), so branch and tab indexes always line up.
-          if (events)
-            StatefulShellBranch(
-              routes: [
-                GoRoute(
-                  path: Routes.events,
-                  builder: (_, state) => EventsScreen(
-                    mine: state.uri.queryParameters['view'] == 'mine',
-                  ),
-                ),
-              ],
-            ),
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -230,11 +219,23 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
+          // Events MVP: the fourth tab (Discover / Likes / Chats / Events / Profile).
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: Routes.events,
+                builder: (_, _) => const EventsFeedScreen(),
+              ),
+            ],
+          ),
           StatefulShellBranch(
             routes: [
               GoRoute(
                 path: Routes.profile,
-                builder: (_, _) => const ProfileScreen(),
+                builder: (_, state) => ProfileScreen(
+                  unavailableNotice:
+                      state.uri.queryParameters['notice'] == 'unavailable',
+                ),
               ),
             ],
           ),
@@ -332,17 +333,17 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '${Routes.legacyReconnect}/:id',
         redirect: (_, state) => '${Routes.chat}/${state.pathParameters['id']}',
       ),
-      _route(
+      // Health/Insights removed (Events PRD): old links land on Profile with a short note.
+      GoRoute(
         path: Routes.health,
-        // R11: the old score page now opens Your insights (setup is a supporting card there).
-        builder: (_, _) => const InsightsDashboard(),
+        redirect: (_, _) => Routes.profileUnavailable,
         routes: [
-          _route(path: 'about', builder: (_, _) => const HealthAboutScreen()),
+          GoRoute(path: 'about', redirect: (_, _) => Routes.profileUnavailable),
         ],
       ),
-      _route(
+      GoRoute(
         path: Routes.insights,
-        builder: (_, _) => const InsightsDashboard(),
+        redirect: (_, _) => Routes.profileUnavailable,
       ),
       _route(path: Routes.streak, builder: (_, _) => const StreakScreen()),
       _route(path: Routes.wallet, builder: (_, _) => const WalletScreen()),
@@ -380,49 +381,69 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-      _route(
+      GoRoute(
         path: Routes.visibility,
-        builder: (_, _) => const VisibilityScreen(),
+        redirect: (_, _) => Routes.profileUnavailable,
         routes: [
-          _route(
-            path: 'about',
-            builder: (_, _) => const VisibilityAboutScreen(),
-          ),
+          GoRoute(path: 'about', redirect: (_, _) => Routes.profileUnavailable),
         ],
       ),
-      _route(path: Routes.eventNew, builder: (_, _) => const EventFormScreen()),
+      // Events MVP routes (PRD E02–E07, M01/M02; H01–H04 demo).
+      _route(path: Routes.evMine, builder: (_, _) => const MyEventsScreen()),
       _route(
-        path: '${Routes.event}/:id',
+        path: '${Routes.evEvent}/:id',
         builder: (_, state) => EventDetailScreen(
+          key: ValueKey(state.uri.toString()),
           eventId: state.pathParameters['id']!,
-          published: state.uri.queryParameters['published'] == '1',
         ),
         routes: [
           _route(
-            path: 'people',
+            path: 'reserve',
             builder: (_, state) =>
-                EventPeopleScreen(eventId: state.pathParameters['id']!),
-          ),
-          _route(
-            path: 'edit',
-            builder: (_, state) =>
-                EventFormScreen(eventId: state.pathParameters['id']!),
+                EventReserveScreen(eventId: state.pathParameters['id']!),
           ),
         ],
       ),
-      GoRoute(
-        path: Routes.paywall,
-        pageBuilder: (_, state) {
-          final name = state.uri.queryParameters['feature'];
-          return _modal(
-            state,
-            PaywallScreen(
-              feature: PremiumFeature.values
-                  .where((f) => f.name == name)
-                  .firstOrNull,
-            ),
-          );
-        },
+      _route(
+        path: '${Routes.evReservation}/:id',
+        builder: (_, state) => ReservationScreen(
+          key: ValueKey(state.uri.toString()),
+          eventId: state.pathParameters['id']!,
+        ),
+      ),
+      _route(
+        path: '${Routes.evNotice}/:id',
+        builder: (_, state) => EventNoticeScreen(
+          key: ValueKey(state.uri.toString()),
+          noticeId: state.pathParameters['id']!,
+        ),
+      ),
+      _route(
+        path: '${Routes.evMet}/:id',
+        builder: (_, state) =>
+            PeopleMetScreen(eventId: state.pathParameters['id']!),
+      ),
+      _route(
+        path: Routes.evProposals,
+        builder: (_, _) => const ProposalsScreen(),
+      ),
+      _route(
+        path: '${Routes.evPropose}/:id',
+        builder: (_, state) => ProposalFormScreen(
+          key: ValueKey(state.uri.toString()),
+          proposalId: state.pathParameters['id']!,
+        ),
+      ),
+      _route(path: Routes.staff, builder: (_, _) => const StaffHomeScreen()),
+      _route(
+        path: '${Routes.staffProposal}/:id',
+        builder: (_, state) =>
+            StaffProposalScreen(proposalId: state.pathParameters['id']!),
+      ),
+      _route(
+        path: '${Routes.staffEvent}/:id',
+        builder: (_, state) =>
+            StaffEventScreen(eventId: state.pathParameters['id']!),
       ),
       _route(
         path: Routes.help,

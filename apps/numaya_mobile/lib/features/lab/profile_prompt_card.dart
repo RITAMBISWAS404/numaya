@@ -35,10 +35,7 @@ class ProfilePromptCard extends ConsumerWidget {
     // editorial variant (A) sits on the grey page and keeps the white squircle.
     Widget footer() => action == null
         ? const SizedBox.shrink()
-        : Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: v == 'A' ? action! : OnWhiteSurface(child: action!),
-          );
+        : Align(alignment: AlignmentDirectional.centerEnd, child: action!);
 
     final Widget body;
     switch (v) {
@@ -182,13 +179,21 @@ class ProfilePromptCard extends ConsumerWidget {
           ),
         );
       default:
+        // Owner note: the purple Compliment button sits on the card's own padding at the bottom
+        // right. The 48pt target overhangs the 38pt squircle by 5pt, so the card pads 11pt on that
+        // side and the text keeps the full 16pt; the footer row reserves the button's height, so
+        // the answer never runs under it.
+        const overhang =
+            (SquircleIconButton.target - SquircleIconButton.size) / 2;
         body = Container(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.s4,
-            AppSpacing.s4,
-            AppSpacing.s4,
-            AppSpacing.s1,
-          ),
+          padding: action == null
+              ? const EdgeInsets.all(AppLayout.cardPadding)
+              : const EdgeInsets.fromLTRB(
+                  AppLayout.cardPadding,
+                  AppLayout.cardPadding,
+                  AppLayout.cardPadding - overhang,
+                  AppLayout.cardPadding - overhang,
+                ),
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: AppRadii.all(AppRadii.card),
@@ -196,13 +201,23 @@ class ProfilePromptCard extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(question, style: questionStyle),
-              const SizedBox(height: AppSpacing.s2),
-              Text(answer, style: AppTypography.answer),
-              if (action != null)
-                footer()
-              else
-                const SizedBox(height: AppSpacing.s3),
+              Padding(
+                padding: EdgeInsetsDirectional.only(
+                  end: action == null ? 0 : overhang,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(question, style: questionStyle),
+                    const SizedBox(height: AppSpacing.s2),
+                    Text(answer, style: AppTypography.answer),
+                  ],
+                ),
+              ),
+              if (action != null) ...[
+                const SizedBox(height: AppSpacing.s1),
+                footer(),
+              ],
             ],
           ),
         );

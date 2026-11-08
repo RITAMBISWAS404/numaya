@@ -12,10 +12,9 @@ import '../../../l10n/l10n.dart';
 import '../../commerce/application/economy_controller.dart';
 import '../../commerce/presentation/wallet_screen.dart';
 import '../../health/application/health_providers.dart';
-import '../../health/presentation/health_screens.dart';
 import '../../home/presentation/large_title_page.dart';
-import '../../insights/application/insights_providers.dart';
-import '../../insights/presentation/insight_cards.dart';
+import '../../lab/lab_banners.dart';
+import 'profile_setup_card.dart';
 import '../../lab/activity_cards.dart';
 import '../../lab/lab_registry.dart';
 import '../../onboarding/application/onboarding_controller.dart';
@@ -31,7 +30,10 @@ import 'profile_variants.dart';
 /// then one support group.
 /// Everything shown is what the member entered; no score or activity is invented.
 class ProfileScreen extends ConsumerWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({super.key, this.unavailableNotice = false});
+
+  /// Opened from a retired Health/Insights link: a short neutral note (Events PRD §4).
+  final bool unavailableNotice;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -78,16 +80,12 @@ class ProfileScreen extends ConsumerWidget {
           (label: walletEntryLabel(context.l10n, e), amount: e.amount),
       ],
     );
-    final week = ref.watch(insightsSnapshotProvider(7));
     final health = ref.watch(profileHealthProvider);
     void toStreak() => context.push(Routes.streak);
     void toWallet() => context.push(Routes.wallet);
-    void toInsights() => context.push(Routes.insights);
 
     // Direction-fixed component variants inside this screen (registry `requires`).
-    final headerV = direction == 'C'
-        ? 'D'
-        : ref.watch(labVariantProvider('profile-header'));
+    final headerV = ref.watch(labVariantProvider('profile-header'));
     final String? setupV = switch (direction) {
       'A' => 'D',
       'C' => 'A',
@@ -105,12 +103,6 @@ class ProfileScreen extends ConsumerWidget {
         onStreak: toStreak,
         onWallet: toWallet,
       ),
-      'D' => ProfileHeaderWithInsights(
-        data: header(),
-        shown: week.shown,
-        liked: week.liked,
-        onInsights: toInsights,
-      ),
       _ => _ProfileSummary(
         photo: mainPhoto,
         initial: initial,
@@ -122,22 +114,11 @@ class ProfileScreen extends ConsumerWidget {
         onVerify: () => context.push(Routes.verifyPhoto),
       ),
     };
-    final headerHasActivity = headerV == 'C' || headerV == 'D';
+    final headerHasActivity = headerV == 'C';
 
     final profileGroup = ListGroup(
       title: l10n.profileYourProfile,
       children: [
-        // R11: Your insights replaces the score row (setup is a supporting card).
-        ListRow(
-          key: const ValueKey('hub-health'),
-          leadingMobile: NumayaMobileIcons.chart,
-          label: l10n.insightsDashTitle,
-          detail: discoveryStatusLabel(
-            l10n,
-            ref.watch(discoveryStatusProvider),
-          ),
-          onTap: toInsights,
-        ),
         if (ReleaseScope.openingMoves)
           ListRow(
             leading: NumayaIcons.message,
@@ -207,98 +188,100 @@ class ProfileScreen extends ConsumerWidget {
     const small = SizedBox(height: AppSpacing.s3);
     final setup = ProfileSetupCard(health: health, variant: setupV);
 
-    final List<Widget> body = switch (direction) {
-      // Quiet editorial: one identity block, one line of activity, then plain groups.
-      'A' => [
-        identity,
-        small,
-        setup,
-        gap,
-        Text(
-          l10n.profileWeekLine(week.shown, week.liked, run.length),
-          style: AppTypography.answer,
-        ),
-        const SizedBox(height: AppSpacing.s1),
-        Text(l10n.profileStatSample, style: AppTypography.caption),
-        gap,
-        profileGroup,
-        gap,
-        activityGroup,
-        gap,
-        supportGroup,
-      ],
-      // Connected cards: each activity is its own card with one destination.
-      'B' => [
-        identity,
-        small,
-        setup,
-        gap,
-        if (!headerHasActivity) ...[
-          StreakSummaryCard(data: streak, onTap: toStreak),
+    final body = <Widget>[
+      ...switch (direction) {
+        // Quiet editorial: one identity block, one line of activity, then plain groups.
+        'A' => [
+          identity,
           small,
-          WalletSummaryCard(data: wallet, onTap: toWallet),
-          small,
+          setup,
+          gap,
+          profileGroup,
+          gap,
+          activityGroup,
+          gap,
+          supportGroup,
         ],
-        MetricWidget(
-          icon: NumayaMobileIcons.eye,
-          label: l10n.insightsMetricShown,
-          value: week.shown,
-          caption: '${periodLabel(l10n, 7)} · ${l10n.insightsSampleTag}',
-          onTap: toInsights,
-        ),
-        gap,
-        profileGroup,
-        gap,
-        supportGroup,
-      ],
-      // Visual insights: the identity carries this week's numbers; bars for streak and credits.
-      'C' => [
-        identity,
-        small,
-        StreakSummaryCard(data: streak, onTap: toStreak, variant: 'B'),
-        small,
-        WalletSummaryCard(data: wallet, onTap: toWallet, variant: 'A'),
-        small,
-        setup,
-        gap,
-        profileGroup,
-        gap,
-        supportGroup,
-      ],
-      // Current-rules baseline: today's order with Your insights and the setup card.
-      _ => [
-        identity,
-        const SizedBox(height: AppSpacing.s4),
-        setup,
-        gap,
-        profileGroup,
-        gap,
-        if (!headerHasActivity) ...[activityGroup, gap],
-        if (draft.prompt != null) ...[
-          NumayaSection(
-            title: l10n.profilePromptTitle,
-            child: PromptCard(
-              question: draft.prompt!.question,
-              answer: draft.prompt!.answer,
-              editLabel: l10n.promptEditLabel,
-              onTap: () => context.push(Routes.editPrompt),
+        // Connected cards: each activity is its own card with one destination.
+        'B' => [
+          identity,
+          small,
+          setup,
+          gap,
+          if (!headerHasActivity) ...[
+            StreakSummaryCard(data: streak, onTap: toStreak),
+            small,
+            WalletSummaryCard(data: wallet, onTap: toWallet),
+            small,
+          ],
+          gap,
+          profileGroup,
+          gap,
+          supportGroup,
+        ],
+        // Visual insights: the identity carries this week's numbers; bars for streak and credits.
+        'C' => [
+          identity,
+          small,
+          StreakSummaryCard(data: streak, onTap: toStreak, variant: 'B'),
+          small,
+          WalletSummaryCard(data: wallet, onTap: toWallet, variant: 'A'),
+          small,
+          setup,
+          gap,
+          profileGroup,
+          gap,
+          supportGroup,
+        ],
+        // Current-rules baseline: today's order with Your insights and the setup card.
+        _ => [
+          identity,
+          const SizedBox(height: AppSpacing.s4),
+          setup,
+          gap,
+          profileGroup,
+          gap,
+          if (!headerHasActivity) ...[activityGroup, gap],
+          if (draft.prompt != null) ...[
+            NumayaSection(
+              title: l10n.profilePromptTitle,
+              child: PromptCard(
+                question: draft.prompt!.question,
+                answer: draft.prompt!.answer,
+                editLabel: l10n.promptEditLabel,
+                onTap: () => context.push(Routes.editPrompt),
+              ),
             ),
-          ),
-          gap,
+            gap,
+          ],
+          if (premium.active) ...[
+            _PremiumCard(
+              active: premium.active,
+              until: premium.activeUntil,
+              onTap: () => context.push(Routes.premium),
+            ),
+            gap,
+          ],
+          supportGroup,
         ],
-        if (premium.active) ...[
-          _PremiumCard(
-            active: premium.active,
-            until: premium.activeUntil,
-            onTap: () => context.push(Routes.premium),
-          ),
-          gap,
-        ],
-        supportGroup,
-      ],
-    };
+      },
+    ];
 
     // R12: the expanded title collapses into the bar on scroll.
+    if (unavailableNotice) {
+      body.insert(
+        0,
+        Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.s3),
+          child: LabStatusBanner(
+            key: const ValueKey('profile-unavailable'),
+            tone: BannerTone.info,
+            title: l10n.profileFeatureUnavailable,
+            body: l10n.profileFeatureUnavailableBody,
+          ),
+        ),
+      );
+    }
     return LargeTitlePage(
       title: l10n.tabProfile,
       actions: [

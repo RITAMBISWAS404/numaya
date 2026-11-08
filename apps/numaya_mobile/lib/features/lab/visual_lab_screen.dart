@@ -18,14 +18,11 @@ import '../dating/presentation/conversation_row.dart';
 import '../dating/presentation/match_avatar.dart';
 import '../dating/presentation/person_profile.dart';
 import '../health/application/health_providers.dart';
-import '../insights/application/insights_providers.dart';
-import '../insights/domain/insights_fixture.dart';
-import '../insights/presentation/insight_cards.dart';
-import '../insights/presentation/insights_dashboard.dart';
 import '../onboarding/application/onboarding_controller.dart';
 import '../premium/application/premium_controller.dart';
 import '../premium/presentation/premium_screens.dart';
 import '../profile/presentation/profile_header_more.dart';
+import '../profile/presentation/profile_setup_card.dart';
 import '../profile/presentation/profile_variants.dart';
 import '../verification/application/verification_controller.dart';
 import 'activity_cards.dart';
@@ -45,7 +42,6 @@ class VisualLabScreen extends ConsumerWidget {
 
   static const _screenRoutes = {
     'screen-profile': Routes.profile,
-    'screen-insights': Routes.insights,
     'screen-heart': Routes.likes,
     'screen-chats': Routes.messages,
     'screen-discover': Routes.home,
@@ -55,7 +51,6 @@ class VisualLabScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final choices = ref.watch(labChoicesProvider);
     final lab = ref.read(labChoicesProvider.notifier);
-    final scenario = ref.watch(insightsScenarioProvider);
     Widget group(LabGroup g) {
       final current = choices[g.id] ?? g.proposed;
       final v = g.variant(current);
@@ -185,29 +180,6 @@ class VisualLabScreen extends ConsumerWidget {
                   expand: false,
                   variant: NumayaButtonVariant.secondary,
                   onPressed: () => lab.chooseAll(d, kind: LabKind.screen),
-                ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.sectionGap),
-          Text('Insights sample scenario', style: AppTypography.section),
-          const SizedBox(height: AppSpacing.s2),
-          Wrap(
-            spacing: AppSpacing.s2,
-            runSpacing: AppSpacing.s2,
-            children: [
-              NumayaChip(
-                label: 'Automatic',
-                selected: scenario == null,
-                onTap: () =>
-                    ref.read(insightsScenarioProvider.notifier).choose(null),
-              ),
-              for (final s in InsightsScenario.values)
-                NumayaChip(
-                  key: ValueKey('lab-scenario-${s.name}'),
-                  label: scenarioName(s),
-                  selected: scenario == s,
-                  onTap: () =>
-                      ref.read(insightsScenarioProvider.notifier).choose(s),
                 ),
             ],
           ),
@@ -416,7 +388,6 @@ class LabPreviewScreen extends ConsumerWidget {
           onVerify: none,
           onPreview: none,
         );
-        final week = ref.watch(insightsSnapshotProvider(7));
         return switch (v) {
           'A' => ProfileHeaderCover(data: data),
           'B' => ProfileHeaderCompact(data: data),
@@ -427,43 +398,8 @@ class LabPreviewScreen extends ConsumerWidget {
             onStreak: none,
             onWallet: none,
           ),
-          'D' => ProfileHeaderWithInsights(
-            data: data,
-            shown: week.shown,
-            liked: week.liked,
-            onInsights: none,
-          ),
           _ => ProfileHeaderActions(data: data),
         };
-      case 'insights-summary':
-        final s = ref.watch(insightsSnapshotProvider(7));
-        return InsightsSummary(s: s, yourTurn: 2, endDate: now, variant: v);
-      case 'metric-widget':
-        final s = ref.watch(insightsSnapshotProvider(7));
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            MetricWidget(
-              icon: NumayaMobileIcons.eye,
-              label: 'Saw your profile',
-              value: s.shown,
-              caption: 'Last 7 days',
-              change: changeLabel(context.l10n, s),
-              daily: s.daily,
-              endDate: now,
-              variant: v,
-            ),
-            const SizedBox(height: AppSpacing.s3),
-            MetricWidget(
-              icon: NumayaMobileIcons.archive,
-              label: 'Archived chats',
-              value: 2,
-              caption: 'Right now',
-              onTap: none,
-              variant: v,
-            ),
-          ],
-        );
       case 'profile-setup':
         return ProfileSetupCard(
           health: ref.watch(profileHealthProvider),

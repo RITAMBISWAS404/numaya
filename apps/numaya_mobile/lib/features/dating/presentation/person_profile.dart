@@ -80,7 +80,7 @@ class PersonHeroCard extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: AppRadii.all(
-            _overlay ? AppRadii.heroCard : AppRadii.photo,
+            _discover ? SquircleIconButton.photoRadius : AppRadii.photo,
           ),
           child: _sized(
             Stack(
@@ -94,7 +94,7 @@ class PersonHeroCard extends StatelessWidget {
                     right: 0,
                     bottom: 0,
                     child: PhotoScrim(
-                      fade: 120,
+                      fade: 48,
                       padding: EdgeInsets.fromLTRB(
                         AppSpacing.s4,
                         0,
@@ -127,16 +127,18 @@ class PersonHeroCard extends StatelessWidget {
                     right: 64,
                     child: _nameChip(context, l10n),
                   ),
+                // Owner note: controls sit on one inset from the photo edge, and the photo's
+                // corner radius is the button radius plus that inset (concentric corners).
                 if (_discover && photoAction != null)
                   Positioned(
-                    top: AppSpacing.s1,
-                    right: AppSpacing.s1,
+                    top: SquircleIconButton.photoOffset,
+                    right: SquircleIconButton.photoOffset,
                     child: photoAction!,
                   ),
                 if (_discover && complimentAction != null)
                   Positioned(
-                    right: AppSpacing.s1,
-                    bottom: AppSpacing.s1,
+                    right: SquircleIconButton.photoOffset,
+                    bottom: SquircleIconButton.photoOffset,
                     child: complimentAction!,
                   ),
                 if (swipe.abs() >= 0.25)
@@ -525,6 +527,9 @@ List<Widget> personSections(
     final tile = PhotoPlaceholder(
       label: l10n.discoverPhotoLabel(person.name, position),
       aspectRatio: AppMedia.personPhoto,
+      radius: onCompliment == null
+          ? AppRadii.photo
+          : SquircleIconButton.photoRadius,
       child: _real(person.photoAt(position)),
     );
     return onPhoto == null
@@ -660,10 +665,11 @@ class ComplimentAnchor extends StatelessWidget {
 
   /// R05: the shared white squircle ([SquircleIconButton]) with the purple message-heart glyph:
   /// legible on any photo, the same size and tap target as the overflow and close controls.
+  /// Owner note: a purple squircle with a white glyph, on cards and on photos alike.
   @override
   Widget build(BuildContext context) => SquircleIconButton(
     mobileIcon: NumayaMobileIcons.compliment,
-    brandGlyph: true,
+    onBrand: true,
     label: context.l10n.complimentActionOn(name),
     onPressed: onPressed,
   );
@@ -681,7 +687,11 @@ class _WithAnchor extends StatelessWidget {
   Widget build(BuildContext context) => Stack(
     children: [
       child,
-      Positioned(right: AppSpacing.s1, bottom: AppSpacing.s1, child: anchor),
+      Positioned(
+        right: SquircleIconButton.photoOffset,
+        bottom: SquircleIconButton.photoOffset,
+        child: anchor,
+      ),
     ],
   );
 }

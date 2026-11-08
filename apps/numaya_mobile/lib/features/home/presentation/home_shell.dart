@@ -7,6 +7,7 @@ import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../compliments/application/compliments_controller.dart';
 import '../../dating/application/dating_controller.dart';
+import '../../events_mvp/application/events_mvp_controller.dart';
 
 /// Signed-in shell: Discover, Likes, Messages and Profile (and Events second when the release
 /// includes it, [eventsAvailableProvider]; EVENTS_SCREEN_INVENTORY EN-1) on the stone page, each tab
@@ -45,8 +46,6 @@ class HomeShell extends ConsumerWidget {
               shell.goBranch(i, initialLocation: i == shell.currentIndex),
           items: [
             TabItem(label: l10n.tabDiscover, icon: NumayaIcons.home),
-            if (ref.watch(eventsAvailableProvider))
-              TabItem(label: l10n.tabEvents, icon: NumayaIcons.event),
             TabItem(
               label: l10n.tabLikes,
               icon: NumayaIcons.heart,
@@ -58,6 +57,17 @@ class HomeShell extends ConsumerWidget {
               icon: NumayaIcons.message,
               badgeCount: newMatches,
               badgeLabel: l10n.tabNewCount(l10n.tabChats, newMatches),
+            ),
+            // Events MVP: the fourth tab (Discover / Likes / Chats / Events / Profile).
+            TabItem(
+              label: l10n.tabEvents,
+              icon: NumayaIcons.event,
+              badgeCount: ref.watch(
+                eventsMvpProvider.select(
+                  (s) => s.notices.where((n) => !n.read).length,
+                ),
+              ),
+              badgeLabel: l10n.tabNewCount(l10n.tabEvents, 0),
             ),
             TabItem(label: l10n.tabProfile, icon: NumayaIcons.user),
           ],

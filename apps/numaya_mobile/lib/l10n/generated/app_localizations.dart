@@ -10629,6 +10629,1422 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose a term to see its full price and renewal.'**
   String get planChooseTerm;
+
+  /// No description provided for @evTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Events'**
+  String get evTitle;
+
+  /// No description provided for @evSampleBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample events in this demo'**
+  String get evSampleBanner;
+
+  /// No description provided for @evSampleBannerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing here is a real event, venue or reservation. Nationwide sample cities show how discovery could work.'**
+  String get evSampleBannerBody;
+
+  /// No description provided for @evCityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get evCityLabel;
+
+  /// No description provided for @evCityChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change city, {city}'**
+  String evCityChange(String city);
+
+  /// No description provided for @evCityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a city'**
+  String get evCityTitle;
+
+  /// No description provided for @evDateAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Any date'**
+  String get evDateAny;
+
+  /// No description provided for @evDateWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get evDateWeek;
+
+  /// No description provided for @evDateWeekend.
+  ///
+  /// In en, this message translates to:
+  /// **'This weekend'**
+  String get evDateWeekend;
+
+  /// No description provided for @evCategoryAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get evCategoryAll;
+
+  /// No description provided for @evCatCoffee.
+  ///
+  /// In en, this message translates to:
+  /// **'Coffee'**
+  String get evCatCoffee;
+
+  /// No description provided for @evCatGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Games'**
+  String get evCatGames;
+
+  /// No description provided for @evCatWorkshop.
+  ///
+  /// In en, this message translates to:
+  /// **'Workshops'**
+  String get evCatWorkshop;
+
+  /// No description provided for @evCatWalk.
+  ///
+  /// In en, this message translates to:
+  /// **'Outdoors'**
+  String get evCatWalk;
+
+  /// No description provided for @evCatFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Food'**
+  String get evCatFood;
+
+  /// No description provided for @evCatArts.
+  ///
+  /// In en, this message translates to:
+  /// **'Arts'**
+  String get evCatArts;
+
+  /// No description provided for @evMyEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'My events'**
+  String get evMyEvents;
+
+  /// No description provided for @evMyEventsDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No upcoming reservations} =1{1 upcoming reservation} other{{count} upcoming reservations}}'**
+  String evMyEventsDetail(int count);
+
+  /// No description provided for @evNoticesWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 update needs your attention} other{{count} updates need your attention}}'**
+  String evNoticesWaiting(int count);
+
+  /// No description provided for @evFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get evFree;
+
+  /// No description provided for @evPlacesLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 place left} other{{count} places left}}'**
+  String evPlacesLeft(int count);
+
+  /// No description provided for @evFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Full'**
+  String get evFull;
+
+  /// No description provided for @evReservedByYou.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re going'**
+  String get evReservedByYou;
+
+  /// No description provided for @evReconfirmNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconfirm needed'**
+  String get evReconfirmNeeded;
+
+  /// No description provided for @evEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No events in {city} yet'**
+  String evEmptyTitle(String city);
+
+  /// No description provided for @evEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample events exist in a few cities only. Try another city or clear the filters.'**
+  String get evEmptyBody;
+
+  /// No description provided for @evEmptyFilterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing matches these filters'**
+  String get evEmptyFilterTitle;
+
+  /// No description provided for @evClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get evClearFilters;
+
+  /// No description provided for @evProposeRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest an event'**
+  String get evProposeRow;
+
+  /// No description provided for @evProposeRowDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Proposal pending decision O1: reviewed by Numaya before anything is published'**
+  String get evProposeRowDetail;
+
+  /// No description provided for @evCardLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{title}. {when}. {place}. {status}'**
+  String evCardLabel(String title, String when, String place, String status);
+
+  /// No description provided for @evWhen.
+  ///
+  /// In en, this message translates to:
+  /// **'{day} · {time}'**
+  String evWhen(String day, String time);
+
+  /// No description provided for @evAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About this event'**
+  String get evAbout;
+
+  /// No description provided for @evHostedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Hosted by a Numaya host'**
+  String get evHostedBy;
+
+  /// No description provided for @evHostSample.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} (sample)'**
+  String evHostSample(String name);
+
+  /// No description provided for @evWhenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When'**
+  String get evWhenTitle;
+
+  /// No description provided for @evWhereTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Where'**
+  String get evWhereTitle;
+
+  /// No description provided for @evTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'{start} to {end} {tz}'**
+  String evTimes(String start, String end, String tz);
+
+  /// No description provided for @evAccessibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Accessibility'**
+  String get evAccessibility;
+
+  /// No description provided for @evAccessUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Not confirmed yet. Contact support if you need details before reserving.'**
+  String get evAccessUnknown;
+
+  /// No description provided for @evTransport.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting there'**
+  String get evTransport;
+
+  /// No description provided for @evDirections.
+  ///
+  /// In en, this message translates to:
+  /// **'Directions'**
+  String get evDirections;
+
+  /// No description provided for @evWhoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Who it’s for'**
+  String get evWhoTitle;
+
+  /// No description provided for @evWhoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Adults {min}+ with a complete profile and a verified phone. Everyone reserves their own place: no plus-ones. We don’t promise a ratio of any kind.'**
+  String evWhoBody(int min);
+
+  /// No description provided for @evPlacesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Places'**
+  String get evPlacesTitle;
+
+  /// No description provided for @evPlacesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{reserved} of {capacity} places reserved. The count can change before you reserve.'**
+  String evPlacesBody(int reserved, int capacity);
+
+  /// No description provided for @evPriceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get evPriceTitle;
+
+  /// No description provided for @evPriceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Free. No ticket, deposit or credits.'**
+  String get evPriceBody;
+
+  /// No description provided for @evCancelTermsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'If plans change'**
+  String get evCancelTermsTitle;
+
+  /// No description provided for @evCancelTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel any time before the start. There’s no penalty.'**
+  String get evCancelTerms;
+
+  /// No description provided for @evNoDirectory.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendees aren’t listed before or after the event.'**
+  String get evNoDirectory;
+
+  /// No description provided for @evReserve.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserve a free place'**
+  String get evReserve;
+
+  /// No description provided for @evViewReservation.
+  ///
+  /// In en, this message translates to:
+  /// **'View your reservation'**
+  String get evViewReservation;
+
+  /// No description provided for @evFullTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This event is full'**
+  String get evFullTitle;
+
+  /// No description provided for @evFullBody.
+  ///
+  /// In en, this message translates to:
+  /// **'There’s no waitlist. Places can open if someone cancels.'**
+  String get evFullBody;
+
+  /// No description provided for @evAlternatives.
+  ///
+  /// In en, this message translates to:
+  /// **'Other events in {city}'**
+  String evAlternatives(String city);
+
+  /// No description provided for @evNoAlternatives.
+  ///
+  /// In en, this message translates to:
+  /// **'No other open events in {city} right now.'**
+  String evNoAlternatives(String city);
+
+  /// No description provided for @evStartedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reservations are closed'**
+  String get evStartedTitle;
+
+  /// No description provided for @evStartedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This event has started.'**
+  String get evStartedBody;
+
+  /// No description provided for @evCompletedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This event has ended'**
+  String get evCompletedTitle;
+
+  /// No description provided for @evCancelledTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This event was cancelled'**
+  String get evCancelledTitle;
+
+  /// No description provided for @evNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This event isn’t available'**
+  String get evNotFound;
+
+  /// No description provided for @evReportSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report or get help'**
+  String get evReportSupport;
+
+  /// No description provided for @evReserveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserve your place'**
+  String get evReserveTitle;
+
+  /// No description provided for @evReserveSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'One place for you'**
+  String get evReserveSummary;
+
+  /// No description provided for @evReserveAck.
+  ///
+  /// In en, this message translates to:
+  /// **'I’ll arrive on time, follow the host’s instructions and the community standards.'**
+  String get evReserveAck;
+
+  /// No description provided for @evDiscoverableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'After the event, show me to people I met'**
+  String get evDiscoverableTitle;
+
+  /// No description provided for @evDiscoverableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional and off by default. Only checked-in attendees who also opt in can see each other, for seven days. You can change this later.'**
+  String get evDiscoverableBody;
+
+  /// No description provided for @evConfirmReserve.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm free reservation'**
+  String get evConfirmReserve;
+
+  /// No description provided for @evSubmitting.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserving…'**
+  String get evSubmitting;
+
+  /// No description provided for @evReservedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re going'**
+  String get evReservedTitle;
+
+  /// No description provided for @evReservedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your place at {title} is reserved. We’ll remind you before it starts.'**
+  String evReservedBody(String title);
+
+  /// No description provided for @evAlreadyReserved.
+  ///
+  /// In en, this message translates to:
+  /// **'You already have a place at this event.'**
+  String get evAlreadyReserved;
+
+  /// No description provided for @evIneligibleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You can’t reserve yet'**
+  String get evIneligibleTitle;
+
+  /// No description provided for @evIneligibleProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your profile to reserve.'**
+  String get evIneligibleProfile;
+
+  /// No description provided for @evIneligiblePhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your phone to reserve.'**
+  String get evIneligiblePhone;
+
+  /// No description provided for @evIneligibleAge.
+  ///
+  /// In en, this message translates to:
+  /// **'This event is for a different age group.'**
+  String get evIneligibleAge;
+
+  /// No description provided for @evIneligibleUnder.
+  ///
+  /// In en, this message translates to:
+  /// **'Events are for adults 18 and over.'**
+  String get evIneligibleUnder;
+
+  /// No description provided for @evCompleteProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete profile'**
+  String get evCompleteProfile;
+
+  /// No description provided for @evUncertainTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn’t confirm your reservation'**
+  String get evUncertainTitle;
+
+  /// No description provided for @evUncertainBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The connection dropped after you tapped reserve. Check the result before trying again.'**
+  String get evUncertainBody;
+
+  /// No description provided for @evCheckStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Check reservation status'**
+  String get evCheckStatus;
+
+  /// No description provided for @evErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t reserve'**
+  String get evErrorTitle;
+
+  /// No description provided for @evErrorBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing was reserved. Check your connection and try again.'**
+  String get evErrorBody;
+
+  /// No description provided for @evOverlapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This overlaps another reservation'**
+  String get evOverlapTitle;
+
+  /// No description provided for @evOverlapBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You’re also going to {title} at that time. You can still reserve.'**
+  String evOverlapBody(String title);
+
+  /// No description provided for @evReservationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your reservation'**
+  String get evReservationTitle;
+
+  /// No description provided for @evReference.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking reference {ref}'**
+  String evReference(String ref);
+
+  /// No description provided for @evStatusConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get evStatusConfirmed;
+
+  /// No description provided for @evStatusReconfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconfirm needed'**
+  String get evStatusReconfirm;
+
+  /// No description provided for @evStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get evStatusCancelled;
+
+  /// No description provided for @evStatusCheckedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked in'**
+  String get evStatusCheckedIn;
+
+  /// No description provided for @evStatusNoShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not checked in'**
+  String get evStatusNoShow;
+
+  /// No description provided for @evStatusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended'**
+  String get evStatusCompleted;
+
+  /// No description provided for @evCancelReasonMember.
+  ///
+  /// In en, this message translates to:
+  /// **'You cancelled this reservation.'**
+  String get evCancelReasonMember;
+
+  /// No description provided for @evCancelReasonEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Numaya cancelled this event: {reason}'**
+  String evCancelReasonEvent(String reason);
+
+  /// No description provided for @evCancelReasonDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'You declined the change, so your place was released.'**
+  String get evCancelReasonDeclined;
+
+  /// No description provided for @evCancelReasonDeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'The time to reconfirm ran out, so your place was released.'**
+  String get evCancelReasonDeadline;
+
+  /// No description provided for @evAddCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to calendar'**
+  String get evAddCalendar;
+
+  /// No description provided for @evCalendarNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar entries don’t update automatically.'**
+  String get evCalendarNote;
+
+  /// No description provided for @evCalendarDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo build: no calendar entry was created.'**
+  String get evCalendarDemo;
+
+  /// No description provided for @evDirectionsDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo build: maps are not opened.'**
+  String get evDirectionsDemo;
+
+  /// No description provided for @evCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel reservation'**
+  String get evCancel;
+
+  /// No description provided for @evCancelConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel your place?'**
+  String get evCancelConfirmTitle;
+
+  /// No description provided for @evCancelConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your place is released for someone else. No penalty.'**
+  String get evCancelConfirmBody;
+
+  /// No description provided for @evCancelKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep my place'**
+  String get evCancelKeep;
+
+  /// No description provided for @evCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Reservation cancelled'**
+  String get evCancelled;
+
+  /// No description provided for @evCancelAfterStart.
+  ///
+  /// In en, this message translates to:
+  /// **'This event has started. Contact support if you can’t make it.'**
+  String get evCancelAfterStart;
+
+  /// No description provided for @evPeopleMet.
+  ///
+  /// In en, this message translates to:
+  /// **'People I met'**
+  String get evPeopleMet;
+
+  /// No description provided for @evPeopleMetDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Open until {date}'**
+  String evPeopleMetDetail(String date);
+
+  /// No description provided for @evUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates'**
+  String get evUpdates;
+
+  /// No description provided for @evMyUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get evMyUpcoming;
+
+  /// No description provided for @evMyPast.
+  ///
+  /// In en, this message translates to:
+  /// **'Past'**
+  String get evMyPast;
+
+  /// No description provided for @evMyCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get evMyCancelled;
+
+  /// No description provided for @evMyEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No reservations yet'**
+  String get evMyEmptyTitle;
+
+  /// No description provided for @evMyEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserve a free place and it shows up here.'**
+  String get evMyEmptyBody;
+
+  /// No description provided for @evBrowse.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse events'**
+  String get evBrowse;
+
+  /// No description provided for @evNoticeFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From {sender}'**
+  String evNoticeFrom(String sender);
+
+  /// No description provided for @evNoticeBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Before'**
+  String get evNoticeBefore;
+
+  /// No description provided for @evNoticeAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'Now'**
+  String get evNoticeAfter;
+
+  /// No description provided for @evNoticeDeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer by {when}'**
+  String evNoticeDeadline(String when);
+
+  /// No description provided for @evNoticeReconfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep my place'**
+  String get evNoticeReconfirm;
+
+  /// No description provided for @evNoticeDecline.
+  ///
+  /// In en, this message translates to:
+  /// **'Release my place'**
+  String get evNoticeDecline;
+
+  /// No description provided for @evNoticeAck.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get evNoticeAck;
+
+  /// No description provided for @evNoticeReconfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'You kept your place.'**
+  String get evNoticeReconfirmed;
+
+  /// No description provided for @evNoticeDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Your place was released.'**
+  String get evNoticeDeclined;
+
+  /// No description provided for @evNoticeAcknowledged.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get evNoticeAcknowledged;
+
+  /// No description provided for @evNoticeSuperseded.
+  ///
+  /// In en, this message translates to:
+  /// **'This change was replaced by a newer one. Answer the latest update.'**
+  String get evNoticeSuperseded;
+
+  /// No description provided for @evNoticeExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'The time to answer has passed.'**
+  String get evNoticeExpired;
+
+  /// No description provided for @evNoticePushFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The notification didn’t reach your phone; this in-app notice is the record.'**
+  String get evNoticePushFailed;
+
+  /// No description provided for @evNoticeUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get evNoticeUnread;
+
+  /// No description provided for @evMetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'People I met'**
+  String get evMetTitle;
+
+  /// No description provided for @evMetIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Only people who were checked in and chose to be seen appear here. Your interest stays private unless it’s mutual.'**
+  String get evMetIntro;
+
+  /// No description provided for @evMetLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No interests left for this event} =1{1 interest left} other{{count} interests left}}'**
+  String evMetLeft(int count);
+
+  /// No description provided for @evMetEnds.
+  ///
+  /// In en, this message translates to:
+  /// **'Open until {when}'**
+  String evMetEnds(String when);
+
+  /// No description provided for @evMetInterested.
+  ///
+  /// In en, this message translates to:
+  /// **'Interested'**
+  String get evMetInterested;
+
+  /// No description provided for @evMetPass.
+  ///
+  /// In en, this message translates to:
+  /// **'Pass'**
+  String get evMetPass;
+
+  /// No description provided for @evMetSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent privately'**
+  String get evMetSent;
+
+  /// No description provided for @evMetPassed.
+  ///
+  /// In en, this message translates to:
+  /// **'Passed'**
+  String get evMetPassed;
+
+  /// No description provided for @evMetEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No one to show'**
+  String get evMetEmptyTitle;
+
+  /// No description provided for @evMetEmptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No other attendees who match your preferences chose to be seen.'**
+  String get evMetEmptyBody;
+
+  /// No description provided for @evMetNotOptedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose to be seen first'**
+  String get evMetNotOptedTitle;
+
+  /// No description provided for @evMetNotOptedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn this on to see people who were there and chose the same.'**
+  String get evMetNotOptedBody;
+
+  /// No description provided for @evMetTurnOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Show me to people I met'**
+  String get evMetTurnOn;
+
+  /// No description provided for @evMetNotAttendedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available for this event'**
+  String get evMetNotAttendedTitle;
+
+  /// No description provided for @evMetNotAttendedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'People I met is for checked-in attendees after the event ends.'**
+  String get evMetNotAttendedBody;
+
+  /// No description provided for @evMetClosedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This window has closed'**
+  String get evMetClosedTitle;
+
+  /// No description provided for @evMetClosedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'People I met stays open for seven days after the event.'**
+  String get evMetClosedBody;
+
+  /// No description provided for @evMetWithdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop showing me'**
+  String get evMetWithdraw;
+
+  /// No description provided for @evMetWithdrawNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Your pending interests are withdrawn. Chats you already have stay as they are.'**
+  String get evMetWithdrawNote;
+
+  /// No description provided for @evMetExhausted.
+  ///
+  /// In en, this message translates to:
+  /// **'You’ve used your three interests for this event.'**
+  String get evMetExhausted;
+
+  /// No description provided for @evMutualTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'It’s mutual'**
+  String get evMutualTitle;
+
+  /// No description provided for @evMutualBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You and {name} both said yes after {event}.'**
+  String evMutualBody(String name, String event);
+
+  /// No description provided for @evMutualNew.
+  ///
+  /// In en, this message translates to:
+  /// **'You have 24 hours to send the first message, as with any new match.'**
+  String get evMutualNew;
+
+  /// No description provided for @evMutualExisting.
+  ///
+  /// In en, this message translates to:
+  /// **'You already have a chat with {name}. It’s unchanged.'**
+  String evMutualExisting(String name);
+
+  /// No description provided for @evMutualArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Your chat with {name} is in Archive. It stays there until one of you writes.'**
+  String evMutualArchived(String name);
+
+  /// No description provided for @evMutualEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Your earlier match with {name} ended. A new one isn’t created (open decision).'**
+  String evMutualEnded(String name);
+
+  /// No description provided for @evMutualRestricted.
+  ///
+  /// In en, this message translates to:
+  /// **'This connection isn’t available.'**
+  String get evMutualRestricted;
+
+  /// No description provided for @evOpenChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Open chat'**
+  String get evOpenChat;
+
+  /// No description provided for @evLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get evLater;
+
+  /// No description provided for @evReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report or get help'**
+  String get evReportTitle;
+
+  /// No description provided for @evReportTypeHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Help with my reservation'**
+  String get evReportTypeHelp;
+
+  /// No description provided for @evReportTypeHost.
+  ///
+  /// In en, this message translates to:
+  /// **'A concern about the host'**
+  String get evReportTypeHost;
+
+  /// No description provided for @evReportTypePerson.
+  ///
+  /// In en, this message translates to:
+  /// **'A concern about someone'**
+  String get evReportTypePerson;
+
+  /// No description provided for @evReportTypeVenue.
+  ///
+  /// In en, this message translates to:
+  /// **'A problem with the venue'**
+  String get evReportTypeVenue;
+
+  /// No description provided for @evReportDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'What happened?'**
+  String get evReportDetails;
+
+  /// No description provided for @evReportUrgent.
+  ///
+  /// In en, this message translates to:
+  /// **'In an emergency, call 112. Numaya support isn’t an emergency service.'**
+  String get evReportUrgent;
+
+  /// No description provided for @evReportSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to Numaya'**
+  String get evReportSend;
+
+  /// No description provided for @evReportReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Received. Reference {ref}. A reviewer who isn’t the host reads it in confidence.'**
+  String evReportReceived(String ref);
+
+  /// No description provided for @evReportDemo.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo build: nothing is sent.'**
+  String get evReportDemo;
+
+  /// No description provided for @evProposeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest an event'**
+  String get evProposeTitle;
+
+  /// No description provided for @evProposeIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending decision O1. A suggestion is reviewed by the Numaya team. It doesn’t publish anything, give you hosting rights or show you attendees.'**
+  String get evProposeIntro;
+
+  /// No description provided for @evProposeName.
+  ///
+  /// In en, this message translates to:
+  /// **'Event name'**
+  String get evProposeName;
+
+  /// No description provided for @evProposeCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get evProposeCategory;
+
+  /// No description provided for @evProposeCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get evProposeCity;
+
+  /// No description provided for @evProposeVenue.
+  ///
+  /// In en, this message translates to:
+  /// **'Public venue'**
+  String get evProposeVenue;
+
+  /// No description provided for @evProposePrivateHome.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a private home'**
+  String get evProposePrivateHome;
+
+  /// No description provided for @evProposeCapacity.
+  ///
+  /// In en, this message translates to:
+  /// **'Places'**
+  String get evProposeCapacity;
+
+  /// No description provided for @evProposeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'What happens'**
+  String get evProposeDescription;
+
+  /// No description provided for @evProposeDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get evProposeDate;
+
+  /// No description provided for @evProposeSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit for review'**
+  String get evProposeSubmit;
+
+  /// No description provided for @evProposeSaveDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Save draft'**
+  String get evProposeSaveDraft;
+
+  /// No description provided for @evProposeErrTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a name of at least 4 characters.'**
+  String get evProposeErrTitle;
+
+  /// No description provided for @evProposeErrVenue.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a public venue.'**
+  String get evProposeErrVenue;
+
+  /// No description provided for @evProposeErrHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Events can’t be held in private homes.'**
+  String get evProposeErrHome;
+
+  /// No description provided for @evProposeErrCapacity.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose between 20 and 30 places.'**
+  String get evProposeErrCapacity;
+
+  /// No description provided for @evProposeErrDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a date at least three days away.'**
+  String get evProposeErrDate;
+
+  /// No description provided for @evProposalsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your suggestions'**
+  String get evProposalsTitle;
+
+  /// No description provided for @evProposalsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No suggestions yet.'**
+  String get evProposalsEmpty;
+
+  /// No description provided for @evProposalStatusDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get evProposalStatusDraft;
+
+  /// No description provided for @evProposalStatusSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted'**
+  String get evProposalStatusSubmitted;
+
+  /// No description provided for @evProposalStatusInReview.
+  ///
+  /// In en, this message translates to:
+  /// **'In review'**
+  String get evProposalStatusInReview;
+
+  /// No description provided for @evProposalStatusNeedsChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs changes'**
+  String get evProposalStatusNeedsChanges;
+
+  /// No description provided for @evProposalStatusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Not accepted'**
+  String get evProposalStatusRejected;
+
+  /// No description provided for @evProposalStatusWithdrawn.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawn'**
+  String get evProposalStatusWithdrawn;
+
+  /// No description provided for @evProposalStatusPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Published'**
+  String get evProposalStatusPublished;
+
+  /// No description provided for @evProposalRevise.
+  ///
+  /// In en, this message translates to:
+  /// **'Revise and resubmit'**
+  String get evProposalRevise;
+
+  /// No description provided for @evProposalWithdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw'**
+  String get evProposalWithdraw;
+
+  /// No description provided for @evProposalViewEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'View published event'**
+  String get evProposalViewEvent;
+
+  /// No description provided for @evProposalNoDeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'There’s no promised review time.'**
+  String get evProposalNoDeadline;
+
+  /// No description provided for @evStaffTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Numaya team tools (demo)'**
+  String get evStaffTitle;
+
+  /// No description provided for @evStaffBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo role, not real access'**
+  String get evStaffBanner;
+
+  /// No description provided for @evStaffBannerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Internal tools are shown to illustrate the PRD. Opening them here grants no authority; a live build needs restricted staff accounts.'**
+  String get evStaffBannerBody;
+
+  /// No description provided for @evStaffQueue.
+  ///
+  /// In en, this message translates to:
+  /// **'Review queue'**
+  String get evStaffQueue;
+
+  /// No description provided for @evStaffEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Published events'**
+  String get evStaffEvents;
+
+  /// No description provided for @evStaffReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get evStaffReview;
+
+  /// No description provided for @evStaffPublish.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve and publish'**
+  String get evStaffPublish;
+
+  /// No description provided for @evStaffReturn.
+  ///
+  /// In en, this message translates to:
+  /// **'Return for changes'**
+  String get evStaffReturn;
+
+  /// No description provided for @evStaffReject.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get evStaffReject;
+
+  /// No description provided for @evStaffHost.
+  ///
+  /// In en, this message translates to:
+  /// **'Named host'**
+  String get evStaffHost;
+
+  /// No description provided for @evStaffReviewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Named report reviewer'**
+  String get evStaffReviewer;
+
+  /// No description provided for @evStaffStaffingNeeded.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign a named host and report reviewer before publishing.'**
+  String get evStaffStaffingNeeded;
+
+  /// No description provided for @evStaffAttendees.
+  ///
+  /// In en, this message translates to:
+  /// **'Attendees and check-in'**
+  String get evStaffAttendees;
+
+  /// No description provided for @evStaffCheckIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in'**
+  String get evStaffCheckIn;
+
+  /// No description provided for @evStaffNoShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark no-show'**
+  String get evStaffNoShow;
+
+  /// No description provided for @evStaffUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get evStaffUndo;
+
+  /// No description provided for @evStaffMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Alex (you, demo member)'**
+  String get evStaffMember;
+
+  /// No description provided for @evStaffAnnounce.
+  ///
+  /// In en, this message translates to:
+  /// **'Send an announcement'**
+  String get evStaffAnnounce;
+
+  /// No description provided for @evStaffChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change time or venue'**
+  String get evStaffChange;
+
+  /// No description provided for @evStaffCancelEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel event'**
+  String get evStaffCancelEvent;
+
+  /// No description provided for @evStaffImpact.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 reservation affected} other{{count} reservations affected}}'**
+  String evStaffImpact(int count);
+
+  /// No description provided for @evStaffTooLate.
+  ///
+  /// In en, this message translates to:
+  /// **'Fewer than two hours to respond: reschedule later or cancel instead.'**
+  String get evStaffTooLate;
+
+  /// No description provided for @evStaffChangeApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Change sent. Attendees must reconfirm.'**
+  String get evStaffChangeApplied;
+
+  /// No description provided for @evStaffCancelReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason shown to attendees'**
+  String get evStaffCancelReason;
+
+  /// No description provided for @evStaffAudit.
+  ///
+  /// In en, this message translates to:
+  /// **'Audit log'**
+  String get evStaffAudit;
+
+  /// No description provided for @evStaffAnnouncementText.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get evStaffAnnouncementText;
+
+  /// No description provided for @evStaffSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Announcement sent'**
+  String get evStaffSent;
+
+  /// No description provided for @evStaffMinutesLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Move start later by'**
+  String get evStaffMinutesLater;
+
+  /// No description provided for @evStaffNewVenue.
+  ///
+  /// In en, this message translates to:
+  /// **'New venue'**
+  String get evStaffNewVenue;
+
+  /// No description provided for @evDemoScenarios.
+  ///
+  /// In en, this message translates to:
+  /// **'Events scenarios'**
+  String get evDemoScenarios;
+
+  /// No description provided for @evScenarioDrop.
+  ///
+  /// In en, this message translates to:
+  /// **'Next reservation: lose the response'**
+  String get evScenarioDrop;
+
+  /// No description provided for @evScenarioIneligible.
+  ///
+  /// In en, this message translates to:
+  /// **'Treat me as ineligible'**
+  String get evScenarioIneligible;
+
+  /// No description provided for @evScenarioReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset events demo'**
+  String get evScenarioReset;
+
+  /// No description provided for @tabEventsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Events'**
+  String get tabEventsLabel;
+
+  /// No description provided for @profileFeatureUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Insights are no longer part of Numaya'**
+  String get profileFeatureUnavailable;
+
+  /// No description provided for @profileFeatureUnavailableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'That page was removed. Your profile, streak and credits are unchanged.'**
+  String get profileFeatureUnavailableBody;
 }
 
 class _AppLocalizationsDelegate

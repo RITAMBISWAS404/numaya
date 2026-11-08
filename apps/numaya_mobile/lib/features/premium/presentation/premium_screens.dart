@@ -20,7 +20,6 @@ List<(NumayaIcons?, NumayaMobileIcons?, String)> premiumBenefits(
   (NumayaIcons.groups, null, l10n.premiumBenefitSeeLikes),
   (NumayaIcons.filter, null, l10n.premiumBenefitFilters),
   (null, NumayaMobileIcons.extend, l10n.premiumBenefitExtend),
-  (null, NumayaMobileIcons.chart, l10n.premiumBenefitInsights),
 ];
 
 String planLabel(AppLocalizations l10n, Product p) => switch (p.kind) {
@@ -256,11 +255,6 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
               (l10n.planCompareLikes, '5', '15'),
               (l10n.planCompareCompliments, '0', '3'),
               (l10n.planCompareSeeLikes, '—', '✓'),
-              (
-                l10n.planCompareInsights,
-                l10n.insightsDays(7),
-                l10n.insightsDays(90),
-              ),
             ],
           ),
           const SizedBox(height: AppSpacing.s2),

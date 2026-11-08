@@ -43,7 +43,8 @@ class LabStatusBanner extends ConsumerWidget {
     };
     Widget glyph(double size, {Color? color}) => icon == null
         ? NumayaIcon(toneIcon, size: size, color: color ?? mark, filled: true)
-        : MobileIcon(icon!, size: size, color: color ?? mark);
+        // Owner note: status banners use filled glyphs (Tabler filled where one exists).
+        : MobileIcon(icon!, size: size, color: color ?? mark, filled: true);
     final titleText = Text(
       title,
       style: AppTypography.weight(

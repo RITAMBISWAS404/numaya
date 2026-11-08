@@ -384,29 +384,54 @@ class ComplimentCard extends ConsumerWidget {
           ),
         );
       default:
-        return Container(
-          padding: pad,
-          decoration: card(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  avatar(48),
-                  const SizedBox(width: AppSpacing.s3),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [name(nameStyle), meta()],
-                    ),
+        // Owner selection O with notes: no Reply / Not now buttons here; the whole card opens the
+        // request page (what they noticed, reply, dismiss, report, block). Opening it accepts
+        // nothing and sends nothing.
+        return Pressable(
+          onTap: onOpen,
+          semanticLabel: [
+            l10n.requestRowCompliment(person.name),
+            c.text,
+            about,
+            time,
+          ].join('. '),
+          excludeChildSemantics: true,
+          pressedScale: 1,
+          borderRadius: AppRadii.all(AppRadii.card),
+          child: Container(
+            padding: pad,
+            decoration: card(),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                        children: [
+                          avatar(48),
+                          const SizedBox(width: AppSpacing.s3),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [name(nameStyle), meta()],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppSpacing.s3),
+                      words(),
+                    ],
                   ),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.s3),
-              words(),
-              const SizedBox(height: AppSpacing.s4),
-              actions(),
-            ],
+                ),
+                const SizedBox(width: AppSpacing.s2),
+                const NumayaIcon(
+                  NumayaIcons.chevronRight,
+                  size: 18,
+                  color: AppColors.iconSupporting,
+                ),
+              ],
+            ),
           ),
         );
     }

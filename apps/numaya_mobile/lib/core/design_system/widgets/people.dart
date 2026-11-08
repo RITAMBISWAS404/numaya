@@ -1419,6 +1419,7 @@ class ViewTabs extends StatelessWidget {
     required this.label,
     this.bleed = 0,
     this.onWhite = false,
+    this.keys,
   });
 
   /// How far the row scrolls past its own edges: the page gutter for a row that sits in a padded
@@ -1430,6 +1431,9 @@ class ViewTabs extends StatelessWidget {
   /// need a subtle edge; on the grey page and grey sheets (every current caller) the white fill
   /// alone is the boundary.
   final bool onWhite;
+
+  /// Optional keys, one per option (tests and capture scripts find pills by key).
+  final List<Key>? keys;
 
   /// A null count shows the label alone (segmented choices such as Basic / Advanced).
   final List<({String label, int? count})> options;
@@ -1456,6 +1460,7 @@ class ViewTabs extends StatelessWidget {
               for (var i = 0; i < options.length; i++) ...[
                 if (i > 0) const SizedBox(width: AppLayout.groupGap),
                 Pressable(
+                  key: keys == null ? null : keys![i],
                   onTap: () => onSelect(i),
                   haptic: HapticMoment.selection,
                   semanticLabel: options[i].count == null
@@ -1642,7 +1647,7 @@ class PhotoScrim extends StatelessWidget {
   const PhotoScrim({
     super.key,
     required this.child,
-    this.fade = 72,
+    this.fade = 40,
     this.padding = EdgeInsets.zero,
   });
 

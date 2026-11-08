@@ -16,6 +16,15 @@ import '../domain/sample_people.dart';
 
 enum EndReason { unmatched, blocked, reported }
 
+/// The outcome of an Events mutual connection ([DatingController.connectFromEvent]).
+enum EventConnection {
+  created,
+  existing,
+  existingArchived,
+  existingEnded,
+  restricted,
+}
+
 /// The context line above an opening Compliment on a photo.
 const String kComplimentPhotoContext = 'Compliment on a photo';
 
@@ -707,6 +716,31 @@ class DatingController extends Notifier<DatingState> {
       lastRead: {...state.lastRead, id: now},
     );
     _economy.recordMessage();
+  }
+
+  /// Events E08: a mutual post-event connection between the member and [id].
+  ///
+  /// Reuses whatever already exists and never resets it: an active or awaiting match is returned
+  /// as it is (no new chat, no timer change); an archived chat stays archived (the member can
+  /// resume it by sending, R01); a pair that unmatched or blocked is never reconnected; an initial
+  /// match that ran out is not recreated (product rule OPEN, D5). Only a pair with no history gets
+  /// a new match, which follows the normal 24-hour first-message rule.
+  EventConnection connectFromEvent(String id) {
+    if (state.ended.containsKey(id)) return EventConnection.restricted;
+    if (state.matches.contains(id)) {
+      return switch (status(id).phase) {
+        MatchPhase.archived => EventConnection.existingArchived,
+        MatchPhase.expired => EventConnection.existingEnded,
+        _ => EventConnection.existing,
+      };
+    }
+    state = state.copyWith(
+      seen: {...state.seen, id},
+      matches: [...state.matches, id],
+      matchedAt: {...state.matchedAt, id: _now},
+    );
+    _log.info('Event connection created');
+    return EventConnection.created;
   }
 
   // Matches and expiry -----------------------------------------------------------------------

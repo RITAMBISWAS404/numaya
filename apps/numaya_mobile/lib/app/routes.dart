@@ -81,6 +81,23 @@ abstract final class Routes {
 
   /// The Events tab (`?view=mine` opens My events) and full-screen event pages.
   static const events = '/events';
+
+  /// Events MVP (co-founder PRD, 2026-11-08). E04, E02 (+/reserve), E05, E06, E07, M02, M01.
+  static const evMine = '/events/mine';
+  static const evEvent = '/events/e';
+  static const evReservation = '/events/r';
+  static const evNotice = '/events/notice';
+  static const evMet = '/events/met';
+  static const evProposals = '/events/proposals';
+  static const evPropose = '/events/propose';
+
+  /// Internal tools demo (H01–H04): Demo Hub only.
+  static const staff = '/staff';
+  static const staffProposal = '/staff/proposal';
+  static const staffEvent = '/staff/event';
+
+  /// Neutral fallback for retired Health/Insights links.
+  static const profileUnavailable = '/profile?notice=unavailable';
   static const event = '/event';
   static const eventNew = '/event/new';
 

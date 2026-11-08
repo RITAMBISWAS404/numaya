@@ -87,22 +87,12 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
     return LargeTitlePage(
       title: l10n.heartTitle,
       scrollController: _scroll,
-      pinned: NumayaSegmented(
-        label: l10n.heartTitle,
-        selected: _tab.index,
-        onSelect: (i) => _switch(HeartTab.values[i]),
-        options: [
-          (
-            label: l10n.heartTabLikes,
-            count: likeCount,
-            key: const ValueKey('heart-tab-likes'),
-          ),
-          (
-            label: l10n.heartTabCompliments,
-            count: requests.length,
-            key: const ValueKey('heart-tab-compliments'),
-          ),
-        ],
+      // Owner selection: two pills, the same pill pattern as Chats' filters (no tab switcher).
+      pinned: HeartPills(
+        selected: _tab,
+        likes: likeCount,
+        compliments: requests.length,
+        onSelect: _switch,
       ),
       child: KeyedSubtree(
         key: ValueKey('heart-${_tab.name}'),
@@ -526,6 +516,44 @@ class PersonProfileScreen extends ConsumerWidget {
                 ),
               ],
             ),
+    );
+  }
+}
+
+/// The Heart tab's two pills, Likes and Compliments, drawn like every other filter pill (Ente
+/// Filter Chip `9524:4352`, Numaya purple when selected). Each is a real button with its count.
+class HeartPills extends StatelessWidget {
+  const HeartPills({
+    super.key,
+    required this.selected,
+    required this.likes,
+    required this.compliments,
+    required this.onSelect,
+  });
+
+  final HeartTab selected;
+  final int likes;
+  final int compliments;
+  final ValueChanged<HeartTab> onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: ViewTabs(
+        label: l10n.heartTitle,
+        selected: selected.index,
+        onSelect: (i) => onSelect(HeartTab.values[i]),
+        keys: const [
+          ValueKey('heart-tab-likes'),
+          ValueKey('heart-tab-compliments'),
+        ],
+        options: [
+          (label: l10n.heartTabLikes, count: likes),
+          (label: l10n.heartTabCompliments, count: compliments),
+        ],
+      ),
     );
   }
 }

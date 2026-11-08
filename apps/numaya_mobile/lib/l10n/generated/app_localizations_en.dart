@@ -6295,4 +6295,832 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get planChooseTerm =>
       'Choose a term to see its full price and renewal.';
+
+  @override
+  String get evTitle => 'Events';
+
+  @override
+  String get evSampleBanner => 'Sample events in this demo';
+
+  @override
+  String get evSampleBannerBody =>
+      'Nothing here is a real event, venue or reservation. Nationwide sample cities show how discovery could work.';
+
+  @override
+  String get evCityLabel => 'City';
+
+  @override
+  String evCityChange(String city) {
+    return 'Change city, $city';
+  }
+
+  @override
+  String get evCityTitle => 'Choose a city';
+
+  @override
+  String get evDateAny => 'Any date';
+
+  @override
+  String get evDateWeek => 'This week';
+
+  @override
+  String get evDateWeekend => 'This weekend';
+
+  @override
+  String get evCategoryAll => 'All';
+
+  @override
+  String get evCatCoffee => 'Coffee';
+
+  @override
+  String get evCatGames => 'Games';
+
+  @override
+  String get evCatWorkshop => 'Workshops';
+
+  @override
+  String get evCatWalk => 'Outdoors';
+
+  @override
+  String get evCatFood => 'Food';
+
+  @override
+  String get evCatArts => 'Arts';
+
+  @override
+  String get evMyEvents => 'My events';
+
+  @override
+  String evMyEventsDetail(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count upcoming reservations',
+      one: '1 upcoming reservation',
+      zero: 'No upcoming reservations',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String evNoticesWaiting(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count updates need your attention',
+      one: '1 update needs your attention',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get evFree => 'Free';
+
+  @override
+  String evPlacesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count places left',
+      one: '1 place left',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get evFull => 'Full';
+
+  @override
+  String get evReservedByYou => 'You’re going';
+
+  @override
+  String get evReconfirmNeeded => 'Reconfirm needed';
+
+  @override
+  String evEmptyTitle(String city) {
+    return 'No events in $city yet';
+  }
+
+  @override
+  String get evEmptyBody =>
+      'Sample events exist in a few cities only. Try another city or clear the filters.';
+
+  @override
+  String get evEmptyFilterTitle => 'Nothing matches these filters';
+
+  @override
+  String get evClearFilters => 'Clear filters';
+
+  @override
+  String get evProposeRow => 'Suggest an event';
+
+  @override
+  String get evProposeRowDetail =>
+      'Proposal pending decision O1: reviewed by Numaya before anything is published';
+
+  @override
+  String evCardLabel(String title, String when, String place, String status) {
+    return '$title. $when. $place. $status';
+  }
+
+  @override
+  String evWhen(String day, String time) {
+    return '$day · $time';
+  }
+
+  @override
+  String get evAbout => 'About this event';
+
+  @override
+  String get evHostedBy => 'Hosted by a Numaya host';
+
+  @override
+  String evHostSample(String name) {
+    return '$name (sample)';
+  }
+
+  @override
+  String get evWhenTitle => 'When';
+
+  @override
+  String get evWhereTitle => 'Where';
+
+  @override
+  String evTimes(String start, String end, String tz) {
+    return '$start to $end $tz';
+  }
+
+  @override
+  String get evAccessibility => 'Accessibility';
+
+  @override
+  String get evAccessUnknown =>
+      'Not confirmed yet. Contact support if you need details before reserving.';
+
+  @override
+  String get evTransport => 'Getting there';
+
+  @override
+  String get evDirections => 'Directions';
+
+  @override
+  String get evWhoTitle => 'Who it’s for';
+
+  @override
+  String evWhoBody(int min) {
+    return 'Adults $min+ with a complete profile and a verified phone. Everyone reserves their own place: no plus-ones. We don’t promise a ratio of any kind.';
+  }
+
+  @override
+  String get evPlacesTitle => 'Places';
+
+  @override
+  String evPlacesBody(int reserved, int capacity) {
+    return '$reserved of $capacity places reserved. The count can change before you reserve.';
+  }
+
+  @override
+  String get evPriceTitle => 'Price';
+
+  @override
+  String get evPriceBody => 'Free. No ticket, deposit or credits.';
+
+  @override
+  String get evCancelTermsTitle => 'If plans change';
+
+  @override
+  String get evCancelTerms =>
+      'Cancel any time before the start. There’s no penalty.';
+
+  @override
+  String get evNoDirectory =>
+      'Attendees aren’t listed before or after the event.';
+
+  @override
+  String get evReserve => 'Reserve a free place';
+
+  @override
+  String get evViewReservation => 'View your reservation';
+
+  @override
+  String get evFullTitle => 'This event is full';
+
+  @override
+  String get evFullBody =>
+      'There’s no waitlist. Places can open if someone cancels.';
+
+  @override
+  String evAlternatives(String city) {
+    return 'Other events in $city';
+  }
+
+  @override
+  String evNoAlternatives(String city) {
+    return 'No other open events in $city right now.';
+  }
+
+  @override
+  String get evStartedTitle => 'Reservations are closed';
+
+  @override
+  String get evStartedBody => 'This event has started.';
+
+  @override
+  String get evCompletedTitle => 'This event has ended';
+
+  @override
+  String get evCancelledTitle => 'This event was cancelled';
+
+  @override
+  String get evNotFound => 'This event isn’t available';
+
+  @override
+  String get evReportSupport => 'Report or get help';
+
+  @override
+  String get evReserveTitle => 'Reserve your place';
+
+  @override
+  String get evReserveSummary => 'One place for you';
+
+  @override
+  String get evReserveAck =>
+      'I’ll arrive on time, follow the host’s instructions and the community standards.';
+
+  @override
+  String get evDiscoverableTitle => 'After the event, show me to people I met';
+
+  @override
+  String get evDiscoverableBody =>
+      'Optional and off by default. Only checked-in attendees who also opt in can see each other, for seven days. You can change this later.';
+
+  @override
+  String get evConfirmReserve => 'Confirm free reservation';
+
+  @override
+  String get evSubmitting => 'Reserving…';
+
+  @override
+  String get evReservedTitle => 'You’re going';
+
+  @override
+  String evReservedBody(String title) {
+    return 'Your place at $title is reserved. We’ll remind you before it starts.';
+  }
+
+  @override
+  String get evAlreadyReserved => 'You already have a place at this event.';
+
+  @override
+  String get evIneligibleTitle => 'You can’t reserve yet';
+
+  @override
+  String get evIneligibleProfile => 'Complete your profile to reserve.';
+
+  @override
+  String get evIneligiblePhone => 'Verify your phone to reserve.';
+
+  @override
+  String get evIneligibleAge => 'This event is for a different age group.';
+
+  @override
+  String get evIneligibleUnder => 'Events are for adults 18 and over.';
+
+  @override
+  String get evCompleteProfile => 'Complete profile';
+
+  @override
+  String get evUncertainTitle => 'We couldn’t confirm your reservation';
+
+  @override
+  String get evUncertainBody =>
+      'The connection dropped after you tapped reserve. Check the result before trying again.';
+
+  @override
+  String get evCheckStatus => 'Check reservation status';
+
+  @override
+  String get evErrorTitle => 'Couldn’t reserve';
+
+  @override
+  String get evErrorBody =>
+      'Nothing was reserved. Check your connection and try again.';
+
+  @override
+  String get evOverlapTitle => 'This overlaps another reservation';
+
+  @override
+  String evOverlapBody(String title) {
+    return 'You’re also going to $title at that time. You can still reserve.';
+  }
+
+  @override
+  String get evReservationTitle => 'Your reservation';
+
+  @override
+  String evReference(String ref) {
+    return 'Booking reference $ref';
+  }
+
+  @override
+  String get evStatusConfirmed => 'Confirmed';
+
+  @override
+  String get evStatusReconfirm => 'Reconfirm needed';
+
+  @override
+  String get evStatusCancelled => 'Cancelled';
+
+  @override
+  String get evStatusCheckedIn => 'Checked in';
+
+  @override
+  String get evStatusNoShow => 'Not checked in';
+
+  @override
+  String get evStatusCompleted => 'Ended';
+
+  @override
+  String get evCancelReasonMember => 'You cancelled this reservation.';
+
+  @override
+  String evCancelReasonEvent(String reason) {
+    return 'Numaya cancelled this event: $reason';
+  }
+
+  @override
+  String get evCancelReasonDeclined =>
+      'You declined the change, so your place was released.';
+
+  @override
+  String get evCancelReasonDeadline =>
+      'The time to reconfirm ran out, so your place was released.';
+
+  @override
+  String get evAddCalendar => 'Add to calendar';
+
+  @override
+  String get evCalendarNote => 'Calendar entries don’t update automatically.';
+
+  @override
+  String get evCalendarDemo => 'Demo build: no calendar entry was created.';
+
+  @override
+  String get evDirectionsDemo => 'Demo build: maps are not opened.';
+
+  @override
+  String get evCancel => 'Cancel reservation';
+
+  @override
+  String get evCancelConfirmTitle => 'Cancel your place?';
+
+  @override
+  String get evCancelConfirmBody =>
+      'Your place is released for someone else. No penalty.';
+
+  @override
+  String get evCancelKeep => 'Keep my place';
+
+  @override
+  String get evCancelled => 'Reservation cancelled';
+
+  @override
+  String get evCancelAfterStart =>
+      'This event has started. Contact support if you can’t make it.';
+
+  @override
+  String get evPeopleMet => 'People I met';
+
+  @override
+  String evPeopleMetDetail(String date) {
+    return 'Open until $date';
+  }
+
+  @override
+  String get evUpdates => 'Updates';
+
+  @override
+  String get evMyUpcoming => 'Upcoming';
+
+  @override
+  String get evMyPast => 'Past';
+
+  @override
+  String get evMyCancelled => 'Cancelled';
+
+  @override
+  String get evMyEmptyTitle => 'No reservations yet';
+
+  @override
+  String get evMyEmptyBody => 'Reserve a free place and it shows up here.';
+
+  @override
+  String get evBrowse => 'Browse events';
+
+  @override
+  String evNoticeFrom(String sender) {
+    return 'From $sender';
+  }
+
+  @override
+  String get evNoticeBefore => 'Before';
+
+  @override
+  String get evNoticeAfter => 'Now';
+
+  @override
+  String evNoticeDeadline(String when) {
+    return 'Answer by $when';
+  }
+
+  @override
+  String get evNoticeReconfirm => 'Keep my place';
+
+  @override
+  String get evNoticeDecline => 'Release my place';
+
+  @override
+  String get evNoticeAck => 'Got it';
+
+  @override
+  String get evNoticeReconfirmed => 'You kept your place.';
+
+  @override
+  String get evNoticeDeclined => 'Your place was released.';
+
+  @override
+  String get evNoticeAcknowledged => 'Read';
+
+  @override
+  String get evNoticeSuperseded =>
+      'This change was replaced by a newer one. Answer the latest update.';
+
+  @override
+  String get evNoticeExpired => 'The time to answer has passed.';
+
+  @override
+  String get evNoticePushFailed =>
+      'The notification didn’t reach your phone; this in-app notice is the record.';
+
+  @override
+  String get evNoticeUnread => 'New';
+
+  @override
+  String get evMetTitle => 'People I met';
+
+  @override
+  String get evMetIntro =>
+      'Only people who were checked in and chose to be seen appear here. Your interest stays private unless it’s mutual.';
+
+  @override
+  String evMetLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count interests left',
+      one: '1 interest left',
+      zero: 'No interests left for this event',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String evMetEnds(String when) {
+    return 'Open until $when';
+  }
+
+  @override
+  String get evMetInterested => 'Interested';
+
+  @override
+  String get evMetPass => 'Pass';
+
+  @override
+  String get evMetSent => 'Sent privately';
+
+  @override
+  String get evMetPassed => 'Passed';
+
+  @override
+  String get evMetEmptyTitle => 'No one to show';
+
+  @override
+  String get evMetEmptyBody =>
+      'No other attendees who match your preferences chose to be seen.';
+
+  @override
+  String get evMetNotOptedTitle => 'Choose to be seen first';
+
+  @override
+  String get evMetNotOptedBody =>
+      'Turn this on to see people who were there and chose the same.';
+
+  @override
+  String get evMetTurnOn => 'Show me to people I met';
+
+  @override
+  String get evMetNotAttendedTitle => 'Not available for this event';
+
+  @override
+  String get evMetNotAttendedBody =>
+      'People I met is for checked-in attendees after the event ends.';
+
+  @override
+  String get evMetClosedTitle => 'This window has closed';
+
+  @override
+  String get evMetClosedBody =>
+      'People I met stays open for seven days after the event.';
+
+  @override
+  String get evMetWithdraw => 'Stop showing me';
+
+  @override
+  String get evMetWithdrawNote =>
+      'Your pending interests are withdrawn. Chats you already have stay as they are.';
+
+  @override
+  String get evMetExhausted =>
+      'You’ve used your three interests for this event.';
+
+  @override
+  String get evMutualTitle => 'It’s mutual';
+
+  @override
+  String evMutualBody(String name, String event) {
+    return 'You and $name both said yes after $event.';
+  }
+
+  @override
+  String get evMutualNew =>
+      'You have 24 hours to send the first message, as with any new match.';
+
+  @override
+  String evMutualExisting(String name) {
+    return 'You already have a chat with $name. It’s unchanged.';
+  }
+
+  @override
+  String evMutualArchived(String name) {
+    return 'Your chat with $name is in Archive. It stays there until one of you writes.';
+  }
+
+  @override
+  String evMutualEnded(String name) {
+    return 'Your earlier match with $name ended. A new one isn’t created (open decision).';
+  }
+
+  @override
+  String get evMutualRestricted => 'This connection isn’t available.';
+
+  @override
+  String get evOpenChat => 'Open chat';
+
+  @override
+  String get evLater => 'Later';
+
+  @override
+  String get evReportTitle => 'Report or get help';
+
+  @override
+  String get evReportTypeHelp => 'Help with my reservation';
+
+  @override
+  String get evReportTypeHost => 'A concern about the host';
+
+  @override
+  String get evReportTypePerson => 'A concern about someone';
+
+  @override
+  String get evReportTypeVenue => 'A problem with the venue';
+
+  @override
+  String get evReportDetails => 'What happened?';
+
+  @override
+  String get evReportUrgent =>
+      'In an emergency, call 112. Numaya support isn’t an emergency service.';
+
+  @override
+  String get evReportSend => 'Send to Numaya';
+
+  @override
+  String evReportReceived(String ref) {
+    return 'Received. Reference $ref. A reviewer who isn’t the host reads it in confidence.';
+  }
+
+  @override
+  String get evReportDemo => 'Demo build: nothing is sent.';
+
+  @override
+  String get evProposeTitle => 'Suggest an event';
+
+  @override
+  String get evProposeIntro =>
+      'Pending decision O1. A suggestion is reviewed by the Numaya team. It doesn’t publish anything, give you hosting rights or show you attendees.';
+
+  @override
+  String get evProposeName => 'Event name';
+
+  @override
+  String get evProposeCategory => 'Activity';
+
+  @override
+  String get evProposeCity => 'City';
+
+  @override
+  String get evProposeVenue => 'Public venue';
+
+  @override
+  String get evProposePrivateHome => 'This is a private home';
+
+  @override
+  String get evProposeCapacity => 'Places';
+
+  @override
+  String get evProposeDescription => 'What happens';
+
+  @override
+  String get evProposeDate => 'Date';
+
+  @override
+  String get evProposeSubmit => 'Submit for review';
+
+  @override
+  String get evProposeSaveDraft => 'Save draft';
+
+  @override
+  String get evProposeErrTitle => 'Add a name of at least 4 characters.';
+
+  @override
+  String get evProposeErrVenue => 'Add a public venue.';
+
+  @override
+  String get evProposeErrHome => 'Events can’t be held in private homes.';
+
+  @override
+  String get evProposeErrCapacity => 'Choose between 20 and 30 places.';
+
+  @override
+  String get evProposeErrDate => 'Choose a date at least three days away.';
+
+  @override
+  String get evProposalsTitle => 'Your suggestions';
+
+  @override
+  String get evProposalsEmpty => 'No suggestions yet.';
+
+  @override
+  String get evProposalStatusDraft => 'Draft';
+
+  @override
+  String get evProposalStatusSubmitted => 'Submitted';
+
+  @override
+  String get evProposalStatusInReview => 'In review';
+
+  @override
+  String get evProposalStatusNeedsChanges => 'Needs changes';
+
+  @override
+  String get evProposalStatusRejected => 'Not accepted';
+
+  @override
+  String get evProposalStatusWithdrawn => 'Withdrawn';
+
+  @override
+  String get evProposalStatusPublished => 'Published';
+
+  @override
+  String get evProposalRevise => 'Revise and resubmit';
+
+  @override
+  String get evProposalWithdraw => 'Withdraw';
+
+  @override
+  String get evProposalViewEvent => 'View published event';
+
+  @override
+  String get evProposalNoDeadline => 'There’s no promised review time.';
+
+  @override
+  String get evStaffTitle => 'Numaya team tools (demo)';
+
+  @override
+  String get evStaffBanner => 'Demo role, not real access';
+
+  @override
+  String get evStaffBannerBody =>
+      'Internal tools are shown to illustrate the PRD. Opening them here grants no authority; a live build needs restricted staff accounts.';
+
+  @override
+  String get evStaffQueue => 'Review queue';
+
+  @override
+  String get evStaffEvents => 'Published events';
+
+  @override
+  String get evStaffReview => 'Review';
+
+  @override
+  String get evStaffPublish => 'Approve and publish';
+
+  @override
+  String get evStaffReturn => 'Return for changes';
+
+  @override
+  String get evStaffReject => 'Reject';
+
+  @override
+  String get evStaffHost => 'Named host';
+
+  @override
+  String get evStaffReviewer => 'Named report reviewer';
+
+  @override
+  String get evStaffStaffingNeeded =>
+      'Assign a named host and report reviewer before publishing.';
+
+  @override
+  String get evStaffAttendees => 'Attendees and check-in';
+
+  @override
+  String get evStaffCheckIn => 'Check in';
+
+  @override
+  String get evStaffNoShow => 'Mark no-show';
+
+  @override
+  String get evStaffUndo => 'Correct';
+
+  @override
+  String get evStaffMember => 'Alex (you, demo member)';
+
+  @override
+  String get evStaffAnnounce => 'Send an announcement';
+
+  @override
+  String get evStaffChange => 'Change time or venue';
+
+  @override
+  String get evStaffCancelEvent => 'Cancel event';
+
+  @override
+  String evStaffImpact(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count reservations affected',
+      one: '1 reservation affected',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get evStaffTooLate =>
+      'Fewer than two hours to respond: reschedule later or cancel instead.';
+
+  @override
+  String get evStaffChangeApplied => 'Change sent. Attendees must reconfirm.';
+
+  @override
+  String get evStaffCancelReason => 'Reason shown to attendees';
+
+  @override
+  String get evStaffAudit => 'Audit log';
+
+  @override
+  String get evStaffAnnouncementText => 'Message';
+
+  @override
+  String get evStaffSent => 'Announcement sent';
+
+  @override
+  String get evStaffMinutesLater => 'Move start later by';
+
+  @override
+  String get evStaffNewVenue => 'New venue';
+
+  @override
+  String get evDemoScenarios => 'Events scenarios';
+
+  @override
+  String get evScenarioDrop => 'Next reservation: lose the response';
+
+  @override
+  String get evScenarioIneligible => 'Treat me as ineligible';
+
+  @override
+  String get evScenarioReset => 'Reset events demo';
+
+  @override
+  String get tabEventsLabel => 'Events';
+
+  @override
+  String get profileFeatureUnavailable =>
+      'Insights are no longer part of Numaya';
+
+  @override
+  String get profileFeatureUnavailableBody =>
+      'That page was removed. Your profile, streak and credits are unchanged.';
 }

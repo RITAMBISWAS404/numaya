@@ -110,7 +110,9 @@ abstract final class MonoColors {
 
   /// Solid translucent panel for text over photos (replaces gradient scrims): ink at 72%. White text
   /// on it stays above 4.5:1 even over a white photo (blend ≈ #585859, 7.2:1).
-  static const Color photoPanel = Color(0xB8000000);
+  // Owner note (Visual Lab, 2026-11-08): a much subtler scrim. 55% black is the minimum that keeps
+  // white body text at 4.5:1 over a pure-white photo (was 72%).
+  static const Color photoPanel = Color(0x8C000000);
 
   /// Round buttons floating on photos: white at 90%.
   static const Color photoButton = Color(0xE6FFFFFF);

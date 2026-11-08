@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/providers.dart';
 import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/connectivity/connectivity.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
-import '../../account_health/application/visibility_report.dart';
+import '../../events_mvp/application/events_mvp_controller.dart';
 import '../../auth/application/session_controller.dart';
 import '../../auth/application/session_expiry.dart';
 import '../../commerce/application/economy_controller.dart';
 import '../../dating/application/dating_controller.dart';
 import '../../dating/data/media_picker.dart';
-import '../../events/application/events_controller.dart';
 import '../../home/presentation/filters_sheet.dart';
 import '../../onboarding/application/device_permissions.dart';
 import '../../onboarding/application/onboarding_controller.dart';
@@ -33,7 +31,6 @@ class DemoHubScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final signals = ref.watch(accountSignalsProvider);
     final session = ref.watch(sessionProvider);
     final signedIn = session != null && session.hasProfile;
     final world = ref.watch(demoWorldProvider);
@@ -280,88 +277,33 @@ class DemoHubScreen extends ConsumerWidget {
               link(l10n.paywallTitle, Routes.paywall),
             ],
           ),
-          // MVP: no Events shortcuts while the release excludes Events (eventsAvailableProvider).
-          if (ref.watch(eventsAvailableProvider)) ...[
-            const SizedBox(height: AppSpacing.sectionGap),
-            ListGroup(
-              title: l10n.demoAreaEvents,
-              footnote: l10n.demoEventsNote,
-              children: [
-                ListRow(
-                  label: l10n.eventsExplore,
-                  detail: signedIn ? null : needsSession,
-                  onTap: signedIn ? () => context.go(Routes.events) : null,
-                ),
-                ListRow(
-                  label: l10n.eventsMine,
-                  detail: signedIn ? null : needsSession,
-                  onTap: signedIn
-                      ? () => context.go('${Routes.events}?view=mine')
-                      : null,
-                ),
-                link(l10n.demoEventOpen, '${Routes.event}/e-jazz'),
-                link(l10n.demoEventFull, '${Routes.event}/e-board'),
-                link(l10n.demoEventCancelled, '${Routes.event}/e-poetry'),
-                link(l10n.eventCreate, Routes.eventNew),
-                ListRow(
-                  label: l10n.demoEventOpenSpot,
-                  detail: l10n.demoEventOpenSpotDetail,
-                  onTap: signedIn
-                      ? () {
-                          final moved = ref
-                              .read(eventsProvider.notifier)
-                              .openSpot('e-board');
-                          NumayaToast.show(
-                            context,
-                            moved
-                                ? l10n.demoEventSpotYou
-                                : l10n.demoEventSpotOpened,
-                          );
-                        }
-                      : null,
-                ),
-                ListRow(
-                  label: l10n.demoEventReset,
-                  onTap: () {
-                    ref.read(eventsProvider.notifier).reset();
-                    NumayaToast.show(context, l10n.demoEventResetDone);
-                  },
-                ),
-              ],
-            ),
-          ],
+          // Events MVP: scenarios and the internal tools demo (isolated from the tab).
           const SizedBox(height: AppSpacing.sectionGap),
           ListGroup(
-            title: l10n.visTitle,
-            footnote: l10n.demoVisNote,
+            title: l10n.evDemoScenarios,
+            footnote: l10n.evStaffBannerBody,
             children: [
-              link(l10n.visTitle, Routes.visibility),
-              link(l10n.visHowItWorks, Routes.visibilityAbout),
-              for (final (state, label) in [
-                (NoticeState.none, l10n.demoVisNoticeNone),
-                (NoticeState.notice, l10n.demoVisNotice),
-                (NoticeState.restricted, l10n.demoVisRestricted),
-                (NoticeState.unavailable, l10n.demoVisUnavailable),
-              ])
-                ListRow(
-                  label: label,
-                  value: signals.notice == state ? l10n.eventSelected : null,
-                  onTap: () => ref
-                      .read(accountSignalsProvider.notifier)
-                      .setNotice(state),
-                ),
-              for (final (state, label) in [
-                (InsightsState.live, l10n.demoVisInsightsLive),
-                (InsightsState.stale, l10n.demoVisInsightsStale),
-                (InsightsState.unavailable, l10n.demoVisInsightsOff),
-              ])
-                ListRow(
-                  label: label,
-                  value: signals.insights == state ? l10n.eventSelected : null,
-                  onTap: () => ref
-                      .read(accountSignalsProvider.notifier)
-                      .setInsights(state),
-                ),
+              link(l10n.evTitle, Routes.events),
+              link(l10n.evMyEvents, Routes.evMine),
+              link(l10n.evStaffTitle, Routes.staff),
+              ListRow(
+                key: const ValueKey('demo-ev-drop'),
+                label: l10n.evScenarioDrop,
+                switchValue: ref.watch(eventsMvpProvider).dropNextResponse,
+                onSwitch: (v) =>
+                    ref.read(eventsMvpProvider.notifier).setDropNextResponse(v),
+              ),
+              ListRow(
+                key: const ValueKey('demo-ev-ineligible'),
+                label: l10n.evScenarioIneligible,
+                switchValue: ref.watch(eventsMvpProvider).forceIneligible,
+                onSwitch: (v) =>
+                    ref.read(eventsMvpProvider.notifier).setForceIneligible(v),
+              ),
+              ListRow(
+                label: l10n.evScenarioReset,
+                onTap: () => ref.read(eventsMvpProvider.notifier).reset(),
+              ),
             ],
           ),
           const SizedBox(height: AppSpacing.sectionGap),

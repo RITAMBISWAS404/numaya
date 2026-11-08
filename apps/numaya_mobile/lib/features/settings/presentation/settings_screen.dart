@@ -232,13 +232,6 @@ class SettingsScreen extends ConsumerWidget {
             footnote: l10n.settingsSnoozeNote,
             children: [
               ListRow(
-                leading: NumayaIcons.explore,
-                tone: AccentTone.info,
-                label: l10n.visTitle,
-                detail: l10n.visSettingsDetail,
-                onTap: () => context.push(Routes.visibility),
-              ),
-              ListRow(
                 leading: NumayaIcons.clock,
                 label: l10n.settingsSnooze,
                 detail: snoozeDetail,

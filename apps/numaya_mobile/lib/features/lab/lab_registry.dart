@@ -8,8 +8,9 @@ import '../../app/providers.dart';
 ///
 /// - Variant `O` is the current-rules baseline: it keeps every required behaviour (R01–R12), so
 ///   choosing it never restores reconnection or the old Compliment placement.
-/// - [LabGroup.proposed] is the proposed coherent default, which ordinary launches render. It is
-///   a recommendation, not an owner selection.
+/// - [LabGroup.proposed] is what ordinary launches render. Since the Events pass (2026-11-08) it
+///   holds the owner's Visual Lab selections (review vl2-8510778-2026-11-08); undecided screen
+///   groups stay on O. The Insights groups were removed with Health/Insights.
 /// - Alternatives render only after someone picks them in the Design Lab, and only where the Demo
 ///   Hub exists (demo sign-in available). Release builds always render [LabGroup.proposed]. There
 ///   is no random assignment, analytics or rollout, and a choice never changes data or navigates.
@@ -73,7 +74,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.component,
     question: 'Can a member see which new matches are running out without reading a countdown?',
     usages: ['Chats: New matches row'],
-    proposed: _o,
+    proposed: 'A',
     variants: [
       LabVariant(
         _o,
@@ -153,7 +154,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.component,
     question: 'Does the member understand who wrote it, what it was about and how to answer?',
     usages: ['Heart tab: Compliments', 'Compliment detail'],
-    proposed: 'B',
+    proposed: _o,
     variants: [
       LabVariant(
         _o,
@@ -193,7 +194,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.component,
     question: 'Can a Premium member scan who liked them; does free still understand the count?',
     usages: ['Heart tab: Likes (Premium grid, free locked)'],
-    proposed: _o,
+    proposed: 'A',
     variants: [
       LabVariant(
         _o,
@@ -233,7 +234,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.component,
     question: 'Is it clear this is my profile, how it looks to others, and how to edit it?',
     usages: ['Profile tab'],
-    proposed: _o,
+    proposed: 'A',
     variants: [
       LabVariant(
         _o,
@@ -259,87 +260,6 @@ const List<LabGroup> kLabGroups = [
         'C relationship',
         'Identity plus the streak and credits in one card; fewer cards below.',
       ),
-      LabVariant(
-        'D',
-        'Profile with insights',
-        'D data',
-        'Identity plus this week’s appearances and likes; opens Insights.',
-      ),
-    ],
-  ),
-  LabGroup(
-    id: 'insights-summary',
-    title: 'Insights summary',
-    kind: LabKind.component,
-    question: 'Does the top of Insights say whether I am being shown and what changed, honestly?',
-    usages: ['Insights', 'Profile (summary)'],
-    proposed: 'A',
-    variants: [
-      LabVariant(
-        _o,
-        'Status card',
-        'baseline',
-        'Plain visibility status, period and one line of numbers.',
-      ),
-      LabVariant(
-        'A',
-        'Chart-led',
-        'D data',
-        'Daily appearances as bars above the status line.',
-      ),
-      LabVariant(
-        'B',
-        'Widget grid',
-        'F compact',
-        'Four small widgets: appearances, likes, matches, your turn.',
-      ),
-      LabVariant(
-        'C',
-        'Funnel-led',
-        'D data',
-        'Appearances → likes → matches → conversations, same period and cohort.',
-      ),
-      LabVariant(
-        'D',
-        'Plain sentence',
-        'A structure',
-        'One editorial sentence with the numbers inline; no chart.',
-      ),
-    ],
-  ),
-  LabGroup(
-    id: 'metric-widget',
-    title: 'Insight metric',
-    kind: LabKind.component,
-    question: 'Can a member read the value, period and change without decoding a chart?',
-    usages: ['Insights widgets'],
-    proposed: 'A',
-    variants: [
-      LabVariant(_o, 'Value tile', 'baseline', 'Label, value and period.'),
-      LabVariant(
-        'A',
-        'Value with weekly bars',
-        'D data',
-        'Value and seven daily bars in the same card.',
-      ),
-      LabVariant(
-        'B',
-        'Row',
-        'F compact',
-        'Icon, label and value in a list row.',
-      ),
-      LabVariant(
-        'C',
-        'Change card',
-        'C relationship',
-        'Value with the change against the previous period, in words.',
-      ),
-      LabVariant(
-        'D',
-        'Large number',
-        'B hierarchy',
-        'Editorial large value, small label; one per row.',
-      ),
     ],
   ),
   LabGroup(
@@ -348,7 +268,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.component,
     question: 'Does the setup card help finish the profile without looking like a score?',
     usages: ['Profile', 'Insights (supporting)'],
-    proposed: 'B',
+    proposed: 'D',
     variants: [
       LabVariant(
         _o,
@@ -544,7 +464,7 @@ const List<LabGroup> kLabGroups = [
     question:
         'Is the full price and renewal clear for each plan, with no pressure?',
     usages: ['Paywall', 'Premium'],
-    proposed: 'B',
+    proposed: _o,
     variants: [
       LabVariant(
         _o,
@@ -626,7 +546,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.component,
     question: 'Does an empty screen explain itself and offer one next step?',
     usages: ['Chats', 'Likes', 'Compliments', 'Archive', 'Insights no data'],
-    proposed: 'A',
+    proposed: _o,
     variants: [
       LabVariant(
         _o,
@@ -672,20 +592,6 @@ const List<LabGroup> kLabGroups = [
         'wallet-card:A',
         'profile-setup:A',
       ],
-    },
-  ),
-  LabGroup(
-    id: 'screen-insights',
-    title: 'Insights screen',
-    kind: LabKind.screen,
-    question: 'Can a member tell if they are shown, what changed, and what might help?',
-    usages: ['/profile/insights'],
-    proposed: _o,
-    variants: _directions,
-    requires: {
-      'A': ['insights-summary:D', 'metric-widget:D', 'profile-setup:D'],
-      'B': ['metric-widget:C', 'profile-setup:B'],
-      'C': ['insights-summary:A', 'metric-widget:A', 'profile-setup:A'],
     },
   ),
   LabGroup(

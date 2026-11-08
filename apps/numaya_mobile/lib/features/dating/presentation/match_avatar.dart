@@ -47,8 +47,10 @@ class MatchAvatarTile extends ConsumerWidget {
     Widget tile;
     switch (v) {
       case 'A':
+        // Owner selection: the squircle ring on a 3:4 portrait (width : height).
         tile = _SquircleRing(
-          size: 88,
+          width: 78,
+          height: 104,
           fraction: fraction,
           color: ringColor,
           child: _photo(personPhotoImage(person, 1), person, focus),
@@ -160,20 +162,23 @@ class MatchAvatarTile extends ConsumerWidget {
 /// A rounded square photo with the progress drawn along its edge, starting top centre.
 class _SquircleRing extends StatelessWidget {
   const _SquircleRing({
-    required this.size,
+    required this.width,
+    required this.height,
     required this.fraction,
     required this.color,
     required this.child,
   });
 
-  final double size;
+  final double width;
+  final double height;
   final double fraction;
   final Color color;
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => SizedBox.square(
-    dimension: size,
+  Widget build(BuildContext context) => SizedBox(
+    width: width,
+    height: height,
     child: CustomPaint(
       foregroundPainter: _RRectRingPainter(fraction: fraction, color: color),
       child: Padding(

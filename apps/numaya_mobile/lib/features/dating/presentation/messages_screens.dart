@@ -281,14 +281,8 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // UI-034: Likes stays first, as an illustrated rounded square with the real
-                  // count at the top.
-                  if (likes > 0 && q.isEmpty)
-                    _LikesTile(
-                      count: likes,
-                      semanticLabel: l10n.queueLikesLabel(likes),
-                      onTap: () => context.go(Routes.likes),
-                    ),
+                  // Owner selection (Visual Lab): only real new matches here; likes live in
+                  // the Heart tab, so the likes tile is gone from this row.
                   // R02: the photo carries a ring showing the fraction of the (possibly
                   // extended) window left; no number under it. The exact time and the
                   // extension are inside the chat; the spoken label includes the time left.
@@ -355,75 +349,6 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   }
 }
 
-/// The New matches row's tile size (UI-033, A-016), shared with the Likes tile.
-const double _tileSize = 96;
-const double _tileGap = AppSpacing.s3;
-
-/// The Likes tile (UI-034, A-016's illustrated first tile): the same rounded square, the real
-/// count large at the top, and the Numaya mascot (existing approved artwork) anchored at the foot.
-class _LikesTile extends StatelessWidget {
-  const _LikesTile({
-    required this.count,
-    required this.semanticLabel,
-    required this.onTap,
-  });
-
-  final int count;
-  final String semanticLabel;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: _tileGap),
-      child: Pressable(
-        key: const ValueKey('likes-tile'),
-        onTap: onTap,
-        semanticLabel: semanticLabel,
-        excludeChildSemantics: true,
-        borderRadius: AppRadii.all(AppRadii.card),
-        child: ClipRRect(
-          borderRadius: AppRadii.all(AppRadii.card),
-          child: Container(
-            width: _tileSize,
-            height: _tileSize,
-            color: AppColors.accentTint,
-            child: Stack(
-              children: [
-                const Positioned(
-                  left: 10,
-                  right: 10,
-                  bottom: -6,
-                  child: IllustrationView(
-                    NumayaIllustration.mascotWaiting,
-                    width: _tileSize - 20,
-                  ),
-                ),
-                Positioned(
-                  top: AppSpacing.s2,
-                  left: AppSpacing.s3,
-                  right: AppSpacing.s2,
-                  child: Text(
-                    count > 99 ? '99+' : '$count',
-                    key: const ValueKey('likes-tile-count'),
-                    maxLines: 1,
-                    textScaler: TextScaler.noScaling,
-                    style: AppTypography.weight(
-                      AppTypography.headline,
-                      AppTypography.bold,
-                    ).copyWith(color: AppColors.accentOnTint),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// "Skip the small talk" (B-43 Opening Moves card).
 class _OpeningMovesCard extends StatelessWidget {
   const _OpeningMovesCard({required this.onTap});
   final VoidCallback onTap;
