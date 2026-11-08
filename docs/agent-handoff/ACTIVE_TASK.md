@@ -1,5 +1,9 @@
 # Active task: revised PRD for additional features (waiting for the owner's brief)
 
+> **2026-11-08, selections pass:** waiting for a non-empty export. The owner chooses again in the
+> updated gallery (open it, choose, then Export before closing the tab), sends the JSON, and the
+> application pass proceeds on `experiment/numaya-visual-lab-selections-20261108`.
+
 > **2026-11-08, Visual Lab V2:** built and delivered on `experiment/numaya-visual-lab-20261108`.
 > **Next:** the owner opens the offline gallery, chooses per group (or keeps O / leaves undecided),
 > exports the JSON and sends it back. Then a separate application pass (RUN_STATE.md, "After the

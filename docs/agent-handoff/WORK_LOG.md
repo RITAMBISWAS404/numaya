@@ -1,5 +1,11 @@
 # Work log
 
+## 2026-11-08 · Selections pass (Windows, Claude desktop)
+- Validated the owner's JSON: valid but empty (0 selections). Nothing applied; asked the owner.
+- Tag `checkpoint/visual-lab-v2-20261108` at `ae78935`; branch `experiment/numaya-visual-lab-selections-20261108`.
+- Backend: archive lifecycle in `0001`/`0002`, CONTRACTS.md and README; reconnect removed from `NumayaApi`.
+- Harness: Heart directions captured as Premium; gallery rebuilt; empty-export confirmation added.
+
 ## 2026-11-08 · Visual Lab V2 (Windows, Claude desktop)
 - Verified start: `experiment/numaya-mvp-prd-20261107` clean at `0df9ec3` = origin; tagged and pushed
   `checkpoint/pre-visual-lab-20261108`; branch `experiment/numaya-visual-lab-20261108`.

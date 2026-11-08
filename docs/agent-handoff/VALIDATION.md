@@ -1,5 +1,10 @@
 # Validation
 
+> **Selections pass (2026-11-08, commit `010fe8f`):** `flutter analyze` no issues; `flutter test`
+> **579 passed, 27 skipped, 0 failed** after removing `requestReconnect`/`respondReconnect` from
+> `NumayaApi`. Backend SQL edited, not executed (no database). Emulator (Pixel 10 AVD): 8 Heart
+> direction screenshots as Premium (`ONLY=screen-heart`). No new APK: no UI change since `8510778`.
+
 > **Visual Lab V2 (2026-11-08, app commit `8510778`):** `dart format` clean; `flutter analyze` **no
 > issues**; `flutter test` **579 passed, 27 skipped, 0 failed** (new `visual_lab_v2_test`: registry
 > integrity, release ignores Lab choices, every component variant in isolation and in its real screen

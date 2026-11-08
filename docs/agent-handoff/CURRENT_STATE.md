@@ -1,5 +1,13 @@
 # Current state
 
+> **Selections pass (2026-11-08):** branch **`experiment/numaya-visual-lab-selections-20261108`** from
+> `ae78935` (Visual Lab V2 delivered; tag `checkpoint/visual-lab-v2-20261108`, pushed). The owner's
+> export `numaya-visual-lab-choices-vl2-8510778-2026-11-08.json` validated (review ID and commit match,
+> IDs valid) but holds **0 selections** (21 groups undecided), so no design was changed. Done here:
+> backend contracts moved to 7-day archiving with no reconnection/check-in; Heart directions recaptured
+> as Premium; gallery export now warns before exporting an empty file. Updated gallery:
+> `C:\Users\biswa\OneDrive\Desktop\Numaya Visual Lab\2026-11-08 Premium Likes update\index.html` (review `vl2-010fe8f-2026-11-08`). The APK from `8510778` is unchanged in UI and still current.
+
 > **Backup checkpoint (2026-11-08):** branch `experiment/numaya-visual-lab-20261108` pushed and verified;
 > baseline tag `checkpoint/pre-visual-lab-20261108` pushed. Moving machines: follow
 > [NEW_MACHINE_SETUP.md](NEW_MACHINE_SETUP.md). **Private reference photos moved:** the originals and
