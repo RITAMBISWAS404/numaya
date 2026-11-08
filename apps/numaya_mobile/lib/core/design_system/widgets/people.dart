@@ -202,14 +202,15 @@ class PhotoPlaceholder extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           const ColoredBox(color: AppColors.photo),
-          const Center(
-            child: NumayaIcon(
-              NumayaIcons.image,
-              size: 32,
-              color: AppColors.textSecondary,
-            ),
-          ),
-          ?child,
+          // Only an empty slot shows the image glyph (it drew behind the lock on locked tiles).
+          child ??
+              const Center(
+                child: NumayaIcon(
+                  NumayaIcons.image,
+                  size: 32,
+                  color: AppColors.textSecondary,
+                ),
+              ),
         ],
       ),
     );

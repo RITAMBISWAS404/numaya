@@ -186,88 +186,91 @@ class LikesGrid extends ConsumerWidget {
             final big = MediaQuery.textScalerOf(context).scale(15) > 22;
             final n = big ? (cols - 1).clamp(1, 3) : cols;
             final w = (box.maxWidth - gap * (n - 1)) / n;
-            return Wrap(
-              spacing: gap,
-              runSpacing: v == 'A' ? gap : AppSpacing.s5,
-              children: [
-                for (final i in items)
-                  SizedBox(
-                    width: w,
-                    child: tap(
-                      i,
-                      v == 'A'
-                          ? Stack(
-                              children: [
-                                photo(i.person),
-                                if (i.badge != null)
-                                  Positioned(
-                                    left: AppSpacing.s2,
-                                    top: AppSpacing.s2,
-                                    child: i.badge!,
-                                  ),
-                                Positioned(
-                                  left: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(
-                                      bottom: Radius.circular(AppRadii.card),
+            return BackdropGroup(
+              child: Wrap(
+                spacing: gap,
+                runSpacing: v == 'A' ? gap : AppSpacing.s5,
+                children: [
+                  for (final i in items)
+                    SizedBox(
+                      width: w,
+                      child: tap(
+                        i,
+                        v == 'A'
+                            ? Stack(
+                                children: [
+                                  photo(i.person),
+                                  if (i.badge != null)
+                                    Positioned(
+                                      left: AppSpacing.s2,
+                                      top: AppSpacing.s2,
+                                      child: i.badge!,
                                     ),
-                                    child: PhotoScrim(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(
-                                          AppSpacing.s2,
-                                        ),
-                                        child: Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: PhotoLabel(
-                                            compact: true,
-                                            child: name(
-                                              i.person,
-                                              color: AppColors.accentForeground,
+                                  Positioned(
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    child: ClipRRect(
+                                      borderRadius: const BorderRadius.vertical(
+                                        bottom: Radius.circular(AppRadii.card),
+                                      ),
+                                      child: PhotoScrim(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(
+                                            AppSpacing.s2,
+                                          ),
+                                          child: Align(
+                                            alignment: Alignment.bottomLeft,
+                                            child: PhotoLabel(
+                                              compact: true,
+                                              child: name(
+                                                i.person,
+                                                color:
+                                                    AppColors.accentForeground,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            )
-                          : Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Stack(
-                                  children: [
-                                    photo(i.person),
-                                    if (i.badge != null)
-                                      Positioned(
-                                        left: AppSpacing.s2,
-                                        top: AppSpacing.s2,
-                                        child: i.badge!,
-                                      ),
-                                  ],
-                                ),
-                                const SizedBox(height: AppSpacing.s2),
-                                name(
-                                  i.person,
-                                  style: v == 'C'
-                                      ? AppTypography.weight(
-                                          AppTypography.bodySm,
-                                          AppTypography.semibold,
-                                        )
-                                      : null,
-                                ),
-                                if (v != 'C')
-                                  MetaText(
-                                    i.caption,
-                                    style: AppTypography.caption,
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Stack(
+                                    children: [
+                                      photo(i.person),
+                                      if (i.badge != null)
+                                        Positioned(
+                                          left: AppSpacing.s2,
+                                          top: AppSpacing.s2,
+                                          child: i.badge!,
+                                        ),
+                                    ],
                                   ),
-                              ],
-                            ),
+                                  const SizedBox(height: AppSpacing.s2),
+                                  name(
+                                    i.person,
+                                    style: v == 'C'
+                                        ? AppTypography.weight(
+                                            AppTypography.bodySm,
+                                            AppTypography.semibold,
+                                          )
+                                        : null,
+                                  ),
+                                  if (v != 'C')
+                                    MetaText(
+                                      i.caption,
+                                      style: AppTypography.caption,
+                                    ),
+                                ],
+                              ),
+                      ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             );
           },
         );

@@ -7,7 +7,6 @@ import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../home/presentation/large_title_page.dart';
-import '../../lab/lab_banners.dart';
 import '../../lab/lab_empty_state.dart';
 import '../../lab/lab_registry.dart';
 import '../application/events_mvp_controller.dart';
@@ -261,76 +260,80 @@ class EventsFeedScreen extends ConsumerWidget {
 
     final filtered = s.category != null || s.dateFilter != EvDateFilter.any;
 
-    return LargeTitlePage(
-      title: l10n.evTitle,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ..._filterHeader(context, ref, s, c),
-          const SizedBox(height: AppSpacing.s4),
-          LabStatusBanner(
-            key: const ValueKey('ev-sample-banner'),
-            tone: BannerTone.info,
-            title: l10n.evSampleBanner,
-            body: l10n.evSampleBannerBody,
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          ListGroup(
-            children: [
-              ListRow(
-                key: const ValueKey('ev-my-events'),
-                leading: NumayaIcons.calendar,
-                label: l10n.evMyEvents,
-                detail: needsAnswer > 0
-                    ? l10n.evNoticesWaiting(needsAnswer)
-                    : l10n.evMyEventsDetail(upcoming),
-                onTap: () => context.push(Routes.evMine),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.sectionGap),
-          if (events.isEmpty)
-            LabEmptyState(
-              key: const ValueKey('ev-empty'),
-              slot: 'events_empty',
-              slotLabel: 'purple cat looking at a map',
-              icon: NumayaMobileIcons.chart,
-              title: filtered
-                  ? l10n.evEmptyFilterTitle
-                  : l10n.evEmptyTitle(s.city),
-              body: l10n.evEmptyBody,
-              actionLabel: filtered ? l10n.evClearFilters : null,
-              onAction: filtered
-                  ? () {
-                      c.setCategory(null);
-                      c.setDateFilter(EvDateFilter.any);
-                    }
-                  : null,
-            )
-          else
-            for (final e in events) ...[
-              EvCard(
-                key: ValueKey('ev-card-${e.id}'),
-                event: e,
-                status: status(e),
-                statusBrand: s.reservations[e.id]?.active ?? false,
-                onTap: () => context.push('${Routes.evEvent}/${e.id}'),
-              ),
-              const SizedBox(height: AppSpacing.s3),
-            ],
-          const SizedBox(height: AppSpacing.s4),
-          ListGroup(
-            footnote: l10n.evProposeRowDetail,
-            children: [
-              ListRow(
-                key: const ValueKey('ev-propose'),
-                leading: NumayaIcons.plus,
-                label: l10n.evProposeRow,
-                onTap: () => context.push(Routes.evProposals),
-              ),
-            ],
-          ),
-        ],
+    return BackdropGroup(
+      child: LargeTitlePage(
+        title: l10n.evTitle,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ..._filterHeader(context, ref, s, c),
+            const SizedBox(height: AppSpacing.s3),
+            // V4: a quiet line (the honest label stays in the first view); the full note ends the
+            // list, so the events themselves reach the first screen.
+            Text(
+              l10n.evSampleBanner,
+              key: const ValueKey('ev-sample-banner'),
+              style: AppTypography.caption,
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            ListGroup(
+              children: [
+                ListRow(
+                  key: const ValueKey('ev-my-events'),
+                  leading: NumayaIcons.calendar,
+                  label: l10n.evMyEvents,
+                  detail: needsAnswer > 0
+                      ? l10n.evNoticesWaiting(needsAnswer)
+                      : l10n.evMyEventsDetail(upcoming),
+                  onTap: () => context.push(Routes.evMine),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.sectionGap),
+            if (events.isEmpty)
+              LabEmptyState(
+                key: const ValueKey('ev-empty'),
+                slot: 'events_empty',
+                slotLabel: 'purple cat looking at a map',
+                icon: NumayaMobileIcons.chart,
+                title: filtered
+                    ? l10n.evEmptyFilterTitle
+                    : l10n.evEmptyTitle(s.city),
+                body: l10n.evEmptyBody,
+                actionLabel: filtered ? l10n.evClearFilters : null,
+                onAction: filtered
+                    ? () {
+                        c.setCategory(null);
+                        c.setDateFilter(EvDateFilter.any);
+                      }
+                    : null,
+              )
+            else
+              for (final e in events) ...[
+                EvCard(
+                  key: ValueKey('ev-card-${e.id}'),
+                  event: e,
+                  status: status(e),
+                  statusBrand: s.reservations[e.id]?.active ?? false,
+                  onTap: () => context.push('${Routes.evEvent}/${e.id}'),
+                ),
+                const SizedBox(height: AppSpacing.s3),
+              ],
+            Text(l10n.evSampleBannerBody, style: AppTypography.helper),
+            const SizedBox(height: AppSpacing.s4),
+            ListGroup(
+              footnote: l10n.evProposeRowDetail,
+              children: [
+                ListRow(
+                  key: const ValueKey('ev-propose'),
+                  leading: NumayaIcons.plus,
+                  label: l10n.evProposeRow,
+                  onTap: () => context.push(Routes.evProposals),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

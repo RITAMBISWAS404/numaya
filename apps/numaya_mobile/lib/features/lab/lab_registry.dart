@@ -586,16 +586,16 @@ const List<LabGroup> kLabGroups = [
     proposed: 'P',
     variants: [
       LabVariant(
-        'P',
-        'Photo with date pill',
-        'V4 default',
-        'Photo leads with the date on a glass pill; title, place and one price and availability line.',
-      ),
-      LabVariant(
         _o,
         'Cover-led card',
         'baseline',
         'Wide cover, title, date line, place line, Free and availability badges.',
+      ),
+      LabVariant(
+        'P',
+        'Photo with date pill',
+        'V4 default',
+        'Photo leads with the date on a glass pill; title, place and one price and availability line.',
       ),
       LabVariant(
         'A',
@@ -627,16 +627,16 @@ const List<LabGroup> kLabGroups = [
     proposed: 'G',
     variants: [
       LabVariant(
-        'G',
-        'Separated groups',
-        'V4 default',
-        'Wide photo, title; then logistics, about, who and good-to-know as their own white cards.',
-      ),
-      LabVariant(
         _o,
         'Single fact list',
         'baseline',
         'The previous order: badges, then About, host, time and place in one long list.',
+      ),
+      LabVariant(
+        'G',
+        'Separated groups',
+        'V4 default',
+        'Wide photo, title; then logistics, about, who and good-to-know as their own white cards.',
       ),
       LabVariant(
         'I',
@@ -662,6 +662,12 @@ const List<LabGroup> kLabGroups = [
     proposed: 'P',
     variants: [
       LabVariant(
+        _o,
+        'Dark panel',
+        'baseline',
+        'The previous solid 55% panel behind the name; over the owner’s 25% gradient cap.',
+      ),
+      LabVariant(
         'P',
         'Compact glass label',
         'V4 default',
@@ -672,12 +678,6 @@ const List<LabGroup> kLabGroups = [
         'Edge-to-edge glass bar',
         'A structure',
         'A full-width glass strip along the foot of the photo; steadier, covers more of it.',
-      ),
-      LabVariant(
-        _o,
-        'Dark panel',
-        'baseline',
-        'The previous solid 55% panel behind the name; over the owner’s 25% gradient cap.',
       ),
     ],
   ),
@@ -690,6 +690,12 @@ const List<LabGroup> kLabGroups = [
     proposed: 'S',
     variants: [
       LabVariant(
+        _o,
+        'Lavender tint',
+        'baseline',
+        'The previous pale purple panel.',
+      ),
+      LabVariant(
         'S',
         'Solid purple',
         'V4 default',
@@ -700,12 +706,6 @@ const List<LabGroup> kLabGroups = [
         'Neutral page',
         'B quiet',
         'Purple mark on the grey page; calmer, less branded.',
-      ),
-      LabVariant(
-        _o,
-        'Lavender tint',
-        'baseline',
-        'The previous pale purple panel.',
       ),
     ],
   ),

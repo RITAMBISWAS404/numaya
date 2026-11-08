@@ -492,7 +492,11 @@ class EvFact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: AppSpacing.s2),
+    // A trailing link already carries its 44dp target's slack; no second gap below it.
+    padding: EdgeInsets.only(
+      top: AppSpacing.s2,
+      bottom: extra == null ? AppSpacing.s2 : 0,
+    ),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -32,14 +32,14 @@ void main() {
               g.id == 'profile-header'
                   ? 4
                   // Ente alignment V3 groups: O plus two or three real alternatives (no padding).
-                  : g.id.startsWith('ea-')
+                  : g.id.startsWith('ea-') || g.id.startsWith('v4-')
                   ? 3
                   : 5,
             ),
             reason: g.id,
           );
         }
-        if (g.kind == LabKind.screen) {
+        if (g.kind == LabKind.screen && !g.id.startsWith('v4-')) {
           expect(g.ids, ['O', 'A', 'B', 'C'], reason: g.id);
         }
         // Dependencies name real groups and variants.
@@ -112,6 +112,7 @@ void main() {
           'status-banner': '${Routes.chat}/rafa',
           'empty-state': '${Routes.likes}?tab=compliments',
           'ea-event-card': Routes.events,
+          'v4-welcome': '${Routes.visualLabPreview}/v4-welcome',
           'ea-event-filters': Routes.events,
           'ea-event-action': '${Routes.evEvent}/ev-board-games-bandra',
           'ea-met-card': '${Routes.evMet}/ev-book-swap',

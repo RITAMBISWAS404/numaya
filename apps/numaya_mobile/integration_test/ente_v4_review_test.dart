@@ -11,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/media/demo_photos.dart';
+import 'package:numaya_mobile/features/dating/domain/sample_people.dart';
 import 'package:numaya_mobile/features/lab/lab_registry.dart';
 import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
 
@@ -90,7 +91,12 @@ void main() {
         ('person', 'Person profile', '${Routes.person}/maya', [0, 900]),
         ('photos', 'Photo viewer', '${Routes.person}/maya/photos?start=1', [0]),
         ('match', 'Match', '${Routes.match}/maya', [0]),
-        ('compliment', 'Send a compliment', '${Routes.compliment}/maya?kind=prompt&index=0', [0]),
+        (
+          'compliment',
+          'Send a compliment',
+          '${Routes.compliment}/maya?kind=prompt&index=0',
+          [0],
+        ),
         ('request', 'Compliment request', '${Routes.request}/seed-sam', [0]),
         ('archive', 'Archive', Routes.archive, [0]),
         ('events', 'Events feed', Routes.events, [0, 700]),
@@ -99,6 +105,12 @@ void main() {
         ('reserve', 'Reserve', '${Routes.evEvent}/ev-cycle-ride/reserve', [0]),
         ('mine', 'My events', Routes.evMine, [0]),
         ('notice', 'Event change notice', '${Routes.evNotice}/n-walk-v2', [0]),
+        (
+          'reservation',
+          'Reservation',
+          '${Routes.evReservation}/ev-cycle-ride',
+          [0],
+        ),
         ('met', 'People I met', '${Routes.evMet}/ev-book-swap', [0]),
         ('profile', 'Profile', Routes.profile, [0, 700]),
         ('streak', 'Streak', Routes.streak, [0]),
@@ -135,10 +147,104 @@ void main() {
         await go(Routes.home);
         await tester.tap(find.bySemanticsLabel('Filters').first);
         await _wait(tester, 900);
-        await cap('screen__filters', 'major', 'filters', 'screen', 'Filters sheet');
+        await cap(
+          'screen__filters',
+          'major',
+          'filters',
+          'screen',
+          'Filters sheet',
+        );
       });
       lab.reset();
     }
+    if (_only.isEmpty || _only == 'key') {
+      // One short pass for the large-text and narrow runs (the host changes the device setting).
+      const key = <(String, String)>[
+        ('discover', Routes.home),
+        ('event', '${Routes.evEvent}/$board'),
+        ('events', Routes.events),
+        ('profile', Routes.profile),
+        ('settings', Routes.settings),
+        ('chat', '${Routes.chat}/priya'),
+        ('reserve', '${Routes.evEvent}/ev-cycle-ride/reserve'),
+      ];
+      for (final (slug, path) in key) {
+        await step('key $slug', () async {
+          await go(Routes.home);
+          await go(path);
+          await cap('key__$slug', 'key', slug, 'qa', slug);
+        });
+      }
+    }
+
+    if (_only.isEmpty || _only == 'variants') {
+      const preview = {'ea-event-card', 'ea-met-card', 'v4-welcome'};
+      const routes = {
+        'v4-event-detail': '${Routes.evEvent}/$board',
+        'v4-photo-label': Routes.home,
+        'ea-event-filters': Routes.events,
+        'ea-event-action': '${Routes.evEvent}/$board',
+        'screen-heart': Routes.likes,
+        'screen-chats': Routes.messages,
+        'screen-profile': Routes.profile,
+      };
+      for (final id in [...preview, ...routes.keys]) {
+        for (final v in labGroup(id).ids) {
+          await step('variant $id $v', () async {
+            lab
+              ..reset()
+              ..choose(id, v);
+            await go(Routes.home);
+            if (preview.contains(id)) {
+              await go('${Routes.visualLabPreview}/$id?v=$v');
+              await cap('crop__${id}__$v', id, v, 'crop', '$id $v');
+            } else {
+              await go(routes[id]!);
+              await cap('screen__${id}__$v', id, v, 'screen', '$id $v');
+            }
+          });
+        }
+      }
+      lab.reset();
+    }
+
+    if (_only.isEmpty || _only == 'states') {
+      // Bright, dark and busy crops: the five main photos on the person card.
+      for (final p in kSamplePeople.take(5)) {
+        await step('photo ${p.id}', () async {
+          await go(Routes.home);
+          await go('${Routes.person}/${p.id}');
+          await cap(
+            'state__photo-${p.id}',
+            'qa',
+            p.id,
+            'qa',
+            'Photo label on ${p.id}',
+          );
+        });
+      }
+      for (final (slug, path, label) in [
+        (
+          'banners',
+          '${Routes.visualLabPreview}/status-banner?v=O',
+          'Status banners',
+        ),
+        ('empty', '${Routes.visualLabPreview}/empty-state?v=O', 'Empty state'),
+        ('specimen', Routes.visualLabSpecimen, 'Semantic specimen'),
+        (
+          'long-event',
+          '${Routes.evEvent}/ev-pottery-hauz-khas',
+          'Event, long content',
+        ),
+      ]) {
+        await step('state $slug', () async {
+          await go(Routes.home);
+          await go(path);
+          await cap('state__$slug', 'qa', slug, 'qa', label);
+        });
+      }
+    }
+
     // ignore: avoid_print
     print('@@DONE@@');
   });

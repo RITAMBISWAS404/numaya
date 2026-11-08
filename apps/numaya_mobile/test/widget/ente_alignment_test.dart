@@ -185,7 +185,8 @@ void main() {
       'ea-met-card',
     ]);
     for (final g in v3) {
-      expect(g.proposed, 'O', reason: g.id);
+      // V4 made the photo-led card (P) the event card default; the others stay on O.
+      expect(g.proposed, g.id == 'ea-event-card' ? 'P' : 'O', reason: g.id);
       expect(g.ids.first, 'O', reason: g.id);
     }
   });

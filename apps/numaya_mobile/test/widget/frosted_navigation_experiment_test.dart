@@ -78,7 +78,13 @@ void main() {
       (tester) async {
         await usePhoneSize(tester);
         await quickStartApp(tester);
-        expect(find.byType(BackdropFilter), findsNothing);
+        expect(
+          find.descendant(
+            of: find.byType(NumayaTabBar),
+            matching: find.byType(BackdropFilter),
+          ),
+          findsNothing,
+        );
         final pill = tester.widget<Container>(pillOf());
         final deco = pill.decoration! as BoxDecoration;
         expect(deco.color, AppColors.surface);
@@ -126,7 +132,13 @@ void main() {
         tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
       );
       await quickStartApp(tester);
-      expect(find.byType(BackdropFilter), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(NumayaTabBar),
+          matching: find.byType(BackdropFilter),
+        ),
+        findsNothing,
+      );
       expect(
         find.descendant(
           of: bar(),

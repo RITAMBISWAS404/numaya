@@ -193,7 +193,7 @@ class EventDetailScreen extends ConsumerWidget {
             ),
           ),
           EvFact(
-            icon: NumayaIcons.public,
+            icon: NumayaIcons.info,
             title: l10n.evAccessibility,
             body: e.venue.accessibility ?? l10n.evAccessUnknown,
           ),
@@ -446,7 +446,7 @@ class EventDetailScreen extends ConsumerWidget {
                       ),
                     ),
                     EvFact(
-                      icon: NumayaIcons.public,
+                      icon: NumayaIcons.info,
                       title: l10n.evAccessibility,
                       body: e.venue.accessibility ?? l10n.evAccessUnknown,
                     ),
