@@ -2694,6 +2694,14 @@
   "expiredStatePending": "Waiting for their answer",
   "expiredStateDeclined": "Declined",
   "walletTitle": "Compliment credits",
+  "walletUnit": "{count, plural, =1{credit} other{credits}}",
+  "@walletUnit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "walletTotal": "{count, plural, =1{1 credit} other{{count} credits}}",
   "@walletTotal": {
     "placeholders": {
@@ -3502,6 +3510,8 @@
   "evWhen": "{day} · {time}",
   "@evWhen": {"placeholders": {"day": {"type": "String"}, "time": {"type": "String"}}},
   "evAbout": "About this event",
+  "evReadMore": "Read more",
+  "evShowLess": "Show less",
   "evHostedBy": "Hosted by a Numaya host",
   "evHostSample": "{name} (sample)",
   "@evHostSample": {"placeholders": {"name": {"type": "String"}}},

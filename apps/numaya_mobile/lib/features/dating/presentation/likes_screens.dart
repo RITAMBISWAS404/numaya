@@ -253,7 +253,8 @@ class _LockedLikes extends StatelessWidget {
               spacing: AppSpacing.s3,
               runSpacing: AppSpacing.s3,
               children: [
-                for (var i = 0; i < count.clamp(1, 4); i++)
+                // V4: one row, so the action sits in the first view above the floating bar.
+                for (var i = 0; i < count.clamp(1, 2); i++)
                   SizedBox(
                     width: w,
                     child: PhotoPlaceholder(

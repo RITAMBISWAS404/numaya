@@ -143,6 +143,10 @@ abstract final class MonoColors {
 
   /// Round buttons floating on photos: white at 90%.
   static const Color photoButton = Color(0xE6FFFFFF);
+
+  /// The bottom edge of a photo text gradient (V4 rule IMG-2): 10% black fading to clear. Owner
+  /// cap: under 25%. The gradient only settles the image; text carries its own glass backing.
+  static const Color photoScrimEdge = Color(0x1A000000);
 }
 
 /// Frosted navigation (frosted-navigation experiment, FN-04): the only glass in the app, on the

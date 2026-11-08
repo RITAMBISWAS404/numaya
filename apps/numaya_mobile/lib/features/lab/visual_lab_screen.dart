@@ -7,6 +7,7 @@ import '../../app/routes.dart';
 import '../../core/design_system/design_system.dart';
 import '../../core/time/ist.dart';
 import '../../l10n/l10n.dart';
+import '../auth/presentation/welcome_screen.dart';
 import '../commerce/application/economy_controller.dart';
 import '../commerce/domain/catalog.dart';
 import '../commerce/presentation/wallet_screen.dart';
@@ -511,6 +512,8 @@ class LabPreviewScreen extends ConsumerWidget {
             ),
           ],
         );
+      case 'v4-welcome':
+        return SizedBox(height: 360, child: WelcomeBrandImage(variant: v));
       case 'ea-event-card':
         final evs = sampleEventsMvp(now);
         return Column(

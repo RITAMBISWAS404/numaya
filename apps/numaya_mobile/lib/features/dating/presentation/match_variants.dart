@@ -295,26 +295,32 @@ class MatchIdentityHero extends StatelessWidget {
                         AppSpacing.s5,
                         AppSpacing.s5,
                       ),
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              l10n.profileNameAge(person.name, person.age),
-                              style: AppTypography.weight(
-                                AppTypography.hero,
-                                AppTypography.bold,
-                              ).copyWith(color: AppColors.accentForeground),
-                            ),
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: PhotoLabel(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  l10n.profileNameAge(person.name, person.age),
+                                  style: AppTypography.weight(
+                                    AppTypography.hero,
+                                    AppTypography.bold,
+                                  ).copyWith(color: AppColors.accentForeground),
+                                ),
+                              ),
+                              if (person.verified) ...[
+                                const SizedBox(width: AppSpacing.s2),
+                                const NumayaIcon(
+                                  NumayaIcons.verified,
+                                  size: AppSizes.iconMd,
+                                  color: AppColors.accentForeground,
+                                ),
+                              ],
+                            ],
                           ),
-                          if (person.verified) ...[
-                            const SizedBox(width: AppSpacing.s2),
-                            const NumayaIcon(
-                              NumayaIcons.verified,
-                              size: AppSizes.iconMd,
-                              color: AppColors.accentForeground,
-                            ),
-                          ],
-                        ],
+                        ),
                       ),
                     ),
                   ),

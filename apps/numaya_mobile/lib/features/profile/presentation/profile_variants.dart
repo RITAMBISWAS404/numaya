@@ -164,17 +164,19 @@ class ProfileHeaderCover extends StatelessWidget {
                         // Owner note: the verification pill sits above the name and age.
                         data.badge(context, tone: BadgeTone.onPhoto),
                         const SizedBox(height: AppSpacing.s2),
-                        Semantics(
-                          header: true,
-                          child: NameWithBadge(
-                            name: data.name,
-                            verified: data.verified,
-                            verifiedLabel: context.l10n.photoVerifiedLabel,
-                            badgeColor: AppColors.accentForeground,
-                            style: AppTypography.weight(
-                              AppTypography.hero,
-                              AppTypography.bold,
-                            ).copyWith(color: AppColors.accentForeground),
+                        PhotoLabel(
+                          child: Semantics(
+                            header: true,
+                            child: NameWithBadge(
+                              name: data.name,
+                              verified: data.verified,
+                              verifiedLabel: context.l10n.photoVerifiedLabel,
+                              badgeColor: AppColors.accentForeground,
+                              style: AppTypography.weight(
+                                AppTypography.hero,
+                                AppTypography.bold,
+                              ).copyWith(color: AppColors.accentForeground),
+                            ),
                           ),
                         ),
                       ],
@@ -187,14 +189,35 @@ class ProfileHeaderCover extends StatelessWidget {
           Positioned(
             top: AppSpacing.s3,
             right: AppSpacing.s3,
-            child: NumayaButton(
+            child: Pressable(
               key: const ValueKey('profile-header-edit'),
-              label: l10n.profileEdit,
-              icon: NumayaIcons.edit,
-              small: true,
-              expand: false,
-              variant: NumayaButtonVariant.secondary,
-              onPressed: data.onEdit,
+              onTap: data.onEdit,
+              semanticLabel: l10n.profileEdit,
+              excludeChildSemantics: true,
+              borderRadius: AppRadii.all(AppRadii.pill),
+              child: PhotoGlass(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.s3,
+                  vertical: AppSpacing.s2,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const NumayaIcon(
+                      NumayaIcons.edit,
+                      size: 18,
+                      color: AppColors.inkForeground,
+                    ),
+                    const SizedBox(width: AppSpacing.s1),
+                    Text(
+                      l10n.profileEdit,
+                      style: AppTypography.buttonSm.copyWith(
+                        color: AppColors.inkForeground,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],

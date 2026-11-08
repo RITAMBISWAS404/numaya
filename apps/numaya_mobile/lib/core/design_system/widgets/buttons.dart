@@ -94,8 +94,9 @@ class NumayaButton extends StatelessWidget {
       // Filled neutral: surface contrast, not a stroke, says "less important".
       NumayaButtonVariant.secondary => (AppColors.field, AppColors.ink, null),
       NumayaButtonVariant.quiet => (AppColors.field, AppColors.ink, null),
+      // V4: no lavender fill; a neutral button whose purple label marks the brand action.
       NumayaButtonVariant.brand => (
-        AppColors.accentTint,
+        AppColors.field,
         AppColors.accentOnTint,
         null,
       ),
@@ -279,7 +280,7 @@ class NavIconButton extends StatelessWidget {
         ? AppRadii.pill
         : AppRadii.iconButton;
     final (Color bg, Color? ring) = brand
-        ? (AppColors.accentTint, null)
+        ? (AppColors.fill, null)
         : switch (style) {
             // A white rounded square with no outline: surface contrast against the grey page.
             NavButtonStyle.floating => (AppColors.surface, null),

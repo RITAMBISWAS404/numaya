@@ -13,6 +13,7 @@ class DemoPhoto {
     required this.portrait,
     required this.focus,
     this.faceSource,
+    this.cover = true,
   });
 
   /// `asset:` source for [localImage].
@@ -27,6 +28,9 @@ class DemoPhoto {
 
   /// A square crop centred on the face (portraits only), for circles and square thumbnails.
   final String? faceSource;
+
+  /// Usable as an event cover (false for a photo with text burned in).
+  final bool cover;
 }
 
 /// The local reference-photo set for the demo, read once at start-up from
@@ -66,6 +70,7 @@ class DemoPhotoLibrary {
         DemoPhoto(
           source: 'asset:$folder${m['photo']}',
           portrait: m['role'] == 'portrait',
+          cover: m['cover'] != false,
           focus: _alignment(m['focus']),
           faceSource: m['face'] == null ? null : 'asset:$folder${m['face']}',
         ),
@@ -100,6 +105,15 @@ class DemoPhotoLibrary {
     for (final p in photos)
       if (p.portrait) p,
   ];
+
+  /// A wider scene for an event cover, fixed by [key]; null when no set is installed.
+  DemoPhoto? coverFor(int key) {
+    final scenes = [
+      for (final p in photos)
+        if (!p.portrait && p.cover) p,
+    ];
+    return scenes.isEmpty ? null : scenes[key % scenes.length];
+  }
 
   /// The photo at gallery [position] (1-based) for the person at [index]: a portrait first, then
   /// the rest of the set in a fixed rotation. Null when no set is installed.

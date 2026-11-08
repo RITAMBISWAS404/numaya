@@ -179,14 +179,15 @@ class _CodeCell extends StatelessWidget {
     // The cells extend the filled field: the neutral fill with no outline, white with a 2pt purple
     // edge when active, red when wrong, the purple tint when verified.
     final (Color bg, Color ring, double ringWidth, Color fg) = switch (state) {
+      // V4: state is the ring and the digit colour, on a neutral cell.
       CodeInputState.error => (
-        AppColors.dangerTint,
+        AppColors.surface,
         AppColors.negative,
         AppBorders.focus,
         AppColors.negative,
       ),
       CodeInputState.success => (
-        AppColors.accentTint,
+        AppColors.surface,
         AppColors.accent,
         AppBorders.selected,
         AppColors.accentOnTint,
@@ -261,7 +262,7 @@ enum MarkTone {
   peach(AppColors.markPink),
   lilac(AppColors.markLavender),
   sky(AppColors.markLavender),
-  mint(AppColors.accentTint),
+  mint(AppColors.markLavender),
   butter(AppColors.markYellow);
 
   const MarkTone(this.color);

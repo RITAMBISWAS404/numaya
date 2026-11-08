@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/design_system/design_system.dart';
+import '../../../core/media/demo_photos.dart';
+import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
 import '../../lab/lab_registry.dart';
 import '../domain/event_models.dart';
@@ -32,8 +34,8 @@ String evTime(DateTime d) => DateFormat('HH:mm').format(d);
 String evWhen(AppLocalizations l10n, DateTime d) =>
     l10n.evWhen(evDay(d), evTime(d));
 
-/// The cover: a labelled illustration placeholder in a soft brand tint with the category glyph.
-/// No photography or generated art (illustrations are a later pass).
+/// The cover: the local demo photo for this event when a set is installed; otherwise a neutral
+/// placeholder with the category glyph and a one-line art brief (V4: no decorative tints).
 class EvCover extends StatelessWidget {
   const EvCover({
     super.key,
@@ -52,54 +54,57 @@ class EvCover extends StatelessWidget {
   final bool showLabel;
   final double iconSize;
 
-  static const _tints = [
-    Color(0xFFEFEDFA),
-    Color(0xFFE9F3EE),
-    Color(0xFFF7EEE6),
-    Color(0xFFEAF0F8),
-    Color(0xFFF6EAF1),
-    Color(0xFFF1F1E6),
-  ];
-
   @override
-  Widget build(BuildContext context) => ExcludeSemantics(
-    child: ClipRRect(
-      borderRadius: AppRadii.all(radius),
-      child: AspectRatio(
-        aspectRatio: aspectRatio,
-        child: ColoredBox(
-          color: _tints[event.tone % _tints.length],
-          child: Stack(
-            children: [
-              Center(
-                child: NumayaIcon(
-                  evIcon(event.category),
-                  size: iconSize,
-                  color: AppColors.accent,
-                ),
-              ),
-              if (showLabel)
-                Positioned(
-                  left: AppSpacing.s3,
-                  bottom: AppSpacing.s2,
-                  right: AppSpacing.s3,
-                  child: Text(
-                    'Illustration: cover for ${event.title.toLowerCase()}',
-                    maxLines: 1,
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
-                    textScaler: TextScaler.noScaling,
-                    style: AppTypography.micro.copyWith(
-                      color: AppColors.textMuted,
-                    ),
+  Widget build(BuildContext context) {
+    final photo = DemoPhotoLibrary.instance.coverFor(event.tone);
+    return ExcludeSemantics(
+      child: ClipRRect(
+        borderRadius: AppRadii.all(radius),
+        child: AspectRatio(
+          aspectRatio: aspectRatio,
+          child: photo != null
+              ? Image(
+                  image: localImage(photo.source, width: 1080),
+                  fit: BoxFit.cover,
+                  alignment: photo.focus,
+                  gaplessPlayback: true,
+                  errorBuilder: (_, _, _) =>
+                      const ColoredBox(color: AppColors.photo),
+                )
+              : ColoredBox(
+                  color: AppColors.photo,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: NumayaIcon(
+                          evIcon(event.category),
+                          size: iconSize,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      if (showLabel)
+                        Positioned(
+                          left: AppSpacing.s3,
+                          bottom: AppSpacing.s2,
+                          right: AppSpacing.s3,
+                          child: Text(
+                            'Illustration: cover for ${event.title.toLowerCase()}',
+                            maxLines: 1,
+                            overflow: TextOverflow.fade,
+                            softWrap: false,
+                            textScaler: TextScaler.noScaling,
+                            style: AppTypography.micro.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
-            ],
-          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 /// The member-facing state of an event, as a small badge (never fake scarcity).
@@ -147,6 +152,7 @@ class EvCard extends ConsumerWidget {
       'A' => _compact(l10n, when, place),
       'B' => _dateLed(l10n, place),
       'C' => _coverDate(l10n, place),
+      'P' => _photoLed(l10n, when, place),
       _ => _original(l10n, when, place),
     };
     return Pressable(
@@ -199,6 +205,68 @@ class EvCard extends ConsumerWidget {
                   EvInfoLine(icon: NumayaIcons.location, text: place),
                   const SizedBox(height: AppSpacing.s3),
                   _badges(l10n),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+
+  /// P (V4 default): the photo leads with the date on a glass pill; title, place, and one quiet
+  /// line for price and availability, with a chevron as the affordance. One status, no badges row.
+  Widget _photoLed(AppLocalizations l10n, String when, String place) =>
+      Container(
+        padding: const EdgeInsets.all(AppSpacing.s2),
+        decoration: _box,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Stack(
+              children: [
+                EvCover(event: event, radius: AppRadii.card - AppSpacing.s2),
+                Positioned(
+                  left: AppSpacing.s2,
+                  top: AppSpacing.s2,
+                  child: PhotoPill(label: when, icon: NumayaIcons.calendar),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.s2,
+                AppSpacing.s3,
+                AppSpacing.s2,
+                AppSpacing.s2,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(event.title, style: AppTypography.card),
+                        const SizedBox(height: AppSpacing.s1),
+                        EvInfoLine(icon: NumayaIcons.location, text: place),
+                        const SizedBox(height: AppSpacing.s2),
+                        if (statusBrand)
+                          EvStatusBadge(label: status, brand: true)
+                        else
+                          Text(
+                            '${l10n.evFree} · $status',
+                            style: AppTypography.weight(
+                              AppTypography.bodySm,
+                              AppTypography.semibold,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.s2),
+                  const NumayaIcon(
+                    NumayaIcons.chevronRight,
+                    size: AppSizes.iconMd,
+                    color: AppColors.iconSupporting,
+                  ),
                 ],
               ),
             ),
@@ -268,7 +336,7 @@ class EvCard extends ConsumerWidget {
           width: 60,
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.s2),
           decoration: BoxDecoration(
-            color: AppColors.accentTint,
+            color: AppColors.fill,
             borderRadius: AppRadii.all(AppRadii.card - AppSpacing.s3),
           ),
           child: Column(
@@ -461,6 +529,75 @@ class EvFact extends StatelessWidget {
   );
 }
 
+/// The event's description on its own white card: a four-line preview with a real expand action
+/// when the text runs longer. (V4 pilot: About separated from logistics.)
+class EvAboutCard extends StatefulWidget {
+  const EvAboutCard({super.key, required this.title, required this.body});
+  final String title;
+  final String body;
+
+  @override
+  State<EvAboutCard> createState() => _EvAboutCardState();
+}
+
+class _EvAboutCardState extends State<EvAboutCard> {
+  bool _open = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final style = AppTypography.body.copyWith(color: AppColors.textSecondary);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppLayout.cardPadding),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.card),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Semantics(
+            header: true,
+            child: Text(widget.title, style: AppTypography.section),
+          ),
+          const SizedBox(height: AppSpacing.s2),
+          LayoutBuilder(
+            builder: (context, box) {
+              final painter = TextPainter(
+                text: TextSpan(text: widget.body, style: style),
+                textScaler: MediaQuery.textScalerOf(context),
+                textDirection: Directionality.of(context),
+                maxLines: 4,
+              )..layout(maxWidth: box.maxWidth);
+              final long = painter.didExceedMaxLines;
+              painter.dispose();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.body,
+                    style: style,
+                    maxLines: _open ? null : 4,
+                    overflow: _open
+                        ? TextOverflow.visible
+                        : TextOverflow.ellipsis,
+                  ),
+                  if (long)
+                    TextLink(
+                      label: _open ? l10n.evShowLess : l10n.evReadMore,
+                      onPressed: () => setState(() => _open = !_open),
+                    ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// White card wrapper with the shared padding.
 class EvCardBox extends StatelessWidget {
   const EvCardBox({super.key, required this.child});
@@ -482,7 +619,7 @@ class EvCardBox extends StatelessWidget {
 
 /// Ente Disclosure Button, chip form (2207:41577: "a value that opens a menu; never a normal
 /// button"): the current value with a down chevron, 40pt tall (48pt target). [active] marks a
-/// non-default value with the subtle brand fill so a set filter is visible at a glance.
+/// non-default value with the solid brand fill so a set filter is visible at a glance.
 class EvDisclosureChip extends StatelessWidget {
   const EvDisclosureChip({
     super.key,
@@ -501,7 +638,7 @@ class EvDisclosureChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fg = active ? AppColors.accentOnTint : AppColors.ink;
+    final fg = active ? AppColors.accentForeground : AppColors.ink;
     return Pressable(
       onTap: onTap,
       semanticLabel: semanticLabel ?? label,
@@ -513,7 +650,7 @@ class EvDisclosureChip extends StatelessWidget {
         height: AppSizes.chip,
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s3),
         decoration: BoxDecoration(
-          color: active ? AppColors.accentTint : AppColors.surface,
+          color: active ? AppColors.accent : AppColors.surface,
           borderRadius: AppRadii.all(AppRadii.pill),
         ),
         child: Row(

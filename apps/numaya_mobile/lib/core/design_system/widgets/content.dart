@@ -6,21 +6,28 @@ import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
+import 'photo_overlays.dart';
 import 'primitives.dart';
 import 'squircle_button.dart';
 
 /// The Numaya mark: a soft square with a bite out of its corner and a rose dot in the bite. In V16
 /// the square is Withings blue (COMPONENT_RULES.md: "mark in accent blue, rose dot kept").
 class BrandMark extends StatelessWidget {
-  const BrandMark({super.key, this.size = 26});
+  const BrandMark({super.key, this.size = 26, this.color});
   final double size;
+
+  /// One colour for square and dot (white on a solid brand surface); default brand purple.
+  final Color? color;
 
   @override
   Widget build(BuildContext context) =>
-      CustomPaint(size: Size.square(size), painter: _BrandMarkPainter());
+      CustomPaint(size: Size.square(size), painter: _BrandMarkPainter(color));
 }
 
 class _BrandMarkPainter extends CustomPainter {
+  _BrandMarkPainter(this.color);
+  final Color? color;
+
   @override
   void paint(Canvas canvas, Size size) {
     final s = size.width / 32;
@@ -31,17 +38,18 @@ class _BrandMarkPainter extends CustomPainter {
       ..addOval(Rect.fromCircle(center: const Offset(27, 5), radius: 7));
     canvas.drawPath(
       Path.combine(PathOperation.difference, square, bite),
-      Paint()..color = AppColors.accent,
+      Paint()..color = color ?? AppColors.accent,
     );
     canvas.drawCircle(
       const Offset(27, 5),
       3.5,
-      Paint()..color = AppColors.accentRose,
+      Paint()..color = color ?? AppColors.accentRose,
     );
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _BrandMarkPainter oldDelegate) =>
+      oldDelegate.color != color;
 }
 
 /// Mark plus the "numaya" wordmark ([AppTypography.wordmark]: Figtree bold, -0.03em) in ink.
@@ -448,20 +456,7 @@ class PhotoGrid extends StatelessWidget {
           Positioned(
             left: 8,
             bottom: 8,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: AppRadii.all(AppRadii.tag),
-              ),
-              child: Text(
-                i == 0 ? mainLabel : '${i + 1}',
-                style: AppTypography.weight(
-                  AppTypography.micro,
-                  AppTypography.semibold,
-                ).copyWith(color: AppColors.textPrimary),
-              ),
-            ),
+            child: PhotoPill(label: i == 0 ? mainLabel : '${i + 1}'),
           ),
           Positioned(
             top: 0,
@@ -735,7 +730,7 @@ class _SetupStepTile extends StatelessWidget {
           vertical: AppSpacing.s3,
         ),
         decoration: BoxDecoration(
-          color: done ? AppColors.fill : AppColors.surface,
+          color: AppColors.surface,
           borderRadius: AppRadii.all(AppRadii.card),
           border: done
               ? null
@@ -792,7 +787,7 @@ class _SetupStepTile extends StatelessWidget {
                     : EdgeInsets.zero,
                 decoration: active
                     ? BoxDecoration(
-                        color: AppColors.accentTint,
+                        color: AppColors.accent,
                         borderRadius: AppRadii.all(AppRadii.pill),
                       )
                     : null,
@@ -804,7 +799,7 @@ class _SetupStepTile extends StatelessWidget {
                         AppTypography.semibold,
                       ).copyWith(
                         color: active
-                            ? AppColors.textBrandDeep
+                            ? AppColors.accentForeground
                             : AppColors.textSecondary,
                       ),
                 ),

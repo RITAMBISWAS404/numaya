@@ -153,131 +153,375 @@ class EventDetailScreen extends ConsumerWidget {
         ? c.alternatives(eventId)
         : const <NumayaEvent>[];
 
-    return NumayaScreen(
-      top: top,
-      footer: booked || (phase == EvPhase.upcoming && !full) ? footer : null,
-      body: Column(
+    // Lab group `v4-event-detail`. G (default): identity, logistics, about, who, good to know.
+    // O keeps the previous single fact list; I and C are alternatives for the owner.
+    final layout = ref.watch(labVariantProvider('v4-event-detail'));
+    final alternatives = <Widget>[
+      if (full && !booked && phase == EvPhase.upcoming) ...[
+        const SizedBox(height: AppSpacing.s4),
+        Text(l10n.evAlternatives(e.city), style: AppTypography.section),
+        const SizedBox(height: AppSpacing.s2),
+        if (alts.isEmpty)
+          Text(l10n.evNoAlternatives(e.city), style: AppTypography.bodySm)
+        else
+          for (final a in alts) ...[
+            EvCard(
+              event: a,
+              status: l10n.evPlacesLeft(c.placesLeft(a.id)),
+              onTap: () => context.push('${Routes.evEvent}/${a.id}'),
+            ),
+            const SizedBox(height: AppSpacing.s2),
+          ],
+      ],
+    ];
+    final logistics = EvCardBox(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: AppSpacing.s2),
-          EvCover(event: e),
-          const SizedBox(height: AppSpacing.s4),
-          Semantics(
-            header: true,
-            child: Text(e.title, style: AppTypography.pageTitle),
+          EvFact(
+            icon: NumayaIcons.calendar,
+            title: evDay(e.start),
+            body: l10n.evTimes(evTime(e.start), evTime(e.end), e.timezone),
           ),
-          const SizedBox(height: AppSpacing.s1),
-          EvInfoLine(icon: NumayaIcons.calendar, text: evWhen(l10n, e.start)),
-          const SizedBox(height: AppSpacing.s3),
-          Wrap(
-            spacing: AppSpacing.s2,
-            runSpacing: AppSpacing.s1,
-            children: [
-              EvStatusBadge(label: l10n.evFree),
-              EvStatusBadge(label: evCategoryLabel(l10n, e.category)),
-              EvStatusBadge(label: l10n.evSampleBanner),
-            ],
-          ),
-          if (state != null) ...[const SizedBox(height: AppSpacing.s4), state],
-          if (full && !booked && phase == EvPhase.upcoming) ...[
-            const SizedBox(height: AppSpacing.s4),
-            Text(l10n.evAlternatives(e.city), style: AppTypography.section),
-            const SizedBox(height: AppSpacing.s2),
-            if (alts.isEmpty)
-              Text(l10n.evNoAlternatives(e.city), style: AppTypography.bodySm)
-            else
-              for (final a in alts) ...[
-                EvCard(
-                  event: a,
-                  status: l10n.evPlacesLeft(c.placesLeft(a.id)),
-                  onTap: () => context.push('${Routes.evEvent}/${a.id}'),
-                ),
-                const SizedBox(height: AppSpacing.s2),
-              ],
-          ],
-          const SizedBox(height: AppSpacing.sectionGap),
-          EvCardBox(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                EvFact(
-                  icon: NumayaIcons.info,
-                  title: l10n.evAbout,
-                  body: e.description,
-                ),
-                EvFact(
-                  icon: NumayaIcons.user,
-                  title: l10n.evHostedBy,
-                  body: l10n.evHostSample(e.hostName),
-                ),
-                EvFact(
-                  icon: NumayaIcons.clock,
-                  title: l10n.evWhenTitle,
-                  body:
-                      '${evDay(e.start)} · ${l10n.evTimes(evTime(e.start), evTime(e.end), e.timezone)}',
-                ),
-                EvFact(
-                  icon: NumayaIcons.location,
-                  title: l10n.evWhereTitle,
-                  body: '${e.venue.name}\n${e.venue.address}, ${e.city}',
-                  extra: TextLink(
-                    label: l10n.evDirections,
-                    onPressed: () =>
-                        NumayaToast.show(context, l10n.evDirectionsDemo),
-                  ),
-                ),
-                EvFact(
-                  icon: NumayaIcons.public,
-                  title: l10n.evAccessibility,
-                  body: e.venue.accessibility ?? l10n.evAccessUnknown,
-                ),
-                if (e.venue.transport != null)
-                  EvFact(
-                    icon: NumayaIcons.nearby,
-                    title: l10n.evTransport,
-                    body: e.venue.transport!,
-                  ),
-              ],
+          EvFact(
+            icon: NumayaIcons.location,
+            title: e.venue.name,
+            body: '${e.venue.address}, ${e.city}',
+            extra: TextLink(
+              label: l10n.evDirections,
+              onPressed: () => NumayaToast.show(context, l10n.evDirectionsDemo),
             ),
           ),
-          const SizedBox(height: AppSpacing.s3),
-          EvCardBox(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                EvFact(
-                  icon: NumayaIcons.groups,
-                  title: l10n.evWhoTitle,
-                  body: l10n.evWhoBody(e.minAge),
-                ),
-                EvFact(
-                  icon: NumayaIcons.event,
-                  title: l10n.evPlacesTitle,
-                  body: l10n.evPlacesBody(c.reserved(eventId), e.capacity),
-                ),
-                EvFact(
-                  icon: NumayaIcons.tag,
-                  title: l10n.evPriceTitle,
-                  body: l10n.evPriceBody,
-                ),
-                EvFact(
-                  icon: NumayaIcons.undo,
-                  title: l10n.evCancelTermsTitle,
-                  body: '${l10n.evCancelTerms} ${l10n.evNoDirectory}',
-                ),
-              ],
-            ),
+          EvFact(
+            icon: NumayaIcons.public,
+            title: l10n.evAccessibility,
+            body: e.venue.accessibility ?? l10n.evAccessUnknown,
           ),
-          const SizedBox(height: AppSpacing.s4),
-          Center(
-            child: TextLink(
-              label: l10n.evReportSupport,
-              muted: true,
-              onPressed: () => showEvReport(context, ref),
+          if (e.venue.transport != null)
+            EvFact(
+              icon: NumayaIcons.nearby,
+              title: l10n.evTransport,
+              body: e.venue.transport!,
             ),
+        ],
+      ),
+    );
+    final about = EvAboutCard(title: l10n.evAbout, body: e.description);
+    final who = EvCardBox(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          EvFact(
+            icon: NumayaIcons.groups,
+            title: l10n.evPlacesTitle,
+            body: l10n.evPlacesBody(c.reserved(eventId), e.capacity),
+          ),
+          EvFact(
+            icon: NumayaIcons.user,
+            title: l10n.evWhoTitle,
+            body: l10n.evWhoBody(e.minAge),
           ),
         ],
       ),
+    );
+    final goodToKnow = EvCardBox(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          EvFact(
+            icon: NumayaIcons.tag,
+            title: l10n.evPriceTitle,
+            body: l10n.evPriceBody,
+          ),
+          EvFact(
+            icon: NumayaIcons.undo,
+            title: l10n.evCancelTermsTitle,
+            body: '${l10n.evCancelTerms} ${l10n.evNoDirectory}',
+          ),
+        ],
+      ),
+    );
+    final tail = <Widget>[
+      const SizedBox(height: AppSpacing.s3),
+      Text(
+        l10n.evSampleBanner,
+        textAlign: TextAlign.center,
+        style: AppTypography.caption,
+      ),
+      Center(
+        child: TextLink(
+          label: l10n.evReportSupport,
+          muted: true,
+          onPressed: () => showEvReport(context, ref),
+        ),
+      ),
+    ];
+    final host = '${l10n.evHostedBy} · ${l10n.evHostSample(e.hostName)}';
+    final pills = <Widget>[
+      PhotoPill(
+        label: evCategoryLabel(l10n, e.category),
+        icon: evIcon(e.category),
+      ),
+      PhotoPill(label: l10n.evFree),
+    ];
+    Widget gap() => const SizedBox(height: AppSpacing.s3);
+    final title = Semantics(
+      header: true,
+      child: Text(e.title, style: AppTypography.pageTitle),
+    );
+    final identity = switch (layout) {
+      // I: imagery first. A tall photo carries the title on a compact backing.
+      'I' => <Widget>[
+        const SizedBox(height: AppSpacing.s2),
+        Stack(
+          children: [
+            EvCover(event: e, aspectRatio: 4 / 5),
+            Positioned(
+              left: AppSpacing.s3,
+              top: AppSpacing.s3,
+              right: AppSpacing.s3,
+              child: Wrap(
+                spacing: AppSpacing.s2,
+                runSpacing: AppSpacing.s1,
+                children: pills,
+              ),
+            ),
+            Positioned(
+              left: AppSpacing.s3,
+              right: AppSpacing.s3,
+              bottom: AppSpacing.s3,
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: PhotoLabel(
+                  child: Semantics(
+                    header: true,
+                    child: Text(
+                      e.title,
+                      style: AppTypography.weight(
+                        AppTypography.pageTitle,
+                        AppTypography.bold,
+                      ).copyWith(color: AppColors.inkForeground),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.s3),
+        EvInfoLine(icon: NumayaIcons.user, text: host),
+      ],
+      // C: information first. A small thumbnail beside the title; logistics reach the first view.
+      'C' => <Widget>[
+        const SizedBox(height: AppSpacing.s2),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 88,
+              child: EvCover(
+                event: e,
+                aspectRatio: 1,
+                radius: AppRadii.control,
+                showLabel: false,
+                iconSize: 28,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.s3),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  title,
+                  const SizedBox(height: AppSpacing.s1),
+                  EvInfoLine(icon: NumayaIcons.user, text: host),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+      // G: the default. A wide photo, then the title and who runs it.
+      _ => <Widget>[
+        const SizedBox(height: AppSpacing.s2),
+        Stack(
+          children: [
+            EvCover(event: e),
+            Positioned(
+              left: AppSpacing.s2,
+              top: AppSpacing.s2,
+              right: AppSpacing.s2,
+              child: Wrap(
+                spacing: AppSpacing.s2,
+                runSpacing: AppSpacing.s1,
+                children: pills,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.s4),
+        title,
+        const SizedBox(height: AppSpacing.s1),
+        EvInfoLine(icon: NumayaIcons.user, text: host),
+      ],
+    };
+    final Widget body = layout == 'O'
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: AppSpacing.s2),
+              EvCover(event: e),
+              const SizedBox(height: AppSpacing.s4),
+              Semantics(
+                header: true,
+                child: Text(e.title, style: AppTypography.pageTitle),
+              ),
+              const SizedBox(height: AppSpacing.s1),
+              EvInfoLine(
+                icon: NumayaIcons.calendar,
+                text: evWhen(l10n, e.start),
+              ),
+              const SizedBox(height: AppSpacing.s3),
+              Wrap(
+                spacing: AppSpacing.s2,
+                runSpacing: AppSpacing.s1,
+                children: [
+                  EvStatusBadge(label: l10n.evFree),
+                  EvStatusBadge(label: evCategoryLabel(l10n, e.category)),
+                  EvStatusBadge(label: l10n.evSampleBanner),
+                ],
+              ),
+              if (state != null) ...[
+                const SizedBox(height: AppSpacing.s4),
+                state,
+              ],
+              if (full && !booked && phase == EvPhase.upcoming) ...[
+                const SizedBox(height: AppSpacing.s4),
+                Text(l10n.evAlternatives(e.city), style: AppTypography.section),
+                const SizedBox(height: AppSpacing.s2),
+                if (alts.isEmpty)
+                  Text(
+                    l10n.evNoAlternatives(e.city),
+                    style: AppTypography.bodySm,
+                  )
+                else
+                  for (final a in alts) ...[
+                    EvCard(
+                      event: a,
+                      status: l10n.evPlacesLeft(c.placesLeft(a.id)),
+                      onTap: () => context.push('${Routes.evEvent}/${a.id}'),
+                    ),
+                    const SizedBox(height: AppSpacing.s2),
+                  ],
+              ],
+              const SizedBox(height: AppSpacing.sectionGap),
+              EvCardBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    EvFact(
+                      icon: NumayaIcons.info,
+                      title: l10n.evAbout,
+                      body: e.description,
+                    ),
+                    EvFact(
+                      icon: NumayaIcons.user,
+                      title: l10n.evHostedBy,
+                      body: l10n.evHostSample(e.hostName),
+                    ),
+                    EvFact(
+                      icon: NumayaIcons.clock,
+                      title: l10n.evWhenTitle,
+                      body:
+                          '${evDay(e.start)} · ${l10n.evTimes(evTime(e.start), evTime(e.end), e.timezone)}',
+                    ),
+                    EvFact(
+                      icon: NumayaIcons.location,
+                      title: l10n.evWhereTitle,
+                      body: '${e.venue.name}\n${e.venue.address}, ${e.city}',
+                      extra: TextLink(
+                        label: l10n.evDirections,
+                        onPressed: () =>
+                            NumayaToast.show(context, l10n.evDirectionsDemo),
+                      ),
+                    ),
+                    EvFact(
+                      icon: NumayaIcons.public,
+                      title: l10n.evAccessibility,
+                      body: e.venue.accessibility ?? l10n.evAccessUnknown,
+                    ),
+                    if (e.venue.transport != null)
+                      EvFact(
+                        icon: NumayaIcons.nearby,
+                        title: l10n.evTransport,
+                        body: e.venue.transport!,
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: AppSpacing.s3),
+              EvCardBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    EvFact(
+                      icon: NumayaIcons.groups,
+                      title: l10n.evWhoTitle,
+                      body: l10n.evWhoBody(e.minAge),
+                    ),
+                    EvFact(
+                      icon: NumayaIcons.event,
+                      title: l10n.evPlacesTitle,
+                      body: l10n.evPlacesBody(c.reserved(eventId), e.capacity),
+                    ),
+                    EvFact(
+                      icon: NumayaIcons.tag,
+                      title: l10n.evPriceTitle,
+                      body: l10n.evPriceBody,
+                    ),
+                    EvFact(
+                      icon: NumayaIcons.undo,
+                      title: l10n.evCancelTermsTitle,
+                      body: '${l10n.evCancelTerms} ${l10n.evNoDirectory}',
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: AppSpacing.s4),
+              Center(
+                child: TextLink(
+                  label: l10n.evReportSupport,
+                  muted: true,
+                  onPressed: () => showEvReport(context, ref),
+                ),
+              ),
+            ],
+          )
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ...identity,
+              if (state != null) ...[
+                const SizedBox(height: AppSpacing.s4),
+                state,
+              ],
+              ...alternatives,
+              const SizedBox(height: AppSpacing.s4),
+              logistics,
+              gap(),
+              about,
+              gap(),
+              who,
+              gap(),
+              goodToKnow,
+              ...tail,
+            ],
+          );
+
+    return NumayaScreen(
+      top: top,
+      footer: booked || (phase == EvPhase.upcoming && !full) ? footer : null,
+      body: body,
     );
   }
 }

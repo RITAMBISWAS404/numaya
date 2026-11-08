@@ -30,6 +30,7 @@ export 'widgets/layout.dart';
 export 'widgets/mascot.dart';
 export 'widgets/navigation.dart';
 export 'widgets/people.dart';
+export 'widgets/photo_overlays.dart';
 export 'widgets/primitives.dart';
 export 'widgets/segmented.dart';
 export 'widgets/selection.dart';

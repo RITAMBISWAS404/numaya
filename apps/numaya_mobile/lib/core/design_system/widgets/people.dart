@@ -12,6 +12,7 @@ import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
 import 'buttons.dart' show NavButtonStyle, NavIconButton;
 import 'content.dart' show MetaText;
+import 'photo_overlays.dart';
 import 'primitives.dart';
 
 /// Initials avatar (`.theme-withings .avatar`): a circle, white initial on navy. [ring] draws the
@@ -264,38 +265,37 @@ class StatusBadge extends StatelessWidget {
         AppColors.ink,
         AppTypography.semibold,
       ),
+      // V4: solid accents only (white on these fills: 4.90, 5.60, 5.81; ink on the amber: 9.95).
       BadgeTone.brand => (
-        AppColors.accentTint,
-        AppColors.accentOnTint,
+        AppColors.accent,
+        AppColors.accentForeground,
         AppTypography.semibold,
       ),
-      BadgeTone.onPhoto => (
-        AppColors.surface,
-        AppColors.accentOnTint,
-        AppTypography.semibold,
-      ),
-      // Over the photo scrim: a translucent white pill (RD-11).
-      BadgeTone.onDark => (
-        const Color(0x33FFFFFF),
+      BadgeTone.onPhoto || BadgeTone.onDark => (
+        AppColors.photoPanel,
         AppColors.inkForeground,
         AppTypography.semibold,
       ),
       BadgeTone.success => (
-        AppColors.successTint,
         AppColors.success,
+        AppColors.accentForeground,
         AppTypography.semibold,
       ),
       BadgeTone.warning => (
-        AppColors.warningTint,
-        AppColors.warning,
+        AppColors.warningBase,
+        AppColors.ink,
         AppTypography.semibold,
       ),
       BadgeTone.error => (
-        AppColors.dangerTint,
         AppColors.danger,
+        AppColors.accentForeground,
         AppTypography.semibold,
       ),
     };
+    // V4 rule IMG-1: anything over a photo is the shared black glass pill.
+    if (tone == BadgeTone.onPhoto || tone == BadgeTone.onDark) {
+      return PhotoPill(label: label, icon: icon);
+    }
     // 26 tall at normal sizes; grows and wraps under large text instead of overflowing.
     return Container(
       constraints: const BoxConstraints(minHeight: 26),
@@ -588,9 +588,9 @@ class _DecisionPill extends StatelessWidget {
         null,
         NumayaIcons.close,
       ),
-      // SuperSwipe is special but secondary: the subtle purple surface with a purple star.
+      // SuperSwipe is special but secondary: a white surface with a purple star (V4: no tint).
       ActionKind.superSwipe => (
-        AppColors.accentTint,
+        AppColors.surface,
         AppColors.accentOnTint,
         null,
         NumayaIcons.star,
@@ -1258,8 +1258,8 @@ class ScallopPortrait extends StatelessWidget {
       child: Container(
         width: size,
         height: size,
-        // The match is a rare celebration: their portrait sits on the subtle purple surface.
-        color: AppColors.accentTint,
+        // A neutral portrait ground (V4: no decorative tint).
+        color: AppColors.identity,
         alignment: Alignment.center,
         child: Text(
           initial,
@@ -1660,10 +1660,10 @@ class _Bleed extends StatelessWidget {
   }
 }
 
-/// The scrim behind text on a photo (typography pass, TC-07): a [fade] band that runs from clear
-/// to [AppColors.photoPanel], then the solid panel behind [child], however tall the text grows. White
-/// text on the panel is at least 9.29:1 over a white photo; a fixed-height gradient left a name at
-/// 200% text on the faint top of the fade (about 1.4:1 over a bright photo).
+/// The gradient behind content on a photo (V4 rule IMG-2): [AppColors.photoScrimEdge] (10% black)
+/// at the lower edge, fading to clear above the content, so the image is settled but never
+/// darkened. It does not make text readable by itself: names and titles sit on a [PhotoLabel] and
+/// statuses on a [PhotoPill]. Replaces the solid 55% panel (TC-07).
 class PhotoScrim extends StatelessWidget {
   const PhotoScrim({
     super.key,
@@ -1679,35 +1679,24 @@ class PhotoScrim extends StatelessWidget {
   final EdgeInsets padding;
 
   @override
-  Widget build(BuildContext context) => Column(
-    mainAxisSize: MainAxisSize.min,
-    crossAxisAlignment: CrossAxisAlignment.stretch,
+  Widget build(BuildContext context) => Stack(
     children: [
-      IgnorePointer(
-        child: SizedBox(
-          height: fade,
-          child: const DecoratedBox(
+      const Positioned.fill(
+        child: IgnorePointer(
+          child: DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0x00000000), AppColors.photoPanel],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [AppColors.photoScrimEdge, Color(0x00000000)],
               ),
             ),
           ),
         ),
       ),
-      // The panel is painted behind the text and ignores touches, so the photo's own gestures
-      // still work through it (only [child] can take a tap).
-      Stack(
-        children: [
-          const Positioned.fill(
-            child: IgnorePointer(
-              child: ColoredBox(color: AppColors.photoPanel),
-            ),
-          ),
-          Padding(padding: padding, child: child),
-        ],
+      Padding(
+        padding: padding.add(EdgeInsets.only(top: fade)),
+        child: child,
       ),
     ],
   );

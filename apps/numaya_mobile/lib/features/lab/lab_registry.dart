@@ -583,8 +583,14 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.component,
     question: 'Can a member tell what, when and where at a glance, and scan several events?',
     usages: ['Events feed (E01)', 'Full event: other events (E02)'],
-    proposed: _o,
+    proposed: 'P',
     variants: [
+      LabVariant(
+        'P',
+        'Photo with date pill',
+        'V4 default',
+        'Photo leads with the date on a glass pill; title, place and one price and availability line.',
+      ),
       LabVariant(
         _o,
         'Cover-led card',
@@ -608,6 +614,98 @@ const List<LabGroup> kLabGroups = [
         'Cover with date chip',
         'A structure',
         'Date chip on the cover; one merged status badge; fewer labels.',
+      ),
+    ],
+  ),
+  LabGroup(
+    id: 'v4-event-detail',
+    title: 'Event detail layout',
+    kind: LabKind.screen,
+    question:
+        'Can a member tell what this is, when and where, and what to do next?',
+    usages: ['Event detail (E02)'],
+    proposed: 'G',
+    variants: [
+      LabVariant(
+        'G',
+        'Separated groups',
+        'V4 default',
+        'Wide photo, title; then logistics, about, who and good-to-know as their own white cards.',
+      ),
+      LabVariant(
+        _o,
+        'Single fact list',
+        'baseline',
+        'The previous order: badges, then About, host, time and place in one long list.',
+      ),
+      LabVariant(
+        'I',
+        'Imagery first',
+        'A imagery',
+        'A tall photo carries the title on a compact backing; logistics start below the fold.',
+      ),
+      LabVariant(
+        'C',
+        'Information first',
+        'B density',
+        'A small thumbnail beside the title; time and place are in the first view, less picture.',
+      ),
+    ],
+  ),
+  LabGroup(
+    id: 'v4-photo-label',
+    title: 'Name over a photo',
+    kind: LabKind.screen,
+    question:
+        'Is the name readable on any photo without darkening the picture?',
+    usages: ['Discover and person profile photo'],
+    proposed: 'P',
+    variants: [
+      LabVariant(
+        'P',
+        'Compact glass label',
+        'V4 default',
+        'A hugging black glass label holds the name; the photo keeps a 10% gradient only.',
+      ),
+      LabVariant(
+        'B',
+        'Edge-to-edge glass bar',
+        'A structure',
+        'A full-width glass strip along the foot of the photo; steadier, covers more of it.',
+      ),
+      LabVariant(
+        _o,
+        'Dark panel',
+        'baseline',
+        'The previous solid 55% panel behind the name; over the owner’s 25% gradient cap.',
+      ),
+    ],
+  ),
+  LabGroup(
+    id: 'v4-welcome',
+    title: 'Welcome brand area',
+    kind: LabKind.component,
+    question: 'Does the first screen feel confidently Numaya without a decorative tint?',
+    usages: ['Welcome (temporary brand art, UI-001)'],
+    proposed: 'S',
+    variants: [
+      LabVariant(
+        'S',
+        'Solid purple',
+        'V4 default',
+        'White mark on the solid brand colour; the strongest first impression.',
+      ),
+      LabVariant(
+        'N',
+        'Neutral page',
+        'B quiet',
+        'Purple mark on the grey page; calmer, less branded.',
+      ),
+      LabVariant(
+        _o,
+        'Lavender tint',
+        'baseline',
+        'The previous pale purple panel.',
       ),
     ],
   ),

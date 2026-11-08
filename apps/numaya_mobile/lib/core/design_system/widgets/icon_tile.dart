@@ -31,12 +31,13 @@ enum AccentTone {
 
   /// (tint, foreground): every foreground is at least 4.5:1 on its tint.
   (Color, Color) get colors => switch (this) {
-    brand => (AppColors.accentTint, AppColors.accentOnTint),
-    info => (AppColors.infoTint, AppColors.info),
-    positive => (AppColors.successTint, AppColors.success),
-    caution => (AppColors.warningTint, AppColors.warning),
-    social => (AppColors.socialTint, AppColors.social),
-    danger => (AppColors.dangerTint, AppColors.danger),
+    // V4: one neutral backplate; the glyph alone carries the tone.
+    brand => (AppColors.fill, AppColors.accentOnTint),
+    info => (AppColors.fill, AppColors.info),
+    positive => (AppColors.fill, AppColors.success),
+    caution => (AppColors.fill, AppColors.warning),
+    social => (AppColors.fill, AppColors.social),
+    danger => (AppColors.fill, AppColors.danger),
     neutral => (AppColors.fill, AppColors.textSecondary),
   };
 }

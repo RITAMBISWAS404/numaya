@@ -57,6 +57,8 @@ def main() -> int:
         shutil.copyfile(original, OUT / photo)
         fx, fy, fw = entry['face']
         item = {'photo': photo, 'role': entry['role'], 'focus': [fx, fy]}
+        if entry.get('cover') is False:
+            item['cover'] = False  # e.g. text burned into the photo
         if entry['role'] == 'portrait':
             with Image.open(original) as im:
                 im = ImageOps.exif_transpose(im).convert('RGB')

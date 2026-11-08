@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/design_system/design_system.dart';
 import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
 import '../../compliments/domain/compliment.dart';
+import '../../lab/lab_registry.dart';
 import '../../lab/profile_prompt_card.dart';
 import '../../onboarding/domain/profile_draft.dart';
 import '../domain/profile_fact_emoji.dart';
@@ -87,24 +89,68 @@ class PersonHeroCard extends StatelessWidget {
               children: [
                 Positioned.fill(child: _photo(l10n)),
                 if (_overlay) ...[
-                  // Bumble's identity on the photo, on a scrim that grows with it (TC-07): the
-                  // name and job stay on the solid panel at any text size.
+                  // Bumble's identity on the photo (V4 IMG-2/3): a 10% gradient settles the image
+                  // and the name and job sit on a compact glass label at any text size.
                   Positioned(
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    child: PhotoScrim(
-                      fade: 48,
-                      padding: EdgeInsets.fromLTRB(
-                        AppSpacing.s4,
-                        0,
-                        // R05: room for the 48pt Compliment target plus a gap.
-                        complimentAction == null
-                            ? AppSpacing.s4
-                            : SquircleIconButton.target + AppSpacing.s2,
-                        AppSpacing.s4,
-                      ),
-                      child: _overlayIdentity(context, l10n),
+                    child: Consumer(
+                      builder: (context, ref, _) {
+                        final label = ref.watch(
+                          labVariantProvider('v4-photo-label'),
+                        );
+                        final inset = EdgeInsets.fromLTRB(
+                          AppSpacing.s3,
+                          0,
+                          // R05: room for the 48pt Compliment target plus a gap.
+                          complimentAction == null
+                              ? AppSpacing.s3
+                              : SquircleIconButton.target + AppSpacing.s2,
+                          AppSpacing.s3,
+                        );
+                        return switch (label) {
+                          // B: an edge-to-edge glass bar along the photo's foot.
+                          'B' => PhotoGlass(
+                            radius: 0,
+                            padding: EdgeInsets.fromLTRB(
+                              AppSpacing.s4,
+                              AppSpacing.s3,
+                              inset.right + AppSpacing.s1,
+                              AppSpacing.s3,
+                            ),
+                            child: _overlayIdentity(
+                              context,
+                              l10n,
+                              backed: false,
+                            ),
+                          ),
+                          // O: the previous 55% panel, kept for comparison (over the 25% cap).
+                          'O' => DecoratedBox(
+                            decoration: const BoxDecoration(
+                              color: AppColors.photoPanel,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                AppSpacing.s4,
+                                AppSpacing.s3,
+                                inset.right + AppSpacing.s1,
+                                AppSpacing.s4,
+                              ),
+                              child: _overlayIdentity(
+                                context,
+                                l10n,
+                                backed: false,
+                              ),
+                            ),
+                          ),
+                          _ => PhotoScrim(
+                            fade: 48,
+                            padding: inset,
+                            child: _overlayIdentity(context, l10n),
+                          ),
+                        };
+                      },
                     ),
                   ),
                 ],
@@ -230,7 +276,11 @@ class PersonHeroCard extends StatelessWidget {
   /// ("Sample profile", "New here") immediately above the name, then the name with its verified
   /// tick, then the designation. Absent fields leave no gap. The profile has no college field, so
   /// none is shown (nothing is invented).
-  Widget _overlayIdentity(BuildContext context, AppLocalizations l10n) {
+  Widget _overlayIdentity(
+    BuildContext context,
+    AppLocalizations l10n, {
+    bool backed = true,
+  }) {
     final large = MediaQuery.textScalerOf(context).scale(10) > 16;
     final nameStyle = AppTypography.hero.copyWith(
       fontSize: large ? 24 : 28,
@@ -312,7 +362,7 @@ class PersonHeroCard extends StatelessWidget {
       children: [
         _badges(l10n),
         const SizedBox(height: AppSpacing.s2),
-        _more(l10n, identity),
+        _more(l10n, backed ? PhotoLabel(child: identity) : identity),
       ],
     );
   }

@@ -55,7 +55,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
           MetricTile(
             label: l10n.walletTitle,
             value: '${ledger.total}',
-            unit: l10n.walletTotal(ledger.total),
+            unit: l10n.walletUnit(ledger.total),
           ),
           const SizedBox(height: AppSpacing.sectionGap),
           ListGroup(

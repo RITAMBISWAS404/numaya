@@ -5184,6 +5184,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletTitle => 'Compliment credits';
 
   @override
+  String walletUnit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'credits',
+      one: 'credit',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String walletTotal(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6430,6 +6441,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get evAbout => 'About this event';
+
+  @override
+  String get evReadMore => 'Read more';
+
+  @override
+  String get evShowLess => 'Show less';
 
   @override
   String get evHostedBy => 'Hosted by a Numaya host';

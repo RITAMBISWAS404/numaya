@@ -8,6 +8,7 @@ import '../../../app/providers.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../lab/lab_registry.dart';
 import '../application/phone_entry_controller.dart';
 import '../domain/auth_repository.dart';
 
@@ -201,16 +202,28 @@ class _RenderZeroIntrinsicHeight extends RenderProxyBox {
 /// body of [build] with the approved asset (for example `Image.asset(..., fit: BoxFit.cover)`)
 /// when it is supplied; the layout around it does not change. Decorative: the headline and the
 /// account actions carry the meaning.
-class WelcomeBrandImage extends StatelessWidget {
-  const WelcomeBrandImage({super.key});
+class WelcomeBrandImage extends ConsumerWidget {
+  const WelcomeBrandImage({super.key, this.variant});
+
+  /// Forces a variant (Visual Lab previews); otherwise the registry decides (`v4-welcome`).
+  final String? variant;
 
   static const String brandName = 'numaya';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final v = variant ?? ref.watch(labVariantProvider('v4-welcome'));
+    // S: solid brand. N: neutral page. O: the previous lavender, kept for comparison.
+    final solid = v == 'S';
+    final bg = switch (v) {
+      'S' => AppColors.accent,
+      'N' => AppColors.canvas,
+      _ => AppColors.accentTint,
+    };
+    final fg = solid ? AppColors.accentForeground : AppColors.accentOnTint;
     return ExcludeSemantics(
       child: ColoredBox(
-        color: AppColors.accentTint,
+        color: bg,
         child: SafeArea(
           bottom: false,
           child: LayoutBuilder(
@@ -222,14 +235,17 @@ class WelcomeBrandImage extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    BrandMark(size: mark),
+                    BrandMark(
+                      size: mark,
+                      color: solid ? AppColors.accentForeground : null,
+                    ),
                     const SizedBox(height: AppSpacing.s4),
                     Text(
                       brandName,
                       style: AppTypography.wordmark().copyWith(
                         fontSize: AppTypography.even(mark * 0.5),
                         height: 1,
-                        color: AppColors.accentOnTint,
+                        color: fg,
                       ),
                     ),
                   ],

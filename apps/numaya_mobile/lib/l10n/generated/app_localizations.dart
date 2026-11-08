@@ -8890,6 +8890,12 @@ abstract class AppLocalizations {
   /// **'Compliment credits'**
   String get walletTitle;
 
+  /// No description provided for @walletUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{credit} other{credits}}'**
+  String walletUnit(int count);
+
   /// No description provided for @walletTotal.
   ///
   /// In en, this message translates to:
@@ -10827,6 +10833,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'About this event'**
   String get evAbout;
+
+  /// No description provided for @evReadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Read more'**
+  String get evReadMore;
+
+  /// No description provided for @evShowLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get evShowLess;
 
   /// No description provided for @evHostedBy.
   ///

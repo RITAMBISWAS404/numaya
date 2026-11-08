@@ -193,7 +193,7 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
                     child: Container(
                       height: 160,
                       decoration: BoxDecoration(
-                        color: AppColors.accentTint,
+                        color: AppColors.fill,
                         borderRadius: AppRadii.all(AppRadii.photo),
                       ),
                       alignment: Alignment.center,
@@ -289,7 +289,7 @@ class _Viewfinder extends StatelessWidget {
                   width: 72,
                   height: 96,
                   decoration: BoxDecoration(
-                    color: AppColors.accentTint,
+                    color: AppColors.fill,
                     borderRadius: AppRadii.all(AppRadii.control),
                   ),
                   alignment: Alignment.center,

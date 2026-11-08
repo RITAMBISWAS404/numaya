@@ -165,6 +165,9 @@ abstract final class AppColors {
   /// Solid translucent panel for text over photos (no gradient scrims).
   static const Color photoPanel = _M.photoPanel;
 
+  /// The lower edge of a photo text gradient (10% black; owner cap under 25%).
+  static const Color photoScrimEdge = _M.photoScrimEdge;
+
   /// Round buttons floating on photos.
   static const Color photoButton = _M.photoButton;
 

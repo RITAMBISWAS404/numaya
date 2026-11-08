@@ -216,11 +216,17 @@ class LikesGrid extends ConsumerWidget {
                                     child: PhotoScrim(
                                       child: Padding(
                                         padding: const EdgeInsets.all(
-                                          AppSpacing.s3,
+                                          AppSpacing.s2,
                                         ),
-                                        child: name(
-                                          i.person,
-                                          color: AppColors.accentForeground,
+                                        child: Align(
+                                          alignment: Alignment.bottomLeft,
+                                          child: PhotoLabel(
+                                            compact: true,
+                                            child: name(
+                                              i.person,
+                                              color: AppColors.accentForeground,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
