@@ -92,12 +92,6 @@ abstract interface class NumayaApi {
     String body,
   );
   Future<ApiResult> extendMatch(String key, String matchId);
-  Future<ApiResult> requestReconnect(String key, String matchId);
-  Future<ApiResult> respondReconnect(
-    String key,
-    String requestId, {
-    required bool accept,
-  });
   Future<ApiResult> claimRecovery(
     String key,
     String missedDay,
@@ -146,15 +140,6 @@ class UnconfiguredNumayaApi implements NumayaApi {
   @override
   Future<ApiResult> extendMatch(String key, String matchId) async =>
       _no('extendMatch');
-  @override
-  Future<ApiResult> requestReconnect(String key, String matchId) async =>
-      _no('reconnectRequest');
-  @override
-  Future<ApiResult> respondReconnect(
-    String key,
-    String requestId, {
-    required bool accept,
-  }) async => _no('reconnectRespond');
   @override
   Future<ApiResult> claimRecovery(
     String key,

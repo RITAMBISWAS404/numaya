@@ -5,6 +5,12 @@
 -- STATUS: NOT APPLIED to any database. No project, credentials or environment exist yet
 -- (docs/product/mvp-prd-v1/LIVE_BLOCKERS.md). Review with the backend owner before applying.
 --
+-- 2026-11-08 (Visual Lab V2, R01/R02; docs/product/mvp-prd-v1/AMENDMENTS_VISUAL_LAB_V2.md): edited in
+-- place because it has never been applied. Started conversations no longer expire: after 7 days
+-- without an accepted message they are 'archived', and any accepted message makes them 'active'
+-- again. Only an initial match with no first message can be 'expired' (terminal). Reconnection,
+-- its table and the quiet check-in are removed.
+--
 -- Principles
 -- - Every business rule that moves money, credits or connection state runs server-side in the
 --   transactional functions (0002), never as a direct client write. Clients get SELECT on their own
@@ -116,16 +122,15 @@ create table matches (
   user_low       uuid not null references profiles (user_id) on delete cascade,
   user_high      uuid not null references profiles (user_id) on delete cascade,
   state          text not null default 'awaiting_first_message'
-                 check (state in ('awaiting_first_message', 'active', 'expired',
-                                  'reconnect_pending', 'blocked', 'unmatched')),
+                 check (state in ('awaiting_first_message', 'active', 'archived', 'expired',
+                                  'blocked', 'unmatched')),
   matched_at     timestamptz not null default now(),
   first_deadline timestamptz not null,
   extended_by    uuid references profiles (user_id),
   first_message_at timestamptz,
   last_message_at  timestamptz,
-  reopened_at    timestamptz,
-  expired_at     timestamptz,
-  expiry_kind    text check (expiry_kind in ('no_first_message', 'quiet')),
+  expired_at     timestamptz,                      -- initial match only: first message never sent
+  archived_at    timestamptz,                      -- last_message_at + 7 days; cleared on a new message
   check (user_low < user_high),
   unique (user_low, user_high)
 );
@@ -139,7 +144,6 @@ create table conversation_members (
   conversation_id uuid not null references conversations (id) on delete cascade,
   user_id        uuid not null references profiles (user_id) on delete cascade,
   muted          boolean not null default false,
-  check_in_seen_for timestamptz,
   primary key (conversation_id, user_id)
 );
 
@@ -152,16 +156,6 @@ create table messages (
 );
 create index messages_thread on messages (conversation_id, accepted_at);
 
-create table reconnect_requests (
-  id             uuid primary key default gen_random_uuid(),
-  match_id       uuid not null references matches (id) on delete cascade,
-  requester      uuid not null references profiles (user_id),
-  episode        timestamptz not null,             -- the expiry this request answers
-  status         text not null default 'pending' check (status in ('pending', 'accepted', 'declined')),
-  created_at     timestamptz not null default now(),
-  responded_at   timestamptz,
-  unique (match_id, episode)                       -- one request per pair per expiry episode
-);
 
 -- Safety -----------------------------------------------------------------------------------------
 create table blocks (
@@ -289,7 +283,7 @@ create table idempotency (
 create table notifications_outbox (
   id             bigserial primary key,
   user_id        uuid not null references profiles (user_id) on delete cascade,
-  kind           text not null check (kind in ('message', 'match', 'check_in', 'reward', 'request')),
+  kind           text not null check (kind in ('message', 'match', 'reward', 'request')),
   payload        jsonb not null,                    -- minimal: ids only, never message text
   created_at     timestamptz not null default now(),
   sent_at        timestamptz
@@ -332,7 +326,6 @@ alter table matches enable row level security;
 alter table conversations enable row level security;
 alter table conversation_members enable row level security;
 alter table messages enable row level security;
-alter table reconnect_requests enable row level security;
 alter table blocks enable row level security;
 alter table reports enable row level security;
 alter table moderation_actions enable row level security;
@@ -393,7 +386,8 @@ create policy conversations_members on conversations for select using (
   exists (select 1 from conversation_members cm where cm.conversation_id = id and cm.user_id = auth.uid())
 );
 create policy members_own on conversation_members for select using (user_id = auth.uid());
--- Messages require membership and a non-terminal match (history stays readable after expiry).
+-- Messages require membership and a non-terminal match (history stays readable when archived
+-- or when an initial match has expired).
 create policy messages_members on messages for select using (
   exists (
     select 1 from conversation_members cm
@@ -403,9 +397,6 @@ create policy messages_members on messages for select using (
       and cm.user_id = auth.uid()
       and m.state not in ('blocked', 'unmatched')
   )
-);
-create policy reconnect_parties on reconnect_requests for select using (
-  exists (select 1 from matches m where m.id = match_id and auth.uid() in (m.user_low, m.user_high))
 );
 
 create policy blocks_own on blocks for select using (blocker = auth.uid());
@@ -425,7 +416,7 @@ create policy insights_own on insights_daily for select using (user_id = auth.ui
 -- Clients never write rule tables directly; the transactional functions (0002) do.
 revoke insert, update, delete on
   users_private, likes, compliments, matches, conversations, conversation_members, messages,
-  reconnect_requests, blocks, reports, moderation_actions, support_tickets, credit_ledger,
+  blocks, reports, moderation_actions, support_tickets, credit_ledger,
   subscriptions, purchases, streak_days, reward_cycles, recovery_events, idempotency,
   notifications_outbox, analytics_events, profile_exposures_daily, insights_daily
 from authenticated, anon;

@@ -318,6 +318,9 @@ void main() {
           lab
             ..reset()
             ..choose(g.id, v);
+          // The Likes grid is a Premium surface: capture each Heart direction as a Premium member,
+          // so its like-tile layout is visible (free members see the same locked count).
+          c.read(premiumProvider.notifier).setActive(g.id == 'screen-heart');
           final paths = switch (g.id) {
             'screen-heart' => [Routes.likes, '${Routes.likes}?tab=compliments'],
             'screen-discover' => [Routes.home],
@@ -348,6 +351,7 @@ void main() {
               );
             }
           }
+          c.read(premiumProvider.notifier).setActive(false);
         });
       }
     }

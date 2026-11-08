@@ -1,11 +1,10 @@
 # Visual Lab V2: open items and limitations (honest list)
 
 ## Not done or partial in this run
-1. **Backend contracts** (`backend/migrations`, `backend/functions/CONTRACTS.md`) still describe PRD v1's
-   14-day expiry, check-in and reconnection. The app no longer uses them. Update before any live
-   build (archive phase, no reconnect tables).
-2. **Notification settings** still list "Quiet chat check-ins"; nothing sends it any more (R01 cancels
-   the 7-day expiry warning). Remove or repurpose with the owner.
+1. ~~Backend contracts~~ **Done 2026-11-08** on `experiment/numaya-visual-lab-selections-20261108`:
+   migrations, CONTRACTS.md and the app's `NumayaApi` now describe 7-day archiving with no
+   reconnection or check-in (SQL still not executed: no database).
+2. ~~Notification settings~~ Done in `8510778`: the check-in category was removed.
 3. **R09 token drift**: new and varied components use shared tokens only; older one-off screens outside
    the 15 families (events, onboarding fields, verification, legal, store outcome) were not re-audited
    pixel by pixel.

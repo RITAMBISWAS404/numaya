@@ -19,10 +19,8 @@ Common to every endpoint
 | `submitLike` | `submit_like(key, recipient, positive)` | recipient uuid, positive bool | `liked`, `passed`, `matched` + match id, `already_decided` | `out_of_likes` (+ `resets_at`), `recipient_unavailable` |
 | `sendCompliment` | `send_compliment(key, recipient, target_kind, target_id, body)` | photo or prompt id, body 1–150 | `sent` + id | `invalid_length`, `pair_already_introduced`, `insufficient_credits`, `recipient_unavailable` |
 | `replyToRequest` | `reply_to_request(key, compliment, message_id, body)` | message UUID, body | `opened` + match id | `request_unavailable` |
-| `sendMessage` | `send_message(message_id, conversation, body)` | client UUID, text and emoji only | `accepted` (`duplicate: true` on retry) | `not_a_member`, `chat_closed` (+ state), `wait_for_reply` |
+| `sendMessage` | `send_message(message_id, conversation, body)` | client UUID, text and emoji only | `accepted` (`duplicate: true` on retry); an archived chat becomes active | `not_a_member`, `chat_closed` (+ state: `expired`, `blocked`, `unmatched`), `wait_for_reply` |
 | `extendMatch` | `extend_match(key, match)` | match id | `extended` | `not_extendable`, `already_extended`, `needs_premium`, `used_today` |
-| `reconnectRequest` | `request_reconnect(key, match)` | match id | `requested` | `not_expired`, `already_requested` |
-| `reconnectRespond` | `respond_reconnect(key, request, accept)` | request id, bool | `reopened`, `declined` | `request_unavailable` |
 | `claimRecovery` | Edge Function `claim-recovery` | missed IST day, purchase token | `repaired` + new streak length | `not_eligible` (store purchase voided/refunded, never charged), `verification_failed` |
 | `verifyPurchase` | Edge Function `verify-purchase` | store, product id, purchase token | `verified` + entitlement | `pending`, `invalid_receipt`, `replayed`, `refunded` |
 
@@ -49,8 +47,7 @@ Common to every endpoint
 ## Jobs (idempotent, transaction-safe)
 | Job | Schedule | Work |
 |---|---|---|
-| `expire-matches` | every 5 min | `refresh_match` on awaiting/active matches past their deadline (writes also evaluate deadlines, so a late job changes nothing) |
-| `quiet-check-ins` | hourly | 7 quiet days: one check-in per member per quiet period (`check_in_seen_for`) |
+| `match-lifecycle` | every 5 min | `refresh_match` on awaiting matches past their first-message deadline (→ `expired`) and active chats 7 days past their last message (→ `archived`); writes also evaluate this, so a late job changes nothing |
 | `weekly-credits` | hourly | for each subscription week boundary since `activated_at`: expire unused weekly credits, grant 3 |
 | `streak-awards` | after each qualifying event and nightly | grant 1 earned credit per completed 7-day cycle; at the cap of 5 record `skipped_at_cap` |
 | `account-deletion` | hourly | hide immediately on request; delete primary data within 30 days (proposed); revoke sessions |
@@ -62,3 +59,13 @@ Common to every endpoint
 - Likes: allowance (5/15 a day) plus 60 decisions per minute.
 - Messages: 30 per minute per user; 10 consecutive unanswered per conversation.
 - Reports: 20 per day per user.
+
+## Lifecycle amendment (2026-11-08, Visual Lab V2 R01/R02)
+- No 14-day expiry, no quiet check-in, no reconnection (endpoints, table and job removed).
+- `archived`: 7 days after the last accepted message. Either person may send; the accepted message
+  sets `active` for both. History, mute and safety controls are unchanged. System notices never
+  change `last_message_at`.
+- `expired`: only an initial match whose first-message deadline (24 h, or the one extension) passed.
+  Terminal; history is read-only; no reconnection.
+- Blocked, unmatched and deleted are terminal and never revived.
+- No 7-day expiry-warning notification exists; the outbox has no `check_in` kind.

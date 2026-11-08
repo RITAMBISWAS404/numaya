@@ -1,4 +1,5 @@
 -- Numaya MVP transactional functions (PRD 05). NOT APPLIED; see 0001 status note.
+-- 2026-11-08: archive lifecycle (R01/R02); request_reconnect / respond_reconnect removed.
 --
 -- Each endpoint: authenticated (auth.uid()), idempotent on (user, key), validates, performs the
 -- debit and state transition in one transaction, stores a durable response and writes an outbox
@@ -179,33 +180,35 @@ begin
   return _remember(p_key, 'reply_to_request', jsonb_build_object('result', 'opened', 'match', v_match));
 end $$;
 
--- Evaluates and persists a match's phase now (used on every write and by the expiry job).
+-- Evaluates and persists a match's phase now (used on every write and by the lifecycle job).
+-- awaiting_first_message -> expired (terminal) at first_deadline; active <-> archived after 7 days
+-- without an accepted message. System notices are not messages, so they never move last_message_at.
 create or replace function refresh_match(p_match uuid) returns text
 language plpgsql security definer set search_path = public as $$
 declare
   m matches%rowtype;
-  v_quiet_from timestamptz;
 begin
   select * into m from matches where id = p_match for update;
-  if m.state in ('blocked', 'unmatched', 'expired', 'reconnect_pending') then return m.state; end if;
-  if m.first_message_at is null and m.reopened_at is null then
+  if m.state in ('blocked', 'unmatched', 'expired') then return m.state; end if;
+  if m.first_message_at is null then
     if now() >= m.first_deadline then
-      update matches set state = 'expired', expired_at = m.first_deadline, expiry_kind = 'no_first_message'
-       where id = p_match;
+      update matches set state = 'expired', expired_at = m.first_deadline where id = p_match;
       return 'expired';
     end if;
     return 'awaiting_first_message';
   end if;
-  v_quiet_from := greatest(coalesce(m.last_message_at, m.reopened_at), coalesce(m.reopened_at, m.last_message_at));
-  if now() >= v_quiet_from + interval '14 days' then
-    update matches set state = 'expired', expired_at = v_quiet_from + interval '14 days', expiry_kind = 'quiet'
-     where id = p_match;
-    return 'expired';
+  if now() >= m.last_message_at + interval '7 days' then
+    if m.state <> 'archived' then
+      update matches set state = 'archived', archived_at = m.last_message_at + interval '7 days'
+       where id = p_match;
+    end if;
+    return 'archived';
   end if;
   return 'active';
 end $$;
 
--- sendMessage: client UUID makes retries idempotent; accepted only before the deadline.
+-- sendMessage: client UUID makes retries idempotent. An initial match accepts it only before the
+-- deadline; an archived chat accepts it and becomes active again for both people.
 create or replace function send_message(p_message_id uuid, p_conversation uuid, p_body text)
 returns jsonb language plpgsql security definer set search_path = public as $$
 declare
@@ -223,7 +226,7 @@ begin
    where c.id = p_conversation;
   if v_match is null then return jsonb_build_object('error', 'not_a_member'); end if;
   v_state := refresh_match(v_match);
-  if v_state not in ('awaiting_first_message', 'active') then
+  if v_state not in ('awaiting_first_message', 'active', 'archived') then
     return jsonb_build_object('error', 'chat_closed', 'state', v_state);
   end if;
   select user_id into v_other from conversation_members where conversation_id = p_conversation and user_id <> me;
@@ -236,7 +239,7 @@ begin
   ) t;
   if v_run >= 10 then return jsonb_build_object('error', 'wait_for_reply'); end if;
   insert into messages (id, conversation_id, sender, body) values (p_message_id, p_conversation, me, trim(p_body));
-  update matches set state = 'active',
+  update matches set state = 'active', archived_at = null,
          first_message_at = coalesce(first_message_at, now()), last_message_at = now()
    where id = v_match;
   insert into streak_days (user_id, ist_day, messages) values (me, ist_today(), 1)
@@ -282,54 +285,8 @@ begin
   return _remember(p_key, 'extend_match', jsonb_build_object('result', 'extended'));
 end $$;
 
--- reconnectRequest / reconnectRespond: one per pair per expiry episode; acceptance reopens, free.
-create or replace function request_reconnect(p_key text, p_match uuid)
-returns jsonb language plpgsql security definer set search_path = public as $$
-declare
-  me uuid := auth.uid();
-  v_prev jsonb := _replay(p_key, 'request_reconnect');
-  m matches%rowtype;
-begin
-  if v_prev is not null then return v_prev; end if;
-  perform refresh_match(p_match);
-  select * into m from matches where id = p_match and me in (user_low, user_high) for update;
-  if m.state <> 'expired' then
-    return _remember(p_key, 'request_reconnect', jsonb_build_object('error', 'not_expired'));
-  end if;
-  insert into reconnect_requests (match_id, requester, episode) values (p_match, me, m.expired_at)
-  on conflict (match_id, episode) do nothing;
-  if not found then
-    return _remember(p_key, 'request_reconnect', jsonb_build_object('error', 'already_requested'));
-  end if;
-  update matches set state = 'reconnect_pending' where id = p_match;
-  return _remember(p_key, 'request_reconnect', jsonb_build_object('result', 'requested'));
-end $$;
-
-create or replace function respond_reconnect(p_key text, p_request uuid, p_accept boolean)
-returns jsonb language plpgsql security definer set search_path = public as $$
-declare
-  me uuid := auth.uid();
-  v_prev jsonb := _replay(p_key, 'respond_reconnect');
-  r reconnect_requests%rowtype;
-begin
-  if v_prev is not null then return v_prev; end if;
-  select rr.* into r from reconnect_requests rr join matches m on m.id = rr.match_id
-   where rr.id = p_request and rr.status = 'pending' and rr.requester <> me
-     and me in (m.user_low, m.user_high) for update;
-  if not found then
-    return _remember(p_key, 'respond_reconnect', jsonb_build_object('error', 'request_unavailable'));
-  end if;
-  update reconnect_requests set status = case when p_accept then 'accepted' else 'declined' end,
-         responded_at = now() where id = p_request;
-  update matches set state = case when p_accept then 'active' else 'expired' end,
-         reopened_at = case when p_accept then now() else reopened_at end
-   where id = r.match_id;
-  return _remember(p_key, 'respond_reconnect',
-    jsonb_build_object('result', case when p_accept then 'reopened' else 'declined' end));
-end $$;
-
 -- claimRecovery and verifyPurchase need store receipt verification (Google Play Developer API)
 -- and run as an Edge Function with the service role: see backend/functions/CONTRACTS.md.
 
 grant execute on function submit_like, send_compliment, reply_to_request, send_message,
-  extend_match, request_reconnect, respond_reconnect to authenticated;
+  extend_match to authenticated;
