@@ -130,16 +130,16 @@ void main() {
       await _wait(tester, 500);
       await tapOn(tester, find.byKey(const ValueKey('heart-tab-compliments')));
       await _wait(tester, 600);
-      final dismiss = find.byWidgetPredicate(
+      // Compliment O: the card opens the request page, which holds Dismiss.
+      final card = find.byWidgetPredicate(
         (w) =>
             w.key is ValueKey<String> &&
-            (w.key! as ValueKey<String>).value.startsWith(
-              'compliment-dismiss-',
-            ),
+            RegExp(r'^compliment-seed-')
+                .hasMatch((w.key! as ValueKey<String>).value),
       );
-      await tester.ensureVisible(dismiss.first);
-      await _wait(tester, 400);
-      await tester.tap(dismiss.first);
+      await tapOn(tester, card.first);
+      await _wait(tester, 600);
+      await tapOn(tester, find.byKey(const ValueKey('request-dismiss')));
       await _wait(tester, 300);
     }
 

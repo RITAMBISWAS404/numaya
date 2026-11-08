@@ -12,12 +12,24 @@ APP=com.numaya.numaya_mobile
 mkdir -p "$OUT/shots" "$OUT/clips"
 printf 'file\tgroup\tvariant\tkind\ttextScale\tfixture\tlabel\n' > "$OUT/shots.tsv"
 printf 'file\tinteraction\tmotion\n' > "$OUT/clips.tsv"
+# The software-GPU emulator sometimes shows "System UI isn't responding"; tap Wait before a capture.
+clear_anr() {
+  if "$ADB" -s "$DEVICE" shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1 &&
+    "$ADB" -s "$DEVICE" shell cat /sdcard/ui.xml | grep -q aerr_wait; then
+    b=$("$ADB" -s "$DEVICE" shell cat /sdcard/ui.xml | grep -o 'aerr_wait[^>]*bounds="\[[0-9]*,[0-9]*\]\[[0-9]*,[0-9]*\]"' | grep -o '\[[0-9,]*\]\[[0-9,]*\]' | tr -d '[]' | tr ',' ' ')
+    set -- $b
+    [ $# -eq 4 ] && "$ADB" -s "$DEVICE" shell input tap $(( ($1 + $3) / 2 )) $(( ($2 + $4) / 2 ))
+    echo "@@ANR@@ dismissed before capture" >> "$OUT/skipped.txt"
+    sleep 2
+  fi
+}
 ack() { "$ADB" -s "$DEVICE" shell run-as "$APP" touch cache/ui_review_ack; }
-flutter test integration_test/visual_lab_gallery_test.dart -d "$DEVICE" ${ONLY:+--dart-define=ONLY=$ONLY} 2>&1 | tee "${RAW:-/dev/null}" | while IFS= read -r line; do
+flutter test "${TEST:-integration_test/visual_lab_gallery_test.dart}" -d "$DEVICE" ${ONLY:+--dart-define=ONLY=$ONLY} 2>&1 | tee "${RAW:-/dev/null}" | while IFS= read -r line; do
   case "$line" in
     *@@CAP@@*)
       rest="${line#*@@CAP@@|}"
       IFS='|' read -r file group variant kind scale fixture label <<< "$rest"
+      [ -n "${CLEAR_ANR:-}" ] && clear_anr
       "$ADB" -s "$DEVICE" exec-out screencap -p > "$OUT/shots/$file"
       printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\n' "$file" "$group" "$variant" "$kind" "$scale" "$fixture" "$label" >> "$OUT/shots.tsv"
       ack
