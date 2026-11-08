@@ -28,7 +28,14 @@ void main() {
           // profile-header lost D (the Insights header) when Insights was removed (H-13).
           expect(
             g.ids.length,
-            greaterThanOrEqualTo(g.id == 'profile-header' ? 4 : 5),
+            greaterThanOrEqualTo(
+              g.id == 'profile-header'
+                  ? 4
+                  // Ente alignment V3 groups: O plus two or three real alternatives (no padding).
+                  : g.id.startsWith('ea-')
+                  ? 3
+                  : 5,
+            ),
             reason: g.id,
           );
         }

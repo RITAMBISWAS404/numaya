@@ -449,26 +449,22 @@ class _RequestScreenState extends ConsumerState<RequestScreen> {
           const SizedBox(height: AppSpacing.s4),
           WhiteCard(child: Text(c.text, style: AppTypography.cardPrimary)),
           const SizedBox(height: AppSpacing.s5),
-          Row(
+          NumayaButtonGroup(
             children: [
-              Expanded(
-                child: NumayaButton(
-                  label: l10n.requestViewProfile,
-                  small: true,
-                  variant: NumayaButtonVariant.secondary,
-                  onPressed: () =>
-                      context.push('${Routes.person}/${person.id}'),
-                ),
+              NumayaButton(
+                expand: true,
+                label: l10n.requestViewProfile,
+                small: true,
+                variant: NumayaButtonVariant.secondary,
+                onPressed: () => context.push('${Routes.person}/${person.id}'),
               ),
-              const SizedBox(width: AppSpacing.s3),
-              Expanded(
-                child: NumayaButton(
-                  key: const ValueKey('request-dismiss'),
-                  label: l10n.requestDismiss,
-                  small: true,
-                  variant: NumayaButtonVariant.secondary,
-                  onPressed: () => _dismiss(person),
-                ),
+              NumayaButton(
+                expand: true,
+                key: const ValueKey('request-dismiss'),
+                label: l10n.requestDismiss,
+                small: true,
+                variant: NumayaButtonVariant.secondary,
+                onPressed: () => _dismiss(person),
               ),
             ],
           ),

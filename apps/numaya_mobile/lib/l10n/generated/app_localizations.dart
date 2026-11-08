@@ -12045,6 +12045,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'That page was removed. Your profile, streak and credits are unchanged.'**
   String get profileFeatureUnavailableBody;
+
+  /// No description provided for @evReserveShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserve'**
+  String get evReserveShort;
 }
 
 class _AppLocalizationsDelegate

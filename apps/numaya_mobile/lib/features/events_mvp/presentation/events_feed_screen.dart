@@ -9,6 +9,7 @@ import '../../../l10n/l10n.dart';
 import '../../home/presentation/large_title_page.dart';
 import '../../lab/lab_banners.dart';
 import '../../lab/lab_empty_state.dart';
+import '../../lab/lab_registry.dart';
 import '../application/events_mvp_controller.dart';
 import '../domain/event_models.dart';
 import '../domain/sample_events_mvp.dart';
@@ -32,7 +33,7 @@ class EventsFeedScreen extends ConsumerWidget {
             ListRow(
               key: ValueKey('ev-city-$c'),
               label: c,
-              value: c == current ? '✓' : null,
+              selected: c == current,
               onTap: () => Navigator.of(sheet).pop(c),
             ),
         ],
@@ -41,38 +42,149 @@ class EventsFeedScreen extends ConsumerWidget {
     if (picked != null) ref.read(eventsMvpProvider.notifier).setCity(picked);
   }
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Future<T?> _pick<T>(
+    BuildContext context,
+    String title,
+    List<(T, String)> options,
+    T current,
+  ) {
     final l10n = context.l10n;
-    final s = ref.watch(eventsMvpProvider);
-    final c = ref.read(eventsMvpProvider.notifier);
-    final events = c.feed();
-    final now = ref.read(clockProvider)();
-    final mine = c.myEvents();
-    final upcoming = mine
-        .where((m) => m.$2.active && m.$1.phaseAt(now) != EvPhase.completed)
-        .length;
-    final needsAnswer = mine
-        .where((m) => m.$2.status == ResStatus.reconfirmRequired)
-        .length;
-
-    String status(NumayaEvent e) {
-      final r = s.reservations[e.id];
-      if (r?.status == ResStatus.reconfirmRequired) {
-        return l10n.evReconfirmNeeded;
-      }
-      if (r?.active ?? false) return l10n.evReservedByYou;
-      if (c.isFull(e.id)) return l10n.evFull;
-      return l10n.evPlacesLeft(c.placesLeft(e.id));
-    }
-
-    final filtered = s.category != null || s.dateFilter != EvDateFilter.any;
-
-    return LargeTitlePage(
-      title: l10n.evTitle,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+    return showNumayaSheet<T>(
+      context: context,
+      title: title,
+      closeLabel: l10n.close,
+      builder: (sheet) => ListGroup(
         children: [
+          for (final (value, label) in options)
+            ListRow(
+              label: label,
+              selected: value == current,
+              onTap: () => Navigator.of(sheet).pop(value),
+            ),
+        ],
+      ),
+    );
+  }
+
+  /// Lab group `ea-event-filters`: O (approved), A (one row of disclosure chips), B (city chip
+  /// leading the date pills). Same filters, same state and persistence in every variant.
+  List<Widget> _filterHeader(
+    BuildContext context,
+    WidgetRef ref,
+    EvState s,
+    EventsMvpController c,
+  ) {
+    final l10n = context.l10n;
+    final v = ref.watch(labVariantProvider('ea-event-filters'));
+    final dateLabels = [l10n.evDateAny, l10n.evDateWeek, l10n.evDateWeekend];
+    final cityChip = EvDisclosureChip(
+      key: const ValueKey('ev-city'),
+      icon: NumayaIcons.location,
+      label: s.city,
+      semanticLabel: l10n.evCityChange(s.city),
+      onTap: () => _pickCity(context, ref),
+    );
+    final categoryTabs = ViewTabs(
+      label: l10n.evCategoryAll,
+      bleed: AppLayout.screenGutter,
+      selected: s.category == null ? 0 : s.category!.index + 1,
+      onSelect: (i) => c.setCategory(i == 0 ? null : EvCategory.values[i - 1]),
+      options: [
+        (label: l10n.evCategoryAll, count: null),
+        for (final cat in EvCategory.values)
+          (label: evCategoryLabel(l10n, cat), count: null),
+      ],
+    );
+    final dateTabs = ViewTabs(
+      label: l10n.evDateAny,
+      bleed: AppLayout.screenGutter,
+      selected: s.dateFilter.index,
+      onSelect: (i) => c.setDateFilter(EvDateFilter.values[i]),
+      options: [for (final d in dateLabels) (label: d, count: null)],
+    );
+    switch (v) {
+      case 'A':
+        return [
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            clipBehavior: Clip.none,
+            child: Row(
+              children: [
+                cityChip,
+                const SizedBox(width: AppSpacing.s2),
+                EvDisclosureChip(
+                  key: const ValueKey('ev-date-chip'),
+                  icon: NumayaIcons.calendar,
+                  label: dateLabels[s.dateFilter.index],
+                  active: s.dateFilter != EvDateFilter.any,
+                  onTap: () async {
+                    final d = await _pick<EvDateFilter>(
+                      context,
+                      l10n.evDateAny,
+                      [
+                        for (final f in EvDateFilter.values)
+                          (f, dateLabels[f.index]),
+                      ],
+                      s.dateFilter,
+                    );
+                    if (d != null) c.setDateFilter(d);
+                  },
+                ),
+                const SizedBox(width: AppSpacing.s2),
+                EvDisclosureChip(
+                  key: const ValueKey('ev-category-chip'),
+                  icon: NumayaIcons.sparkle,
+                  label: s.category == null
+                      ? l10n.evCategoryAll
+                      : evCategoryLabel(l10n, s.category!),
+                  active: s.category != null,
+                  onTap: () async {
+                    final picked = await _pick<int>(
+                      context,
+                      l10n.evCategoryAll,
+                      [
+                        (-1, l10n.evCategoryAll),
+                        for (final cat in EvCategory.values)
+                          (cat.index, evCategoryLabel(l10n, cat)),
+                      ],
+                      s.category?.index ?? -1,
+                    );
+                    if (picked != null) {
+                      c.setCategory(
+                        picked < 0 ? null : EvCategory.values[picked],
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ];
+      case 'B':
+        return [
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            clipBehavior: Clip.none,
+            child: Row(
+              children: [
+                cityChip,
+                const SizedBox(width: AppSpacing.s2),
+                for (final f in EvDateFilter.values) ...[
+                  NumayaChip(
+                    label: dateLabels[f.index],
+                    selected: s.dateFilter == f,
+                    onTap: () => c.setDateFilter(f),
+                  ),
+                  const SizedBox(width: AppSpacing.s2),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(height: AppSpacing.s2),
+          categoryTabs,
+        ];
+      default:
+        return [
           // City first and explicit (Eventbrite's "in <city>" pill).
           Pressable(
             key: const ValueKey('ev-city'),
@@ -117,30 +229,46 @@ class EventsFeedScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.s3),
-          ViewTabs(
-            label: l10n.evDateAny,
-            bleed: AppLayout.screenGutter,
-            selected: s.dateFilter.index,
-            onSelect: (i) => c.setDateFilter(EvDateFilter.values[i]),
-            options: [
-              (label: l10n.evDateAny, count: null),
-              (label: l10n.evDateWeek, count: null),
-              (label: l10n.evDateWeekend, count: null),
-            ],
-          ),
+          dateTabs,
           const SizedBox(height: AppSpacing.s2),
-          ViewTabs(
-            label: l10n.evCategoryAll,
-            bleed: AppLayout.screenGutter,
-            selected: s.category == null ? 0 : s.category!.index + 1,
-            onSelect: (i) =>
-                c.setCategory(i == 0 ? null : EvCategory.values[i - 1]),
-            options: [
-              (label: l10n.evCategoryAll, count: null),
-              for (final cat in EvCategory.values)
-                (label: evCategoryLabel(l10n, cat), count: null),
-            ],
-          ),
+          categoryTabs,
+        ];
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final s = ref.watch(eventsMvpProvider);
+    final c = ref.read(eventsMvpProvider.notifier);
+    final events = c.feed();
+    final now = ref.read(clockProvider)();
+    final mine = c.myEvents();
+    final upcoming = mine
+        .where((m) => m.$2.active && m.$1.phaseAt(now) != EvPhase.completed)
+        .length;
+    final needsAnswer = mine
+        .where((m) => m.$2.status == ResStatus.reconfirmRequired)
+        .length;
+
+    String status(NumayaEvent e) {
+      final r = s.reservations[e.id];
+      if (r?.status == ResStatus.reconfirmRequired) {
+        return l10n.evReconfirmNeeded;
+      }
+      if (r?.active ?? false) return l10n.evReservedByYou;
+      if (c.isFull(e.id)) return l10n.evFull;
+      return l10n.evPlacesLeft(c.placesLeft(e.id));
+    }
+
+    final filtered = s.category != null || s.dateFilter != EvDateFilter.any;
+
+    return LargeTitlePage(
+      title: l10n.evTitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ..._filterHeader(context, ref, s, c),
           const SizedBox(height: AppSpacing.s4),
           LabStatusBanner(
             key: const ValueKey('ev-sample-banner'),

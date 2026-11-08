@@ -341,7 +341,8 @@ class NumayaTabBar extends StatelessWidget {
                           width: 10,
                           height: 10,
                           decoration: BoxDecoration(
-                            color: AppColors.negative,
+                            // The error anchor: a 10pt dot is a mark, 4.24:1 on white.
+                            color: AppColors.errorBase,
                             shape: BoxShape.circle,
                             border: Border.all(
                               color: AppColors.surface,
@@ -466,7 +467,7 @@ class NumayaTabBar extends StatelessWidget {
                       width: 10,
                       height: 10,
                       decoration: BoxDecoration(
-                        color: AppColors.negative,
+                        color: AppColors.errorBase,
                         shape: BoxShape.circle,
                         border: Border.all(color: AppColors.surface, width: 2),
                       ),
@@ -545,6 +546,7 @@ class ListRow extends StatelessWidget {
     this.onSwitch,
     this.danger = false,
     this.showChevron,
+    this.selected,
     this.leading,
     this.tone = AccentTone.neutral,
     this.inlineIcon = false,
@@ -568,6 +570,10 @@ class ListRow extends StatelessWidget {
   final ValueChanged<bool>? onSwitch;
   final bool danger;
   final bool? showChevron;
+
+  /// A picker row (Ente: "a trailing ... or a selection tick"): non-null makes the row a choice;
+  /// true draws the filled brand tick and announces it as selected. Never a chevron as well.
+  final bool? selected;
   final NumayaIcons? leading;
 
   /// A mobile-only leading glyph ([NumayaMobileIcons]), drawn exactly like [leading].
@@ -656,7 +662,9 @@ class ListRow extends StatelessWidget {
 
   Widget _content(double valueMax, {bool stackValue = false}) {
     final isSwitch = switchValue != null;
-    final chevron = showChevron ?? (onTap != null && !isSwitch && !danger);
+    final chevron =
+        selected == null &&
+        (showChevron ?? (onTap != null && !isSwitch && !danger));
     return Row(
       children: [
         if (avatar != null) ...[
@@ -739,6 +747,16 @@ class ListRow extends StatelessWidget {
             padding: const EdgeInsets.only(left: AppSpacing.s3),
             child: NumayaSwitch(value: switchValue!, onChanged: onSwitch),
           ),
+        if (selected ?? false)
+          const Padding(
+            padding: EdgeInsets.only(left: AppSpacing.s2),
+            child: NumayaIcon(
+              NumayaIcons.verified,
+              size: AppSizes.iconLg,
+              color: AppColors.accent,
+              filled: true,
+            ),
+          ),
         if (chevron)
           const Padding(
             padding: EdgeInsets.only(left: AppSpacing.s2),
@@ -775,6 +793,7 @@ class ListRow extends StatelessWidget {
     // The value and detail are read out with the label, as they are seen with it.
     return Pressable(
       onTap: onTap,
+      selected: selected,
       semanticLabel: [
         [_spokenLabel, ?value].join(', '),
         if (detail != null && detail!.isNotEmpty)

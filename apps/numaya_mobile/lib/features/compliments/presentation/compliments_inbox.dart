@@ -165,25 +165,22 @@ class ComplimentCard extends ConsumerWidget {
     );
     Widget words({TextStyle? style}) =>
         Text(c.text, style: style ?? AppTypography.answer);
-    Widget actions() => Row(
+    Widget actions() => NumayaButtonGroup(
       children: [
-        Expanded(
-          child: NumayaButton(
-            key: ValueKey('compliment-dismiss-${c.id}'),
-            label: l10n.complimentNotNow,
-            small: true,
-            variant: NumayaButtonVariant.secondary,
-            onPressed: onDismiss,
-          ),
+        NumayaButton(
+          expand: true,
+          key: ValueKey('compliment-dismiss-${c.id}'),
+          label: l10n.complimentNotNow,
+          small: true,
+          variant: NumayaButtonVariant.secondary,
+          onPressed: onDismiss,
         ),
-        const SizedBox(width: AppSpacing.s3),
-        Expanded(
-          child: NumayaButton(
-            key: ValueKey('compliment-reply-${c.id}'),
-            label: l10n.complimentReply,
-            small: true,
-            onPressed: onOpen,
-          ),
+        NumayaButton(
+          expand: true,
+          key: ValueKey('compliment-reply-${c.id}'),
+          label: l10n.complimentReply,
+          small: true,
+          onPressed: onOpen,
         ),
       ],
     );

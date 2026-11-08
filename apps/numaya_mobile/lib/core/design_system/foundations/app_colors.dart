@@ -175,6 +175,17 @@ abstract final class AppColors {
   static const Color warning = _M.warning;
   static const Color warningTint = _M.warningSubtle;
 
+  /// Owner-approved anchors (Ente alignment V3) and their icon roles; see FOUNDATIONS.md.
+  static const Color errorBase = _M.errorBase;
+  static const Color dangerIcon = _M.dangerIcon;
+  static const Color successBase = _M.successBase;
+  static const Color successIcon = _M.successIcon;
+  static const Color warningBase = _M.warningBase;
+  static const Color warningIcon = _M.warningIcon;
+
+  /// Text on the orange anchor: ink (9.95:1); white on it would be 2.11:1.
+  static const Color onWarningBase = _M.ink;
+
   /// Semantic accents for icon tiles and statuses (never actions): see [AccentTone].
   static const Color info = _M.info;
   static const Color infoTint = _M.infoSubtle;

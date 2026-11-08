@@ -353,34 +353,31 @@ class LikeProfileScreen extends ConsumerWidget {
         style: AppTypography.helper,
       );
     } else {
-      footer = Row(
+      footer = NumayaButtonGroup(
         children: [
-          Expanded(
-            child: NumayaButton(
-              label: l10n.likePass,
-              icon: NumayaIcons.close,
-              variant: NumayaButtonVariant.secondary,
-              onPressed: () {
-                controller.likeBack(personId, liked: false);
-                NumayaToast.show(context, l10n.likePassed(person.name));
-                context.pop();
-              },
-            ),
+          NumayaButton(
+            expand: true,
+            label: l10n.likePass,
+            icon: NumayaIcons.close,
+            variant: NumayaButtonVariant.secondary,
+            onPressed: () {
+              controller.likeBack(personId, liked: false);
+              NumayaToast.show(context, l10n.likePassed(person.name));
+              context.pop();
+            },
           ),
-          const SizedBox(width: AppSpacing.s3),
-          Expanded(
-            child: NumayaButton(
-              label: l10n.likeBack,
-              icon: NumayaIcons.heart,
-              onPressed: () {
-                final result = controller.likeBack(personId, liked: true);
-                if (result == DecisionResult.outOfLikes) {
-                  context.push(Routes.allowance);
-                  return;
-                }
-                context.pushReplacement('${Routes.match}/$personId');
-              },
-            ),
+          NumayaButton(
+            expand: true,
+            label: l10n.likeBack,
+            icon: NumayaIcons.heart,
+            onPressed: () {
+              final result = controller.likeBack(personId, liked: true);
+              if (result == DecisionResult.outOfLikes) {
+                context.push(Routes.allowance);
+                return;
+              }
+              context.pushReplacement('${Routes.match}/$personId');
+            },
           ),
         ],
       );
@@ -441,36 +438,33 @@ class PersonProfileScreen extends ConsumerWidget {
     Widget? footer;
     if (person != null && canDecide && !decided) {
       final controller = ref.read(datingProvider.notifier);
-      footer = Row(
+      footer = NumayaButtonGroup(
         children: [
-          Expanded(
-            child: NumayaButton(
-              label: l10n.likePass,
-              icon: NumayaIcons.close,
-              variant: NumayaButtonVariant.secondary,
-              onPressed: () {
-                controller.decide(personId, liked: false);
-                context.pop();
-              },
-            ),
+          NumayaButton(
+            expand: true,
+            label: l10n.likePass,
+            icon: NumayaIcons.close,
+            variant: NumayaButtonVariant.secondary,
+            onPressed: () {
+              controller.decide(personId, liked: false);
+              context.pop();
+            },
           ),
-          const SizedBox(width: AppSpacing.s3),
-          Expanded(
-            child: NumayaButton(
-              label: l10n.likeAction,
-              icon: NumayaIcons.heart,
-              onPressed: () {
-                final result = controller.decide(personId, liked: true);
-                if (result == DecisionResult.matched) {
-                  context.pushReplacement('${Routes.match}/$personId');
-                } else if (result == DecisionResult.outOfLikes) {
-                  context.push(Routes.allowance);
-                } else {
-                  NumayaToast.show(context, l10n.discoverLiked(person.name));
-                  context.pop();
-                }
-              },
-            ),
+          NumayaButton(
+            expand: true,
+            label: l10n.likeAction,
+            icon: NumayaIcons.heart,
+            onPressed: () {
+              final result = controller.decide(personId, liked: true);
+              if (result == DecisionResult.matched) {
+                context.pushReplacement('${Routes.match}/$personId');
+              } else if (result == DecisionResult.outOfLikes) {
+                context.push(Routes.allowance);
+              } else {
+                NumayaToast.show(context, l10n.discoverLiked(person.name));
+                context.pop();
+              }
+            },
           ),
         ],
       );

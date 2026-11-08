@@ -9,6 +9,7 @@ import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../lab/lab_banners.dart';
+import '../../lab/lab_registry.dart';
 import '../application/events_mvp_controller.dart';
 import '../domain/event_models.dart';
 import 'ev_parts.dart';
@@ -63,11 +64,63 @@ class EventDetailScreen extends ConsumerWidget {
         onPressed: () => context.push('${Routes.evReservation}/$eventId'),
       );
     } else if (phase == EvPhase.upcoming && !full) {
-      footer = NumayaButton(
-        key: const ValueKey('ev-reserve'),
-        label: l10n.evReserve,
-        onPressed: () => context.push('${Routes.evEvent}/$eventId/reserve'),
-      );
+      // Lab group `ea-event-action` (Ente alignment V3): O is the approved full-width button.
+      final v = ref.watch(labVariantProvider('ea-event-action'));
+      final places = l10n.evPlacesLeft(c.placesLeft(eventId));
+      void reserve() => context.push('${Routes.evEvent}/$eventId/reserve');
+      footer = switch (v) {
+        // A: summary on the left, a compact primary on the right (Insight Timer, Trainline).
+        'A' => Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    l10n.evFree,
+                    style: AppTypography.weight(
+                      AppTypography.body,
+                      AppTypography.semibold,
+                    ),
+                  ),
+                  Text(places, style: AppTypography.caption),
+                ],
+              ),
+            ),
+            const SizedBox(width: AppSpacing.s3),
+            NumayaButton(
+              key: const ValueKey('ev-reserve'),
+              label: l10n.evReserveShort,
+              expand: false,
+              onPressed: reserve,
+            ),
+          ],
+        ),
+        // B: the availability line above the full-width button.
+        'B' => Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              '${l10n.evFree} · $places',
+              textAlign: TextAlign.center,
+              style: AppTypography.caption,
+            ),
+            const SizedBox(height: AppSpacing.s2),
+            NumayaButton(
+              key: const ValueKey('ev-reserve'),
+              label: l10n.evReserve,
+              onPressed: reserve,
+            ),
+          ],
+        ),
+        _ => NumayaButton(
+          key: const ValueKey('ev-reserve'),
+          label: l10n.evReserve,
+          onPressed: reserve,
+        ),
+      };
     } else {
       footer = const SizedBox.shrink();
     }

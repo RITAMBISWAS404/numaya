@@ -3725,5 +3725,6 @@
   "evScenarioReset": "Reset events demo",
   "tabEventsLabel": "Events",
   "profileFeatureUnavailable": "Insights are no longer part of Numaya",
-  "profileFeatureUnavailableBody": "That page was removed. Your profile, streak and credits are unchanged."
+  "profileFeatureUnavailableBody": "That page was removed. Your profile, streak and credits are unchanged.",
+  "evReserveShort": "Reserve"
 }

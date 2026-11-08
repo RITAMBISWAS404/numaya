@@ -453,32 +453,29 @@ class _StaffProposalScreenState extends ConsumerState<StaffProposalScreen> {
                   },
           ),
           const SizedBox(height: AppSpacing.s2),
-          Row(
+          NumayaButtonGroup(
             children: [
-              Expanded(
-                child: NumayaButton(
-                  key: const ValueKey('ev-staff-return'),
-                  label: l10n.evStaffReturn,
-                  small: true,
-                  variant: NumayaButtonVariant.secondary,
-                  onPressed: () => c.returnProposal(
-                    p.id,
-                    _note.text.isEmpty ? 'Please add more detail.' : _note.text,
-                  ),
+              NumayaButton(
+                expand: true,
+                key: const ValueKey('ev-staff-return'),
+                label: l10n.evStaffReturn,
+                small: true,
+                variant: NumayaButtonVariant.secondary,
+                onPressed: () => c.returnProposal(
+                  p.id,
+                  _note.text.isEmpty ? 'Please add more detail.' : _note.text,
                 ),
               ),
-              const SizedBox(width: AppSpacing.s3),
-              Expanded(
-                child: NumayaButton(
-                  label: l10n.evStaffReject,
-                  small: true,
-                  variant: NumayaButtonVariant.secondary,
-                  onPressed: () => c.rejectProposal(
-                    p.id,
-                    _note.text.isEmpty
-                        ? 'Not suitable for the pilot.'
-                        : _note.text,
-                  ),
+              NumayaButton(
+                expand: true,
+                label: l10n.evStaffReject,
+                small: true,
+                variant: NumayaButtonVariant.secondary,
+                onPressed: () => c.rejectProposal(
+                  p.id,
+                  _note.text.isEmpty
+                      ? 'Not suitable for the pilot.'
+                      : _note.text,
                 ),
               ),
             ],

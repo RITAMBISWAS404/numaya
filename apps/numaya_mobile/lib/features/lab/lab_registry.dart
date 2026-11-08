@@ -575,6 +575,127 @@ const List<LabGroup> kLabGroups = [
       ),
     ],
   ),
+  // Ente alignment V3 (2026-11-08): Events layout questions. O is the current approved layout
+  // with the V3 alignment fixes; alternatives wait for the owner's selection.
+  LabGroup(
+    id: 'ea-event-card',
+    title: 'Event card (feed)',
+    kind: LabKind.component,
+    question: 'Can a member tell what, when and where at a glance, and scan several events?',
+    usages: ['Events feed (E01)', 'Full event: other events (E02)'],
+    proposed: _o,
+    variants: [
+      LabVariant(
+        _o,
+        'Cover-led card',
+        'baseline',
+        'Wide cover, title, date line, place line, Free and availability badges.',
+      ),
+      LabVariant(
+        'A',
+        'Compact row',
+        'F compact',
+        'Square category thumbnail; date, title, place; twice as many events per screen.',
+      ),
+      LabVariant(
+        'B',
+        'Date-led',
+        'B hierarchy',
+        'Tinted date tile leads; time and place share one line; no cover.',
+      ),
+      LabVariant(
+        'C',
+        'Cover with date chip',
+        'A structure',
+        'Date chip on the cover; one merged status badge; fewer labels.',
+      ),
+    ],
+  ),
+  LabGroup(
+    id: 'ea-event-filters',
+    title: 'Event filters (feed)',
+    kind: LabKind.component,
+    question:
+        'Can a member change city, date and activity without a crowded header?',
+    usages: ['Events feed (E01)'],
+    proposed: _o,
+    variants: [
+      LabVariant(
+        _o,
+        'City field and two pill rows',
+        'baseline',
+        'Full-width city field, then date pills, then activity pills.',
+      ),
+      LabVariant(
+        'A',
+        'One row of dropdown chips',
+        'F compact',
+        'City, date and activity as three disclosure chips on one row; each opens a sheet.',
+      ),
+      LabVariant(
+        'B',
+        'City chip with date pills',
+        'B hierarchy',
+        'City becomes the first chip of the date row; activity pills stay below.',
+      ),
+    ],
+  ),
+  LabGroup(
+    id: 'ea-event-action',
+    title: 'Event detail action bar',
+    kind: LabKind.component,
+    question: 'Is the price and availability clear at the moment of reserving?',
+    usages: ['Event detail (E02)'],
+    proposed: _o,
+    variants: [
+      LabVariant(
+        _o,
+        'Full-width button',
+        'baseline',
+        'One full-width primary button pinned at the bottom.',
+      ),
+      LabVariant(
+        'A',
+        'Summary and button',
+        'B hierarchy',
+        'Free and places left on the left, a compact primary button on the right.',
+      ),
+      LabVariant(
+        'B',
+        'Availability line above',
+        'D data',
+        'A one-line availability note above the full-width button.',
+      ),
+    ],
+  ),
+  LabGroup(
+    id: 'ea-met-card',
+    title: 'People I met card',
+    kind: LabKind.component,
+    question: 'Can a member decide on each person calmly, with the actions clearly paired?',
+    usages: ['People I met (E07)'],
+    proposed: _o,
+    variants: [
+      LabVariant(
+        _o,
+        'Row with paired buttons',
+        'baseline',
+        'Photo, name and chevron; Pass and Interested as equal buttons below.',
+      ),
+      LabVariant(
+        'A',
+        'Photo card',
+        'A structure',
+        'A large photo leads (4:3), the name under it; Pass and Interested below.',
+      ),
+      LabVariant(
+        'B',
+        'Compact row with icon actions',
+        'F compact',
+        'One row: photo, name, then labelled round Pass and Interested buttons.',
+      ),
+    ],
+  ),
   // Screens: three coherent directions (brief 10) plus the current-rules baseline.
   LabGroup(
     id: 'screen-profile',

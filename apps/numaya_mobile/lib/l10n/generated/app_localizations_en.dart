@@ -7123,4 +7123,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get profileFeatureUnavailableBody =>
       'That page was removed. Your profile, streak and credits are unchanged.';
+
+  @override
+  String get evReserveShort => 'Reserve';
 }

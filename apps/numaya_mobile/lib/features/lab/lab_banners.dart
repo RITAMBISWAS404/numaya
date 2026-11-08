@@ -37,9 +37,9 @@ class LabStatusBanner extends ConsumerWidget {
     final v = variant ?? ref.watch(labVariantProvider('status-banner'));
     final (Color mark, NumayaIcons toneIcon) = switch (tone) {
       BannerTone.info => (AppColors.accent, NumayaIcons.info),
-      BannerTone.pending => (AppColors.warning, NumayaIcons.clock),
-      BannerTone.success => (AppColors.positive, NumayaIcons.verified),
-      BannerTone.error => (AppColors.negative, NumayaIcons.alert),
+      BannerTone.pending => (AppColors.warningIcon, NumayaIcons.clock),
+      BannerTone.success => (AppColors.successIcon, NumayaIcons.verified),
+      BannerTone.error => (AppColors.dangerIcon, NumayaIcons.alert),
     };
     Widget glyph(double size, {Color? color}) => icon == null
         ? NumayaIcon(toneIcon, size: size, color: color ?? mark, filled: true)

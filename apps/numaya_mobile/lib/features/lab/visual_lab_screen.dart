@@ -17,6 +17,9 @@ import '../dating/domain/sample_people.dart';
 import '../dating/presentation/conversation_row.dart';
 import '../dating/presentation/match_avatar.dart';
 import '../dating/presentation/person_profile.dart';
+import '../events_mvp/domain/sample_events_mvp.dart';
+import '../events_mvp/presentation/ev_parts.dart';
+import '../events_mvp/presentation/my_events_screens.dart';
 import '../health/application/health_providers.dart';
 import '../onboarding/application/onboarding_controller.dart';
 import '../premium/application/premium_controller.dart';
@@ -506,6 +509,40 @@ class LabPreviewScreen extends ConsumerWidget {
               body: 'A photo is being checked against our photo rules.',
               onTap: none,
             ),
+          ],
+        );
+      case 'ea-event-card':
+        final evs = sampleEventsMvp(now);
+        return Column(
+          children: [
+            for (final (e, st) in [
+              (evs[0], '12 places left'),
+              (evs[1], 'Full'),
+            ]) ...[
+              EvCard(event: e, status: st, onTap: none, variant: v),
+              const SizedBox(height: AppSpacing.s3),
+            ],
+          ],
+        );
+      case 'ea-met-card':
+        return Column(
+          children: [
+            for (final (p, sent) in [
+              (people[1], false),
+              (people[2], true),
+            ]) ...[
+              PeerCard(
+                person: p,
+                sent: sent,
+                passed: false,
+                canSend: true,
+                onInterested: none,
+                onPass: none,
+                onProfile: none,
+                variant: v,
+              ),
+              const SizedBox(height: AppSpacing.s3),
+            ],
           ],
         );
       case 'empty-state':

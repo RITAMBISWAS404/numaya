@@ -42,7 +42,7 @@ class NumayaButton extends StatelessWidget {
     this.small = false,
     this.loading = false,
     this.icon,
-    this.expand = true,
+    this.expand,
   });
 
   final String label;
@@ -51,7 +51,12 @@ class NumayaButton extends StatelessWidget {
   final bool small;
   final bool loading;
   final NumayaIcons? icon;
-  final bool expand;
+
+  /// Whether the button fills the width it is given. Defaults: Button Large fills, Button Small
+  /// hugs its label. Pass `true` for a small button that shares a row with peers
+  /// ([NumayaButtonGroup]); Ente alignment V3, issue EA-B01.
+  final bool? expand;
+  bool get _fills => expand ?? !small;
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +144,7 @@ class NumayaButton extends StatelessWidget {
         curve: AppMotion.easeOut,
         // At least the button height; taller only when the label wraps.
         constraints: BoxConstraints(minHeight: height),
-        width: expand && !small ? double.infinity : null,
+        width: _fills ? double.infinity : null,
         padding: EdgeInsets.symmetric(
           horizontal: small ? AppSpacing.s4 : AppSpacing.s6,
           vertical: AppSpacing.s2,
@@ -372,6 +377,70 @@ class TextLink extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Ente action groups (alignment V3, EA-B01). Ente stacks Button Large in sheets, main action on
+/// top (Bottom Sheet 4809:8074, spacing/md 12 between); peer actions in rows and cards share the
+/// width equally with the same 12pt gap, so no arbitrary space opens between two content-width
+/// buttons. When the row can't hold each label on one line (narrow phone, large text) the group
+/// stacks instead of shrinking type or targets.
+enum NumayaButtonGroupLayout {
+  /// Equal-width buttons side by side; stacks when too narrow.
+  peers,
+
+  /// Full-width buttons one above the other, the first one on top.
+  stacked,
+}
+
+class NumayaButtonGroup extends StatelessWidget {
+  const NumayaButtonGroup({
+    super.key,
+    required this.children,
+    this.layout = NumayaButtonGroupLayout.peers,
+    this.minButtonWidth = 120,
+  });
+
+  /// The actions, in reading order (main action last in a row, first in a stack: callers pass
+  /// the order they want read).
+  final List<Widget> children;
+  final NumayaButtonGroupLayout layout;
+
+  /// Below this width per button at the current text scale, a peer row stacks.
+  final double minButtonWidth;
+
+  static const double gap = AppSpacing.s3;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget stack() => Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var i = 0; i < children.length; i++) ...[
+          if (i > 0) const SizedBox(height: gap),
+          children[i],
+        ],
+      ],
+    );
+    if (layout == NumayaButtonGroupLayout.stacked) return stack();
+    final scale = MediaQuery.textScalerOf(context).scale(1);
+    return LayoutBuilder(
+      builder: (context, c) {
+        final each =
+            (c.maxWidth - gap * (children.length - 1)) / children.length;
+        if (each < minButtonWidth * scale) return stack();
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (var i = 0; i < children.length; i++) ...[
+              if (i > 0) const SizedBox(width: gap),
+              Expanded(child: children[i]),
+            ],
+          ],
+        );
+      },
     );
   }
 }

@@ -11,6 +11,7 @@ import '../../dating/domain/sample_people.dart';
 import '../../dating/presentation/person_profile.dart';
 import '../../lab/lab_banners.dart';
 import '../../lab/lab_empty_state.dart';
+import '../../lab/lab_registry.dart';
 import '../application/events_mvp_controller.dart';
 import '../domain/event_models.dart';
 import 'ev_parts.dart';
@@ -431,7 +432,7 @@ class PeopleMetScreen extends ConsumerWidget {
             )
           else
             for (final p in peers) ...[
-              _PeerCard(
+              PeerCard(
                 key: ValueKey('ev-peer-${p.id}'),
                 person: p,
                 sent: sent.contains(p.id),
@@ -475,8 +476,11 @@ class PeopleMetScreen extends ConsumerWidget {
   }
 }
 
-class _PeerCard extends StatelessWidget {
-  const _PeerCard({
+/// One person at People I met. Lab group `ea-met-card` (Ente alignment V3): O is the approved row
+/// with paired buttons; A and B are alternatives for owner selection. Every variant keeps the
+/// same private actions and states (sent, passed, allowance used).
+class PeerCard extends ConsumerWidget {
+  const PeerCard({
     super.key,
     required this.person,
     required this.sent,
@@ -485,6 +489,7 @@ class _PeerCard extends StatelessWidget {
     required this.onInterested,
     required this.onPass,
     required this.onProfile,
+    this.variant,
   });
 
   final SamplePerson person;
@@ -495,15 +500,62 @@ class _PeerCard extends StatelessWidget {
   final VoidCallback onPass;
   final VoidCallback onProfile;
 
+  /// Forces a variant (Visual Lab previews); otherwise the registry decides.
+  final String? variant;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final v = variant ?? ref.watch(labVariantProvider('ea-met-card'));
+    return switch (v) {
+      'A' => _photo(context),
+      'B' => _compact(context),
+      _ => _original(context),
+    };
+  }
+
+  BoxDecoration get _box => BoxDecoration(
+    color: AppColors.surface,
+    borderRadius: AppRadii.all(AppRadii.card),
+  );
+
+  Widget _name(BuildContext context) => NameWithBadge(
+    name: context.l10n.profileNameAge(person.name, person.age),
+    verified: person.verified,
+    verifiedLabel: context.l10n.photoVerifiedLabel,
+    style: AppTypography.card,
+  );
+
+  /// Sent, passed, or the two peer actions at equal width (EA-B01).
+  Widget _actions(BuildContext context) {
+    final l10n = context.l10n;
+    if (sent) return Text(l10n.evMetSent, style: AppTypography.bodySm);
+    if (passed) return Text(l10n.evMetPassed, style: AppTypography.bodySm);
+    return NumayaButtonGroup(
+      children: [
+        NumayaButton(
+          key: ValueKey('ev-pass-${person.id}'),
+          label: l10n.evMetPass,
+          small: true,
+          expand: true,
+          variant: NumayaButtonVariant.secondary,
+          onPressed: onPass,
+        ),
+        NumayaButton(
+          key: ValueKey('ev-interested-${person.id}'),
+          label: l10n.evMetInterested,
+          small: true,
+          expand: true,
+          onPressed: canSend ? onInterested : null,
+        ),
+      ],
+    );
+  }
+
+  Widget _original(BuildContext context) {
     final l10n = context.l10n;
     return Container(
       padding: const EdgeInsets.all(AppLayout.cardPadding),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: AppRadii.all(AppRadii.card),
-      ),
+      decoration: _box,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -521,14 +573,7 @@ class _PeerCard extends StatelessWidget {
                   imageAlignment: personAvatarFocus(person),
                 ),
                 const SizedBox(width: AppSpacing.s3),
-                Expanded(
-                  child: NameWithBadge(
-                    name: l10n.profileNameAge(person.name, person.age),
-                    verified: person.verified,
-                    verifiedLabel: l10n.photoVerifiedLabel,
-                    style: AppTypography.card,
-                  ),
-                ),
+                Expanded(child: _name(context)),
                 const NumayaIcon(
                   NumayaIcons.chevronRight,
                   size: 18,
@@ -538,33 +583,123 @@ class _PeerCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.s3),
-          if (sent)
-            Text(l10n.evMetSent, style: AppTypography.bodySm)
-          else if (passed)
-            Text(l10n.evMetPassed, style: AppTypography.bodySm)
-          else
-            Row(
+          _actions(context),
+        ],
+      ),
+    );
+  }
+
+  /// A: photo card (imagery). A large photo leads, as on Discover; the name sits under it.
+  Widget _photo(BuildContext context) {
+    final l10n = context.l10n;
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.s2),
+      decoration: _box,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Pressable(
+            onTap: onProfile,
+            semanticLabel: l10n.viewProfile(person.name),
+            excludeChildSemantics: true,
+            pressedScale: 0.99,
+            borderRadius: AppRadii.all(AppRadii.card - AppSpacing.s2),
+            child: ClipRRect(
+              // Concentric: 20 card radius minus the 8 inset.
+              borderRadius: AppRadii.all(AppRadii.card - AppSpacing.s2),
+              child: AspectRatio(
+                aspectRatio: 4 / 3,
+                child: ColoredBox(
+                  color: AppColors.fill,
+                  child: personPhotoImage(person, 1) ?? const SizedBox(),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.s2,
+              AppSpacing.s3,
+              AppSpacing.s2,
+              AppSpacing.s2,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: NumayaButton(
-                    key: ValueKey('ev-pass-${person.id}'),
-                    label: l10n.evMetPass,
-                    small: true,
-                    variant: NumayaButtonVariant.secondary,
-                    onPressed: onPass,
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.s3),
-                Expanded(
-                  child: NumayaButton(
-                    key: ValueKey('ev-interested-${person.id}'),
-                    label: l10n.evMetInterested,
-                    small: true,
-                    onPressed: canSend ? onInterested : null,
-                  ),
-                ),
+                _name(context),
+                const SizedBox(height: AppSpacing.s3),
+                _actions(context),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// B: compact row (density). Photo, name, then two labelled round actions on the right
+  /// (Ente's compact contextual actions); the state replaces them once decided.
+  Widget _compact(BuildContext context) {
+    final l10n = context.l10n;
+    final Widget trailing;
+    if (sent || passed) {
+      trailing = Text(
+        sent ? l10n.evMetSent : l10n.evMetPassed,
+        style: AppTypography.caption,
+      );
+    } else {
+      trailing = Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SquircleIconButton(
+            key: ValueKey('ev-pass-${person.id}'),
+            icon: NumayaIcons.close,
+            label: l10n.evMetPass,
+            elevated: false,
+            onPressed: onPass,
+          ),
+          const SizedBox(width: AppSpacing.s2),
+          SquircleIconButton(
+            key: ValueKey('ev-interested-${person.id}'),
+            icon: NumayaIcons.heart,
+            label: l10n.evMetInterested,
+            onBrand: true,
+            elevated: false,
+            onPressed: canSend ? onInterested : null,
+          ),
+        ],
+      );
+    }
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppLayout.cardPadding,
+        vertical: AppSpacing.s3,
+      ),
+      decoration: _box,
+      child: Row(
+        children: [
+          Expanded(
+            child: Pressable(
+              onTap: onProfile,
+              semanticLabel: l10n.viewProfile(person.name),
+              excludeChildSemantics: true,
+              pressedScale: 1,
+              child: Row(
+                children: [
+                  InitialsAvatar(
+                    initial: person.initial,
+                    size: 48,
+                    image: personAvatarImage(person),
+                    imageAlignment: personAvatarFocus(person),
+                  ),
+                  const SizedBox(width: AppSpacing.s3),
+                  Expanded(child: _name(context)),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.s2),
+          Flexible(child: trailing),
         ],
       ),
     );
