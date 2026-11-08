@@ -1,5 +1,7 @@
 # Active task: revised PRD for additional features (waiting for the owner's brief)
 
+> **2026-11-09, Ente Refinement V4:** delivered on `experiment/numaya-ente-refinement-v4-20261108-1928`. **Next:** the owner reviews `C:\Users\biswa\OneDrive\Desktop\Numaya V4 Review\2026-11-09 0109\gallery\index.html`, exports JSON and sends it back; apply the choices in a separate pass. Do not merge without the owner's word.
+
 > **2026-11-08, Ente Alignment V3:** delivered on `experiment/numaya-ente-alignment-lab-20261108-1829`. **Next:** the owner reviews `C:\Users\biswa\OneDrive\Desktop\Numaya Ente Alignment Review\2026-11-08 1909\index.html`, exports the JSON and sends it back; then promote only the selected options (EXPERIMENTS.md "Promotion"). Open items: R09/R10/R13/R14 partial (REQUIREMENTS.md).
 
 > **2026-11-08, Events MVP + selected UI:** delivered on `experiment/numaya-events-selected-ui-20261108-1629`. **Next:** the owner reviews the

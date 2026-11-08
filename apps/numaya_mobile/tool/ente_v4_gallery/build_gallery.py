@@ -186,7 +186,9 @@ generated = datetime.datetime.now().astimezone().replace(microsecond=0).isoforma
 review_id = f"v4-{args.commit[:7]}-{generated[:10]}"
 manifest = {'schemaVersion': 1, 'reviewId': review_id, 'baselineCommit': args.baseline, 'codeCommit': args.commit,
             'branch': args.branch, 'generatedAt': generated, 'groups': GROUPS, 'dependencies': {}, 'compatibility': {},
-            'a11y': {g['id']: '320 dp and 200% text checked by widget test' for g in GROUPS},
+            'a11y': {g['id']: ('320 dp and 200% text checked by the V4 widget test' if g['id'].startswith('v4-')
+                                else 'Covered by the earlier Lab tests (V2 and V3 records); not re-checked separately in V4')
+                     for g in GROUPS},
             'screenshots': shots, 'major': major, 'videos': [], 'missingItems': missing}
 json.dump(manifest, open(os.path.join(out, 'manifest.json'), 'w', encoding='utf-8'), indent=2)
 
@@ -201,6 +203,7 @@ subs = [
     ('Numaya Visual Lab V2 choices', 'Numaya Ente V4 choices'),
     ("<h3>${kind==='component'?'Card families':kind==='screen'?'Screens':'Motion'}</h3>",
      "<h3>${kind==='component'?'Components':kind==='screen'?'Screen layouts':'Motion'}</h3>"),
+    ("for (const kind of ['component','screen','motion']) {", "for (const kind of ['component','screen']) {"),
     ('selectedAt: state.selectedAt, selections:', 'selectedAt: state.selectedAt, exportedAt: new Date().toISOString(), selections:'),
     ('<span class="badge prop">Proposed (not approved)</span>', '<span class="badge prop">Candidate default (not approved)</span>'),
 ]

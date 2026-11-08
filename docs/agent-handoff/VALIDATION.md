@@ -1,5 +1,7 @@
 # Validation
 
+> **Ente Refinement V4 (`25e145f`):** full register in `docs/design/ente-refinement-v4/REQUIREMENTS_REGISTER.md`. `flutter test` 586 passed, 42 skipped (none added), 0 failed; analyze 1 pre-existing info; emulator 91/91 captures plus font 1.5, 2.0 and 360 dp; gallery round trip verified; APK installs and launches on the emulator. Web: no files changed; `npm test` 121/122 and the token and icon checks fail on CRLF only, as before; `test:e2e` cannot run (Playwright browser missing). Not checked: physical phone, iOS, blur profiling, keyboard on device.
+
 > **Ente Alignment V3 (`ba3a6fc`):** analyze clean; `flutter test` 575 passed, 42 skipped (none added), 0 failed; emulator 38/38 captures; gallery export/import/zero-selection verified in the in-app browser; APK installs and launches. Unverified: physical phone, iOS, dark mode, toast/action-sheet fidelity, full dating-screen re-audit. Details: docs/design/ente-alignment/VALIDATION.md.
 
 > **Events MVP + selected UI (2026-11-08, app code `ebf3623`, APK at `6a12b91`):** `flutter analyze`

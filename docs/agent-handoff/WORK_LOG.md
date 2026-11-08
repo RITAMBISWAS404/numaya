@@ -1,5 +1,10 @@
 # Work log
 
+## 2026-11-09 · Ente Refinement V4 (Windows, Claude desktop)
+- Checkpoint tag and V4 branch pushed first. Figma pages and Mobbin references read; design rules written.
+- New shared `PhotoGlass`, `PhotoPill`, `PhotoLabel`; neutral surfaces and solid accents in primitives; Event detail G and feed P with alternatives; 3 new Lab groups.
+- 586 tests passed, 42 skipped. 91 emulator captures. Gallery round trip tested. APK at `25e145f`.
+
 ## 2026-11-08 · Ente Alignment Lab V3 (Windows, Claude desktop)
 - Figma rules page, variables and component sheets read live; Mobbin references for Events layouts.
 - Shared fixes (EA-B01/B02/S01/L01/C01), specimen screen, 4 `ea-*` Lab groups (O default), V3 capture + gallery builder.
