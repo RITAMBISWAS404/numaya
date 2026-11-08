@@ -1,5 +1,10 @@
 # Work log
 
+## 2026-11-08 · Ente Alignment Lab V3 (Windows, Claude desktop)
+- Figma rules page, variables and component sheets read live; Mobbin references for Events layouts.
+- Shared fixes (EA-B01/B02/S01/L01/C01), specimen screen, 4 `ea-*` Lab groups (O default), V3 capture + gallery builder.
+- Tests 575 passed / 42 skipped; 38 emulator captures; gallery round-trip tested; APK at `ba3a6fc`. Run was interrupted once by the user and resumed without rework.
+
 ## 2026-11-08 · Events MVP + approved visual refinements (Windows, Claude desktop)
 - Branch `experiment/numaya-events-selected-ui-20261108-1629` from the selections branch; WIP checkpoint `bdaa659` pushed.
 - Events MVP module `lib/features/events_mvp/` (domain, clock-injected controller, E01–E08, S01,

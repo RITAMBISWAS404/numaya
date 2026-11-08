@@ -1,5 +1,7 @@
 # Validation
 
+> **Ente Alignment V3 (`ba3a6fc`):** analyze clean; `flutter test` 575 passed, 42 skipped (none added), 0 failed; emulator 38/38 captures; gallery export/import/zero-selection verified in the in-app browser; APK installs and launches. Unverified: physical phone, iOS, dark mode, toast/action-sheet fidelity, full dating-screen re-audit. Details: docs/design/ente-alignment/VALIDATION.md.
+
 > **Events MVP + selected UI (2026-11-08, app code `ebf3623`, APK at `6a12b91`):** `flutter analyze`
 > **no issues**; `flutter test` **566 passed, 42 skipped, 0 failed** (new `events_mvp_controller_test`
 > and `events_mvp_test`; skips are superseded old-Events/visibility/"no Events in MVP" tests, each with

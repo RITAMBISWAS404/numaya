@@ -1,5 +1,7 @@
 # Current state
 
+> **Ente Alignment Lab V3 (2026-11-08):** branch **`experiment/numaya-ente-alignment-lab-20261108-1829`** from `a000ff3` (tag `checkpoint/pre-ente-alignment-20261108-1829`). App code `ba3a6fc`. Shared fixes: equal-width action groups, critical confirm sheets, sheet radius 20, picker ticks, owner semantic anchors #EB2D2F/#FF9B0F/#0D9F61 with derived roles. Four Events layout groups (`ea-*`) await selection; default stays O. Gallery `C:\Users\biswa\OneDrive\Desktop\Numaya Ente Alignment Review\2026-11-08 1909\index.html` (review `ea3-ba3a6fc-2026-11-08`); APK `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-Ente-Alignment-Lab-20261108-ba3a6fc.apk`. Record: [`docs/design/ente-alignment/`](../design/ente-alignment/REQUIREMENTS.md). Not merged.
+
 > **Events MVP + selected UI (2026-11-08):** branch **`experiment/numaya-events-selected-ui-20261108-1629`** (WIP checkpoint `bdaa659`; app code
 > `ebf3623`, capture tooling `6a12b91`, handoff on top). Implements the owner's
 > `NUMAYA_EVENTS_COFOUNDER_PRD.md` as a labelled frontend demo: five tabs (Discover / Likes / Chats /

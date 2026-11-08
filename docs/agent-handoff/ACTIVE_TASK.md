@@ -1,5 +1,7 @@
 # Active task: revised PRD for additional features (waiting for the owner's brief)
 
+> **2026-11-08, Ente Alignment V3:** delivered on `experiment/numaya-ente-alignment-lab-20261108-1829`. **Next:** the owner reviews `C:\Users\biswa\OneDrive\Desktop\Numaya Ente Alignment Review\2026-11-08 1909\index.html`, exports the JSON and sends it back; then promote only the selected options (EXPERIMENTS.md "Promotion"). Open items: R09/R10/R13/R14 partial (REQUIREMENTS.md).
+
 > **2026-11-08, Events MVP + selected UI:** delivered on `experiment/numaya-events-selected-ui-20261108-1629`. **Next:** the owner reviews the
 > review folder (`C:\Users\biswa\OneDrive\Desktop\Numaya Events Review\2026-11-08 1720\index.html`) and the APK, then decides O1 (member suggestions vs no public hosting) and
 > O2 (nationwide vs invited pilot), and assigns D2 (named host, reviewers, technical owner). Do not
