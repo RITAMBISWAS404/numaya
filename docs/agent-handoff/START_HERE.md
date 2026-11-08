@@ -7,6 +7,8 @@ doing anything else, and the session that stops updates it before it ends.
 > CURRENT_STATE first. New laptop: [NEW_MACHINE_SETUP.md](NEW_MACHINE_SETUP.md). The account-switch
 > note below is historical.
 
+> **Latest handoff (2026-11-09): read [ACCOUNT_HANDOFF.md](ACCOUNT_HANDOFF.md) first.**
+
 > **Account switch (2026-11-07):** read [`NUMAYA_ACCOUNT_HANDOFF.md`](../../NUMAYA_ACCOUNT_HANDOFF.md)
 > at the repo root first: working branch `experiment/numaya-15px-icons-20261107` (the approved
 > 15px design baseline), local-only files, tools, and the next task (revised PRD).
