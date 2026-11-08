@@ -1,5 +1,14 @@
 # Validation
 
+> **Events MVP + selected UI (2026-11-08, app code `ebf3623`, APK at `6a12b91`):** `flutter analyze`
+> **no issues**; `flutter test` **566 passed, 42 skipped, 0 failed** (new `events_mvp_controller_test`
+> and `events_mvp_test`; skips are superseded old-Events/visibility/"no Events in MVP" tests, each with
+> a reason). Before fixes: 37 failures, all from the intended changes (five tabs, removed screens,
+> selected variants); no pre-existing failures found. Pixel 10 AVD: `events_review_test` 34/34
+> captures, 0 skipped steps; APK `adb install -r` Success, launches to Welcome. Web checks: see the
+> line below. Not checked: physical phone, iOS, large text on the new Events screens on device,
+> backend (none for Events).
+
 > **Selections pass (2026-11-08, commit `010fe8f`):** `flutter analyze` no issues; `flutter test`
 > **579 passed, 27 skipped, 0 failed** after removing `requestReconnect`/`respondReconnect` from
 > `NumayaApi`. Backend SQL edited, not executed (no database). Emulator (Pixel 10 AVD): 8 Heart

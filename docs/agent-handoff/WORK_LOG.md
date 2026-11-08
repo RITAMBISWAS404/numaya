@@ -1,5 +1,18 @@
 # Work log
 
+## 2026-11-08 · Events MVP + approved visual refinements (Windows, Claude desktop)
+- Branch `experiment/numaya-events-selected-ui-20261108-1629` from the selections branch; WIP checkpoint `bdaa659` pushed.
+- Events MVP module `lib/features/events_mvp/` (domain, clock-injected controller, E01–E08, S01,
+  M01/M02, H01–H04 demo role); `DatingController.connectFromEvent` reuses chats, never reopens
+  archived ones; five-tab shell; Health/Insights/visibility deleted with a Profile fallback.
+- Owner's Visual Lab selections applied (match ring A 3:4, no likes tile, Compliment O card + pills,
+  like tile A, header A, setup D, prompt O, photo O concentric radii, 55% scrim at AA).
+- Tests: 2 new Events files; 30+ tests updated for five tabs and selections; superseded tests
+  skipped with reasons. `ebf3623`.
+- Emulator journey `integration_test/events_review_test.dart` (34 captures; first run spoiled by a
+  System UI ANR dialog, harness now taps Wait). APK built and installed. `6a12b91`.
+- Docs: `docs/product/events-mvp/` (checklist, limitations, D4 audit, references).
+
 ## 2026-11-08 · Selections pass (Windows, Claude desktop)
 - Validated the owner's JSON: valid but empty (0 selections). Nothing applied; asked the owner.
 - Tag `checkpoint/visual-lab-v2-20261108` at `ae78935`; branch `experiment/numaya-visual-lab-selections-20261108`.

@@ -1,5 +1,11 @@
 # Next steps
 
+> **2026-11-08 (after Events MVP), queue:**
+> 1. Owner: review `Numaya Events Review6-11-08 1720` and the APK; decide O1, O2; assign D2.
+> 2. Events backend contracts (reservations, notices, attendance, consent, interests) before any pilot.
+> 3. Large-text (200%) and 320dp pass on the Events screens on a device; physical-phone check.
+> 4. Real event cover illustrations (placeholders are labelled).
+
 > **2026-11-08 (after Visual Lab V2), queue:**
 > 1. Owner: choose in the gallery, export JSON, send it back; then the application pass.
 > 2. Update `backend/` contracts to the archive lifecycle (no reconnect, no 14-day expiry).

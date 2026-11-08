@@ -1,5 +1,10 @@
 # Active task: revised PRD for additional features (waiting for the owner's brief)
 
+> **2026-11-08, Events MVP + selected UI:** delivered on `experiment/numaya-events-selected-ui-20261108-1629`. **Next:** the owner reviews the
+> review folder (`C:\Users\biswa\OneDrive\Desktop\Numaya Events Review\2026-11-08 1720\index.html`) and the APK, then decides O1 (member suggestions vs no public hosting) and
+> O2 (nationwide vs invited pilot), and assigns D2 (named host, reviewers, technical owner). Do not
+> merge into any baseline without the owner's word.
+
 > **2026-11-08, selections pass:** waiting for a non-empty export. The owner chooses again in the
 > updated gallery (open it, choose, then Export before closing the tab), sends the JSON, and the
 > application pass proceeds on `experiment/numaya-visual-lab-selections-20261108`.

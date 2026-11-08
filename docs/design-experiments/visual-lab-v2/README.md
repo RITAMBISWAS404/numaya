@@ -1,5 +1,7 @@
 # Visual Lab V2 (2026-11-08): record
 
+> **Superseded in part (2026-11-08, H-13):** Insights and its Visual Lab groups are removed by the Events PRD; the owner's other selections are applied on `experiment/numaya-events-selected-ui-20261108-1629` (see `docs/product/events-mvp/`).
+
 Owner brief `NUMAYA_VISUAL_LAB_V2.zip` (START_HERE, 01–11). Branch **`experiment/numaya-visual-lab-20261108`**
 from `0df9ec3` (checkpoint tag `checkpoint/pre-visual-lab-20261108`, pushed). Not merged anywhere.
 

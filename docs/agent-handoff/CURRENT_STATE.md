@@ -1,5 +1,14 @@
 # Current state
 
+> **Events MVP + selected UI (2026-11-08):** branch **`experiment/numaya-events-selected-ui-20261108-1629`** (WIP checkpoint `bdaa659`; app code
+> `ebf3623`, capture tooling `6a12b91`, handoff on top). Implements the owner's
+> `NUMAYA_EVENTS_COFOUNDER_PRD.md` as a labelled frontend demo: five tabs (Discover / Likes / Chats /
+> Events / Profile), E01–E08, S01, M01/M02 (pending O1), internal demo-role H01–H04 at `/staff`;
+> Health and Insights removed (old links land on Profile with a note); the owner's Visual Lab
+> selections applied (`lab_registry.dart` `proposed`). Record: [`docs/product/events-mvp/`](../product/events-mvp/README.md).
+> APK `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-Events-Selected-UI-20261108-6a12b91.apk` (SHA-256 `dab6b1c2680e44075917bc759e6aa972427ff2dea19abc105b730505bc430d93`; private photos, never publish). Review: `C:\Users\biswa\OneDrive\Desktop\Numaya Events Review\2026-11-08 1720\index.html` (34 emulator captures).
+> O1, O2 and D1–D7 stay open (LIMITATIONS.md). Not merged anywhere.
+
 > **Selections pass (2026-11-08):** branch **`experiment/numaya-visual-lab-selections-20261108`** from
 > `ae78935` (Visual Lab V2 delivered; tag `checkpoint/visual-lab-v2-20261108`, pushed). The owner's
 > export `numaya-visual-lab-choices-vl2-8510778-2026-11-08.json` validated (review ID and commit match,
