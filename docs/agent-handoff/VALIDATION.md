@@ -5,8 +5,9 @@
 > and `events_mvp_test`; skips are superseded old-Events/visibility/"no Events in MVP" tests, each with
 > a reason). Before fixes: 37 failures, all from the intended changes (five tabs, removed screens,
 > selected variants); no pre-existing failures found. Pixel 10 AVD: `events_review_test` 34/34
-> captures, 0 skipped steps; APK `adb install -r` Success, launches to Welcome. Web checks: see the
-> line below. Not checked: physical phone, iOS, large text on the new Events screens on device,
+> captures, 0 skipped steps; APK `adb install -r` Success, launches to Welcome. Web (no web
+> files changed on this branch): `npm test` 121/122, `vite build` OK; `tokens:check`, `icons:check` and
+> the token unit test fail on CRLF only, as before; `test:e2e` not run (Playwright Chromium missing). Not checked: physical phone, iOS, large text on the new Events screens on device,
 > backend (none for Events).
 
 > **Selections pass (2026-11-08, commit `010fe8f`):** `flutter analyze` no issues; `flutter test`
