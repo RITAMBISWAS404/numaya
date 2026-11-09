@@ -1,5 +1,7 @@
 # Current state
 
+> **Final screenshot collection (2026-11-09):** 152 screens and states, 223 emulator PNGs of the V4 candidate at app commit `269de9d`: `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\2026-11-09 1710\index.html`. Capture-only tooling added; no app or design change. Waiting for the owner's visual review.
+
 > **Ente Refinement V4 (2026-11-09):** branch **`experiment/numaya-ente-refinement-v4-20261108-1928`** from `6fad2d1` (tag `checkpoint/pre-ente-v4-20261108-1928`). App code `25e145f`, records on top. Neutral surfaces, solid accents, black glass photo pills, 10% gradient, separated event detail; alternatives kept in the Lab. Start at [ACCOUNT_HANDOFF.md](ACCOUNT_HANDOFF.md). Not merged.
 
 > **Ente Alignment Lab V3 (2026-11-08):** branch **`experiment/numaya-ente-alignment-lab-20261108-1829`** from `a000ff3` (tag `checkpoint/pre-ente-alignment-20261108-1829`). App code `ba3a6fc`. Shared fixes: equal-width action groups, critical confirm sheets, sheet radius 20, picker ticks, owner semantic anchors #EB2D2F/#FF9B0F/#0D9F61 with derived roles. Four Events layout groups (`ea-*`) await selection; default stays O. Gallery `C:\Users\biswa\OneDrive\Desktop\Numaya Ente Alignment Review\2026-11-08 1909\index.html` (review `ea3-ba3a6fc-2026-11-08`); APK `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-Ente-Alignment-Lab-20261108-ba3a6fc.apk`. Record: [`docs/design/ente-alignment/`](../design/ente-alignment/REQUIREMENTS.md). Not merged.

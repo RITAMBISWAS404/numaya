@@ -1,5 +1,9 @@
 # Work log
 
+## 2026-11-09 · Final screenshot collection (Windows, Claude desktop)
+- New capture-only harness `integration_test/final_screens_capture_test.dart` and folder builder `tool/final_screens/build_index.py`. No `lib/` change.
+- 223 PNGs on the Pixel 10 AVD, every flow checked by eye; six states recaptured in a second run (`ONLY=fix`). Coverage gaps are in the folder's COVERAGE.md.
+
 ## 2026-11-09 · Ente Refinement V4 (Windows, Claude desktop)
 - Checkpoint tag and V4 branch pushed first. Figma pages and Mobbin references read; design rules written.
 - New shared `PhotoGlass`, `PhotoPill`, `PhotoLabel`; neutral surfaces and solid accents in primitives; Event detail G and feed P with alternatives; 3 new Lab groups.

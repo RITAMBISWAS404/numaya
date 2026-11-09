@@ -9,6 +9,7 @@ Open this same folder on the next account, then read this file and START_HERE. A
 - **Owner choices open:** 10 groups in the gallery. Also Events decisions O1, O2 and D2 from earlier.
 - **Gallery:** `C:\Users\biswa\OneDrive\Desktop\Numaya V4 Review\2026-11-09 0109\gallery\index.html`
 - **APK:** `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-Ente-V4-20261109-25e145f.apk` (debug, version 0.1.0+1, SHA-256 `34054bc737187daac584221cf0ef43d76a0f4f6990a372eaca81959f07c3f13e`).
+- **Full screenshot collection:** `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\2026-11-09 1710\index.html` (local only; shows private photos).
 - **Records:** `docs/design/ente-refinement-v4/` (rules, component map, tint audit, routes, skills, references, register).
 - **Skills:** project-local `flutter-figma-workflow`, `flutter-ui-design`, `design-review`, and the existing `impeccable`.
 - **Connectors:** Figma (claude.ai connector) and Mobbin need sign-in on a new account. The Figma plugin needs `/mcp`.
