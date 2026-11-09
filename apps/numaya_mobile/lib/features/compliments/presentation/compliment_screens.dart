@@ -285,7 +285,7 @@ class _ComplimentComposerScreenState
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        body,
+        Flexible(child: SingleChildScrollView(child: body)),
         const SizedBox(height: AppSpacing.s4),
         footer,
       ],
