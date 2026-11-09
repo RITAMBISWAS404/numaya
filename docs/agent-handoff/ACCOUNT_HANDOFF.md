@@ -2,17 +2,22 @@
 
 Open this same folder on the next account, then read this file and START_HERE. A fresh clone is not needed.
 
-- **Branch:** `experiment/numaya-ente-refinement-v4-20261108-1928`. Verify with `git status -sb` and `git ls-remote origin experiment/numaya-ente-refinement-v4-20261108-1928`.
-- **Approved baseline:** tag `checkpoint/pre-ente-v4-20261108-1928` (`6fad2d1`), which carries the owner-approved 15px typography (H-08).
-- **V4 candidate:** app code `25e145f`. A later records-only commit sits on top and does not change the app. Not merged anywhere.
-- **Next action:** the owner reviews the gallery, chooses, exports JSON and sends it back. Then apply those choices in a separate pass. An empty export means nothing was chosen.
-- **Owner choices open:** 10 groups in the gallery. Also Events decisions O1, O2 and D2 from earlier.
-- **Gallery:** `C:\Users\biswa\OneDrive\Desktop\Numaya V4 Review\2026-11-09 0109\gallery\index.html`
-- **APK:** `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-Ente-V4-20261109-25e145f.apk` (debug, version 0.1.0+1, SHA-256 `34054bc737187daac584221cf0ef43d76a0f4f6990a372eaca81959f07c3f13e`).
-- **Full screenshot collection:** `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\2026-11-09 1710\index.html` (local only; shows private photos).
-- **Records:** `docs/design/ente-refinement-v4/` (rules, component map, tint audit, routes, skills, references, register).
-- **Skills:** project-local `flutter-figma-workflow`, `flutter-ui-design`, `design-review`, and the existing `impeccable`.
+- **Branch:** `experiment/numaya-mvp-focus-v5-20261109-2303`. Verify with `git status -sb` and `git ls-remote origin experiment/numaya-mvp-focus-v5-20261109-2303`.
+- **Checkpoint before V5:** tag `checkpoint/pre-mvp-v5-20261109-2303` (`ca0ff57`), the V4 candidate.
+- **MVP scope:** [MVP_SCOPE.md](../product/mvp-focus-v5/MVP_SCOPE.md). Events and Health are deferred; the Events PRD is roadmap history. To re-enable Events internally: `--dart-define=NUMAYA_EVENTS=true`.
+- **App source:** `36407b3`. Later commits on the branch change only records and delivery tooling. Not merged anywhere.
+- **Compliment policy:** [COMPLIMENT_CONTRACT.md](../product/mvp-focus-v5/COMPLIMENT_CONTRACT.md). One per pair, debit after acceptance, recipient's reply opens the chat.
+- **Approved:** 15px type, purple brand, Tabler icons, #D6D6D6 switch, V4 surfaces. The gradient name is the owner-requested V5 default.
+- **Undecided in the gallery:** name over photo, received Compliment card, Welcome colour, Chats layout, Profile layout. Earlier Events decisions are parked with Events.
+- **Next action:** the owner reviews the phone folder and gallery, exports choices and sends them back. Apply them in a separate pass.
+- **Phone folder:** `C:\Users\biswa\OneDrive\Desktop\Numaya MVP V5 Screenshots\2026-11-10 0058`
+- **Screen index:** `C:\Users\biswa\OneDrive\Desktop\Numaya MVP V5 Screenshots\2026-11-10 0058 review-gallery\index.html`
+- **Choice gallery:** `C:\Users\biswa\OneDrive\Desktop\Numaya MVP V5 Review\2026-11-10 0058\gallery\index.html`
+- **APK:** `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-MVP-V5-20261110-36407b3.apk` (debug, 0.1.0+1, SHA-256 `c9453662932b30293828227ae9e934f13bfa769f966e8cfec57c24932945b0e8`).
+- **Records:** `docs/product/mvp-focus-v5/` (scope delta, benchmark, contract, launch readiness, references, skills, coverage, register).
+- **Skills:** project-local `flutter-figma-workflow`, `flutter-ui-design`, `design-review`, `impeccable`. `rad-spacing` and `audit-design-system` are not installed: no licence on GitHub.
 - **Connectors:** Figma (claude.ai connector) and Mobbin need sign-in on a new account. The Figma plugin needs `/mcp`.
-- **Local only, not on GitHub:** `pics\`, `apps/numaya_mobile/assets/demo/photos/`, APKs and review folders. They show private photos, so back them up privately. Rebuilding the demo needs `pics\` and `tool/install_demo_photos.py`.
-- **Not done:** physical-phone test, blur profiling (needs a phone), keyboard check on device.
+- **Local only, not on GitHub:** `pics\`, `apps/numaya_mobile/assets/demo/photos/`, APKs, review folders, `.claude/launch.json`. They show private photos. **No private backup location exists yet.** Rebuilding the demo needs `pics\` and `tool/install_demo_photos.py`.
+- **Known baseline failures:** web token and icon checks and one token test fail on CRLF only; browser e2e needs Playwright's browser.
+- **Not done:** physical phone, iOS, screen reader, blur profiling. This is a front-end test build: see [LAUNCH_READINESS.md](../product/mvp-focus-v5/LAUNCH_READINESS.md).
 - **Do not touch:** `experiment/numaya-android12-compat`, `design/apple-impeccable-full-app`.

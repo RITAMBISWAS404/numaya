@@ -60,8 +60,7 @@ GROUPS = [
          V('N', 'Neutral page', 'quiet', 'Purple mark on the grey page.', 'Calm; less branded.'),
      ]},
 ]
-for sid, title, q in [('screen-heart', 'Heart screen', 'How should Likes and Compliments share the Heart tab?'),
-                      ('screen-chats', 'Chats screen', 'How should new matches and conversations be arranged?'),
+for sid, title, q in [('screen-chats', 'Chats screen', 'How should new matches and conversations be arranged?'),
                       ('screen-profile', 'Profile screen', 'What should lead the Profile tab?')]:
     GROUPS.append({'id': sid, 'title': title, 'kind': 'screen', 'proposed': 'O', 'question': q,
                    'task': 'Earlier layout direction, still undecided by you.',

@@ -1,5 +1,10 @@
 # Work log
 
+## 2026-11-10 · MVP Focus V5 (Windows, Claude desktop)
+- Checkpoint tag, separate branch. Events and Health gated out with stable tabs and guarded links.
+- Three-screen benchmark rendered and corrected first, then spacing, gradient and icon roles propagated. Compliment debit moved to after acknowledgement.
+- Whole-app audit found copy defects, fixed. 600 tests passed, 42 skipped. 188 screenshots, gallery round trip, APK at `36407b3`.
+
 ## 2026-11-09 · Final screenshot collection (Windows, Claude desktop)
 - New capture-only harness `integration_test/final_screens_capture_test.dart` and folder builder `tool/final_screens/build_index.py`. No `lib/` change.
 - 223 PNGs on the Pixel 10 AVD, every flow checked by eye; six states recaptured in a second run (`ONLY=fix`). Coverage gaps are in the folder's COVERAGE.md.

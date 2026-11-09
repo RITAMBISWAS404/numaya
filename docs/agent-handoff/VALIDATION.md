@@ -1,5 +1,7 @@
 # Validation
 
+> **MVP Focus V5 (`36407b3`):** register in `docs/product/mvp-focus-v5/REQUIREMENTS_REGISTER.md`. `flutter test` 600 passed, 42 skipped (none added), 0 failed; analyze 1 older info; 193 emulator captures, 0 skipped; font 1.5, 2.0 and 360 dp on 11 screens; gallery round trip verified; APK installs over the existing app and launches. Web: no files changed; `npm test` 121/122 and token and icon checks fail on CRLF only. Not checked: physical phone, iOS, screen reader, blur profiling.
+
 > **Final screenshots (app `269de9d`):** 223 of 223 `adb screencap` PNGs, 1080 x 2424, font scale 1.0, reviewed visually; 223 index links resolve; harness analyzes clean. Emulator only. No app or web file changed, so the test suites were not re-run.
 
 > **Ente Refinement V4 (`25e145f`):** full register in `docs/design/ente-refinement-v4/REQUIREMENTS_REGISTER.md`. `flutter test` 586 passed, 42 skipped (none added), 0 failed; analyze 1 pre-existing info; emulator 91/91 captures plus font 1.5, 2.0 and 360 dp; gallery round trip verified; APK installs and launches on the emulator. Web: no files changed; `npm test` 121/122 and the token and icon checks fail on CRLF only, as before; `test:e2e` cannot run (Playwright browser missing). Not checked: physical phone, iOS, blur profiling, keyboard on device.

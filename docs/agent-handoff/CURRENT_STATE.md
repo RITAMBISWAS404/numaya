@@ -1,5 +1,7 @@
 # Current state
 
+> **MVP Focus V5 (2026-11-10):** branch **`experiment/numaya-mvp-focus-v5-20261109-2303`** from tag `checkpoint/pre-mvp-v5-20261109-2303`. App source `36407b3`. Events and Health deferred, four tabs, recomposed Compliment flow, smooth photo gradient, proximity spacing. Start at [ACCOUNT_HANDOFF.md](ACCOUNT_HANDOFF.md). Older notes about keeping Events are superseded. Not merged.
+
 > **Final screenshot collection (2026-11-09):** 152 screens and states, 223 emulator PNGs of the V4 candidate at app commit `269de9d`: `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\2026-11-09 1710\index.html`. Capture-only tooling added; no app or design change. Waiting for the owner's visual review.
 
 > **Ente Refinement V4 (2026-11-09):** branch **`experiment/numaya-ente-refinement-v4-20261108-1928`** from `6fad2d1` (tag `checkpoint/pre-ente-v4-20261108-1928`). App code `25e145f`, records on top. Neutral surfaces, solid accents, black glass photo pills, 10% gradient, separated event detail; alternatives kept in the Lab. Start at [ACCOUNT_HANDOFF.md](ACCOUNT_HANDOFF.md). Not merged.

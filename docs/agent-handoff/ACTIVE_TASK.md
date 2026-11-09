@@ -1,5 +1,7 @@
 # Active task: revised PRD for additional features (waiting for the owner's brief)
 
+> **2026-11-10, MVP Focus V5:** delivered on `experiment/numaya-mvp-focus-v5-20261109-2303`. **Next:** the owner reviews `C:\Users\biswa\OneDrive\Desktop\Numaya MVP V5 Screenshots\2026-11-10 0058` and the gallery, exports JSON and sends it back. Do not merge without the owner's word.
+
 > **2026-11-09, final screenshots:** delivered at `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\2026-11-09 1710`. **Next:** the owner reviews each screen. No design changes until then.
 
 > **2026-11-09, Ente Refinement V4:** delivered on `experiment/numaya-ente-refinement-v4-20261108-1928`. **Next:** the owner reviews `C:\Users\biswa\OneDrive\Desktop\Numaya V4 Review\2026-11-09 0109\gallery\index.html`, exports JSON and sends it back; apply the choices in a separate pass. Do not merge without the owner's word.
