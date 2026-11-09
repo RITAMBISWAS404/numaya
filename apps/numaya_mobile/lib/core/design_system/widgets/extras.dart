@@ -426,7 +426,8 @@ class StatusBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     // (icon colour, title colour, icon)
     final (Color mark, Color titleColor, NumayaIcons icon) = switch (tone) {
-      BannerTone.info => (AppColors.accent, AppColors.ink, NumayaIcons.info),
+      // Ente info/dark: information is blue; purple stays for action and selection.
+      BannerTone.info => (AppColors.info, AppColors.ink, NumayaIcons.info),
       // Pending alerts are waiting or time states (in review, expiring, can't check yet): the
       // clock has Tabler filled artwork; `pending`'s dashed ring stays for incomplete rows.
       BannerTone.pending => (

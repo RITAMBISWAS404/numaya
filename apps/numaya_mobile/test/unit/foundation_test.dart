@@ -139,7 +139,7 @@ void main() {
       // Visible tiles may be compact; every hit area stays at least 44 (Pressable.minSize).
       expect(AppSizes.touchMin, 44);
       expect(AppSizes.choice, 20);
-      expect(AppLayout.screenGutter, 16);
+      expect(AppLayout.screenGutter, 20); // Ente Settings 12099:96480
     });
   });
 

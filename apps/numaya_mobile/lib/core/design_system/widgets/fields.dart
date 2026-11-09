@@ -329,9 +329,12 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
 
 /// ISO country code badge (`.input__code`), e.g. "US".
 class CountryCodeBadge extends StatelessWidget {
-  const CountryCodeBadge(this.iso, {super.key});
+  const CountryCodeBadge(this.iso, {super.key, this.onAccent = false});
 
   final String iso;
+
+  /// On a solid purple row: a translucent white plate with white letters.
+  final bool onAccent;
 
   @override
   Widget build(BuildContext context) {
@@ -340,7 +343,7 @@ class CountryCodeBadge extends StatelessWidget {
       height: 22,
       padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: onAccent ? const Color(0x33FFFFFF) : AppColors.surface,
         borderRadius: AppRadii.all(AppRadii.tag),
       ),
       alignment: Alignment.center,
@@ -350,7 +353,9 @@ class CountryCodeBadge extends StatelessWidget {
             .copyWith(
               height: 1,
               letterSpacing: 0.66,
-              color: AppColors.textSecondary,
+              color: onAccent
+                  ? AppColors.accentForeground
+                  : AppColors.textSecondary,
             ),
       ),
     );

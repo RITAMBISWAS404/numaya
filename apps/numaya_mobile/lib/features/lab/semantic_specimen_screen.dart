@@ -128,6 +128,33 @@ class SemanticSpecimenScreen extends StatelessWidget {
               ],
             ),
           ]),
+          section('Actions and selection', [
+            NumayaButton(label: 'Primary', onPressed: () {}),
+            const SizedBox(height: AppSpacing.s2),
+            NumayaButton(
+              label: 'Secondary',
+              variant: NumayaButtonVariant.secondary,
+              onPressed: () {},
+            ),
+            const SizedBox(height: AppSpacing.s2),
+            const NumayaButton(label: 'Disabled', onPressed: null),
+            const SizedBox(height: AppSpacing.s2),
+            NumayaButton(
+              label: 'Destructive',
+              variant: NumayaButtonVariant.destructiveSolid,
+              onPressed: () {},
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            ViewTabs(
+              label: 'Selection',
+              selected: 0,
+              onSelect: (_) {},
+              options: const [
+                (label: 'Selected', count: null),
+                (label: 'Unselected', count: null),
+              ],
+            ),
+          ]),
           section('Inline field error', [
             NumayaTextField(
               label: 'Event name',

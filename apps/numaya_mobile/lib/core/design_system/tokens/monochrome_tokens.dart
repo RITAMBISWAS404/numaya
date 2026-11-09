@@ -87,36 +87,36 @@ abstract final class MonoColors {
   // and used where their contrast holds (dots, large marks, black-on-orange). Readable roles are
   // derived by mixing the anchor with black (text/icon/solid) or white (subtle) and are measured
   // in docs/design/ente-alignment/FOUNDATIONS.md; they are derived, not owner-supplied.
-  /// Error / destructive anchor: 4.24:1 on white (icons and dots only, never small text).
-  static const Color errorBase = Color(0xFFEB2D2F);
+  /// Ente warning/default (Figma 10871:4420): icons and dots only, never small text.
+  static const Color errorBase = Color(0xFFF63A3A);
 
-  /// Error text, destructive labels, and the solid destructive fill (white on it 5.81:1).
-  static const Color danger = Color(0xFFC42326);
+  /// Ente warning/darker: error text, destructive labels and the solid destructive fill.
+  static const Color danger = Color(0xFFC52E2E);
 
   /// Filled error icon on white, canvas or the subtle tint (4.14:1 on the tint).
-  static const Color dangerIcon = Color(0xFFDB2A2C);
+  static const Color dangerIcon = Color(0xFFDD3434);
   static const Color dangerSubtle = Color(0xFFFDEAEA);
 
-  /// Success / confirmation anchor: 3.42:1 on white (large marks only).
-  static const Color successBase = Color(0xFF0D9F61);
+  /// Ente primary/default: large marks only.
+  static const Color successBase = Color(0xFF08C225);
 
-  /// Success text (4.99:1 on its tint, 5.60:1 on white).
-  static const Color success = Color(0xFF08774A);
+  /// Ente primary/darker: success text and the solid success badge.
+  static const Color success = Color(0xFF057C18);
 
   /// Filled success icon (3.68:1 on its tint).
-  static const Color successIcon = Color(0xFF0C8F57);
+  static const Color successIcon = Color(0xFF069D1E);
   static const Color successSubtle = Color(0xFFE7F5EF);
 
-  /// Warning / caution anchor: 2.11:1 on white, so it is a fill under black text (9.95:1) or a
+  /// Ente caution/default: a fill under black text, or a or a
   /// decorative mark, never a foreground on white.
-  static const Color warningBase = Color(0xFFFF9B0F);
+  static const Color warningBase = Color(0xFFF08A1E);
 
-  /// Warning text (5.56:1 on its tint, 6.00:1 on white).
-  static const Color warning = Color(0xFF8F5608);
+  /// Derived from Ente caution/default (Ente has no darker role): warning text.
+  static const Color warning = Color(0xFF9E5B14);
 
-  /// Filled warning icon (3.66:1 on its tint, 3.95:1 on white).
-  static const Color warningIcon = Color(0xFFB86F0A);
-  static const Color warningSubtle = Color(0xFFFFF5E7);
+  /// Derived from Ente caution/default: filled warning icon, at least 3:1 on white.
+  static const Color warningIcon = Color(0xFFBB6C17);
+  static const Color warningSubtle = Color(0xFFFAF4EB);
 
   // Semantic accents (final UX polish, FP-01): restrained hues for icon tiles, statuses and
   // illustrations only. Purple stays the one action colour. Each foreground meets 4.5:1 on its own

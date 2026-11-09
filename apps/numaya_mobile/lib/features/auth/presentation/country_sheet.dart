@@ -62,7 +62,15 @@ class _CountryListState extends State<_CountryList> {
                   itemBuilder: (context, i) {
                     final country = results[i];
                     final isSelected = country == widget.selected;
+                    final fg = isSelected
+                        ? AppColors.accentForeground
+                        : AppColors.ink;
+                    // V6: selection is the solid row itself. High contrast adds a tick, a
+                    // cue that does not depend on colour.
+                    final tick =
+                        isSelected && MediaQuery.highContrastOf(context);
                     return Pressable(
+                      key: ValueKey('country-${country.iso}'),
                       onTap: () => Navigator.of(context).pop(country),
                       haptic: HapticMoment.selection,
                       semanticLabel:
@@ -71,48 +79,56 @@ class _CountryListState extends State<_CountryList> {
                       excludeChildSemantics: true,
                       pressedScale: 1,
                       borderRadius: AppRadii.all(AppRadii.control),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 13,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: isSelected ? AppColors.accent : null,
+                          borderRadius: AppRadii.all(AppRadii.control),
                         ),
-                        child: Row(
-                          children: [
-                            CountryCodeBadge(country.iso),
-                            const SizedBox(width: AppSpacing.s3),
-                            Expanded(
-                              child: Text(
-                                country.name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTypography.weight(
-                                  AppTypography.body,
-                                  isSelected ? AppTypography.semibold : 400,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppLayout.cardPadding,
+                            vertical: 14,
+                          ),
+                          child: Row(
+                            children: [
+                              CountryCodeBadge(
+                                country.iso,
+                                onAccent: isSelected,
+                              ),
+                              const SizedBox(width: AppSpacing.s3),
+                              Expanded(
+                                child: Text(
+                                  country.name,
+                                  style: AppTypography.weight(
+                                    AppTypography.body,
+                                    isSelected
+                                        ? AppTypography.semibold
+                                        : AppTypography.medium,
+                                  ).copyWith(color: fg),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            Text(
-                              '+${country.dialCode}',
-                              style: AppTypography.body.copyWith(
-                                color: AppColors.textMuted,
-                                fontFeatures: const [
-                                  FontFeature.tabularFigures(),
-                                ],
+                              const SizedBox(width: AppSpacing.s3),
+                              Text(
+                                '+${country.dialCode}',
+                                style: AppTypography.body.copyWith(
+                                  color: isSelected
+                                      ? AppColors.accentForeground
+                                      : AppColors.textMuted,
+                                  fontFeatures: const [
+                                    FontFeature.tabularFigures(),
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            SizedBox(
-                              width: 20,
-                              child: isSelected
-                                  ? const NumayaIcon(
-                                      NumayaIcons.check,
-                                      size: AppSizes.iconMd,
-                                      color: AppColors.textBrand,
-                                    )
-                                  : null,
-                            ),
-                          ],
+                              if (tick) ...[
+                                const SizedBox(width: AppSpacing.s2),
+                                const NumayaIcon(
+                                  NumayaIcons.check,
+                                  size: AppSizes.iconMd,
+                                  color: AppColors.accentForeground,
+                                ),
+                              ],
+                            ],
+                          ),
                         ),
                       ),
                     );

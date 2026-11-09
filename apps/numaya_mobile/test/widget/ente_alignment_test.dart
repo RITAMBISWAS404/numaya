@@ -130,9 +130,9 @@ void main() {
 
   group('EA-C01 semantic palette', () {
     test('the anchors are the owner-approved values, unchanged', () {
-      expect(AppColors.errorBase, const Color(0xFFEB2D2F));
-      expect(AppColors.warningBase, const Color(0xFFFF9B0F));
-      expect(AppColors.successBase, const Color(0xFF0D9F61));
+      expect(AppColors.errorBase, const Color(0xFFF63A3A));
+      expect(AppColors.warningBase, const Color(0xFFF08A1E));
+      expect(AppColors.successBase, const Color(0xFF08C225));
     });
 
     test('text roles reach 4.5:1 on white, the page and their own tint', () {
