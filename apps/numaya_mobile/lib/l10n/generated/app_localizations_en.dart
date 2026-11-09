@@ -2452,7 +2452,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get premiumCardBody =>
-      'Advanced filters, Rematch, unlimited Extends, Incognito and Travel.';
+      'More likes, weekly Compliments, see who liked you and advanced filters.';
 
   @override
   String get premiumExplore => 'Explore Premium';
@@ -5026,7 +5026,7 @@ class AppLocalizationsEn extends AppLocalizations {
       locale: localeName,
       other: 'Uses 1 credit. You have $count.',
       one: 'Uses 1 credit. You have 1.',
-      zero: 'You have no Compliment credits',
+      zero: 'You have no Compliment credits.',
     );
     return '$_temp0';
   }
@@ -5052,7 +5052,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get complimentFailedBody =>
-      'Your credit was returned. Check your connection and try again.';
+      'No credit was used. Check your connection and try again.';
 
   @override
   String complimentTooLong(int max) {

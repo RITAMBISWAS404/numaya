@@ -4237,7 +4237,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumCardBody.
   ///
   /// In en, this message translates to:
-  /// **'Advanced filters, Rematch, unlimited Extends, Incognito and Travel.'**
+  /// **'More likes, weekly Compliments, see who liked you and advanced filters.'**
   String get premiumCardBody;
 
   /// No description provided for @premiumExplore.
@@ -8659,7 +8659,7 @@ abstract class AppLocalizations {
   /// No description provided for @complimentBalance.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{You have no Compliment credits} =1{Uses 1 credit. You have 1.} other{Uses 1 credit. You have {count}.}}'**
+  /// **'{count, plural, =0{You have no Compliment credits.} =1{Uses 1 credit. You have 1.} other{Uses 1 credit. You have {count}.}}'**
   String complimentBalance(int count);
 
   /// No description provided for @complimentRule.
@@ -8695,7 +8695,7 @@ abstract class AppLocalizations {
   /// No description provided for @complimentFailedBody.
   ///
   /// In en, this message translates to:
-  /// **'Your credit was returned. Check your connection and try again.'**
+  /// **'No credit was used. Check your connection and try again.'**
   String get complimentFailedBody;
 
   /// No description provided for @complimentTooLong.

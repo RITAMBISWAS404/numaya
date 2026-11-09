@@ -34,9 +34,7 @@ const List<HelpArticle> kHelpArticles = [
       ),
       (
         heading: 'Who can send the first message?',
-        body:
-            'Either of you. If they’ve set an Opening Move, you can answer it instead of '
-            'starting from scratch.',
+        body: 'Either of you. A new match shows a few openers you can edit, or you can write your own.',
       ),
       (
         heading: 'What does “For you” show?',
@@ -78,7 +76,7 @@ const List<HelpArticle> kHelpArticles = [
   HelpArticle(
     HelpArticleId.matchesExpiring,
     'Matches that expire',
-    'The 24-hour window, Extend and Rematch',
+    'The 24-hour window and Extend',
     [
       (
         heading: 'Why do matches expire?',
@@ -89,8 +87,8 @@ const List<HelpArticle> kHelpArticles = [
       (
         heading: 'Can I get more time?',
         body:
-            'Yes. Extend adds 24 hours: one free Extend a day, as many as you like with '
-            'Premium. Expired matches can be brought back with Rematch, a Premium feature.',
+            'Yes. Extend adds 24 hours: one free extension a week, one per match. Premium '
+            'extends a match every day.',
       ),
     ],
   ),
@@ -164,7 +162,7 @@ const List<HelpArticle> kHelpArticles = [
     [
       (
         heading: 'What do I get?',
-        body: 'Advanced filters, Rematch, unlimited Extends, Incognito and Travel.',
+        body: 'More likes, weekly Compliments, see who liked you, advanced filters and a daily match extension.',
       ),
       (
         heading: 'How do I cancel?',

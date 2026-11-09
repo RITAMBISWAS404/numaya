@@ -860,28 +860,6 @@ void main() {
           await h.wait(900);
         },
       );
-      await h.step('Reply', () async {
-        await h.go(priya);
-        await tester.longPress(
-          find
-              .byWidgetPredicate(
-                (w) =>
-                    w.key is ValueKey<String> &&
-                    (w.key! as ValueKey<String>).value.startsWith('message-'),
-              )
-              .last,
-        );
-        await h.wait(900);
-        await h.tapText(_l.chatReply);
-        await h.shot(
-          f,
-          'Chat-replying',
-          'Reply preview above the composer',
-          'Chat > Long press > Reply',
-          scroll: false,
-        );
-        await h.go(Routes.messages);
-      });
     }
 
     // Profile.

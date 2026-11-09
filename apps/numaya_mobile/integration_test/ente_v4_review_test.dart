@@ -161,12 +161,16 @@ void main() {
       // One short pass for the large-text and narrow runs (the host changes the device setting).
       const key = <(String, String)>[
         ('discover', Routes.home),
-        ('event', '${Routes.evEvent}/$board'),
-        ('events', Routes.events),
+        ('person', '${Routes.person}/ines'),
+        ('composer', '${Routes.compliment}/noor?kind=prompt&index=0'),
+        ('request', '${Routes.request}/seed-chloe'),
+        ('compliments', '${Routes.likes}?tab=compliments'),
+        ('messages', Routes.messages),
+        ('chat', '${Routes.chat}/priya'),
         ('profile', Routes.profile),
         ('settings', Routes.settings),
-        ('chat', '${Routes.chat}/priya'),
-        ('reserve', '${Routes.evEvent}/ev-cycle-ride/reserve'),
+        ('paywall', Routes.paywall),
+        ('wallet', Routes.wallet),
       ];
       for (final (slug, path) in key) {
         await step('key $slug', () async {
@@ -178,12 +182,9 @@ void main() {
     }
 
     if (_only.isEmpty || _only == 'variants') {
-      const preview = {'ea-event-card', 'ea-met-card', 'v4-welcome'};
+      const preview = {'compliment-card', 'v4-welcome'};
       const routes = {
-        'v4-event-detail': '${Routes.evEvent}/$board',
         'v4-photo-label': Routes.home,
-        'ea-event-filters': Routes.events,
-        'ea-event-action': '${Routes.evEvent}/$board',
         'screen-heart': Routes.likes,
         'screen-chats': Routes.messages,
         'screen-profile': Routes.profile,
@@ -221,26 +222,6 @@ void main() {
             'qa',
             'Photo label on ${p.id}',
           );
-        });
-      }
-      for (final (slug, path, label) in [
-        (
-          'banners',
-          '${Routes.visualLabPreview}/status-banner?v=O',
-          'Status banners',
-        ),
-        ('empty', '${Routes.visualLabPreview}/empty-state?v=O', 'Empty state'),
-        ('specimen', Routes.visualLabSpecimen, 'Semantic specimen'),
-        (
-          'long-event',
-          '${Routes.evEvent}/ev-pottery-hauz-khas',
-          'Event, long content',
-        ),
-      ]) {
-        await step('state $slug', () async {
-          await go(Routes.home);
-          await go(path);
-          await cap('state__$slug', 'qa', slug, 'qa', label);
         });
       }
     }

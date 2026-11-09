@@ -1345,7 +1345,7 @@
       "plan": {}
     }
   },
-  "premiumCardBody": "Advanced filters, Rematch, unlimited Extends, Incognito and Travel.",
+  "premiumCardBody": "More likes, weekly Compliments, see who liked you and advanced filters.",
   "premiumExplore": "Explore Premium",
   "premiumManage": "Manage",
   "premiumHeroTitle": "More ways to meet the right people",
@@ -2570,7 +2570,7 @@
       }
     }
   },
-  "complimentBalance": "{count, plural, =0{You have no Compliment credits} =1{Uses 1 credit. You have 1.} other{Uses 1 credit. You have {count}.}}",
+  "complimentBalance": "{count, plural, =0{You have no Compliment credits.} =1{Uses 1 credit. You have 1.} other{Uses 1 credit. You have {count}.}}",
   "@complimentBalance": {
     "placeholders": {
       "count": {
@@ -2593,7 +2593,7 @@
     }
   },
   "complimentFailedTitle": "Your Compliment didn’t send",
-  "complimentFailedBody": "Your credit was returned. Check your connection and try again.",
+  "complimentFailedBody": "No credit was used. Check your connection and try again.",
   "complimentTooLong": "Keep it to {max} characters.",
   "@complimentTooLong": {
     "placeholders": {
