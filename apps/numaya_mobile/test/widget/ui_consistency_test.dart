@@ -136,7 +136,7 @@ void main() {
         expect(bar.height, 64);
         expect(bar.left, greaterThanOrEqualTo(16), reason: '$width');
         expect(bar.right, lessThanOrEqualTo(width - 16), reason: '$width');
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 4; i++) {
           final item = tester.getRect(find.byKey(ValueKey('tab-item-$i')));
           expect(item.width, greaterThanOrEqualTo(48), reason: '$width $i');
           expect(item.height, 48);
@@ -145,8 +145,7 @@ void main() {
         for (final (label, index) in [
           ('Likes', 1),
           ('Messages', 2),
-          ('Events', 3),
-          ('Profile', 4),
+          ('Profile', 3),
           ('Home', 0),
         ]) {
           await openTab(tester, label);

@@ -394,22 +394,22 @@ void main() {
         expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
         final bar = tester.getRect(pill);
         expect(bar.height, AppSizes.tabBar);
-        // Events MVP: Discover, Likes, Chats, Events and Profile.
+        // MVP Focus V5: Discover, Likes, Chats and Profile.
         final items = [
-          for (var i = 0; i < 5; i++)
+          for (var i = 0; i < 4; i++)
             tester.getRect(find.byKey(ValueKey('tab-item-$i'))),
         ];
         final tiles = [
-          for (var i = 0; i < 5; i++)
+          for (var i = 0; i < 4; i++)
             tester.getRect(find.byKey(ValueKey('tab-tile-$i'))),
         ];
-        expect(find.byKey(const ValueKey('tab-tile-5')), findsNothing);
+        expect(find.byKey(const ValueKey('tab-tile-4')), findsNothing);
         // 8 inside the bar on all four sides.
         expect(items.first.left - bar.left, closeTo(8, 0.01));
         expect(bar.right - items.last.right, closeTo(8, 0.01));
         expect(items.first.top - bar.top, closeTo(8, 0.01));
         expect(bar.bottom - items.first.bottom, closeTo(8, 0.01));
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 4; i++) {
           expect(items[i].height, 48);
           expect(items[i].width, closeTo(items[0].width, 0.01));
           // 4 inside each item on all four sides.

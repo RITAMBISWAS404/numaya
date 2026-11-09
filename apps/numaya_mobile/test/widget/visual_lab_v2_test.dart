@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/providers.dart';
+import 'package:numaya_mobile/app/router.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/compliments/application/compliments_controller.dart';
@@ -73,7 +74,7 @@ void main() {
         await usePhoneSize(tester, size: const Size(320, 568));
         tester.platformDispatcher.textScaleFactorTestValue = 2;
         addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-        final c = await quickStartApp(tester);
+        final c = await quickStartApp(tester, overrides: eventsOn);
         c.read(onboardingProvider.notifier).loadSample();
         final failures = <String>[];
         for (final g in kLabGroups.where((g) => g.kind == LabKind.component)) {
@@ -339,7 +340,7 @@ void main() {
 
   group('Health/Insights removed (Events PRD)', () {
     testWidgets(
-      'old Health, Insights and visibility links land on Profile with a note',
+      'old Health, Insights and visibility links land on Profile, with no note',
       (tester) async {
         await usePhoneSize(tester);
         final c = await quickStartApp(tester);
@@ -351,8 +352,8 @@ void main() {
         ]) {
           await goTo(c, tester, path);
           expect(
-            find.byKey(const ValueKey('profile-unavailable')),
-            findsOneWidget,
+            c.read(routerProvider).routerDelegate.currentConfiguration.uri.path,
+            Routes.profile,
             reason: path,
           );
         }

@@ -196,7 +196,10 @@ class VisualLabScreen extends ConsumerWidget {
             }, style: AppTypography.section),
             const SizedBox(height: AppSpacing.s3),
             for (final g in kLabGroups)
-              if (g.kind == kind) group(g),
+              if (g.kind == kind &&
+                  (ref.watch(eventsAvailableProvider) ||
+                      !isDeferredLabGroup(g.id)))
+                group(g),
           ],
         ],
       ),

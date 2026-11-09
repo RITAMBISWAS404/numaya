@@ -63,20 +63,14 @@ void main() {
 
   group('Navigation', () {
     testWidgets(
-      'five destinations (Events MVP); selected is filled near-black on a light tile, announced as selected',
+      'four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected',
       (tester) async {
         await usePhoneSize(tester);
         final handle = tester.ensureSemantics();
         final c = await quickStartApp(tester);
         await goTo(c, tester, Routes.home);
         final bar = find.byType(NumayaTabBar);
-        for (final label in [
-          'Home',
-          'Likes',
-          'Messages',
-          'Events',
-          'Profile',
-        ]) {
+        for (final label in ['Home', 'Likes', 'Messages', 'Profile']) {
           expect(
             find.descendant(of: bar, matching: find.byTooltip(label)),
             findsOneWidget,
@@ -104,7 +98,7 @@ void main() {
             .toList();
         expect(
           [for (final i in icons) i.filled],
-          [false, false, false, false, true],
+          [false, false, false, true],
         );
         expect(icons.last.color, AppColors.iconSelected);
         expect(icons.first.color, AppColors.iconInactive);

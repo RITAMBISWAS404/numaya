@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/providers.dart';
 import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/connectivity/connectivity.dart';
@@ -277,35 +278,39 @@ class DemoHubScreen extends ConsumerWidget {
               link(l10n.paywallTitle, Routes.paywall),
             ],
           ),
-          // Events MVP: scenarios and the internal tools demo (isolated from the tab).
-          const SizedBox(height: AppSpacing.sectionGap),
-          ListGroup(
-            title: l10n.evDemoScenarios,
-            footnote: l10n.evStaffBannerBody,
-            children: [
-              link(l10n.evTitle, Routes.events),
-              link(l10n.evMyEvents, Routes.evMine),
-              link(l10n.evStaffTitle, Routes.staff),
-              ListRow(
-                key: const ValueKey('demo-ev-drop'),
-                label: l10n.evScenarioDrop,
-                switchValue: ref.watch(eventsMvpProvider).dropNextResponse,
-                onSwitch: (v) =>
-                    ref.read(eventsMvpProvider.notifier).setDropNextResponse(v),
-              ),
-              ListRow(
-                key: const ValueKey('demo-ev-ineligible'),
-                label: l10n.evScenarioIneligible,
-                switchValue: ref.watch(eventsMvpProvider).forceIneligible,
-                onSwitch: (v) =>
-                    ref.read(eventsMvpProvider.notifier).setForceIneligible(v),
-              ),
-              ListRow(
-                label: l10n.evScenarioReset,
-                onTap: () => ref.read(eventsMvpProvider.notifier).reset(),
-              ),
-            ],
-          ),
+          // Deferred Events scenarios and internal tools (hidden in MVP Focus V5).
+          if (ref.watch(eventsAvailableProvider)) ...[
+            const SizedBox(height: AppSpacing.sectionGap),
+            ListGroup(
+              title: l10n.evDemoScenarios,
+              footnote: l10n.evStaffBannerBody,
+              children: [
+                link(l10n.evTitle, Routes.events),
+                link(l10n.evMyEvents, Routes.evMine),
+                link(l10n.evStaffTitle, Routes.staff),
+                ListRow(
+                  key: const ValueKey('demo-ev-drop'),
+                  label: l10n.evScenarioDrop,
+                  switchValue: ref.watch(eventsMvpProvider).dropNextResponse,
+                  onSwitch: (v) => ref
+                      .read(eventsMvpProvider.notifier)
+                      .setDropNextResponse(v),
+                ),
+                ListRow(
+                  key: const ValueKey('demo-ev-ineligible'),
+                  label: l10n.evScenarioIneligible,
+                  switchValue: ref.watch(eventsMvpProvider).forceIneligible,
+                  onSwitch: (v) => ref
+                      .read(eventsMvpProvider.notifier)
+                      .setForceIneligible(v),
+                ),
+                ListRow(
+                  label: l10n.evScenarioReset,
+                  onTap: () => ref.read(eventsMvpProvider.notifier).reset(),
+                ),
+              ],
+            ),
+          ],
           const SizedBox(height: AppSpacing.sectionGap),
           ListGroup(
             title: l10n.demoAreaMatching,

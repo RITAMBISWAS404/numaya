@@ -31,6 +31,7 @@ import '../features/events_mvp/presentation/proposal_staff_screens.dart';
 import '../features/experiments/experiment_lab_screen.dart';
 import '../features/help/presentation/help_screens.dart';
 import '../features/home/presentation/home_shell.dart';
+import '../features/lab/lab_registry.dart' show isDeferredLabGroup;
 import '../features/lab/semantic_specimen_screen.dart';
 import '../features/lab/visual_lab_screen.dart';
 import '../features/matches/presentation/lifecycle_screens.dart';
@@ -71,6 +72,9 @@ final routerProvider = Provider<GoRouter>((ref) {
   final refresh = _SessionListenable(ref);
   ref.onDispose(refresh.dispose);
 
+  // MVP Focus V5: Events is deferred. Off, its tab and routes are not built at all.
+  final eventsOn = ref.read(eventsAvailableProvider);
+
   final router = GoRouter(
     initialLocation: Routes.welcome,
     refreshListenable: refresh,
@@ -78,6 +82,14 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final path = state.uri.path;
       final session = ref.read(sessionProvider);
+      // Deferred Events: any saved, notified or restored location goes to Discover (which sends a
+      // signed-out visitor on to Welcome), so no old link can reach a removed page.
+      if (!eventsOn && Routes.isDeferredEvents(path)) return Routes.home;
+      if (!eventsOn &&
+          path.startsWith(Routes.visualLabPreview) &&
+          isDeferredLabGroup(path.split('/').last)) {
+        return Routes.visualLab;
+      }
       // The Demo Hub and its Design Lab exist only where demo sign-in does (never in release
       // builds).
       if ((path == Routes.demo ||
@@ -221,23 +233,21 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-          // Events MVP: the fourth tab (Discover / Likes / Chats / Events / Profile).
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: Routes.events,
-                builder: (_, _) => const EventsFeedScreen(),
-              ),
-            ],
-          ),
+          // Deferred Events tab (off in MVP Focus V5); see AppTab in home_shell.dart.
+          if (eventsOn)
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: Routes.events,
+                  builder: (_, _) => const EventsFeedScreen(),
+                ),
+              ],
+            ),
           StatefulShellBranch(
             routes: [
               GoRoute(
                 path: Routes.profile,
-                builder: (_, state) => ProfileScreen(
-                  unavailableNotice:
-                      state.uri.queryParameters['notice'] == 'unavailable',
-                ),
+                builder: (_, _) => const ProfileScreen(),
               ),
             ],
           ),
@@ -338,15 +348,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Health/Insights removed (Events PRD): old links land on Profile with a short note.
       GoRoute(
         path: Routes.health,
-        redirect: (_, _) => Routes.profileUnavailable,
-        routes: [
-          GoRoute(path: 'about', redirect: (_, _) => Routes.profileUnavailable),
-        ],
+        redirect: (_, _) => Routes.profile,
+        routes: [GoRoute(path: 'about', redirect: (_, _) => Routes.profile)],
       ),
-      GoRoute(
-        path: Routes.insights,
-        redirect: (_, _) => Routes.profileUnavailable,
-      ),
+      GoRoute(path: Routes.insights, redirect: (_, _) => Routes.profile),
       _route(path: Routes.streak, builder: (_, _) => const StreakScreen()),
       _route(path: Routes.wallet, builder: (_, _) => const WalletScreen()),
       GoRoute(
@@ -385,10 +390,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.visibility,
-        redirect: (_, _) => Routes.profileUnavailable,
-        routes: [
-          GoRoute(path: 'about', redirect: (_, _) => Routes.profileUnavailable),
-        ],
+        redirect: (_, _) => Routes.profile,
+        routes: [GoRoute(path: 'about', redirect: (_, _) => Routes.profile)],
       ),
       GoRoute(
         path: Routes.paywall,
@@ -398,69 +401,71 @@ final routerProvider = Provider<GoRouter>((ref) {
             state,
             PaywallScreen(
               feature: PremiumFeature.values
-                  .where((f) => f.name == name)
+                  .where((f) => f.name == name && f != PremiumFeature.insights)
                   .firstOrNull,
             ),
           );
         },
       ),
-      // Events MVP routes (PRD E02–E07, M01/M02; H01–H04 demo).
-      _route(path: Routes.evMine, builder: (_, _) => const MyEventsScreen()),
-      _route(
-        path: '${Routes.evEvent}/:id',
-        builder: (_, state) => EventDetailScreen(
-          key: ValueKey(state.uri.toString()),
-          eventId: state.pathParameters['id']!,
-        ),
-        routes: [
-          _route(
-            path: 'reserve',
-            builder: (_, state) =>
-                EventReserveScreen(eventId: state.pathParameters['id']!),
+      // Deferred Events routes (PRD E02–E07, M01/M02; H01–H04 demo): built only when enabled.
+      if (eventsOn) ...[
+        _route(path: Routes.evMine, builder: (_, _) => const MyEventsScreen()),
+        _route(
+          path: '${Routes.evEvent}/:id',
+          builder: (_, state) => EventDetailScreen(
+            key: ValueKey(state.uri.toString()),
+            eventId: state.pathParameters['id']!,
           ),
-        ],
-      ),
-      _route(
-        path: '${Routes.evReservation}/:id',
-        builder: (_, state) => ReservationScreen(
-          key: ValueKey(state.uri.toString()),
-          eventId: state.pathParameters['id']!,
+          routes: [
+            _route(
+              path: 'reserve',
+              builder: (_, state) =>
+                  EventReserveScreen(eventId: state.pathParameters['id']!),
+            ),
+          ],
         ),
-      ),
-      _route(
-        path: '${Routes.evNotice}/:id',
-        builder: (_, state) => EventNoticeScreen(
-          key: ValueKey(state.uri.toString()),
-          noticeId: state.pathParameters['id']!,
+        _route(
+          path: '${Routes.evReservation}/:id',
+          builder: (_, state) => ReservationScreen(
+            key: ValueKey(state.uri.toString()),
+            eventId: state.pathParameters['id']!,
+          ),
         ),
-      ),
-      _route(
-        path: '${Routes.evMet}/:id',
-        builder: (_, state) =>
-            PeopleMetScreen(eventId: state.pathParameters['id']!),
-      ),
-      _route(
-        path: Routes.evProposals,
-        builder: (_, _) => const ProposalsScreen(),
-      ),
-      _route(
-        path: '${Routes.evPropose}/:id',
-        builder: (_, state) => ProposalFormScreen(
-          key: ValueKey(state.uri.toString()),
-          proposalId: state.pathParameters['id']!,
+        _route(
+          path: '${Routes.evNotice}/:id',
+          builder: (_, state) => EventNoticeScreen(
+            key: ValueKey(state.uri.toString()),
+            noticeId: state.pathParameters['id']!,
+          ),
         ),
-      ),
-      _route(path: Routes.staff, builder: (_, _) => const StaffHomeScreen()),
-      _route(
-        path: '${Routes.staffProposal}/:id',
-        builder: (_, state) =>
-            StaffProposalScreen(proposalId: state.pathParameters['id']!),
-      ),
-      _route(
-        path: '${Routes.staffEvent}/:id',
-        builder: (_, state) =>
-            StaffEventScreen(eventId: state.pathParameters['id']!),
-      ),
+        _route(
+          path: '${Routes.evMet}/:id',
+          builder: (_, state) =>
+              PeopleMetScreen(eventId: state.pathParameters['id']!),
+        ),
+        _route(
+          path: Routes.evProposals,
+          builder: (_, _) => const ProposalsScreen(),
+        ),
+        _route(
+          path: '${Routes.evPropose}/:id',
+          builder: (_, state) => ProposalFormScreen(
+            key: ValueKey(state.uri.toString()),
+            proposalId: state.pathParameters['id']!,
+          ),
+        ),
+        _route(path: Routes.staff, builder: (_, _) => const StaffHomeScreen()),
+        _route(
+          path: '${Routes.staffProposal}/:id',
+          builder: (_, state) =>
+              StaffProposalScreen(proposalId: state.pathParameters['id']!),
+        ),
+        _route(
+          path: '${Routes.staffEvent}/:id',
+          builder: (_, state) =>
+              StaffEventScreen(eventId: state.pathParameters['id']!),
+        ),
+      ],
       _route(
         path: Routes.help,
         builder: (_, _) => const HelpCentreScreen(),

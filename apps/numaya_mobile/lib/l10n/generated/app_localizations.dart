@@ -2371,7 +2371,7 @@ abstract class AppLocalizations {
   /// No description provided for @demoOfflineNote.
   ///
   /// In en, this message translates to:
-  /// **'Shows the offline banner; messages wait and send when you switch it off; joining events fails'**
+  /// **'Shows the offline banner; messages wait and send when you switch it off'**
   String get demoOfflineNote;
 
   /// No description provided for @chatStatusFailed.

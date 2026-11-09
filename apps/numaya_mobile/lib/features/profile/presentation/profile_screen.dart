@@ -14,7 +14,6 @@ import '../../commerce/presentation/wallet_screen.dart';
 import '../../health/application/health_providers.dart';
 import '../../home/presentation/large_title_page.dart';
 import '../../lab/activity_cards.dart';
-import '../../lab/lab_banners.dart';
 import '../../lab/lab_registry.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../premium/application/premium_controller.dart';
@@ -30,10 +29,7 @@ import 'profile_variants.dart';
 /// then one support group.
 /// Everything shown is what the member entered; no score or activity is invented.
 class ProfileScreen extends ConsumerWidget {
-  const ProfileScreen({super.key, this.unavailableNotice = false});
-
-  /// Opened from a retired Health/Insights link: a short neutral note (Events PRD §4).
-  final bool unavailableNotice;
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -268,20 +264,6 @@ class ProfileScreen extends ConsumerWidget {
     ];
 
     // R12: the expanded title collapses into the bar on scroll.
-    if (unavailableNotice) {
-      body.insert(
-        0,
-        Padding(
-          padding: const EdgeInsets.only(bottom: AppSpacing.s3),
-          child: LabStatusBanner(
-            key: const ValueKey('profile-unavailable'),
-            tone: BannerTone.info,
-            title: l10n.profileFeatureUnavailable,
-            body: l10n.profileFeatureUnavailableBody,
-          ),
-        ),
-      );
-    }
     return LargeTitlePage(
       title: l10n.tabProfile,
       actions: [

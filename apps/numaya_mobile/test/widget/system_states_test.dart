@@ -21,7 +21,7 @@ void main() {
     'offline: a banner on every screen, messages wait and send on reconnect, reservations fail safely',
     (tester) async {
       await usePhoneSize(tester);
-      final c = await quickStartApp(tester);
+      final c = await quickStartApp(tester, overrides: eventsOn);
       expect(find.byType(ConnectionBanner), findsNothing);
 
       c.read(connectivityProvider.notifier).setOnline(false);

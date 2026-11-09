@@ -96,8 +96,6 @@ abstract final class Routes {
   static const staffProposal = '/staff/proposal';
   static const staffEvent = '/staff/event';
 
-  /// Neutral fallback for retired Health/Insights links.
-  static const profileUnavailable = '/profile?notice=unavailable';
   static const event = '/event';
   static const eventNew = '/event/new';
 
@@ -107,6 +105,11 @@ abstract final class Routes {
       path.startsWith('$events/') ||
       path == event ||
       path.startsWith('$event/');
+
+  /// MVP Focus V5: Events (all of its pages and the internal tools) is deferred. A saved link,
+  /// notification or restored location for any of these lands on Discover.
+  static bool isDeferredEvents(String path) =>
+      isEvents(path) || path == staff || path.startsWith('$staff/');
 
   /// Profile & visibility (account health) and its explanation page.
   static const visibility = '/profile/visibility';

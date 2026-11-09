@@ -1010,13 +1010,6 @@ void main() {
           'Photo verification > Start',
         );
       });
-      await h.page(
-        f,
-        'Profile-old-link-note',
-        'Retired Health link lands here',
-        Routes.profileUnavailable,
-        'Old Health or Insights link',
-      );
     }
 
     // Events.

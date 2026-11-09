@@ -149,7 +149,7 @@ void main() {
       tester,
     ) async {
       await usePhoneSize(tester);
-      final c = await quickStartApp(tester);
+      final c = await quickStartApp(tester, overrides: eventsOn);
       await goTo(c, tester, '${Routes.evEvent}/ev-board-games-bandra');
       expect(find.byType(EvAboutCard), findsOneWidget);
       expect(find.byType(InitialsAvatar), findsNothing);
@@ -164,7 +164,7 @@ void main() {
       await usePhoneSize(tester, size: const Size(320, 568));
       tester.platformDispatcher.textScaleFactorTestValue = 2;
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-      final c = await quickStartApp(tester);
+      final c = await quickStartApp(tester, overrides: eventsOn);
       final failures = <String>[];
       for (final (id, path) in [
         ('v4-event-detail', '${Routes.evEvent}/ev-board-games-bandra'),

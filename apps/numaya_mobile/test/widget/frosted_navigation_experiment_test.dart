@@ -163,8 +163,8 @@ void main() {
               find.descendant(of: bar(), matching: find.byType(NumayaIcon)),
             )
             .toList();
-        // Events MVP: five destinations.
-        expect(icons, hasLength(5));
+        // MVP Focus V5: four destinations.
+        expect(icons, hasLength(4));
         // Discover is selected: Tabler's filled glyph in near-black; the others are outlines in
         // the light grey (3.46:1 on white, above WCAG 1.4.11's 3:1).
         expect(icons.first.filled, isTrue);

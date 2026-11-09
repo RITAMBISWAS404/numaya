@@ -781,7 +781,7 @@
   "offlineBanner": "You’re offline. We’ll keep trying.",
   "offlineBannerDemo": "Simulated in the Demo Hub",
   "demoOffline": "Simulate being offline",
-  "demoOfflineNote": "Shows the offline banner; messages wait and send when you switch it off; joining events fails",
+  "demoOfflineNote": "Shows the offline banner; messages wait and send when you switch it off",
   "chatStatusFailed": "Not sent",
   "chatRetry": "Try again",
   "chatDelete": "Delete",

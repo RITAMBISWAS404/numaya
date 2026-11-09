@@ -9,9 +9,26 @@ import '../../compliments/application/compliments_controller.dart';
 import '../../dating/application/dating_controller.dart';
 import '../../events_mvp/application/events_mvp_controller.dart';
 
-/// Signed-in shell: Discover, Likes, Messages and Profile (and Events second when the release
-/// includes it, [eventsAvailableProvider]; EVENTS_SCREEN_INVENTORY EN-1) on the stone page, each tab
-/// keeping its own stack, above the tab bar.
+/// The bottom bar's destinations, by identity rather than position. Events exists only when the
+/// release includes it, so the branch order matches this list (see the shell routes in router.dart).
+enum AppTab {
+  discover,
+  likes,
+  chats,
+  events,
+  profile;
+
+  static List<AppTab> active({required bool events}) => [
+    discover,
+    likes,
+    chats,
+    if (events) AppTab.events,
+    profile,
+  ];
+}
+
+/// Signed-in shell: Discover, Likes, Chats and Profile on the stone page, each tab keeping its own
+/// stack, above the tab bar. (Events is deferred, [eventsAvailableProvider].)
 class HomeShell extends ConsumerWidget {
   const HomeShell({super.key, required this.shell});
 
@@ -28,11 +45,13 @@ class HomeShell extends ConsumerWidget {
         dating.unansweredLikes() +
         ref.read(complimentsProvider.notifier).requests().length;
     final newMatches = dating.unopenedMatches();
+    final tabs = AppTab.active(events: ref.watch(eventsAvailableProvider));
+    final home = tabs.indexOf(AppTab.discover);
     // Android back on another tab's root returns to Home first; back on Home leaves the app.
     return PopScope(
-      canPop: shell.currentIndex == 0,
+      canPop: shell.currentIndex == home,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) shell.goBranch(0);
+        if (!didPop) shell.goBranch(home);
       },
       child: Scaffold(
         backgroundColor: AppColors.canvas,
@@ -45,31 +64,39 @@ class HomeShell extends ConsumerWidget {
           onSelect: (i) =>
               shell.goBranch(i, initialLocation: i == shell.currentIndex),
           items: [
-            TabItem(label: l10n.tabDiscover, icon: NumayaIcons.home),
-            TabItem(
-              label: l10n.tabLikes,
-              icon: NumayaIcons.heart,
-              badgeCount: newLikes,
-              badgeLabel: l10n.tabNewCount(l10n.tabLikes, newLikes),
-            ),
-            TabItem(
-              label: l10n.tabChats,
-              icon: NumayaIcons.message,
-              badgeCount: newMatches,
-              badgeLabel: l10n.tabNewCount(l10n.tabChats, newMatches),
-            ),
-            // Events MVP: the fourth tab (Discover / Likes / Chats / Events / Profile).
-            TabItem(
-              label: l10n.tabEvents,
-              icon: NumayaIcons.event,
-              badgeCount: ref.watch(
-                eventsMvpProvider.select(
-                  (s) => s.notices.where((n) => !n.read).length,
+            for (final tab in tabs)
+              switch (tab) {
+                AppTab.discover => TabItem(
+                  label: l10n.tabDiscover,
+                  icon: NumayaIcons.home,
                 ),
-              ),
-              badgeLabel: l10n.tabNewCount(l10n.tabEvents, 0),
-            ),
-            TabItem(label: l10n.tabProfile, icon: NumayaIcons.user),
+                AppTab.likes => TabItem(
+                  label: l10n.tabLikes,
+                  icon: NumayaIcons.heart,
+                  badgeCount: newLikes,
+                  badgeLabel: l10n.tabNewCount(l10n.tabLikes, newLikes),
+                ),
+                AppTab.chats => TabItem(
+                  label: l10n.tabChats,
+                  icon: NumayaIcons.message,
+                  badgeCount: newMatches,
+                  badgeLabel: l10n.tabNewCount(l10n.tabChats, newMatches),
+                ),
+                AppTab.events => TabItem(
+                  label: l10n.tabEvents,
+                  icon: NumayaIcons.event,
+                  badgeCount: ref.watch(
+                    eventsMvpProvider.select(
+                      (s) => s.notices.where((n) => !n.read).length,
+                    ),
+                  ),
+                  badgeLabel: l10n.tabNewCount(l10n.tabEvents, 0),
+                ),
+                AppTab.profile => TabItem(
+                  label: l10n.tabProfile,
+                  icon: NumayaIcons.user,
+                ),
+              },
           ],
         ),
       ),

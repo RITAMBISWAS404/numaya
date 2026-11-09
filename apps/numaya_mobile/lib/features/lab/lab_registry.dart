@@ -67,6 +67,10 @@ class LabGroup {
 const _o = 'O';
 
 /// Every group, in gallery order: components, then screens, then motion.
+/// Layout groups that belong to deferred Events (MVP Focus V5): hidden from the Lab and guarded.
+bool isDeferredLabGroup(String id) =>
+    id.contains('event') || id == 'ea-met-card';
+
 const List<LabGroup> kLabGroups = [
   LabGroup(
     id: 'match-avatar',

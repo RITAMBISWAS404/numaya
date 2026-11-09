@@ -28,7 +28,7 @@ void main() {
     'E01: the Events tab is the fourth of five and lists sample events',
     (tester) async {
       await usePhoneSize(tester);
-      final c = await quickStartApp(tester);
+      final c = await quickStartApp(tester, overrides: eventsOn);
       await openTab(tester, 'Events');
       expect(c.read(routerProvider).state.uri.path, Routes.events);
       expect(find.byKey(const ValueKey('ev-sample-banner')), findsOneWidget);
@@ -41,7 +41,7 @@ void main() {
     'E02→E03→E05: reserve once, a second reserve returns the same place, cancel',
     (tester) async {
       await usePhoneSize(tester);
-      final c = await quickStartApp(tester);
+      final c = await quickStartApp(tester, overrides: eventsOn);
       final ev = c.read(eventsMvpProvider.notifier);
       final left = ev.placesLeft(board);
       await goTo(c, tester, '${Routes.evEvent}/$board/reserve');
@@ -88,7 +88,7 @@ void main() {
     'E03: a full event offers no reservation; offline shows an error, then works',
     (tester) async {
       await usePhoneSize(tester);
-      final c = await quickStartApp(tester);
+      final c = await quickStartApp(tester, overrides: eventsOn);
       final ev = c.read(eventsMvpProvider.notifier);
       final full = ev.reserve('ev-coffee-indiranagar', discoverable: false);
       await tester.pump(const Duration(milliseconds: 600));
@@ -118,7 +118,7 @@ void main() {
     'E03: an uncertain result is reconciled, never resubmitted blind',
     (tester) async {
       await usePhoneSize(tester);
-      final c = await quickStartApp(tester);
+      final c = await quickStartApp(tester, overrides: eventsOn);
       final ev = c.read(eventsMvpProvider.notifier)..setDropNextResponse(true);
       final first = ev.reserve(board, discoverable: false);
       await tester.pump(const Duration(milliseconds: 600));
@@ -140,7 +140,7 @@ void main() {
     tester,
   ) async {
     await usePhoneSize(tester);
-    final c = await quickStartApp(tester);
+    final c = await quickStartApp(tester, overrides: eventsOn);
     await goTo(c, tester, Routes.evMine);
     for (final k in ['ev-mine-upcoming', 'ev-mine-past', 'ev-mine-cancelled']) {
       expect(find.byKey(ValueKey(k)), findsOneWidget, reason: k);
@@ -152,7 +152,7 @@ void main() {
     tester,
   ) async {
     await usePhoneSize(tester);
-    final c = await quickStartApp(tester);
+    final c = await quickStartApp(tester, overrides: eventsOn);
     await goTo(c, tester, Routes.staff);
     expect(find.byKey(const ValueKey('ev-staff-banner')), findsOneWidget);
     await settle(tester);

@@ -1351,7 +1351,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get demoOfflineNote =>
-      'Shows the offline banner; messages wait and send when you switch it off; joining events fails';
+      'Shows the offline banner; messages wait and send when you switch it off';
 
   @override
   String get chatStatusFailed => 'Not sent';
