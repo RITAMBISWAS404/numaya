@@ -255,7 +255,7 @@ abstract final class MonoSizes {
 
 /// Spacing roles on the 4pt scale (LAYOUT_GUIDELINES.md).
 abstract final class MonoSpace {
-  static const double gutter = 16;
+  static const double gutter = 20;
   static const double section = 32;
   static const double cardPadding = 16;
   static const double heroPadding = 20;
