@@ -21,6 +21,8 @@ import 'package:numaya_mobile/features/commerce/application/economy_controller.d
 import 'package:numaya_mobile/features/compliments/application/compliments_controller.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 import 'package:numaya_mobile/features/dating/data/media_picker.dart';
+import 'package:numaya_mobile/features/dating/presentation/chat_attachments.dart';
+import 'package:numaya_mobile/features/dating/presentation/chat_voice.dart';
 import 'package:numaya_mobile/features/help/domain/help_articles.dart';
 import 'package:numaya_mobile/features/home/application/discovery_filters.dart';
 import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
@@ -853,15 +855,7 @@ void main() {
         'Chat > Long press message',
         () async {
           await h.go(priya);
-          await tester.longPress(
-            find
-                .byWidgetPredicate(
-                  (w) =>
-                      w.key is ValueKey<String> &&
-                      (w.key! as ValueKey<String>).value.startsWith('message-'),
-                )
-                .last,
-          );
+          await tester.longPress(find.byType(SwipeableMessage).last);
           await h.wait(900);
         },
       );
@@ -1475,11 +1469,7 @@ void main() {
       await h.go(Routes.messages);
       await h.go('${Routes.chat}/priya');
       await h.wait(1200);
-      final bubble = find.byWidgetPredicate(
-        (w) =>
-            w.key is ValueKey<String> &&
-            (w.key! as ValueKey<String>).value.startsWith('message-'),
-      );
+      final bubble = find.byType(SwipeableMessage);
       await tester.longPress(bubble.at(bubble.evaluate().length - 2));
       await h.wait(1200);
       await h.tapText(_l.chatReply);
@@ -1535,7 +1525,7 @@ void main() {
         'Chat > Send photo',
         scroll: false,
       );
-      await tester.tap(find.bySemanticsLabel(_l.chatOpenPhoto).last);
+      await tester.tap(find.byType(AttachmentImage).last);
       await h.wait(1200);
       await h.shot(
         _chat,
@@ -1638,7 +1628,10 @@ void main() {
         'Chat > Send voice note',
         scroll: false,
       );
-      await tester.tap(find.bySemanticsLabel(RegExp('^${_l.voicePlay}')).last);
+      await tester.tapAt(
+        tester.getTopLeft(find.byType(VoiceMessage).last) +
+            const Offset(32, 32),
+      );
       await h.wait(900);
       await h.shot(
         _chat,

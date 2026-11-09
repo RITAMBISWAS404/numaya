@@ -16,6 +16,7 @@ import 'package:numaya_mobile/features/dating/data/media_picker.dart';
 import 'package:numaya_mobile/features/dating/domain/sample_people.dart';
 import 'package:numaya_mobile/features/lab/lab_registry.dart';
 import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
+import 'package:numaya_mobile/features/premium/application/premium_controller.dart';
 
 import '../test/helpers/journeys.dart';
 
@@ -201,8 +202,7 @@ void main() {
         ),
       );
       await _wait(tester, 800);
-      const preview = {'compliment-card', 'v4-welcome'};
-      const routes = {
+      const screens = {
         'v4-photo-label': Routes.home,
         'v6-quote-style': '${Routes.chat}/priya',
         'v6-voice-bubble': '${Routes.chat}/priya',
@@ -215,24 +215,32 @@ void main() {
         'screen-heart': Routes.likes,
         'screen-chats': Routes.messages,
         'screen-profile': Routes.profile,
+        'screen-discover': Routes.home,
       };
-      for (final id in [...preview, ...routes.keys]) {
-        for (final v in labGroup(id).ids) {
-          await step('variant $id $v', () async {
+      for (final g in kLabGroups) {
+        if (isDeferredLabGroup(g.id) || g.kind == LabKind.motion) continue;
+        final component = g.kind == LabKind.component;
+        final route = screens[g.id];
+        if (!component && route == null) continue;
+        // Premium, so the Heart directions differ from one another.
+        c.read(premiumProvider.notifier).setActive(g.id == 'screen-heart');
+        for (final v in g.ids) {
+          await step('variant ${g.id} $v', () async {
             lab
               ..reset()
-              ..choose(id, v);
+              ..choose(g.id, v);
             await go(Routes.home);
-            if (preview.contains(id)) {
-              await go('${Routes.visualLabPreview}/$id?v=$v');
-              await cap('crop__${id}__$v', id, v, 'crop', '$id $v');
+            if (component) {
+              await go('${Routes.visualLabPreview}/${g.id}?v=$v');
+              await cap('crop__${g.id}__$v', g.id, v, 'crop', '${g.id} $v');
             } else {
-              await go(routes[id]!);
-              await cap('screen__${id}__$v', id, v, 'screen', '$id $v');
+              await go(route!);
+              await cap('screen__${g.id}__$v', g.id, v, 'screen', '${g.id} $v');
             }
           });
         }
       }
+      c.read(premiumProvider.notifier).setActive(false);
       lab.reset();
     }
 
