@@ -424,8 +424,7 @@ void main() {
         for (final (label, path, index) in [
           ('Likes', Routes.likes, 1),
           ('Messages', Routes.messages, 2),
-          ('Events', Routes.events, 3),
-          ('Profile', Routes.profile, 4),
+          ('Profile', Routes.profile, 3),
           ('Home', Routes.home, 0),
         ]) {
           await openTab(tester, label);
