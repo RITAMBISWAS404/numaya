@@ -1129,10 +1129,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatStatusOnDevice => 'Not sent: saved on this device';
 
   @override
-  String get chatAttach => 'Add a photo, video or voice note';
+  String get chatAttach => 'Add a photo';
 
   @override
-  String get chatAttachPhoto => 'Photo';
+  String get chatAttachPhoto => 'Choose a photo';
 
   @override
   String get chatAttachVideo => 'Video';
@@ -1194,6 +1194,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mediaMissing => 'This file is no longer on your phone';
+
+  @override
+  String get chatAttachTakePhoto => 'Take a photo';
+
+  @override
+  String get chatRecordVoice => 'Record a voice note';
+
+  @override
+  String get chatQuoteUnavailable => 'Original message unavailable';
+
+  @override
+  String get chatQuoteGoTo => 'Go to the original message';
+
+  @override
+  String get voiceDiscard => 'Discard recording';
+
+  @override
+  String get voicePlay => 'Play voice note';
+
+  @override
+  String get voicePause => 'Pause';
+
+  @override
+  String get voiceSend => 'Send voice note';
+
+  @override
+  String get voicePermissionDenied =>
+      'Numaya needs microphone access to record. You can allow it in your phone’s settings.';
+
+  @override
+  String get voiceUnavailable => 'Recording isn’t available on this device.';
+
+  @override
+  String get voicePlayFailed => 'Couldn’t play this voice note.';
+
+  @override
+  String get voiceSampleNote => 'Demo note, no sound';
 
   @override
   String get voiceTitle => 'Voice note';

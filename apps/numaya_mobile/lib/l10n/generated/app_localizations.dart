@@ -1975,13 +1975,13 @@ abstract class AppLocalizations {
   /// No description provided for @chatAttach.
   ///
   /// In en, this message translates to:
-  /// **'Add a photo, video or voice note'**
+  /// **'Add a photo'**
   String get chatAttach;
 
   /// No description provided for @chatAttachPhoto.
   ///
   /// In en, this message translates to:
-  /// **'Photo'**
+  /// **'Choose a photo'**
   String get chatAttachPhoto;
 
   /// No description provided for @chatAttachVideo.
@@ -2091,6 +2091,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This file is no longer on your phone'**
   String get mediaMissing;
+
+  /// No description provided for @chatAttachTakePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get chatAttachTakePhoto;
+
+  /// No description provided for @chatRecordVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Record a voice note'**
+  String get chatRecordVoice;
+
+  /// No description provided for @chatQuoteUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Original message unavailable'**
+  String get chatQuoteUnavailable;
+
+  /// No description provided for @chatQuoteGoTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to the original message'**
+  String get chatQuoteGoTo;
+
+  /// No description provided for @voiceDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard recording'**
+  String get voiceDiscard;
+
+  /// No description provided for @voicePlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Play voice note'**
+  String get voicePlay;
+
+  /// No description provided for @voicePause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get voicePause;
+
+  /// No description provided for @voiceSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send voice note'**
+  String get voiceSend;
+
+  /// No description provided for @voicePermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Numaya needs microphone access to record. You can allow it in your phone’s settings.'**
+  String get voicePermissionDenied;
+
+  /// No description provided for @voiceUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording isn’t available on this device.'**
+  String get voiceUnavailable;
+
+  /// No description provided for @voicePlayFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t play this voice note.'**
+  String get voicePlayFailed;
+
+  /// No description provided for @voiceSampleNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo note, no sound'**
+  String get voiceSampleNote;
 
   /// No description provided for @voiceTitle.
   ///

@@ -935,6 +935,20 @@ class DatingController extends Notifier<DatingState> {
     _accept(id, message);
   }
 
+  /// Removes one message (a moderation or account-deletion outcome): a reply to it then shows that
+  /// the original is unavailable.
+  void removeMessage(String id, int messageId) {
+    state = state.copyWith(
+      threads: {
+        ...state.threads,
+        id: [
+          for (final m in state.threads[id] ?? const <DemoMessage>[])
+            if (m.id != messageId) m,
+        ],
+      },
+    );
+  }
+
   /// The service's answer to a send. A first message counts only if it is accepted before the
   /// match's deadline; an accepted message resets the quiet timer and counts toward the streak.
   void _accept(String id, DemoMessage message) {

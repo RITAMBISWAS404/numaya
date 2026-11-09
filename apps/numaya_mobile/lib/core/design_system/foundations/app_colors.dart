@@ -190,6 +190,9 @@ abstract final class AppColors {
   static const Color onWarningBase = _M.ink;
 
   /// Semantic accents for icon tiles and statuses (never actions): see [AccentTone].
+  /// The empty part of a track on the neutral fill.
+  static const Color fillStrong = _M.fillStrong;
+
   static const Color info = _M.info;
   static const Color infoTint = _M.infoSubtle;
   static const Color social = _M.social;

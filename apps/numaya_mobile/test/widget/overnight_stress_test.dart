@@ -47,12 +47,9 @@ void main() {
       mediaPicker: const SampleMediaPicker(),
     );
     await goTo(c, tester, '${Routes.chat}/priya');
-    await tapOn(
-      tester,
-      find.bySemanticsLabel('Add a photo, video or voice note'),
-    );
+    await tapOn(tester, find.bySemanticsLabel('Add a photo'));
     await tester.pump(const Duration(milliseconds: 600));
-    await tester.tap(find.text('Photo').last);
+    await tester.tap(find.text('Choose a photo').last);
     await tester.pump(const Duration(seconds: 1));
     _keyboardUp(tester);
     await tester.enterText(

@@ -192,7 +192,7 @@ void main() {
     await overlay(
       tester,
       '${Routes.chat}/priya',
-      find.bySemanticsLabel('Add a photo, video or voice note'),
+      find.bySemanticsLabel('Add a photo'),
       'o05-attach-menu',
     );
   });

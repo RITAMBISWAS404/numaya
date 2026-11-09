@@ -696,6 +696,7 @@ class ConsequenceList extends StatelessWidget {
 /// round ink send button (disabled warm grey).
 class Composer extends StatefulWidget {
   const Composer({
+    this.idleAction,
     super.key,
     required this.controller,
     required this.placeholder,
@@ -716,6 +717,10 @@ class Composer extends StatefulWidget {
 
   /// A control before the field (the attachment button in chat).
   final Widget? leading;
+
+  /// Shown in Send's place while there is nothing to send (the microphone in chat), so the slot
+  /// never moves.
+  final Widget? idleAction;
 
   /// An attachment is waiting, so Send works with an empty field (the text is its caption).
   final bool hasAttachment;
@@ -819,37 +824,40 @@ class _ComposerState extends State<Composer> {
         ),
         // 8pt to the circle, as in V16 (the tap target adds 2pt).
         const SizedBox(width: AppSpacing.s2 - 2),
-        Pressable(
-          onTap: canSend ? _send : null,
-          semanticLabel: widget.sendLabel,
-          excludeChildSemantics: true,
-          pressedScale: 0.92,
-          borderRadius: AppRadii.all(AppRadii.control),
-          // A 44pt rounded square (RD-02) inside a 48dp tap target.
-          child: SizedBox.square(
-            dimension: kMinInteractiveDimension,
-            child: Center(
-              child: AnimatedContainer(
-                duration: AppMotion.duration(context, AppMotion.base),
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: canSend ? AppColors.accent : AppColors.disabled,
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                // UI-039: a plain upward arrow.
-                child: NumayaIcon(
-                  NumayaIcons.arrowUp,
-                  size: 22,
-                  color: canSend
-                      ? AppColors.inkForeground
-                      : AppColors.disabledForeground,
+        if (!canSend && widget.idleAction != null)
+          widget.idleAction!
+        else
+          Pressable(
+            onTap: canSend ? _send : null,
+            semanticLabel: widget.sendLabel,
+            excludeChildSemantics: true,
+            pressedScale: 0.92,
+            borderRadius: AppRadii.all(AppRadii.control),
+            // A 44pt rounded square (RD-02) inside a 48dp tap target.
+            child: SizedBox.square(
+              dimension: kMinInteractiveDimension,
+              child: Center(
+                child: AnimatedContainer(
+                  duration: AppMotion.duration(context, AppMotion.base),
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: canSend ? AppColors.accent : AppColors.disabled,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  // UI-039: a plain upward arrow.
+                  child: NumayaIcon(
+                    NumayaIcons.arrowUp,
+                    size: 22,
+                    color: canSend
+                        ? AppColors.inkForeground
+                        : AppColors.disabledForeground,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -865,6 +873,9 @@ class MessageBubble extends StatelessWidget {
     this.grouped = false,
     this.dimmed = false,
     this.mine = true,
+    this.replyThumbnail,
+    this.onQuoteTap,
+    this.quoteStyle = QuoteStyle.block,
     this.replyAuthor,
     this.replyText,
   });
@@ -873,6 +884,14 @@ class MessageBubble extends StatelessWidget {
   final bool grouped;
   final bool dimmed;
   final bool mine;
+
+  final QuoteStyle quoteStyle;
+
+  /// A small picture of the quoted photo, at the end of the quote.
+  final Widget? replyThumbnail;
+
+  /// Jumps to the quoted message when it is still available.
+  final VoidCallback? onQuoteTap;
 
   /// The message this one answers (UI-036): who wrote it and its text, quoted at the top.
   final String? replyAuthor;
@@ -889,7 +908,7 @@ class MessageBubble extends StatelessWidget {
         child: Opacity(
           opacity: dimmed ? AppOpacity.pending : 1,
           child: Container(
-            margin: EdgeInsets.only(top: grouped ? 4 : AppSpacing.s2),
+            margin: EdgeInsets.only(top: grouped ? 4 : AppSpacing.s3),
             // Ente Comment Bubble (5412:23548 / 5412:23575): 20pt corners with one 6pt corner on
             // the sender's side. UI-040: Numaya purple for your own, white for theirs.
             // Inset 16 across and 12 down (Ente uses 16 all round; tightened for chat density).
@@ -915,6 +934,9 @@ class MessageBubble extends StatelessWidget {
                     author: replyAuthor ?? '',
                     text: replyText!,
                     onAccent: mine,
+                    thumbnail: replyThumbnail,
+                    onTap: onQuoteTap,
+                    style: quoteStyle,
                   ),
                   const SizedBox(height: AppSpacing.s2),
                 ],
@@ -933,37 +955,46 @@ class MessageBubble extends StatelessWidget {
   }
 }
 
-/// A replied-to message quoted inside a bubble or above the composer (UI-036): a 3pt bar, the
-/// author in semibold, then up to two lines of their text.
+/// How a quote is drawn inside a bubble.
+enum QuoteStyle { block, stripe, plain }
+
+/// A replied-to message quoted inside a bubble (UI-036, V6): the stripe is a rounded capsule held
+/// inside the block's inset, so it can never reach the block's corners.
 class _QuotedReply extends StatelessWidget {
   const _QuotedReply({
     required this.author,
     required this.text,
     required this.onAccent,
+    this.thumbnail,
+    this.onTap,
+    this.style = QuoteStyle.block,
   });
 
+  final QuoteStyle style;
   final String author;
   final String text;
   final bool onAccent;
+  final Widget? thumbnail;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final fg = onAccent ? AppColors.accentForeground : AppColors.textSecondary;
-    return _BarSurface(
-      color: onAccent ? const Color(0x26FFFFFF) : AppColors.canvas,
-      bar: onAccent ? AppColors.accentForeground : AppColors.accent,
-      radius: AppRadii.tag,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          AppSpacing.s2,
-          AppSpacing.s1,
-          AppSpacing.s2,
-          AppSpacing.s1,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
+    final fg = onAccent ? AppColors.accentForeground : AppColors.ink;
+    final sub = onAccent ? AppColors.accentForeground : AppColors.textSecondary;
+    final body = _QuoteBlock(
+      color: style == QuoteStyle.stripe
+          ? null
+          : (onAccent ? const Color(0x2EFFFFFF) : AppColors.canvas),
+      stripe: style == QuoteStyle.plain
+          ? null
+          : (onAccent ? AppColors.accentForeground : AppColors.accent),
+      radius: AppRadii.tile,
+      trailing: thumbnail,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (author.isNotEmpty)
             Text(
               author,
               maxLines: 1,
@@ -973,16 +1004,16 @@ class _QuotedReply extends StatelessWidget {
                 AppTypography.semibold,
               ).copyWith(color: fg),
             ),
-            Text(
-              text,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.caption.copyWith(color: fg),
-            ),
-          ],
-        ),
+          Text(
+            text,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: AppTypography.caption.copyWith(color: sub),
+          ),
+        ],
       ),
     );
+    return onTap == null ? body : GestureDetector(onTap: onTap, child: body);
   }
 }
 
@@ -995,6 +1026,7 @@ class ReplyPreview extends StatelessWidget {
     required this.text,
     required this.cancelLabel,
     required this.onCancel,
+    this.thumbnail,
   });
 
   final String title;
@@ -1002,41 +1034,19 @@ class ReplyPreview extends StatelessWidget {
   final String cancelLabel;
   final VoidCallback onCancel;
 
+  /// A small picture of the photo being answered.
+  final Widget? thumbnail;
+
   @override
   Widget build(BuildContext context) {
-    return _BarSurface(
+    return _QuoteBlock(
       color: AppColors.canvas,
-      bar: AppColors.accent,
+      stripe: AppColors.accent,
       radius: AppRadii.tile,
-      child: Row(
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(width: AppSpacing.s3),
-          Expanded(
-            child: Semantics(
-              liveRegion: true,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.weight(
-                      AppTypography.caption,
-                      AppTypography.semibold,
-                    ).copyWith(color: AppColors.accentOnTint),
-                  ),
-                  Text(
-                    text,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.caption,
-                  ),
-                ],
-              ),
-            ),
-          ),
+          ?thumbnail,
           NavIconButton(
             icon: NumayaIcons.close,
             label: cancelLabel,
@@ -1045,40 +1055,82 @@ class ReplyPreview extends StatelessWidget {
           ),
         ],
       ),
+      child: Semantics(
+        liveRegion: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.weight(
+                AppTypography.caption,
+                AppTypography.semibold,
+              ).copyWith(color: AppColors.accentOnTint),
+            ),
+            Text(
+              text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.caption,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
-/// A rounded surface with a 3pt accent bar on its leading edge (quoted replies, the reply
-/// preview). The bar is a child, clipped by the corners: Flutter cannot paint a one-sided border
-/// with rounded corners.
-class _BarSurface extends StatelessWidget {
-  const _BarSurface({
+/// A quoted block: rounded surface, an inset capsule stripe, then the copy. Its height comes from
+/// the copy, and the stripe stretches inside the inset.
+class _QuoteBlock extends StatelessWidget {
+  const _QuoteBlock({
     required this.color,
-    required this.bar,
+    required this.stripe,
     required this.radius,
     required this.child,
+    this.trailing,
   });
 
-  final Color color;
-  final Color bar;
+  final Color? color;
+  final Color? stripe;
   final double radius;
   final Widget child;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: AppRadii.all(radius),
-      child: ColoredBox(
+    return Container(
+      decoration: BoxDecoration(
         color: color,
-        child: IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ColoredBox(color: bar, child: const SizedBox(width: 3)),
-              Flexible(child: child),
+        borderRadius: AppRadii.all(radius),
+      ),
+      padding: const EdgeInsets.all(AppSpacing.s2),
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (stripe != null) ...[
+              Container(
+                width: 3,
+                decoration: BoxDecoration(
+                  color: stripe,
+                  borderRadius: AppRadii.all(2),
+                ),
+              ),
+              const SizedBox(width: AppSpacing.s2),
             ],
-          ),
+            Flexible(
+              fit: FlexFit.tight,
+              child: Align(alignment: Alignment.centerLeft, child: child),
+            ),
+            if (trailing != null) ...[
+              const SizedBox(width: AppSpacing.s2),
+              trailing!,
+            ],
+          ],
         ),
       ),
     );

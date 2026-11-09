@@ -229,10 +229,7 @@ void main() {
         tester.getSize(bar).width,
         tester.view.physicalSize.width / tester.view.devicePixelRatio,
       );
-      expect(
-        find.bySemanticsLabel('Add a photo, video or voice note'),
-        findsNothing,
-      );
+      expect(find.bySemanticsLabel('Add a photo'), findsNothing);
       for (final f in [find.byType(TextField), find.bySemanticsLabel('Send')]) {
         expect(find.descendant(of: bar, matching: f), findsWidgets);
       }

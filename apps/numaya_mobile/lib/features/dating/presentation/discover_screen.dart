@@ -448,7 +448,9 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
       header: header,
       scrollController: _scroll,
       topGap: false,
-      gutter: AppLayout.screenGutter,
+      gutter: ref.watch(labVariantProvider('v6-discover-margin')) == 'A'
+          ? AppSpacing.gutterTight
+          : AppLayout.screenGutter,
       child: _DecisionMotion(
         key: ValueKey(person.id),
         exit: _exit,

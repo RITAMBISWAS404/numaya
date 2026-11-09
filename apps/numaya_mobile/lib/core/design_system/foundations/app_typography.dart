@@ -39,7 +39,7 @@ abstract final class AppTypography {
   // Headings: Plus Jakarta Sans --------------------------------------------------------------
 
   /// Ente Display-1. Names on photos ("Maya, 29") and Welcome: 32/40 semibold.
-  static final TextStyle hero = _style(display, 32, 40, semibold, 0);
+  static final TextStyle hero = _style(display, 32, 40, bold, 0);
 
   /// Ente Display-2. Tab-root titles ("Likes", "Messages"): 24/32 semibold.
   static final TextStyle pageTitle = _style(display, 24, 32, bold, 0);

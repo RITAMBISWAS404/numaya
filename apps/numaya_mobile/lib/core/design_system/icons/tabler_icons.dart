@@ -165,6 +165,7 @@ const Map<NumayaIcons, TablerGlyph> kTablerIcons = {
 enum NumayaMobileIcons {
   video,
   play,
+  pause,
   stop,
   attach,
   logout,
@@ -193,6 +194,8 @@ const Map<NumayaMobileIcons, TablerGlyph> kTablerMobileIcons = {
   NumayaMobileIcons.video: (outline: 'video', filled: 'video'),
   // play
   NumayaMobileIcons.play: (outline: 'player-play', filled: 'player-play'),
+
+  NumayaMobileIcons.pause: (outline: 'player-pause', filled: 'player-pause'),
   // stop recording
   NumayaMobileIcons.stop: (outline: 'player-stop', filled: 'player-stop'),
   // attach

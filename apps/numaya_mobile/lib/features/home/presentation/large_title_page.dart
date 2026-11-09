@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/design_system/design_system.dart';
+import '../../lab/lab_registry.dart';
 
 /// R12 (Visual Lab V2): Ente Header v2 (`11439:5040`) on a scrolling page. The expanded large
 /// title sits under the leading control (or at the top of a tab root) and scrolls away with the
@@ -153,10 +155,22 @@ class _LargeTitlePageState extends State<LargeTitlePage> {
         children: [
           Semantics(
             header: true,
-            child: Text(
-              widget.title,
-              key: const ValueKey('large-title'),
-              style: AppTypography.largeTitle,
+            child: Consumer(
+              builder: (context, ref, _) => Text(
+                widget.title,
+                key: const ValueKey('large-title'),
+                style: switch (ref.watch(labVariantProvider('v6-page-title'))) {
+                  'A' => AppTypography.weight(
+                    AppTypography.largeTitle,
+                    AppTypography.semibold,
+                  ).copyWith(fontSize: 28, height: 34 / 28),
+                  'B' => AppTypography.weight(
+                    AppTypography.largeTitle,
+                    AppTypography.extrabold,
+                  ).copyWith(fontSize: 32, height: 38 / 32),
+                  _ => AppTypography.largeTitle,
+                },
+              ),
             ),
           ),
           if (widget.subtitle != null) ...[

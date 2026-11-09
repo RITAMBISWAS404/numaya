@@ -8,6 +8,7 @@ import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../auth/application/session_controller.dart';
 import '../../dating/application/dating_controller.dart';
+import '../../lab/lab_registry.dart';
 import '../../onboarding/presentation/permission_prompt.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../profile/application/profile_details_controller.dart';
@@ -205,6 +206,39 @@ class SettingsScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
+          if (ref.watch(labVariantProvider('v6-settings-plan')) == 'A') ...[
+            Pressable(
+              onTap: () => context.push(Routes.premium),
+              semanticLabel: l10n.premiumName,
+              excludeChildSemantics: true,
+              borderRadius: AppRadii.all(AppRadii.heroCard),
+              child: Container(
+                padding: const EdgeInsets.all(AppLayout.heroPadding),
+                decoration: BoxDecoration(
+                  color: AppColors.accent,
+                  borderRadius: AppRadii.all(AppRadii.heroCard),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        l10n.premiumName,
+                        style: AppTypography.section.copyWith(
+                          color: AppColors.accentForeground,
+                        ),
+                      ),
+                    ),
+                    const NumayaIcon(
+                      NumayaIcons.chevronRight,
+                      size: AppSizes.iconMd,
+                      color: AppColors.accentForeground,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.sectionGap),
+          ],
           ListGroup(
             title: l10n.settingsAccount,
             children: [

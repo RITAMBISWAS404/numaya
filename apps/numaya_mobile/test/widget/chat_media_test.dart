@@ -32,10 +32,7 @@ class _FakePicker implements MediaPicker {
 }
 
 Future<void> _openMenu(WidgetTester tester) async {
-  await tapOn(
-    tester,
-    find.bySemanticsLabel('Add a photo, video or voice note'),
-  );
+  await tapOn(tester, find.bySemanticsLabel('Add a photo'));
   await tester.pump(const Duration(milliseconds: 600));
 }
 
@@ -64,7 +61,7 @@ void main() {
       );
       await goTo(c, tester, '${Routes.chat}/priya');
 
-      await _choose(tester, 'Photo');
+      await _choose(tester, 'Choose a photo');
       expect(find.byType(PendingAttachment), findsOneWidget);
       expect(find.text('columbia-road.jpg'), findsOneWidget);
       expect(find.bySemanticsLabel('Ready to send: Photo'), findsOneWidget);
@@ -72,7 +69,7 @@ void main() {
       await tester.pump();
       expect(find.byType(PendingAttachment), findsNothing);
 
-      await _choose(tester, 'Photo');
+      await _choose(tester, 'Choose a photo');
       await tester.enterText(find.byType(TextField), 'The stall I mentioned');
       await tester.pump();
       await _sendNow(tester);
@@ -118,9 +115,12 @@ void main() {
         mediaPicker: const SampleMediaPicker(),
       );
       await goTo(c, tester, '${Routes.chat}/priya');
-      await _choose(tester, 'Video');
-      expect(find.textContaining('8.4 MB'), findsOneWidget);
-      await _sendNow(tester);
+      // The menu no longer offers video (V6); a received or older video still shows as a file card.
+      c
+          .read(datingProvider.notifier)
+          .send('priya', '', attachment: SampleMediaPicker.video)
+          .ignore();
+      await tester.pump(const Duration(milliseconds: 600));
       expect(
         c.read(datingProvider).threads['priya']!.last.attachment?.kind,
         AttachmentKind.video,
@@ -136,46 +136,7 @@ void main() {
     },
   );
 
-  testWidgets(
-    'voice note: too short is refused; a timed demo note is sent and labelled',
-    (tester) async {
-      await usePhoneSize(tester);
-      // The dormant attachment code, switched on for this test (MVP chat is text-only).
-      final c = await quickStartApp(
-        tester,
-        mediaPicker: const SampleMediaPicker(),
-      );
-      await goTo(c, tester, '${Routes.chat}/priya');
-      await _choose(tester, 'Voice note');
-      expect(find.textContaining('doesn’t use the microphone'), findsOneWidget);
-
-      await tapOn(tester, find.widgetWithText(NumayaButton, 'Start recording'));
-      // Stopped before a second has passed.
-      await tester.tap(find.widgetWithText(NumayaButton, 'Stop'));
-      await tester.pump();
-      expect(
-        find.text('Too short. Record for at least a second.'),
-        findsOneWidget,
-      );
-
-      await tapOn(tester, find.widgetWithText(NumayaButton, 'Start recording'));
-      await tester.pump(const Duration(seconds: 3));
-      expect(find.text('0:03'), findsOneWidget);
-      await tester.tap(find.widgetWithText(NumayaButton, 'Stop'));
-      await tester.pump();
-      await tapOn(tester, find.widgetWithText(NumayaButton, 'Add to message'));
-      await tester.pump(const Duration(milliseconds: 600));
-      expect(find.byType(PendingAttachment), findsOneWidget);
-      await _sendNow(tester);
-      final note = c.read(datingProvider).threads['priya']!.last.attachment!;
-      expect(note.kind, AttachmentKind.voice);
-      expect(note.duration, const Duration(seconds: 3));
-      expect(note.sample, isTrue);
-      // UI-041: labelled as a voice note, without demo copy.
-      expect(find.text('Voice note'), findsOneWidget);
-      await settle(tester);
-    },
-  );
+  // The voice sheet was replaced by the inline recorder: see chat_v6_contract_test.dart.
 
   testWidgets(
     'picker cancelled or refused: nothing is attached and the reason is shown',
@@ -186,7 +147,7 @@ void main() {
         mediaPicker: _FakePicker(failure: MediaFailure.permissionDenied),
       );
       await goTo(c, tester, '${Routes.chat}/priya');
-      await _choose(tester, 'Photo');
+      await _choose(tester, 'Choose a photo');
       expect(find.byType(PendingAttachment), findsNothing);
       expect(find.textContaining('can’t see your photos'), findsOneWidget);
       await settle(tester);
@@ -208,7 +169,7 @@ void main() {
       );
       await goTo(c, tester, '${Routes.chat}/priya');
       // Cancelling the picker attaches nothing.
-      await _choose(tester, 'Photo');
+      await _choose(tester, 'Choose a photo');
       expect(find.byType(PendingAttachment), findsNothing);
 
       c.read(connectivityProvider.notifier).setOnline(false);

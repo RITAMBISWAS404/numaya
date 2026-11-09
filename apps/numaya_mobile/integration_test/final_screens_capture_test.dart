@@ -20,6 +20,7 @@ import 'package:numaya_mobile/features/auth/application/session_expiry.dart';
 import 'package:numaya_mobile/features/commerce/application/economy_controller.dart';
 import 'package:numaya_mobile/features/compliments/application/compliments_controller.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
+import 'package:numaya_mobile/features/dating/data/media_picker.dart';
 import 'package:numaya_mobile/features/help/domain/help_articles.dart';
 import 'package:numaya_mobile/features/home/application/discovery_filters.dart';
 import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
@@ -493,7 +494,11 @@ void main() {
 
   testWidgets('signed-in product', (tester) async {
     if (!_wants('product')) return;
-    final c = await quickStartApp(tester);
+    final c = await quickStartApp(
+      tester,
+      mediaPicker: const SampleMediaPicker(),
+    );
+    c.read(sampleMediaProvider.notifier).set(true);
     c.read(onboardingProvider.notifier).loadSample();
     c
         .read(profileDetailsProvider.notifier)
@@ -1363,7 +1368,11 @@ void main() {
   // phone-folder order places each beside its related screen (tool/final_screens).
   testWidgets('supplementary states', (tester) async {
     if (_only.isNotEmpty && _only != 'fix') return;
-    final c = await quickStartApp(tester);
+    final c = await quickStartApp(
+      tester,
+      mediaPicker: const SampleMediaPicker(),
+    );
+    c.read(sampleMediaProvider.notifier).set(true);
     c.read(onboardingProvider.notifier).loadSample();
     final h = _H(tester, c);
     await h.wait(1500);
@@ -1482,6 +1491,174 @@ void main() {
         'Chat > Long press > Reply',
         scroll: false,
       );
+      await h.go(Routes.messages);
+    });
+    await h.step('Chat media', () async {
+      const priya = '${Routes.chat}/priya';
+      final dating = c.read(datingProvider.notifier);
+      Finder bubbles() => find.byWidgetPredicate((w) => w is SwipeableMessage);
+      Future<void> replyToLast() async {
+        await h.go(Routes.messages);
+        await h.go(priya);
+        await h.wait(1000);
+        await tester.longPress(bubbles().last);
+        await h.wait(1000);
+        await h.tapText(_l.chatReply);
+        await h.wait(700);
+      }
+
+      await h.go(Routes.messages);
+      await h.go(priya);
+      await h.tapLabel(_l.chatAttach);
+      await h.shot(
+        _chat,
+        'Chat-attach-menu',
+        'Photo source',
+        'Chat > +',
+        sheet: true,
+      );
+      await h.tapText(_l.chatAttachPhoto);
+      await h.wait(900);
+      await h.shot(
+        _chat,
+        'Chat-photo-pending',
+        'Photo waiting above the composer',
+        'Chat > + > Choose a photo',
+        scroll: false,
+      );
+      await tester.tap(find.bySemanticsLabel(_l.chatSend).last);
+      await h.wait(1500);
+      await h.shot(
+        _chat,
+        'Chat-photo-sent',
+        'Sample photo in the conversation',
+        'Chat > Send photo',
+        scroll: false,
+      );
+      await tester.tap(find.bySemanticsLabel(_l.chatOpenPhoto).last);
+      await h.wait(1200);
+      await h.shot(
+        _chat,
+        'Chat-photo-viewer',
+        'Full screen',
+        'Chat > Photo',
+        scroll: false,
+      );
+      await tester.tap(find.bySemanticsLabel(_l.close).last);
+      await h.wait(800);
+      await replyToLast();
+      await h.shot(
+        _chat,
+        'Chat-reply-to-photo',
+        'Composer preview with thumbnail',
+        'Chat > Long press photo > Reply',
+        scroll: false,
+      );
+      await h.type(find.byType(TextField).last, 'Is that Columbia Road?');
+      await tester.tap(find.bySemanticsLabel(_l.chatSend).last);
+      await h.wait(1500);
+      await h.shot(
+        _chat,
+        'Chat-quoted-photo',
+        'Sent reply quoting a photo',
+        'Chat > Send reply',
+        scroll: false,
+      );
+      await dating.send(
+        'priya',
+        'I know a place near the station that does the cardamom ones all day, and the queue is never as bad as Columbia Road. Saturday?',
+      );
+      await h.wait(800);
+      await replyToLast();
+      await h.shot(
+        _chat,
+        'Chat-reply-to-long-text',
+        'Composer preview, long message',
+        'Chat > Swipe right on a message',
+        scroll: false,
+      );
+      await h.type(find.byType(TextField).last, 'Saturday works.');
+      await h.shot(
+        _chat,
+        'Chat-typed-send',
+        'Send replaces the microphone',
+        'Chat > Type',
+        keepFocus: true,
+        scroll: false,
+      );
+      await tester.tap(find.bySemanticsLabel(_l.chatSend).last);
+      await h.wait(1500);
+      await h.shot(
+        _chat,
+        'Chat-quoted-long-text',
+        'Sent reply quoting long text',
+        'Chat > Send reply',
+        scroll: false,
+      );
+      final original = c.read(datingProvider).threads['priya']!.first.id;
+      await dating.send(
+        'priya',
+        'Replying to something removed',
+        replyToId: original,
+      );
+      await h.wait(600);
+      dating.removeMessage('priya', original);
+      await h.wait(1200);
+      await h.shot(
+        _chat,
+        'Chat-quote-unavailable',
+        'Original no longer exists',
+        'Chat > Reply to a removed message',
+        scroll: false,
+      );
+      await tester.tap(find.byKey(const ValueKey('chat-voice')));
+      await h.wait(3400);
+      await h.shot(
+        _chat,
+        'Chat-voice-recording',
+        'Recording: bin, timer, stop',
+        'Chat > Microphone',
+        scroll: false,
+      );
+      await tester.tap(find.byKey(const ValueKey('voice-stop')));
+      await h.wait(900);
+      await h.shot(
+        _chat,
+        'Chat-voice-preview',
+        'Play, length, send',
+        'Chat > Microphone > Stop',
+        scroll: false,
+      );
+      await tester.tap(find.byKey(const ValueKey('voice-send')));
+      await h.wait(1500);
+      await h.shot(
+        _chat,
+        'Chat-voice-sent',
+        'Demo note in the conversation',
+        'Chat > Send voice note',
+        scroll: false,
+      );
+      await tester.tap(find.bySemanticsLabel(RegExp('^${_l.voicePlay}')).last);
+      await h.wait(900);
+      await h.shot(
+        _chat,
+        'Chat-voice-playing',
+        'Position advancing',
+        'Chat > Play voice note',
+        scroll: false,
+      );
+      dating.setSimulateErrors(true);
+      await h.type(find.byType(TextField).last, 'This one will not send.');
+      await tester.tap(find.bySemanticsLabel(_l.chatSend).last);
+      await h.wait(2000);
+      await h.shot(
+        _chat,
+        'Chat-send-failed',
+        'Not sent, retry available',
+        'Chat > Send while failing',
+        scroll: false,
+      );
+      dating.setSimulateErrors(false);
       await h.go(Routes.messages);
     });
     _counts[_settings] = 40;

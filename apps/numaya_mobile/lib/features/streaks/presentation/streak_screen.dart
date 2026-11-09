@@ -11,6 +11,7 @@ import '../../commerce/application/economy_controller.dart';
 import '../../commerce/domain/catalog.dart';
 import '../../commerce/presentation/store_screens.dart';
 import '../../dating/application/dating_controller.dart';
+import '../../lab/lab_registry.dart';
 import '../../premium/application/premium_controller.dart';
 import '../domain/streak.dart';
 
@@ -46,6 +47,49 @@ class StreakScreen extends ConsumerWidget {
         dating.newMatches().isEmpty;
     final capped = economy.lastAward?.result == AwardResult.skippedAtCap;
 
+    final hero = ref.watch(labVariantProvider('v6-streak-hero')) == 'A';
+    final fg = hero ? AppColors.accentForeground : AppColors.ink;
+    final head = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            MobileIcon(
+              NumayaMobileIcons.flame,
+              size: 28,
+              filled: run.length > 0,
+              color: hero
+                  ? AppColors.accentForeground
+                  : run.length > 0
+                  ? AppColors.accent
+                  : AppColors.textSecondary,
+            ),
+            const SizedBox(width: AppSpacing.s3),
+            Expanded(
+              child: Semantics(
+                header: true,
+                child: Text(
+                  l10n.streakDays(run.length),
+                  style: AppTypography.pageTitle.copyWith(color: fg),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.s4),
+        _CycleDots(done: progress, total: cycle, onAccent: hero),
+        const SizedBox(height: AppSpacing.s3),
+        Text(
+          l10n.streakCycle(progress),
+          style: AppTypography.bodySm.copyWith(color: fg),
+        ),
+        const SizedBox(height: AppSpacing.s1),
+        Text(
+          todayCounts ? l10n.streakToday : l10n.streakTodayOpen,
+          style: AppTypography.helper.copyWith(color: hero ? fg : null),
+        ),
+      ],
+    );
     return NumayaScreen(
       top: NumayaTopBar(
         onBack: () => context.pop(),
@@ -56,44 +100,16 @@ class StreakScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
-          WhiteCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    MobileIcon(
-                      NumayaMobileIcons.flame,
-                      size: 28,
-                      filled: run.length > 0,
-                      color: run.length > 0
-                          ? AppColors.accent
-                          : AppColors.textSecondary,
-                    ),
-                    const SizedBox(width: AppSpacing.s3),
-                    Expanded(
-                      child: Semantics(
-                        header: true,
-                        child: Text(
-                          l10n.streakDays(run.length),
-                          style: AppTypography.pageTitle,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.s4),
-                _CycleDots(done: progress, total: cycle),
-                const SizedBox(height: AppSpacing.s3),
-                Text(l10n.streakCycle(progress), style: AppTypography.bodySm),
-                const SizedBox(height: AppSpacing.s1),
-                Text(
-                  todayCounts ? l10n.streakToday : l10n.streakTodayOpen,
-                  style: AppTypography.helper,
-                ),
-              ],
-            ),
-          ),
+          hero
+              ? Container(
+                  padding: const EdgeInsets.all(AppLayout.heroPadding),
+                  decoration: BoxDecoration(
+                    color: AppColors.accent,
+                    borderRadius: AppRadii.all(AppRadii.heroCard),
+                  ),
+                  child: head,
+                )
+              : WhiteCard(child: head),
           if (offer != null) ...[
             const SizedBox(height: AppSpacing.s4),
             StatusBanner(
@@ -170,8 +186,13 @@ class StreakScreen extends ConsumerWidget {
 
 /// Seven marks for the current cycle: filled for days done.
 class _CycleDots extends StatelessWidget {
-  const _CycleDots({required this.done, required this.total});
+  const _CycleDots({
+    required this.done,
+    required this.total,
+    this.onAccent = false,
+  });
 
+  final bool onAccent;
   final int done;
   final int total;
 
@@ -188,7 +209,11 @@ class _CycleDots extends StatelessWidget {
                 child: Container(
                   height: 8,
                   decoration: BoxDecoration(
-                    color: i < done ? AppColors.accent : AppColors.divider,
+                    color: i < done
+                        ? (onAccent
+                              ? AppColors.accentForeground
+                              : AppColors.accent)
+                        : (onAccent ? const Color(0x4DFFFFFF) : AppColors.fill),
                     borderRadius: AppRadii.all(AppRadii.pill),
                   ),
                 ),

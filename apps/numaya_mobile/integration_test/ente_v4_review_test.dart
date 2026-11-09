@@ -11,6 +11,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/media/demo_photos.dart';
+import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
+import 'package:numaya_mobile/features/dating/data/media_picker.dart';
 import 'package:numaya_mobile/features/dating/domain/sample_people.dart';
 import 'package:numaya_mobile/features/lab/lab_registry.dart';
 import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
@@ -33,7 +35,11 @@ void main() {
   setUpAll(DemoPhotoLibrary.load);
 
   testWidgets('ente v4 review', (tester) async {
-    final c = await quickStartApp(tester);
+    final c = await quickStartApp(
+      tester,
+      mediaPicker: const SampleMediaPicker(),
+    );
+    c.read(sampleMediaProvider.notifier).set(true);
     c.read(onboardingProvider.notifier).loadSample();
     final lab = c.read(labChoicesProvider.notifier);
 
@@ -182,9 +188,30 @@ void main() {
     }
 
     if (_only.isEmpty || _only == 'variants') {
+      final dating = c.read(datingProvider.notifier);
+      final first = c.read(datingProvider).threads['priya']!.first;
+      await dating.send('priya', 'Saturday works for me.', replyToId: first.id);
+      await dating.send(
+        'priya',
+        '',
+        attachment: const MessageAttachment(
+          kind: AttachmentKind.voice,
+          duration: Duration(seconds: 12),
+          sample: true,
+        ),
+      );
+      await _wait(tester, 800);
       const preview = {'compliment-card', 'v4-welcome'};
       const routes = {
         'v4-photo-label': Routes.home,
+        'v6-quote-style': '${Routes.chat}/priya',
+        'v6-voice-bubble': '${Routes.chat}/priya',
+        'v6-composer': '${Routes.chat}/priya',
+        'v6-page-title': Routes.profile,
+        'v6-wallet-header': Routes.wallet,
+        'v6-streak-hero': Routes.streak,
+        'v6-settings-plan': Routes.settings,
+        'v6-discover-margin': Routes.home,
         'screen-heart': Routes.likes,
         'screen-chats': Routes.messages,
         'screen-profile': Routes.profile,

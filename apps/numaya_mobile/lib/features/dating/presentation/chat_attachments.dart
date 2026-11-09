@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,8 +5,9 @@ import '../../../core/design_system/design_system.dart';
 import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
 import '../data/media_picker.dart';
+import 'chat_voice.dart';
 
-/// Opens the attachment menu (photo, video, voice note) and returns the chosen attachment, or null
+/// Opens the attachment menu (library or camera) and returns the chosen photo, or null
 /// when cancelled. Picker failures are explained in a toast and return null.
 Future<MessageAttachment?> chooseAttachment(
   BuildContext context,
@@ -26,17 +25,15 @@ Future<MessageAttachment?> chooseAttachment(
       ),
       (
         icon: NumayaIcons.camera,
-        label: l10n.chatAttachVideo,
+        label: l10n.chatAttachTakePhoto,
         destructive: false,
       ),
-      (icon: NumayaIcons.mic, label: l10n.chatAttachVoice, destructive: false),
     ],
   );
   if (choice == null || !context.mounted) return null;
-  if (choice == 2) return showVoiceRecorderSheet(context);
   final picker = ref.read(mediaPickerProvider);
   try {
-    return choice == 0 ? await picker.pickPhoto() : await picker.pickVideo();
+    return choice == 0 ? await picker.pickPhoto() : await picker.takePhoto();
   } on MediaPickException catch (e) {
     if (context.mounted) {
       NumayaToast.show(context, mediaFailureMessage(l10n, e.reason));
@@ -149,10 +146,10 @@ class PendingAttachment extends StatelessWidget {
                     ClipRRect(
                       borderRadius: AppRadii.all(AppRadii.tag),
                       child: SizedBox.square(
-                        dimension: 48,
+                        dimension: 64,
                         child:
                             a.kind == AttachmentKind.photo && a.source != null
-                            ? AttachmentImage(attachment: a, width: 48)
+                            ? AttachmentImage(attachment: a, width: 64)
                             : ColoredBox(
                                 color: AppColors.canvas,
                                 child: Center(
@@ -276,14 +273,10 @@ class AttachmentMessage extends StatelessWidget {
           muted: muted,
         ),
       ),
-      AttachmentKind.voice => _FileCard(
-        width: width,
+      AttachmentKind.voice => VoiceMessage(
+        attachment: a,
         mine: mine,
-        leading: NumayaIcon(NumayaIcons.mic, size: 24, color: fg),
-        title: formatClock(a.duration ?? Duration.zero),
-        detail: l10n.chatVoiceDemo,
-        fg: fg,
-        muted: muted,
+        width: width,
       ),
     };
     return Align(
@@ -412,170 +405,6 @@ class _PhotoViewer extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-/// Demo voice recorder: a real timer and the recording states, but no microphone (this build has
-/// no audio plugin), so the note carries no sound and says so. Returns the note, or null.
-Future<MessageAttachment?> showVoiceRecorderSheet(BuildContext context) {
-  final l10n = context.l10n;
-  return showNumayaSheet<MessageAttachment>(
-    context: context,
-    title: l10n.voiceTitle,
-    closeLabel: l10n.cancel,
-    builder: (context) => const _VoiceRecorder(),
-  );
-}
-
-enum _VoiceStage { ready, recording, done }
-
-class _VoiceRecorder extends StatefulWidget {
-  const _VoiceRecorder();
-
-  @override
-  State<_VoiceRecorder> createState() => _VoiceRecorderState();
-}
-
-class _VoiceRecorderState extends State<_VoiceRecorder> {
-  static const max = Duration(minutes: 2);
-
-  _VoiceStage _stage = _VoiceStage.ready;
-  int _seconds = 0;
-  Timer? _timer;
-  bool _tooShort = false;
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  void _start() {
-    setState(() {
-      _stage = _VoiceStage.recording;
-      _seconds = 0;
-      _tooShort = false;
-    });
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      setState(() => _seconds++);
-      if (_seconds >= max.inSeconds) _stop();
-    });
-  }
-
-  void _stop() {
-    _timer?.cancel();
-    _timer = null;
-    setState(() {
-      if (_seconds < 1) {
-        _stage = _VoiceStage.ready;
-        _tooShort = true;
-      } else {
-        _stage = _VoiceStage.done;
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final recording = _stage == _VoiceStage.recording;
-    final time = formatClock(Duration(seconds: _seconds));
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        InfoCard(
-          icon: NumayaIcons.info,
-          title: l10n.voiceDemoTitle,
-          body: l10n.voiceDemoNote,
-        ),
-        const SizedBox(height: AppSpacing.s6),
-        Semantics(
-          liveRegion: true,
-          label: recording
-              ? l10n.voiceRecordingLabel(time)
-              : _stage == _VoiceStage.done
-              ? l10n.chatVoiceLabel(time)
-              : null,
-          child: ExcludeSemantics(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (recording) ...[
-                      Container(
-                        width: 10,
-                        height: 10,
-                        decoration: const BoxDecoration(
-                          color: AppColors.negative,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: AppSpacing.s2),
-                    ],
-                    Text(
-                      time,
-                      style: AppTypography.pageTitle.copyWith(
-                        fontFeatures: const [FontFeature.tabularFigures()],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.s1),
-                Text(
-                  switch (_stage) {
-                    _VoiceStage.ready => l10n.voiceMaxNote,
-                    _VoiceStage.recording => l10n.voiceRecording,
-                    _VoiceStage.done => l10n.chatVoiceDemo,
-                  },
-                  style: AppTypography.caption.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        if (_tooShort) ...[
-          const SizedBox(height: AppSpacing.s3),
-          FieldNote(l10n.voiceTooShort, tone: FieldNoteTone.error),
-        ],
-        const SizedBox(height: AppSpacing.s6),
-        switch (_stage) {
-          _VoiceStage.ready => NumayaButton(
-            label: l10n.voiceStart,
-            icon: NumayaIcons.mic,
-            onPressed: _start,
-          ),
-          _VoiceStage.recording => NumayaButton(
-            label: l10n.voiceStop,
-            onPressed: _stop,
-          ),
-          _VoiceStage.done => NumayaButton(
-            label: l10n.voiceUse,
-            onPressed: () => Navigator.of(context).pop(
-              MessageAttachment(
-                kind: AttachmentKind.voice,
-                duration: Duration(seconds: _seconds),
-                sample: true,
-              ),
-            ),
-          ),
-        },
-        if (_stage == _VoiceStage.done) ...[
-          const SizedBox(height: AppSpacing.s3),
-          NumayaButton(
-            label: l10n.voiceRedo,
-            variant: NumayaButtonVariant.secondary,
-            onPressed: () => setState(() {
-              _stage = _VoiceStage.ready;
-              _seconds = 0;
-            }),
-          ),
-        ],
-      ],
     );
   }
 }

@@ -22,6 +22,7 @@ import '../application/dating_controller.dart';
 import '../data/media_picker.dart';
 import '../domain/sample_people.dart';
 import 'chat_attachments.dart';
+import 'chat_voice.dart';
 import 'conversation_row.dart';
 import 'empty_conversations.dart';
 import 'match_avatar.dart';
@@ -418,6 +419,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   /// The message being answered (UI-036), set by a right swipe or the Reply action.
   DemoMessage? _replyTo;
+  bool _recording = false;
+  final _messageKeys = <int, GlobalKey>{};
 
   /// Messages whose exact time is pinned open by the Show time action (UI-035's alternative to
   /// the left swipe).
@@ -502,6 +505,34 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         );
     _toLatest();
     await sending;
+  }
+
+  /// Sends a finished voice note, answering the message being replied to.
+  Future<void> _sendVoice(MessageAttachment note) async {
+    final replyTo = _replyTo;
+    setState(() {
+      _recording = false;
+      _replyTo = null;
+    });
+    AppHaptics.fire(context, HapticMoment.commit);
+    final sending = ref
+        .read(datingProvider.notifier)
+        .send(widget.personId, '', attachment: note, replyToId: replyTo?.id);
+    _toLatest();
+    await sending;
+  }
+
+  void _goToMessage(int id) {
+    final target = _messageKeys[id]?.currentContext;
+    if (target != null) {
+      unawaited(
+        Scrollable.ensureVisible(
+          target,
+          alignment: 0.3,
+          duration: AppMotion.duration(context, AppMotion.state),
+        ),
+      );
+    }
   }
 
   Future<void> _attach() async {
@@ -886,6 +917,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         final prev = i > 0 ? messages[i - 1] : null;
         final grouped = prev != null && prev.mine == m.mine;
         final quoted = m.replyToId == null ? null : byId[m.replyToId];
+        final quoteGone = m.replyToId != null && quoted == null;
+        final quotedPhoto =
+            quoted?.attachment?.kind == AttachmentKind.photo &&
+                quoted?.attachment?.source != null
+            ? quoted!.attachment
+            : null;
         final dimmed =
             m.status == MessageStatus.sending ||
             m.status == MessageStatus.waiting;
@@ -923,7 +960,31 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     replyAuthor: quoted == null
                         ? null
                         : (quoted.mine ? l10n.chatYou : person.name),
-                    replyText: quoted == null ? null : preview(quoted),
+                    replyText: quoteGone
+                        ? l10n.chatQuoteUnavailable
+                        : (quoted == null ? null : preview(quoted)),
+                    quoteStyle: switch (ref.watch(
+                      labVariantProvider('v6-quote-style'),
+                    )) {
+                      'A' => QuoteStyle.stripe,
+                      'B' => QuoteStyle.plain,
+                      _ => QuoteStyle.block,
+                    },
+                    replyThumbnail: quotedPhoto == null
+                        ? null
+                        : ClipRRect(
+                            borderRadius: AppRadii.all(AppRadii.tag),
+                            child: SizedBox.square(
+                              dimension: 36,
+                              child: AttachmentImage(
+                                attachment: quotedPhoto,
+                                width: 36,
+                              ),
+                            ),
+                          ),
+                    onQuoteTap: quoted == null
+                        ? null
+                        : () => _goToMessage(quoted.id),
                   ),
                 ),
               );
@@ -931,7 +992,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         // and the screen-reader actions offer both without a gesture.
         final time = DateFormat('HH:mm').format(m.at);
         final swipeable = SwipeableMessage(
-          key: ValueKey('message-${m.id}'),
+          key: _messageKeys.putIfAbsent(
+            m.id,
+            () => GlobalKey(debugLabel: 'message-${m.id}'),
+          ),
           mine: m.mine,
           time: time,
           timeShown: _timeShown.contains(m.id),
@@ -1168,6 +1232,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                               if (r.text.isNotEmpty) r.text,
                                             ].join('. '),
                                       cancelLabel: l10n.chatCancelReply,
+                                      thumbnail:
+                                          r.attachment?.kind ==
+                                                  AttachmentKind.photo &&
+                                              r.attachment?.source != null
+                                          ? ClipRRect(
+                                              borderRadius: AppRadii.all(
+                                                AppRadii.tag,
+                                              ),
+                                              child: SizedBox.square(
+                                                dimension: 36,
+                                                child: AttachmentImage(
+                                                  attachment: r.attachment!,
+                                                  width: 36,
+                                                ),
+                                              ),
+                                            )
+                                          : null,
                                       onCancel: () =>
                                           setState(() => _replyTo = null),
                                     ),
@@ -1190,27 +1271,84 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                     const SizedBox(height: AppSpacing.s2),
                                   ],
                                   // UI-041: no demo footer under the composer.
-                                  Composer(
-                                    controller: _text,
-                                    focusNode: _focus,
-                                    placeholder: _pending == null
-                                        ? l10n.chatPlaceholder(person.name)
-                                        : l10n.chatCaptionPlaceholder,
-                                    sendLabel: l10n.chatSend,
-                                    onSend: _send,
-                                    hasAttachment: _pending != null,
-                                    enabled: controller.canSendMore(person.id),
-                                    // PRD 01: chat is text and emoji only in the MVP; attachments
-                                    // stay dormant behind ReleaseScope.chatAttachments.
-                                    leading: ref.watch(chatAttachmentsProvider)
-                                        ? NavIconButton(
-                                            icon: NumayaIcons.plus,
-                                            label: l10n.chatAttach,
-                                            style: NavButtonStyle.plain,
-                                            onPressed: _attach,
-                                          )
-                                        : null,
-                                  ),
+                                  if (_recording)
+                                    VoiceRecorderBar(
+                                      onClose: () =>
+                                          setState(() => _recording = false),
+                                      onSend: _sendVoice,
+                                    )
+                                  else
+                                    Composer(
+                                      controller: _text,
+                                      focusNode: _focus,
+                                      placeholder: _pending == null
+                                          ? l10n.chatPlaceholder(person.name)
+                                          : l10n.chatCaptionPlaceholder,
+                                      sendLabel: l10n.chatSend,
+                                      onSend: _send,
+                                      hasAttachment: _pending != null,
+                                      idleAction:
+                                          ref.watch(chatAttachmentsProvider) &&
+                                              controller.canSendMore(
+                                                person.id,
+                                              ) &&
+                                              ref.watch(
+                                                    labVariantProvider(
+                                                      'v6-composer',
+                                                    ),
+                                                  ) !=
+                                                  'A'
+                                          ? NavIconButton(
+                                              key: const ValueKey('chat-voice'),
+                                              icon: NumayaIcons.mic,
+                                              label: l10n.chatRecordVoice,
+                                              style: NavButtonStyle.plain,
+                                              onPressed: () {
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                                setState(
+                                                  () => _recording = true,
+                                                );
+                                              },
+                                            )
+                                          : null,
+                                      enabled: controller.canSendMore(
+                                        person.id,
+                                      ),
+                                      // PRD 01: chat is text and emoji only in the MVP; attachments
+                                      // stay dormant behind ReleaseScope.chatAttachments.
+                                      leading:
+                                          ref.watch(chatAttachmentsProvider)
+                                          ? Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                NavIconButton(
+                                                  icon: NumayaIcons.plus,
+                                                  label: l10n.chatAttach,
+                                                  style: NavButtonStyle.plain,
+                                                  onPressed: _attach,
+                                                ),
+                                                if (ref.watch(
+                                                      labVariantProvider(
+                                                        'v6-composer',
+                                                      ),
+                                                    ) ==
+                                                    'A')
+                                                  NavIconButton(
+                                                    key: const ValueKey(
+                                                      'chat-voice',
+                                                    ),
+                                                    icon: NumayaIcons.mic,
+                                                    label: l10n.chatRecordVoice,
+                                                    style: NavButtonStyle.plain,
+                                                    onPressed: () => setState(
+                                                      () => _recording = true,
+                                                    ),
+                                                  ),
+                                              ],
+                                            )
+                                          : null,
+                                    ),
                                 ],
                               ),
                             ),

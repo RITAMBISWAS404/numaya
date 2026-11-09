@@ -91,7 +91,7 @@ abstract final class MonoColors {
   static const Color errorBase = Color(0xFFF63A3A);
 
   /// Ente warning/darker: error text, destructive labels and the solid destructive fill.
-  static const Color danger = Color(0xFFC52E2E);
+  static const Color danger = Color(0xFFC22D2D);
 
   /// Filled error icon on white, canvas or the subtle tint (4.14:1 on the tint).
   static const Color dangerIcon = Color(0xFFDD3434);
@@ -101,7 +101,7 @@ abstract final class MonoColors {
   static const Color successBase = Color(0xFF08C225);
 
   /// Ente primary/darker: success text and the solid success badge.
-  static const Color success = Color(0xFF057C18);
+  static const Color success = Color(0xFF047917);
 
   /// Filled success icon (3.68:1 on its tint).
   static const Color successIcon = Color(0xFF069D1E);
@@ -112,7 +112,7 @@ abstract final class MonoColors {
   static const Color warningBase = Color(0xFFF08A1E);
 
   /// Derived from Ente caution/default (Ente has no darker role): warning text.
-  static const Color warning = Color(0xFF9E5B14);
+  static const Color warning = Color(0xFF985712);
 
   /// Derived from Ente caution/default: filled warning icon, at least 3:1 on white.
   static const Color warningIcon = Color(0xFFBB6C17);

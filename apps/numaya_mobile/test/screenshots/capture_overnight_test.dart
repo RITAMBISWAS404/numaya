@@ -37,10 +37,7 @@ void main() {
     }
 
     Future<void> choose(String option) async {
-      await tapOn(
-        tester,
-        find.bySemanticsLabel('Add a photo, video or voice note'),
-      );
+      await tapOn(tester, find.bySemanticsLabel('Add a photo'));
       await tester.pump(const Duration(milliseconds: 600));
       if (option == 'Photo') await shot('01-attach-menu');
       await tester.tap(find.text(option).last);

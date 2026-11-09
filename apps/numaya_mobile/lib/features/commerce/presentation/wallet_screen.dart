@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../lab/lab_registry.dart';
 import '../../premium/application/premium_controller.dart';
 import '../application/economy_controller.dart';
 import '../domain/credit_ledger.dart';
@@ -52,11 +53,38 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
-          MetricTile(
-            label: l10n.walletTitle,
-            value: '${ledger.total}',
-            unit: l10n.walletUnit(ledger.total),
-          ),
+          if (ref.watch(labVariantProvider('v6-wallet-header')) == 'A')
+            Container(
+              padding: const EdgeInsets.all(AppLayout.heroPadding),
+              decoration: BoxDecoration(
+                color: AppColors.accent,
+                borderRadius: AppRadii.all(AppRadii.heroCard),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.walletTitle,
+                    style: AppTypography.bodySm.copyWith(
+                      color: AppColors.accentForeground,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.s1),
+                  Text(
+                    '${ledger.total} ${l10n.walletUnit(ledger.total)}',
+                    style: AppTypography.pageTitle.copyWith(
+                      color: AppColors.accentForeground,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else
+            MetricTile(
+              label: l10n.walletTitle,
+              value: '${ledger.total}',
+              unit: l10n.walletUnit(ledger.total),
+            ),
           const SizedBox(height: AppSpacing.sectionGap),
           ListGroup(
             footnote: l10n.walletOrder,
