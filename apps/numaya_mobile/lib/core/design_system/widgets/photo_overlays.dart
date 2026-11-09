@@ -102,6 +102,15 @@ class PhotoPill extends StatelessWidget {
   );
 }
 
+/// White type straight on a photo: a tight shadow holds the letterforms over bright patches and a
+/// wide one softens the area around them. Used with [PhotoScrim] on every name over a photo.
+abstract final class PhotoText {
+  static const List<Shadow> shadows = [
+    Shadow(color: Color(0x8C000000), blurRadius: 3, offset: Offset(0, 1)),
+    Shadow(color: Color(0x66000000), blurRadius: 16),
+  ];
+}
+
 /// A compact backing for a name or title over a photo (V4 rule IMG-3). The photo gradient is held
 /// under 25%, which cannot keep white text readable on a bright or busy crop, so the text carries
 /// its own hugging glass instead of a dark band across the image.

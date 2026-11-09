@@ -242,8 +242,8 @@ void main() {
       }
     });
 
-    test('supporting icons are the lighter control grey at 3:1 on cards and the page', () {
-      expect(AppColors.iconSupporting, const Color(0xFF8A8A8A));
+    test('supporting icons are the readable grey #666666 on cards and the page (V5 D05)', () {
+      expect(AppColors.iconSupporting, const Color(0xFF666666));
       expect(
         ratio(AppColors.iconSupporting, AppColors.surface),
         greaterThanOrEqualTo(3),

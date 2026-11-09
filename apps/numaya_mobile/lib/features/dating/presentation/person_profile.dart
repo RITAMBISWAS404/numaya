@@ -144,10 +144,21 @@ class PersonHeroCard extends StatelessWidget {
                               ),
                             ),
                           ),
-                          _ => PhotoScrim(
+                          // P: the compact glass label, kept as an alternative.
+                          'P' => PhotoScrim(
                             fade: 48,
                             padding: inset,
                             child: _overlayIdentity(context, l10n),
+                          ),
+                          // G (default): a smooth gradient behind the name, no backing.
+                          _ => PhotoScrim(
+                            fade: 96,
+                            padding: inset,
+                            child: _overlayIdentity(
+                              context,
+                              l10n,
+                              backed: false,
+                            ),
                           ),
                         };
                       },
@@ -286,6 +297,7 @@ class PersonHeroCard extends StatelessWidget {
       fontSize: large ? 24 : 28,
       height: large ? 30 / 24 : 36 / 28,
       color: AppColors.inkForeground,
+      shadows: backed ? null : PhotoText.shadows,
     );
     final name = Text(
       showAge && person.age > 0
@@ -335,22 +347,25 @@ class PersonHeroCard extends StatelessWidget {
             child: Text.rich(
               TextSpan(
                 children: [
-                  const WidgetSpan(
-                    alignment: PlaceholderAlignment.middle,
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 6),
-                      child: NumayaIcon(
-                        NumayaIcons.user,
-                        size: AppSizes.iconSm,
-                        color: AppColors.inkForeground,
+                  // The glyph only earns its place on a backing; on the photo it adds noise.
+                  if (backed)
+                    const WidgetSpan(
+                      alignment: PlaceholderAlignment.middle,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 6),
+                        child: NumayaIcon(
+                          NumayaIcons.user,
+                          size: AppSizes.iconSm,
+                          color: AppColors.inkForeground,
+                        ),
                       ),
                     ),
-                  ),
                   TextSpan(text: person.job!),
                 ],
               ),
               style: AppTypography.body.copyWith(
                 color: AppColors.inkForeground,
+                shadows: backed ? null : PhotoText.shadows,
               ),
             ),
           ),

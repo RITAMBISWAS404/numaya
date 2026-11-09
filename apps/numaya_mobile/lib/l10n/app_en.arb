@@ -2548,6 +2548,13 @@
       "name": {}
     }
   },
+  "complimentSentTitle": "Compliment sent",
+  "complimentSentBody": "If {name} replies, a chat opens. Until then, you can’t send them another.",
+  "@complimentSentBody": {"placeholders": {"name": {"type": "String"}}},
+  "complimentDiscardTitle": "Discard your Compliment?",
+  "complimentDiscardBody": "What you’ve written won’t be saved. No credit is used.",
+  "complimentDiscard": "Discard",
+  "complimentKeepWriting": "Keep writing",
   "complimentOnPhoto": "On their photo",
   "complimentOnPrompt": "On their prompt",
   "complimentFieldLabel": "Your Compliment",
@@ -2571,7 +2578,7 @@
       }
     }
   },
-  "complimentRule": "{name} can reply to start a chat. You can send one Compliment to each person.",
+  "complimentRule": "A chat opens only if {name} replies.",
   "@complimentRule": {
     "placeholders": {
       "name": {}

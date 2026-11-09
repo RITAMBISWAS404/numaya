@@ -8590,6 +8590,42 @@ abstract class AppLocalizations {
   /// **'Compliment {name}'**
   String complimentTitle(Object name);
 
+  /// No description provided for @complimentSentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment sent'**
+  String get complimentSentTitle;
+
+  /// No description provided for @complimentSentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If {name} replies, a chat opens. Until then, you can’t send them another.'**
+  String complimentSentBody(String name);
+
+  /// No description provided for @complimentDiscardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard your Compliment?'**
+  String get complimentDiscardTitle;
+
+  /// No description provided for @complimentDiscardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'What you’ve written won’t be saved. No credit is used.'**
+  String get complimentDiscardBody;
+
+  /// No description provided for @complimentDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get complimentDiscard;
+
+  /// No description provided for @complimentKeepWriting.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep writing'**
+  String get complimentKeepWriting;
+
   /// No description provided for @complimentOnPhoto.
   ///
   /// In en, this message translates to:
@@ -8629,7 +8665,7 @@ abstract class AppLocalizations {
   /// No description provided for @complimentRule.
   ///
   /// In en, this message translates to:
-  /// **'{name} can reply to start a chat. You can send one Compliment to each person.'**
+  /// **'A chat opens only if {name} replies.'**
   String complimentRule(Object name);
 
   /// No description provided for @complimentSend.

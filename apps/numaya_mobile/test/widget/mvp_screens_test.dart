@@ -113,7 +113,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 600));
     await tester.pump(const Duration(milliseconds: 600));
     expect(c.read(creditBalanceProvider), before - 1);
-    expect(find.text('Compliment sent to ${first.name}'), findsOneWidget);
+    expect(find.text('Compliment sent'), findsOneWidget);
     // The profile left the deck.
     expect(
       c.read(datingProvider.notifier).queue().map((p) => p.id),

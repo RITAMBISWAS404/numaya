@@ -1669,7 +1669,7 @@ class PhotoScrim extends StatelessWidget {
   const PhotoScrim({
     super.key,
     required this.child,
-    this.fade = 40,
+    this.fade = 72,
     this.padding = EdgeInsets.zero,
   });
 
@@ -1686,10 +1686,18 @@ class PhotoScrim extends StatelessWidget {
         child: IgnorePointer(
           child: DecoratedBox(
             decoration: BoxDecoration(
+              // Eased, so no edge shows where the gradient ends (V5 D04).
               gradient: LinearGradient(
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
-                colors: [AppColors.photoScrimEdge, Color(0x00000000)],
+                colors: [
+                  AppColors.photoScrimEdge,
+                  Color(0x29000000),
+                  Color(0x14000000),
+                  Color(0x05000000),
+                  Color(0x00000000),
+                ],
+                stops: [0, 0.34, 0.62, 0.86, 1],
               ),
             ),
           ),

@@ -96,10 +96,7 @@ void main() {
               find.descendant(of: bar, matching: find.byType(NumayaIcon)),
             )
             .toList();
-        expect(
-          [for (final i in icons) i.filled],
-          [false, false, false, true],
-        );
+        expect([for (final i in icons) i.filled], [false, false, false, true]);
         expect(icons.last.color, AppColors.iconSelected);
         expect(icons.first.color, AppColors.iconInactive);
         handle.dispose();

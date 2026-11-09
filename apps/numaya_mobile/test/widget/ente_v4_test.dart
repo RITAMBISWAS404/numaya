@@ -32,8 +32,8 @@ void main() {
       expect(ratio(AppColors.inkForeground, worst), greaterThanOrEqualTo(4.5));
     });
 
-    test('the gradient edge is about 10% black, under the 25% cap', () {
-      expect(AppColors.photoScrimEdge.a, closeTo(0.10, 0.01));
+    test('the gradient peak is 24% black, under the 25% cap (V5 D04)', () {
+      expect(AppColors.photoScrimEdge.a, closeTo(0.24, 0.01));
       expect(AppColors.photoScrimEdge.a, lessThan(0.25));
     });
 
@@ -140,7 +140,7 @@ void main() {
         labGroup('v4-event-detail').ids,
         containsAll(['G', 'O', 'I', 'C']),
       );
-      expect(labGroup('v4-photo-label').proposed, 'P');
+      expect(labGroup('v4-photo-label').proposed, 'G');
       expect(labGroup('v4-photo-label').ids, contains('O'));
       expect(labGroup('v4-welcome').ids, contains('O'));
     });

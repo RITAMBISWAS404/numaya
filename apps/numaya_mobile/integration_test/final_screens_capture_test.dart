@@ -12,13 +12,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
+import 'package:numaya_mobile/core/connectivity/connectivity.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/core/media/demo_photos.dart';
 import 'package:numaya_mobile/features/auth/application/session_controller.dart';
 import 'package:numaya_mobile/features/auth/application/session_expiry.dart';
 import 'package:numaya_mobile/features/commerce/application/economy_controller.dart';
+import 'package:numaya_mobile/features/compliments/application/compliments_controller.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
-import 'package:numaya_mobile/features/events_mvp/application/events_mvp_controller.dart';
 import 'package:numaya_mobile/features/help/domain/help_articles.dart';
 import 'package:numaya_mobile/features/home/application/discovery_filters.dart';
 import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
@@ -35,13 +36,12 @@ const _likes = '03-Likes-Compliments';
 const _messages = '04-Messages';
 const _chat = '05-Chat';
 const _profile = '06-Profile';
-const _events = '07-Events';
-const _streak = '08-Streaks';
-const _wallet = '09-Wallet-Store';
-const _premium = '10-Premium';
-const _settings = '11-Settings';
-const _safety = '12-Safety-Help-Legal';
-const _account = '13-Account-States';
+const _streak = '07-Streaks';
+const _wallet = '08-Wallet-Store';
+const _premium = '09-Premium';
+const _settings = '10-Settings';
+const _safety = '11-Safety-Help-Legal';
+const _account = '12-Account-States';
 
 const _only = String.fromEnvironment('ONLY');
 final _ack = File('/data/user/0/com.numaya.numaya_mobile/cache/ui_review_ack');
@@ -1012,214 +1012,6 @@ void main() {
       });
     }
 
-    // Events.
-    {
-      const f = _events;
-      const board = 'ev-board-games-bandra';
-      await h.page(
-        f,
-        'Events-feed',
-        'Mumbai, populated',
-        Routes.events,
-        'Tab: Events',
-      );
-      await h.sheet(
-        f,
-        'City-picker-sheet',
-        'Sheet open',
-        'Events > City',
-        () async {
-          await h.go(Routes.events);
-          await h.tapKey('ev-city');
-        },
-      );
-      await h.step('Empty city', () async {
-        c.read(eventsMvpProvider.notifier).setCity('Jaipur');
-        await h.go(Routes.home);
-        await h.go(Routes.events);
-        await h.shot(
-          f,
-          'Events-empty-city',
-          'No events in Jaipur',
-          'Events > City > Jaipur',
-        );
-        c.read(eventsMvpProvider.notifier).setCity('Mumbai');
-      });
-      await h.page(
-        f,
-        'Event-detail',
-        'Places available',
-        '${Routes.evEvent}/$board',
-        'Events > Board games',
-      );
-      await h.page(
-        f,
-        'Event-detail-full',
-        'Full',
-        '${Routes.evEvent}/ev-coffee-indiranagar',
-        'Events > Saturday coffee',
-      );
-      await h.page(
-        f,
-        'Event-detail-cancelled',
-        'Cancelled',
-        '${Routes.evEvent}/ev-pottery-hauz-khas',
-        'Events > Pottery',
-      );
-      await h.page(
-        f,
-        'Event-detail-reserved',
-        'Already reserved',
-        '${Routes.evEvent}/ev-sunrise-walk',
-        'My events > Sunrise walk',
-      );
-      await h.sheet(
-        f,
-        'Report-event-sheet',
-        'Sheet open',
-        'Event > Report or get help',
-        () async {
-          await h.go('${Routes.evEvent}/$board');
-          await h.tapLabel('Report or get help');
-        },
-      );
-      await h.step('Reserve', () async {
-        await h.go('${Routes.evEvent}/$board/reserve');
-        await h.shot(
-          f,
-          'Reserve',
-          'Before acknowledging',
-          'Event > Reserve a free place',
-        );
-        await h.tapKey('ev-ack');
-        await h.shot(
-          f,
-          'Reserve-acknowledged',
-          'Ready to confirm',
-          'Reserve > Tick acknowledgement',
-        );
-        await h.tapKey('ev-confirm');
-        await h.wait(900);
-        await h.shot(
-          f,
-          'Reserve-confirmed',
-          'Place reserved',
-          'Reserve > Confirm',
-        );
-      });
-      await h.page(
-        f,
-        'My-events-upcoming',
-        'Upcoming',
-        Routes.evMine,
-        'Events > My events',
-      );
-      await h.page(
-        f,
-        'Reservation',
-        'Confirmed',
-        '${Routes.evReservation}/$board',
-        'My events > An event',
-      );
-      await h.page(
-        f,
-        'Notice-time-or-place-change',
-        'Reconfirm needed',
-        '${Routes.evNotice}/n-walk-v2',
-        'My events > Updates',
-      );
-      await h.step('Reconfirmed', () async {
-        await h.go('${Routes.evNotice}/n-walk-v2');
-        await h.tapKey('ev-reconfirm');
-        await h.shot(
-          f,
-          'Notice-reconfirmed',
-          'Place kept',
-          'Update > Keep my place',
-        );
-      });
-      await h.page(
-        f,
-        'Notice-announcement',
-        'Ordinary update',
-        '${Routes.evNotice}/n-cycle-1',
-        'Reservation > Update',
-      );
-      await h.page(
-        f,
-        'Notice-event-cancelled',
-        'Event cancelled',
-        '${Routes.evNotice}/n-pottery-cancel',
-        'My events > Update',
-      );
-      await h.step('Cancel', () async {
-        await h.go('${Routes.evReservation}/$board');
-        await tester.scrollUntilVisible(
-          find.byKey(const ValueKey('ev-cancel')),
-          200,
-          scrollable: find.byType(Scrollable).first,
-        );
-        await h.tapKey('ev-cancel');
-        await h.shot(
-          f,
-          'Cancel-reservation-sheet',
-          'Confirm',
-          'Reservation > Cancel reservation',
-          sheet: true,
-        );
-        await h.tapKey('ev-cancel-confirm');
-        await h.go(Routes.evMine);
-        await h.tapKey('ev-mine-cancelled');
-        await h.shot(
-          f,
-          'My-events-cancelled',
-          'Cancelled tab',
-          'My events > Cancelled',
-        );
-        await h.tapKey('ev-mine-past');
-        await h.shot(f, 'My-events-past', 'Past tab', 'My events > Past');
-      });
-      await h.step('Met', () async {
-        await h.go('${Routes.evMet}/ev-book-swap');
-        await h.shot(
-          f,
-          'People-I-met',
-          'Populated',
-          'Past event > People I met',
-        );
-        await h.tapKey('ev-interested-tomas');
-        await h.shot(
-          f,
-          'People-I-met-interest-sent',
-          'Interest sent',
-          'People I met > Interested',
-        );
-        await h.tapKey('ev-interested-sam');
-        await h.shot(
-          f,
-          'Mutual-interest-sheet',
-          'Mutual',
-          'People I met > Interested in Sam',
-          sheet: true,
-        );
-        await h.pop();
-      });
-      await h.page(
-        f,
-        'Event-proposals',
-        'Pending decision O1',
-        Routes.evProposals,
-        'Events > Propose an event',
-      );
-      await h.page(
-        f,
-        'Event-proposal-form',
-        'Returned with a note',
-        '${Routes.evPropose}/p-chess',
-        'Proposals > Chess',
-      );
-    }
-
     // Streak, wallet, store.
     await h.page(
       _streak,
@@ -1533,26 +1325,71 @@ void main() {
     print('@@DONE@@');
   });
 
-  // Run with ONLY=fix after the full pass: states that need a reset first or a side effect, numbered
-  // to land in their flow folders.
-  testWidgets('supplementary states', (tester) async {
-    if (_only != 'fix') return;
+  // The three-screen benchmark: photo identity, Compliment, one settings grouping.
+  testWidgets('benchmark pilot', (tester) async {
+    if (_only != 'pilot') return;
     final c = await quickStartApp(tester);
     c.read(onboardingProvider.notifier).loadSample();
     final h = _H(tester, c);
     await h.wait(1500);
-    _counts[_onboarding] = 23;
-    await h.sheet(
-      _onboarding,
-      'Prompt-answer-sheet',
-      'Sheet open',
-      'Prompt browser > A prompt',
-      () async {
-        await h.go('${Routes.prompt}?slot=1');
-        await h.tapText('A green flag');
-      },
+    const f = 'pilot';
+    Future<void> one(String name, String path) => h.step(name, () async {
+      await h.go(Routes.messages);
+      await h.go(path);
+      await h.shot(f, name, 'pilot', path, scroll: false);
+    });
+    await one('Discover', Routes.home);
+    for (final p in ['lea', 'ines', 'noor', 'maya', 'sam', 'kemi', 'mira']) {
+      await one('Photo-$p', '${Routes.person}/$p');
+    }
+    await one('Profile', Routes.profile);
+    await one('Settings', Routes.settings);
+    await one('Likes-premium', Routes.likes);
+    await one('Match', '${Routes.match}/maya');
+    await one(
+      'Composer-prompt',
+      '${Routes.compliment}/noor?kind=prompt&index=0',
     );
-    _counts[_onboarding] = 29;
+    await one('Composer-photo', '${Routes.compliment}/lea?kind=photo&index=0');
+    await h.step('typed', () async {
+      await h.go('${Routes.compliment}/noor?kind=prompt&index=0');
+      await h.type(
+        find.byKey(const ValueKey('compliment-field')),
+        'Your answer is exactly my kind of Sunday. Croissants for dinner, then a long argument about it.',
+      );
+      await h.shot(
+        f,
+        'Composer-typed-keyboard',
+        'keyboard',
+        'composer',
+        keepFocus: true,
+        scroll: false,
+      );
+      await tester.tap(find.byKey(const ValueKey('compliment-send')));
+      await h.wait(1500);
+      await h.shot(f, 'Composer-sent', 'sent', 'composer', scroll: false);
+      await h.go(Routes.home);
+    });
+    await one(
+      'Composer-already-sent',
+      '${Routes.compliment}/noor?kind=prompt&index=0',
+    );
+    await one('Compliments', '${Routes.likes}?tab=compliments');
+    await one('Request-photo', '${Routes.request}/seed-sam');
+    await one('Request-prompt', '${Routes.request}/seed-chloe');
+    // ignore: avoid_print
+    print('@@DONE@@');
+  });
+
+  // States that need a reset first or a side effect. Numbers start high so they cannot collide; the
+  // phone-folder order places each beside its related screen (tool/final_screens).
+  testWidgets('supplementary states', (tester) async {
+    if (_only.isNotEmpty && _only != 'fix') return;
+    final c = await quickStartApp(tester);
+    c.read(onboardingProvider.notifier).loadSample();
+    final h = _H(tester, c);
+    await h.wait(1500);
+    _counts[_onboarding] = 40;
     await h.sheet(
       _onboarding,
       'Photo-options-menu',
@@ -1563,7 +1400,90 @@ void main() {
         await h.tapLabel('Photo 2 options');
       },
     );
-    _counts[_chat] = 11;
+    _counts[_likes] = 40;
+    const noor = '${Routes.compliment}/noor?kind=prompt&index=0';
+    const typed = 'Your answer is exactly my kind of Sunday.';
+    await h.step('Composer keyboard', () async {
+      await h.go(Routes.home);
+      await h.go(noor);
+      await h.type(find.byKey(const ValueKey('compliment-field')), typed);
+      await h.shot(
+        _likes,
+        'Send-compliment-keyboard-open',
+        'Intentional: keyboard open, text entered',
+        'Compliment composer',
+        keepFocus: true,
+        scroll: false,
+      );
+    });
+    await h.step('Composer discard', () async {
+      await tapOn(tester, find.bySemanticsLabel('Close').first);
+      await h.wait(900);
+      await h.shot(
+        _likes,
+        'Send-compliment-discard-sheet',
+        'Confirm before losing text',
+        'Composer > Close with text',
+        sheet: true,
+      );
+      await h.tapText('Keep writing');
+    });
+    await h.step('Composer sent', () async {
+      await tester.tap(find.byKey(const ValueKey('compliment-send')));
+      await h.wait(1500);
+      await h.shot(
+        _likes,
+        'Send-compliment-sent',
+        'Confirmation, waiting for a reply',
+        'Composer > Send',
+        scroll: false,
+      );
+      await h.go(Routes.home);
+    });
+    await h.page(
+      _likes,
+      'Send-compliment-already-sent',
+      'One per person',
+      noor,
+      'Composer for someone already sent to',
+    );
+    await h.step('Composer failed', () async {
+      await h.go(Routes.home);
+      await h.go('${Routes.compliment}/lea?kind=photo&index=0');
+      await h.type(
+        find.byKey(const ValueKey('compliment-field')),
+        'That light is unreal.',
+      );
+      c.read(connectivityProvider.notifier).setOnline(false);
+      await h.wait(400);
+      await tester.tap(find.byKey(const ValueKey('compliment-send')));
+      await h.wait(1500);
+      await h.shot(
+        _likes,
+        'Send-compliment-failed',
+        'Send failed: words kept, no credit used',
+        'Composer > Send while offline',
+        scroll: false,
+      );
+      c.read(connectivityProvider.notifier).setOnline(true);
+      await h.go(Routes.home);
+    });
+    await h.step('Composer no credits', () async {
+      final economy = c.read(economyProvider.notifier);
+      for (var i = 0; c.read(creditBalanceProvider) > 0 && i < 20; i++) {
+        economy.spendCredit(key: 'capture-drain-$i', source: 'capture');
+      }
+      await h.go('${Routes.compliment}/lea?kind=photo&index=0');
+      await h.shot(
+        _likes,
+        'Send-compliment-no-credits',
+        'No credits: Get Compliments',
+        'Composer with no credits',
+        scroll: false,
+      );
+      await h.go(Routes.home);
+    });
+    _counts[_chat] = 40;
     await h.step('Reply', () async {
       await h.go(Routes.messages);
       await h.go('${Routes.chat}/priya');
@@ -1586,7 +1506,7 @@ void main() {
       );
       await h.go(Routes.messages);
     });
-    _counts[_settings] = 9;
+    _counts[_settings] = 40;
     await h.step('Delete confirm', () async {
       await h.go(Routes.deleteAccount);
       await h.tapText('I met someone');
@@ -1600,15 +1520,7 @@ void main() {
       );
       await h.pop();
     });
-    _counts[_safety] = 4;
-    await h.page(
-      _safety,
-      'Help-article',
-      'First article',
-      '${Routes.help}/${kHelpArticles.first.id.name}',
-      'Help centre > An article',
-    );
-    _counts[_safety] = 12;
+    _counts[_safety] = 40;
     await h.step('Support populated', () async {
       await h.go(Routes.helpContact);
       await h.tapText('My account');

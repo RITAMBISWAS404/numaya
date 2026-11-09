@@ -26,6 +26,7 @@ class ComplimentsController extends Notifier<List<Compliment>> {
 
   DateTime get _now => ref.read(clockProvider)();
   int _next = 1;
+  final _sending = <String>{};
 
   @override
   List<Compliment> build() {
@@ -117,8 +118,8 @@ class ComplimentsController extends Notifier<List<Compliment>> {
     );
   }
 
-  /// Sends a Compliment. The credit is spent only when the send is accepted; a failure refunds it.
-  /// Back or cancel before this call spends nothing.
+  /// Sends a Compliment. The credit is spent only once the send is accepted, so a failure or a
+  /// cancel spends nothing, and repeated taps cannot send or charge twice.
   Future<ComplimentSendResult> send({
     required String personId,
     required ComplimentTarget target,
@@ -129,23 +130,28 @@ class ComplimentsController extends Notifier<List<Compliment>> {
       return ComplimentSendResult.invalid;
     }
     if (blockFor(personId) != null) return ComplimentSendResult.notAllowed;
-    final id = 'c${_now.microsecondsSinceEpoch}-${_next++}';
-    final economy = ref.read(economyProvider.notifier);
-    final spend = economy.spendCredit(
-      key: 'compliment:$id',
-      source: 'compliment:$id',
-    );
-    if (spend.status == SpendStatus.insufficient) {
+    if (_sending.contains(personId)) return ComplimentSendResult.notAllowed;
+    if (ref.read(creditBalanceProvider) <= 0) {
       return ComplimentSendResult.insufficientCredits;
     }
-    await Future<void>.delayed(const Duration(milliseconds: 300));
+    _sending.add(personId);
+    try {
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    } finally {
+      _sending.remove(personId);
+    }
     if (!ref.mounted) return ComplimentSendResult.failed;
     final failed =
         !ref.read(connectivityProvider) ||
         ref.read(datingProvider).simulateErrors;
-    if (failed) {
-      economy.refundSpend('compliment:$id');
-      return ComplimentSendResult.failed;
+    if (failed) return ComplimentSendResult.failed;
+    // Accepted: the one debit. The key is per pair, so it can never charge twice.
+    final id = 'c${_now.microsecondsSinceEpoch}-${_next++}';
+    final spend = ref
+        .read(economyProvider.notifier)
+        .spendCredit(key: 'compliment:$personId', source: 'compliment:$id');
+    if (spend.status == SpendStatus.insufficient) {
+      return ComplimentSendResult.insufficientCredits;
     }
     state = [
       ...state,

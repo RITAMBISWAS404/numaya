@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart' show StringCharacters;
 
 /// Compliments (PRD 01/02): a contextual introduction of up to 150 characters on one photo or one
 /// prompt answer, sent before a match.
@@ -83,10 +84,14 @@ class Compliment {
 
 enum ComplimentProblem { empty, tooLong }
 
+/// The length a member sees: an emoji or an accented letter counts as one, surrounding space as
+/// none (docs/product/mvp-focus-v5/COMPLIMENT_CONTRACT.md).
+int complimentLength(String text) => text.trim().characters.length;
+
 ComplimentProblem? complimentProblem(String text, int maxLength) {
   final t = text.trim();
   if (t.isEmpty) return ComplimentProblem.empty;
-  if (t.runes.length > maxLength) return ComplimentProblem.tooLong;
+  if (complimentLength(t) > maxLength) return ComplimentProblem.tooLong;
   return null;
 }
 

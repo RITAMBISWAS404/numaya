@@ -4982,6 +4982,27 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get complimentSentTitle => 'Compliment sent';
+
+  @override
+  String complimentSentBody(String name) {
+    return 'If $name replies, a chat opens. Until then, you can’t send them another.';
+  }
+
+  @override
+  String get complimentDiscardTitle => 'Discard your Compliment?';
+
+  @override
+  String get complimentDiscardBody =>
+      'What you’ve written won’t be saved. No credit is used.';
+
+  @override
+  String get complimentDiscard => 'Discard';
+
+  @override
+  String get complimentKeepWriting => 'Keep writing';
+
+  @override
   String get complimentOnPhoto => 'On their photo';
 
   @override
@@ -5012,7 +5033,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String complimentRule(Object name) {
-    return '$name can reply to start a chat. You can send one Compliment to each person.';
+    return 'A chat opens only if $name replies.';
   }
 
   @override

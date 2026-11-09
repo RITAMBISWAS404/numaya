@@ -663,13 +663,19 @@ const List<LabGroup> kLabGroups = [
     question:
         'Is the name readable on any photo without darkening the picture?',
     usages: ['Discover and person profile photo'],
-    proposed: 'P',
+    proposed: 'G',
     variants: [
       LabVariant(
         _o,
         'Dark panel',
         'baseline',
         'The previous solid 55% panel behind the name; over the owner’s 25% gradient cap.',
+      ),
+      LabVariant(
+        'G',
+        'Smooth gradient',
+        'V5 default',
+        'The name sits straight on the photo over an eased gradient under 25%, with a soft text shadow.',
       ),
       LabVariant(
         'P',

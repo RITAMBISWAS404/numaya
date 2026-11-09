@@ -63,7 +63,7 @@ abstract final class MonoColors {
   /// An unselected icon that still works (the idle tabs): a light grey at 3.46:1 on white, above
   /// the 3:1 needed by meaningful non-text graphics (WCAG 1.4.11). Same value as [disabledText],
   /// a separate role so "idle" never reads as "unavailable" in code.
-  static const Color iconInactive = Color(0xFF8A8A8A);
+  static const Color iconInactive = Color(0xFF666666);
 
   // Purple: the Numaya brand (#7262C7, canonical in tokens/numaya.tokens.json `purple.600`).
   /// Primary actions, selected pills and segments, active tab, switch on, progress.
@@ -146,7 +146,7 @@ abstract final class MonoColors {
 
   /// The bottom edge of a photo text gradient (V4 rule IMG-2): 10% black fading to clear. Owner
   /// cap: under 25%. The gradient only settles the image; text carries its own glass backing.
-  static const Color photoScrimEdge = Color(0x1A000000);
+  static const Color photoScrimEdge = Color(0x3D000000);
 }
 
 /// Frosted navigation (frosted-navigation experiment, FN-04): the only glass in the app, on the
@@ -256,7 +256,7 @@ abstract final class MonoSizes {
 /// Spacing roles on the 4pt scale (LAYOUT_GUIDELINES.md).
 abstract final class MonoSpace {
   static const double gutter = 16;
-  static const double section = 24;
+  static const double section = 32;
   static const double cardPadding = 16;
   static const double heroPadding = 20;
   static const double item = 12;

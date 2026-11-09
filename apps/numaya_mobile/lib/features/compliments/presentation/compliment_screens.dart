@@ -100,6 +100,79 @@ class ComplimentReference extends StatelessWidget {
   }
 }
 
+/// The exact photo or prompt a Compliment is about, as one compact row: words first, then the
+/// picture at the end of the line, so the field or message below keeps the emphasis.
+class ComplimentContextRow extends StatelessWidget {
+  const ComplimentContextRow({
+    super.key,
+    required this.person,
+    required this.target,
+    this.available = true,
+    this.yours = false,
+  });
+
+  final SamplePerson person;
+  final ComplimentTarget target;
+  final bool available;
+  final bool yours;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final isPrompt = target.kind == ComplimentTargetKind.prompt;
+    final prompt = isPrompt ? promptAt(person, target.index) : null;
+    final exists = isPrompt ? prompt != null : target.index < person.photoCount;
+    if (!available || !exists) {
+      return Text(
+        l10n.complimentReferenceGone,
+        style: AppTypography.bodySm.copyWith(color: AppColors.textSecondary),
+      );
+    }
+    final caption = isPrompt
+        ? (yours ? l10n.requestOnYourPrompt : l10n.complimentOnPrompt)
+        : (yours ? l10n.requestOnYourPhoto : l10n.complimentOnPhoto);
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                prompt == null ? caption : '$caption · ${prompt.question}',
+                style: AppTypography.helper,
+              ),
+              if (prompt != null) ...[
+                const SizedBox(height: AppLayout.metaGap),
+                Text(
+                  prompt.answer,
+                  style: AppTypography.weight(
+                    AppTypography.body,
+                    AppTypography.semibold,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+        if (!isPrompt) ...[
+          const SizedBox(width: AppSpacing.s3),
+          ClipRRect(
+            borderRadius: AppRadii.all(AppRadii.tile),
+            child: SizedBox(
+              width: 56,
+              child: PhotoPlaceholder(
+                label: l10n.discoverPhotoLabel(person.name, target.index + 1),
+                aspectRatio: AppMedia.personPhoto,
+                child: personPhotoImage(person, target.index + 1),
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
 /// S14: write a Compliment of up to 150 characters on one photo or prompt. Shows the credit
 /// balance; with none, the button opens the Compliment pack. Sends once (the button locks while
 /// sending); closing the page spends nothing.
@@ -123,6 +196,9 @@ class _ComplimentComposerScreenState
   final _text = TextEditingController();
   bool _sending = false;
   bool _failed = false;
+  bool _sent = false;
+
+  bool get _dirty => !_sent && _text.text.trim().isNotEmpty;
 
   @override
   void initState() {
@@ -136,9 +212,45 @@ class _ComplimentComposerScreenState
     super.dispose();
   }
 
+  /// Leaving with words written asks first; nothing has been spent either way.
+  Future<void> _close() async {
+    if (!_dirty) {
+      context.pop();
+      return;
+    }
+    final l10n = context.l10n;
+    final discard = await showNumayaSheet<bool>(
+      context: context,
+      title: l10n.complimentDiscardTitle,
+      closeLabel: l10n.close,
+      builder: (sheet) => Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            l10n.complimentDiscardBody,
+            style: AppTypography.body.copyWith(color: AppColors.textSecondary),
+          ),
+          const SizedBox(height: AppSpacing.s5),
+          NumayaButton(
+            label: l10n.complimentKeepWriting,
+            onPressed: () => Navigator.of(sheet).pop(false),
+          ),
+          const SizedBox(height: AppSpacing.s3),
+          NumayaButton(
+            key: const ValueKey('compliment-discard'),
+            label: l10n.complimentDiscard,
+            variant: NumayaButtonVariant.secondary,
+            onPressed: () => Navigator.of(sheet).pop(true),
+          ),
+        ],
+      ),
+    );
+    if (discard == true && mounted) context.pop();
+  }
+
   Future<void> _send(SamplePerson person) async {
     if (_sending) return;
-    final l10n = context.l10n;
     setState(() {
       _sending = true;
       _failed = false;
@@ -161,8 +273,8 @@ class _ComplimentComposerScreenState
     switch (result) {
       case ComplimentSendResult.sent:
         AppHaptics.fire(context, HapticMoment.success);
-        context.pop();
-        NumayaToast.show(context, l10n.complimentSent(person.name));
+        FocusManager.instance.primaryFocus?.unfocus();
+        setState(() => _sent = true);
       case ComplimentSendResult.insufficientCredits:
         await context.push(Routes.storeCompliments);
       case ComplimentSendResult.failed:
@@ -180,7 +292,7 @@ class _ComplimentComposerScreenState
     ref.watch(complimentsProvider);
     final controller = ref.read(complimentsProvider.notifier);
     final top = NumayaTopBar(
-      onBack: () => context.pop(),
+      onBack: _close,
       backLabel: l10n.close,
       closeIcon: true,
     );
@@ -196,7 +308,7 @@ class _ComplimentComposerScreenState
     final max = controller.maxLength;
     final block = controller.blockFor(person.id);
     final problem = complimentProblem(_text.text, max);
-    final used = _text.text.trim().runes.length;
+    final used = complimentLength(_text.text);
     final blockText = switch (block) {
       ComplimentBlock.alreadySent => l10n.complimentAlreadySent(person.name),
       ComplimentBlock.alreadyReceived => l10n.complimentAlreadyReceived(
@@ -206,6 +318,59 @@ class _ComplimentComposerScreenState
       ComplimentBlock.unavailable => l10n.complimentUnavailable,
       null => null,
     };
+    if (_sent) {
+      return NumayaScreen(
+        top: NumayaTopBar(
+          onBack: () => context.pop(),
+          backLabel: l10n.close,
+          closeIcon: true,
+        ),
+        footer: NumayaButton(
+          key: const ValueKey('compliment-done'),
+          label: l10n.done,
+          onPressed: () => context.pop(),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: AppSpacing.s4),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: 48,
+                height: 48,
+                decoration: const BoxDecoration(
+                  color: AppColors.accent,
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: const NumayaIcon(
+                  NumayaIcons.check,
+                  size: AppSizes.iconMd,
+                  color: AppColors.accentForeground,
+                ),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.s4),
+            ScreenHeader(
+              title: l10n.complimentSentTitle,
+              lede: l10n.complimentSentBody(person.name),
+            ),
+            const SizedBox(height: AppSpacing.s5),
+            WhiteCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ComplimentContextRow(person: person, target: widget.target),
+                  const SizedBox(height: AppSpacing.s3),
+                  Text(_text.text.trim(), style: AppTypography.cardPrimary),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
     final Widget footer;
     if (blockText != null) {
       footer = NumayaButton(label: l10n.done, onPressed: () => context.pop());
@@ -222,46 +387,61 @@ class _ComplimentComposerScreenState
         onPressed: problem == null && !_sending ? () => _send(person) : null,
       );
     }
-    return NumayaScreen(
-      top: top,
-      footer: footer,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: AppSpacing.s4),
-          ScreenHeader(title: l10n.complimentTitle(person.name)),
-          const SizedBox(height: AppSpacing.s4),
-          ComplimentReference(person: person, target: widget.target),
-          const SizedBox(height: AppSpacing.s5),
-          if (blockText != null)
-            StatusBanner(title: blockText)
-          else ...[
-            if (_failed) ...[
-              StatusBanner(
-                tone: BannerTone.error,
-                title: l10n.complimentFailedTitle,
-                body: l10n.complimentFailedBody,
+    return PopScope(
+      canPop: !_dirty,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _close();
+      },
+      child: NumayaScreen(
+        top: top,
+        footer: footer,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: AppSpacing.s4),
+            ScreenHeader(title: l10n.complimentTitle(person.name)),
+            const SizedBox(height: AppSpacing.s4),
+            WhiteCard(
+              child: ComplimentContextRow(
+                person: person,
+                target: widget.target,
               ),
-              const SizedBox(height: AppSpacing.s4),
-            ],
-            NumayaTextField(
-              key: const ValueKey('compliment-field'),
-              label: l10n.complimentFieldLabel,
-              placeholder: l10n.complimentPlaceholder,
-              controller: _text,
-              maxLength: max,
-              enabled: !_sending,
-              error: problem == ComplimentProblem.tooLong
-                  ? l10n.complimentTooLong(max)
-                  : null,
-              hint: l10n.complimentCounter(used, max),
             ),
-            const SizedBox(height: AppSpacing.s3),
-            Text(l10n.complimentBalance(balance), style: AppTypography.bodySm),
-            const SizedBox(height: AppSpacing.s1),
-            Text(l10n.complimentRule(person.name), style: AppTypography.helper),
+            const SizedBox(height: AppSpacing.s4),
+            if (blockText != null)
+              StatusBanner(title: blockText)
+            else ...[
+              if (_failed) ...[
+                StatusBanner(
+                  tone: BannerTone.error,
+                  title: l10n.complimentFailedTitle,
+                  body: l10n.complimentFailedBody,
+                ),
+                const SizedBox(height: AppSpacing.s4),
+              ],
+              NumayaTextField(
+                key: const ValueKey('compliment-field'),
+                label: l10n.complimentFieldLabel,
+                placeholder: l10n.complimentPlaceholder,
+                controller: _text,
+                maxLength: max,
+                multiline: true,
+                autofocus: balance > 0,
+                textCapitalization: TextCapitalization.sentences,
+                enabled: !_sending,
+                error: problem == ComplimentProblem.tooLong
+                    ? l10n.complimentTooLong(max)
+                    : null,
+                trailingNote: l10n.complimentCounter(used, max),
+              ),
+              const SizedBox(height: AppSpacing.s2),
+              Text(
+                '${l10n.complimentBalance(balance)} ${l10n.complimentRule(person.name)}',
+                style: AppTypography.helper,
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
@@ -441,15 +621,22 @@ class _RequestScreenState extends ConsumerState<RequestScreen> {
             ],
           ),
           const SizedBox(height: AppSpacing.s5),
-          ComplimentReference(
-            person: ref.watch(ownProfilePersonProvider),
-            target: c.target,
-            available: c.referenceAvailable,
-            yours: true,
+          WhiteCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(c.text, style: AppTypography.cardPrimary),
+                const SizedBox(height: AppSpacing.s3),
+                ComplimentContextRow(
+                  person: ref.watch(ownProfilePersonProvider),
+                  target: c.target,
+                  available: c.referenceAvailable,
+                  yours: true,
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: AppSpacing.s4),
-          WhiteCard(child: Text(c.text, style: AppTypography.cardPrimary)),
-          const SizedBox(height: AppSpacing.s5),
           NumayaButtonGroup(
             children: [
               NumayaButton(

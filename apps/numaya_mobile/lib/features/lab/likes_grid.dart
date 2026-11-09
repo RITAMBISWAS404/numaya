@@ -44,7 +44,12 @@ class LikesGrid extends ConsumerWidget {
                         AppTypography.row,
                         AppTypography.semibold,
                       ))
-                  .copyWith(color: color),
+                  .copyWith(
+                    color: color,
+                    shadows: color == AppColors.accentForeground
+                        ? PhotoText.shadows
+                        : null,
+                  ),
         );
     Widget photo(SamplePerson p, {double ratio = 3 / 4}) => ClipRRect(
       borderRadius: AppRadii.all(AppRadii.card),
@@ -221,13 +226,9 @@ class LikesGrid extends ConsumerWidget {
                                           ),
                                           child: Align(
                                             alignment: Alignment.bottomLeft,
-                                            child: PhotoLabel(
-                                              compact: true,
-                                              child: name(
-                                                i.person,
-                                                color:
-                                                    AppColors.accentForeground,
-                                              ),
+                                            child: name(
+                                              i.person,
+                                              color: AppColors.accentForeground,
                                             ),
                                           ),
                                         ),
