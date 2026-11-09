@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Numaya Design Choices</title>
+<style>
+:root{--bg:#f4f4f4;--card:#fff;--ink:#111;--muted:#5f5f5f;--brand:#5b4bb0;--solid:#7262c7;--line:#e2e2e2;--warn:#8a4f0f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,"Segoe UI",sans-serif}
+header{padding:20px 20px 12px;max-width:1500px;margin:auto}h1{margin:0 0 4px;font-size:26px}.meta{color:var(--muted);font-size:13px;margin:0}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1500px;margin:auto;padding:10px 20px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+select,input[type=search]{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:inherit;min-height:40px}input[type=search]{flex:1 1 200px}
+button,.btn{font:inherit;font-weight:600;padding:8px 14px;border-radius:10px;border:0;background:#e6e6e6;color:var(--ink);cursor:pointer;min-height:40px}.btn.p{background:var(--solid);color:#fff}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.stats{max-width:1500px;margin:12px auto 0;padding:0 20px;display:flex;gap:10px;flex-wrap:wrap}.stat{background:var(--card);border-radius:12px;padding:10px 16px;min-width:120px}.stat b{display:block;font-size:22px}.stat span{font-size:13px;color:var(--muted)}
+main{max-width:1500px;margin:auto;padding:12px 20px 80px}
+.group{background:var(--card);border-radius:16px;padding:18px;margin:14px 0}.group h2{font-size:19px;margin:0}.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}.chip{font-size:12px;padding:2px 8px;border-radius:99px;background:#ececec;color:#333}.chip.w{background:#fbeedd;color:var(--warn)}
+.q{margin:6px 0;font-weight:500}.d{margin:3px 0;color:var(--muted);font-size:13px}
+.vars{display:flex;gap:12px;overflow-x:auto;padding:10px 0 6px}.v{flex:0 0 230px;border:2px solid var(--line);border-radius:14px;padding:8px}.v.on{border-color:var(--solid)}
+.v img{width:100%;height:auto;border-radius:8px;display:block;background:#ddd;cursor:zoom-in}.empty{height:120px;border-radius:8px;background:#eee;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;padding:8px;text-align:center}
+.v h3{font-size:14px;margin:8px 0 2px}.v p{font-size:12px;color:var(--muted);margin:2px 0}.tag{font-size:11px;font-weight:600}.tag.r{color:var(--brand)}.tag.b{color:#444}
+label.pick{display:flex;gap:6px;align-items:center;font-size:13px;margin-top:6px;min-height:32px;cursor:pointer}textarea{width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:10px;min-height:44px;margin-top:6px}
+details{margin-top:6px;font-size:13px}details .hist{display:flex;gap:6px;overflow-x:auto;padding-top:6px}details img{height:150px;border-radius:6px;cursor:zoom-in}
+.warn{color:var(--warn);font-size:13px;margin:6px 0}.stress{display:flex;flex-wrap:wrap;gap:8px}.stress figure{margin:0;width:150px;font-size:11px;color:var(--muted)}.stress img{width:100%;border-radius:8px;cursor:zoom-in}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:12px;max-width:90vw;display:none;z-index:9}
+#lb{position:fixed;inset:0;background:#000d;display:none;align-items:center;justify-content:center;z-index:8;padding:12px}#lb img{max-width:100%;max-height:100%}
+</style></head><body>
+<header><h1>Numaya design choices</h1><p class="meta" id="meta"></p>
+<p class="meta">The app works without this page. A recommendation is not an approval: nothing changes until you export your choices and send them back. Earlier renders keep their original review ID and are not re-labelled.</p></header>
+<div class="bar"><div class="bar-in">
+<input type="search" id="q" placeholder="Search groups and options" aria-label="Search">
+<select id="fRun" aria-label="Run"></select><select id="fFlow" aria-label="Flow"></select><select id="fSurf" aria-label="Surface"><option value="">All surfaces</option><option value="screen">Screens</option><option value="component">Components</option></select>
+<select id="fState" aria-label="Review status"><option value="">Any status</option><option value="open">Undecided</option><option value="done">Chosen</option></select>
+<button class="btn p" id="exp">Export choices (JSON)</button><button class="btn" id="txt">Export summary (TXT)</button><label class="btn" for="imp" tabindex="0">Import JSON</label><input id="imp" type="file" accept=".json,application/json" hidden><button class="btn" id="reset">Clear</button>
+</div></div>
+<div class="stats" id="stats"></div><main><div id="groups"></div><section class="group" id="stressSec"><h2>Large text and narrow width</h2><p class="d">Key screens at font 1.5, font 2.0 and 360 dp.</p><div class="stress" id="stress"></div></section></main>
+<div id="toast" role="status"></div><div id="lb"><img alt=""></div>
+<script>
+const M = __MANIFEST__;
+const KEY='numaya-choices:'+M.reviewId; let st={selections:{},notes:{}};
+const load=()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.selections)st=s;}catch(e){}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}};
+const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toast=m=>{const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3500);};
+const byId=Object.fromEntries(M.groups.map(g=>[g.id,g]));
+const conflicts=(sel)=>{const out=[];for(const [gid,vid] of Object.entries(sel)){const g=byId[gid];for(const r of (g&&g.requires&&g.requires[vid])||[]){const [og,ov]=r.split(':');if(sel[og]&&sel[og]!==ov)out.push(`${g.title} ${vid} needs ${og} ${ov}`);}}return out;};
+const opt=(el,all,vals)=>{el.innerHTML=`<option value="">${all}</option>`+vals.map(v=>`<option>${E(v)}</option>`).join('');};
+const $=i=>document.getElementById(i);
+opt($('fRun'),'All runs',[...new Set(M.groups.map(g=>g.run))]);opt($('fFlow'),'All flows',[...new Set(M.groups.map(g=>g.flow))].sort());
+$('meta').textContent=`Review ${M.reviewId} · source ${M.sourceCommit.slice(0,7)} · baseline ${M.baselineCommit.slice(0,7)}`;
+function img(i,alt){return `<img loading="lazy" src="${E(i.path)}" alt="${E(alt)}" data-full="${E(i.path)}">`;}
+function match(g){const q=$('q').value.trim().toLowerCase();if(q&&!(g.title+' '+g.id+' '+g.question+' '+g.variants.map(v=>v.name+' '+v.note).join(' ')).toLowerCase().includes(q))return false;
+if($('fRun').value&&g.run!==$('fRun').value)return false;if($('fFlow').value&&g.flow!==$('fFlow').value)return false;if($('fSurf').value&&g.surface!==$('fSurf').value)return false;
+const done=!!st.selections[g.id];if($('fState').value==='open'&&done)return false;if($('fState').value==='done'&&!done)return false;return true;}
+function card(g){const sel=st.selections[g.id]||'';
+const v=g.variants.map(x=>`<div class="v ${sel===x.id?'on':''}">${x.images.length?x.images.map(i=>img(i,g.title+' '+x.name)).join(''):'<div class="empty">No render in this set</div>'}
+<h3>${E(x.id)} · ${E(x.name)}</h3><p class="tag ${x.id==='O'?'b':x.id===g.recommended?'r':''}">${x.id==='O'?'Baseline':''}${x.id===g.recommended?(x.id==='O'?' · ':'')+'Recommended, not approved':''}</p><p>${E(x.note)}</p>${x.tradeoff?`<p><i>Trade-off:</i> ${E(x.tradeoff)}</p>`:''}
+${(x.history||[]).length?`<details><summary>${x.history.length} earlier render(s)</summary><div class="hist">${x.history.map(h=>`<figure style="margin:0">${img(h,h.run)}<figcaption>${E(h.run)}</figcaption></figure>`).join('')}</div></details>`:''}
+<label class="pick"><input type="radio" name="s-${E(g.id)}" value="${E(x.id)}" ${sel===x.id?'checked':''}> Choose ${E(x.id)}</label></div>`).join('');
+const conf=conflicts(st.selections).filter(c=>c.startsWith(g.title));
+return `<section class="group" data-g="${E(g.id)}"><h2>${E(g.title)}</h2><div class="chips"><span class="chip">${E(g.flow)}</span><span class="chip">${E(g.surface)}</span><span class="chip">${E(g.run)}</span><span class="chip">source ${E(g.source)}</span>${g.status==='deferred'?'<span class="chip w">Deferred feature, not in the app</span>':''}${g.status==='earlier'?'<span class="chip w">Earlier render, not re-rendered</span>':''}</div>
+<p class="q">${E(g.question)}</p>${g.task?`<p class="d"><b>Target:</b> ${E(g.task)}</p>`:''}${g.problem?`<p class="d"><b>Problem:</b> ${E(g.problem)}</p>`:''}${g.hypothesis?`<p class="d"><b>Hypothesis:</b> ${E(g.hypothesis)}</p>`:''}${(g.references||[]).length?`<p class="d"><b>References:</b> ${g.references.map(E).join(' · ')}</p>`:''}${g.earlier.length?`<p class="d"><b>Also rendered in:</b> ${g.earlier.map(e=>E(e.run)+' ('+e.count+')').join(', ')}</p>`:''}
+${conf.map(c=>`<p class="warn">Conflict: ${E(c)}</p>`).join('')}<div class="vars">${v}</div>
+<label class="pick"><input type="radio" name="s-${E(g.id)}" value="" ${sel?'':'checked'}> Undecided</label><textarea data-n="${E(g.id)}" placeholder="Optional note" aria-label="Note for ${E(g.title)}">${E(st.notes[g.id]||'')}</textarea></section>`;}
+function stats(){const open=M.groups.filter(g=>!st.selections[g.id]);const c=M.groups.filter(g=>g.status==='current');
+$('stats').innerHTML=[['Groups',M.groups.length],['Options',M.groups.reduce((n,g)=>n+g.variants.length,0)],['Current renders',c.length],['Undecided',open.length],['Chosen',M.groups.length-open.length]].map(([l,v])=>`<div class="stat"><b>${v}</b><span>${l}</span></div>`).join('');}
+function render(){$('groups').innerHTML=M.groups.filter(match).map(card).join('')||'<p class="d">No groups match.</p>';stats();
+document.querySelectorAll('.group input[type=radio]').forEach(r=>r.onchange=e=>{const g=e.target.closest('.group').dataset.g;if(e.target.value)st.selections[g]=e.target.value;else delete st.selections[g];save();render();const c=conflicts(st.selections);if(c.length)toast('Conflict: '+c[0]);});
+document.querySelectorAll('textarea[data-n]').forEach(t=>t.oninput=e=>{const g=e.target.dataset.n;if(e.target.value)st.notes[g]=e.target.value;else delete st.notes[g];save();});}
+const payload=()=>({schemaVersion:2,reviewId:M.reviewId,sourceCommit:M.sourceCommit,generatedAt:M.generatedAt,exportedAt:new Date().toISOString(),selections:Object.entries(st.selections).map(([groupId,variantId])=>({groupId,variantId,notes:st.notes[groupId]||''})),undecidedGroups:M.groups.filter(g=>!st.selections[g.id]).map(g=>g.id),notesWithoutSelection:Object.fromEntries(Object.entries(st.notes).filter(([g])=>!st.selections[g]))});
+function dl(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();}
+$('exp').onclick=()=>{if(!Object.keys(st.selections).length&&!confirm('No designs selected.\n\nEvery group is still Undecided: nothing will be applied. Export an all-undecided file anyway?'))return;dl(`numaya-choices-${M.reviewId}.json`,JSON.stringify(payload(),null,2),'application/json');};
+$('txt').onclick=()=>{const p=payload();const lines=[`Numaya design choices (${p.reviewId}, source ${p.sourceCommit})`,`Exported ${p.exportedAt}`,''];for(const g of M.groups){const s=st.selections[g.id];lines.push(`${g.title} [${g.id}]: ${s?s+' – '+g.variants.find(v=>v.id===s).name:'undecided'}`);if(st.notes[g.id])lines.push('  Notes: '+st.notes[g.id]);}dl(`numaya-choices-${M.reviewId}.txt`,lines.join('\n'),'text/plain');};
+$('reset').onclick=()=>{if(!confirm('Clear every choice and note in this browser? Exported files are not affected.'))return;st={selections:{},notes:{}};save();render();};
+$('imp').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;let d;try{d=JSON.parse(await f.text());}catch(x){toast('That file isn’t valid JSON. Nothing changed.');return;}
+const bad=[];if(d.schemaVersion!==2)bad.push('schemaVersion must be 2');if(d.reviewId!==M.reviewId)bad.push(`reviewId ${String(d.reviewId).slice(0,40)} doesn’t match this gallery (${M.reviewId})`);if(!Array.isArray(d.selections))bad.push('selections must be a list');
+const n={selections:{},notes:{}};for(const s of d.selections||[]){const g=s&&byId[s.groupId];if(!g){bad.push('unknown group '+String(s&&s.groupId).slice(0,50));continue;}if(!g.variants.some(v=>v.id===s.variantId)){bad.push(`unknown variant ${String(s.variantId).slice(0,20)} in ${s.groupId}`);continue;}n.selections[s.groupId]=s.variantId;if(typeof s.notes==='string'&&s.notes)n.notes[s.groupId]=s.notes.slice(0,4000);}
+for(const [g,t] of Object.entries(d.notesWithoutSelection||{}))if(byId[g]&&typeof t==='string')n.notes[g]=t.slice(0,4000);
+const c=conflicts(n.selections);if(c.length)bad.push('incompatible: '+c[0]);if(bad.length){toast('Import refused: '+bad[0]);console.warn(bad);return;}st=n;save();render();toast(`Imported ${Object.keys(st.selections).length} choices`);};
+['q','fRun','fFlow','fSurf','fState'].forEach(i=>$(i).addEventListener('input',render));
+$('stress').innerHTML=M.stress.map(s=>`<figure>${img(s,s.label)}<figcaption>${E(s.label)}</figcaption></figure>`).join('');
+document.addEventListener('click',e=>{const t=e.target;const lb=$('lb');if(t.tagName==='IMG'&&t.dataset.full){lb.querySelector('img').src=t.dataset.full;lb.style.display='flex';}else if(t.closest('#lb'))lb.style.display='none';});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('lb').style.display='none';});
+load();render();
+</script></body></html>
