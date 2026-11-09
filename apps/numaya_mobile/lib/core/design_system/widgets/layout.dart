@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../foundations/app_colors.dart';
 import '../foundations/app_layout.dart';
@@ -493,4 +494,59 @@ class Gap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SizedBox(height: size, width: size);
+}
+
+/// Extends [child] by [inset] on both sides, past the page gutter, so an image can run edge to
+/// edge inside an otherwise inset column. Height comes from the child.
+class EdgeBleed extends SingleChildRenderObjectWidget {
+  const EdgeBleed({
+    super.key,
+    required this.inset,
+    required Widget super.child,
+  });
+
+  final double inset;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      RenderEdgeBleed(inset);
+
+  @override
+  void updateRenderObject(BuildContext context, RenderEdgeBleed renderObject) {
+    renderObject.inset = inset;
+  }
+}
+
+class RenderEdgeBleed extends RenderShiftedBox {
+  RenderEdgeBleed(this._inset) : super(null);
+
+  double _inset;
+  set inset(double v) {
+    if (v == _inset) return;
+    _inset = v;
+    markNeedsLayout();
+  }
+
+  @override
+  void performLayout() {
+    final width = constraints.maxWidth + _inset * 2;
+    child!.layout(
+      BoxConstraints(minWidth: width, maxWidth: width),
+      parentUsesSize: true,
+    );
+    size = constraints.constrain(
+      Size(constraints.maxWidth, child!.size.height),
+    );
+    (child!.parentData! as BoxParentData).offset = Offset(-_inset, 0);
+  }
+
+  @override
+  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
+    final offset = (child!.parentData! as BoxParentData).offset;
+    return result.addWithPaintOffset(
+      offset: offset,
+      position: position,
+      hitTest: (r, p) => child!.hitTest(r, position: p),
+    );
+  }
 }

@@ -8,6 +8,7 @@ import '../../../l10n/l10n.dart';
 import '../../compliments/application/compliments_controller.dart';
 import '../../dating/application/dating_controller.dart';
 import '../../events_mvp/application/events_mvp_controller.dart';
+import '../../lab/lab_registry.dart';
 
 /// The bottom bar's destinations, by identity rather than position. Events exists only when the
 /// release includes it, so the branch order matches this list (see the shell routes in router.dart).
@@ -60,6 +61,7 @@ class HomeShell extends ConsumerWidget {
         extendBody: true,
         body: shell,
         bottomNavigationBar: NumayaTabBar(
+          labelled: ref.watch(labVariantProvider('v7-nav')) == 'A',
           currentIndex: shell.currentIndex,
           onSelect: (i) =>
               shell.goBranch(i, initialLocation: i == shell.currentIndex),

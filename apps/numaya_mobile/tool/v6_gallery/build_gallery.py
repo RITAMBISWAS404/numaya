@@ -1,4 +1,4 @@
-"""Builds the cumulative offline choice gallery: current V6 renders plus every earlier review set.
+"""Builds the cumulative offline choice gallery: current renders plus every earlier review set.
 
 Usage: python build_gallery.py --current <capture dir> --stress f15=<dir> f20=<dir> n360=<dir>
   --archive <review dir> [...] --commit <sha> --baseline <sha> --branch <name> --out <dir>
@@ -32,6 +32,11 @@ V6 = {
     'v6-settings-plan': ('Membership summary at the top of Settings', 'Subscription is buried low in a long list', 'A leading card surfaces the plan; adds one thing above the list', ['Figma 12099:96480 (Ente storage card)']),
     'v6-discover-margin': ('Photo margin on Discover', 'Discover’s photo could align with the page or fill more of it', 'Alignment against a larger photo', ['Measured: Ente Settings page margin 20']),
 }
+
+
+X = json.load(open(os.path.join(app, '..', '..', 'docs', 'design', 'creative-lab-v7', 'experiments.json'), encoding='utf-8'))
+for _gid, _x in X['groups'].items():
+    FLOW[_gid] = _x['flow']
 
 
 def registry():
@@ -80,10 +85,13 @@ for _, m in archives:
     for g in m['groups']:
         names.setdefault(g['id'], g)
 
-groups, stills = [], {}
+groups, stills, seq = [], {}, {}
 with open(A.current + '/shots.tsv', encoding='utf-8') as f:
     for r in csv.DictReader(f, delimiter='\t'):
         p = os.path.join(A.current, 'shots', r['file'])
+        if r['kind'] == 'journey' and os.path.exists(p):
+            seq.setdefault(r['group'], {}).setdefault(r['variant'], []).append((r['file'], p))
+            continue
         if os.path.exists(p) and r['group'] in FLOW and os.path.getsize(p) > 1000:
             stills.setdefault(r['group'], {})[r['variant']] = (p, r['kind'] == 'crop')
 for gid, by in sorted(stills.items(), key=lambda kv: (FLOW[kv[0]], kv[0])):
@@ -95,7 +103,13 @@ for gid, by in sorted(stills.items(), key=lambda kv: (FLOW[kv[0]], kv[0])):
     if not g['variants']:
         g['variants'] = [{'id': v['id'], 'name': v.get('name', v['id']), 'pass': v.get('pass', ''), 'note': v.get('note', ''), 'images': []} for v in old.get('variants', [])] or [{'id': k, 'name': k, 'pass': '', 'note': '', 'images': []} for k in sorted(by)]
     g['requires'] = old.get('requires') or {}
-    g.update(flow=FLOW[gid], run='V6 current render', source=A.commit[:7], status='current', earlier=[])
+    run = 'V7 Creative Lab' if gid.startswith('v7-') else 'V6 refinement' if gid.startswith('v6-') else 'Earlier option, re-rendered'
+    g.update(flow=FLOW[gid], run=run, source=A.commit[:7], status='current', earlier=[], level=g.get('surface', 'screen'), impl='Implemented in Flutter, selectable in Visual Lab', directions={})
+    if gid in X['groups']:
+        x = X['groups'][gid]
+        g.update({k: x[k] for k in ('level', 'task', 'problem', 'essential', 'primary', 'benefit', 'cost', 'hypothesis', 'references', 'route', 'verification', 'critique', 'directions', 'recommended')})
+        for v in g['variants']:
+            v['tradeoff'] = x.get('tradeoffs', {}).get(v['id'], '')
     if gid in V6:
         g['task'], g['problem'], g['hypothesis'], g['references'] = V6[gid]
     for v in g['variants']:
@@ -140,11 +154,29 @@ for root, m in archives:
             groups.append({
                 'id': key, 'title': g.get('title', g['id']), 'surface': g.get('kind', 'screen'), 'question': g.get('question', ''),
                 'task': g.get('task', ''), 'problem': g.get('problem', ''), 'references': g.get('references', []),
-                'recommended': g.get('proposed', 'O'), 'requires': {},
+                'recommended': g.get('proposed', 'O'), 'requires': {}, 'level': g.get('kind', 'screen'), 'directions': {}, 'impl': 'Earlier render, not re-rendered on this source',
                 'flow': 'Deferred (Events)' if deferred(g['id']) else 'Earlier review',
                 'run': rid, 'source': code, 'status': 'deferred' if deferred(g['id']) else 'earlier', 'earlier': [],
                 'variants': [{'id': v['id'], 'name': v.get('name', v['id']), 'pass': v.get('pass', ''), 'note': v.get('note', ''), 'tradeoff': v.get('tradeoff', ''), 'images': imgs.get(v['id'], [])} for v in g.get('variants', [])],
             })
+
+sequences = []
+os.makedirs(OUT + '/current/seq')
+for sid, conf in X['sequences'].items():
+    rows = []
+    bound = reg.get(sid) if sid != 'direction' else None
+    for vid in ('O', 'A', 'B', 'C'):
+        shots = sorted(seq.get(sid, {}).get(vid, []))
+        if not shots:
+            continue
+        steps = []
+        for fn, p in shots:
+            key = fn[:-4].rsplit('__', 1)[1]
+            jpg(p, f'{OUT}/current/seq/{fn[:-4]}.jpg')
+            steps.append({'path': f'current/seq/{fn[:-4]}.jpg', 'label': conf['steps'].get(key, key)})
+        name = 'Baseline' if vid == 'O' else X['directions'][vid]['name'] if sid == 'direction' else next(v['name'] for v in bound['variants'] if v['id'] == vid)
+        rows.append({'variant': vid, 'name': name, 'steps': steps})
+    sequences.append({'id': sid, 'title': conf['title'], 'note': conf['note'], 'rows': rows})
 
 stress = []
 LABELS = {'f15': 'Font 1.5', 'f20': 'Font 2.0', 'n360': '360 dp wide'}
@@ -158,8 +190,8 @@ for spec in A.stress:
             stress.append({'path': 'stress/' + name, 'label': f"{r['variant']}, {LABELS.get(tag, tag)}", 'setting': LABELS.get(tag, tag)})
 
 generated = datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()
-review = f'v6-{A.commit[:7]}-{generated[:10]}'
-manifest = {'schemaVersion': 2, 'reviewId': review, 'sourceCommit': A.commit, 'baselineCommit': A.baseline, 'branch': A.branch, 'generatedAt': generated, 'groups': groups, 'stress': stress}
+review = f'v7-{A.commit[:7]}-{generated[:10]}'
+manifest = {'schemaVersion': 3, 'directions': X['directions'], 'directionBound': X['directionBound'], 'exclusive': X['exclusive'], 'recommendedPath': [g for g in X['recommendedPath'] if any(x['id'] == g for x in groups)], 'sequences': sequences, 'reviewId': review, 'sourceCommit': A.commit, 'baselineCommit': A.baseline, 'branch': A.branch, 'generatedAt': generated, 'groups': groups, 'stress': stress}
 json.dump(manifest, open(OUT + '/manifest.json', 'w', encoding='utf-8'), indent=1)
 tpl = open(here + '/template.html', encoding='utf-8').read()
 open(OUT + '/index.html', 'w', encoding='utf-8', newline='\n').write(tpl.replace('__MANIFEST__', json.dumps(manifest).replace('</', '<\\/')))

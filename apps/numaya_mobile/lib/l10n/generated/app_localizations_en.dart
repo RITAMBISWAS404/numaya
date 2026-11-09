@@ -5019,6 +5019,45 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String v7CommonGround(String name, String things) {
+    return 'You and $name both like $things';
+  }
+
+  @override
+  String v7ComplimentWarmTitle(String name) {
+    return 'Tell $name what caught your eye';
+  }
+
+  @override
+  String get v7OpenerStory => 'What’s the story here?';
+
+  @override
+  String get v7OpenerWhere => 'Where was this?';
+
+  @override
+  String get v7OpenerMore => 'Tell me more about this';
+
+  @override
+  String get v7OpenerPromptStory => 'I need the story behind this';
+
+  @override
+  String get v7OpenerPromptSame => 'I feel the same way';
+
+  @override
+  String v7LikesCountLabel(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'people like you',
+      one: 'person likes you',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get v7StreakDays => 'day streak';
+
+  @override
   String get complimentSentTitle => 'Compliment sent';
 
   @override

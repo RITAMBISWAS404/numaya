@@ -432,7 +432,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
     void openPhotos(int start) =>
         unawaited(context.push(Routes.personPhotos(person.id, start: start)));
     void compliment(ComplimentTarget target) =>
-        unawaited(context.push(complimentRoute(person.id, target)));
+        unawaited(openCompliment(context, ref, person.id, target));
 
     // Screen group `screen-discover`: directions fix the photo and prompt variants here.
     final direction = ref.watch(labVariantProvider('screen-discover'));
@@ -444,6 +444,7 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
     };
     final discoverPhotoV =
         photoV ?? ref.watch(labVariantProvider('discover-photo'));
+    final v7 = ref.watch(labVariantProvider('v7-discover'));
     final page = TabPage(
       header: header,
       scrollController: _scroll,
@@ -477,30 +478,46 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
             ],
             // Bumble's discovery card (ER-01): the 3:4 photo (UI-011) with the identity group laid
             // over its foot (UI-014); the profile follows as cards when scrolled.
-            KeyedSubtree(
-              key: _heroKey,
-              // Keyed by person: the measured hero keeps its state across people, the swipe card
-              // (and its drag offset) must not.
-              child: _SwipeCard(
-                key: ValueKey('swipe-${person.id}'),
-                person: person,
-                photoHeight: _photoHeight(context),
-                // R05: the overflow stays top-right; the Compliment squircle sits bottom-right,
-                // the same size and target as the overflow.
-                photoAction: SquircleIconButton(
-                  icon: NumayaIcons.more,
-                  label: l10n.discoverOptions,
-                  onPressed: () => _options(person),
+            if (v7 == 'C' && person.shared.isNotEmpty) ...[
+              _CommonGround(name: person.name, shared: person.shared),
+              const SizedBox(height: AppSpacing.s3),
+            ],
+            if (v7 == 'B') ...[
+              _CalmIdentity(person: person),
+              const SizedBox(height: AppSpacing.s4),
+            ],
+            EdgeBleed(
+              inset: v7 == 'A' ? AppLayout.screenGutter : 0,
+              child: KeyedSubtree(
+                key: _heroKey,
+                // Keyed by person: the measured hero keeps its state across people, the swipe card
+                // (and its drag offset) must not.
+                child: _SwipeCard(
+                  key: ValueKey('swipe-${person.id}'),
+                  person: person,
+                  photoHeight: _photoHeight(context),
+                  // R05: the overflow stays top-right; the Compliment squircle sits bottom-right,
+                  // the same size and target as the overflow.
+                  photoAction: SquircleIconButton(
+                    icon: NumayaIcons.more,
+                    label: l10n.discoverOptions,
+                    onPressed: () => _options(person),
+                  ),
+                  complimentAction: ComplimentAnchor(
+                    key: const ValueKey('compliment-photo-0'),
+                    name: person.name,
+                    onPressed: () =>
+                        compliment(const ComplimentTarget.photo(0)),
+                  ),
+                  layout: switch (v7) {
+                    'A' => 'F',
+                    'B' => 'N',
+                    _ => discoverPhotoV,
+                  },
+                  onOpenPhotos: () => openPhotos(1),
+                  onMore: _toDetails,
+                  onDecide: (liked) => unawaited(_decide(person, liked: liked)),
                 ),
-                complimentAction: ComplimentAnchor(
-                  key: const ValueKey('compliment-photo-0'),
-                  name: person.name,
-                  onPressed: () => compliment(const ComplimentTarget.photo(0)),
-                ),
-                layout: discoverPhotoV,
-                onOpenPhotos: () => openPhotos(1),
-                onMore: _toDetails,
-                onDecide: (liked) => unawaited(_decide(person, liked: liked)),
               ),
             ),
             // UI-016: no decision buttons; the photo is swiped.
@@ -838,6 +855,60 @@ class _ProfileSkeleton extends StatelessWidget {
           bar(120, 14),
         ],
       ),
+    );
+  }
+}
+
+/// Direction C: what you share leads the card.
+class _CommonGround extends StatelessWidget {
+  const _CommonGround({required this.name, required this.shared});
+
+  final String name;
+  final List<String> shared;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(AppLayout.cardPadding),
+    decoration: BoxDecoration(
+      color: AppColors.accent,
+      borderRadius: AppRadii.all(AppRadii.card),
+    ),
+    child: Text(
+      context.l10n.v7CommonGround(name, shared.join(', ')),
+      style: AppTypography.weight(
+        AppTypography.body,
+        AppTypography.semibold,
+      ).copyWith(color: AppColors.accentForeground),
+    ),
+  );
+}
+
+/// Direction B: identity on the page, before the photo.
+class _CalmIdentity extends StatelessWidget {
+  const _CalmIdentity({required this.person});
+
+  final SamplePerson person;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        NameWithBadge(
+          name: l10n.profileNameAge(person.name, person.age),
+          verified: person.verified,
+          verifiedLabel: l10n.photoVerifiedLabel,
+          style: AppTypography.pageTitle,
+        ),
+        if (person.job != null) ...[
+          const SizedBox(height: AppSpacing.s1),
+          Text(
+            person.job!,
+            style: AppTypography.body.copyWith(color: AppColors.textSecondary),
+          ),
+        ],
+      ],
     );
   }
 }

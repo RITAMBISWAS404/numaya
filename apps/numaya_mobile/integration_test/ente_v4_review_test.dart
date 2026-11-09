@@ -11,6 +11,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/media/demo_photos.dart';
+import 'package:numaya_mobile/features/commerce/application/economy_controller.dart';
+import 'package:numaya_mobile/features/compliments/application/compliments_controller.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
 import 'package:numaya_mobile/features/dating/data/media_picker.dart';
 import 'package:numaya_mobile/features/dating/domain/sample_people.dart';
@@ -186,9 +188,48 @@ void main() {
           await cap('key__$slug', 'key', slug, 'qa', slug);
         });
       }
+      // The alternatives most exposed to large text and narrow width.
+      const alternatives = <(String, String, String)>[
+        ('v7-nav', 'A', Routes.home),
+        ('v7-compliment', 'C', '${Routes.compliment}/noor?kind=prompt&index=0'),
+        ('v7-request', 'A', '${Routes.request}/seed-chloe'),
+        ('v7-request', 'B', '${Routes.request}/seed-chloe'),
+        ('v7-likes-locked', 'A', Routes.likes),
+      ];
+      for (final (group, v, path) in alternatives) {
+        await step('alt $group $v', () async {
+          lab
+            ..reset()
+            ..choose(group, v);
+          await go(Routes.home);
+          await go(path);
+          await cap('key__${group}__$v', 'key', '$group $v', 'qa', '$group $v');
+        });
+      }
+      for (final d in const ['A', 'B', 'C']) {
+        await step('alt direction $d', () async {
+          lab
+            ..reset()
+            ..choose('v7-discover', d)
+            ..choose('v7-compliment', d)
+            ..choose('v7-profile', d)
+            ..choose('v7-streak', d);
+          const seq = <(String, String)>[
+            ('discover', Routes.home),
+            ('profile', Routes.profile),
+            ('streak', Routes.streak),
+          ];
+          for (final (n, path) in seq) {
+            await go(Routes.home);
+            await go(path);
+            await cap('key__dir${d}__$n', 'key', 'Direction $d $n', 'qa', n);
+          }
+        });
+      }
+      lab.reset();
     }
 
-    if (_only.isEmpty || _only == 'variants') {
+    if (_only.isEmpty || _only == 'variants' || _only == 'v7') {
       final dating = c.read(datingProvider.notifier);
       final first = c.read(datingProvider).threads['priya']!.first;
       await dating.send('priya', 'Saturday works for me.', replyToId: first.id);
@@ -212,6 +253,15 @@ void main() {
         'v6-streak-hero': Routes.streak,
         'v6-settings-plan': Routes.settings,
         'v6-discover-margin': Routes.home,
+        'v7-nav': Routes.home,
+        'v7-discover': Routes.home,
+        'v7-compliment': '${Routes.compliment}/noor?kind=prompt&index=0',
+        'v7-profile': Routes.profile,
+        'v7-streak': Routes.streak,
+        'v7-request': '${Routes.request}/seed-chloe',
+        'v7-filters': Routes.home,
+        'v7-paywall': Routes.paywall,
+        'v7-likes-locked': Routes.likes,
         'screen-heart': Routes.likes,
         'screen-chats': Routes.messages,
         'screen-profile': Routes.profile,
@@ -219,6 +269,7 @@ void main() {
       };
       for (final g in kLabGroups) {
         if (isDeferredLabGroup(g.id) || g.kind == LabKind.motion) continue;
+        if (_only == 'v7' && !g.id.startsWith('v7-')) continue;
         final component = g.kind == LabKind.component;
         final route = screens[g.id];
         if (!component && route == null) continue;
@@ -235,12 +286,111 @@ void main() {
               await cap('crop__${g.id}__$v', g.id, v, 'crop', '${g.id} $v');
             } else {
               await go(route!);
+              if (g.id == 'v7-filters') {
+                await tester.tap(find.bySemanticsLabel('Filters').first);
+                await _wait(tester, 900);
+              }
               await cap('screen__${g.id}__$v', g.id, v, 'screen', '${g.id} $v');
+              if (g.id == 'v7-filters') {
+                await tester.binding.handlePopRoute();
+                await _wait(tester, 500);
+              }
             }
           });
         }
       }
       c.read(premiumProvider.notifier).setActive(false);
+      lab.reset();
+    }
+
+    if (_only.isEmpty || _only == 'v7') {
+      // Journey: entry, main, written, leave with a draft, then send and completion, for each
+      // arrangement of the Compliment composer.
+      for (final v in const ['O', 'A', 'B', 'C']) {
+        Future<void> jc(String n, String label) => cap(
+          'journey__v7-compliment__${v}__$n',
+          'v7-compliment',
+          v,
+          'journey',
+          label,
+        );
+        await step('journey compliment $v', () async {
+          // Every arrangement starts from the same people and credits.
+          c
+            ..invalidate(datingProvider)
+            ..invalidate(complimentsProvider)
+            ..invalidate(economyProvider);
+          lab
+            ..reset()
+            ..choose('v7-compliment', v);
+          await go(Routes.home);
+          await jc('1-entry', 'Entry: Discover');
+          await tester.tap(find.byKey(const ValueKey('compliment-photo-0')));
+          await _wait(tester, 900);
+          await jc('2-main', 'Main: empty');
+          await tester.enterText(
+            find.byKey(const ValueKey('compliment-field')),
+            'That photo looks like the best kind of Sunday. Where was it taken?',
+          );
+          await _wait(tester, 500);
+          await jc('3-written', 'Written');
+          await tester.binding.handlePopRoute();
+          await _wait(tester, 800);
+          await jc('4-leave', 'Back with a draft: discard choice');
+          await tester.binding.handlePopRoute();
+          await _wait(tester, 600);
+          c.read(datingProvider.notifier).setSimulateErrors(true);
+          await tester.tap(find.byKey(const ValueKey('compliment-send')));
+          await _wait(tester, 1200);
+          await jc('4b-failed', 'Send failed: words kept, no credit used');
+          c.read(datingProvider.notifier).setSimulateErrors(false);
+          await tester.tap(find.byKey(const ValueKey('compliment-send')));
+          await _wait(tester, 1500);
+          await jc('5-complete', 'Completion');
+          await tester.tap(find.byKey(const ValueKey('compliment-done')));
+          await _wait(tester, 900);
+          await go(Routes.home);
+          await jc('6-next', 'Back on Discover');
+          await tester.tap(find.byKey(const ValueKey('compliment-photo-0')));
+          await _wait(tester, 900);
+          await jc('7-blocked', 'They already sent you one: reply instead');
+          await tester.tap(find.byKey(const ValueKey('compliment-done')));
+          await _wait(tester, 900);
+        });
+      }
+      // Each named direction across the four benchmark screens, same data and viewport.
+      for (final d in const ['O', 'A', 'B', 'C']) {
+        await step('direction $d', () async {
+          lab
+            ..reset()
+            ..choose('v7-discover', d)
+            ..choose('v7-compliment', d)
+            ..choose('v7-profile', d)
+            ..choose('v7-streak', d);
+          const seq = <(String, String)>[
+            ('1-discover', Routes.home),
+            ('2-compliment', '${Routes.compliment}/noor?kind=photo&index=0'),
+            ('3-profile', Routes.profile),
+            ('4-streak', Routes.streak),
+          ];
+          c
+            ..invalidate(datingProvider)
+            ..invalidate(complimentsProvider)
+            ..invalidate(economyProvider);
+          for (final (n, path) in seq) {
+            await go(Routes.home);
+            if (d == 'B' && n == '2-compliment') {
+              await tester.tap(
+                find.byKey(const ValueKey('compliment-photo-0')),
+              );
+              await _wait(tester, 900);
+            } else {
+              await go(path);
+            }
+            await cap('direction__${d}__$n', 'direction', d, 'journey', n);
+          }
+        });
+      }
       lab.reset();
     }
 

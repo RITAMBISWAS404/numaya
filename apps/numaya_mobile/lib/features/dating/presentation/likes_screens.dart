@@ -234,50 +234,63 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
 }
 
 /// S18 free state: the count, locked tiles and the Premium offer; Discover stays the free path.
-class _LockedLikes extends StatelessWidget {
+class _LockedLikes extends ConsumerWidget {
   const _LockedLikes({required this.count});
 
   final int count;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final countLed = ref.watch(labVariantProvider('v7-likes-locked')) == 'A';
     return Column(
       key: const ValueKey('likes-locked'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        LayoutBuilder(
-          builder: (context, box) {
-            final w = (box.maxWidth - AppSpacing.s3) / 2;
-            return Wrap(
-              spacing: AppSpacing.s3,
-              runSpacing: AppSpacing.s3,
-              children: [
-                // V4: one row, so the action sits in the first view above the floating bar.
-                for (var i = 0; i < count.clamp(1, 2); i++)
-                  SizedBox(
-                    width: w,
-                    child: PhotoPlaceholder(
-                      label: l10n.likesLockedTile,
-                      aspectRatio: AppMedia.personPhoto,
-                      child: const Center(
-                        child: NumayaIcon(
-                          NumayaIcons.lock,
-                          size: 28,
-                          color: AppColors.textSecondary,
+        if (countLed)
+          Text(
+            '$count',
+            style: AppTypography.hero.copyWith(
+              fontSize: 64,
+              height: 72 / 64,
+              color: AppColors.accent,
+            ),
+          )
+        else
+          LayoutBuilder(
+            builder: (context, box) {
+              final w = (box.maxWidth - AppSpacing.s3) / 2;
+              return Wrap(
+                spacing: AppSpacing.s3,
+                runSpacing: AppSpacing.s3,
+                children: [
+                  // V4: one row, so the action sits in the first view above the floating bar.
+                  for (var i = 0; i < count.clamp(1, 2); i++)
+                    SizedBox(
+                      width: w,
+                      child: PhotoPlaceholder(
+                        label: l10n.likesLockedTile,
+                        aspectRatio: AppMedia.personPhoto,
+                        child: const Center(
+                          child: NumayaIcon(
+                            NumayaIcons.lock,
+                            size: 28,
+                            color: AppColors.textSecondary,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-              ],
-            );
-          },
-        ),
+                ],
+              );
+            },
+          ),
         const SizedBox(height: AppSpacing.s5),
         Semantics(
           header: true,
           child: Text(
-            l10n.likesLockedTitle(count),
+            countLed
+                ? l10n.v7LikesCountLabel(count)
+                : l10n.likesLockedTitle(count),
             style: AppTypography.section,
           ),
         ),
@@ -506,7 +519,7 @@ class PersonProfileScreen extends ConsumerWidget {
                   // S12: Compliment anchors while the member can still decide.
                   onCompliment: canDecide && !decided
                       ? (ComplimentTarget t) =>
-                            context.push(complimentRoute(person.id, t))
+                            openCompliment(context, ref, person.id, t)
                       : null,
                 ),
               ],

@@ -48,6 +48,7 @@ class StreakScreen extends ConsumerWidget {
     final capped = economy.lastAward?.result == AwardResult.skippedAtCap;
 
     final hero = ref.watch(labVariantProvider('v6-streak-hero')) == 'A';
+    final v7 = ref.watch(labVariantProvider('v7-streak'));
     final fg = hero ? AppColors.accentForeground : AppColors.ink;
     final head = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,16 +101,99 @@ class StreakScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
-          hero
-              ? Container(
-                  padding: const EdgeInsets.all(AppLayout.heroPadding),
-                  decoration: BoxDecoration(
-                    color: AppColors.accent,
-                    borderRadius: AppRadii.all(AppRadii.heroCard),
+          if (v7 == 'A')
+            Column(
+              children: [
+                Text(
+                  '${run.length}',
+                  style: AppTypography.hero.copyWith(
+                    fontSize: 64,
+                    height: 72 / 64,
                   ),
-                  child: head,
-                )
-              : WhiteCard(child: head),
+                ),
+                Text(l10n.v7StreakDays, style: AppTypography.section),
+                const SizedBox(height: AppSpacing.s4),
+                _CycleDots(done: progress, total: cycle),
+              ],
+            )
+          else if (v7 == 'B')
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.streakDays(run.length),
+                  style: AppTypography.flowTitle,
+                ),
+                const SizedBox(height: AppSpacing.s1),
+                Text(l10n.streakCycle(progress), style: AppTypography.body),
+                Text(
+                  todayCounts ? l10n.streakToday : l10n.streakTodayOpen,
+                  style: AppTypography.helper,
+                ),
+              ],
+            )
+          else if (v7 == 'C')
+            Container(
+              padding: const EdgeInsets.all(AppLayout.heroPadding),
+              decoration: BoxDecoration(
+                color: AppColors.accent,
+                borderRadius: AppRadii.all(AppRadii.heroCard),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.streakDays(run.length),
+                    style: AppTypography.pageTitle.copyWith(
+                      color: AppColors.accentForeground,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.s4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      for (var i = 0; i < cycle; i++)
+                        Container(
+                          width: 34,
+                          height: 34,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: i < progress
+                                ? AppColors.accentForeground
+                                : const Color(0x33FFFFFF),
+                          ),
+                          alignment: Alignment.center,
+                          child: i < progress
+                              ? const NumayaIcon(
+                                  NumayaIcons.check,
+                                  size: 18,
+                                  color: AppColors.accent,
+                                )
+                              : null,
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.s3),
+                  Text(
+                    l10n.streakCycle(progress),
+                    style: AppTypography.bodySm.copyWith(
+                      color: AppColors.accentForeground,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else
+            hero
+                ? Container(
+                    padding: const EdgeInsets.all(AppLayout.heroPadding),
+                    decoration: BoxDecoration(
+                      color: AppColors.accent,
+                      borderRadius: AppRadii.all(AppRadii.heroCard),
+                    ),
+                    child: head,
+                  )
+                : WhiteCard(child: head),
           if (offer != null) ...[
             const SizedBox(height: AppSpacing.s4),
             StatusBanner(

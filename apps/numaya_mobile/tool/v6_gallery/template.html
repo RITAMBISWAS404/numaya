@@ -19,65 +19,95 @@ main{max-width:1500px;margin:auto;padding:12px 20px 80px}
 .v h3{font-size:14px;margin:8px 0 2px}.v p{font-size:12px;color:var(--muted);margin:2px 0}.tag{font-size:11px;font-weight:600}.tag.r{color:var(--brand)}.tag.b{color:#444}
 label.pick{display:flex;gap:6px;align-items:center;font-size:13px;margin-top:6px;min-height:32px;cursor:pointer}textarea{width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:10px;min-height:44px;margin-top:6px}
 details{margin-top:6px;font-size:13px}details .hist{display:flex;gap:6px;overflow-x:auto;padding-top:6px}details img{height:150px;border-radius:6px;cursor:zoom-in}
-.warn{color:var(--warn);font-size:13px;margin:6px 0}.stress{display:flex;flex-wrap:wrap;gap:8px}.stress figure{margin:0;width:150px;font-size:11px;color:var(--muted)}.stress img{width:100%;border-radius:8px;cursor:zoom-in}
+.warn{color:var(--warn);font-size:13px;margin:6px 0}#conflict{max-width:1500px;margin:12px auto 0;padding:0 20px}#conflict div{background:#fbeedd;color:var(--warn);border-radius:12px;padding:10px 16px;margin-bottom:6px;font-weight:600}
+.seq{background:var(--card);border-radius:16px;padding:18px;margin:14px 0}.seq h2{font-size:19px;margin:0 0 4px}.row{margin-top:12px}.row h3{font-size:14px;margin:0 0 6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}.steps{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}.steps figure{margin:0;flex:0 0 150px;font-size:11px;color:var(--muted)}.steps img{width:100%;border-radius:8px;cursor:zoom-in;display:block}
+.tog{background:none;padding:0;min-height:32px;font-size:19px;font-weight:700;text-align:left}.path{color:var(--brand);font-weight:700;margin-right:6px}.rec{background:#f1eefb;border-radius:10px;padding:8px 12px;margin:8px 0;font-size:13px}.v .dir{font-size:11px;color:var(--brand)}.flash{outline:3px solid var(--solid)}.stress{display:flex;flex-wrap:wrap;gap:8px}.stress figure{margin:0;width:150px;font-size:11px;color:var(--muted)}.stress img{width:100%;border-radius:8px;cursor:zoom-in}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:12px;max-width:90vw;display:none;z-index:9}
 #lb{position:fixed;inset:0;background:#000d;display:none;align-items:center;justify-content:center;z-index:8;padding:12px}#lb img{max-width:100%;max-height:100%}
 </style></head><body>
 <header><h1>Numaya design choices</h1><p class="meta" id="meta"></p>
-<p class="meta">The app works without this page. A recommendation is not an approval: nothing changes until you export your choices and send them back. Earlier renders keep their original review ID and are not re-labelled.</p></header>
+<p class="meta" id="dirs"></p><p class="meta">The app works without this page. A recommendation is not an approval: nothing changes until you export your choices and send them back. Earlier renders keep their original review ID and are not re-labelled.</p></header>
 <div class="bar"><div class="bar-in">
 <input type="search" id="q" placeholder="Search groups and options" aria-label="Search">
 <select id="fRun" aria-label="Run"></select><select id="fFlow" aria-label="Flow"></select><select id="fSurf" aria-label="Surface"><option value="">All surfaces</option><option value="screen">Screens</option><option value="component">Components</option></select>
-<select id="fState" aria-label="Review status"><option value="">Any status</option><option value="open">Undecided</option><option value="done">Chosen</option></select>
+<select id="fLevel" aria-label="Level"><option value="">All levels</option><option value="component">Component</option><option value="screen">Screen</option><option value="journey">Journey</option></select><select id="fDir" aria-label="Direction"></select>
+<select id="fState" aria-label="Review status"><option value="">Any status</option><option value="open">Undecided</option><option value="done">Variant chosen</option><option value="keep">Keep baseline</option></select>
+<select id="fView" aria-label="View"><option value="">Full collection</option><option value="path">Recommended path</option></select><button class="btn" id="next">Next undecided</button><button class="btn" id="foldAll">Collapse all</button>
 <button class="btn p" id="exp">Export choices (JSON)</button><button class="btn" id="txt">Export summary (TXT)</button><label class="btn" for="imp" tabindex="0">Import JSON</label><input id="imp" type="file" accept=".json,application/json" hidden><button class="btn" id="reset">Clear</button>
 </div></div>
-<div class="stats" id="stats"></div><main><div id="groups"></div><section class="group" id="stressSec"><h2>Large text and narrow width</h2><p class="d">Key screens at font 1.5, font 2.0 and 360 dp.</p><div class="stress" id="stress"></div></section></main>
+<div class="stats" id="stats"></div><div id="conflict" role="alert"></div><main><div id="seqs"></div><div id="groups"></div><section class="group" id="stressSec"><h2>Large text and narrow width</h2><p class="d">Key screens at font 1.5, font 2.0 and 360 dp.</p><div class="stress" id="stress"></div></section></main>
 <div id="toast" role="status"></div><div id="lb"><img alt=""></div>
 <script>
 const M = __MANIFEST__;
-const KEY='numaya-choices:'+M.reviewId; let st={selections:{},notes:{}};
-const load=()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.selections)st=s;}catch(e){}};
+const KEEP='KEEP',KEY='numaya-choices:'+M.reviewId;let st={selections:{},notes:{},fold:{}};
+const load=()=>{try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.selections)st={fold:{},...s};}catch(e){}};
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}};
 const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const toast=m=>{const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3500);};
-const byId=Object.fromEntries(M.groups.map(g=>[g.id,g]));
-const conflicts=(sel)=>{const out=[];for(const [gid,vid] of Object.entries(sel)){const g=byId[gid];for(const r of (g&&g.requires&&g.requires[vid])||[]){const [og,ov]=r.split(':');if(sel[og]&&sel[og]!==ov)out.push(`${g.title} ${vid} needs ${og} ${ov}`);}}return out;};
-const opt=(el,all,vals)=>{el.innerHTML=`<option value="">${all}</option>`+vals.map(v=>`<option>${E(v)}</option>`).join('');};
 const $=i=>document.getElementById(i);
+const toast=m=>{const t=$('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3500);};
+const byId=Object.fromEntries(M.groups.map(g=>[g.id,g]));
+const real=v=>v&&v!==KEEP&&v!=='O';
+const hits=(v,set)=>real(v)&&(set==='*'||set.includes(v));
+const dirName=d=>(M.directions[d]||{}).name||d;
+function conflicts(sel){const out=[];
+for(const [gid,vid] of Object.entries(sel)){if(vid===KEEP)continue;const g=byId[gid];for(const r of (g&&g.requires&&g.requires[vid])||[]){const [og,ov]=r.split(':');if(sel[og]&&sel[og]!==ov)out.push(`${g.title} ${vid} needs ${og} ${ov}`);}}
+const used=M.directionBound.filter(g=>byId[g]&&real(sel[g])).map(g=>[g,byId[g].directions[sel[g]]]);
+const kinds=[...new Set(used.map(u=>u[1]))];
+if(kinds.length>1)out.push('Direction mix: '+used.map(([g,d])=>`${byId[g].title} is ${dirName(d)}`).join(', ')+'. Use one direction for all four, or keep the baseline.');
+for(const x of M.exclusive)if(hits(sel[x.a],x.av)&&hits(sel[x.b],x.bv))out.push(`${byId[x.a].title} ${sel[x.a]} and ${byId[x.b].title} ${sel[x.b]} can’t both apply. ${x.why}`);
+return out;}
+const opt=(el,all,vals)=>{el.innerHTML=`<option value="">${all}</option>`+vals.map(v=>`<option>${E(v)}</option>`).join('');};
 opt($('fRun'),'All runs',[...new Set(M.groups.map(g=>g.run))]);opt($('fFlow'),'All flows',[...new Set(M.groups.map(g=>g.flow))].sort());
+$('fDir').innerHTML='<option value="">All directions</option>'+Object.entries(M.directions).map(([k,v])=>`<option value="${k}">${E(v.name)}</option>`).join('');
 $('meta').textContent=`Review ${M.reviewId} · source ${M.sourceCommit.slice(0,7)} · baseline ${M.baselineCommit.slice(0,7)}`;
+$('dirs').innerHTML=Object.entries(M.directions).map(([k,v])=>`<b>${E(v.name)}:</b> ${E(v.principle)}`).join('<br>');
 function img(i,alt){return `<img loading="lazy" src="${E(i.path)}" alt="${E(alt)}" data-full="${E(i.path)}">`;}
+const folded=g=>g.id in st.fold?st.fold[g.id]:g.status!=='current';
 function match(g){const q=$('q').value.trim().toLowerCase();if(q&&!(g.title+' '+g.id+' '+g.question+' '+g.variants.map(v=>v.name+' '+v.note).join(' ')).toLowerCase().includes(q))return false;
-if($('fRun').value&&g.run!==$('fRun').value)return false;if($('fFlow').value&&g.flow!==$('fFlow').value)return false;if($('fSurf').value&&g.surface!==$('fSurf').value)return false;
-const done=!!st.selections[g.id];if($('fState').value==='open'&&done)return false;if($('fState').value==='done'&&!done)return false;return true;}
-function card(g){const sel=st.selections[g.id]||'';
+if($('fRun').value&&g.run!==$('fRun').value)return false;if($('fFlow').value&&g.flow!==$('fFlow').value)return false;if($('fSurf').value&&g.surface!==$('fSurf').value)return false;if($('fLevel').value&&g.level!==$('fLevel').value)return false;
+if($('fDir').value&&!Object.values(g.directions||{}).includes($('fDir').value))return false;
+const s=st.selections[g.id];const f=$('fState').value;if(f==='open'&&s)return false;if(f==='done'&&(!s||s===KEEP))return false;if(f==='keep'&&s!==KEEP)return false;return true;}
+const line=(k,v)=>v?`<p class="d"><b>${k}:</b> ${E(v)}</p>`:'';
+function card(g){const sel=st.selections[g.id]||'';const n=M.recommendedPath.indexOf(g.id);const rec=g.variants.find(v=>v.id===g.recommended);
+const head=`<h2><button class="tog" data-f="${E(g.id)}" aria-expanded="${!folded(g)}">${n>=0&&$('fView').value?`<span class="path">${n+1}</span>`:''}${E(g.title)}</button></h2><div class="chips"><span class="chip">${E(g.flow)}</span><span class="chip">${E(g.level)}</span><span class="chip">${E(g.run)}</span><span class="chip">source ${E(g.source)}</span>${sel?`<span class="chip">${sel===KEEP?'Keep baseline':'Chosen '+E(sel)}</span>`:'<span class="chip w">Undecided</span>'}${g.status==='deferred'?'<span class="chip w">Deferred feature, not in the app</span>':''}${g.status==='earlier'?'<span class="chip w">Earlier render, not re-rendered</span>':''}</div>`;
+if(folded(g))return `<section class="group" data-g="${E(g.id)}">${head}</section>`;
 const v=g.variants.map(x=>`<div class="v ${sel===x.id?'on':''}">${x.images.length?x.images.map(i=>img(i,g.title+' '+x.name)).join(''):'<div class="empty">No render in this set</div>'}
-<h3>${E(x.id)} · ${E(x.name)}</h3><p class="tag ${x.id==='O'?'b':x.id===g.recommended?'r':''}">${x.id==='O'?'Baseline':''}${x.id===g.recommended?(x.id==='O'?' · ':'')+'Recommended, not approved':''}</p><p>${E(x.note)}</p>${x.tradeoff?`<p><i>Trade-off:</i> ${E(x.tradeoff)}</p>`:''}
+<h3>${E(x.id)} · ${E(x.name)}</h3>${g.directions[x.id]?`<p class="dir">${E(dirName(g.directions[x.id]))}</p>`:''}<p class="tag ${x.id==='O'?'b':x.id===g.recommended?'r':''}">${x.id==='O'?'Baseline':'Alternative'}${x.id===g.recommended?' · Recommended, not approved':''}</p><p>${E(x.note)}</p>${x.tradeoff?`<p><i>Trade-off:</i> ${E(x.tradeoff)}</p>`:''}
 ${(x.history||[]).length?`<details><summary>${x.history.length} earlier render(s)</summary><div class="hist">${x.history.map(h=>`<figure style="margin:0">${img(h,h.run)}<figcaption>${E(h.run)}</figcaption></figure>`).join('')}</div></details>`:''}
 <label class="pick"><input type="radio" name="s-${E(g.id)}" value="${E(x.id)}" ${sel===x.id?'checked':''}> Choose ${E(x.id)}</label></div>`).join('');
-const conf=conflicts(st.selections).filter(c=>c.startsWith(g.title));
-return `<section class="group" data-g="${E(g.id)}"><h2>${E(g.title)}</h2><div class="chips"><span class="chip">${E(g.flow)}</span><span class="chip">${E(g.surface)}</span><span class="chip">${E(g.run)}</span><span class="chip">source ${E(g.source)}</span>${g.status==='deferred'?'<span class="chip w">Deferred feature, not in the app</span>':''}${g.status==='earlier'?'<span class="chip w">Earlier render, not re-rendered</span>':''}</div>
-<p class="q">${E(g.question)}</p>${g.task?`<p class="d"><b>Target:</b> ${E(g.task)}</p>`:''}${g.problem?`<p class="d"><b>Problem:</b> ${E(g.problem)}</p>`:''}${g.hypothesis?`<p class="d"><b>Hypothesis:</b> ${E(g.hypothesis)}</p>`:''}${(g.references||[]).length?`<p class="d"><b>References:</b> ${g.references.map(E).join(' · ')}</p>`:''}${g.earlier.length?`<p class="d"><b>Also rendered in:</b> ${g.earlier.map(e=>E(e.run)+' ('+e.count+')').join(', ')}</p>`:''}
-${conf.map(c=>`<p class="warn">Conflict: ${E(c)}</p>`).join('')}<div class="vars">${v}</div>
-<label class="pick"><input type="radio" name="s-${E(g.id)}" value="" ${sel?'':'checked'}> Undecided</label><textarea data-n="${E(g.id)}" placeholder="Optional note" aria-label="Note for ${E(g.title)}">${E(st.notes[g.id]||'')}</textarea></section>`;}
-function stats(){const open=M.groups.filter(g=>!st.selections[g.id]);const c=M.groups.filter(g=>g.status==='current');
-$('stats').innerHTML=[['Groups',M.groups.length],['Options',M.groups.reduce((n,g)=>n+g.variants.length,0)],['Current renders',c.length],['Undecided',open.length],['Chosen',M.groups.length-open.length]].map(([l,v])=>`<div class="stat"><b>${v}</b><span>${l}</span></div>`).join('');}
-function render(){$('groups').innerHTML=M.groups.filter(match).map(card).join('')||'<p class="d">No groups match.</p>';stats();
-document.querySelectorAll('.group input[type=radio]').forEach(r=>r.onchange=e=>{const g=e.target.closest('.group').dataset.g;if(e.target.value)st.selections[g]=e.target.value;else delete st.selections[g];save();render();const c=conflicts(st.selections);if(c.length)toast('Conflict: '+c[0]);});
-document.querySelectorAll('textarea[data-n]').forEach(t=>t.oninput=e=>{const g=e.target.dataset.n;if(e.target.value)st.notes[g]=e.target.value;else delete st.notes[g];save();});}
-const payload=()=>({schemaVersion:2,reviewId:M.reviewId,sourceCommit:M.sourceCommit,generatedAt:M.generatedAt,exportedAt:new Date().toISOString(),selections:Object.entries(st.selections).map(([groupId,variantId])=>({groupId,variantId,notes:st.notes[groupId]||''})),undecidedGroups:M.groups.filter(g=>!st.selections[g.id]).map(g=>g.id),notesWithoutSelection:Object.fromEntries(Object.entries(st.notes).filter(([g])=>!st.selections[g]))});
+const c=g.critique;
+return `<section class="group" data-g="${E(g.id)}">${head}<p class="q">${E(g.question)}</p>${line('Your task',g.task)}${line('Problem',g.problem)}${line('Essential now / later',g.essential)}${line('Primary action',g.primary)}${line('Benefit',g.benefit)}${line('Cost or risk',g.cost)}${line('Hypothesis, not research',g.hypothesis)}${line('Status',g.impl)}${line('Route and widget',g.route)}${line('Verified',g.verification)}
+${(g.references||[]).length?`<p class="d"><b>References:</b> ${g.references.map(E).join(' · ')}</p>`:''}${g.earlier.length?`<p class="d"><b>Also rendered in:</b> ${g.earlier.map(e=>E(e.run)+' ('+e.count+')').join(', ')}</p>`:''}
+${rec?`<div class="rec"><b>Recommendation:</b> ${E(rec.id)} · ${E(rec.name)}. A suggestion only.</div>`:''}${c?`<details><summary>Four-way critique (one reviewer, separate passes)</summary><p class="d"><b>Product:</b> ${E(c.product)}</p><p class="d"><b>Visual:</b> ${E(c.visual)}</p><p class="d"><b>Interaction and access:</b> ${E(c.interaction)}</p><p class="d"><b>Flutter:</b> ${E(c.engineering)}</p></details>`:''}
+<div class="vars">${v}</div>
+<label class="pick"><input type="radio" name="s-${E(g.id)}" value="${KEEP}" ${sel===KEEP?'checked':''}> None of these, keep baseline</label><label class="pick"><input type="radio" name="s-${E(g.id)}" value="" ${sel?'':'checked'}> Undecided</label><textarea data-n="${E(g.id)}" placeholder="Optional note" aria-label="Note for ${E(g.title)}">${E(st.notes[g.id]||'')}</textarea></section>`;}
+function seqs(){$('seqs').innerHTML=M.sequences.map(s=>`<section class="seq"><h2>${E(s.title)}</h2><p class="d">${E(s.note)}</p>${s.rows.map(r=>`<div class="row"><h3>${E(r.variant)} · ${E(r.name)}${s.id==='direction'&&r.variant!=='O'?` <button class="btn" data-dir="${E(r.variant)}">Use this direction</button>`:''}${s.id==='direction'&&r.variant==='O'?` <button class="btn" data-dir="${KEEP}">Keep baseline on all four</button>`:''}</h3><div class="steps">${r.steps.map(x=>`<figure>${img(x,s.title+' '+r.name+' '+x.label)}<figcaption>${E(x.label)}</figcaption></figure>`).join('')}</div></div>`).join('')}</section>`).join('');}
+function stats(){const open=M.groups.filter(g=>!st.selections[g.id]);const keep=M.groups.filter(g=>st.selections[g.id]===KEEP).length;
+$('stats').innerHTML=[['Groups',M.groups.length],['Options',M.groups.reduce((n,g)=>n+g.variants.length,0)],['Current renders',M.groups.filter(g=>g.status==='current').length],['Undecided',open.length],['Variant chosen',M.groups.length-open.length-keep],['Keep baseline',keep]].map(([l,v])=>`<div class="stat"><b>${v}</b><span>${l}</span></div>`).join('');
+$('conflict').innerHTML=conflicts(st.selections).map(c=>`<div>${E(c)}</div>`).join('');}
+function list(){const f=M.groups.filter(match);if(!$('fView').value)return f;return M.recommendedPath.map(i=>byId[i]).filter(g=>f.includes(g));}
+function render(){$('groups').innerHTML=list().map(card).join('')||'<p class="d">No groups match.</p>';stats();
+document.querySelectorAll('.group input[type=radio]').forEach(r=>r.onchange=e=>{const g=e.target.closest('.group').dataset.g;if(e.target.value)st.selections[g]=e.target.value;else delete st.selections[g];save();render();});
+document.querySelectorAll('textarea[data-n]').forEach(t=>t.oninput=e=>{const g=e.target.dataset.n;if(e.target.value)st.notes[g]=e.target.value;else delete st.notes[g];save();});
+document.querySelectorAll('.tog').forEach(b=>b.onclick=()=>{const g=byId[b.dataset.f];st.fold[g.id]=!folded(g);save();render();});}
+const decision=g=>{const s=st.selections[g.id];return {groupId:g.id,decision:!s?'undecided':s===KEEP?'keep-baseline':'selected',variantId:s&&s!==KEEP?s:null,direction:s&&s!==KEEP?(g.directions[s]||null):null,notes:st.notes[g.id]||''};};
+const payload=()=>({schemaVersion:3,reviewId:M.reviewId,sourceCommit:M.sourceCommit,generatedAt:M.generatedAt,exportedAt:new Date().toISOString(),decisions:M.groups.map(decision)});
 function dl(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();}
-$('exp').onclick=()=>{if(!Object.keys(st.selections).length&&!confirm('No designs selected.\n\nEvery group is still Undecided: nothing will be applied. Export an all-undecided file anyway?'))return;dl(`numaya-choices-${M.reviewId}.json`,JSON.stringify(payload(),null,2),'application/json');};
-$('txt').onclick=()=>{const p=payload();const lines=[`Numaya design choices (${p.reviewId}, source ${p.sourceCommit})`,`Exported ${p.exportedAt}`,''];for(const g of M.groups){const s=st.selections[g.id];lines.push(`${g.title} [${g.id}]: ${s?s+' – '+g.variants.find(v=>v.id===s).name:'undecided'}`);if(st.notes[g.id])lines.push('  Notes: '+st.notes[g.id]);}dl(`numaya-choices-${M.reviewId}.txt`,lines.join('\n'),'text/plain');};
-$('reset').onclick=()=>{if(!confirm('Clear every choice and note in this browser? Exported files are not affected.'))return;st={selections:{},notes:{}};save();render();};
+const blocked=()=>{const c=conflicts(st.selections);if(c.length){toast('Resolve this before exporting: '+c[0]);return true;}return false;};
+$('exp').onclick=()=>{if(blocked())return;if(!Object.keys(st.selections).length&&!confirm('No designs selected.\n\nEvery group is still Undecided: nothing will be applied. Export an all-undecided file anyway?'))return;dl(`numaya-choices-${M.reviewId}.json`,JSON.stringify(payload(),null,2),'application/json');};
+$('txt').onclick=()=>{if(blocked())return;const p=payload();const lines=[`Numaya design choices (${p.reviewId}, source ${p.sourceCommit})`,`Exported ${p.exportedAt}`,''];for(const d of p.decisions){const g=byId[d.groupId];lines.push(`${g.title} [${g.id}]: ${d.decision==='selected'?d.variantId+' – '+g.variants.find(v=>v.id===d.variantId).name:d.decision}`);if(d.notes)lines.push('  Notes: '+d.notes);}dl(`numaya-choices-${M.reviewId}.txt`,lines.join('\n'),'text/plain');};
+$('reset').onclick=()=>{if(!confirm('Clear every choice and note in this browser? Exported files are not affected.'))return;st={selections:{},notes:{},fold:{}};save();render();};
 $('imp').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;let d;try{d=JSON.parse(await f.text());}catch(x){toast('That file isn’t valid JSON. Nothing changed.');return;}
-const bad=[];if(d.schemaVersion!==2)bad.push('schemaVersion must be 2');if(d.reviewId!==M.reviewId)bad.push(`reviewId ${String(d.reviewId).slice(0,40)} doesn’t match this gallery (${M.reviewId})`);if(!Array.isArray(d.selections))bad.push('selections must be a list');
-const n={selections:{},notes:{}};for(const s of d.selections||[]){const g=s&&byId[s.groupId];if(!g){bad.push('unknown group '+String(s&&s.groupId).slice(0,50));continue;}if(!g.variants.some(v=>v.id===s.variantId)){bad.push(`unknown variant ${String(s.variantId).slice(0,20)} in ${s.groupId}`);continue;}n.selections[s.groupId]=s.variantId;if(typeof s.notes==='string'&&s.notes)n.notes[s.groupId]=s.notes.slice(0,4000);}
-for(const [g,t] of Object.entries(d.notesWithoutSelection||{}))if(byId[g]&&typeof t==='string')n.notes[g]=t.slice(0,4000);
-const c=conflicts(n.selections);if(c.length)bad.push('incompatible: '+c[0]);if(bad.length){toast('Import refused: '+bad[0]);console.warn(bad);return;}st=n;save();render();toast(`Imported ${Object.keys(st.selections).length} choices`);};
-['q','fRun','fFlow','fSurf','fState'].forEach(i=>$(i).addEventListener('input',render));
+const bad=[];if(d.schemaVersion!==3)bad.push('schemaVersion must be 3');if(d.reviewId!==M.reviewId)bad.push(`reviewId ${String(d.reviewId).slice(0,40)} doesn’t match this gallery (${M.reviewId})`);if(!Array.isArray(d.decisions))bad.push('decisions must be a list');
+const n={selections:{},notes:{},fold:st.fold},seen=new Set();for(const s of Array.isArray(d.decisions)?d.decisions:[]){const g=s&&byId[s.groupId];if(!g){bad.push('unknown group '+String(s&&s.groupId).slice(0,50));continue;}if(seen.has(s.groupId)){bad.push('duplicate group '+s.groupId);continue;}seen.add(s.groupId);
+if(s.decision==='selected'){if(!g.variants.some(v=>v.id===s.variantId)){bad.push(`unknown variant ${String(s.variantId).slice(0,20)} in ${s.groupId}`);continue;}n.selections[s.groupId]=s.variantId;}else if(s.decision==='keep-baseline')n.selections[s.groupId]=KEEP;else if(s.decision!=='undecided'){bad.push('unknown decision in '+s.groupId);continue;}
+if(typeof s.notes==='string'&&s.notes)n.notes[s.groupId]=s.notes.slice(0,4000);}
+const c=conflicts(n.selections);if(c.length)bad.push('incompatible: '+c[0]);if(bad.length){toast('Import refused: '+bad[0]);console.warn(bad);return;}st=n;save();render();toast(`Imported ${seen.size} decisions`);};
+['q','fRun','fFlow','fSurf','fLevel','fDir','fState','fView'].forEach(i=>$(i).addEventListener('input',render));
+$('next').onclick=()=>{const g=list().find(x=>!st.selections[x.id]);if(!g){toast('Nothing undecided in this view.');return;}st.fold[g.id]=false;save();render();const el=document.querySelector(`[data-g="${CSS.escape(g.id)}"]`);el.scrollIntoView({block:'start'});el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1500);};
+$('foldAll').onclick=()=>{M.groups.forEach(g=>st.fold[g.id]=true);save();render();};
 $('stress').innerHTML=M.stress.map(s=>`<figure>${img(s,s.label)}<figcaption>${E(s.label)}</figcaption></figure>`).join('');
-document.addEventListener('click',e=>{const t=e.target;const lb=$('lb');if(t.tagName==='IMG'&&t.dataset.full){lb.querySelector('img').src=t.dataset.full;lb.style.display='flex';}else if(t.closest('#lb'))lb.style.display='none';});
+document.addEventListener('click',e=>{const t=e.target;const lb=$('lb');if(t.dataset&&t.dataset.dir){const d=t.dataset.dir;for(const g of M.directionBound){if(!byId[g])continue;if(d===KEEP)st.selections[g]=KEEP;else{const v=Object.entries(byId[g].directions).find(([,x])=>x===d);if(v)st.selections[g]=v[0];}}save();render();toast(d===KEEP?'Baseline kept on all four':'Applied '+dirName(d)+' to all four');return;}if(t.tagName==='IMG'&&t.dataset.full){lb.querySelector('img').src=t.dataset.full;lb.style.display='flex';}else if(t.closest('#lb'))lb.style.display='none';});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('lb').style.display='none';});
-load();render();
+load();seqs();render();
 </script></body></html>

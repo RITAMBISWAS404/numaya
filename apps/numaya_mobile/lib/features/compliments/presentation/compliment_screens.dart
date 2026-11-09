@@ -11,6 +11,7 @@ import '../../dating/domain/sample_people.dart';
 import '../../dating/presentation/person_profile.dart';
 import '../../dating/presentation/safety_sheets.dart';
 import '../../dating/presentation/time_format.dart';
+import '../../lab/lab_registry.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../profile/application/profile_details_controller.dart';
 import '../../profile/presentation/own_profile.dart';
@@ -36,6 +37,30 @@ ComplimentTarget parseComplimentTarget(Map<String, String> q) {
   return q['kind'] == ComplimentTargetKind.prompt.name
       ? ComplimentTarget.prompt(index)
       : ComplimentTarget.photo(index);
+}
+
+/// Opens the composer for a target: a page, or a sheet over the profile in the sheet direction.
+Future<void> openCompliment(
+  BuildContext context,
+  WidgetRef ref,
+  String personId,
+  ComplimentTarget target,
+) async {
+  final person = personById(personId);
+  if (ref.read(labVariantProvider('v7-compliment')) == 'B' && person != null) {
+    await showNumayaSheet<void>(
+      context: context,
+      title: context.l10n.complimentTitle(person.name),
+      closeLabel: context.l10n.close,
+      builder: (_) => ComplimentComposerScreen(
+        personId: personId,
+        target: target,
+        embedded: true,
+      ),
+    );
+    return;
+  }
+  await context.push(complimentRoute(personId, target));
 }
 
 /// The prompt at [index] on [person] (0: the main prompt, then the extra prompts).
@@ -96,6 +121,34 @@ class ComplimentReference extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+/// Direction A: the photo or prompt fills the width, so the member writes looking at it.
+class ComplimentContextHero extends StatelessWidget {
+  const ComplimentContextHero({
+    super.key,
+    required this.person,
+    required this.target,
+  });
+
+  final SamplePerson person;
+  final ComplimentTarget target;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final prompt = target.kind == ComplimentTargetKind.prompt
+        ? promptAt(person, target.index)
+        : null;
+    if (prompt != null) {
+      return PromptCard(question: prompt.question, answer: prompt.answer);
+    }
+    return PhotoPlaceholder(
+      label: l10n.discoverPhotoLabel(person.name, target.index + 1),
+      aspectRatio: 1,
+      child: personPhotoImage(person, target.index + 1),
     );
   }
 }
@@ -181,10 +234,14 @@ class ComplimentComposerScreen extends ConsumerStatefulWidget {
     super.key,
     required this.personId,
     required this.target,
+    this.embedded = false,
   });
 
   final String personId;
   final ComplimentTarget target;
+
+  /// Drawn inside a sheet rather than as a page.
+  final bool embedded;
 
   @override
   ConsumerState<ComplimentComposerScreen> createState() =>
@@ -199,6 +256,41 @@ class _ComplimentComposerScreenState
   bool _sent = false;
 
   bool get _dirty => !_sent && _text.text.trim().isNotEmpty;
+
+  void _leave() {
+    if (widget.embedded) {
+      Navigator.of(context).pop();
+    } else {
+      context.pop();
+    }
+  }
+
+  void _useOpener(String text) {
+    _text.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
+  }
+
+  /// A page, or plain content inside the sheet (which has its own title and close).
+  Widget _frame({
+    required Widget top,
+    required Widget footer,
+    required Widget body,
+  }) {
+    if (!widget.embedded) {
+      return NumayaScreen(top: top, footer: footer, body: body);
+    }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        body,
+        const SizedBox(height: AppSpacing.s4),
+        footer,
+      ],
+    );
+  }
 
   @override
   void initState() {
@@ -215,7 +307,7 @@ class _ComplimentComposerScreenState
   /// Leaving with words written asks first; nothing has been spent either way.
   Future<void> _close() async {
     if (!_dirty) {
-      context.pop();
+      _leave();
       return;
     }
     final l10n = context.l10n;
@@ -246,7 +338,7 @@ class _ComplimentComposerScreenState
         ],
       ),
     );
-    if (discard == true && mounted) context.pop();
+    if (discard == true && mounted) _leave();
   }
 
   Future<void> _send(SamplePerson person) async {
@@ -305,6 +397,7 @@ class _ComplimentComposerScreenState
         ),
       );
     }
+    final v7 = ref.watch(labVariantProvider('v7-compliment'));
     final max = controller.maxLength;
     final block = controller.blockFor(person.id);
     final problem = complimentProblem(_text.text, max);
@@ -319,16 +412,16 @@ class _ComplimentComposerScreenState
       null => null,
     };
     if (_sent) {
-      return NumayaScreen(
+      return _frame(
         top: NumayaTopBar(
-          onBack: () => context.pop(),
+          onBack: _leave,
           backLabel: l10n.close,
           closeIcon: true,
         ),
         footer: NumayaButton(
           key: const ValueKey('compliment-done'),
           label: l10n.done,
-          onPressed: () => context.pop(),
+          onPressed: _leave,
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -392,21 +485,30 @@ class _ComplimentComposerScreenState
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) _close();
       },
-      child: NumayaScreen(
+      child: _frame(
         top: top,
         footer: footer,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: AppSpacing.s4),
-            ScreenHeader(title: l10n.complimentTitle(person.name)),
-            const SizedBox(height: AppSpacing.s4),
-            WhiteCard(
-              child: ComplimentContextRow(
-                person: person,
-                target: widget.target,
+            if (!widget.embedded) ...[
+              const SizedBox(height: AppSpacing.s4),
+              ScreenHeader(
+                title: v7 == 'C'
+                    ? l10n.v7ComplimentWarmTitle(person.name)
+                    : l10n.complimentTitle(person.name),
               ),
-            ),
+              const SizedBox(height: AppSpacing.s4),
+            ],
+            if (v7 == 'A')
+              ComplimentContextHero(person: person, target: widget.target)
+            else
+              WhiteCard(
+                child: ComplimentContextRow(
+                  person: person,
+                  target: widget.target,
+                ),
+              ),
             const SizedBox(height: AppSpacing.s4),
             if (blockText != null)
               StatusBanner(title: blockText)
@@ -434,6 +536,30 @@ class _ComplimentComposerScreenState
                     : null,
                 trailingNote: l10n.complimentCounter(used, max),
               ),
+              if (v7 == 'C' && _text.text.isEmpty) ...[
+                const SizedBox(height: AppSpacing.s3),
+                Wrap(
+                  spacing: AppSpacing.s2,
+                  runSpacing: AppSpacing.s2,
+                  children: [
+                    for (final opener in [
+                      if (widget.target.kind == ComplimentTargetKind.photo) ...[
+                        l10n.v7OpenerStory,
+                        l10n.v7OpenerWhere,
+                      ] else ...[
+                        l10n.v7OpenerPromptStory,
+                        l10n.v7OpenerPromptSame,
+                      ],
+                      l10n.v7OpenerMore,
+                    ])
+                      NumayaChip(
+                        label: opener,
+                        selected: false,
+                        onTap: () => _useOpener(opener),
+                      ),
+                  ],
+                ),
+              ],
               const SizedBox(height: AppSpacing.s2),
               Text(
                 '${l10n.complimentBalance(balance)} ${l10n.complimentRule(person.name)}',
@@ -571,6 +697,7 @@ class _RequestScreenState extends ConsumerState<RequestScreen> {
       );
     }
     final now = ref.read(clockProvider)();
+    final requestV = ref.watch(labVariantProvider('v7-request'));
     return NumayaScreen(
       top: top,
       footer: Column(
@@ -621,21 +748,44 @@ class _RequestScreenState extends ConsumerState<RequestScreen> {
             ],
           ),
           const SizedBox(height: AppSpacing.s5),
-          WhiteCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(c.text, style: AppTypography.cardPrimary),
-                const SizedBox(height: AppSpacing.s3),
-                ComplimentContextRow(
-                  person: ref.watch(ownProfilePersonProvider),
-                  target: c.target,
-                  available: c.referenceAvailable,
-                  yours: true,
-                ),
-              ],
+          if (requestV == 'B') ...[
+            PhotoPlaceholder(
+              label: l10n.discoverPhotoLabel(person.name, 1),
+              aspectRatio: 4 / 3,
+              child: personPhotoImage(person, 1),
             ),
-          ),
+            const SizedBox(height: AppSpacing.s4),
+          ],
+          if (requestV == 'A')
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.s4),
+              child: Text(c.text, style: AppTypography.headline),
+            ),
+          if (requestV == 'A')
+            WhiteCard(
+              child: ComplimentContextRow(
+                person: ref.watch(ownProfilePersonProvider),
+                target: c.target,
+                available: c.referenceAvailable,
+                yours: true,
+              ),
+            )
+          else
+            WhiteCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(c.text, style: AppTypography.cardPrimary),
+                  const SizedBox(height: AppSpacing.s3),
+                  ComplimentContextRow(
+                    person: ref.watch(ownProfilePersonProvider),
+                    target: c.target,
+                    available: c.referenceAvailable,
+                    yours: true,
+                  ),
+                ],
+              ),
+            ),
           const SizedBox(height: AppSpacing.s4),
           NumayaButtonGroup(
             children: [

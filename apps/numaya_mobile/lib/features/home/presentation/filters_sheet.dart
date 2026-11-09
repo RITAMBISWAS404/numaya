@@ -7,6 +7,7 @@ import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../dating/application/dating_controller.dart';
 import '../../help/domain/help_articles.dart';
+import '../../lab/lab_registry.dart';
 import '../../onboarding/domain/profile_draft.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../profile/domain/profile_details.dart';
@@ -364,21 +365,29 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ViewTabs(
-          label: l10n.filtersTitle,
-          selected: _tab,
-          onSelect: (i) => setState(() => _tab = i),
-          options: [
-            (label: l10n.filtersBasic, count: null),
-            (label: l10n.filtersAdvanced, count: null),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.s4),
+        if (ref.watch(labVariantProvider('v7-filters')) != 'A') ...[
+          ViewTabs(
+            label: l10n.filtersTitle,
+            selected: _tab,
+            onSelect: (i) => setState(() => _tab = i),
+            options: [
+              (label: l10n.filtersBasic, count: null),
+              (label: l10n.filtersAdvanced, count: null),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.s4),
+        ],
         Flexible(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: _tab == 0 ? basic : advanced,
+              children: ref.watch(labVariantProvider('v7-filters')) == 'A'
+                  ? [
+                      ...basic,
+                      const SizedBox(height: AppLayout.sectionGap),
+                      ...advanced,
+                    ]
+                  : (_tab == 0 ? basic : advanced),
             ),
           ),
         ),

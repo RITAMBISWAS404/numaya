@@ -100,9 +100,16 @@ class ProfileHeaderData {
 /// member's main photo as a wide cover with their name on it, so the Profile tab opens on how
 /// others first see them. Edit sits on the photo as a white pill. Axis: **photo emphasis**.
 class ProfileHeaderCover extends StatelessWidget {
-  const ProfileHeaderCover({super.key, required this.data});
+  const ProfileHeaderCover({
+    super.key,
+    required this.data,
+    this.square = false,
+  });
 
   final ProfileHeaderData data;
+
+  /// Square corners, for a cover that runs to the screen edges.
+  final bool square;
 
   /// Room above the name for the Edit pill and, without a photo, the initial.
   static const double _topRoom = 150;
@@ -121,7 +128,9 @@ class ProfileHeaderCover extends StatelessWidget {
     );
     return ClipRRect(
       key: const ValueKey('profile-header-cover'),
-      borderRadius: AppRadii.all(AppRadii.heroCard),
+      borderRadius: square
+          ? BorderRadius.zero
+          : AppRadii.all(AppRadii.heroCard),
       child: Stack(
         children: [
           Positioned.fill(

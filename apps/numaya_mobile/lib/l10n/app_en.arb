@@ -2560,6 +2560,18 @@
       "name": {}
     }
   },
+  "v7CommonGround": "You and {name} both like {things}",
+  "@v7CommonGround": {"placeholders": {"name": {"type": "String"}, "things": {"type": "String"}}},
+  "v7ComplimentWarmTitle": "Tell {name} what caught your eye",
+  "@v7ComplimentWarmTitle": {"placeholders": {"name": {"type": "String"}}},
+  "v7OpenerStory": "What’s the story here?",
+  "v7OpenerWhere": "Where was this?",
+  "v7OpenerMore": "Tell me more about this",
+  "v7OpenerPromptStory": "I need the story behind this",
+  "v7OpenerPromptSame": "I feel the same way",
+  "v7LikesCountLabel": "{count, plural, =1{person likes you} other{people like you}}",
+  "@v7LikesCountLabel": {"placeholders": {"count": {"type": "int"}}},
+  "v7StreakDays": "day streak",
   "complimentSentTitle": "Compliment sent",
   "complimentSentBody": "If {name} replies, a chat opens. Until then, you can’t send them another.",
   "@complimentSentBody": {"placeholders": {"name": {"type": "String"}}},

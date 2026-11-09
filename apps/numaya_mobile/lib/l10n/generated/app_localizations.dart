@@ -8662,6 +8662,60 @@ abstract class AppLocalizations {
   /// **'Compliment {name}'**
   String complimentTitle(Object name);
 
+  /// No description provided for @v7CommonGround.
+  ///
+  /// In en, this message translates to:
+  /// **'You and {name} both like {things}'**
+  String v7CommonGround(String name, String things);
+
+  /// No description provided for @v7ComplimentWarmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell {name} what caught your eye'**
+  String v7ComplimentWarmTitle(String name);
+
+  /// No description provided for @v7OpenerStory.
+  ///
+  /// In en, this message translates to:
+  /// **'What’s the story here?'**
+  String get v7OpenerStory;
+
+  /// No description provided for @v7OpenerWhere.
+  ///
+  /// In en, this message translates to:
+  /// **'Where was this?'**
+  String get v7OpenerWhere;
+
+  /// No description provided for @v7OpenerMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell me more about this'**
+  String get v7OpenerMore;
+
+  /// No description provided for @v7OpenerPromptStory.
+  ///
+  /// In en, this message translates to:
+  /// **'I need the story behind this'**
+  String get v7OpenerPromptStory;
+
+  /// No description provided for @v7OpenerPromptSame.
+  ///
+  /// In en, this message translates to:
+  /// **'I feel the same way'**
+  String get v7OpenerPromptSame;
+
+  /// No description provided for @v7LikesCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{person likes you} other{people like you}}'**
+  String v7LikesCountLabel(int count);
+
+  /// No description provided for @v7StreakDays.
+  ///
+  /// In en, this message translates to:
+  /// **'day streak'**
+  String get v7StreakDays;
+
   /// No description provided for @complimentSentTitle.
   ///
   /// In en, this message translates to:

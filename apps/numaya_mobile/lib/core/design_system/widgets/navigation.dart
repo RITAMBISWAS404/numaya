@@ -73,6 +73,7 @@ class NumayaTabBar extends StatelessWidget {
     required this.onSelect,
     this.indicator = TabIndicatorStyle.tint,
     this.surface = TabBarSurface.ente,
+    this.labelled = false,
   });
 
   /// Space between the pill's edge and each item.
@@ -87,6 +88,9 @@ class NumayaTabBar extends StatelessWidget {
   final TabIndicatorStyle indicator;
   final TabBarSurface surface;
 
+  /// A full-width bar naming each destination, instead of the floating icon pill.
+  final bool labelled;
+
   /// Whether this build draws glass: frosted, unless the person asked for High Contrast.
   bool frostedIn(BuildContext context) =>
       surface == TabBarSurface.frosted && !MediaQuery.highContrastOf(context);
@@ -96,6 +100,7 @@ class NumayaTabBar extends StatelessWidget {
     final bottom = MediaQuery.paddingOf(context).bottom;
     final frosted = frostedIn(context);
     final ente = surface == TabBarSurface.ente;
+    if (labelled) return _labelledBar(context, bottom);
     if (ente) return _compact(context, bottom);
     return _frame(
       frosted: frosted || ente,
@@ -238,6 +243,88 @@ class NumayaTabBar extends StatelessWidget {
   ///
   /// On a narrow screen the items narrow (to 68 at 320pt); the touch targets never shrink below
   /// 48.
+  Widget _labelledBar(BuildContext context, double bottom) {
+    return Container(
+      key: pillKey,
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        border: Border(top: BorderSide(color: AppColors.border)),
+      ),
+      padding: EdgeInsets.only(
+        top: AppSpacing.s2,
+        bottom: bottom > 0 ? bottom : AppSpacing.s2,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (var i = 0; i < items.length; i++)
+            Expanded(child: _labelledTab(context, i)),
+        ],
+      ),
+    );
+  }
+
+  Widget _labelledTab(BuildContext context, int i) {
+    final item = items[i];
+    final current = i == currentIndex;
+    final fg = current ? AppColors.accent : AppColors.textSecondary;
+    return Semantics(
+      selected: current,
+      button: true,
+      child: Pressable(
+        onTap: () => onSelect(i),
+        semanticLabel: item.badgeCount > 0
+            ? (item.badgeLabel ?? item.label)
+            : item.label,
+        excludeChildSemantics: true,
+        pressedScale: 0.95,
+        child: Padding(
+          key: ValueKey('tab-item-$i'),
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.s1),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  NumayaIcon(
+                    item.icon,
+                    filled: current,
+                    size: AppSizes.iconMd,
+                    color: fg,
+                  ),
+                  if (item.badgeCount > 0)
+                    Positioned(
+                      right: -3,
+                      top: -2,
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          color: AppColors.errorBase,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.surface,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.s1),
+              Text(
+                item.label,
+                textAlign: TextAlign.center,
+                style: AppTypography.caption.copyWith(color: fg),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _compact(BuildContext context, double bottom) {
     return _frame(
       frosted: true,

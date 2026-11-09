@@ -50,7 +50,11 @@ class PersonHeroCard extends StatelessWidget {
   final Widget? photoAction;
 
   bool get _overlay =>
-      photoHeight != null && layout != 'A' && layout != 'B' && layout != 'D';
+      photoHeight != null &&
+      layout != 'A' &&
+      layout != 'B' &&
+      layout != 'D' &&
+      layout != 'N';
 
   /// The discovery card's controls (overflow, Compliment) are drawn for every discover layout.
   bool get _discover => photoHeight != null;
@@ -82,7 +86,11 @@ class PersonHeroCard extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: AppRadii.all(
-            _discover ? SquircleIconButton.photoRadius : AppRadii.photo,
+            layout == 'F'
+                ? 0
+                : _discover
+                ? SquircleIconButton.photoRadius
+                : AppRadii.photo,
           ),
           child: _sized(
             Stack(
@@ -214,7 +222,7 @@ class PersonHeroCard extends StatelessWidget {
             ),
           ),
         ),
-        if (!_overlay)
+        if (!_overlay && layout != 'N')
           Padding(
             padding: const EdgeInsets.fromLTRB(
               AppSpacing.s3,
@@ -280,8 +288,10 @@ class PersonHeroCard extends StatelessWidget {
 
   // UI-011: every full profile photo is a 3:4 portrait frame across the content width, in both
   // the overlay (discovery) and plain layouts.
-  Widget _sized(Widget child) =>
-      AspectRatio(aspectRatio: AppMedia.personPhoto, child: child);
+  Widget _sized(Widget child) => AspectRatio(
+    aspectRatio: layout == 'N' ? 1 : AppMedia.personPhoto,
+    child: child,
+  );
 
   /// UI-014: the identity group at the bottom of the photo, over its fade: the status tags
   /// ("Sample profile", "New here") immediately above the name, then the name with its verified

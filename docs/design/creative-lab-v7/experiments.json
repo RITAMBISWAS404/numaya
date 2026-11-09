@@ -1,0 +1,164 @@
+{
+  "directions": {
+    "A": {"name": "Image-led", "principle": "The person's photo is the page. Edge to edge, square corners at the screen edge, words over a smooth scrim, one big number when there is no photo."},
+    "B": {"name": "Calm and spacious", "principle": "Words before imagery, nothing on top of a photo, no filled headers, compact identity. Sheets keep you where you were."},
+    "C": {"name": "Social and expressive", "principle": "What connects two people leads, on solid purple. Warm headings, starters for the blank field, collected day marks."}
+  },
+  "directionBound": ["v7-discover", "v7-compliment", "v7-profile", "v7-streak"],
+  "exclusive": [
+    {"a": "v7-streak", "av": "*", "b": "v6-streak-hero", "bv": "*", "why": "Both replace the same Streak header; the V7 choice would hide the V6 one."},
+    {"a": "v7-discover", "av": ["A", "B"], "b": "discover-photo", "bv": "*", "why": "Both set how the Discover photo is laid out."},
+    {"a": "v7-discover", "av": ["A"], "b": "v6-discover-margin", "bv": "*", "why": "Edge to edge has no page margin to choose."},
+    {"a": "v7-profile", "av": "*", "b": "profile-header", "bv": "*", "why": "Both replace the Profile header."}
+  ],
+  "recommendedPath": ["v7-discover", "v7-compliment", "v7-profile", "v7-streak", "v7-likes-locked", "v7-request", "v7-nav", "v7-filters", "v7-paywall", "v6-composer", "v6-quote-style", "v6-voice-bubble", "v6-wallet-header", "v6-settings-plan", "v6-page-title"],
+  "sequences": {
+    "v7-compliment": {
+      "title": "Compliment journey, four arrangements",
+      "note": "Same person, same credits. Entry, main, written, leaving with a draft, failed send, completion, back on Discover, and a person who cannot be sent one.",
+      "steps": {"1-entry": "Entry", "2-main": "Main", "3-written": "Written", "4-leave": "Back with draft", "4b-failed": "Send failed", "5-complete": "Sent", "6-next": "Back on Discover", "7-blocked": "Not allowed"}
+    },
+    "direction": {
+      "title": "Each direction across four screens",
+      "note": "Same data and viewport. A direction applies to all four or none, so screens do not contradict each other.",
+      "steps": {"1-discover": "Discover", "2-compliment": "Compliment", "3-profile": "Profile", "4-streak": "Streak"}
+    }
+  },
+  "groups": {
+    "v7-discover": {
+      "flow": "Discover", "level": "screen", "recommended": "A", "directions": {"A": "A", "B": "B", "C": "C"},
+      "task": "Decide quickly and fairly whether this person is interesting.",
+      "problem": "The inset photo is a card among cards: in the render the photo, the prompt and About me carry similar weight, though the photo drives the first impression.",
+      "essential": "Now: face, name, age, job, the action to compliment, safety menu. Later: prompts, About me, further photos (one scroll away).",
+      "primary": "Swipe to decide, or compliment the photo. Completion is the next person appearing.",
+      "benefit": "A: larger face at the moment of decision. B: identity read before looks. C: a reason to start talking.",
+      "cost": "A: name sits on the image and depends on the scrim. B: square photo shows less. C: banner adds height and only appears when something is shared.",
+      "hypothesis": "If the photo reaches the edges, members look at more of the face before deciding; a real test would compare time to first decision and Compliment rate.",
+      "references": ["Hinge profile, prompt card with anchored action: https://mobbin.com/screens/935ec54d-ecb9-4760-83ff-9d762406f786", "Ente Updated screens page 12099:96447 (20 margin, surfaces)"],
+      "route": "/home, discover_screen.dart with EdgeBleed and PersonHeroCard layouts F and N",
+      "verification": "Rendered on Pixel_10 with a bright and a busy photo; compliment and overflow actions tapped in the journey run.",
+      "critique": {"product": "A fits the task best; C is honest because it uses real shared interests and disappears when there are none.", "visual": "A is the strongest image; B feels like a different, quieter product; disagreement remains on whether B undersells photos.", "interaction": "Safety menu and Compliment keep their place and 44pt targets in all three.", "engineering": "EdgeBleed is one small render box; no duplicated screen tree."},
+      "tradeoffs": {"A": "Overlay text relies on the scrim on bright photos.", "B": "Less photo at first sight.", "C": "Extra banner height pushes the prompt down."}
+    },
+    "v7-compliment": {
+      "flow": "Likes and Compliments", "level": "journey", "recommended": "A", "directions": {"A": "A", "B": "B", "C": "C"},
+      "task": "Say something specific about one photo or prompt.",
+      "problem": "On the baseline the thing being complimented is a small thumbnail, and leaving the profile for a page breaks the connection between what you saw and what you write.",
+      "essential": "Now: the exact photo or prompt, the field, the cost and rule. Later: nothing.",
+      "primary": "Send. Completion is a clear sent state, then Discover moves on. No credit is used unless the send is accepted.",
+      "benefit": "A: you write looking at the photo. B: you stay on the profile. C: starters help with the blank field.",
+      "cost": "A: the large photo pushes the field down, and the keyboard covers it while typing. B: less room at large text. C: starters risk generic messages, so they only fill the field and are edited before sending.",
+      "hypothesis": "If context stays visible more Compliments mention something specific; measure by review of sent text in a consented study, not by volume.",
+      "references": ["TikTok comment sheet over content: https://mobbin.com/screens/d97ff021-06c4-452c-b8e6-4217411126f3", "ChatGPT comment on an image: https://mobbin.com/screens/f7ac84a2-f366-4023-bdcc-bdfd1eb0aaf2", "Hinge action anchored on the prompt: https://mobbin.com/screens/935ec54d-ecb9-4760-83ff-9d762406f786"],
+      "route": "/compliment/:id or a sheet from openCompliment, compliment_screens.dart",
+      "verification": "Whole journey run for each arrangement: entry, write, discard choice, failed send keeping the words, sent, blocked person.",
+      "critique": {"product": "Credit debit, one-per-pair and reply-first rules are untouched in all arrangements.", "visual": "A is the most persuasive; C's title is warm but its chips are visually small.", "interaction": "B's sheet shares the discard choice and back behaviour with the page.", "engineering": "One composer with an embedded flag; no second implementation."},
+      "tradeoffs": {"A": "Field is lower on the screen.", "B": "Tight with large text and the keyboard.", "C": "Starters may read as generic."}
+    },
+    "v7-profile": {
+      "flow": "Profile", "level": "screen", "recommended": "A", "directions": {"A": "A", "B": "B", "C": "C"},
+      "task": "Check how I appear and find what needs doing.",
+      "problem": "The photo card takes the top half before setup, streak or credits appear, and they sit below the fold.",
+      "essential": "Now: how others see me, setup progress. Later: lists of settings.",
+      "primary": "Edit profile or finish setup.",
+      "benefit": "A: same feeling as Discover, so you see yourself as others do. B: nearly everything is visible at once. C: streak and credits are one tap away.",
+      "cost": "A pushes lists further down. B loses the sense of seeing your photo. C repeats what Your activity lists below.",
+      "hypothesis": "If Profile matches the Discover presentation members better understand their own card.",
+      "references": ["Fresha account with floating navigation: https://mobbin.com/screens/ee15ef44-8a04-4dc1-9521-617ab3ff5830", "Ente Settings 12099:96480"],
+      "route": "/profile, ProfileHeaderCover, ProfileHeaderCompact, _ActivityStrip",
+      "verification": "Rendered; edit and strip targets exercised by route tests.",
+      "critique": {"product": "B serves maintenance best, A serves self-image best.", "visual": "Square corners were needed on A after the first render showed rounded corners at the screen edge.", "interaction": "Each half of C's strip is a separate 44pt target with its own label.", "engineering": "Reuses existing header widgets."},
+      "tradeoffs": {"A": "Setup moves down.", "B": "Less personal.", "C": "Duplicates Your activity."}
+    },
+    "v7-streak": {
+      "flow": "Streaks", "level": "component", "recommended": "A", "directions": {"A": "A", "B": "B", "C": "C"},
+      "task": "See where I am and what counts today.",
+      "problem": "The white card with a flame looks like every other card, so progress has little presence.",
+      "essential": "Now: current run, day in the cycle, whether today counts. Later: how a day counts, repair offer.",
+      "primary": "Understand progress; repair is offered only when eligible.",
+      "benefit": "A: one number reads instantly. B: quiet. C: collected marks feel rewarding without adding any new reward.",
+      "cost": "A loses today's status text. C's purple header competes with Repair.",
+      "hypothesis": "If progress reads at a glance members can answer what is left today without reading.",
+      "references": ["WHOOP week row: https://mobbin.com/screens/f38f622f-5abd-4432-b5de-cf3fbc93b17a", "BitePal number-led header: https://mobbin.com/screens/c6961180-60fb-450b-88af-27755cdfd567", "Cal AI day circles: https://mobbin.com/screens/f48da1ad-4de3-4900-9abd-6978316b5bb7"],
+      "route": "/streak, streak_screen.dart",
+      "verification": "Rendered with a repair offer visible; awards and repair logic not touched.",
+      "critique": {"product": "A omits 'Today counts'; C keeps the cycle but not today's state, which is a known gap in both.", "visual": "C is the most distinctive.", "interaction": "Day marks are not interactive; state uses a tick as well as colour.", "engineering": "Inline in the screen; extract if selected."},
+      "tradeoffs": {"A": "Today's status is not repeated.", "B": "Little sense of occasion.", "C": "Competes with Repair."}
+    },
+    "v7-likes-locked": {
+      "flow": "Likes and Compliments", "level": "screen", "recommended": "A", "directions": {"A": "A"},
+      "task": "Understand that people like me and what my options are.",
+      "problem": "Two blank locked tiles look like images that failed to load.",
+      "essential": "Now: how many, how to see them, that Discover is a free route.",
+      "primary": "See who with Premium, or go to Home.",
+      "benefit": "Honest and clear, no empty frames.",
+      "cost": "Less sense of real people waiting.",
+      "hypothesis": "A plain count avoids a broken-looking state with no pressure added.",
+      "references": ["LinkedIn viewers count: https://mobbin.com/screens/d8371080-4451-4c8e-ae20-01637ea7a193"],
+      "route": "/likes for a free member",
+      "verification": "Rendered; first render repeated the number, corrected to say it once.",
+      "critique": {"product": "No urgency or blur tricks added.", "visual": "Lots of space below; acceptable for a single message.", "interaction": "Header semantics preserved.", "engineering": "One conditional."},
+      "tradeoffs": {"A": "Less human than tiles."}
+    },
+    "v7-request": {
+      "flow": "Likes and Compliments", "level": "screen", "recommended": "A", "directions": {"A": "A", "B": "B"},
+      "task": "Read what someone said and decide whether to reply.",
+      "problem": "Their words have the same weight as the context under them.",
+      "essential": "Now: their words, what they were about, who sent it. Later: their full profile.",
+      "primary": "Reply, which is free and opens the chat.",
+      "benefit": "A: the words land. B: you meet the person first.",
+      "cost": "A: the sender is quieter. B: the photo can steer the decision before the words are read.",
+      "hypothesis": "Words-first encourages replies to what was said.",
+      "references": ["Hinge prompt weight: https://mobbin.com/screens/935ec54d-ecb9-4760-83ff-9d762406f786"],
+      "route": "/request/:id",
+      "verification": "Rendered; first render of B pushed the actions below the fold, corrected to a 4:3 photo.",
+      "critique": {"product": "Dismiss and report stay available in all.", "visual": "A is the clearest.", "interaction": "Reply remains anchored.", "engineering": "Reuses the context row."},
+      "tradeoffs": {"A": "Sender is quieter.", "B": "Longer page."}
+    },
+    "v7-nav": {
+      "flow": "Shared", "level": "screen", "recommended": "O", "directions": {"A": "A"},
+      "task": "Move between the four areas.",
+      "problem": "Icon-only tabs rely on recognition; four tabs have room for names.",
+      "essential": "Where I am, and where I can go.",
+      "primary": "Change tab.",
+      "benefit": "Named destinations are clearer for new members.",
+      "cost": "Takes more height and loses content running beneath the bar.",
+      "hypothesis": "Labels help mainly in the first sessions.",
+      "references": ["LinkedIn labelled bar: https://mobbin.com/screens/d8371080-4451-4c8e-ae20-01637ea7a193", "Fresha floating labelled bar: https://mobbin.com/screens/ee15ef44-8a04-4dc1-9521-617ab3ff5830"],
+      "route": "Every tab, NumayaTabBar labelled",
+      "verification": "Rendered on Discover; tab order, badges and semantics unchanged.",
+      "critique": {"product": "Baseline stays recommended because the four icons are conventional.", "visual": "The floating pill is more distinctive.", "interaction": "Named bar has larger targets.", "engineering": "One flag on the shared bar; large text needs checking if chosen."},
+      "tradeoffs": {"A": "Less photo on screen."}
+    },
+    "v7-filters": {
+      "flow": "Discover", "level": "screen", "recommended": "A", "directions": {"A": "A"},
+      "task": "Say who I want to see and return.",
+      "problem": "Tabs hide Advanced, and a choice there is invisible from Basic.",
+      "essential": "Who, age, distance first; lifestyle later in the same list.",
+      "primary": "Show results.",
+      "benefit": "Nothing hidden, one mental model.",
+      "cost": "A longer scroll.",
+      "hypothesis": "A single list reduces missed filters.",
+      "references": ["Ente Updated screens 12099:96447 (grouped lists)"],
+      "route": "Filters sheet",
+      "verification": "Rendered; filter logic unchanged.",
+      "critique": {"product": "Premium gating inside the list is unchanged.", "visual": "Section headers carry the structure tabs did.", "interaction": "Show and Reset stay anchored.", "engineering": "One conditional."},
+      "tradeoffs": {"A": "Longer sheet."}
+    },
+    "v7-paywall": {
+      "flow": "Premium", "level": "screen", "recommended": "O", "directions": {"A": "A"},
+      "task": "Compare plans or understand what Premium adds.",
+      "problem": "Someone already decided must scroll past benefits.",
+      "essential": "Plans and prices; what you get.",
+      "primary": "Pick a plan and continue.",
+      "benefit": "Faster for someone deciding.",
+      "cost": "Prices before value for someone who arrived from a locked feature.",
+      "hypothesis": "No change in amounts or terms; order only.",
+      "references": ["Numaya paywall baseline"],
+      "route": "/paywall",
+      "verification": "Rendered; plan amounts and disclosure text unchanged.",
+      "critique": {"product": "Baseline recommended: value before price, no pressure.", "visual": "Equal.", "interaction": "Selection unchanged.", "engineering": "Order only."},
+      "tradeoffs": {"A": "Asks for a decision before explaining."}
+    }
+  }
+}

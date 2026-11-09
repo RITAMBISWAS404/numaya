@@ -42,7 +42,8 @@ void main() {
         }
         if (g.kind == LabKind.screen &&
             !g.id.startsWith('v4-') &&
-            !g.id.startsWith('v6-')) {
+            !g.id.startsWith('v6-') &&
+            !g.id.startsWith('v7-')) {
           expect(g.ids, ['O', 'A', 'B', 'C'], reason: g.id);
         }
         // Dependencies name real groups and variants.

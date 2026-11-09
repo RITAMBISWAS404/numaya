@@ -110,6 +110,30 @@ class ProfileScreen extends ConsumerWidget {
         onVerify: () => context.push(Routes.verifyPhoto),
       ),
     };
+    final v7 = ref.watch(labVariantProvider('v7-profile'));
+    final Widget hero = switch (v7) {
+      'A' => EdgeBleed(
+        inset: AppLayout.screenGutter,
+        child: ProfileHeaderCover(data: header(), square: true),
+      ),
+      'B' => ProfileHeaderCompact(data: header()),
+      'C' => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          identity,
+          const SizedBox(height: AppSpacing.s3),
+          _ActivityStrip(
+            streak: l10n.hubStreakDetail(run.length),
+            credits: l10n.hubCreditsDetail(ledger.total),
+            streakLabel: l10n.streakTitle,
+            creditsLabel: l10n.walletTitle,
+            onStreak: toStreak,
+            onCredits: toWallet,
+          ),
+        ],
+      ),
+      _ => identity,
+    };
     final headerHasActivity = headerV == 'C';
 
     final profileGroup = ListGroup(
@@ -188,7 +212,7 @@ class ProfileScreen extends ConsumerWidget {
       ...switch (direction) {
         // Quiet editorial: one identity block, one line of activity, then plain groups.
         'A' => [
-          identity,
+          hero,
           small,
           setup,
           gap,
@@ -200,7 +224,7 @@ class ProfileScreen extends ConsumerWidget {
         ],
         // Connected cards: each activity is its own card with one destination.
         'B' => [
-          identity,
+          hero,
           small,
           setup,
           gap,
@@ -217,7 +241,7 @@ class ProfileScreen extends ConsumerWidget {
         ],
         // Visual insights: the identity carries this week's numbers; bars for streak and credits.
         'C' => [
-          identity,
+          hero,
           small,
           StreakSummaryCard(data: streak, onTap: toStreak, variant: 'B'),
           small,
@@ -231,7 +255,7 @@ class ProfileScreen extends ConsumerWidget {
         ],
         // Current-rules baseline: today's order with Your insights and the setup card.
         _ => [
-          identity,
+          hero,
           const SizedBox(height: AppSpacing.s4),
           setup,
           gap,
@@ -484,4 +508,67 @@ class _ProfileSummary extends StatelessWidget {
       ],
     );
   }
+}
+
+/// Direction C: streak and credits as one purple strip, each half its own target.
+class _ActivityStrip extends StatelessWidget {
+  const _ActivityStrip({
+    required this.streak,
+    required this.credits,
+    required this.streakLabel,
+    required this.creditsLabel,
+    required this.onStreak,
+    required this.onCredits,
+  });
+
+  final String streak;
+  final String credits;
+  final String streakLabel;
+  final String creditsLabel;
+  final VoidCallback onStreak;
+  final VoidCallback onCredits;
+
+  Widget _half(String label, String value, VoidCallback onTap) => Expanded(
+    child: Pressable(
+      onTap: onTap,
+      semanticLabel: '$label, $value',
+      excludeChildSemantics: true,
+      borderRadius: AppRadii.all(AppRadii.card),
+      child: Padding(
+        padding: const EdgeInsets.all(AppLayout.cardPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              value,
+              style: AppTypography.section.copyWith(
+                color: AppColors.accentForeground,
+              ),
+            ),
+            Text(
+              label,
+              style: AppTypography.caption.copyWith(
+                color: AppColors.accentForeground,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: BoxDecoration(
+      color: AppColors.accent,
+      borderRadius: AppRadii.all(AppRadii.card),
+    ),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _half(streakLabel, streak, onStreak),
+        _half(creditsLabel, credits, onCredits),
+      ],
+    ),
+  );
 }

@@ -8,6 +8,7 @@ import '../../../l10n/l10n.dart';
 import '../../commerce/domain/catalog.dart';
 import '../../commerce/presentation/store_screens.dart';
 import '../../help/domain/help_articles.dart';
+import '../../lab/lab_registry.dart';
 import '../../lab/plan_picker.dart';
 import '../application/premium_controller.dart';
 
@@ -173,6 +174,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final plansFirst = ref.watch(labVariantProvider('v7-paywall')) == 'A';
     final l10n = context.l10n;
     final premium = ref.watch(premiumProvider);
     final plans = ref.watch(catalogProvider).plans;
@@ -234,8 +236,10 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
           const SizedBox(height: AppSpacing.s4),
           ScreenHeader(title: _title(l10n), lede: l10n.paywallLede),
           const SizedBox(height: AppSpacing.s4),
-          const _BenefitList(),
-          const SizedBox(height: AppSpacing.s5),
+          if (!plansFirst) ...[
+            const _BenefitList(),
+            const SizedBox(height: AppSpacing.s5),
+          ],
           OptionGroupLabel(text: l10n.paywallPlans),
           const SizedBox(height: AppSpacing.s2),
           // Card family `plan-card` (Visual Lab V2): full billed amount and term together.
@@ -257,6 +261,10 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
               (l10n.planCompareSeeLikes, '—', '✓'),
             ],
           ),
+          if (plansFirst) ...[
+            const SizedBox(height: AppSpacing.s5),
+            const _BenefitList(),
+          ],
           const SizedBox(height: AppSpacing.s2),
           const SizedBox(height: AppSpacing.s2),
           Text(l10n.premiumFreeStays, style: AppTypography.helper),
