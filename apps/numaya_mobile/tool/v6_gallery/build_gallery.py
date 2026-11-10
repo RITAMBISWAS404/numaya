@@ -163,11 +163,12 @@ for root, m in archives:
 sequences = []
 os.makedirs(OUT + '/current/seq')
 for sid, conf in X['sequences'].items():
-    rows = []
+    rows, incomplete = [], []
     bound = reg.get(sid) if sid != 'direction' else None
     for vid in ('O', 'A', 'B', 'C'):
         shots = sorted(seq.get(sid, {}).get(vid, []))
-        if not shots:
+        if len(shots) < len(conf['steps']):
+            incomplete.append(vid)
             continue
         steps = []
         for fn, p in shots:
@@ -176,7 +177,7 @@ for sid, conf in X['sequences'].items():
             steps.append({'path': f'current/seq/{fn[:-4]}.jpg', 'label': conf['steps'].get(key, key)})
         name = 'Baseline' if vid == 'O' else X['directions'][vid]['name'] if sid == 'direction' else next(v['name'] for v in bound['variants'] if v['id'] == vid)
         rows.append({'variant': vid, 'name': name, 'steps': steps})
-    sequences.append({'id': sid, 'title': conf['title'], 'note': conf['note'], 'rows': rows})
+    sequences.append({'id': sid, 'title': conf['title'], 'note': conf['note'] + (f" Not captured end to end, so not shown: {', '.join(incomplete)}." if incomplete else ''), 'rows': rows})
 
 stress = []
 LABELS = {'f15': 'Font 1.5', 'f20': 'Font 2.0', 'n360': '360 dp wide'}

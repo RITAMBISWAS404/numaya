@@ -1,5 +1,8 @@
 # Validation
 
+> **Creative Lab V7 (`71564be`):** `flutter test` 635 passed, 42 skipped, 0 failed. `flutter analyze` 1 older info, no errors or warnings. `creative_lab_v7_test.dart` includes the Compliment sheet failed-send regression, which passes and caught a real overflow. Commit `759fbfe` was pushed with that test failing, and `71564be` fixed it. Emulator: 207 default captures with 0 skips, 243 Lab captures with 4 skipped journey steps. Gallery tested in the built-in browser over local HTTP: 432 of 432 images loaded, choices and notes survived a reload, JSON export and re-import matched, and bad JSON, a stale review ID, unknown group or variant and a direction mix were all refused. APK installed with `-r` and launched to Welcome. Not run: web `npm run check` and e2e (no web change; baseline failures unchanged from the start of V7), V7 at font 1.5 or 2.0 or 360 dp on a device, physical phone, screen reader.
+
+
 > **MVP Focus V5 (`36407b3`):** register in `docs/product/mvp-focus-v5/REQUIREMENTS_REGISTER.md`. `flutter test` 600 passed, 42 skipped (none added), 0 failed; analyze 1 older info; 193 emulator captures, 0 skipped; font 1.5, 2.0 and 360 dp on 11 screens; gallery round trip verified; APK installs over the existing app and launches. Web: no files changed; `npm test` 121/122 and token and icon checks fail on CRLF only. Not checked: physical phone, iOS, screen reader, blur profiling.
 
 > **Final screenshots (app `269de9d`):** 223 of 223 `adb screencap` PNGs, 1080 x 2424, font scale 1.0, reviewed visually; 223 index links resolve; harness analyzes clean. Emulator only. No app or web file changed, so the test suites were not re-run.

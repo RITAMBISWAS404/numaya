@@ -374,3 +374,14 @@ Newest first. One entry per session: date, who, what changed, commits, what was 
   were made.
 - **No product code changed.**
 - **Left:** the owner to confirm the scope of the final UX polish ([ACTIVE_TASK.md](ACTIVE_TASK.md)).
+
+## 2026-11-10, Creative Lab V7
+
+- Branch `experiment/numaya-creative-lab-v7-20261110-0236`, app source `71564be`.
+- Added nine Lab groups (`v7-nav`, `v7-discover`, `v7-compliment`, `v7-profile`, `v7-streak`, `v7-request`, `v7-filters`, `v7-paywall`, `v7-likes-locked`), `EdgeBleed`, a labelled tab bar and a sheet form of the Compliment composer.
+- Rendered and corrected: Profile cover corners, locked Likes count, photo-led received Compliment height, Compliment starters per target, Compliment sheet overflow.
+- Found a leftover V6 capture job force-stopping new runs on the shared emulator; stopped it.
+- Mistake: a compound command pushed `759fbfe` after a failed edit, with a failing test. `71564be` fixed it.
+- Gallery schema 3: directions, levels, journey comparison, keep-baseline, recommended path, conflict refusal.
+- Stopped at the owner's request before large-text and narrow passes.
+

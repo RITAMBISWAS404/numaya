@@ -1,0 +1,204 @@
+number,screen_state,v7_decision,groups,review_level,source
+001,Onboarding-Welcome,earlier option,v4-welcome,contact sheet,71564be
+002,Onboarding-Phone-number,not explored in V7,,contact sheet,71564be
+003,Onboarding-Country-picker-sheet-01-top,not explored in V7,,contact sheet,71564be
+004,Onboarding-Country-picker-sheet-02-bottom,not explored in V7,,contact sheet,71564be
+005,Onboarding-Verification-code,not explored in V7,,contact sheet,71564be
+006,Onboarding-Setup-hub,not explored in V7,,contact sheet,71564be
+007,Onboarding-Setup-hub-in-progress,not explored in V7,,contact sheet,71564be
+008,Onboarding-Name-and-birthday,not explored in V7,,contact sheet,71564be
+009,Onboarding-Confirm-age-sheet,not explored in V7,,contact sheet,71564be
+010,Onboarding-Under-18,not explored in V7,,contact sheet,71564be
+011,Onboarding-Gender-01-top,not explored in V7,,contact sheet,71564be
+012,Onboarding-Gender-02-bottom,not explored in V7,,contact sheet,71564be
+013,Onboarding-Gender-detail-sheet,not explored in V7,,contact sheet,71564be
+014,Onboarding-Who-to-meet,not explored in V7,,contact sheet,71564be
+015,Onboarding-Intentions,not explored in V7,,contact sheet,71564be
+016,Onboarding-Height,not explored in V7,,contact sheet,71564be
+017,Onboarding-Location,not explored in V7,,contact sheet,71564be
+018,Onboarding-Location-permission-prompt,not explored in V7,,contact sheet,71564be
+019,Onboarding-Choose-area-sheet-01-top,not explored in V7,,contact sheet,71564be
+020,Onboarding-Choose-area-sheet-02-bottom,not explored in V7,,contact sheet,71564be
+021,Onboarding-Photos,not explored in V7,,contact sheet,71564be
+022,Onboarding-Add-photo-sheet,not explored in V7,,contact sheet,71564be
+023,Onboarding-Photo-tips-sheet,not explored in V7,,contact sheet,71564be
+024,Onboarding-Photo-options-menu,not explored in V7,,contact sheet,71564be
+025,Onboarding-Interests-01-top,not explored in V7,,contact sheet,71564be
+026,Onboarding-Interests-02-bottom,not explored in V7,,contact sheet,71564be
+027,Onboarding-Prompts,not explored in V7,,contact sheet,71564be
+028,Onboarding-Prompt-browser-01-top,not explored in V7,,contact sheet,71564be
+029,Onboarding-Prompt-browser-02-bottom,not explored in V7,,contact sheet,71564be
+030,Onboarding-Prompt-answer-sheet,not explored in V7,,contact sheet,71564be
+031,Onboarding-Bio,not explored in V7,,contact sheet,71564be
+032,Onboarding-Verify-offer,not explored in V7,,contact sheet,71564be
+033,Onboarding-Notifications,not explored in V7,,contact sheet,71564be
+034,Onboarding-Review-01-top,not explored in V7,,contact sheet,71564be
+035,Onboarding-Review-02-middle,not explored in V7,,contact sheet,71564be
+036,Onboarding-Review-03-middle,not explored in V7,,contact sheet,71564be
+037,Onboarding-Review-04-middle,not explored in V7,,contact sheet,71564be
+038,Onboarding-Review-05-middle,not explored in V7,,contact sheet,71564be
+039,Onboarding-Review-06-bottom,not explored in V7,,contact sheet,71564be
+040,Onboarding-All-set,not explored in V7,,contact sheet,71564be
+041,Discover-Profile-01-top,not explored in V7,,contact sheet,71564be
+042,Discover-Profile-02-middle,not explored in V7,,contact sheet,71564be
+043,Discover-Profile-03-middle,not explored in V7,,contact sheet,71564be
+044,Discover-Profile-04-middle,not explored in V7,,contact sheet,71564be
+045,Discover-Profile-05-bottom,not explored in V7,,contact sheet,71564be
+046,Discover-Filters-sheet-basic-01-top,experiment,v7-filters,contact sheet,71564be
+047,Discover-Filters-sheet-basic-02-bottom,experiment,v7-filters,contact sheet,71564be
+048,Discover-Filters-sheet-advanced-01-top,experiment,v7-filters,contact sheet,71564be
+049,Discover-Filters-sheet-advanced-02-middle,experiment,v7-filters,contact sheet,71564be
+050,Discover-Filters-sheet-advanced-03-bottom,experiment,v7-filters,contact sheet,71564be
+051,Discover-Profile-options-menu,experiment,v7-discover,contact sheet,71564be
+052,Discover-For-you,not explored in V7,,contact sheet,71564be
+053,Discover-Person-profile-decide-01-top,not explored in V7,,contact sheet,71564be
+054,Discover-Person-profile-decide-02-middle,not explored in V7,,contact sheet,71564be
+055,Discover-Person-profile-decide-03-middle,not explored in V7,,contact sheet,71564be
+056,Discover-Person-profile-decide-04-middle,not explored in V7,,contact sheet,71564be
+057,Discover-Person-profile-decide-05-middle,not explored in V7,,contact sheet,71564be
+058,Discover-Person-profile-decide-06-middle,not explored in V7,,contact sheet,71564be
+059,Discover-Person-profile-decide-07-bottom,not explored in V7,,contact sheet,71564be
+060,Discover-Person-profile-view-01-top,not explored in V7,,contact sheet,71564be
+061,Discover-Person-profile-view-02-middle,not explored in V7,,contact sheet,71564be
+062,Discover-Person-profile-view-03-middle,not explored in V7,,contact sheet,71564be
+063,Discover-Person-profile-view-04-middle,not explored in V7,,contact sheet,71564be
+064,Discover-Person-profile-view-05-bottom,not explored in V7,,contact sheet,71564be
+065,Discover-Photo-viewer,not explored in V7,,contact sheet,71564be
+066,Discover-Allowance-used,not explored in V7,,contact sheet,71564be
+067,Discover-Out-of-likes,not explored in V7,,contact sheet,71564be
+068,Discover-No-one-fits,not explored in V7,,contact sheet,71564be
+069,Likes-Compliments-Free-locked,not explored in V7,,contact sheet,71564be
+070,Likes-Compliments-Premium-grid-01-top,not explored in V7,,contact sheet,71564be
+071,Likes-Compliments-Premium-grid-02-bottom,not explored in V7,,contact sheet,71564be
+072,Likes-Compliments-Incoming-like-profile-01-top,not explored in V7,,contact sheet,71564be
+073,Likes-Compliments-Incoming-like-profile-02-middle,not explored in V7,,contact sheet,71564be
+074,Likes-Compliments-Incoming-like-profile-03-middle,not explored in V7,,contact sheet,71564be
+075,Likes-Compliments-Incoming-like-profile-04-bottom,not explored in V7,,contact sheet,71564be
+076,Likes-Compliments-Compliments-populated,not explored in V7,,contact sheet,71564be
+077,Likes-Compliments-Compliment-request-photo,experiment,v7-request,contact sheet,71564be
+078,Likes-Compliments-Compliment-request-prompt,experiment,v7-request,contact sheet,71564be
+079,Likes-Compliments-Compliment-options-menu,experiment,v7-request,contact sheet,71564be
+080,Likes-Compliments-Dismiss-compliment-sheet,experiment,v7-request,contact sheet,71564be
+081,Likes-Compliments-Send-compliment-prompt,experiment,v7-compliment,contact sheet,71564be
+082,Likes-Compliments-Send-compliment-photo,experiment,v7-compliment,contact sheet,71564be
+083,Likes-Compliments-Send-compliment-typed,experiment,v7-compliment,contact sheet,71564be
+084,Likes-Compliments-Send-compliment-keyboard-open,experiment,v7-compliment,contact sheet,71564be
+085,Likes-Compliments-Send-compliment-discard-sheet,experiment,v7-compliment,contact sheet,71564be
+086,Likes-Compliments-Send-compliment-sent,experiment,v7-compliment,contact sheet,71564be
+087,Likes-Compliments-Send-compliment-already-sent,experiment,v7-compliment,contact sheet,71564be
+088,Likes-Compliments-Send-compliment-failed,experiment,v7-compliment,contact sheet,71564be
+089,Likes-Compliments-Send-compliment-no-credits,experiment,v7-compliment,contact sheet,71564be
+090,Likes-Compliments-Match,not explored in V7,,contact sheet,71564be
+091,Messages-All,earlier option,"screen-chats, conversation-row, match-avatar",contact sheet,71564be
+092,Messages-Unread,earlier option,"screen-chats, conversation-row, match-avatar",contact sheet,71564be
+093,Messages-Your-move,earlier option,"screen-chats, conversation-row, match-avatar",contact sheet,71564be
+094,Messages-Search,earlier option,"screen-chats, conversation-row, match-avatar",contact sheet,71564be
+095,Messages-Archive,earlier option,"screen-chats, conversation-row, match-avatar",contact sheet,71564be
+096,Chat-Active-01-top,not explored in V7,,contact sheet,71564be
+097,Chat-Active-02-bottom,not explored in V7,,contact sheet,71564be
+098,Chat-Keyboard-open,not explored in V7,,contact sheet,71564be
+099,Chat-New-match-01-top,not explored in V7,,contact sheet,71564be
+100,Chat-New-match-02-bottom,not explored in V7,,contact sheet,71564be
+101,Chat-Expiring-01-top,not explored in V7,,contact sheet,71564be
+102,Chat-Expiring-02-bottom,not explored in V7,,contact sheet,71564be
+103,Chat-Archived-01-top,not explored in V7,,contact sheet,71564be
+104,Chat-Archived-02-bottom,not explored in V7,,contact sheet,71564be
+105,Chat-Expired-01-top,not explored in V7,,contact sheet,71564be
+106,Chat-Expired-02-bottom,not explored in V7,,contact sheet,71564be
+107,Chat-Options-menu,not explored in V7,,contact sheet,71564be
+108,Chat-Share-date-details-sheet,not explored in V7,,contact sheet,71564be
+109,Chat-Did-you-meet-sheet,not explored in V7,,contact sheet,71564be
+110,Chat-Unmatch-sheet,not explored in V7,,contact sheet,71564be
+111,Chat-Report-person-sheet-01-top,not explored in V7,,contact sheet,71564be
+112,Chat-Report-person-sheet-02-bottom,not explored in V7,,contact sheet,71564be
+113,Chat-Block-person-sheet,not explored in V7,,contact sheet,71564be
+114,Chat-Message-actions-menu,not explored in V7,,contact sheet,71564be
+115,Chat-Replying,not explored in V7,,contact sheet,71564be
+116,Chat-Attach-menu,not explored in V7,,contact sheet,71564be
+117,Chat-Photo-pending,not explored in V7,,contact sheet,71564be
+118,Chat-Photo-sent,not explored in V7,,contact sheet,71564be
+119,Chat-Photo-viewer,not explored in V7,,contact sheet,71564be
+120,Chat-Reply-to-photo,not explored in V7,,contact sheet,71564be
+121,Chat-Quoted-photo,experiment,"v6-quote-style, v6-voice-bubble, v6-composer",contact sheet,71564be
+122,Chat-Reply-to-long-text,not explored in V7,,contact sheet,71564be
+123,Chat-Typed-send,experiment,"v6-quote-style, v6-voice-bubble, v6-composer",contact sheet,71564be
+124,Chat-Quoted-long-text,experiment,"v6-quote-style, v6-voice-bubble, v6-composer",contact sheet,71564be
+125,Chat-Quote-unavailable,experiment,"v6-quote-style, v6-voice-bubble, v6-composer",contact sheet,71564be
+126,Chat-Voice-recording,not explored in V7,,contact sheet,71564be
+127,Chat-Voice-preview,not explored in V7,,contact sheet,71564be
+128,Chat-Voice-sent,not explored in V7,,contact sheet,71564be
+129,Chat-Voice-playing,not explored in V7,,contact sheet,71564be
+130,Chat-Send-failed,not explored in V7,,contact sheet,71564be
+131,Profile-Hub-01-top,not explored in V7,,contact sheet,71564be
+132,Profile-Hub-02-middle,not explored in V7,,contact sheet,71564be
+133,Profile-Hub-03-bottom,not explored in V7,,contact sheet,71564be
+134,Profile-Edit-profile-01-top,not explored in V7,,contact sheet,71564be
+135,Profile-Edit-profile-02-middle,not explored in V7,,contact sheet,71564be
+136,Profile-Edit-profile-03-middle,not explored in V7,,contact sheet,71564be
+137,Profile-Edit-profile-04-bottom,not explored in V7,,contact sheet,71564be
+138,Profile-Edit-bio-sheet,not explored in V7,,contact sheet,71564be
+139,Profile-Height-sheet,not explored in V7,,contact sheet,71564be
+140,Profile-Languages-sheet,not explored in V7,,contact sheet,71564be
+141,Profile-Work-sheet,not explored in V7,,contact sheet,71564be
+142,Profile-Exercise-choice-sheet,not explored in V7,,contact sheet,71564be
+143,Profile-Edit-basics-01-top,not explored in V7,,contact sheet,71564be
+144,Profile-Edit-basics-02-bottom,not explored in V7,,contact sheet,71564be
+145,Profile-Edit-interests,not explored in V7,,contact sheet,71564be
+146,Profile-Edit-photos,not explored in V7,,contact sheet,71564be
+147,Profile-Edit-prompt-01-top,not explored in V7,,contact sheet,71564be
+148,Profile-Edit-prompt-02-bottom,not explored in V7,,contact sheet,71564be
+149,Profile-Setup-hub,not explored in V7,,contact sheet,71564be
+150,Profile-Preview-01-top,not explored in V7,,contact sheet,71564be
+151,Profile-Preview-02-middle,not explored in V7,,contact sheet,71564be
+152,Profile-Preview-03-middle,not explored in V7,,contact sheet,71564be
+153,Profile-Preview-04-middle,not explored in V7,,contact sheet,71564be
+154,Profile-Preview-05-bottom,not explored in V7,,contact sheet,71564be
+155,Profile-Photo-verification-intro,not explored in V7,,contact sheet,71564be
+156,Profile-Photo-verification-pose,not explored in V7,,contact sheet,71564be
+157,Streaks-Streak,experiment,"v7-streak, v6-streak-hero",contact sheet,71564be
+158,Streaks-Repair-purchase,not explored in V7,,contact sheet,71564be
+159,Wallet-Store-Free-01-top,not explored in V7,,contact sheet,71564be
+160,Wallet-Store-Free-02-bottom,not explored in V7,,contact sheet,71564be
+161,Wallet-Store-Premium-01-top,not explored in V7,,contact sheet,71564be
+162,Wallet-Store-Premium-02-bottom,not explored in V7,,contact sheet,71564be
+163,Wallet-Store-Compliment-pack,not explored in V7,,contact sheet,71564be
+164,Wallet-Store-Purchase-success,not explored in V7,,contact sheet,71564be
+165,Wallet-Store-Purchase-pending,not explored in V7,,contact sheet,71564be
+166,Wallet-Store-Purchase-failed,not explored in V7,,contact sheet,71564be
+167,Wallet-Store-Purchase-cancelled,not explored in V7,,contact sheet,71564be
+168,Wallet-Store-Purchase-unavailable,not explored in V7,,contact sheet,71564be
+169,Premium-Overview-free,not explored in V7,,contact sheet,71564be
+170,Premium-Overview-active,not explored in V7,,contact sheet,71564be
+171,Premium-Paywall-01-top,experiment,v7-paywall,contact sheet,71564be
+172,Premium-Paywall-02-bottom,experiment,v7-paywall,contact sheet,71564be
+173,Premium-Paywall-yearly-selected-01-top,experiment,v7-paywall,contact sheet,71564be
+174,Premium-Paywall-yearly-selected-02-bottom,experiment,v7-paywall,contact sheet,71564be
+175,Premium-Checkout-sheet,not explored in V7,,contact sheet,71564be
+176,Settings-01-top,not explored in V7,,contact sheet,71564be
+177,Settings-02-middle,not explored in V7,,contact sheet,71564be
+178,Settings-03-middle,not explored in V7,,contact sheet,71564be
+179,Settings-04-bottom,not explored in V7,,contact sheet,71564be
+180,Settings-Snooze-sheet,not explored in V7,,contact sheet,71564be
+181,Settings-Recovery-email-sheet,not explored in V7,,contact sheet,71564be
+182,Settings-Travel-sheet,not explored in V7,,contact sheet,71564be
+183,Settings-Sign-out-sheet,not explored in V7,,contact sheet,71564be
+184,Settings-Notification-settings,not explored in V7,,contact sheet,71564be
+185,Settings-Privacy,not explored in V7,,contact sheet,71564be
+186,Settings-Blocked-people,not explored in V7,,contact sheet,71564be
+187,Settings-Delete-account-01-top,not explored in V7,,contact sheet,71564be
+188,Settings-Delete-account-02-bottom,not explored in V7,,contact sheet,71564be
+189,Settings-Delete-confirm-sheet,not explored in V7,,contact sheet,71564be
+190,Safety-Help-Legal-Centre,not explored in V7,,contact sheet,71564be
+191,Safety-Help-Legal-Help-centre,not explored in V7,,contact sheet,71564be
+192,Safety-Help-Legal-Help-article,not explored in V7,,contact sheet,71564be
+193,Safety-Help-Legal-Contact-support,not explored in V7,,contact sheet,71564be
+194,Safety-Help-Legal-Support-requests,not explored in V7,,contact sheet,71564be
+195,Safety-Help-Legal-Support-requests-populated,not explored in V7,,contact sheet,71564be
+196,Safety-Help-Legal-Legal,not explored in V7,,contact sheet,71564be
+197,Safety-Help-Legal-Legal-Privacy,not explored in V7,,contact sheet,71564be
+198,Safety-Help-Legal-Legal-Terms,not explored in V7,,contact sheet,71564be
+199,Safety-Help-Legal-Legal-Community,not explored in V7,,contact sheet,71564be
+200,Safety-Help-Legal-Legal-Safety,not explored in V7,,contact sheet,71564be
+201,Account-States-Restricted,not explored in V7,,contact sheet,71564be
+202,Account-States-Page-not-found,not explored in V7,,contact sheet,71564be
+203,Account-States-Session-expired,not explored in V7,,contact sheet,71564be

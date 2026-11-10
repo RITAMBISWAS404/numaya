@@ -354,7 +354,7 @@ void main() {
           await tester.tap(find.byKey(const ValueKey('compliment-photo-0')));
           await _wait(tester, 900);
           await jc('7-blocked', 'They already sent you one: reply instead');
-          await tester.tap(find.byKey(const ValueKey('compliment-done')));
+          await tester.binding.handlePopRoute();
           await _wait(tester, 900);
         });
       }

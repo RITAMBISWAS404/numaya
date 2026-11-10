@@ -1,5 +1,8 @@
 # Active task: revised PRD for additional features (waiting for the owner's brief)
 
+> **2026-11-10, Creative Lab V7:** delivered in wrap-up mode on `experiment/numaya-creative-lab-v7-20261110-0236`. **Next:** the owner reviews the gallery and phone folder, exports choices and sends them back. Open items: [REMAINING_WORK.md](REMAINING_WORK.md).
+
+
 > **2026-11-10, MVP Focus V5:** delivered on `experiment/numaya-mvp-focus-v5-20261109-2303`. **Next:** the owner reviews `C:\Users\biswa\OneDrive\Desktop\Numaya MVP V5 Screenshots\2026-11-10 0058` and the gallery, exports JSON and sends it back. Do not merge without the owner's word.
 
 > **2026-11-09, final screenshots:** delivered at `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\2026-11-09 1710`. **Next:** the owner reviews each screen. No design changes until then.

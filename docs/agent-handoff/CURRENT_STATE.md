@@ -1,5 +1,8 @@
 # Current state
 
+> **Creative Lab V7 (2026-11-10):** branch **`experiment/numaya-creative-lab-v7-20261110-0236`** from tag `checkpoint/pre-v7-20261110-0236` (`45b3872`). App source and APK `71564be`; later commits change only records and tooling. Nine V7 groups, 27 options including baselines, three named directions. The default is still the baseline plus V6. Nothing is selected. Delivery was cut short at the owner's request: see [REMAINING_WORK.md](REMAINING_WORK.md).
+
+
 > **MVP Focus V5 (2026-11-10):** branch **`experiment/numaya-mvp-focus-v5-20261109-2303`** from tag `checkpoint/pre-mvp-v5-20261109-2303`. App source `36407b3`. Events and Health deferred, four tabs, recomposed Compliment flow, smooth photo gradient, proximity spacing. Start at [ACCOUNT_HANDOFF.md](ACCOUNT_HANDOFF.md). Older notes about keeping Events are superseded. Not merged.
 
 > **Final screenshot collection (2026-11-09):** 152 screens and states, 223 emulator PNGs of the V4 candidate at app commit `269de9d`: `C:\Users\biswa\OneDrive\Desktop\Numaya Final Screenshots\2026-11-09 1710\index.html`. Capture-only tooling added; no app or design change. Waiting for the owner's visual review.

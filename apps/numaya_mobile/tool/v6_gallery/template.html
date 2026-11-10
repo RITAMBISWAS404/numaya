@@ -106,7 +106,7 @@ const c=conflicts(n.selections);if(c.length)bad.push('incompatible: '+c[0]);if(b
 ['q','fRun','fFlow','fSurf','fLevel','fDir','fState','fView'].forEach(i=>$(i).addEventListener('input',render));
 $('next').onclick=()=>{const g=list().find(x=>!st.selections[x.id]);if(!g){toast('Nothing undecided in this view.');return;}st.fold[g.id]=false;save();render();const el=document.querySelector(`[data-g="${CSS.escape(g.id)}"]`);el.scrollIntoView({block:'start'});el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1500);};
 $('foldAll').onclick=()=>{M.groups.forEach(g=>st.fold[g.id]=true);save();render();};
-$('stress').innerHTML=M.stress.map(s=>`<figure>${img(s,s.label)}<figcaption>${E(s.label)}</figcaption></figure>`).join('');
+if(!M.stress.length)$('stressSec').style.display='none';$('stress').innerHTML=M.stress.map(s=>`<figure>${img(s,s.label)}<figcaption>${E(s.label)}</figcaption></figure>`).join('');
 document.addEventListener('click',e=>{const t=e.target;const lb=$('lb');if(t.dataset&&t.dataset.dir){const d=t.dataset.dir;for(const g of M.directionBound){if(!byId[g])continue;if(d===KEEP)st.selections[g]=KEEP;else{const v=Object.entries(byId[g].directions).find(([,x])=>x===d);if(v)st.selections[g]=v[0];}}save();render();toast(d===KEEP?'Baseline kept on all four':'Applied '+dirName(d)+' to all four');return;}if(t.tagName==='IMG'&&t.dataset.full){lb.querySelector('img').src=t.dataset.full;lb.style.display='flex';}else if(t.closest('#lb'))lb.style.display='none';});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('lb').style.display='none';});
 load();seqs();render();
