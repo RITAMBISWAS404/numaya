@@ -207,6 +207,18 @@ class ProfileScreen extends ConsumerWidget {
     const gap = SizedBox(height: AppLayout.sectionGap);
     const small = SizedBox(height: AppSpacing.s3);
     final setup = ProfileSetupCard(health: health, variant: setupV);
+    // Owner selections wallet-card A and streak-card O, inside the selected baseline Profile.
+    final activityCards = NumayaSection(
+      title: l10n.hubActivity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          WalletSummaryCard(data: wallet, onTap: toWallet),
+          small,
+          StreakSummaryCard(data: streak, onTap: toStreak),
+        ],
+      ),
+    );
 
     final body = <Widget>[
       ...switch (direction) {
@@ -261,7 +273,7 @@ class ProfileScreen extends ConsumerWidget {
           gap,
           profileGroup,
           gap,
-          if (!headerHasActivity) ...[activityGroup, gap],
+          if (!headerHasActivity) ...[activityCards, gap],
           if (draft.prompt != null) ...[
             NumayaSection(
               title: l10n.profilePromptTitle,

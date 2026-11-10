@@ -192,6 +192,12 @@ void main() {
           await cap('key__$slug', 'key', slug, 'qa', slug);
         });
       }
+      await step('key profile activity', () async {
+        await go(Routes.home);
+        await go(Routes.profile);
+        await scrollDown(700);
+        await cap('key__profile-activity', 'key', 'profile', 'qa', 'activity');
+      });
       await step('key filters', () async {
         await go(Routes.home);
         await tester.tap(find.bySemanticsLabel('Filters').first);
