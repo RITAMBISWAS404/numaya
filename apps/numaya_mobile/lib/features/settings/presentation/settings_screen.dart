@@ -180,7 +180,9 @@ class SettingsScreen extends ConsumerWidget {
     final prefs = ref.watch(accountPrefsProvider);
     final prefsController = ref.read(accountPrefsProvider.notifier);
     final premium = ref.watch(premiumProvider);
-    final demo = ref.watch(demoAuthProvider) != null;
+    final demo =
+        ref.watch(devToolsAvailableProvider) &&
+        ref.watch(demoAuthProvider) != null;
     final dating = ref.watch(datingProvider);
     final datingController = ref.read(datingProvider.notifier);
     final until = prefs.snoozeUntil;

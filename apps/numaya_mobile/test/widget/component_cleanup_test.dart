@@ -118,8 +118,8 @@ void main() {
     });
   });
 
-  testWidgets('OV-01 alerts are Ente banners: white, no tint or border, the '
-      'status in the icon and (for errors) the title', (tester) async {
+  testWidgets('OV-01 InfoCard is white; StatusBanner is the selected outlined '
+      'treatment with the status in the icon', (tester) async {
     await tester.pumpWidget(
       host(
         const Column(
@@ -142,10 +142,10 @@ void main() {
         .where((d) => d.borderRadius == AppRadii.all(AppRadii.card))
         .toList();
     expect(cards, hasLength(2));
-    for (final d in cards) {
-      expect(d.color, AppColors.surface);
-      expect(d.border, isNull);
-    }
+    expect(cards.first.color, AppColors.surface);
+    expect(cards.first.border, isNull);
+    expect(cards.last.color, isNull);
+    expect(cards.last.border, Border.all(color: AppColors.border));
     final infoIcon = tester.widget<NumayaIcon>(
       find.byWidgetPredicate(
         (w) => w is NumayaIcon && w.icon == NumayaIcons.info,
@@ -154,7 +154,7 @@ void main() {
     expect(infoIcon.color, AppColors.accent);
     expect(
       tester.widget<Text>(find.text('Heads up')).style!.color,
-      AppColors.negative,
+      AppColors.ink,
     );
     expect(
       tester.widget<Text>(find.text('Body.').first).style!.color,

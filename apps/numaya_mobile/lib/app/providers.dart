@@ -43,6 +43,11 @@ final profileRepositoryProvider = Provider<ProfileRepository>(
 /// dormant module in `lib/features/events/` stays unrouted.
 final eventsAvailableProvider = Provider<bool>((ref) => ReleaseScope.events);
 
+/// Whether development controls exist in this build (compile-time [ReleaseScope.devTools]).
+final devToolsAvailableProvider = Provider<bool>(
+  (ref) => ReleaseScope.devTools,
+);
+
 /// Whether chat attachments are offered (MVP: no, text and emoji only). Defaults to the
 /// compile-time [ReleaseScope.chatAttachments]; tests of the dormant attachment code turn it on.
 final chatAttachmentsProvider = Provider<bool>(

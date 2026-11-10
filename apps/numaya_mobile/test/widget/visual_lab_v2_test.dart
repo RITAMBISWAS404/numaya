@@ -7,7 +7,6 @@ import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/compliments/application/compliments_controller.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
-import 'package:numaya_mobile/features/dating/presentation/match_avatar.dart';
 import 'package:numaya_mobile/features/lab/lab_registry.dart';
 import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
 
@@ -182,9 +181,8 @@ void main() {
       await openTab(tester, 'Messages');
       expect(find.byKey(const ValueKey('chats-archive')), findsOneWidget);
       expect(find.byKey(const ValueKey('chats-requests')), findsNothing);
-      // Owner selection A: a squircle progress ring on a 3:4 portrait.
-      expect(find.byType(MatchAvatarTile), findsWidgets);
-      expect(find.byType(CountdownAvatar), findsNothing);
+      // Owner selection O: a circle inside a ring that empties.
+      expect(find.byType(CountdownAvatar), findsWidgets);
       await tapOn(tester, find.byKey(const ValueKey('chats-archive')));
       await tester.pump(const Duration(milliseconds: 600));
       expect(find.byKey(const ValueKey('archived-rafa')), findsOneWidget);
@@ -224,13 +222,12 @@ void main() {
       await tapOn(tester, find.byKey(const ValueKey('heart-tab-compliments')));
       await tester.pump(const Duration(milliseconds: 400));
       expect(find.byKey(const ValueKey('compliment-seed-sam')), findsOneWidget);
-      // O card (owner selection): no inline buttons; the card opens the request page, whose
-      // reply makes exactly one conversation.
-      expect(
+      // Selected card B: Reply opens the request page, whose reply makes exactly one
+      // conversation.
+      await tapOn(
+        tester,
         find.byKey(const ValueKey('compliment-reply-seed-sam')),
-        findsNothing,
       );
-      await tapOn(tester, find.byKey(const ValueKey('compliment-seed-sam')));
       await tester.pump(const Duration(milliseconds: 600));
       await tester.enterText(find.byType(TextField), 'Thank you!');
       await tester.pump();
@@ -249,10 +246,11 @@ void main() {
       final c = await quickStartApp(tester);
       await goTo(c, tester, '${Routes.likes}?tab=compliments');
       await tester.pump(const Duration(milliseconds: 400));
-      // O card: dismiss lives on the request page the card opens.
-      await tapOn(tester, find.byKey(const ValueKey('compliment-seed-chloe')));
-      await tester.pump(const Duration(milliseconds: 600));
-      await tapOn(tester, find.byKey(const ValueKey('request-dismiss')));
+      // Selected card B: Not now is on the card and asks first.
+      await tapOn(
+        tester,
+        find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
+      );
       await tester.pump(const Duration(milliseconds: 600));
       await tapOn(tester, find.byKey(const ValueKey('dismiss-confirm')));
       await tester.pump(const Duration(milliseconds: 600));
@@ -327,10 +325,11 @@ void main() {
       final c = await quickStartApp(tester);
       await goTo(c, tester, '${Routes.likes}?tab=compliments');
       await tester.pump(const Duration(milliseconds: 400));
-      // O card: dismiss lives on the request page the card opens.
-      await tapOn(tester, find.byKey(const ValueKey('compliment-seed-chloe')));
-      await tester.pump(const Duration(milliseconds: 600));
-      await tapOn(tester, find.byKey(const ValueKey('request-dismiss')));
+      // Selected card B: Not now is on the card and asks first.
+      await tapOn(
+        tester,
+        find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
+      );
       await tester.pump(const Duration(milliseconds: 600));
       final close = find.byKey(const ValueKey('sheet-close'));
       expect(close, findsOneWidget);

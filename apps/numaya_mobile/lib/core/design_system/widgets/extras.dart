@@ -424,27 +424,15 @@ class StatusBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // (icon colour, title colour, icon)
-    final (Color mark, Color titleColor, NumayaIcons icon) = switch (tone) {
+    // (icon colour, icon)
+    final (Color mark, NumayaIcons icon) = switch (tone) {
       // Ente info/dark: information is blue; purple stays for action and selection.
-      BannerTone.info => (AppColors.info, AppColors.ink, NumayaIcons.info),
+      BannerTone.info => (AppColors.info, NumayaIcons.info),
       // Pending alerts are waiting or time states (in review, expiring, can't check yet): the
       // clock has Tabler filled artwork; `pending`'s dashed ring stays for incomplete rows.
-      BannerTone.pending => (
-        AppColors.warningIcon,
-        AppColors.ink,
-        NumayaIcons.clock,
-      ),
-      BannerTone.success => (
-        AppColors.successIcon,
-        AppColors.positive,
-        NumayaIcons.verified,
-      ),
-      BannerTone.error => (
-        AppColors.dangerIcon,
-        AppColors.negative,
-        NumayaIcons.alert,
-      ),
+      BannerTone.pending => (AppColors.warningIcon, NumayaIcons.clock),
+      BannerTone.success => (AppColors.successIcon, NumayaIcons.verified),
+      BannerTone.error => (AppColors.dangerIcon, NumayaIcons.alert),
     };
     return Semantics(
       liveRegion: true,
@@ -452,20 +440,19 @@ class StatusBanner extends StatelessWidget {
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(AppSpacing.s4),
+        // Owner selection, status-banner C: outlined, no fill, icon level with the title.
         decoration: BoxDecoration(
-          color: AppColors.surface,
           borderRadius: AppRadii.all(AppRadii.card),
+          border: Border.all(color: AppColors.border),
         ),
         child: Row(
-          // Tabler MVP pass (supersedes UI-010's top alignment): the leading icon is centred on
-          // the full content height, title, body and any action, as in Ente's Banners
-          // (14590:125245), and drawn with Tabler's filled artwork in the status colour.
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             NumayaIcon(icon, size: AppSizes.iconMd, color: mark, filled: true),
             const SizedBox(width: AppSpacing.s3),
             Expanded(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -473,7 +460,7 @@ class StatusBanner extends StatelessWidget {
                     style: AppTypography.weight(
                       AppTypography.body,
                       AppTypography.semibold,
-                    ).copyWith(color: titleColor),
+                    ).copyWith(color: AppColors.ink),
                   ),
                   if (body != null) ...[
                     const SizedBox(height: 2),

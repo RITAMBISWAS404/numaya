@@ -49,7 +49,8 @@ class LabGroup {
   final String question;
   final List<LabVariant> variants;
 
-  /// The proposed default variant ID (not an owner decision).
+  /// The variant ordinary launches render. Since review `v7-71564be-2026-11-10` this is the owner's
+  /// selection for every group that review decided (docs/design/creative-lab-v7/SELECTIONS.md).
   final String proposed;
 
   /// Where the family renders (screens and widgets), for the usage map.
@@ -78,7 +79,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.component,
     question: 'Can a member see which new matches are running out without reading a countdown?',
     usages: ['Chats: New matches row'],
-    proposed: 'A',
+    proposed: _o,
     variants: [
       LabVariant(
         _o,
@@ -158,7 +159,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.component,
     question: 'Does the member understand who wrote it, what it was about and how to answer?',
     usages: ['Heart tab: Compliments', 'Compliment detail'],
-    proposed: _o,
+    proposed: 'B',
     variants: [
       LabVariant(
         _o,
@@ -272,7 +273,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.component,
     question: 'Does the setup card help finish the profile without looking like a score?',
     usages: ['Profile', 'Insights (supporting)'],
-    proposed: 'D',
+    proposed: _o,
     variants: [
       LabVariant(
         _o,
@@ -515,7 +516,7 @@ const List<LabGroup> kLabGroups = [
       'Paused',
       'Restricted',
     ],
-    proposed: _o,
+    proposed: 'C',
     variants: [
       LabVariant(
         _o,
@@ -820,7 +821,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.screen,
     question: 'What matters most when reading a Compliment?',
     usages: ['Compliment request'],
-    proposed: _o,
+    proposed: 'B',
     variants: [
       LabVariant(
         _o,
@@ -999,7 +1000,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.screen,
     question: 'Should the balance be a quiet card or a moment?',
     usages: ['Compliment credits'],
-    proposed: _o,
+    proposed: 'A',
     variants: [
       LabVariant(
         _o,
@@ -1043,7 +1044,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.screen,
     question: 'Should Settings open with a membership summary?',
     usages: ['Settings'],
-    proposed: _o,
+    proposed: 'A',
     variants: [
       LabVariant(
         _o,
@@ -1377,6 +1378,9 @@ final labChoicesProvider = NotifierProvider<LabChoices, Map<String, String>>(
 /// otherwise always the proposed default.
 final labVariantProvider = Provider.family<String, String>((ref, groupId) {
   final group = labGroup(groupId);
-  if (ref.watch(demoAuthProvider) == null) return group.proposed;
+  if (!ref.watch(devToolsAvailableProvider) ||
+      ref.watch(demoAuthProvider) == null) {
+    return group.proposed;
+  }
   return ref.watch(labChoicesProvider)[groupId] ?? group.proposed;
 });

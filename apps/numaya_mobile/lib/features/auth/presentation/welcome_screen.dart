@@ -46,7 +46,9 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final demo = ref.watch(demoAuthProvider) != null;
+    final demo =
+        ref.watch(devToolsAvailableProvider) &&
+        ref.watch(demoAuthProvider) != null;
     final linkStyle =
         AppTypography.weight(
           AppTypography.micro,

@@ -21,6 +21,10 @@ abstract final class ReleaseScope {
   /// (docs/design-experiments/ente-design-system/tabler-mvp/EVENTS_GATE.md).
   static const bool events = bool.fromEnvironment('NUMAYA_EVENTS');
 
+  /// Demo Hub, Visual Lab, Design Lab and the prototype section of Settings. Off in the app members
+  /// use; on for an internal build with `--dart-define=NUMAYA_DEV_TOOLS=true`.
+  static const bool devTools = bool.fromEnvironment('NUMAYA_DEV_TOOLS');
+
   /// Photos and voice notes in chat (V6 messaging pass, owner request). Files stay on this device:
   /// there is no upload service yet. Off with `--dart-define=NUMAYA_CHAT_ATTACHMENTS=false`.
   static const bool chatAttachments = bool.fromEnvironment(

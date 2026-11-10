@@ -43,6 +43,7 @@ Widget testApp({
   DemoWorld world = DemoWorld.fresh,
   List<Override> overrides = const [],
   MediaPicker mediaPicker = const NoPicker(),
+  bool devTools = true,
 }) {
   final repo = auth ?? testAuth();
   return ProviderScope(
@@ -54,6 +55,8 @@ Widget testApp({
       // Attachments are off in the MVP (text and emoji only); tests that bring a picker are
       // testing the dormant attachment code, so they turn it on.
       chatAttachmentsProvider.overrideWithValue(mediaPicker is! NoPicker),
+      // Most tests reach screens through the Demo Hub; the normal app has none.
+      devToolsAvailableProvider.overrideWithValue(devTools),
       ...overrides,
     ],
     child: const NumayaApp(),

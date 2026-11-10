@@ -21,16 +21,6 @@ const _routes = {
 };
 
 void main() {
-  test('V7 groups keep the baseline as the proposal', () {
-    final groups = kLabGroups.where((g) => g.id.startsWith('v7-'));
-    expect(groups, isNotEmpty);
-    for (final g in groups) {
-      expect(g.proposed, 'O', reason: g.id);
-      expect(g.ids.first, 'O', reason: g.id);
-      expect(g.ids.length, greaterThan(1), reason: g.id);
-    }
-  });
-
   for (final entry in _routes.entries) {
     for (final v in labGroup(entry.key).ids) {
       testWidgets('${entry.key} $v renders on its route', (tester) async {

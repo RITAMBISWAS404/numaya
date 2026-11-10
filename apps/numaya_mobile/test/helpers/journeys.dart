@@ -263,9 +263,11 @@ Future<ProviderContainer> quickStartApp(
   DemoAuthRepository? auth,
   List<Override> overrides = const [],
   MediaPicker mediaPicker = const NoPicker(),
+  bool devTools = true,
 }) async {
   await tester.pumpWidget(
     testApp(
+      devTools: devTools,
       world: world,
       auth: auth,
       overrides: overrides,

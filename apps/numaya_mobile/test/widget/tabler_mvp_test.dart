@@ -201,46 +201,44 @@ void main() {
       ),
       ('with action', 'Confirm your email', 'So you can get back in.', true),
     ]) {
-      testWidgets('StatusBanner icon is centred on the content ($name)', (
-        tester,
-      ) async {
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: SizedBox(
-                width: 300,
-                child: StatusBanner(
-                  title: title,
-                  body: body,
-                  tone: BannerTone.error,
-                  action: action
-                      ? NumayaButton(
-                          label: 'Confirm',
-                          small: true,
-                          expand: false,
-                          onPressed: () {},
-                        )
-                      : null,
+      testWidgets(
+        'StatusBanner icon is level with the top of the content ($name)',
+        (tester) async {
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: SizedBox(
+                  width: 300,
+                  child: StatusBanner(
+                    title: title,
+                    body: body,
+                    tone: BannerTone.error,
+                    action: action
+                        ? NumayaButton(
+                            label: 'Confirm',
+                            small: true,
+                            expand: false,
+                            onPressed: () {},
+                          )
+                        : null,
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-        final icon = tester.getRect(find.byType(NumayaIcon));
-        final content = tester.getRect(
-          find
-              .ancestor(of: find.text(title), matching: find.byType(Column))
-              .first,
-        );
-        expect(
-          (icon.center.dy - content.center.dy).abs(),
-          lessThanOrEqualTo(1),
-        );
-        expect(
-          tester.widget<NumayaIcon>(find.byType(NumayaIcon)).filled,
-          isTrue,
-        );
-      });
+          );
+          final icon = tester.getRect(find.byType(NumayaIcon));
+          final content = tester.getRect(
+            find
+                .ancestor(of: find.text(title), matching: find.byType(Column))
+                .first,
+          );
+          expect((icon.top - content.top).abs(), lessThanOrEqualTo(1));
+          expect(
+            tester.widget<NumayaIcon>(find.byType(NumayaIcon)).filled,
+            isTrue,
+          );
+        },
+      );
     }
 
     testWidgets('InfoCard icon stays centred at 320pt and 200% text', (

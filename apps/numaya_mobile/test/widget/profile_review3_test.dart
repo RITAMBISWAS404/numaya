@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
-import 'package:numaya_mobile/features/dating/presentation/match_avatar.dart';
 import 'package:numaya_mobile/features/lab/lab_registry.dart';
 import 'package:numaya_mobile/features/profile/application/profile_details_controller.dart';
 import 'package:numaya_mobile/features/verification/application/verification_controller.dart';
@@ -36,22 +35,8 @@ void main() {
           find.bySemanticsLabel(RegExp('^$likes people like you')),
           findsNothing,
         );
-        final tiles = find.byType(MatchAvatarTile);
-        expect(tiles, findsWidgets);
-        for (final e in tiles.evaluate()) {
-          final ring = find
-              .descendant(
-                of: find.byWidget(e.widget),
-                matching: find.byWidgetPredicate(
-                  (w) => w is CustomPaint && w.foregroundPainter != null,
-                ),
-              )
-              .first;
-          final size = tester.getSize(ring);
-          // 3:4 width to height (the brief's "4:3 vertical").
-          expect(size.width / size.height, closeTo(3 / 4, 0.03));
-          expect(size.width, greaterThanOrEqualTo(72));
-        }
+        // Owner selection O (v7 export): a circle inside a ring that empties.
+        expect(find.byType(CountdownAvatar), findsWidgets);
         // R02 supersedes the MVP caption: no time under the avatar; it is spoken instead.
         expect(find.text('21h left'), findsNothing);
         expect(

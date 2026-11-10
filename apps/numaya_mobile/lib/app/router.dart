@@ -90,13 +90,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           isDeferredLabGroup(path.split('/').last)) {
         return Routes.visualLab;
       }
-      // The Demo Hub and its Design Lab exist only where demo sign-in does (never in release
-      // builds).
+      // The Demo Hub and its labs exist only in internal builds with demo sign-in.
       if ((path == Routes.demo ||
               path == Routes.designLab ||
               path == Routes.experimentLab ||
               path.startsWith(Routes.visualLab)) &&
-          ref.read(demoAuthProvider) == null) {
+          (!ref.read(devToolsAvailableProvider) ||
+              ref.read(demoAuthProvider) == null)) {
         return Routes.welcome;
       }
       // First release (UI-031): Opening Moves is excluded, so its route, deep links included,

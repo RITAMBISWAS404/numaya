@@ -41,6 +41,8 @@ void main() {
     final c = await quickStartApp(
       tester,
       mediaPicker: const SampleMediaPicker(),
+      // The selected candidate as members get it; the labs need the controls.
+      devTools: _only != 'key',
     );
     c.read(sampleMediaProvider.notifier).set(true);
     c.read(onboardingProvider.notifier).loadSample();
@@ -180,6 +182,8 @@ void main() {
         ('settings', Routes.settings),
         ('paywall', Routes.paywall),
         ('wallet', Routes.wallet),
+        ('streak', Routes.streak),
+        ('likes', Routes.likes),
       ];
       for (final (slug, path) in key) {
         await step('key $slug', () async {
@@ -188,45 +192,14 @@ void main() {
           await cap('key__$slug', 'key', slug, 'qa', slug);
         });
       }
-      // The alternatives most exposed to large text and narrow width.
-      const alternatives = <(String, String, String)>[
-        ('v7-nav', 'A', Routes.home),
-        ('v7-compliment', 'C', '${Routes.compliment}/noor?kind=prompt&index=0'),
-        ('v7-request', 'A', '${Routes.request}/seed-chloe'),
-        ('v7-request', 'B', '${Routes.request}/seed-chloe'),
-        ('v7-likes-locked', 'A', Routes.likes),
-      ];
-      for (final (group, v, path) in alternatives) {
-        await step('alt $group $v', () async {
-          lab
-            ..reset()
-            ..choose(group, v);
-          await go(Routes.home);
-          await go(path);
-          await cap('key__${group}__$v', 'key', '$group $v', 'qa', '$group $v');
-        });
-      }
-      for (final d in const ['A', 'B', 'C']) {
-        await step('alt direction $d', () async {
-          lab
-            ..reset()
-            ..choose('v7-discover', d)
-            ..choose('v7-compliment', d)
-            ..choose('v7-profile', d)
-            ..choose('v7-streak', d);
-          const seq = <(String, String)>[
-            ('discover', Routes.home),
-            ('profile', Routes.profile),
-            ('streak', Routes.streak),
-          ];
-          for (final (n, path) in seq) {
-            await go(Routes.home);
-            await go(path);
-            await cap('key__dir${d}__$n', 'key', 'Direction $d $n', 'qa', n);
-          }
-        });
-      }
-      lab.reset();
+      await step('key filters', () async {
+        await go(Routes.home);
+        await tester.tap(find.bySemanticsLabel('Filters').first);
+        await _wait(tester, 900);
+        await cap('key__filters', 'key', 'filters', 'qa', 'filters');
+        await tester.binding.handlePopRoute();
+        await _wait(tester, 500);
+      });
     }
 
     if (_only.isEmpty || _only == 'variants' || _only == 'v7') {

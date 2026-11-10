@@ -279,7 +279,7 @@ void main() {
 
   testWidgets('signed out and onboarding', (tester) async {
     if (!_wants('onboarding')) return;
-    await tester.pumpWidget(testApp(auth: testAuth()));
+    await tester.pumpWidget(testApp(auth: testAuth(), devTools: false));
     final c = ProviderScope.containerOf(
       tester.element(find.byType(MaterialApp).first),
     );
@@ -498,6 +498,7 @@ void main() {
     if (!_wants('product')) return;
     final c = await quickStartApp(
       tester,
+      devTools: false,
       mediaPicker: const SampleMediaPicker(),
     );
     c.read(sampleMediaProvider.notifier).set(true);
@@ -1305,7 +1306,7 @@ void main() {
   // The three-screen benchmark: photo identity, Compliment, one settings grouping.
   testWidgets('benchmark pilot', (tester) async {
     if (_only != 'pilot') return;
-    final c = await quickStartApp(tester);
+    final c = await quickStartApp(tester, devTools: false);
     c.read(onboardingProvider.notifier).loadSample();
     final h = _H(tester, c);
     await h.wait(1500);
@@ -1364,6 +1365,7 @@ void main() {
     if (_only.isNotEmpty && _only != 'fix') return;
     final c = await quickStartApp(
       tester,
+      devTools: false,
       mediaPicker: const SampleMediaPicker(),
     );
     c.read(sampleMediaProvider.notifier).set(true);

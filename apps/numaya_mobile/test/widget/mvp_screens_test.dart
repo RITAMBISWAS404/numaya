@@ -132,8 +132,11 @@ void main() {
       expect(find.byKey(const ValueKey('chats-requests')), findsNothing);
       await goTo(c, tester, '${Routes.likes}?tab=compliments');
       await tester.pump(const Duration(milliseconds: 600));
-      // Compliment O: the card itself opens the request page.
-      await tapOn(tester, find.byKey(const ValueKey('compliment-seed-sam')));
+      // Selected card B: Reply opens the request page.
+      await tapOn(
+        tester,
+        find.byKey(const ValueKey('compliment-reply-seed-sam')),
+      );
       await tester.pump(const Duration(milliseconds: 600));
       await tester.enterText(
         find.byType(TextField),
