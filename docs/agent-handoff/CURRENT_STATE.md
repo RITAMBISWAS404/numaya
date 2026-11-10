@@ -1,5 +1,8 @@
 # Current state
 
+> **V7 selected candidate (2026-11-10):** branch **`experiment/numaya-v7-selected-20261110`** from tag `checkpoint/pre-v7-selection-20261110` (`2fb12f9`). App source and APK `014ac35`. The owner's export `v7-71564be-2026-11-10` is the default app: [SELECTIONS.md](../design/creative-lab-v7/SELECTIONS.md). Demo Hub and labs need `NUMAYA_DEV_TOOLS`. Not merged anywhere.
+
+
 > **Creative Lab V7 (2026-11-10):** branch **`experiment/numaya-creative-lab-v7-20261110-0236`** from tag `checkpoint/pre-v7-20261110-0236` (`45b3872`). App source and APK `71564be`; later commits change only records and tooling. Nine V7 groups, 27 options including baselines, three named directions. The default is still the baseline plus V6. Nothing is selected. Delivery was cut short at the owner's request: see [REMAINING_WORK.md](REMAINING_WORK.md).
 
 

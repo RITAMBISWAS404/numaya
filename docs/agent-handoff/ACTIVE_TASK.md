@@ -1,5 +1,8 @@
 # Active task: revised PRD for additional features (waiting for the owner's brief)
 
+> **2026-11-10, V7 selections applied:** delivered on `experiment/numaya-v7-selected-20261110`. **Next:** the owner tests the APK on an Android phone. Open items: [REMAINING_WORK.md](REMAINING_WORK.md).
+
+
 > **2026-11-10, Creative Lab V7:** delivered in wrap-up mode on `experiment/numaya-creative-lab-v7-20261110-0236`. **Next:** the owner reviews the gallery and phone folder, exports choices and sends them back. Open items: [REMAINING_WORK.md](REMAINING_WORK.md).
 
 

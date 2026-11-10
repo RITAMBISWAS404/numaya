@@ -1,26 +1,26 @@
-# Remaining work, Creative Lab V7
+# Remaining work
 
-State at delivery on 10 November 2026. App source `71564be`.
+State on 10 November 2026. App source `014ac35`, selections applied. See [SELECTIONS.md](../design/creative-lab-v7/SELECTIONS.md).
 
 ## Waiting on the owner
 
-- Review the gallery, export choices and send them back. Nothing is applied until then.
+- Test the APK on an Android phone.
+- Events and Health: 12 gallery groups remain undecided and deferred.
 
-## Not done or not verified
+## Known issues
 
 | Item | State |
 |---|---|
-| V7 alternatives at font 1.5, font 2.0 and 360 dp on a device | Not rendered. The capture steps exist in `ente_v4_review_test.dart` (`ONLY=key`). |
-| Compliment arrangement C, full journey | Entry only, so it is left out of the journey comparison. Its screen render is in the gallery. Harness step fixed, not re-run. |
-| Per-screen sweep | 203 default screens reviewed as contact sheets only. 34 are tied to an experiment or earlier option; 169 had no V7 alternative explored. See `docs/design/creative-lab-v7/SCREEN_REVIEW_LEDGER.csv`. |
-| Ente Figma for V7 | Page list read; Rituals seen only as an unreadable overview. V6 node inspections carried forward. |
-| Discover direction C | Only appears when the two people share something. |
-| Streak directions A and C | Do not show today's status. Should return if chosen. |
-| `v7-nav` A | Rendered on Discover only. Large text unchecked. |
-| Physical phone, iOS, screen reader | Not done. |
-| Web `npm run check`, e2e | Not run in V7. No web change. CRLF failures and missing Playwright browser predate V7. |
-| V6 deliverables | V6 never got its own screenshots, gallery or APK. They are folded into V7. |
+| Compliment composer title at font 2.0 | "Compliment" breaks mid-word. Page still works. |
+| Pills at font 1.5 and 2.0 | The second or third pill runs off the edge and scrolls sideways. |
+| Unread count badge at font 2.0 | Digit looks cramped in Messages. |
 
-## Not launch ready
+## Not verified
 
-Front-end test build: no backend, real purchases or production signing. See `docs/product/mvp-focus-v5/LAUNCH_READINESS.md`.
+- Physical phone, iOS, screen reader.
+- Live Figma comparison for the selections. The owner chose from rendered app screens.
+- Web `npm run check` and e2e. No web change; CRLF failures and the missing Playwright browser predate V7.
+
+## Release blockers
+
+Front-end test build only: no backend, real sign-in, real purchases, push notifications, file upload or production signing. Legal text is draft and safety contacts need checking. See `docs/product/mvp-focus-v5/LAUNCH_READINESS.md`.

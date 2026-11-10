@@ -385,3 +385,10 @@ Newest first. One entry per session: date, who, what changed, commits, what was 
 - Gallery schema 3: directions, levels, journey comparison, keep-baseline, recommended path, conflict refusal.
 - Stopped at the owner's request before large-text and narrow passes.
 
+## 2026-11-10, V7 selections applied
+
+- Branch `experiment/numaya-v7-selected-20261110`, app source `014ac35`, checkpoint tag `checkpoint/pre-v7-selection-20261110`.
+- Mapped 36 decisions and 12 deferred undecided groups. Seven defaults changed.
+- Status banner C went into the shared `StatusBanner`. Wallet A and streak O had no slot in the selected Profile, so they now fill Your activity.
+- Added `ReleaseScope.devTools`, default off.
+
