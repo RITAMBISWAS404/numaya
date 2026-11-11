@@ -401,3 +401,10 @@ Newest first. One entry per session: date, who, what changed, commits, what was 
 - Messaging: Compliment conversations (`ComplimentThread`, `ChatHeader`), a unified list, redirects, a non-match guard and times in bubbles.
 - Components: `SceneArt`, `InfoTile` and `InfoTilePair`, `SegmentBar`, `StepMarks`.
 
+## 2026-11-12, V9
+
+- Tagged V8 as `checkpoint/v8-baseline-20261112` and created `version-9` from it. Both are pushed.
+- Mobbin: 11 searches covering Hinge, Bumble, happn, WhatsApp, Airbnb, Uber, Binance and Apple Health. Figma radius node read (partial). The `apple-design` skill was applied to motion. Recorded in `docs/v9/research-and-design-audit.md`.
+- Restored the V7 type and radii. Added an adaptive `PhotoScrim` with `PhotoLuma`, `StatCard` (replacing `InfoTile` and `InfoTilePair`), `NumayaDivider`, `TabFadeStack` and the chat avatar hero. Card padding is now 20. Profile hub duplicates removed.
+- Delivered `docs/v9/design-exploration.html` (10 decisions), `design-decisions.md`, `implementation-report.md`, `docs/v9/screenshots/` (206 PNGs local only, plus a tracked INDEX.md) and `build/v9/namaya-v9.apk` (local only).
+

@@ -1,5 +1,8 @@
 # Active task: revised PRD for additional features (waiting for the owner's brief)
 
+> **2026-11-12, V9:** delivered on `version-9` for the investor demo. **Next:** the owner installs `build/v9/namaya-v9.apk` on a phone and reviews `docs/v9/design-exploration.html`. Open items: [REMAINING_WORK.md](REMAINING_WORK.md).
+
+
 > **2026-11-11, V8:** delivered on `version-8`. **Next:** the owner tests the APK and reviews the phone folder. Open items: [REMAINING_WORK.md](REMAINING_WORK.md).
 
 

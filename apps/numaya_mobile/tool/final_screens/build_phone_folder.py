@@ -18,15 +18,14 @@ A = ap.parse_args()
 
 SECTION = re.compile(r'^(.*)-(\d\d)-(top|middle|bottom)$')
 TOP_ONLY = ('Discover-out-of-likes',)
-STATE_FIX = {'Compliments-populated': 'Two requests', 'Profile-setup-hub': '45% complete', 'Support-requests': 'Empty, no requests yet'}
+STATE_FIX = {'Messages-with-Compliments': 'Two Compliments among chats', 'Profile-setup-hub': '45% complete', 'Support-requests': 'Empty, no requests yet'}
 OB, DI, LI, CH, PR, SE, SA = '01-Onboarding', '02-Discover', '03-Likes-Compliments', '05-Chat', '06-Profile', '10-Settings', '11-Safety-Help-Legal'
 # (anchor, [rows placed straight after it]): sheets and states beside the screen that opens them.
 MOVES = [
     (f'{OB}/20-Photo-tips-sheet', [f'{OB}/41-Photo-options-menu']),
     (f'{DI}/09-Allowance-used', [f'{DI}/11-Discover-out-of-likes']),
-    # V8: the Compliment conversation's menu and Not now sheet sit beside the conversation.
-    (f'{LI}/06-Compliment-request-prompt', [f'{LI}/61-Compliment-conversation-menu', f'{LI}/62-Compliment-not-now-sheet']),
-    (f'{LI}/09-Send-compliment-typed', [f'{LI}/41-Send-compliment-keyboard-open', f'{LI}/42-Send-compliment-discard-sheet', f'{LI}/43-Send-compliment-sent', f'{LI}/44-Send-compliment-already-sent', f'{LI}/45-Send-compliment-failed', f'{LI}/46-Send-compliment-no-credits']),
+    # V9: the harness captures the Compliment conversation's menu and Not now sheet in order.
+    (f'{LI}/11-Send-compliment-typed', [f'{LI}/41-Send-compliment-keyboard-open', f'{LI}/42-Send-compliment-discard-sheet', f'{LI}/43-Send-compliment-sent', f'{LI}/44-Send-compliment-already-sent', f'{LI}/45-Send-compliment-failed', f'{LI}/46-Send-compliment-no-credits']),
     (f'{CH}/10-Unmatch-sheet', [f'{SA}/02-Report-person-sheet', f'{SA}/03-Block-person-sheet']),
     (f'{CH}/11-Message-actions-menu', [f'{CH}/41-Chat-replying', f'{CH}/42-Chat-attach-menu', f'{CH}/43-Chat-photo-pending', f'{CH}/44-Chat-photo-sent', f'{CH}/45-Chat-photo-viewer', f'{CH}/46-Chat-reply-to-photo', f'{CH}/47-Chat-quoted-photo', f'{CH}/48-Chat-reply-to-long-text', f'{CH}/49-Chat-typed-send', f'{CH}/50-Chat-quoted-long-text', f'{CH}/51-Chat-quote-unavailable', f'{CH}/52-Chat-voice-recording', f'{CH}/53-Chat-voice-preview', f'{CH}/54-Chat-voice-sent', f'{CH}/55-Chat-voice-playing', f'{CH}/56-Chat-send-failed']),
     (f'{PR}/02-Edit-profile', [f'{PR}/07-Edit-bio-sheet', f'{PR}/08-Height-sheet', f'{PR}/09-Languages-sheet', f'{PR}/10-Work-sheet', f'{PR}/11-Exercise-choice-sheet']),
@@ -35,6 +34,9 @@ MOVES = [
 ]
 RENAME_FLOW = {f'{SA}/02-Report-person-sheet': CH, f'{SA}/03-Block-person-sheet': CH}
 
+# V9: harness keys that predate Compliments living in Messages, shown under their current names.
+RELABEL = {'04-Compliments-populated': '04-Messages-with-Compliments', '05-Compliment-request-photo': '05-Compliment-conversation-photo', '06-Compliment-request-prompt': '06-Compliment-conversation-prompt', '07-Compliment-options-menu': '07-Compliment-conversation-menu', '08-Dismiss-compliment-sheet': '08-Compliment-not-now-sheet'}
+
 rows = {}
 for r in csv.DictReader(open(os.path.join(A.capture, 'shots.tsv'), encoding='utf-8'), delimiter='\t'):
     path = os.path.join(A.capture, 'shots', r['file'])
@@ -42,6 +44,8 @@ for r in csv.DictReader(open(os.path.join(A.capture, 'shots.tsv'), encoding='utf
     flow, name = r['file'][:-4].split('__', 1)
     m = SECTION.match(name)
     base = m.group(1) if m else name
+    if flow == LI and base in RELABEL:
+        base = RELABEL[base]
     if m and base.split('-', 1)[1] in TOP_ONLY and m.group(3) != 'top':
         continue
     key = f'{flow}/{base}'

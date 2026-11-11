@@ -1,5 +1,8 @@
 # Validation
 
+> **V9 (`fb9e5cb`):** `flutter analyze`: one older deprecation info in a test. `flutter test`: 639 passed, 42 skipped (the same skips as V8), 0 failed, with no skips added. Five tests encoded replaced decisions (the fixed scrim widget, the Profile Settings row, the hub prompt card, the bar's Help button, the arrow disc) and were updated; one new test covers the adaptive scrim range. Emulator (Pixel 10 AVD): 210 captures in the full harness, 0 skipped; 19 key screens each at font 1.5, font 2.0 and 360 dp, 0 skipped. Release-mode APK built (signed with the debug key; no release keystore exists), installed with `-r`, and launched to Welcome with no crash in logcat. The deeper journeys were exercised on the debug build by the harness, not by hand on the release build. Not run: `npm run check` and the web e2e (no web change), physical phone, iOS, screen reader.
+
+
 > **V8 (`45eadc1`, router import order fixed later):** `flutter test` 638 passed, 42 skipped, 0 failed, with no skips added. 24 tests encoded replaced decisions (fonts, radii, grey buttons, row cards without hairlines, hidden message times, the Compliments tab) and were updated to the V8 behaviour. Analyzer: one older deprecation info. New tests cover the Compliment conversation (reply opens the chat in place) and the Not now confirmation. Emulator: 208 captures plus 2 re-shot states (the conversation menu and Not now sheet, harness fixed), 19 key screens each at font 1.5, font 2.0 and 360 dp, all 0 skipped. APK installed with `-r` and launched. Not run: web checks (no web change), physical phone, screen reader.
 
 

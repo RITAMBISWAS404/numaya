@@ -1,5 +1,8 @@
 # Current state
 
+> **V9 (2026-11-12):** branch **`version-9`** from V8 `47ba247` (tagged `checkpoint/v8-baseline-20261112`). App source `fb9e5cb`. V7 type (Plus Jakarta Sans and Figtree) and V7 radii are restored. Also new: an adaptive photo scrim, single-column `StatCard`s, one `NumayaDivider`, 20pt card padding, a tab fade, the chat avatar hero, and Profile hub duplicates removed. Compliments stay inside Messages. See [docs/v9](../v9/design-decisions.md).
+
+
 > **V8 (2026-11-11):** branch **`version-8`** from tag `checkpoint/v7-selected-baseline-20261111` (`b5e5245`, the protected V7). App source and APK `45eadc1`. Google Sans plus Bree Serif, a tighter radius scale, outlined secondary buttons, hairline separators, code-drawn scene art, two-column information tiles, and Compliments inside Messages with no Compliments tab. See [docs/design/v8](../design/v8/DESIGN_SYSTEM.md).
 
 

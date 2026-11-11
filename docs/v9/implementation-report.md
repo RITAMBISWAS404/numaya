@@ -60,4 +60,19 @@ Nothing was removed from the router, the data model, or a user journey. Every re
 
 ## Verification
 
-Filled in at delivery; see [VALIDATION.md](../agent-handoff/VALIDATION.md) for the run log.
+- **`flutter analyze`:** one older deprecation info in a test file.
+- **`flutter test`:** 639 passed, 42 skipped (unchanged from V8), 0 failed. No tests were disabled. Five tests that encoded replaced decisions were updated, and one test was added for the adaptive scrim.
+- **Emulator (Pixel 10 AVD):**
+  - 210 screens through the full capture harness, 0 skipped. This includes onboarding, Discover, Likes, sending a Compliment, the Compliment conversation and Not now, chat states, Profile, editing, wallet, Premium, Settings, help and account states.
+  - 19 key screens at font 1.5, at font 2.0 and at 360 dp, 0 skipped.
+- **APK:** `build/v9/namaya-v9.apk`, 63,385,965 bytes, SHA-256 `127c802c…536f`.
+  - Release mode, signed with the debug key (no release keystore is configured).
+  - Installed and launched to Welcome with no crash.
+- **Not run:**
+  - Web checks: no web change.
+  - Physical phone, iOS, screen reader.
+  - Hand-driven journeys on the release build.
+
+## Known limitations
+
+See [REMAINING_WORK.md](../agent-handoff/REMAINING_WORK.md).
