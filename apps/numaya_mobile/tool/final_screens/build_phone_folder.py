@@ -118,7 +118,7 @@ is_sheet = lambda b: '-sheet' in b or b.endswith('-menu') or b.endswith('permiss
 entries, sheets = len(order), sum(1 for r in order if is_sheet(r['base']))
 
 flat_name = os.path.basename(A.flat.rstrip('/\\'))
-md = [f'# Numaya MVP V7 screen index\n\nBranch `{A.branch}`, app commit `{A.commit}`. Real Pixel 10 AVD screenshots (API 36, 1080 x 2424, density 420, font 1.0).\n\n**{entries} unique screens and states** ({entries - sheets} screens or page states, {sheets} sheets and menus), **{len(plan)} PNG files** including scrolling sections.\n\n| File | Screen | State | How to get there |\n|---|---|---|---|\n']
+md = [f'# Numaya V9 screen index\n\nBranch `{A.branch}`, app commit `{A.commit}`. Real Pixel 10 AVD screenshots (API 36, 1080 x 2424, density 420, font 1.0).\n\n**{entries} unique screens and states** ({entries - sheets} screens or page states, {sheets} sheets and menus), **{len(plan)} PNG files** including scrolling sections.\n\n| File | Screen | State | How to get there |\n|---|---|---|---|\n']
 for path, d, r, where in plan:
     md.append(f"| `{d}` | {r['base'].split('-', 1)[1].replace('-', ' ')} | {r['state']}{' (' + where + ')' if where else ''} | {r['nav']} |\n")
 open(os.path.join(A.gallery, 'SCREEN_INDEX.md'), 'w', encoding='utf-8', newline='\n').write(''.join(md))
@@ -142,7 +142,7 @@ for f, rs in flows.items():
         n = min(len(by_row[r['key']]), 6)
         cards.append(f'<article style="--n:{n}"><div class="shots">{figs}</div><h3>{esc(title)}</h3><p>{esc(r["state"])}</p><p class="nav">{esc(r["nav"])}</p></article>')
     sec.append(f'<section id="{esc(f)}"><h2>{esc(f.split("-", 1)[1])}</h2><div class="grid">{"".join(cards)}</div></section>')
-open(os.path.join(A.gallery, 'index.html'), 'w', encoding='utf-8', newline='\n').write(f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Numaya MVP V5 Screens</title>
+open(os.path.join(A.gallery, 'index.html'), 'w', encoding='utf-8', newline='\n').write(f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Numaya V9 Screens</title>
 <style>
 :root{{--bg:#f4f4f4;--card:#fff;--ink:#111;--muted:#5f5f5f;--brand:#5b4bb0}}
 *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,"Segoe UI",sans-serif}}
@@ -154,7 +154,7 @@ section{{max-width:1500px;margin:auto;padding:20px 16px;scroll-margin-top:52px}}
 .shots{{display:flex;flex-wrap:wrap;gap:6px}}.shot{{position:relative;display:block;width:150px;max-width:100%;line-height:0}}.shot img{{width:100%;height:auto;border-radius:8px;background:#ddd;border:1px solid #e3e3e3}}
 .shot:focus-visible{{outline:3px solid var(--brand);outline-offset:2px}}.part{{position:absolute;left:4px;bottom:4px;background:#000b;color:#fff;font-size:11px;line-height:16px;padding:0 6px;border-radius:99px}}
 h3{{font-size:14px;margin:8px 0 0}}article p{{margin:0;font-size:13px;color:var(--muted)}}p.nav{{font-size:12px}}
-</style></head><body><header><h1>Numaya MVP V7 screens</h1><p>{entries} screens and states, {len(plan)} PNGs. App commit {esc(A.commit[:7])}, Pixel 10 emulator, font 1.0. Click a thumbnail for the full-resolution PNG. <a href="COVERAGE.md">Coverage</a> · <a href="SCREEN_INDEX.md">Screen index</a></p></header><nav>{nav}</nav>{"".join(sec)}</body></html>''')
+</style></head><body><header><h1>Numaya V9 screens</h1><p>{entries} screens and states, {len(plan)} PNGs. App commit {esc(A.commit[:7])}, Pixel 10 emulator, font 1.0. Click a thumbnail for the full-resolution PNG. <a href="COVERAGE.md">Coverage</a> · <a href="SCREEN_INDEX.md">Screen index</a></p></header><nav>{nav}</nav>{"".join(sec)}</body></html>''')
 print(f'entries {entries} sheets {sheets} pngs {len(plan)} problems {len(problems)} identical-bytes {dup}')
 for p in problems:
     print(p)

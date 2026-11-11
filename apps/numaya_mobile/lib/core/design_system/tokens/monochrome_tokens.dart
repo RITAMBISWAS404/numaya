@@ -267,7 +267,8 @@ abstract final class MonoSizes {
 abstract final class MonoSpace {
   static const double gutter = 20;
   static const double section = 32;
-  static const double cardPadding = 16;
+  // V9: 20, the same as the gutter, so cards, rows and dividers share one rhythm (D-11).
+  static const double cardPadding = 20;
   static const double heroPadding = 20;
   static const double item = 12;
   static const double field = 16;

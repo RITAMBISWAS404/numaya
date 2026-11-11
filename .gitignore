@@ -11,3 +11,7 @@ tests/e2e/artifacts
 /pics/
 apps/numaya_mobile/assets/demo/photos/*
 !apps/numaya_mobile/assets/demo/photos/README.md
+
+# V9 deliverables that contain the private demo photos: kept local, never published.
+/build/
+docs/v9/screenshots/*.png
