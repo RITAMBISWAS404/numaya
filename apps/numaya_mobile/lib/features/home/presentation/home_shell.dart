@@ -117,8 +117,7 @@ class TabHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // The tab title is the page-title role (24/32) at every text size (UI-012); the bar grows
-    // with its content.
+    // The tab title is Bree Serif 28/34 at every text size; the bar grows with its content.
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: AppSizes.tabHeader),
       child: Padding(
@@ -128,7 +127,8 @@ class TabHeader extends StatelessWidget {
             Expanded(
               child: Semantics(
                 header: true,
-                child: Text(title, style: AppTypography.pageTitle),
+                // V8: tab roots share the serif title voice with large-title pages.
+                child: Text(title, style: AppTypography.flowTitle),
               ),
             ),
             if (actions.isNotEmpty) ...[
