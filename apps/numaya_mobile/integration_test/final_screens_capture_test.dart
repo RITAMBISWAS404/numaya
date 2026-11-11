@@ -663,8 +663,9 @@ void main() {
         'Action sheet',
         'Compliment > ...',
         () async {
+          // V8: a Compliment opens as a conversation; its menu has the safety actions.
           await h.go('${Routes.request}/seed-sam');
-          await h.tapLabel(_l.discoverOptions);
+          await h.tapLabel(_l.conversationOptions);
         },
       );
       await h.sheet(
@@ -674,7 +675,8 @@ void main() {
         'Compliment > Dismiss',
         () async {
           await h.go('${Routes.request}/seed-sam');
-          await h.tapKey('request-dismiss');
+          await h.tapLabel(_l.conversationOptions);
+          await h.tapText(_l.complimentNotNow);
         },
       );
       await h.page(
@@ -1299,6 +1301,41 @@ void main() {
         await h.shot(f, 'Session-expired', 'Sign in again', 'Session expiry');
       });
     }
+    // ignore: avoid_print
+    print('@@DONE@@');
+  });
+
+  // V8: re-shoot only the Compliment conversation menu and its Not now sheet, numbered as in the
+  // full run (07 and 08 in the Likes and Compliments flow).
+  testWidgets('v8 compliment menu', (tester) async {
+    if (_only != 'v8menu') return;
+    final c = await quickStartApp(tester, devTools: false);
+    c.read(onboardingProvider.notifier).loadSample();
+    final h = _H(tester, c);
+    await h.wait(1500);
+    const f = _likes;
+    _counts[f] = 6;
+    await h.sheet(
+      f,
+      'Compliment-options-menu',
+      'Action sheet',
+      'Compliment > ...',
+      () async {
+        await h.go('${Routes.request}/seed-sam');
+        await h.tapLabel(_l.conversationOptions);
+      },
+    );
+    await h.sheet(
+      f,
+      'Dismiss-compliment-sheet',
+      'Confirm',
+      'Compliment > Not now',
+      () async {
+        await h.go('${Routes.request}/seed-sam');
+        await h.tapLabel(_l.conversationOptions);
+        await h.tapText(_l.complimentNotNow);
+      },
+    );
     // ignore: avoid_print
     print('@@DONE@@');
   });

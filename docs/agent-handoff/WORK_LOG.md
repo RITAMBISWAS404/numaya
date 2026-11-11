@@ -392,3 +392,12 @@ Newest first. One entry per session: date, who, what changed, commits, what was 
 - Status banner C went into the shared `StatusBanner`. Wallet A and streak O had no slot in the selected Profile, so they now fill Your activity.
 - Added `ReleaseScope.devTools`, default off.
 
+## 2026-11-11, V8
+
+- Created `version-8` from the V7 checkpoint and tagged it `checkpoint/v7-selected-baseline-20261111`. An empty branch `experiment/numaya-v8-design-system-20261111` from the first, superseded brief points at the same commit and was left alone.
+- Tiimo research through Mobbin: 22 screens, in `docs/design/v8/TYPOGRAPHY.md`.
+- Fonts from google/fonts under OFL: Google Sans (variable) and Bree Serif.
+- Foundations: type roles, radius scale, outlined buttons, hairlines, chips and nav tiles.
+- Messaging: Compliment conversations (`ComplimentThread`, `ChatHeader`), a unified list, redirects, a non-match guard and times in bubbles.
+- Components: `SceneArt`, `InfoTile` and `InfoTilePair`, `SegmentBar`, `StepMarks`.
+

@@ -1,5 +1,8 @@
 # Current state
 
+> **V8 (2026-11-11):** branch **`version-8`** from tag `checkpoint/v7-selected-baseline-20261111` (`b5e5245`, the protected V7). App source and APK `45eadc1`. Google Sans plus Bree Serif, a tighter radius scale, outlined secondary buttons, hairline separators, code-drawn scene art, two-column information tiles, and Compliments inside Messages with no Compliments tab. See [docs/design/v8](../design/v8/DESIGN_SYSTEM.md).
+
+
 > **V7 selected candidate (2026-11-10):** branch **`experiment/numaya-v7-selected-20261110`** from tag `checkpoint/pre-v7-selection-20261110` (`2fb12f9`). App source and APK `014ac35`. The owner's export `v7-71564be-2026-11-10` is the default app: [SELECTIONS.md](../design/creative-lab-v7/SELECTIONS.md). Demo Hub and labs need `NUMAYA_DEV_TOOLS`. Not merged anywhere.
 
 

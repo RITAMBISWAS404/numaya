@@ -1,5 +1,8 @@
 # Validation
 
+> **V8 (`45eadc1`, router import order fixed later):** `flutter test` 638 passed, 42 skipped, 0 failed, with no skips added. 24 tests encoded replaced decisions (fonts, radii, grey buttons, row cards without hairlines, hidden message times, the Compliments tab) and were updated to the V8 behaviour. Analyzer: one older deprecation info. New tests cover the Compliment conversation (reply opens the chat in place) and the Not now confirmation. Emulator: 208 captures plus 2 re-shot states (the conversation menu and Not now sheet, harness fixed), 19 key screens each at font 1.5, font 2.0 and 360 dp, all 0 skipped. APK installed with `-r` and launched. Not run: web checks (no web change), physical phone, screen reader.
+
+
 > **V7 selected candidate (`014ac35`):** `flutter test` 638 passed, 42 skipped (no new skips), 0 failed; analyzer has only the older deprecation info. `selected_candidate_test.dart` asserts all 36 decisions and that development controls are absent; the Compliment sheet regression passes. Emulator: 208 captures, 0 skipped, all from `014ac35`, with real taps through chat keyboard, quoted replies, voice controls, Compliment send and failure, filters, wallet and profile; 15 key screens each at font 1.5, font 2.0 and 360 dp with 0 skipped. APK installed with `-r` and launched. 43 screens changed by the selections were inspected at phone size; the rest as contact sheets. Tests that encoded replaced looks were updated: banner fill and icon alignment, squircle match avatar, card tap to open. Not run: web `npm run check` and e2e (no web change), physical phone, screen reader, live Figma comparison.
 
 
