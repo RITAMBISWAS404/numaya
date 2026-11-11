@@ -14,6 +14,9 @@ import '../features/auth/presentation/verify_screen.dart';
 import '../features/auth/presentation/welcome_screen.dart';
 import '../features/commerce/presentation/store_screens.dart';
 import '../features/commerce/presentation/wallet_screen.dart';
+import '../features/compliments/application/compliments_controller.dart';
+import '../features/compliments/domain/compliment.dart';
+import '../features/dating/application/dating_controller.dart';
 import '../features/compliments/presentation/compliment_screens.dart';
 import '../features/dating/presentation/archive_screen.dart';
 import '../features/dating/presentation/discover_screen.dart';
@@ -216,7 +219,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: Routes.likes,
-                // R03: `?tab=compliments` opens the Compliments part (notification links).
+                // V8: the old Compliments part lives in Messages now.
+                redirect: (_, state) =>
+                    state.uri.queryParameters['tab'] == 'compliments'
+                    ? Routes.messages
+                    : null,
                 builder: (_, state) => LikesScreen(
                   initialTab: state.uri.queryParameters['tab'] == 'compliments'
                       ? HeartTab.compliments
@@ -328,12 +335,19 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
         ),
       ),
-      _route(
+      // V8: a Compliment notification or saved link opens its conversation.
+      GoRoute(
         path: '${Routes.request}/:id',
-        builder: (_, state) => RequestScreen(
-          key: ValueKey(state.uri.toString()),
-          complimentId: state.pathParameters['id']!,
-        ),
+        redirect: (_, state) {
+          final c = ref
+              .read(complimentsProvider.notifier)
+              .byId(state.pathParameters['id']!);
+          final open =
+              c != null &&
+              (c.status == ComplimentStatus.pending ||
+                  ref.read(datingProvider).matches.contains(c.personId));
+          return open ? '${Routes.chat}/${c.personId}' : Routes.messages;
+        },
       ),
       _route(path: Routes.archive, builder: (_, _) => const ArchiveScreen()),
       // R01: retired routes redirect instead of 404 (old notifications, saved links).

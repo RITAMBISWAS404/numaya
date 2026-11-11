@@ -878,9 +878,13 @@ class MessageBubble extends StatelessWidget {
     this.quoteStyle = QuoteStyle.block,
     this.replyAuthor,
     this.replyText,
+    this.time,
   });
 
   final String text;
+
+  /// "14:02", drawn small at the bubble's end.
+  final String? time;
   final bool grouped;
   final bool dimmed;
   final bool mine;
@@ -926,7 +930,7 @@ class MessageBubble extends StatelessWidget {
               ),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (replyText != null) ...[
@@ -946,6 +950,23 @@ class MessageBubble extends StatelessWidget {
                     color: mine ? AppColors.accentForeground : AppColors.ink,
                   ),
                 ),
+                if (time != null)
+                  Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: Text(
+                        time!,
+                        style: AppTypography.micro.copyWith(
+                          color: mine
+                              ? AppColors.accentForeground.withValues(
+                                  alpha: 0.78,
+                                )
+                              : AppColors.textMuted,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

@@ -11,6 +11,9 @@ import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
+import '../../compliments/application/compliments_controller.dart';
+import '../../compliments/domain/compliment.dart';
+import '../../compliments/presentation/compliment_thread.dart';
 import '../../experiments/experiments.dart';
 import '../../home/presentation/home_shell.dart';
 import '../../home/presentation/tab_screens.dart';
@@ -22,6 +25,7 @@ import '../application/dating_controller.dart';
 import '../data/media_picker.dart';
 import '../domain/sample_people.dart';
 import 'chat_attachments.dart';
+import 'chat_header.dart';
 import 'chat_voice.dart';
 import 'conversation_row.dart';
 import 'empty_conversations.dart';
@@ -34,6 +38,29 @@ enum _ConvFilter { all, unread, yourMove }
 
 /// Messages (B-42 / B-43, V16 034 / 037 / 052): search, the match queue (countdown rings, the
 /// likes tile, expired matches), an Opening Moves prompt and conversations with view tabs.
+/// One row of the conversation list: a chat, or a Compliment nobody has answered yet.
+class _Entry {
+  const _Entry({
+    required this.person,
+    required this.last,
+    required this.unread,
+    required this.yourMove,
+    this.compliment = false,
+  });
+
+  final SamplePerson person;
+  final DemoMessage last;
+  final int unread;
+  final bool yourMove;
+  final bool compliment;
+}
+
+/// A received Compliment counts as unread until its conversation is opened.
+bool _unseen(DatingState state, Compliment c) {
+  final read = state.lastRead[c.personId];
+  return read == null || read.isBefore(c.sentAt);
+}
+
 class MessagesScreen extends ConsumerStatefulWidget {
   const MessagesScreen({super.key});
 
@@ -87,6 +114,18 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     final archived = controller.archivedConversations();
     final convs = controller.conversations();
     final likes = controller.unansweredLikes();
+    ref.watch(complimentsProvider);
+    final compliments = ref.read(complimentsProvider.notifier);
+    // Pending Compliments both ways, as conversations that have not started yet.
+    final pending = <Compliment>[
+      ...compliments.requests(),
+      for (final c in ref.read(complimentsProvider))
+        if (c.fromMe &&
+            c.status == ComplimentStatus.pending &&
+            state.isActive(c.personId) &&
+            !state.matches.contains(c.personId))
+          c,
+    ];
     final hasMoves = ref.watch(
       profileDetailsProvider.select((d) => d.openingMoves.isNotEmpty),
     );
@@ -113,7 +152,8 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     if (queued.isEmpty &&
         expired.isEmpty &&
         archived.isEmpty &&
-        convs.isEmpty) {
+        convs.isEmpty &&
+        pending.isEmpty) {
       // EXP-003 (Experiment Lab only; release builds show the refined candidate).
       final variant = ref.watch(
         experimentVariantProvider(Experiment.emptyChats),
@@ -137,10 +177,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             EmptyState(
-              art: const IllustrationView(
-                NumayaIllustration.noChats,
-                width: 160,
-              ),
+              art: const SceneArt(ArtScene.conversation, width: 168),
               title: l10n.chatsEmptyTitle,
               body: l10n.chatsEmptyBody,
               action: NumayaButton(
@@ -169,28 +206,71 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
         .where((m) => q.isEmpty || m.person.name.toLowerCase().contains(q))
         .toList();
     final laterCount = archived.length + expired.length;
-    final all = convs.where(matches).toList();
-    final unread = all.where((p) => controller.unread(p.id) > 0).toList();
-    final yourMove = all.where((p) => controller.yourMove(p.id)).toList();
+    final now = ref.read(clockProvider)();
+    // One list: chats and not-yet-answered Compliments, newest activity first.
+    final entries = <_Entry>[
+      for (final p in convs.where(matches))
+        _Entry(
+          person: p,
+          last: controller.lastMessage(p.id)!,
+          unread: controller.unread(p.id),
+          yourMove: controller.yourMove(p.id),
+        ),
+      for (final c in pending)
+        if (personById(c.personId) case final p? when matches(p))
+          _Entry(
+            person: p,
+            last: DemoMessage(
+              id: -1,
+              text: c.text,
+              status: MessageStatus.onDevice,
+              at: c.sentAt,
+              mine: c.fromMe,
+              sample: !c.fromMe,
+            ),
+            // Unread until opened; it is your move until you reply.
+            unread: !c.fromMe && _unseen(state, c) ? 1 : 0,
+            yourMove: !c.fromMe,
+            compliment: true,
+          ),
+    ]..sort((a, b) => b.last.at.compareTo(a.last.at));
+    final all = entries;
+    final unread = all.where((e) => e.unread > 0).toList();
+    final yourMove = all.where((e) => e.yourMove).toList();
     final rows = switch (_filter) {
       _ConvFilter.all => all,
       _ConvFilter.unread => unread,
       _ConvFilter.yourMove => yourMove,
     };
-    final now = ref.read(clockProvider)();
 
     final Widget list;
     if (rows.isNotEmpty) {
       list = Column(
         children: [
           for (var i = 0; i < rows.length; i++) ...[
+            // V8: conversations are rows on the page, divided by inset hairlines.
+            if (i > 0)
+              const Padding(
+                padding: EdgeInsetsDirectional.only(
+                  start: ConversationRow.textInset,
+                ),
+                child: ExcludeSemantics(
+                  child: SizedBox(
+                    height: AppBorders.hairline,
+                    width: double.infinity,
+                    child: ColoredBox(color: AppColors.divider),
+                  ),
+                ),
+              ),
             ConversationRow(
-              person: rows[i],
-              last: controller.lastMessage(rows[i].id)!,
-              unread: controller.unread(rows[i].id),
-              yourMove: controller.yourMove(rows[i].id),
+              key: ValueKey('conversation-${rows[i].person.id}'),
+              person: rows[i].person,
+              last: rows[i].last,
+              unread: rows[i].unread,
+              yourMove: rows[i].yourMove,
+              compliment: rows[i].compliment,
               now: now,
-              onTap: () => _open(rows[i]),
+              onTap: () => _open(rows[i].person),
               variant: rowV,
             ),
           ],
@@ -708,6 +788,32 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     final controller = ref.read(datingProvider.notifier);
     final messages = state.threads[person.id] ?? const <DemoMessage>[];
+    // V8: before a reply, a Compliment is this conversation. Received: reply privately here;
+    // sent: wait here. Once answered the same route becomes the chat, Compliment first.
+    ref.watch(complimentsProvider);
+    if (messages.isEmpty && !state.matches.contains(person.id)) {
+      final compliments = ref.read(complimentsProvider.notifier);
+      final incoming = compliments.pendingFrom(person.id);
+      final outgoing = compliments.sentTo(person.id);
+      final c =
+          incoming ??
+          (outgoing?.status == ComplimentStatus.pending ? outgoing : null);
+      if (c != null && state.isActive(person.id)) {
+        return ComplimentThread(person: person, compliment: c, onBack: _back);
+      }
+      // Not a match and no Compliment to answer: there is no conversation to write in.
+      return NumayaScreen(
+        top: NumayaTopBar(onBack: _back, backLabel: l10n.backToMessages),
+        body: Padding(
+          padding: const EdgeInsets.only(top: AppSpacing.s10),
+          child: EmptyState(
+            art: const SceneArt(ArtScene.conversation, width: 140),
+            title: l10n.requestGone,
+            body: '',
+          ),
+        ),
+      );
+    }
     final known = _known ??= {for (final m in messages) m.id};
     final expired = controller.isExpired(person.id);
     final archived = controller.isArchived(person.id);
@@ -715,62 +821,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     // UC-05: the same height and centre line as `NumayaTopBar` (the V16 8pt drop is retired), so
     // Back sits where it does on every other pushed page.
-    final header = SizedBox(
-      height: AppSizes.topBar,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppLayout.barPadding,
-          vertical: AppSpacing.s1,
-        ),
-        child: Row(
-          children: [
-            NavIconButton(
-              icon: NumayaIcons.chevronLeft,
-              label: l10n.backToMessages,
-              style: NavButtonStyle.plain,
-              onPressed: _back,
-            ),
-            const SizedBox(width: AppSpacing.s3),
-            Expanded(
-              child: Pressable(
-                onTap: () => context.push('${Routes.person}/${person.id}'),
-                semanticLabel: l10n.viewProfile(person.name),
-                excludeChildSemantics: true,
-                pressedScale: 1,
-                child: Row(
-                  children: [
-                    InitialsAvatar(
-                      initial: person.initial,
-                      size: 36,
-                      image: personAvatarImage(person),
-                      imageAlignment: personAvatarFocus(person),
-                    ),
-                    const SizedBox(width: AppSpacing.s3),
-                    Flexible(
-                      child: Text(
-                        person.name,
-                        overflow: TextOverflow.ellipsis,
-                        // X15-H: the chat header is an app bar; its name takes the app-bar
-                        // title role like every other pushed page.
-                        style: AppTypography.appBarTitle,
-                      ),
-                    ),
-                    if (person.verified) ...[
-                      const SizedBox(width: 4),
-                      const VerifiedMark(),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-            NavIconButton(
-              icon: NumayaIcons.more,
-              label: l10n.conversationOptions,
-              onPressed: () => _menu(person, talked: messages.isNotEmpty),
-            ),
-          ],
-        ),
-      ),
+    final header = ChatHeader(
+      person: person,
+      onBack: _back,
+      onMenu: () => _menu(person, talked: messages.isNotEmpty),
     );
 
     final Widget body;
@@ -957,12 +1011,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     mine: m.mine,
                     grouped: grouped,
                     dimmed: dimmed,
+                    time: DateFormat('HH:mm').format(m.at),
                     replyAuthor: quoted == null
-                        ? null
+                        ? (m.context == null
+                              ? null
+                              : (m.mine
+                                    ? l10n.v8ComplimentYours
+                                    : l10n.v8ComplimentTheirs(person.name)))
                         : (quoted.mine ? l10n.chatYou : person.name),
                     replyText: quoteGone
                         ? l10n.chatQuoteUnavailable
-                        : (quoted == null ? null : preview(quoted)),
+                        : quoted != null
+                        ? preview(quoted)
+                        : m.context == null
+                        ? null
+                        : (m.context == kComplimentPhotoContext
+                              ? l10n.v8ComplimentOnAPhoto
+                              : m.context!),
                     quoteStyle: switch (ref.watch(
                       labVariantProvider('v6-quote-style'),
                     )) {

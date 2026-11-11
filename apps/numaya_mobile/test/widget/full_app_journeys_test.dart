@@ -40,7 +40,8 @@ void main() {
     await tapOn(tester, find.text('Quick start as Alex (sample account)'));
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.text('Maya, 29'), findsOneWidget);
-    expect(find.bySemanticsLabel('Messages, 3 new'), findsOneWidget);
+    // V8: two Compliments waiting to be answered count with the three new matches.
+    expect(find.bySemanticsLabel('Messages, 5 new'), findsOneWidget);
 
     await openTab(tester, 'Profile');
     await tapOn(tester, find.bySemanticsLabel('Settings').first);
@@ -116,7 +117,8 @@ void main() {
       ),
       findsOneWidget,
     );
-    await tapOn(tester, find.bySemanticsLabel('Unread, 1'));
+    // V8: the two Compliments nobody has opened yet are unread conversations too.
+    await tapOn(tester, find.bySemanticsLabel('Unread, 3'));
     await tapOn(tester, find.bySemanticsLabel(RegExp('^Priya')));
     await tester.pump(const Duration(milliseconds: 600));
     // UI-041: no demo notice in the conversation (it replaced CL-07's single notice).
@@ -132,11 +134,10 @@ void main() {
     expect(find.text('Not sent: saved on this device'), findsOneWidget);
     await tapOn(tester, find.bySemanticsLabel('Back to messages'));
     await tester.pump(const Duration(milliseconds: 600));
-    // The Unread view is now empty: Priya's messages have been read.
-    expect(find.bySemanticsLabel('Unread, 0'), findsOneWidget);
-    expect(find.text('You’re all caught up'), findsOneWidget);
-    // R01: Rafa's quiet chat is in Archive, so All counts two.
-    await tapOn(tester, find.bySemanticsLabel('All, 2'));
+    // Priya's messages have been read; the two Compliments are still waiting.
+    expect(find.bySemanticsLabel('Unread, 2'), findsOneWidget);
+    // R01: Rafa's quiet chat is in Archive. All: two chats and three Compliments.
+    await tapOn(tester, find.bySemanticsLabel('All, 5'));
     expect(find.text('You: Not yet. Saturday?'), findsOneWidget);
     await settle(tester);
   });

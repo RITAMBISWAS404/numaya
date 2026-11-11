@@ -67,7 +67,7 @@ class NumayaButton extends StatelessWidget {
         : textOnly
         ? AppSizes.buttonHeightQuiet
         : AppSizes.buttonHeight;
-    // Ente Button Large (2207:41760): a 20pt rounded rectangle, not a pill.
+    // V8: a 12pt rounded rectangle (Ente Button Large geometry, tighter corners).
     const radius = AppRadii.control;
 
     // A small button that isn't primary, tint or solid red is the outlined pill.
@@ -91,14 +91,23 @@ class NumayaButton extends StatelessWidget {
         AppColors.accentForeground,
         null,
       ),
-      // Filled neutral: surface contrast, not a stroke, says "less important".
-      NumayaButtonVariant.secondary => (AppColors.field, AppColors.ink, null),
-      NumayaButtonVariant.quiet => (AppColors.field, AppColors.ink, null),
-      // V4: no lavender fill; a neutral button whose purple label marks the brand action.
+      // V8: secondary actions are a hairline outline on a faint wash, so only the primary is
+      // filled and the page stays light.
+      NumayaButtonVariant.secondary => (
+        AppColors.buttonWash,
+        AppColors.ink,
+        AppColors.buttonOutline,
+      ),
+      NumayaButtonVariant.quiet => (
+        AppColors.buttonWash,
+        AppColors.ink,
+        AppColors.buttonOutline,
+      ),
+      // The brand action: a purple label inside a faint purple outline.
       NumayaButtonVariant.brand => (
-        AppColors.field,
+        AppColors.accentWash,
         AppColors.accentOnTint,
-        null,
+        AppColors.accentOutline,
       ),
       NumayaButtonVariant.destructive => (
         Colors.transparent,
@@ -157,7 +166,7 @@ class NumayaButton extends StatelessWidget {
               ? null
               : Border.all(
                   color: ring,
-                  width: AppBorders.hairline,
+                  width: AppBorders.control,
                   strokeAlign: BorderSide.strokeAlignInside,
                 ),
         ),

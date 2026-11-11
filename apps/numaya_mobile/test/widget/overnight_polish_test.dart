@@ -59,7 +59,7 @@ void main() {
       await goTo(c, tester, Routes.profile);
       final title = find.byKey(const ValueKey('large-title'));
       expect(title, findsOneWidget);
-      expect(tester.widget<Text>(title).style?.fontSize, 30);
+      expect(tester.widget<Text>(title).style?.fontSize, 32);
       final painter = TextPainter(
         text: TextSpan(
           text: 'Profile',

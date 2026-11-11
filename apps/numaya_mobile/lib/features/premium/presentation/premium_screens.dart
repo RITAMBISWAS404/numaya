@@ -190,7 +190,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         body: Padding(
           padding: const EdgeInsets.only(top: AppSpacing.s10),
           child: ResultPanel(
-            illustration: NumayaIllustration.hello,
+            illustration: NumayaIllustration.premium,
             title: l10n.paywallAlreadyTitle,
             body: premium.autoRenew
                 ? l10n.premiumRenews(shortDate(premium.paidThrough!))

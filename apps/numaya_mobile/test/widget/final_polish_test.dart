@@ -346,8 +346,7 @@ void main() {
     });
 
     testWidgets(
-      'off a sheet, related rows share one white 20pt card with no hairlines '
-      '(OV-02, Ente Settings DS)',
+      'off a sheet, related rows share one white card divided by hairlines (V8)',
       (tester) async {
         await tester.pumpWidget(
           host(
@@ -363,7 +362,7 @@ void main() {
         final lines = find.byWidgetPredicate(
           (w) => w is ColoredBox && w.color == AppColors.divider,
         );
-        expect(lines, findsNothing);
+        expect(lines, findsNWidgets(2));
         final cards = find.descendant(
           of: find.byType(ListGroup),
           matching: find.byWidgetPredicate(
@@ -598,9 +597,8 @@ void main() {
       final deco =
           tester.widget<AnimatedContainer>(selected).decoration!
               as BoxDecoration;
-      // UC-03: a fully rounded pill 4pt inside its item (supersedes the Tabler MVP's 12pt
-      // tile corners).
-      expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
+      // V8: a tile, not a pill.
+      expect(deco.borderRadius, AppRadii.all(AppRadii.tile));
       await settle(tester);
     });
 

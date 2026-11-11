@@ -24,13 +24,13 @@ void main() {
     // Regression: the old 16/24 default must not come back through an override.
     expect(s.fontSize, isNot(16), reason: '$what: not the old 16');
     // Ente Body is medium (500) (Ente experiment).
-    expect(s.fontWeight, FontWeight.w500, reason: '$what: Figtree 500');
+    expect(s.fontWeight, FontWeight.w500, reason: '$what: Google Sans 500');
   }
 
   group('TR-01: body copy is 15/20 (X15)', () {
     test('the semantic body role', () {
       expectBody(AppTypography.body, 'AppTypography.body');
-      expect(AppTypography.body.fontFamily, 'Figtree');
+      expect(AppTypography.body.fontFamily, 'Google Sans');
     });
 
     // UI-020: the bio is the About me card's primary content, larger than its 14pt label.

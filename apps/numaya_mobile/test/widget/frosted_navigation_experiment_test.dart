@@ -88,8 +88,8 @@ void main() {
         final pill = tester.widget<Container>(pillOf());
         final deco = pill.decoration! as BoxDecoration;
         expect(deco.color, AppColors.surface);
-        // UC-03: a stadium at any width.
-        expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
+        // V8: the bar follows the tighter radius scale.
+        expect(deco.borderRadius, AppRadii.all(AppRadii.nav));
         expect(deco.boxShadow, AppElevation.navigation);
         expect(tester.getSize(pillOf()).height, AppSizes.tabBar);
         await settle(tester);

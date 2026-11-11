@@ -192,25 +192,32 @@ abstract final class MonoGlass {
 /// Corner radii: generous, role-specific (premium TOKENS.md "Shape"). Larger surfaces take larger
 /// corners; nested corners are the container's minus the inset.
 abstract final class MonoRadii {
-  static const double tag = 12;
+  // V8 radius scale: tighter and controlled, one step per role (docs/design/v8/DESIGN_SYSTEM.md).
+  static const double tag = 8;
 
   /// Ente Checkbox: radius/sm (4) on 16, scaled with the 20pt mark.
   static const double checkbox = 5;
 
-  /// Rounded-square icon tiles in rows (40pt tile; 14 for the 48pt one).
-  static const double iconTile = 12;
+  /// Rounded-square icon tiles in rows and cards.
+  static const double iconTile = 10;
   static const double iconTileLg = 12;
-  static const double field = 16;
-  static const double control = 20;
-  static const double iconButton = 12;
-  static const double tile = 16;
-  static const double card = 20;
-  static const double heroCard = 24;
-  static const double image = 16;
+  static const double field = 12;
 
-  /// Ente: "button and sheet corners are xl" (radius/xl 20; Ente alignment V3, EA-S01).
+  /// Buttons and button-sized controls.
+  static const double control = 12;
+
+  /// Chips, view tabs and segments: small controls, not pills.
+  static const double chip = 10;
+  static const double iconButton = 10;
+  static const double tile = 12;
+  static const double card = 16;
+  static const double heroCard = 20;
+  static const double image = 14;
+
+  /// The navigation bar's outer corner.
+  static const double nav = 20;
   static const double sheet = 20;
-  static const double dialog = 20;
+  static const double dialog = 16;
   static const double pill = 999;
 }
 
@@ -295,4 +302,27 @@ abstract final class MonoShadows {
   static const List<BoxShadow> thumb = [
     BoxShadow(color: Color(0x2918181B), blurRadius: 4, offset: Offset(0, 1)),
   ];
+}
+
+/// V8 illustration palette: the brand purple with the secondary marks, for scene art only (never
+/// text or controls).
+abstract final class MonoArt {
+  static const Color brand = Color(0xFF7262C7);
+  static const Color lilac = Color(0xFFB7ACF2);
+  static const Color coral = Color(0xFFFF8A78);
+  static const Color sun = Color(0xFFFFC85C);
+  static const Color mint = Color(0xFF6FD6B4);
+  static const Color sky = Color(0xFF8DC3FF);
+  static const Color cream = Color(0xFFFFF6EA);
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color ink = Color(0xFF1B1530);
+  static const Color shadow = Color(0x2E1B1530);
+}
+
+/// V8 button outlines and washes.
+abstract final class MonoButtons {
+  static const Color outline = Color(0x29111111);
+  static const Color wash = Color(0x08111111);
+  static const Color accentOutline = Color(0x667262C7);
+  static const Color accentWash = Color(0x0D7262C7);
 }

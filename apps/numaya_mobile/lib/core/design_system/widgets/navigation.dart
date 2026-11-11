@@ -353,7 +353,7 @@ class NumayaTabBar extends StatelessWidget {
                 padding: const EdgeInsets.all(AppSizes.tabPadding),
                 decoration: BoxDecoration(
                   color: AppColors.surface,
-                  borderRadius: AppRadii.all(AppRadii.pill),
+                  borderRadius: AppRadii.all(AppRadii.nav),
                   boxShadow: AppElevation.navigation,
                 ),
                 child: Row(
@@ -393,7 +393,7 @@ class NumayaTabBar extends StatelessWidget {
               : item.label,
           excludeChildSemantics: true,
           pressedScale: 0.95,
-          borderRadius: AppRadii.all(AppRadii.pill),
+          borderRadius: AppRadii.all(AppRadii.tile),
           child: SizedBox(
             key: ValueKey('tab-item-$i'),
             width: width,
@@ -408,7 +408,7 @@ class NumayaTabBar extends StatelessWidget {
                   color: current
                       ? AppColors.iconSelectedFill
                       : const Color(0x00FFFFFF),
-                  borderRadius: AppRadii.all(AppRadii.pill),
+                  borderRadius: AppRadii.all(AppRadii.tile),
                 ),
                 alignment: Alignment.center,
                 child: Stack(
@@ -954,7 +954,25 @@ class ListGroup extends StatelessWidget {
               borderRadius: AppRadii.all(AppRadii.card),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: children,
+                children: [
+                  for (var i = 0; i < children.length; i++) ...[
+                    // V8: a low-contrast hairline between related rows, inset to the label.
+                    if (i > 0 && dividers)
+                      Padding(
+                        padding: EdgeInsetsDirectional.only(
+                          start: _inset(children[i], false),
+                        ),
+                        child: const ExcludeSemantics(
+                          child: SizedBox(
+                            height: AppBorders.hairline,
+                            width: double.infinity,
+                            child: ColoredBox(color: AppColors.divider),
+                          ),
+                        ),
+                      ),
+                    children[i],
+                  ],
+                ],
               ),
             ),
           )

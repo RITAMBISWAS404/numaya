@@ -5019,6 +5019,55 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get v8ComplimentTag => 'Compliment';
+
+  @override
+  String v8ComplimentFrom(String name) {
+    return '$name sent you a Compliment';
+  }
+
+  @override
+  String v8ComplimentYouSent(String name) {
+    return 'You sent $name a Compliment';
+  }
+
+  @override
+  String v8ComplimentWaiting(String name) {
+    return 'Waiting for $name';
+  }
+
+  @override
+  String get v8ComplimentOnYourPhoto => 'Compliment on your photo';
+
+  @override
+  String get v8ComplimentOnYourPrompt => 'Compliment on your prompt';
+
+  @override
+  String get v8ComplimentOnTheirPhoto => 'Your Compliment on their photo';
+
+  @override
+  String get v8ComplimentOnTheirPrompt => 'Your Compliment on their prompt';
+
+  @override
+  String get v8ComplimentOnAPhoto => 'On a photo';
+
+  @override
+  String v8ComplimentPhotoNumber(int n) {
+    return 'Photo $n';
+  }
+
+  @override
+  String get v8ComplimentYours => 'Your Compliment';
+
+  @override
+  String v8ComplimentTheirs(String name) {
+    return '$name’s Compliment';
+  }
+
+  @override
+  String get v8ReplyPrivately => 'Reply privately';
+
+  @override
   String v7CommonGround(String name, String things) {
     return 'You and $name both like $things';
   }

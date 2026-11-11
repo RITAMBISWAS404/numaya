@@ -276,7 +276,10 @@ void main() {
           matching: find.byType(AnimatedContainer),
         ),
       );
-      expect((box.decoration! as BoxDecoration).color, AppColors.field);
+      // V8: a standalone secondary action is outlined on a faint wash, not a grey slab.
+      final deco = box.decoration! as BoxDecoration;
+      expect(deco.color, AppColors.buttonWash);
+      expect(deco.border, isNotNull);
       expect(
         tester.getSize(find.byType(NumayaButton)).height,
         AppSizes.buttonHeight,

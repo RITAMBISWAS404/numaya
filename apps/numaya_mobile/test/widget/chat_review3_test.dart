@@ -11,6 +11,26 @@ import '../helpers/test_app.dart';
 /// Review batch 3, Chat: UI-035 (left swipe reveals the time), UI-036 (right swipe replies),
 /// UI-038 (one white composer bar), UI-039 (up-arrow Send), UI-040 (bubble colours), UI-041 (no
 /// demo footer).
+/// The swipe-reveal time, not the one printed inside the bubble.
+Finder _reveal(String time) =>
+    find
+        .descendant(
+          of: find.byType(SwipeableMessage),
+          matching: find.byWidgetPredicate((w) => w is Text && w.data == time),
+        )
+        .evaluate()
+        .isEmpty
+    ? find.text(time)
+    : _outsideBubble(time);
+
+Finder _outsideBubble(String time) => find.byElementPredicate(
+  (e) =>
+      e.widget is Text &&
+      (e.widget as Text).data == time &&
+      e.findAncestorWidgetOfExactType<MessageBubble>() == null,
+  description: 'reveal $time',
+);
+
 void main() {
   setUpAll(loadAppFonts);
 
@@ -26,20 +46,29 @@ void main() {
 
   /// The opacity of the revealed time for a message, or null when it is not built.
   double timeOpacity(WidgetTester tester, String time) {
-    final f = find.ancestor(
-      of: find.text(time),
-      matching: find.byType(Opacity),
-    );
+    final f = find.ancestor(of: _reveal(time), matching: find.byType(Opacity));
     return tester.widget<Opacity>(f.first).opacity;
   }
 
   group('UI-035 exact times', () {
-    testWidgets('hidden at rest; the day line stays', (tester) async {
+    testWidgets('V8: every bubble shows its time; the day line stays', (
+      tester,
+    ) async {
       await openPriya(tester);
       expect(find.text('Today'), findsOneWidget);
-      // Each message carries its time, fully transparent until dragged.
       for (final t in ['07:00', '10:26']) {
-        for (final e in find.text(t).evaluate()) {
+        expect(
+          find.descendant(
+            of: find.byType(MessageBubble),
+            matching: find.text(t),
+          ),
+          findsWidgets,
+          reason: t,
+        );
+      }
+      // The separate swipe reveal stays hidden at rest.
+      for (final t in ['07:00', '10:26']) {
+        for (final e in _reveal(t).evaluate()) {
           final o = tester.widget<Opacity>(
             find
                 .ancestor(
@@ -88,7 +117,7 @@ void main() {
       await tester.tap(find.text('Show time'));
       await tester.pumpAndSettle();
       // Both Priya messages were sent at 10:26; the one long-pressed is pinned open.
-      final shown = find.text('10:26').evaluate().where((e) {
+      final shown = _reveal('10:26').evaluate().where((e) {
         final o = tester.widget<Opacity>(
           find
               .ancestor(

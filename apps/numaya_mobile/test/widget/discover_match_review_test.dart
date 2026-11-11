@@ -391,7 +391,7 @@ void main() {
         final deco =
             tester.widget<Container>(pill).decoration! as BoxDecoration;
         expect(deco.boxShadow, AppElevation.navigation);
-        expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
+        expect(deco.borderRadius, AppRadii.all(AppRadii.nav));
         final bar = tester.getRect(pill);
         expect(bar.height, AppSizes.tabBar);
         // MVP Focus V5: Discover, Likes, Chats and Profile.

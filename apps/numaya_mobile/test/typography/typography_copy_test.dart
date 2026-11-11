@@ -49,15 +49,21 @@ void main() {
           reason: 'role $i must be smaller than role ${i - 1}',
         );
       }
-      // Headings are Plus Jakarta Sans; reading text and controls are Figtree.
+      // V8: functional headings and metrics are Google Sans; expressive titles Bree Serif.
       for (final s in [
         AppTypography.hero,
         AppTypography.pageTitle,
         AppTypography.section,
-        AppTypography.emptyTitle,
         AppTypography.metric,
       ]) {
         expect(s.fontFamily, AppTypography.display);
+      }
+      for (final s in [
+        AppTypography.largeTitle,
+        AppTypography.flowTitle,
+        AppTypography.emptyTitle,
+      ]) {
+        expect(s.fontFamily, AppTypography.serif);
       }
       for (final s in [
         AppTypography.body,
@@ -183,8 +189,9 @@ void main() {
           );
         }
         for (var i = 1; i < measured.length; i++) {
-          // Each step adds visible ink (over 8% more than the step below).
-          expect(measured[i], greaterThan(measured[i - 1] * 1.08));
+          // Each step adds visible ink (over 5% more than the step below; Google Sans spans
+          // 400-700, so its steps are flatter than the old faces' 8%).
+          expect(measured[i], greaterThan(measured[i - 1] * 1.05));
         }
       });
     }

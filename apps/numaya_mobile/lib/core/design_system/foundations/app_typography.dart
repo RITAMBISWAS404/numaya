@@ -3,32 +3,35 @@ import 'package:flutter/painting.dart';
 import '../tokens/monochrome_tokens.dart';
 import 'app_colors.dart';
 
-/// Numaya type roles. Two families, both variable and bundled: **Figtree** (wght 300-900) for
-/// reading text, labels and controls, and **Plus Jakarta Sans** (wght 200-800) for headings,
-/// names and metrics.
+/// Numaya type roles (V8). Two bundled families with separate jobs:
+/// - **Bree Serif** (one weight, 400) is the expressive voice: page-level titles on tab roots,
+///   onboarding and editorial headings, empty-state and milestone titles. It never sets labels,
+///   metadata, buttons, navigation, chat text or dense data.
+/// - **Google Sans** (variable, wght 400-700) does everything functional: body, names, cards,
+///   buttons, fields, rows, chat, timestamps and metrics.
+/// The split follows docs/design/v8/TYPOGRAPHY.md (observed in Tiimo through Mobbin: a soft serif
+/// for the one heading that sets the mood, sans for every working element).
 ///
-/// The hierarchy is Ente's light-mode text styles (Figma 22AeTw6QiPj2fNYHLhC7MK, Text styles
-/// 10854:4420, re-read live on 2026-11-07): Display-1 32/40, Display-2 24/32, Display-3 and H1
-/// 20/28, H2 18/24, Large 16/20 (all 600), Body 14/20 500, Body-Bold 14/20 600, Mini 12/16 500,
-/// Tiny 10/12 500, all at 0 tracking. Ente sets these in Inter and Outfit; Numaya keeps its own
-/// faces at Ente's sizes and weights (Figma type and icons pass, FT-01):
-/// - **Authored font sizes are even, with one exception: the body tier is 15** (X15, the 15px
-///   experiment, 2026-11-07). Every role that was 14 (body, bodySm, row, input, buttons, label,
-///   helper, fieldLabel, metricUnit) is 15 and keeps its 20pt line (multiplier 20/15). Metadata
-///   stays Ente's Mini 12/16.
-/// - Weights (X15-H): page titles and app-bar titles are Bold (700); buttons are SemiBold (600)
-///   so actions lead the 15pt body; reading text, rows and supporting text stay Medium (500).
-/// - Dynamic sizes (avatar initials, the Welcome wordmark) go through [even].
-/// The role map is in docs/design-experiments/ente-design-system/figma-type-icons/README.md.
+/// Body stays at the approved 15pt/20 Medium; metadata is 12/16. Buttons and card headings are
+/// SemiBold, functional titles Bold. Serif roles
+/// are always 400: [weight] leaves them alone so the face is never synthetically emboldened.
+/// The "numaya" wordmark keeps Figtree: it is the logo, not a type role.
 ///
-/// Sizes are logical pixels and scale with the system text size. Every role sets its weight
-/// through the `wght` axis as well as [FontWeight]; restyle a role's weight with [weight], never
-/// `copyWith(fontWeight:)` alone (that keeps the old axis value; test/typography guards it).
+/// Sizes are logical pixels and scale with the system text size. Every sans role sets its weight
+/// through the `wght` axis as well as [FontWeight]; restyle a weight with [weight], never
+/// `copyWith(fontWeight:)` alone (test/typography guards it).
 abstract final class AppTypography {
-  static const String family = 'Figtree';
+  /// Functional text.
+  static const String family = 'Google Sans';
 
-  /// Headings, names and metrics.
-  static const String display = 'Plus Jakarta Sans';
+  /// Functional headings, names and metrics: the same face as [family].
+  static const String display = 'Google Sans';
+
+  /// Expressive headings only.
+  static const String serif = 'Bree Serif';
+
+  /// The logotype's own face.
+  static const String wordmarkFamily = 'Figtree';
 
   static const double regular = 400;
   static const double medium = 500;
@@ -38,18 +41,18 @@ abstract final class AppTypography {
 
   // Headings: Plus Jakarta Sans --------------------------------------------------------------
 
-  /// Ente Display-1. Names on photos ("Maya, 29") and Welcome: 32/40 semibold.
+  /// Names on photos ("Maya, 29") and large counts: Google Sans 32/40 bold.
   static final TextStyle hero = _style(display, 32, 40, bold, 0);
 
-  /// Ente Display-2. Tab-root titles ("Likes", "Messages"): 24/32 semibold.
+  /// Functional page headings (an article title, a balance): Google Sans 24/32 bold.
   static final TextStyle pageTitle = _style(display, 24, 32, bold, 0);
 
-  /// R12 (Visual Lab V2): the expanded large title of Ente Header v2, under the leading control,
-  /// collapsing into [appBarTitle]. Plus Jakarta Sans 30/36 bold.
-  static final TextStyle largeTitle = _style(display, 30, 36, bold, 0);
+  /// Tab-root titles ("Profile", "Messages"), expanded, collapsing into [appBarTitle]:
+  /// Bree Serif 32/38.
+  static final TextStyle largeTitle = _style(serif, 32, 38, regular, 0);
 
-  /// Ente Display-2. Onboarding and editorial page headings: 24/32 semibold.
-  static final TextStyle flowTitle = _style(display, 24, 32, bold, 0);
+  /// Onboarding questions and editorial page headings ([ScreenHeader]): Bree Serif 28/34.
+  static final TextStyle flowTitle = _style(serif, 28, 34, regular, 0);
 
   /// Ente Display-2. Result titles and the Profile name: 24/32 semibold.
   static final TextStyle headline = _style(display, 24, 32, bold, 0);
@@ -59,8 +62,11 @@ abstract final class AppTypography {
   /// titles, so a section never competes with the page's own title.
   static final TextStyle section = _style(display, 18, 24, semibold, 0);
 
-  /// Ente Display-3. Empty-state titles: 20/28 semibold.
-  static final TextStyle emptyTitle = _style(display, 20, 28, semibold, 0);
+  /// Empty-state and milestone titles: Bree Serif 22/28.
+  /// The one large editorial line on Welcome and celebration moments: Bree Serif 34/40.
+  static final TextStyle display1 = _style(serif, 34, 40, regular, 0);
+
+  static final TextStyle emptyTitle = _style(serif, 22, 28, regular, 0);
 
   // Headings: Figtree -------------------------------------------------------------------------
 
@@ -96,7 +102,7 @@ abstract final class AppTypography {
   /// and 21).
   static TextStyle wordmark({bool small = false}) {
     final size = small ? 22.0 : 28.0;
-    return _style(family, size, size, bold, -0.03);
+    return _style(wordmarkFamily, size, size, bold, -0.03);
   }
 
   // Text: Figtree -----------------------------------------------------------------------------
@@ -226,10 +232,13 @@ abstract final class AppTypography {
   static double even(double size) => (size / 2).roundToDouble() * 2;
 
   /// Returns [style] at a different variable-font weight.
-  static TextStyle weight(TextStyle style, double weight) => style.copyWith(
-    fontWeight: _nearest(weight),
-    fontVariations: [FontVariation('wght', weight)],
-  );
+  static TextStyle weight(TextStyle style, double weight) =>
+      style.fontFamily == serif
+      ? style
+      : style.copyWith(
+          fontWeight: _nearest(weight),
+          fontVariations: [FontVariation('wght', weight)],
+        );
 
   static TextStyle _style(
     String face,
@@ -238,13 +247,14 @@ abstract final class AppTypography {
     double w,
     double em,
   ) {
+    final fixed = face == serif;
     return TextStyle(
       fontFamily: face,
       fontSize: size,
       height: line / size,
       letterSpacing: em * size,
-      fontWeight: _nearest(w),
-      fontVariations: [FontVariation('wght', w)],
+      fontWeight: fixed ? FontWeight.w400 : _nearest(w),
+      fontVariations: fixed ? null : [FontVariation('wght', w)],
       color: AppColors.textPrimary,
       leadingDistribution: TextLeadingDistribution.even,
     );

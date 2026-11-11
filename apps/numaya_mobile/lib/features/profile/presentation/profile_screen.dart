@@ -207,16 +207,37 @@ class ProfileScreen extends ConsumerWidget {
     const gap = SizedBox(height: AppLayout.sectionGap);
     const small = SizedBox(height: AppSpacing.s3);
     final setup = ProfileSetupCard(health: health, variant: setupV);
-    // Owner selections wallet-card A and streak-card O, inside the selected baseline Profile.
+    // V8 information tiles, side by side: the owner's stacked credit bar and seven streak marks
+    // become each tile's visual.
     final activityCards = NumayaSection(
       title: l10n.hubActivity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          WalletSummaryCard(data: wallet, onTap: toWallet),
-          small,
-          StreakSummaryCard(data: streak, onTap: toStreak),
-        ],
+      child: InfoTilePair(
+        first: InfoTile(
+          key: const ValueKey('tile-wallet'),
+          icon: NumayaMobileIcons.wallet,
+          title: l10n.walletTitle,
+          value: l10n.walletTotal(
+            wallet.weekly + wallet.earned + wallet.purchased,
+          ),
+          visual: SegmentBar(
+            parts: [
+              (wallet.weekly, AppColors.accent),
+              (wallet.earned, AppColors.accent.withValues(alpha: 0.55)),
+              (wallet.purchased, AppColors.accent.withValues(alpha: 0.25)),
+            ],
+          ),
+          meta: l10n.walletOrderShort,
+          onTap: toWallet,
+        ),
+        second: InfoTile(
+          key: const ValueKey('tile-streak'),
+          icon: NumayaMobileIcons.flame,
+          title: l10n.streakTitle,
+          value: l10n.streakDays(streak.length),
+          visual: StepMarks(done: streak.progress, total: streak.cycle),
+          meta: streak.todayCounts ? l10n.streakToday : l10n.streakTodayOpen,
+          onTap: toStreak,
+        ),
       ),
     );
 

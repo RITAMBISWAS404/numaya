@@ -201,6 +201,14 @@ abstract final class AppColors {
   /// Separators between rows of a grouped list, inset to the text.
   static const Color divider = _M.divider;
 
+  /// V8 outlined buttons: a low-opacity ink edge on a near-transparent wash.
+  static const Color buttonOutline = MonoButtons.outline;
+  static const Color buttonWash = MonoButtons.wash;
+
+  /// The brand outline button: Numaya purple at low opacity.
+  static const Color accentOutline = MonoButtons.accentOutline;
+  static const Color accentWash = MonoButtons.accentWash;
+
   /// The Numaya mark's dot: brand purple.
   static const Color accentRose = accent;
 }

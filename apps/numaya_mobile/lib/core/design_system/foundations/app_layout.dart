@@ -139,8 +139,14 @@ abstract final class AppRadii {
   static const double dialog = MonoRadii.dialog;
   static const double pill = MonoRadii.pill;
 
-  /// Segmented track: a full pill; segments are pills inside it.
-  static const double segment = MonoRadii.pill;
+  /// Chips, view tabs and segments (V8: not pills).
+  static const double chip = MonoRadii.chip;
+
+  /// The navigation bar's outer corner.
+  static const double nav = MonoRadii.nav;
+
+  /// Segmented track; segments nest inside it.
+  static const double segment = MonoRadii.chip;
 
   static BorderRadius all(double r) => BorderRadius.all(Radius.circular(r));
 
@@ -153,6 +159,9 @@ abstract final class AppRadii {
 /// Stroke widths.
 abstract final class AppBorders {
   static const double hairline = NumayaSizeTokens.borderHairline;
+
+  /// Outlined controls (secondary buttons): 1pt.
+  static const double control = 1;
   static const double selected = NumayaSizeTokens.borderSelected;
   static const double focus = NumayaSizeTokens.borderFocus;
 }

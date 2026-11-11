@@ -8,6 +8,7 @@ import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
 import 'photo_overlays.dart';
 import 'primitives.dart';
+import 'scene_art.dart';
 import 'squircle_button.dart';
 
 /// The Numaya mark: a soft square with a bite out of its corner and a rose dot in the bite. In V16
@@ -101,6 +102,9 @@ class Wordmark extends StatelessWidget {
 /// Spot illustrations shared with the web (exported by tool/export_assets.mjs).
 enum NumayaIllustration {
   verified,
+
+  /// V8 scene only (no drawing file).
+  premium,
   hello,
   interests,
   noChats,
@@ -154,8 +158,24 @@ class IllustrationView extends StatelessWidget {
   final NumayaIllustration illustration;
   final double width;
 
+  /// V8: the lit, rounded scene for each context; flat drawings remain only for the calm,
+  /// sensitive states (unmatched, blocked) and the deferred Events art.
+  static ArtScene? sceneFor(NumayaIllustration i) => switch (i) {
+    NumayaIllustration.verified => ArtScene.celebrate,
+    NumayaIllustration.hello => ArtScene.conversation,
+    NumayaIllustration.noChats => ArtScene.conversation,
+    NumayaIllustration.interests => ArtScene.discover,
+    NumayaIllustration.seenEveryone => ArtScene.discover,
+    NumayaIllustration.noMatch => ArtScene.heart,
+    NumayaIllustration.paused => ArtScene.waiting,
+    NumayaIllustration.premium => ArtScene.premium,
+    _ => null,
+  };
+
   @override
   Widget build(BuildContext context) {
+    final scene = sceneFor(illustration);
+    if (scene != null) return SceneArt(scene, width: width);
     return ExcludeSemantics(
       child: SvgPicture.asset(
         illustration.asset,

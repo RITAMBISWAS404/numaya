@@ -132,7 +132,7 @@ void main() {
                     .widget<Container>(find.byKey(NumayaTabBar.pillKey))
                     .decoration!
                 as BoxDecoration;
-        expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
+        expect(deco.borderRadius, AppRadii.all(AppRadii.nav));
         expect(bar.height, 64);
         expect(bar.left, greaterThanOrEqualTo(16), reason: '$width');
         expect(bar.right, lessThanOrEqualTo(width - 16), reason: '$width');
@@ -157,7 +157,7 @@ void main() {
                       .decoration!
                   as BoxDecoration;
           expect(tile.color, AppColors.iconSelectedFill);
-          expect(tile.borderRadius, AppRadii.all(AppRadii.pill));
+          expect(tile.borderRadius, AppRadii.all(AppRadii.tile)); // V8
         }
         expect(c, isNotNull);
         await settle(tester);

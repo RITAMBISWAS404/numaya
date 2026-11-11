@@ -81,8 +81,9 @@ Future<void> loadAppFonts() async {
   if (_fontsLoaded) return;
   _fontsLoaded = true;
   for (final (family, file) in [
+    ('Google Sans', 'assets/fonts/GoogleSans-Variable.ttf'),
+    ('Bree Serif', 'assets/fonts/BreeSerif-Regular.ttf'),
     ('Figtree', 'assets/fonts/Figtree-Variable.ttf'),
-    ('Plus Jakarta Sans', 'assets/fonts/PlusJakartaSans-Variable.ttf'),
     ('Noto Color Emoji', '/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf'),
     // Flutter's Material Icons (the app's icons, RD-04), from the SDK running the tests.
     (
