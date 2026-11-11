@@ -220,6 +220,7 @@ class LikesGrid extends ConsumerWidget {
                                         bottom: Radius.circular(AppRadii.card),
                                       ),
                                       child: PhotoScrim(
+                                        sample: personTileImage(i.person),
                                         child: Padding(
                                           padding: const EdgeInsets.all(
                                             AppSpacing.s2,

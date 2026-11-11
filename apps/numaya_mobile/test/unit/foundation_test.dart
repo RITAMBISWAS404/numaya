@@ -80,33 +80,22 @@ void main() {
       expect(ratio(AppColors.success, AppColors.successTint), greaterThan(4.5));
     });
 
-    test('V8: Google Sans for function, Bree Serif for expressive titles', () {
-      expect(AppTypography.pageTitle.fontFamily, 'Google Sans');
-      expect(AppTypography.hero.fontFamily, 'Google Sans');
-      expect(AppTypography.metric.fontFamily, 'Google Sans');
-      expect(AppTypography.body.fontFamily, 'Google Sans');
-      expect(AppTypography.button.fontFamily, 'Google Sans');
-      for (final s in [
-        AppTypography.largeTitle,
-        AppTypography.flowTitle,
-        AppTypography.emptyTitle,
-        AppTypography.display1,
-      ]) {
-        expect(s.fontFamily, 'Bree Serif');
-        // One weight: never synthetically emboldened.
-        expect(s.fontWeight, FontWeight.w400);
-        expect(AppTypography.weight(s, AppTypography.bold), s);
-      }
+    test('Plus Jakarta Sans headings over Figtree text', () {
+      expect(AppTypography.pageTitle.fontFamily, 'Plus Jakarta Sans');
+      expect(AppTypography.hero.fontFamily, 'Plus Jakarta Sans');
+      expect(AppTypography.metric.fontFamily, 'Plus Jakarta Sans');
+      expect(AppTypography.body.fontFamily, 'Figtree');
+      expect(AppTypography.button.fontFamily, 'Figtree');
       // Ente text styles: Display-1 32/40, Display-2 24/32, Display-3 / H1 20/28, H2 18/24.
       expect(AppTypography.hero.fontSize, 32);
       expect(AppTypography.pageTitle.fontSize, 24);
       expect(AppTypography.pageTitle.fontWeight, FontWeight.w700); // X15-H
-      expect(AppTypography.flowTitle.fontSize, 28); // V8 Bree Serif
+      expect(AppTypography.flowTitle.fontSize, 24);
       expect(AppTypography.headline.fontSize, 24);
       expect(AppTypography.card.fontSize, 18);
       // Typography pass: sections are Ente H2 (18/24), a step under the 20pt sheet title.
       expect(AppTypography.section.fontSize, 18);
-      expect(AppTypography.emptyTitle.fontSize, 22); // V8 Bree Serif
+      expect(AppTypography.emptyTitle.fontSize, 20);
       expect(AppTypography.sheetTitle.fontSize, 20);
       expect(AppTypography.metric.fontSize, 40);
       // R07: the former caps eyebrow is a sentence-case 14pt label (even sizes, FT-01).
@@ -131,16 +120,15 @@ void main() {
     });
 
     test('geometry follows the Ente radii and sizes', () {
-      // V8 radius scale: 8 tag, 10 small controls, 12 controls and fields, 16 cards, 20 hero.
-      expect(AppRadii.field, 12);
-      expect(AppRadii.control, 12);
-      expect(AppRadii.chip, 10);
-      expect(AppRadii.card, 16);
-      expect(AppRadii.heroCard, 20);
-      expect(AppRadii.photo, 14);
+      // radius/lg 16, radius/xl 20 (11112:4508); 24 for the hero card and sheet top (NX).
+      expect(AppRadii.field, 16);
+      expect(AppRadii.control, 20);
+      expect(AppRadii.card, 20);
+      expect(AppRadii.heroCard, 24);
+      expect(AppRadii.photo, 16); // nested: hero 24 minus its 8pt inset
       // Ente alignment V3 (EA-S01): sheet corners are radius/xl 20, as Ente's rules state.
       expect(AppRadii.sheet, 20);
-      expect(AppRadii.iconButton, 10);
+      expect(AppRadii.iconButton, 12);
       // Button Large 52, Text Input 52, Menu Item 60, Icon Button 38; the nav bar is the UC-03
       // stadium: 8 + 48pt items + 8 = 64 tall.
       expect(AppSizes.buttonHeight, 52);

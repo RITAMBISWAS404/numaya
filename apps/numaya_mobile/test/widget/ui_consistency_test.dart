@@ -57,10 +57,10 @@ void main() {
 
         await goTo(c, tester, Routes.profile);
         await settle(tester);
-        final profile = tiles(tester, ['Help centre', 'Settings']);
-        expect(profile[1].left - profile[0].right, closeTo(8, 0.01));
+        // V9: Profile's bar holds Settings alone (Help is a row on the page).
+        final profile = tiles(tester, ['Settings']);
         // The same trailing inset on both tab roots.
-        expect(390 - profile[1].right, closeTo(discoverEdge, 0.01));
+        expect(390 - profile[0].right, closeTo(discoverEdge, 0.01));
       },
     );
 
@@ -132,7 +132,7 @@ void main() {
                     .widget<Container>(find.byKey(NumayaTabBar.pillKey))
                     .decoration!
                 as BoxDecoration;
-        expect(deco.borderRadius, AppRadii.all(AppRadii.nav));
+        expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
         expect(bar.height, 64);
         expect(bar.left, greaterThanOrEqualTo(16), reason: '$width');
         expect(bar.right, lessThanOrEqualTo(width - 16), reason: '$width');
@@ -157,7 +157,7 @@ void main() {
                       .decoration!
                   as BoxDecoration;
           expect(tile.color, AppColors.iconSelectedFill);
-          expect(tile.borderRadius, AppRadii.all(AppRadii.tile)); // V8
+          expect(tile.borderRadius, AppRadii.all(AppRadii.pill));
         }
         expect(c, isNotNull);
         await settle(tester);

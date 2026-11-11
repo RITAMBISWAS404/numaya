@@ -192,32 +192,35 @@ abstract final class MonoGlass {
 /// Corner radii: generous, role-specific (premium TOKENS.md "Shape"). Larger surfaces take larger
 /// corners; nested corners are the container's minus the inset.
 abstract final class MonoRadii {
-  // V8 radius scale: tighter and controlled, one step per role (docs/design/v8/DESIGN_SYSTEM.md).
-  static const double tag = 8;
+  // V9: the V7 rounded scale is restored (V8's tighter 8-20 scale is retired; see
+  // docs/v9/design-decisions.md). Larger surfaces take larger corners.
+  static const double tag = 12;
 
   /// Ente Checkbox: radius/sm (4) on 16, scaled with the 20pt mark.
   static const double checkbox = 5;
 
-  /// Rounded-square icon tiles in rows and cards.
-  static const double iconTile = 10;
+  /// Rounded-square icon tiles in rows (40pt tile; 14 for the 48pt one).
+  static const double iconTile = 12;
   static const double iconTileLg = 12;
-  static const double field = 12;
+  static const double field = 16;
 
-  /// Buttons and button-sized controls.
-  static const double control = 12;
+  /// Ente Button Large: a 20pt rounded rectangle, not a pill.
+  static const double control = 20;
 
-  /// Chips, view tabs and segments: small controls, not pills.
-  static const double chip = 10;
-  static const double iconButton = 10;
-  static const double tile = 12;
-  static const double card = 16;
-  static const double heroCard = 20;
-  static const double image = 14;
+  /// Chips, view tabs and segments: full pills, as in V7.
+  static const double chip = pill;
+  static const double iconButton = 12;
+  static const double tile = 16;
+  static const double card = 20;
+  static const double heroCard = 24;
+  static const double image = 16;
 
-  /// The navigation bar's outer corner.
-  static const double nav = 20;
+  /// The floating navigation bar: a stadium (UC-03).
+  static const double nav = pill;
+
+  /// Ente: "button and sheet corners are xl" (radius/xl 20; Ente alignment V3, EA-S01).
   static const double sheet = 20;
-  static const double dialog = 16;
+  static const double dialog = 20;
   static const double pill = 999;
 }
 

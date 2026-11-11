@@ -7,6 +7,7 @@ import '../../lab/lab_registry.dart';
 import '../application/dating_controller.dart';
 import '../domain/sample_people.dart';
 import 'chat_attachments.dart';
+import 'chat_header.dart' show chatAvatarHeroTag;
 import 'person_profile.dart';
 import 'time_format.dart';
 
@@ -82,11 +83,15 @@ class ConversationRow extends ConsumerWidget {
       style: nameStyle,
       maxLines: maxLines,
     );
-    Widget avatar(double size) => InitialsAvatar(
-      initial: person.initial,
-      size: size,
-      image: personAvatarImage(person),
-      imageAlignment: personAvatarFocus(person),
+    // V9: the avatar carries into the conversation's header (a shared-element push).
+    Widget avatar(double size) => Hero(
+      tag: chatAvatarHeroTag(person.id),
+      child: InitialsAvatar(
+        initial: person.initial,
+        size: size,
+        image: personAvatarImage(person),
+        imageAlignment: personAvatarFocus(person),
+      ),
     );
     Widget trailingBadge() => unread > 0
         ? CountBadge(count: unread)

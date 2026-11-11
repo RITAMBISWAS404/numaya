@@ -164,40 +164,22 @@ class ProfileSetupCard extends ConsumerWidget {
           ),
         );
       default:
-        return Container(
-          padding: const EdgeInsets.all(AppLayout.cardPadding),
-          decoration: card(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: AppTypography.weight(
-                        AppTypography.body,
-                        AppTypography.semibold,
-                      ),
-                    ),
-                  ),
-                  Text(progress, style: AppTypography.caption),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.s3),
-              bar(),
-              const SizedBox(height: AppSpacing.s3),
-              if (allDone)
-                Text(l10n.setupAllDone, style: AppTypography.bodySm)
-              else
-                NumayaButton(
-                  label: healthFactorLabel(l10n, next),
-                  small: true,
-                  variant: NumayaButtonVariant.secondary,
-                  onPressed: openNext,
-                ),
-            ],
+        // V9: an information card whose one tap opens the next step; no button inside it.
+        return StatCard(
+          key: const ValueKey('profile-setup-card'),
+          icon: NumayaMobileIcons.chart,
+          title: title,
+          value: progress,
+          description: allDone
+              ? l10n.setupAllDone
+              : l10n.v9SetupNextItem(healthFactorLabel(l10n, next)),
+          visual: bar(),
+          art: SceneArt(
+            ArtScene.profile,
+            width: StatCard.artWidth,
+            progress: fraction,
           ),
+          onTap: openNext,
         );
     }
   }

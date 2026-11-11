@@ -259,6 +259,15 @@ void main() {
       await tester.tap(find.byTooltip('Profile'));
       await tester.pumpAndSettle();
       expect(find.text('Sam, 31'), findsOneWidget);
+      // V9: the prompt answer is not repeated on the hub; it is in Edit profile.
+      expect(find.text('Pastries, then a very long walk.'), findsNothing);
+      await tapText(tester, 'Edit profile');
+      await tester.pumpAndSettle();
+      await tester.dragUntilVisible(
+        find.text('Pastries, then a very long walk.'),
+        find.byType(Scrollable).first,
+        const Offset(0, -300),
+      );
       expect(find.text('Pastries, then a very long walk.'), findsOneWidget);
       await settle(tester);
     },

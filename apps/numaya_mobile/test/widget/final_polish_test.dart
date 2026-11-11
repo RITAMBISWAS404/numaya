@@ -597,8 +597,8 @@ void main() {
       final deco =
           tester.widget<AnimatedContainer>(selected).decoration!
               as BoxDecoration;
-      // V8: a tile, not a pill.
-      expect(deco.borderRadius, AppRadii.all(AppRadii.tile));
+      // UC-03: a fully rounded pill 4pt inside its item (V9 restores V7).
+      expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
       await settle(tester);
     });
 

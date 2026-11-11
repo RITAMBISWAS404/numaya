@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numaya V9 Design Exploration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&family=Bree+Serif&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#7262C7; --brand-ink:#5B4BB0; --brand-wash:rgba(114,98,199,.08);
+  --page:#F4F4F5; --surface:#FFFFFF; --ink:#18181B; --text2:#52525B; --muted:#71717A;
+  --divider:#EBEBEB; --fill:#F0F0F2; --outline:rgba(17,17,17,.16);
+  --rec:#1F8A5B; --rec-wash:#E7F5EE;
+  --r-card:20px; --r-control:20px; --r-field:16px; --r-tile:16px; --r-hero:24px;
+  --pad:20px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#ECEBF2;color:var(--ink);font:500 15px/20px Figtree,system-ui,sans-serif}
+h1,h2,h3{font-family:"Plus Jakarta Sans",Figtree,sans-serif;margin:0}
+a{color:var(--brand-ink)}
+header.top{position:sticky;top:0;z-index:5;background:rgba(236,235,242,.86);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.06)}
+.top-in{max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.mark{display:flex;align-items:center;gap:8px;font:700 20px/1 Figtree}
+.mark i{width:12px;height:12px;border-radius:50%;background:var(--brand);display:inline-block}
+nav.toc{display:flex;gap:6px;flex-wrap:wrap}
+nav.toc a{font-size:13px;text-decoration:none;color:var(--text2);padding:6px 10px;border-radius:999px;background:#fff}
+nav.toc a:hover{color:var(--brand-ink)}
+main{max-width:1180px;margin:0 auto;padding:28px 20px 80px}
+.intro{max-width:760px;margin-bottom:28px}
+.intro h1{font-size:32px;line-height:40px;margin-bottom:8px}
+.intro p{color:var(--text2);margin:6px 0}
+section.topic{background:#fff;border-radius:28px;padding:28px;margin:0 0 28px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.topic-head{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.topic h2{font-size:24px;line-height:32px}
+.problem{color:var(--text2);max-width:720px;margin:6px 0 20px}
+.tag{font:600 12px/16px Figtree;padding:4px 10px;border-radius:999px;background:var(--fill);color:var(--text2);white-space:nowrap}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.opt{border:1px solid var(--divider);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:12px;background:#FCFCFD}
+.opt.rec{border-color:var(--rec);box-shadow:0 0 0 3px var(--rec-wash)}
+.opt-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.opt-h b{font:700 15px/20px "Plus Jakarta Sans"}
+.badge-rec{font:700 11px/14px Figtree;color:var(--rec);background:var(--rec-wash);padding:4px 8px;border-radius:999px}
+.badge-was{font:600 11px/14px Figtree;color:var(--muted);background:var(--fill);padding:4px 8px;border-radius:999px}
+.opt p{margin:0;color:var(--text2);font-size:14px}
+.why{margin-top:18px;padding:14px 16px;border-radius:16px;background:var(--rec-wash);color:#12573A;font-size:14px}
+.why b{color:#0D4A30}
+/* phone stage */
+.stage{background:var(--page);border-radius:18px;padding:16px;min-height:120px}
+.card{background:var(--surface);border-radius:var(--r-card);padding:var(--pad)}
+.cap{font:600 12px/16px Figtree;color:var(--brand-ink);display:flex;align-items:center;gap:6px}
+.val{font:700 24px/32px "Plus Jakarta Sans";margin-top:8px}
+.desc{color:var(--text2);font-size:14px;margin-top:4px}
+.meta{color:var(--muted);font-size:12px;margin-top:8px}
+.seg{display:flex;gap:2px;height:8px;border-radius:999px;overflow:hidden;margin-top:12px}
+.seg i{display:block;height:100%}
+.marks{display:flex;gap:4px;margin-top:12px}.marks i{flex:1;height:8px;border-radius:999px;background:var(--divider)}.marks i.on{background:var(--brand)}
+.row{display:flex;gap:16px;align-items:center}
+.grow{flex:1;min-width:0}
+.art{width:84px;height:68px;flex:none}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pair .card{padding:16px}.pair .val{font-size:20px;line-height:28px}
+.tile-ico{width:28px;height:28px;border-radius:10px;background:var(--brand-wash);display:grid;place-items:center}
+.btn2{display:block;text-align:center;font:600 15px/20px Figtree;padding:10px 14px;border-radius:var(--r-control);background:var(--fill);margin-top:12px}
+.btn2.o{background:transparent;border:1px solid var(--outline)}
+.btn1{display:block;text-align:center;font:600 15px/20px Figtree;padding:14px;border-radius:var(--r-control);background:var(--brand);color:#fff}
+.bar{height:6px;border-radius:999px;background:var(--fill);margin-top:12px;overflow:hidden}.bar i{display:block;height:100%;background:var(--brand)}
+.chev{color:var(--muted);font-size:18px}
+/* list */
+.list{background:var(--surface);border-radius:var(--r-card);padding:4px 0}
+.li{display:flex;align-items:center;gap:12px;padding:14px var(--pad)}
+.li .lab{flex:1}
+.li small{display:block;color:var(--muted);font-size:12px}
+.hr{height:1px;background:var(--divider)}
+.hr.text{margin-left:56px}
+.hr.full{margin:0 var(--pad)}
+.ico{width:20px;height:20px;flex:none}
+/* photo */
+.photo{position:relative;border-radius:24px;overflow:hidden;height:300px}
+.photo .scene{position:absolute;inset:0}
+.photo .scrim{position:absolute;left:0;right:0;bottom:0;height:46%}
+.photo .who{position:absolute;left:18px;bottom:16px;color:#fff;font:700 28px/34px "Plus Jakarta Sans";text-shadow:0 1px 3px rgba(0,0,0,.55),0 0 16px rgba(0,0,0,.4)}
+.photo .who small{display:block;font:500 14px/18px Figtree}
+.photo .glass{position:absolute;left:14px;bottom:14px;padding:8px 12px;border-radius:20px;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);color:#fff;font:700 24px/30px "Plus Jakarta Sans"}
+.ctrl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;font-size:14px;color:var(--text2)}
+.ctrl button{font:600 13px/16px Figtree;border:1px solid var(--outline);background:#fff;border-radius:999px;padding:8px 12px;cursor:pointer}
+.ctrl button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ctrl input{accent-color:var(--brand)}
+.readout{font:600 12px/16px Figtree;color:var(--muted)}
+/* chat */
+.chat .li{padding:12px var(--pad)}
+.av{width:52px;height:52px;border-radius:50%;flex:none}
+.name{font:700 15px/20px Figtree}
+.prev{color:var(--text2);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.time{font-size:12px;color:var(--muted)}.time.u{color:var(--brand-ink);font-weight:700}
+.cnt{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:999px;background:var(--brand);color:#fff;font:700 11px/1 Figtree;padding:0 6px;margin-top:4px}
+.cmark{color:var(--brand-ink);font-weight:600}
+/* radius demo */
+.rgrid{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.rbox{background:#fff;border:1px solid var(--divider);display:grid;place-items:center;font-size:11px;color:var(--muted)}
+/* tabs demo */
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.screen{position:relative;height:150px;border-radius:18px;overflow:hidden;background:var(--page)}
+.pane{position:absolute;inset:0;padding:16px}
+.pane h3{font-size:20px;margin-bottom:10px}
+.ph{height:14px;border-radius:7px;background:#fff;margin:8px 0}
+.type-sample{display:flex;flex-direction:column;gap:6px}
+footer{color:var(--muted);font-size:13px;text-align:center;margin-top:40px}
+@media (max-width:640px){section.topic{padding:18px;border-radius:22px}.intro h1{font-size:26px;line-height:32px}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-in">
+  <div class="mark"><i></i>numaya <span style="font:600 13px Figtree;color:var(--muted);margin-left:6px">V9 design exploration</span></div>
+  <nav class="toc">
+    <a href="#type">Type</a><a href="#radius">Radius</a><a href="#cards">Info cards</a><a href="#setup">Setup card</a><a href="#photo">Photo overlay</a><a href="#dividers">Dividers</a><a href="#icons">Icons</a><a href="#chat">Chat list</a><a href="#buttons">Buttons</a><a href="#tabs">Tab motion</a>
+  </nav>
+</div></header>
+<main>
+<div class="intro">
+  <h1>Ten decisions for V9</h1>
+  <p>Each section names the problem, shows two or three directions drawn with Numaya's own tokens (brand <code>#7262C7</code>, Plus Jakarta Sans headings over Figtree text, the V7 radius scale), and records the one that ships. The app contains only the recommended option; the others stay here for review.</p>
+  <p>Photos are drawn as colour fields on purpose: the member photos used in the app are private and are not published in this file.</p>
+</div>
+
+<section class="topic" id="type">
+  <div class="topic-head"><h2>1. Typography</h2><span class="tag">Foundations · D-01</span></div>
+  <p class="problem">V8 replaced the V7 faces with Bree Serif titles over Google Sans. On review the serif read as a different product, and it broke mid-word at large text in the Compliment composer. The brief asks to return to the type that worked before.</p>
+  <div class="opts">
+    <div class="opt"><div class="opt-h"><b>A · V8 serif titles</b><span class="badge-was">V8</span></div>
+      <div class="stage"><div class="type-sample"><div style="font:400 32px/38px 'Bree Serif'">Profile</div><div style="font:700 18px/24px 'Google Sans'">Your activity</div><div style="font:500 15px/20px 'Google Sans';color:#52525B">Weekly credits are used first.</div></div></div>
+      <p>Expressive, but a second voice the Figma file never had; one weight only.</p></div>
+    <div class="opt rec"><div class="opt-h"><b>B · V7 restored</b><span class="badge-rec">Recommended</span></div>
+      <div class="stage"><div class="type-sample"><div style="font:700 30px/36px 'Plus Jakarta Sans'">Profile</div><div style="font:600 18px/24px 'Plus Jakarta Sans'">Your activity</div><div style="font:500 15px/20px Figtree;color:#52525B">Weekly credits are spent first</div></div></div>
+      <p>Plus Jakarta Sans for headings, names and numbers; Figtree for reading text and controls, at the Ente sizes the Figma file defines.</p></div>
+  </div>
+  <div class="why"><b>Why B:</b> it is the established identity, it matches the Figma text styles (Display-1 32/40, Display-2 24/32, H2 18/24, Body 15/20), and both faces are variable, so hierarchy can come from weight. Kept from V8: times inside message bubbles and the one-line chat header name.</div>
+</section>
+
+<section class="topic" id="radius">
+  <div class="topic-head"><h2>2. Corner radius</h2><span class="tag">Foundations · D-02</span></div>
+  <p class="problem">V8 tightened every corner (cards 16, buttons 12, chips 10). The owner preferred the softer V7 language.</p>
+  <div class="opts">
+    <div class="opt"><div class="opt-h"><b>A · V8 tight scale</b><span class="badge-was">V8</span></div>
+      <div class="stage"><div class="rgrid"><div class="rbox" style="width:110px;height:70px;border-radius:16px">card 16</div><div class="rbox" style="width:90px;height:44px;border-radius:12px">button 12</div><div class="rbox" style="width:64px;height:32px;border-radius:10px">chip 10</div></div></div></div>
+    <div class="opt rec"><div class="opt-h"><b>B · V7 rounded scale</b><span class="badge-rec">Recommended</span></div>
+      <div class="stage"><div class="rgrid"><div class="rbox" style="width:110px;height:70px;border-radius:20px">card 20</div><div class="rbox" style="width:90px;height:44px;border-radius:20px">button 20</div><div class="rbox" style="width:64px;height:32px;border-radius:999px">chip pill</div><div class="rbox" style="width:70px;height:90px;border-radius:24px">hero 24</div></div></div></div>
+  </div>
+  <div class="why"><b>Why B:</b> it is Ente's radius/xl for buttons and sheets (the Figma source), cards nest correctly (24 hero, 16 photo inside an 8pt inset), and the navigation bar returns to its stadium. Every value lives in <code>MonoRadii</code>.</div>
+</section>
+
+<section class="topic" id="cards">
+  <div class="topic-head"><h2>3. Information cards</h2><span class="tag">Profile · D-04</span></div>
+  <p class="problem">V8 put credits and streak in two narrow tiles side by side. At normal text the heading wrapped unevenly; at large text the pair stacked anyway. The brief rules out forced two-column cards.</p>
+  <div class="opts">
+    <div class="opt"><div class="opt-h"><b>A · Two tiles</b><span class="badge-was">V8</span></div>
+      <div class="stage"><div class="pair">
+        <div class="card"><div class="cap"><span class="tile-ico">◆</span>Compliment credits</div><div class="val">2 credits</div><div class="seg"><i style="flex:2;background:var(--brand)"></i><i style="flex:1;background:rgba(114,98,199,.4)"></i></div><div class="meta">Weekly credits are used first, then earned, then purchased.</div></div>
+        <div class="card"><div class="cap"><span class="tile-ico">◆</span>Streak</div><div class="val">1-day streak</div><div class="marks"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="meta">Today isn't counted yet</div></div>
+      </div></div><p>Uneven headings, three-line metadata, icons on tinted squares.</p></div>
+    <div class="opt rec"><div class="opt-h"><b>B · Full width, art at the side</b><span class="badge-rec">Recommended</span></div>
+      <div class="stage">
+        <div class="card"><div class="row"><div class="grow"><div class="cap">♥ Compliment credits</div><div class="val">2 credits</div><div class="desc">Weekly credits are spent first</div><div class="seg"><i style="flex:2;background:var(--brand)"></i><i style="flex:1;background:rgba(114,98,199,.4)"></i></div></div>
+          <svg class="art" viewBox="0 0 84 68"><ellipse cx="42" cy="62" rx="24" ry="4" fill="rgba(27,21,48,.15)"/><path d="M42 56C20 42 16 30 22 22c6-8 16-6 20 2 4-8 14-10 20-2 6 8 2 20-20 34z" fill="#7262C7"/><path d="M30 24c3-3 8-3 10 1" stroke="#fff" stroke-opacity=".6" stroke-width="3" fill="none" stroke-linecap="round"/></svg></div></div>
+        <div style="height:12px"></div>
+        <div class="card"><div class="row"><div class="grow"><div class="cap">🔥 Streak</div><div class="val">1-day streak</div><div class="desc">Today isn't counted yet</div><div class="marks"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          <svg class="art" viewBox="0 0 84 68"><ellipse cx="42" cy="62" rx="20" ry="4" fill="rgba(27,21,48,.15)"/><path d="M42 58c-12 0-18-8-16-18 2-8 8-12 10-22 8 6 10 12 9 18 3-2 5-5 5-9 6 6 9 13 7 20-2 7-7 11-15 11z" fill="#FF8A78"/><path d="M42 58c-6 0-9-4-8-9 1-4 4-6 6-10 4 4 6 7 6 11 0 5-1 8-4 8z" fill="#FFC85C"/></svg></div></div>
+      </div><p>Icon and heading, the number, one line, the visual, art with its own 96pt column.</p></div>
+    <div class="opt"><div class="opt-h"><b>C · Art on the left</b><span class="badge-was">Alternative</span></div>
+      <div class="stage"><div class="card"><div class="row"><svg class="art" viewBox="0 0 84 68"><ellipse cx="42" cy="62" rx="20" ry="4" fill="rgba(27,21,48,.15)"/><path d="M42 58c-12 0-18-8-16-18 2-8 8-12 10-22 8 6 10 12 9 18 3-2 5-5 5-9 6 6 9 13 7 20-2 7-7 11-15 11z" fill="#FF8A78"/></svg><div class="grow"><div class="cap">🔥 Streak</div><div class="val">1-day streak</div><div class="desc">Today isn't counted yet</div></div></div></div></div>
+      <p>Good for a single hero card; in a stack, art on the left pushes the numbers out of one scan line.</p></div>
+  </div>
+  <div class="why"><b>Why B:</b> one column keeps every number on the same left edge (the Apple Health highlight and Binance balance pattern seen in research), copy fits one line, and the illustration finally has room. <code>StatCard</code> supports <code>artStart</code> for C where a lone card wants it. At large text the art drops under the copy.</div>
+</section>
+
+<section class="topic" id="setup">
+  <div class="topic-head"><h2>4. Profile setup: information vs action</h2><span class="tag">Profile · D-05</span></div>
+  <p class="problem">The setup card held a title, a count, a progress bar and a full-width button naming the next step: data and an action in one box.</p>
+  <div class="opts">
+    <div class="opt"><div class="opt-h"><b>A · Button inside</b><span class="badge-was">V7 / V8</span></div>
+      <div class="stage"><div class="card"><div class="row"><b class="grow">Profile setup</b><span class="time">5 of 6 done</span></div><div class="bar"><i style="width:83%"></i></div><span class="btn2">A second prompt answer (optional)</span></div></div></div>
+    <div class="opt rec"><div class="opt-h"><b>B · One card, one destination</b><span class="badge-rec">Recommended</span></div>
+      <div class="stage"><div class="card"><div class="row"><div class="grow"><div class="cap">▦ Profile setup</div><div class="val">5 of 6 done</div><div class="desc">Next: A second prompt answer</div><div class="bar"><i style="width:83%"></i></div></div>
+        <svg class="art" viewBox="0 0 84 68"><circle cx="42" cy="32" r="24" fill="none" stroke="#EBEBEB" stroke-width="6"/><circle cx="42" cy="32" r="24" fill="none" stroke="#7262C7" stroke-width="6" stroke-dasharray="125 151" transform="rotate(-90 42 32)" stroke-linecap="round"/><circle cx="42" cy="27" r="7" fill="#B7ACF2"/><path d="M30 44c3-7 21-7 24 0" fill="#B7ACF2"/></svg></div></div></div>
+      <p>The card reports; tapping it opens the next step. No button competes with the number.</p></div>
+    <div class="opt"><div class="opt-h"><b>C · A list row</b><span class="badge-was">Alternative</span></div>
+      <div class="stage"><div class="list"><div class="li"><span class="lab">Profile setup</span><span class="time">5 of 6 done</span><span class="chev">›</span></div></div></div>
+      <p>Quietest, but loses the progress and the next step.</p></div>
+  </div>
+  <div class="why"><b>Why B:</b> it follows the card rule (information and actions apart) while keeping a single obvious tap. The art's ring fills with real progress.</div>
+</section>
+
+<section class="topic" id="photo">
+  <div class="topic-head"><h2>5. Text over photos</h2><span class="tag">Discover · Match · Profile · D-03</span></div>
+  <p class="problem">A fixed 24% gradient left white names faint on bright photos (snow, beaches, white walls), while a stronger fixed one darkens every dark photo for nothing.</p>
+  <div class="ctrl">
+    <span>Photo:</span>
+    <button data-scene="bright" class="on">Bright</button><button data-scene="mid">Mid</button><button data-scene="dark">Dark</button>
+    <label style="display:flex;gap:8px;align-items:center">Brightness <input id="lum" type="range" min="0" max="100" value="82"></label>
+    <span class="readout" id="readout"></span>
+  </div>
+  <div class="opts">
+    <div class="opt"><div class="opt-h"><b>A · Fixed 24%</b><span class="badge-was">V8</span></div>
+      <div class="photo"><div class="scene"></div><div class="scrim" style="background:linear-gradient(to top,rgba(0,0,0,.24),rgba(0,0,0,.16) 34%,rgba(0,0,0,.08) 62%,rgba(0,0,0,.02) 86%,transparent)"></div><div class="who">Maya, 29<small>Product designer</small></div></div>
+      <p class="cr" data-edge="0.24"></p></div>
+    <div class="opt rec"><div class="opt-h"><b>B · Adaptive</b><span class="badge-rec">Recommended</span></div>
+      <div class="photo"><div class="scene"></div><div class="scrim" id="adaptive"></div><div class="who">Maya, 29<small>Product designer</small></div></div>
+      <p class="cr" data-edge="adaptive"></p></div>
+    <div class="opt"><div class="opt-h"><b>C · Glass label</b><span class="badge-was">Alternative</span></div>
+      <div class="photo"><div class="scene"></div><div class="glass">Maya, 29</div></div>
+      <p>Always readable, but a dark box on every photo; heavier than the photo-first look.</p></div>
+  </div>
+  <div class="why"><b>Why B:</b> the app measures the lower 40% of each photo once (decoded at 12×16, cached) and sets the gradient's bottom edge between 24% (dark photos) and 52% (white photos). The gradient covers only the band under the text and eases to clear, so the rest of the photo is untouched. The name keeps its two soft text shadows.</div>
+</section>
+
+<section class="topic" id="dividers">
+  <div class="topic-head"><h2>6. Separators</h2><span class="tag">Lists · D-06</span></div>
+  <p class="problem">V8 started each hairline where the row's text starts, so in lists with and without icons the lines began at different places and looked like stubs.</p>
+  <div class="opts">
+    <div class="opt"><div class="opt-h"><b>A · Inset to the text</b><span class="badge-was">V8</span></div>
+      <div class="stage"><div class="list"><div class="li"><svg class="ico" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="none" stroke="#71717A" stroke-width="1.6"/></svg><span class="lab">Safety and wellbeing</span><span class="chev">›</span></div><div class="hr text"></div><div class="li"><svg class="ico" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="none" stroke="#71717A" stroke-width="1.6"/></svg><span class="lab">Help centre</span><span class="chev">›</span></div></div></div></div>
+    <div class="opt rec"><div class="opt-h"><b>B · Near full width, equal margins</b><span class="badge-rec">Recommended</span></div>
+      <div class="stage"><div class="list"><div class="li"><svg class="ico" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="none" stroke="#71717A" stroke-width="1.6"/></svg><span class="lab">Safety and wellbeing</span><span class="chev">›</span></div><div class="hr full"></div><div class="li"><svg class="ico" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="none" stroke="#71717A" stroke-width="1.6"/></svg><span class="lab">Help centre</span><span class="chev">›</span></div></div></div></div>
+    <div class="opt"><div class="opt-h"><b>C · No lines, spacing only</b><span class="badge-was">V7</span></div>
+      <div class="stage"><div class="list"><div class="li"><span class="lab">Safety and wellbeing</span><span class="chev">›</span></div><div class="li"><span class="lab">Help centre</span><span class="chev">›</span></div></div></div></div>
+  </div>
+  <div class="why"><b>Why B:</b> one rule everywhere: a 1px #EBEBEB line with the same 20pt margin at both ends inside cards, the page gutter on the chat list, and none at all where the parent already insets (sheets, profile sections). It is one widget, <code>NumayaDivider</code>.</div>
+</section>
+
+<section class="topic" id="icons">
+  <div class="topic-head"><h2>7. Icons</h2><span class="tag">Iconography · D-07</span></div>
+  <p class="problem">Some cards put their icon on a tinted square, and actionable banners had a grey disc behind their arrow: decoration that adds visual weight without meaning.</p>
+  <div class="opts">
+    <div class="opt"><div class="opt-h"><b>A · Backplates</b><span class="badge-was">V8</span></div><div class="stage"><div class="card"><div class="cap"><span class="tile-ico">♥</span>Compliment credits</div></div></div></div>
+    <div class="opt rec"><div class="opt-h"><b>B · Glyph on the surface</b><span class="badge-rec">Recommended</span></div><div class="stage"><div class="card"><div class="cap">♥ Compliment credits</div></div></div><p>Small icons use the filled glyph for legibility; row icons stay outline.</p></div>
+  </div>
+  <div class="why"><b>Why B:</b> Airbnb's profile rows and Apple Health's highlights both draw the glyph straight on the surface. Backplates stay only where they do work: the send button, the photo action buttons (contrast over images), selection marks and the swipe stamps.</div>
+</section>
+
+<section class="topic" id="chat">
+  <div class="topic-head"><h2>8. Chat list with Compliments</h2><span class="tag">Messages · D-08</span></div>
+  <p class="problem">Compliments already live inside Messages (V8). The question is how a pending Compliment reads among chats.</p>
+  <div class="opts">
+    <div class="opt rec"><div class="opt-h"><b>A · One list, a mark in the preview</b><span class="badge-rec">Recommended</span></div>
+      <div class="stage chat"><div class="list">
+        <div class="li"><span class="av" style="background:linear-gradient(135deg,#F3C4A8,#B07A62)"></span><div class="grow"><div class="name">Priya</div><div class="prev">Have you been?</div></div><div style="text-align:right"><div class="time u">10:26</div><span class="cnt">2</span></div></div>
+        <div class="hr full"></div>
+        <div class="li"><span class="av" style="background:linear-gradient(135deg,#C9B8F0,#7262C7)"></span><div class="grow"><div class="name">Sam</div><div class="prev"><span class="cmark">♥ Compliment</span> · That light in your first photo…</div></div><div style="text-align:right"><div class="time u">07:00</div><span class="cnt">1</span></div></div>
+        <div class="hr full"></div>
+        <div class="li"><span class="av" style="background:linear-gradient(135deg,#A8D8C8,#4C8C78)"></span><div class="grow"><div class="name">Finn</div><div class="prev">You: I have strong opinions about this…</div></div><div style="text-align:right"><div class="time">Yesterday</div></div></div>
+      </div></div><p>Sorted by time with chats; unread time in brand ink with a count.</p></div>
+    <div class="opt"><div class="opt-h"><b>B · A Compliments section on top</b><span class="badge-was">Alternative</span></div>
+      <div class="stage chat"><div style="font:600 13px Figtree;color:var(--muted);margin:0 4px 8px">Compliments (1)</div><div class="list"><div class="li"><span class="av" style="background:linear-gradient(135deg,#C9B8F0,#7262C7)"></span><div class="grow"><div class="name">Sam</div><div class="prev">That light in your first photo…</div></div></div></div><div style="font:600 13px Figtree;color:var(--muted);margin:14px 4px 8px">Chats</div><div class="list"><div class="li"><span class="av" style="background:linear-gradient(135deg,#F3C4A8,#B07A62)"></span><div class="grow"><div class="name">Priya</div><div class="prev">Have you been?</div></div></div></div></div>
+      <p>Clear, but it rebuilds the separate inbox the brief removed.</p></div>
+  </div>
+  <div class="why"><b>Why A:</b> a Compliment is the first message of a conversation, so it belongs in the conversation list. Tapping it, or its notification, opens <code>/chat/:id</code>; replying turns the same screen into the chat, with the Compliment kept as message one. V9 adds the avatar carrying from the row into the chat header.</div>
+</section>
+
+<section class="topic" id="buttons">
+  <div class="topic-head"><h2>9. Secondary buttons</h2><span class="tag">Controls · D-10</span></div>
+  <p class="problem">Grey filled secondary buttons made pages look heavy next to the purple primary.</p>
+  <div class="opts">
+    <div class="opt"><div class="opt-h"><b>A · Grey fill</b><span class="badge-was">V7</span></div><div class="stage"><span class="btn1">See plans</span><span class="btn2">Maybe later</span></div></div>
+    <div class="opt rec"><div class="opt-h"><b>B · Hairline outline</b><span class="badge-rec">Kept from V8</span></div><div class="stage"><span class="btn1">See plans</span><span class="btn2 o">Maybe later</span></div></div>
+  </div>
+  <div class="why"><b>Why B:</b> it is the one V8 change that tested better: one filled button per screen, so the main action is obvious. Corners return to 20.</div>
+</section>
+
+<section class="topic" id="tabs">
+  <div class="topic-head"><h2>10. Tab switching</h2><span class="tag">Motion · D-09</span></div>
+  <p class="problem">Changing tabs was a hard cut. Tabs must keep their scroll and state, so the motion cannot rebuild them.</p>
+  <div class="opts">
+    <div class="opt"><div class="opt-h"><b>A · Cut</b><span class="badge-was">V8</span></div><div class="tabs" data-mode="cut"></div><div class="screen" data-mode="cut"></div></div>
+    <div class="opt rec"><div class="opt-h"><b>B · 200ms fade in</b><span class="badge-rec">Recommended</span></div><div class="tabs" data-mode="fade"></div><div class="screen" data-mode="fade"></div></div>
+    <div class="opt"><div class="opt-h"><b>C · Slide</b><span class="badge-was">Rejected</span></div><div class="tabs" data-mode="slide"></div><div class="screen" data-mode="slide"></div></div>
+  </div>
+  <div class="why"><b>Why B:</b> the new tab fades in over 200ms ease-out. Nothing moves, so it is comfortable for motion-sensitive people; with reduced motion it is instant. Slide implies an order between tabs that does not exist. Pushes keep their 280ms emphasized curve with a quicker 200ms return, and presses still respond on touch-down.</div>
+</section>
+
+<footer>Numaya V9 · branch <code>version-9</code> · decisions recorded in docs/v9/design-decisions.md</footer>
+</main>
+<script>
+// Photo overlay demo
+const scenes={bright:82,mid:45,dark:12};
+const lum=document.getElementById('lum');const readout=document.getElementById('readout');
+function sceneCss(l){const a=l/100;const sky=`hsl(205,60%,${40+a*55}%)`;const ground=`hsl(30,25%,${20+a*72}%)`;return `linear-gradient(to bottom,${sky},${ground})`}
+function edgeFor(luma){const t=Math.min(1,Math.max(0,(luma-0.18)/0.42));return 0.24+0.28*t}
+function contrast(bg){const L=x=>{x/=255;return x<=.04045?x/12.92:Math.pow((x+.055)/1.055,2.4)};const l=.2126*L(bg)+.7152*L(bg)+.0722*L(bg);return (1.05)/(l+.05)}
+function update(){const v=+lum.value;const luma=Math.pow(v/100,2.2);document.querySelectorAll('.photo .scene').forEach(s=>s.style.background=sceneCss(v));
+  const e=edgeFor(luma);document.getElementById('adaptive').style.background=`linear-gradient(to top,rgba(0,0,0,${e}),rgba(0,0,0,${e*.72}) 30%,rgba(0,0,0,${e*.4}) 56%,rgba(0,0,0,${e*.14}) 80%,transparent)`;
+  const base=Math.round(255*(0.4+v/100*0.55));
+  document.querySelectorAll('.cr').forEach(p=>{const edge=p.dataset.edge==='adaptive'?e:+p.dataset.edge;const bg=Math.round(base*(1-edge));p.textContent=`Bottom edge ${Math.round(edge*100)}% · white text about ${contrast(bg).toFixed(1)}:1 at the name (before text shadow)`});
+  readout.textContent=`measured lower-photo luminance ${luma.toFixed(2)}`;}
+document.querySelectorAll('[data-scene]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-scene]').forEach(x=>x.classList.remove('on'));b.classList.add('on');lum.value=scenes[b.dataset.scene];update()});
+lum.oninput=()=>{document.querySelectorAll('[data-scene]').forEach(x=>x.classList.remove('on'));update()};update();
+// Tabs demo
+const names=['Discover','Likes','Messages','Profile'];
+document.querySelectorAll('.screen').forEach(screen=>{const mode=screen.dataset.mode;const bar=document.querySelector(`.tabs[data-mode="${mode}"]`);
+  const panes=names.map((n,i)=>{const p=document.createElement('div');p.className='pane';p.innerHTML=`<h3>${n}</h3><div class="ph" style="width:${70+i*7}%"></div><div class="ph" style="width:${55+i*9}%"></div><div class="ph" style="width:${80-i*6}%"></div>`;p.style.opacity=i?0:1;screen.appendChild(p);return p});
+  let cur=0;const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  names.forEach((n,i)=>{const b=document.createElement('button');b.textContent=n;b.className='ctrl-b';b.style.cssText='font:600 12px Figtree;border:1px solid var(--outline);background:#fff;border-radius:999px;padding:6px 10px;cursor:pointer';if(!i){b.style.background='#18181B';b.style.color='#fff'}
+    b.onclick=()=>{if(i===cur)return;[...bar.children].forEach(x=>{x.style.background='#fff';x.style.color=''});b.style.background='#18181B';b.style.color='#fff';
+      const from=panes[cur],to=panes[i];const dir=i>cur?1:-1;cur=i;
+      panes.forEach(p=>{p.style.transition='none';p.style.transform='none'});
+      if(mode==='cut'||reduce){panes.forEach(p=>p.style.opacity=0);to.style.opacity=1;return}
+      if(mode==='fade'){from.style.opacity=0;to.style.opacity=0;requestAnimationFrame(()=>{to.style.transition='opacity 200ms cubic-bezier(.2,.8,.2,1)';to.style.opacity=1})}
+      if(mode==='slide'){to.style.opacity=1;to.style.transform=`translateX(${dir*100}%)`;from.style.opacity=1;requestAnimationFrame(()=>{[from,to].forEach(p=>p.style.transition='transform 280ms cubic-bezier(.2,.8,.2,1)');from.style.transform=`translateX(${-dir*100}%)`;to.style.transform='none';setTimeout(()=>{from.style.opacity=0},290)})}
+    };bar.appendChild(b)})});
+</script>
+</body>
+</html>

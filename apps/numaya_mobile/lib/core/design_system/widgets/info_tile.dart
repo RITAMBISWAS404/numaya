@@ -6,132 +6,145 @@ import '../foundations/app_typography.dart';
 import '../icons/tabler_icons.dart';
 import 'primitives.dart' show MobileIcon, Pressable;
 
-/// V8 information card: one consistent order for any card that reports a value.
-/// 1 icon, 2 heading, 3 primary value, 4 visual (bar, dots, art), 5 metadata. Any part but the
-/// heading and value may be left out. Pair two with [InfoTilePair].
-class InfoTile extends StatelessWidget {
-  const InfoTile({
+/// V9 information card: a full-width, single-column card that reports one thing.
+///
+/// Reading order (docs/v9/design-decisions.md, D-04): 1 a small icon and heading, 2 the primary
+/// value, 3 one short line of description, 4 an optional visual (bar, marks), 5 optional metadata.
+/// An illustration may sit at the side ([art], [artStart] puts it on the left) with its own room,
+/// never under the text. The icon is drawn straight on the card, filled at this small size and
+/// with no backplate (V9 icon rule). The whole card is one tap target with one destination:
+/// actions never sit inside it.
+class StatCard extends StatelessWidget {
+  const StatCard({
     super.key,
     required this.icon,
     required this.title,
     required this.value,
+    this.description,
     this.visual,
     this.meta,
+    this.art,
+    this.artStart = false,
     this.onTap,
   });
 
   final NumayaMobileIcons icon;
   final String title;
   final String value;
+  final String? description;
   final Widget? visual;
   final String? meta;
+
+  /// The illustration (usually a [SceneArt] about 96pt wide).
+  final Widget? art;
+  final bool artStart;
   final VoidCallback? onTap;
+
+  /// Width kept for [art] beside the text.
+  static const double artWidth = 96;
 
   @override
   Widget build(BuildContext context) {
+    // At large text the art drops under the copy, so the text keeps the card's full width.
+    final large = MediaQuery.textScalerOf(context).scale(15) > 21;
+    final text = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            MobileIcon(
+              icon,
+              size: AppSizes.iconSm,
+              filled: true,
+              color: AppColors.accentOnTint,
+            ),
+            const SizedBox(width: AppSpacing.s2),
+            Expanded(
+              child: Text(
+                title,
+                style: AppTypography.weight(
+                  AppTypography.caption,
+                  AppTypography.semibold,
+                ).copyWith(color: AppColors.accentOnTint),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.s2),
+        Text(value, style: AppTypography.pageTitle),
+        if (description != null) ...[
+          const SizedBox(height: AppSpacing.s1),
+          Text(
+            description!,
+            maxLines: 2,
+            style: AppTypography.bodySm.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ],
+        if (visual != null) ...[
+          const SizedBox(height: AppSpacing.s3),
+          ExcludeSemantics(child: visual!),
+        ],
+        if (meta != null) ...[
+          const SizedBox(height: AppSpacing.s2),
+          Text(meta!, style: AppTypography.caption),
+        ],
+      ],
+    );
+    final artBox = art == null
+        ? null
+        : ExcludeSemantics(
+            child: SizedBox(
+              width: artWidth,
+              child: Center(child: art),
+            ),
+          );
+    final Widget content;
+    if (artBox == null) {
+      content = text;
+    } else if (large) {
+      content = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          text,
+          const SizedBox(height: AppSpacing.s3),
+          Align(alignment: AlignmentDirectional.centerStart, child: artBox),
+        ],
+      );
+    } else {
+      content = Row(
+        children: [
+          if (artStart) ...[artBox, const SizedBox(width: AppSpacing.s4)],
+          Expanded(child: text),
+          if (!artStart) ...[const SizedBox(width: AppSpacing.s4), artBox],
+        ],
+      );
+    }
     final body = Container(
       padding: const EdgeInsets.all(AppLayout.cardPadding),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: AppRadii.all(AppRadii.card),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: AppColors.accentWash,
-                  borderRadius: AppRadii.all(AppRadii.iconTile),
-                ),
-                alignment: Alignment.center,
-                child: MobileIcon(
-                  icon,
-                  size: AppSizes.iconSm,
-                  color: AppColors.accentOnTint,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.s2),
-              Expanded(
-                child: Text(
-                  title,
-                  style: AppTypography.weight(
-                    AppTypography.caption,
-                    AppTypography.semibold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.s4),
-          Text(value, style: AppTypography.pageTitle),
-          if (visual != null) ...[
-            const SizedBox(height: AppSpacing.s3),
-            ExcludeSemantics(child: visual!),
-          ],
-          if (meta != null) ...[
-            const SizedBox(height: AppSpacing.s3),
-            Text(meta!, style: AppTypography.caption),
-          ],
-        ],
-      ),
+      child: content,
     );
+    final label = [title, value, ?description, ?meta].join('. ');
     if (onTap == null) {
       return Semantics(
         container: true,
-        label: [title, value, ?meta].join('. '),
+        label: label,
         excludeSemantics: true,
         child: body,
       );
     }
     return Pressable(
       onTap: onTap,
-      semanticLabel: [title, value, ?meta].join('. '),
+      semanticLabel: label,
       excludeChildSemantics: true,
       pressedScale: 0.98,
       borderRadius: AppRadii.all(AppRadii.card),
       child: body,
-    );
-  }
-}
-
-/// Two [InfoTile]s side by side, equal height; stacked when the width or text size can't hold
-/// two columns comfortably.
-class InfoTilePair extends StatelessWidget {
-  const InfoTilePair({super.key, required this.first, required this.second});
-
-  final Widget first;
-  final Widget second;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, box) {
-        final large = MediaQuery.textScalerOf(context).scale(15) > 22;
-        if (large || box.maxWidth < 300) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              first,
-              const SizedBox(height: AppSpacing.s3),
-              second,
-            ],
-          );
-        }
-        return IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(child: first),
-              const SizedBox(width: AppSpacing.s3),
-              Expanded(child: second),
-            ],
-          ),
-        );
-      },
     );
   }
 }

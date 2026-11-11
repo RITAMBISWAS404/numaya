@@ -7,6 +7,9 @@ import '../../../l10n/l10n.dart';
 import '../domain/sample_people.dart';
 import 'person_profile.dart';
 
+/// The shared-element tag joining a conversation row's avatar to the open conversation's header.
+String chatAvatarHeroTag(String personId) => 'chat-avatar-$personId';
+
 /// A conversation's header (WhatsApp-style): back, avatar and name that open the profile, and the
 /// conversation menu. Shared by the chat and a Compliment that has not been answered yet, so the
 /// two read as one place.
@@ -49,11 +52,14 @@ class ChatHeader extends StatelessWidget {
                 pressedScale: 1,
                 child: Row(
                   children: [
-                    InitialsAvatar(
-                      initial: person.initial,
-                      size: 40,
-                      image: personAvatarImage(person),
-                      imageAlignment: personAvatarFocus(person),
+                    Hero(
+                      tag: chatAvatarHeroTag(person.id),
+                      child: InitialsAvatar(
+                        initial: person.initial,
+                        size: 40,
+                        image: personAvatarImage(person),
+                        imageAlignment: personAvatarFocus(person),
+                      ),
                     ),
                     const SizedBox(width: AppSpacing.s3),
                     // One line, as the app bar holds it at any text size.

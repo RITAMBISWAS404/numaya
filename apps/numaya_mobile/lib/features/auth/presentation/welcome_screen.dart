@@ -114,7 +114,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                                 header: true,
                                 child: Text(
                                   l10n.welcomeTitle,
-                                  style: AppTypography.display1,
+                                  style: AppTypography.hero,
                                 ),
                               ),
                               const SizedBox(height: AppSpacing.s3),

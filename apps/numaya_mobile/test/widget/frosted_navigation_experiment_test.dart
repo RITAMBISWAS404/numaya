@@ -88,8 +88,8 @@ void main() {
         final pill = tester.widget<Container>(pillOf());
         final deco = pill.decoration! as BoxDecoration;
         expect(deco.color, AppColors.surface);
-        // V8: the bar follows the tighter radius scale.
-        expect(deco.borderRadius, AppRadii.all(AppRadii.nav));
+        // UC-03: a stadium at any width.
+        expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
         expect(deco.boxShadow, AppElevation.navigation);
         expect(tester.getSize(pillOf()).height, AppSizes.tabBar);
         await settle(tester);
@@ -182,14 +182,15 @@ void main() {
       final c = await quickStartApp(tester);
       await goTo(c, tester, Routes.profile);
       final scroll = find.byType(Scrollable).first;
+      // V9: the hub's last row is Help centre (Settings moved to the bar).
       await tester.dragUntilVisible(
-        find.text('Settings').last,
+        find.text('Help centre').last,
         scroll,
         const Offset(0, -300),
       );
       await tester.drag(scroll, const Offset(0, -2000));
       await tester.pump(const Duration(milliseconds: 600));
-      final last = tester.getRect(find.text('Settings').last);
+      final last = tester.getRect(find.text('Help centre').last);
       final pill = tester.getRect(pillOf());
       expect(last.bottom, lessThanOrEqualTo(pill.top));
       await settle(tester);

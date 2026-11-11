@@ -12309,6 +12309,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reserve'**
   String get evReserveShort;
+
+  /// The next profile-setup step on the Profile setup card.
+  ///
+  /// In en, this message translates to:
+  /// **'Next: {item}'**
+  String v9SetupNextItem(String item);
+
+  /// One-line spend order on the Compliment credits card.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly credits are spent first'**
+  String get v9WalletOrderLine;
 }
 
 class _AppLocalizationsDelegate

@@ -11,6 +11,7 @@ import '../icons/numaya_icon_data.g.dart';
 import '../icons/tabler_icons.dart' show NumayaMobileIcons;
 import '../tokens/monochrome_tokens.dart';
 import 'content.dart' show MetaText;
+import 'divider.dart';
 import 'icon_tile.dart';
 import 'people.dart';
 import 'primitives.dart';
@@ -393,7 +394,7 @@ class NumayaTabBar extends StatelessWidget {
               : item.label,
           excludeChildSemantics: true,
           pressedScale: 0.95,
-          borderRadius: AppRadii.all(AppRadii.tile),
+          borderRadius: AppRadii.all(AppRadii.pill),
           child: SizedBox(
             key: ValueKey('tab-item-$i'),
             width: width,
@@ -408,7 +409,7 @@ class NumayaTabBar extends StatelessWidget {
                   color: current
                       ? AppColors.iconSelectedFill
                       : const Color(0x00FFFFFF),
-                  borderRadius: AppRadii.all(AppRadii.tile),
+                  borderRadius: AppRadii.all(AppRadii.pill),
                 ),
                 alignment: Alignment.center,
                 child: Stack(
@@ -919,10 +920,6 @@ class ListGroup extends StatelessWidget {
   /// Hairlines between rows. Off for groups whose rows are self-contained (cards, previews).
   final bool dividers;
 
-  static double _inset(Widget row, bool flush) =>
-      (flush ? 0 : AppLayout.cardPadding) +
-      (row is ListRow ? row.textInset : 0);
-
   @override
   Widget build(BuildContext context) {
     // UI-023: sheets are the grey page surface now, so groups default to white cards there too.
@@ -956,20 +953,8 @@ class ListGroup extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   for (var i = 0; i < children.length; i++) ...[
-                    // V8: a low-contrast hairline between related rows, inset to the label.
-                    if (i > 0 && dividers)
-                      Padding(
-                        padding: EdgeInsetsDirectional.only(
-                          start: _inset(children[i], false),
-                        ),
-                        child: const ExcludeSemantics(
-                          child: SizedBox(
-                            height: AppBorders.hairline,
-                            width: double.infinity,
-                            child: ColoredBox(color: AppColors.divider),
-                          ),
-                        ),
-                      ),
+                    // V9: one near-full-width hairline between related rows (D-06).
+                    if (i > 0 && dividers) const NumayaDivider(),
                     children[i],
                   ],
                 ],
@@ -980,19 +965,7 @@ class ListGroup extends StatelessWidget {
           Column(
             children: [
               for (var i = 0; i < children.length; i++) ...[
-                if (i > 0 && dividers)
-                  Padding(
-                    padding: EdgeInsetsDirectional.only(
-                      start: _inset(children[i], flush),
-                    ),
-                    child: const ExcludeSemantics(
-                      child: SizedBox(
-                        height: AppBorders.hairline,
-                        width: double.infinity,
-                        child: ColoredBox(color: AppColors.divider),
-                      ),
-                    ),
-                  ),
+                if (i > 0 && dividers) const NumayaDivider(margin: 0),
                 _FlushRows(child: children[i]),
               ],
             ],

@@ -3785,5 +3785,9 @@
   "tabEventsLabel": "Events",
   "profileFeatureUnavailable": "Insights are no longer part of Numaya",
   "profileFeatureUnavailableBody": "That page was removed. Your profile, streak and credits are unchanged.",
-  "evReserveShort": "Reserve"
+  "evReserveShort": "Reserve",
+  "v9SetupNextItem": "Next: {item}",
+  "@v9SetupNextItem": {"description": "The next profile-setup step on the Profile setup card.", "placeholders": {"item": {"type": "String"}}},
+  "v9WalletOrderLine": "Weekly credits are spent first",
+  "@v9WalletOrderLine": {"description": "One-line spend order on the Compliment credits card."}
 }

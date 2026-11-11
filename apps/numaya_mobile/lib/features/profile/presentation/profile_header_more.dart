@@ -68,15 +68,8 @@ class _IdentityRow extends StatelessWidget {
 class _Divider extends StatelessWidget {
   const _Divider();
   @override
-  Widget build(BuildContext context) => const Padding(
-    padding: EdgeInsets.symmetric(vertical: AppSpacing.s4),
-    child: ExcludeSemantics(
-      child: SizedBox(
-        height: AppBorders.hairline,
-        child: ColoredBox(color: AppColors.divider),
-      ),
-    ),
-  );
+  Widget build(BuildContext context) =>
+      const NumayaDivider(margin: 0, spacing: AppSpacing.s4);
 }
 
 /// A tappable fact inside a header card: icon, value line, chevron.

@@ -67,7 +67,7 @@ class NumayaButton extends StatelessWidget {
         : textOnly
         ? AppSizes.buttonHeightQuiet
         : AppSizes.buttonHeight;
-    // V8: a 12pt rounded rectangle (Ente Button Large geometry, tighter corners).
+    // Ente Button Large (2207:41760): a 20pt rounded rectangle, not a pill.
     const radius = AppRadii.control;
 
     // A small button that isn't primary, tint or solid red is the outlined pill.

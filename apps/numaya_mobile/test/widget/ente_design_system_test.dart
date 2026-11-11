@@ -50,11 +50,7 @@ void main() {
         matching: find.byType(AnimatedContainer),
       ),
     );
-    // V8: tighter 12pt button corners.
-    expect(
-      (box.decoration! as BoxDecoration).borderRadius,
-      AppRadii.all(AppRadii.control),
-    );
+    expect((box.decoration! as BoxDecoration).borderRadius, AppRadii.all(20));
     final label = tester.widget<Text>(find.text('Save')).style!;
     expect(label.fontSize, 15);
     // FT-01: Ente Button Large (2207:41759) labels are Body, 14/20 medium.

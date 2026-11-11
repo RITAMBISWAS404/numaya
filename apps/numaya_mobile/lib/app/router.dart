@@ -203,7 +203,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           _route(path: 'done', builder: (_, _) => const AllSetScreen()),
         ],
       ),
-      StatefulShellRoute.indexedStack(
+      // V9: the tabs keep their state as with indexedStack, and the newly selected one fades in.
+      StatefulShellRoute(
+        navigatorContainerBuilder: (context, shell, children) =>
+            TabFadeStack(index: shell.currentIndex, children: children),
         pageBuilder: (context, state, shell) =>
             _page(state, HomeShell(shell: shell)),
         branches: [

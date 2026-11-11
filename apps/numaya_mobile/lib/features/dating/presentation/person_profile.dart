@@ -156,12 +156,14 @@ class PersonHeroCard extends StatelessWidget {
                           'P' => PhotoScrim(
                             fade: 48,
                             padding: inset,
+                            sample: personTileImage(person),
                             child: _overlayIdentity(context, l10n),
                           ),
                           // G (default): a smooth gradient behind the name, no backing.
                           _ => PhotoScrim(
                             fade: 96,
                             padding: inset,
+                            sample: personTileImage(person),
                             child: _overlayIdentity(
                               context,
                               l10n,
@@ -655,15 +657,10 @@ List<Widget> personSections(
             // R07: the bio and prompt answers share one Figtree reading role.
             if (hasBio) Text(person.bio!, style: AppTypography.answer),
             if (hasBio && facts.isNotEmpty)
-              const Padding(
+              const NumayaDivider(
                 key: ValueKey('about-divider'),
-                padding: EdgeInsets.symmetric(vertical: AppSpacing.s4),
-                child: ExcludeSemantics(
-                  child: SizedBox(
-                    height: AppBorders.hairline,
-                    child: ColoredBox(color: AppColors.divider),
-                  ),
-                ),
+                margin: 0,
+                spacing: AppSpacing.s4,
               ),
             if (facts.isNotEmpty)
               Wrap(

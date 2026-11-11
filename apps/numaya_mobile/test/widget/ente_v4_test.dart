@@ -73,18 +73,26 @@ void main() {
       await tester.pumpWidget(
         host(const SizedBox(width: 200, child: PhotoScrim(child: Text('A')))),
       );
-      final box = tester.widget<DecoratedBox>(
+      final box = tester.widget<AnimatedContainer>(
         find.descendant(
           of: find.byType(PhotoScrim),
-          matching: find.byType(DecoratedBox),
+          matching: find.byType(AnimatedContainer),
         ),
       );
-      final g = (box.decoration as BoxDecoration).gradient! as LinearGradient;
-      expect(g.colors.first, AppColors.photoScrimEdge);
+      final g = (box.decoration! as BoxDecoration).gradient! as LinearGradient;
+      // V9: without a measured photo the scrim keeps the light 24% edge.
+      expect(g.colors.first.a, closeTo(0.24, 0.01));
       expect(g.colors.last.a, 0);
       for (final c in g.colors) {
         expect(c.a, lessThan(0.25));
       }
+    });
+
+    test('V9: the scrim strengthens only for bright photos, capped at 52%', () {
+      expect(PhotoScrim.edgeFor(null), 0.24);
+      expect(PhotoScrim.edgeFor(0.05), 0.24); // a dark photo is not darkened further
+      expect(PhotoScrim.edgeFor(0.4), closeTo(0.387, 0.01));
+      expect(PhotoScrim.edgeFor(0.9), closeTo(0.52, 0.001));
     });
   });
 

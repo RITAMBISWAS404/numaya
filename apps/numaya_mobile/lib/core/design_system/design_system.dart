@@ -22,6 +22,7 @@ export 'icons/tabler_icons.dart'
 export 'widgets/age_range_slider.dart';
 export 'widgets/buttons.dart';
 export 'widgets/content.dart';
+export 'widgets/divider.dart';
 export 'widgets/extras.dart';
 export 'widgets/fields.dart';
 export 'widgets/icon_tile.dart';
@@ -38,4 +39,5 @@ export 'widgets/segmented.dart';
 export 'widgets/selection.dart';
 export 'widgets/slider_thumbs.dart';
 export 'widgets/squircle_button.dart';
+export 'widgets/tab_fade_stack.dart';
 export 'widgets/toast.dart';

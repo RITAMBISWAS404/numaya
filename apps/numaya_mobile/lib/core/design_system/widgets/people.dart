@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show OverflowBoxFit;
@@ -1734,52 +1736,169 @@ class _Bleed extends StatelessWidget {
   }
 }
 
-/// The gradient behind content on a photo (V4 rule IMG-2): [AppColors.photoScrimEdge] (10% black)
-/// at the lower edge, fading to clear above the content, so the image is settled but never
-/// darkened. It does not make text readable by itself: names and titles sit on a [PhotoLabel] and
-/// statuses on a [PhotoPill]. Replaces the solid 55% panel (TC-07).
-class PhotoScrim extends StatelessWidget {
+/// How bright the lower part of a photo is (V9 adaptive scrim). The photo is decoded once at 12x16
+/// and the bottom 40% averaged as relative luminance (0 dark, 1 white). Cached per image, so each
+/// photo is measured once per launch.
+abstract final class PhotoLuma {
+  static final Map<ImageProvider, double> _cache = {};
+
+  /// The cached value, or null when [image] has not been measured yet.
+  static double? cached(ImageProvider image) => _cache[image];
+
+  static Future<double?> measure(ImageProvider image) async {
+    final hit = _cache[image];
+    if (hit != null) return hit;
+    final small = ResizeImage(
+      image,
+      width: 12,
+      height: 16,
+      policy: ResizeImagePolicy.exact,
+    );
+    final completer = Completer<ui.Image?>();
+    final stream = small.resolve(ImageConfiguration.empty);
+    late final ImageStreamListener listener;
+    listener = ImageStreamListener(
+      (info, _) {
+        if (!completer.isCompleted) completer.complete(info.image.clone());
+        info.dispose();
+      },
+      onError: (_, _) {
+        if (!completer.isCompleted) completer.complete(null);
+      },
+    );
+    stream.addListener(listener);
+    final decoded = await completer.future;
+    stream.removeListener(listener);
+    if (decoded == null) return null;
+    try {
+      final data = await decoded.toByteData();
+      if (data == null) return null;
+      final w = decoded.width, h = decoded.height;
+      var sum = 0.0;
+      var n = 0;
+      for (var y = (h * 0.6).floor(); y < h; y++) {
+        for (var x = 0; x < w; x++) {
+          final i = (y * w + x) * 4;
+          double lin(int c) {
+            final v = c / 255;
+            return v <= 0.04045
+                ? v / 12.92
+                : math.pow((v + 0.055) / 1.055, 2.4).toDouble();
+          }
+
+          sum +=
+              0.2126 * lin(data.getUint8(i)) +
+              0.7152 * lin(data.getUint8(i + 1)) +
+              0.0722 * lin(data.getUint8(i + 2));
+          n++;
+        }
+      }
+      final luma = n == 0 ? 0.0 : sum / n;
+      _cache[image] = luma;
+      return luma;
+    } finally {
+      decoded.dispose();
+    }
+  }
+}
+
+/// The gradient behind content on a photo (V9 adaptive scrim, replacing V4 IMG-2's fixed 24%).
+/// It covers only the band under the content and eases to clear above it, so the rest of the
+/// photograph is never darkened. Given [sample] (the photo underneath), its strength follows how
+/// bright the photo's lower part is: a dark photo keeps the light 24% edge, a bright or white one
+/// rises to 52% at the very bottom so white names stay readable (with [PhotoText.shadows]).
+/// Without a sample, or before the photo has been measured, the light edge is used.
+class PhotoScrim extends StatefulWidget {
   const PhotoScrim({
     super.key,
     required this.child,
     this.fade = 72,
     this.padding = EdgeInsets.zero,
+    this.sample,
   });
 
   final Widget child;
   final double fade;
 
-  /// Space around [child] inside the solid panel.
+  /// Space around [child] inside the gradient.
   final EdgeInsets padding;
 
+  /// The photo under the scrim, measured to set the gradient's strength.
+  final ImageProvider? sample;
+
+  /// The bottom-edge opacity for a photo whose lower part has relative luminance [luma].
+  static double edgeFor(double? luma) {
+    if (luma == null) return 0.24;
+    // Dark photos (luma < 0.18) keep 24%; bright ones (0.6+) reach 52%.
+    final t = ((luma - 0.18) / 0.42).clamp(0.0, 1.0);
+    return 0.24 + 0.28 * t;
+  }
+
   @override
-  Widget build(BuildContext context) => Stack(
-    children: [
-      const Positioned.fill(
-        child: IgnorePointer(
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              // Eased, so no edge shows where the gradient ends (V5 D04).
-              gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [
-                  AppColors.photoScrimEdge,
-                  Color(0x29000000),
-                  Color(0x14000000),
-                  Color(0x05000000),
-                  Color(0x00000000),
-                ],
-                stops: [0, 0.34, 0.62, 0.86, 1],
+  State<PhotoScrim> createState() => _PhotoScrimState();
+}
+
+class _PhotoScrimState extends State<PhotoScrim> {
+  double? _luma;
+
+  @override
+  void initState() {
+    super.initState();
+    _measure();
+  }
+
+  @override
+  void didUpdateWidget(PhotoScrim old) {
+    super.didUpdateWidget(old);
+    if (old.sample != widget.sample) _measure();
+  }
+
+  void _measure() {
+    final sample = widget.sample;
+    if (sample == null) {
+      _luma = null;
+      return;
+    }
+    _luma = PhotoLuma.cached(sample);
+    if (_luma != null) return;
+    unawaited(
+      PhotoLuma.measure(sample)
+          .then((v) {
+            if (mounted && widget.sample == sample) setState(() => _luma = v);
+          })
+          .catchError((Object _) {}),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final edge = PhotoScrim.edgeFor(_luma);
+    Color at(double share) => Color.fromRGBO(0, 0, 0, edge * share);
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: IgnorePointer(
+            child: AnimatedContainer(
+              duration: AppMotion.duration(context, AppMotion.base),
+              curve: AppMotion.easeOut,
+              decoration: BoxDecoration(
+                // Eased (an ease-out curve sampled at five stops), so no edge shows where it
+                // ends: strongest under the text, gone by the top of the band.
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [at(1), at(0.72), at(0.4), at(0.14), at(0)],
+                  stops: const [0, 0.3, 0.56, 0.8, 1],
+                ),
               ),
             ),
           ),
         ),
-      ),
-      Padding(
-        padding: padding.add(EdgeInsets.only(top: fade)),
-        child: child,
-      ),
-    ],
-  );
+        Padding(
+          padding: widget.padding.add(EdgeInsets.only(top: widget.fade)),
+          child: widget.child,
+        ),
+      ],
+    );
+  }
 }

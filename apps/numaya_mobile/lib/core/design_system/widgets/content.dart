@@ -202,10 +202,8 @@ class InfoCard extends StatelessWidget {
   final String title;
   final String? body;
 
-  /// V3-F01: the card is the child of a tap target (a [Pressable]), so it shows Ente's
-  /// actionable-banner affordance (14590:125245): a round fill button (the header icon-button
-  /// size) with an arrow,
-  /// centred on the right. Decorative; the wrapping control carries the semantics.
+  /// V3-F01: the card is the child of a tap target (a [Pressable]), so it shows a chevron centred
+  /// on the right (V9: no disc behind it). Decorative; the wrapping control carries the semantics.
   final bool trailingArrow;
 
   @override
@@ -255,20 +253,12 @@ class InfoCard extends StatelessWidget {
           ),
           if (trailingArrow) ...[
             const SizedBox(width: AppSpacing.s3),
-            ExcludeSemantics(
-              child: Container(
-                width: AppSizes.iconButton,
-                height: AppSizes.iconButton,
-                decoration: const BoxDecoration(
-                  color: AppColors.fill,
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: const NumayaIcon(
-                  NumayaIcons.arrowRight,
-                  size: AppSizes.iconSm,
-                  color: AppColors.ink,
-                ),
+            // V9 icon rule: the chevron sits on the card, with no grey disc behind it.
+            const ExcludeSemantics(
+              child: NumayaIcon(
+                NumayaIcons.chevronRight,
+                size: AppSizes.iconMd,
+                color: AppColors.textMuted,
               ),
             ),
           ],

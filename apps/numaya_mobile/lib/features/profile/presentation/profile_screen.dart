@@ -197,47 +197,55 @@ class ProfileScreen extends ConsumerWidget {
           label: l10n.helpTitle,
           onTap: () => context.push(Routes.help),
         ),
-        ListRow(
-          leading: NumayaIcons.settings,
-          label: l10n.profileSettings,
-          onTap: () => context.push(Routes.settings),
-        ),
+        // V9: Settings lives in the title bar only (it was listed twice).
       ],
     );
     const gap = SizedBox(height: AppLayout.sectionGap);
     const small = SizedBox(height: AppSpacing.s3);
     final setup = ProfileSetupCard(health: health, variant: setupV);
-    // V8 information tiles, side by side: the owner's stacked credit bar and seven streak marks
-    // become each tile's visual.
+    // V9 information cards, one per row: icon and heading, the number, one line, the owner's
+    // stacked credit bar or seven streak marks, and the art at the side.
     final activityCards = NumayaSection(
       title: l10n.hubActivity,
-      child: InfoTilePair(
-        first: InfoTile(
-          key: const ValueKey('tile-wallet'),
-          icon: NumayaMobileIcons.wallet,
-          title: l10n.walletTitle,
-          value: l10n.walletTotal(
-            wallet.weekly + wallet.earned + wallet.purchased,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          StatCard(
+            key: const ValueKey('tile-wallet'),
+            icon: NumayaMobileIcons.wallet,
+            title: l10n.walletTitle,
+            value: l10n.walletTotal(
+              wallet.weekly + wallet.earned + wallet.purchased,
+            ),
+            description: l10n.v9WalletOrderLine,
+            visual: SegmentBar(
+              parts: [
+                (wallet.weekly, AppColors.accent),
+                (wallet.earned, AppColors.accent.withValues(alpha: 0.55)),
+                (wallet.purchased, AppColors.accent.withValues(alpha: 0.25)),
+              ],
+            ),
+            art: const SceneArt(ArtScene.heart, width: StatCard.artWidth),
+            onTap: toWallet,
           ),
-          visual: SegmentBar(
-            parts: [
-              (wallet.weekly, AppColors.accent),
-              (wallet.earned, AppColors.accent.withValues(alpha: 0.55)),
-              (wallet.purchased, AppColors.accent.withValues(alpha: 0.25)),
-            ],
+          const SizedBox(height: AppSpacing.s3),
+          StatCard(
+            key: const ValueKey('tile-streak'),
+            icon: NumayaMobileIcons.flame,
+            title: l10n.streakTitle,
+            value: l10n.streakDays(streak.length),
+            description: streak.todayCounts
+                ? l10n.streakToday
+                : l10n.streakTodayOpen,
+            visual: StepMarks(done: streak.progress, total: streak.cycle),
+            art: SceneArt(
+              ArtScene.flame,
+              width: StatCard.artWidth,
+              level: streak.length,
+            ),
+            onTap: toStreak,
           ),
-          meta: l10n.walletOrderShort,
-          onTap: toWallet,
-        ),
-        second: InfoTile(
-          key: const ValueKey('tile-streak'),
-          icon: NumayaMobileIcons.flame,
-          title: l10n.streakTitle,
-          value: l10n.streakDays(streak.length),
-          visual: StepMarks(done: streak.progress, total: streak.cycle),
-          meta: streak.todayCounts ? l10n.streakToday : l10n.streakTodayOpen,
-          onTap: toStreak,
-        ),
+        ],
       ),
     );
 
@@ -295,18 +303,7 @@ class ProfileScreen extends ConsumerWidget {
           profileGroup,
           gap,
           if (!headerHasActivity) ...[activityCards, gap],
-          if (draft.prompt != null) ...[
-            NumayaSection(
-              title: l10n.profilePromptTitle,
-              child: PromptCard(
-                question: draft.prompt!.question,
-                answer: draft.prompt!.answer,
-                editLabel: l10n.promptEditLabel,
-                onTap: () => context.push(Routes.editPrompt),
-              ),
-            ),
-            gap,
-          ],
+          // V9: the prompt is edited in Edit profile and shown in Preview, not repeated here.
           if (premium.active) ...[
             _PremiumCard(
               active: premium.active,
@@ -324,11 +321,7 @@ class ProfileScreen extends ConsumerWidget {
     return LargeTitlePage(
       title: l10n.tabProfile,
       actions: [
-        NavIconButton(
-          icon: NumayaIcons.help,
-          label: l10n.helpTitle,
-          onPressed: () => context.push(Routes.help),
-        ),
+        // V9: Help is the Safety and support row; the bar keeps Settings alone.
         NavIconButton(
           icon: NumayaIcons.settings,
           label: l10n.profileSettings,

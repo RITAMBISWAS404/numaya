@@ -248,20 +248,8 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       list = Column(
         children: [
           for (var i = 0; i < rows.length; i++) ...[
-            // V8: conversations are rows on the page, divided by inset hairlines.
-            if (i > 0)
-              const Padding(
-                padding: EdgeInsetsDirectional.only(
-                  start: ConversationRow.textInset,
-                ),
-                child: ExcludeSemantics(
-                  child: SizedBox(
-                    height: AppBorders.hairline,
-                    width: double.infinity,
-                    child: ColoredBox(color: AppColors.divider),
-                  ),
-                ),
-              ),
+            // V9: conversations are rows on the page, divided by the one near-full-width rule.
+            if (i > 0) const NumayaDivider(margin: NumayaDivider.onPage),
             ConversationRow(
               key: ValueKey('conversation-${rows[i].person.id}'),
               person: rows[i].person,

@@ -65,7 +65,8 @@ void main() {
       ),
     );
     final arrows = find.byWidgetPredicate(
-      (w) => w is NumayaIcon && w.icon == NumayaIcons.arrowRight,
+      // V9: a plain chevron, with no disc behind it.
+      (w) => w is NumayaIcon && w.icon == NumayaIcons.chevronRight,
     );
     expect(arrows, findsOneWidget);
     expect(

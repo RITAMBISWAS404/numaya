@@ -193,13 +193,8 @@ class _ComplimentThreadState extends ConsumerState<ComplimentThread> {
         child: Column(
           children: [
             ChatHeader(person: person, onBack: widget.onBack, onMenu: _menu),
-            const ExcludeSemantics(
-              child: SizedBox(
-                height: AppBorders.hairline,
-                width: double.infinity,
-                child: ColoredBox(color: AppColors.divider),
-              ),
-            ),
+            // The header's bottom edge: full bleed, like the chat's.
+            const NumayaDivider(margin: 0),
             Expanded(child: thread),
             if (received)
               Padding(

@@ -7289,4 +7289,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get evReserveShort => 'Reserve';
+
+  @override
+  String v9SetupNextItem(String item) {
+    return 'Next: $item';
+  }
+
+  @override
+  String get v9WalletOrderLine => 'Weekly credits are spent first';
 }
