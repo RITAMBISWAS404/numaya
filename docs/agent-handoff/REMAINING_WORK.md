@@ -1,31 +1,30 @@
 # Remaining work
 
-State on 12 November 2026. Branch `experiment/numaya-v8-premium-rebuild-20261112-1945`, app source `ee87648`.
+State on 13 November 2026. Branch `experiment/numaya-fable-design-20261113-0048`, app source `da197b7`.
 
 ## Waiting on the owner
 
-- Review the gallery `C:\Users\biswa\OneDrive\Desktop\Numaya Replacement V8 Review\2026-11-12 ee87648\index.html`. It uses relative image paths and is meant to open directly in Chrome or Edge, but that was not tested; it was tested over a localhost server (`.claude/launch.json` `r8-gallery`, port 8772). Choices are saved per browser and origin. Then export JSON or TXT. Seven decisions, none pre-selected:
-  - **Recommended:** adaptive scrim, near-full chat hairline, outlined secondary buttons, unified Compliments, V7 type.
-  - **Your V7 choices offered with a critique alternative:** credits card emphasis, Profile title bar.
-- Install `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-Replacement-V8-20261112-ee87648.apk` on a phone.
+- Review `C:\Users\biswa\OneDrive\Desktop\Numaya Fable Lab Review\2026-11-13 da197b7\index.html` and export choices (JSON or TXT). Seven decisions: six lab groups and the still-open photo scrim.
+- Install `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-Fable-Lab-20261113-da197b7-debug-lab.apk` to try the options on a phone: tap the purple area on Welcome → Demo hub → Quick start; then Demo hub → Visual Lab V2.
+- Decide whether to commission artwork for the feature card (Profile B/C, Credits B, Streak B).
+
+## Then
+
+Follow [QA_HANDOFF.md](../design/fable-lab/QA_HANDOFF.md): apply the choices, run the unchecked items, capture the chosen screens on the emulator.
+
+## Backlog (not built)
+
+Reply composer (R1/R2), sent confirmation (S1/S2), sheet headers, alert cards, settings groups, welcome composition, paywall comparison, a motion clip. See [EXPERIMENTS.md](../design/fable-lab/EXPERIMENTS.md).
 
 ## Known limitations
 
 | Item | State |
 |---|---|
-| Real integrations | OTP, persistence, delivery, push, billing, moderation and release signing are not present (on-device demo). Notification routing is in-app links only. |
-| Server guarantees | Atomic send plus debit, cross-device idempotency and server-enforced reciprocity must come from a backend (CONVERSATION_CONTRACT.md). |
-| Read and delivery ticks | Not shown, because no backend reports them. |
-| Old Compliments inbox and request page | Unreachable (routes redirect); code kept for the lab and recovery. |
-| Editorial fonts | Bundled for the comparison (about 5 MB). Unregister them if the comparison is rejected. |
-| Figma | Six nodes read; the desktop plugin was not used (needs `/mcp` sign-in). |
-| Art | V7 assets only; the old V8 "3D art" reference was never supplied. |
-| Quirky direction | Deferred to a later branch. |
-
-## Not verified
-
-Physical phone, iOS, screen reader, hardware profiling, web checks (no web change).
+| Artwork | The mascot is a stand-in in every feature card. |
+| Renders | Flutter test renders, not emulator screenshots; no status bar. |
+| Release builds | Demo sign-in is compiled out of release builds, so a release APK stops at Welcome. Use debug builds until real auth exists. The 12 November replacement V8 APK is affected. |
+| Real integrations | None: on-device demo only. |
 
 ## Private photos
 
-The demo photos (`pics/`, `apps/numaya_mobile/assets/demo/photos/`) are local and git-ignored. They appear in the screenshots, the gallery and the APK. **No private backup exists.**
+The demo photos are local and git-ignored. They appear in the gallery, the render folder and the APK, which therefore stay local. **No private backup exists.**

@@ -135,8 +135,13 @@ if A.extra:
                 name = f"{gid}__{v['id']}__{i}.jpg"
                 jpg(src, f'{OUT}/current/{name}')
                 ims.append({'path': 'current/' + name, 'label': label})
-            vs.append({'id': v['id'], 'name': v['name'], 'pass': v.get('pass', ''), 'note': v.get('note', ''), 'images': ims})
-        groups.append({'id': gid, 'title': e['title'], 'surface': 'screen', 'question': e['question'], 'recommended': e['recommended'], 'requires': {}, 'flow': e['flow'], 'run': 'Replacement V8', 'source': A.commit[:7], 'status': 'current', 'earlier': [], 'level': 'screen', 'impl': e.get('impl', 'Implemented in Flutter'), 'directions': {}, 'variants': vs})
+            vs.append({'id': v['id'], 'name': v['name'], 'pass': v.get('pass', ''), 'note': v.get('note', ''), 'tradeoff': v.get('tradeoff', ''), 'images': ims})
+        g = {'id': gid, 'title': e['title'], 'surface': 'screen', 'question': e['question'], 'recommended': e['recommended'], 'requires': {}, 'flow': e['flow'], 'run': e.get('run', 'Replacement V8'), 'source': e.get('source', A.commit[:7]), 'status': e.get('status', 'current'), 'earlier': [], 'level': e.get('level', 'screen'), 'impl': e.get('impl', 'Implemented in Flutter'), 'directions': {}, 'variants': vs}
+        # Fable lab: optional review lines the template already knows how to draw.
+        for k in ('task', 'problem', 'benefit', 'cost', 'hypothesis', 'route', 'verification', 'references'):
+            if k in e:
+                g[k] = e[k]
+        groups.append(g)
 current = {g['id'] for g in groups}
 
 deferred = lambda i: bool(re.search('event|insight|metric-widget|health|ea-met-card', i))

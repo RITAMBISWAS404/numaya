@@ -1,4 +1,11 @@
-# Active task: owner review of the replacement V8 candidate
+# Active task: owner review of the Fable design lab
+
+> **2026-11-13, Fable design lab. Read this first.**
+> - **Folder:** `C:\Users\biswa\Projects\Numaya-fable-lab` (a worktree). **Branch:** `experiment/numaya-fable-design-20261113-0048`, based on the replacement V8 `c890d02`. App source `da197b7`.
+> - **What it is:** six experiment groups with real alternatives (Discover, Profile, Messages, Received Compliment, Credits, Streak). The app default is still the owner's baseline (O) in every group.
+> - **Records:** [docs/design/fable-lab](../design/fable-lab/EXPERIMENTS.md): EXPERIMENTS, COVERAGE.csv, QA_HANDOFF.
+> - **Next:** the owner reviews the gallery and exports choices. Then follow QA_HANDOFF. Do not pick options for the owner.
+> - **Other checkouts:** `C:\Users\biswa\Projects\Numaya` (replacement V8) and `C:\Users\biswa\Projects\Numaya-backend` are separate work. Do not switch or edit them from here.
 
 > **2026-11-12, replacement V8 delivered (premium candidate). Read this first.**
 > - **Branch:** `experiment/numaya-v8-premium-rebuild-20261112-1945`, from the selected V7 `b5e5245` (all 36 owner selections kept). App source `ee87648`.

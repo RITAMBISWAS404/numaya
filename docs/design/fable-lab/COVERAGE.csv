@@ -1,0 +1,25 @@
+screen,current problem,affected component,experiment or deliberate keep,evidence,status
+Discover profile card,Deciding facts below the fold; unlabelled Compliment icon,PersonHeroCard / DiscoverScreen,fx-discover O/A/B,Renders 01-06,implemented
+Own Profile hub,Repeats a large photo; credits and streak read alike,ProfileScreen,fx-profile O/A/B/C,Renders 07-13,implemented (B and C artwork-pending)
+Messages list,Compliment marked only by a glyph; turn carried by pills,MessagesScreen / ConversationRow,fx-messages O/A/B,Renders 14-16,implemented
+Received Compliment thread,Decline only in the menu; context is a small quote,ComplimentThread,fx-compliment-thread O/A/B,Renders 17-22,implemented
+Compliment credits,Balance and action at opposite ends,WalletScreen,fx-wallet O/A/B,Renders 23-25,implemented (B artwork-pending)
+Streak,Bars do not show today or the reward,StreakScreen,fx-streak O/A/B,Renders 26-28,implemented (B artwork-pending)
+Text over photos,Open owner decision,PhotoScrim,r8-photo-scrim O/A (earlier renders),Gallery group,undecided by owner
+Sent Compliment (waiting),None observed,ComplimentThread,keep,Reviewed at ee87648,kept
+Send Compliment composer,Recipe S1/S2 not explored,ComplimentComposerScreen,backlog 2,Reviewed at ee87648,not assessed this run
+Chat conversation and reply composer,Recipe R1/R2 not explored,ChatScreen / Composer,backlog 1,Reviewed at ee87648,not assessed this run
+Chat attachments and voice,None observed,ChatScreen,keep,Reviewed at ee87648,not assessed this run
+Onboarding and auth,Welcome composition is a listed opportunity,WelcomeScreen and steps,backlog 4,Reviewed at ee87648,not assessed this run
+Profile setup and edit,None observed,Edit screens and sheets,keep,Reviewed at ee87648,not assessed this run
+Likes (locked and grid),None observed,LikesScreen,keep,Reviewed at ee87648,not assessed this run
+Person profile and photo viewer,Shares fx-discover content blocks,PersonProfile,follows fx-discover,Renders 02 04 06,partly covered
+Filters sheet,None observed,Filters,keep,Reviewed at ee87648,not assessed this run
+Match,None observed,MatchScreen,keep,Reviewed at ee87648,not assessed this run
+Premium overview and paywall,Feature comparison is a listed opportunity,Premium screens,backlog 4,Reviewed at ee87648,not assessed this run
+Store and purchase results,None observed,Store screens,keep,Reviewed at ee87648,not assessed this run
+Settings privacy and notifications,Settings groups are a listed opportunity,Settings screens,backlog 3,Reviewed at ee87648,not assessed this run
+Safety help and legal,None observed,Safety and help screens,keep,Reviewed at ee87648,not assessed this run
+Sheets and alerts,Header and action grouping are listed opportunities,Shared sheet and banner widgets,backlog 3,Reviewed at ee87648,not assessed this run
+Account states,None observed,Restricted / not found / session expired,keep,Reviewed at ee87648,not assessed this run
+Events and Health,Excluded,—,excluded by brief,—,excluded

@@ -1,5 +1,13 @@
 # Validation
 
+> **Fable design lab (`da197b7`):**
+> - **Analyzer:** one older deprecation info in a test file.
+> - **Tests:** `flutter test` 655 passed, 43 skipped (the earlier 42 plus the opt-in render harness), 0 failed. Nine new targeted tests in `fx_lab_test.dart`.
+> - **Renders:** 28 Flutter test renders at 393 × 852, all from `da197b7`; every option also at 1.5× text and at 360 wide with no overflow error.
+> - **Gallery:** checked over localhost: 28 of 28 image URLs returned 200, a selection and a note persisted across a reload, JSON and TXT export worked, an import with another review ID was refused, and its own export imported.
+> - **APK:** debug build with the Design Lab; installed with `-r`, launched, the Demo hub opened and the Visual Lab listed the `fx-` groups. Switching an option on the device was not exercised.
+> - **Not run:** text scale 2.0, screen reader, physical phone, iOS, performance, web checks. See [QA_HANDOFF.md](../design/fable-lab/QA_HANDOFF.md).
+
 > **Replacement V8 (`ee87648`):**
 > - **Analyzer:** `flutter analyze` reports one older deprecation info in a test file.
 > - **Tests:** `flutter test` 646 passed, 42 skipped (the same 42 as V7), 0 failed, with no skips added.

@@ -414,3 +414,13 @@ Newest first. One entry per session: date, who, what changed, commits, what was 
   - Two 200% text defects in shared widgets: `BalancedText` mid-word breaks and the `CountBadge` height.
 - Delivered the phone folder (206 PNGs), the offline gallery and the APK, all from `ee87648`.
 
+## 2026-11-13, Fable design lab (resumed)
+
+- Resumed at `ef4e0ee` (clean, matching the remote). The earlier session had implemented Discover and Profile A/B and a render harness, and stopped before the records.
+- Implemented Messages A/B, Received Compliment A/B, Credits A/B and Streak A/B. Reworked the Profile B feature card (larger art zone, labelled balances, one solid action) and added the purple C.
+- Removed registry entries that only showed the baseline; every listed option is now real.
+- Follow UI inventory: none in active screens.
+- Corrections after render review: unread count moved onto the thumbnail (Messages B); bucket tiles shortened (Credits B); headline shortened (Streak B); feature-card semantics.
+- Found that release-mode builds compile out demo sign-in, so test APKs must be debug builds. The replacement V8 release-mode APK from 12 November has the same limit.
+- Delivered the gallery, the flat render folder and a debug APK from `da197b7`.
+
