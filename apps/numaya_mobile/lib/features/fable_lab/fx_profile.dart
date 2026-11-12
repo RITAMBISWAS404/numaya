@@ -53,13 +53,16 @@ class FxIdentityRow extends StatelessWidget {
         Wrap(
           spacing: AppSpacing.s2,
           runSpacing: AppSpacing.s2,
+          // The verification pill sits in a 44pt tap target; centring keeps both pills on one line.
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             data.badge(context),
             if (completion != null)
               StatusBadge(
                 key: const ValueKey('profile-completion-pill'),
                 label: l10n.profileCompletionLabel(completion!),
-                icon: NumayaIcons.check,
+                // A tick only once the profile is complete, so it never reads as done early.
+                icon: completion == 100 ? NumayaIcons.check : null,
                 tone: completion == 100 ? BadgeTone.brand : BadgeTone.neutral,
               ),
           ],
