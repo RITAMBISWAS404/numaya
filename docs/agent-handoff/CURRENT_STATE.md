@@ -1,5 +1,7 @@
 # Current state
 
+> **Backend V1 (2026-11-12/13, separate worktree):** `C:\Users\biswa\Projects\Numaya-backend`, branch `experiment/numaya-backend-20261112-2255` from `c890d02`. Supabase schema/RLS/RPCs, Flutter live layer (off unless built with the dev-defines), local semantic checks 18/18; real-backend tests blocked on the owner's dev project credentials. Start at [docs/backend/START_HERE.md](../backend/START_HERE.md). The UI checkout stays on the V8 branch.
+
 > **2026-11-12, replacement V8 delivered (premium candidate). Read this first.**
 > - **Branch:** `experiment/numaya-v8-premium-rebuild-20261112-1945`, from the selected V7 `b5e5245` (all 36 owner selections kept). App source `ee87648`.
 > - **Brief:** `NUMAYA_V8_REPLACEMENT_PREMIUM.zip`. Records are in [docs/v8-replacement](../v8-replacement/DECISIONS.md).
