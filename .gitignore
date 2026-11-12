@@ -11,3 +11,11 @@ tests/e2e/artifacts
 /pics/
 apps/numaya_mobile/assets/demo/photos/*
 !apps/numaya_mobile/assets/demo/photos/README.md
+
+# Backend secrets and local artefacts (backend worktree)
+supabase/.env.local
+supabase/.env
+supabase/.temp/
+*.dump
+backups/
+tools/backend/.out/
