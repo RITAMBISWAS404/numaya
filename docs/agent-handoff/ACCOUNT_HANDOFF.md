@@ -1,32 +1,25 @@
 # Account handoff
 
-> **2026-11-12, return to V7. Read this first.**
-> - **V7 is the approved starting point.** Branch `v8-replacement-from-v7-20261112` starts at `b5e5245`, the selected V7 candidate. That is the V7 lab (`71564be`, handoff `2fb12f9`) with the owner's export `v7-71564be-2026-11-10` applied: all 36 decisions, with the 12 undecided groups still deferred.
-> - **The previous V8 and V9 implementations and their briefs are archived and superseded.** They are on `archive/superseded-v8-v9-20261112` (`eb38d9f`, which holds V8 and V9) and `archive/superseded-v8-20261112` (`47ba247`). `version-8` and `version-9` are left as they were. Do not use them, or `docs/design/v8` / `docs/v9` from them, as the direction.
-> - **The replacement V8 requirements have not arrived yet.**
-> - **Do not begin any redesign or new implementation until the owner provides them.**
+> **2026-11-12, replacement V8 delivered (premium candidate). Read this first.**
+> - **Branch:** `experiment/numaya-v8-premium-rebuild-20261112-1945`, from the selected V7 `b5e5245` (all 36 owner selections kept). App source `ee87648`.
+> - **Brief:** `NUMAYA_V8_REPLACEMENT_PREMIUM.zip`. Records are in [docs/v8-replacement](../v8-replacement/DECISIONS.md).
+> - **Superseded:** the earlier V8 and V9 are archived on `archive/superseded-v8-v9-20261112` and `archive/superseded-v8-20261112`; do not use them as the direction.
+> - **Next:** the owner reviews the gallery and the phone folder, then exports choices. The quirky direction is deferred to a later branch. No new work until the owner replies.
 
 Open this same folder on the next account, then read this file and START_HERE. A fresh clone is not needed.
 
-- **Branch:** `v8-replacement-from-v7-20261112`. Verify with `git status -sb` and `git ls-remote origin v8-replacement-from-v7-20261112`.
-- **Baseline:** `b5e5245`, the V7 selected candidate (tag `checkpoint/v7-selected-baseline-20261111`, also `experiment/numaya-v7-selected-20261110`). App source `014ac35`; later commits change only records.
-- **Archived, superseded:** `archive/superseded-v8-v9-20261112` (V8 and V9), `archive/superseded-v8-20261112` (V8). Local-only V9 outputs are in `C:\Users\biswa\OneDrive\Desktop\Numaya V8-V9 Superseded (local only)`.
-- **Next action:** wait for the owner's replacement V8 brief. No redesign or implementation before it arrives.
-
-V7 details (unchanged):
-
-- **Branch:** `experiment/numaya-v7-selected-20261110`. Verify with `git status -sb` and `git ls-remote origin experiment/numaya-v7-selected-20261110`.
-- **Checkpoint before selections:** tag `checkpoint/pre-v7-selection-20261110` (`2fb12f9`), the unselected V7 lab.
-- **App source:** `014ac35`. Later commits change only records. Not merged anywhere.
-- **Selections:** [SELECTIONS.md](../design/creative-lab-v7/SELECTIONS.md), export `v7-71564be-2026-11-10`. Each is the group's `proposed` value.
-- **Scope:** Events and Health deferred. Consent, safety, privacy, payment amounts, awards, eligibility and messaging permissions unchanged.
-- **Development controls:** off by default. Build with `--dart-define=NUMAYA_DEV_TOOLS=true` to get the Demo Hub, labs and alternatives back.
-- **Next action:** the owner tests on a phone. Remaining items: [REMAINING_WORK.md](REMAINING_WORK.md).
-- **Phone folder:** `C:\Users\biswa\OneDrive\Desktop\Numaya V7 Selected Screenshots\2026-11-10 014ac35` (204 PNGs).
-- **APK:** `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-MVP-V7-Selected-20261110-014ac35.apk` (debug, 0.1.0+1, SHA-256 `ced6dde61513d682c42fe94772258f4d7dc6db4d062011f352a1f840d319dde5`).
-- **Earlier gallery, kept for recovery:** `C:\Users\biswa\OneDrive\Desktop\Numaya MVP V7 Review\2026-11-10 1305\index.html`.
-- **Capture warning:** check for leftover capture jobs before using the emulator. Two runs force-stop each other with only "did not complete".
+- **Branch:** `experiment/numaya-v8-premium-rebuild-20261112-1945`. Verify with `git status -sb` and `git ls-remote origin experiment/numaya-v8-premium-rebuild-20261112-1945`.
+- **Baseline:** the selected V7 `b5e5245` (tag `checkpoint/v7-selected-baseline-20261111`). The export `v7-71564be-2026-11-10` decisions are all kept.
+- **App source:** `ee87648`. Later commits change only records.
+- **Archived, superseded:** `archive/superseded-v8-v9-20261112` (`eb38d9f`) and `archive/superseded-v8-20261112` (`47ba247`). Local-only V9 outputs are in `C:\Users\biswa\OneDrive\Desktop\Numaya V8-V9 Superseded (local only)`.
+- **Records:** [docs/v8-replacement](../v8-replacement/DECISIONS.md): DECISIONS, DESIGN_CONTRACT, REFERENCE_LOG, FONT_ASSET_INVENTORY, CONVERSATION_CONTRACT, SCREEN_LEDGER, REQUIREMENTS_REGISTER, IMPLEMENTATION_REPORT.
+- **APK:** `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-Replacement-V8-20261112-ee87648.apk` (release mode, debug-key signed, 0.1.0+1, SHA-256 `021c74a57402ed89109ab1ddaf49af4343f12c8d67c278aa30aee4c8599a8394`).
+- **Phone folder:** `C:\Users\biswa\OneDrive\Desktop\Numaya Replacement V8 Screenshots\2026-11-12 ee87648` (206 PNGs, SCREEN_LIST.txt, CAPTURE_MANIFEST.md, SCREEN_INDEX.md, COVERAGE.md).
+- **Gallery:** `C:\Users\biswa\OneDrive\Desktop\Numaya Replacement V8 Review\2026-11-12 ee87648\index.html`. Review ID `r8-ee87648-2026-11-12`. The `.claude/launch.json` entry `r8-gallery` serves it on port 8772 if a server is wanted.
+- **Development controls:** off by default. Build with `--dart-define=NUMAYA_DEV_TOOLS=true` to switch comparisons in the Design Lab. The editorial type needs `--dart-define=NUMAYA_EDITORIAL_TYPE=true`.
+- **Capture tooling:**
+  - Use one emulator job at a time. A stopped bash script can leave its `capture_visual_lab.sh` child running, so check `ps -ef` before starting another.
+  - The `cap` passes rebuild from the working tree, so do not edit `lib` while they run.
 - **Connectors:** Figma (claude.ai connector) and Mobbin need sign-in on a new account. The Figma plugin needs `/mcp`.
-- **Local only, not on GitHub:** `pics\`, `apps/numaya_mobile/assets/demo/photos/` (only its README is tracked), APKs, review folders, `.claude/launch.json`. They show private photos. **No private backup exists.**
-- **Known baseline failures:** web token and icon checks and one token test fail on CRLF only; browser e2e needs Playwright's browser.
+- **Local only, not on GitHub:** `pics/`, `apps/numaya_mobile/assets/demo/photos/` (only its README is tracked), APKs, screenshot and review folders, `.claude/launch.json`. They show private photos. **No private backup exists.**
 - **Do not touch:** `experiment/numaya-android12-compat`, `design/apple-impeccable-full-app`.

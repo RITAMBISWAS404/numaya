@@ -1,29 +1,31 @@
 # Remaining work
 
-> **2026-11-12:** the open item is the owner's replacement V8 brief. The V7 items below still apply to this baseline. The V8 and V9 lists are archived on `archive/superseded-v8-v9-20261112`.
-
-
-State on 10 November 2026. App source `014ac35`, selections applied. See [SELECTIONS.md](../design/creative-lab-v7/SELECTIONS.md).
+State on 12 November 2026. Branch `experiment/numaya-v8-premium-rebuild-20261112-1945`, app source `ee87648`.
 
 ## Waiting on the owner
 
-- Test the APK on an Android phone.
-- Events and Health: 12 gallery groups remain undecided and deferred.
+- Review the gallery `C:\Users\biswa\OneDrive\Desktop\Numaya Replacement V8 Review\2026-11-12 ee87648\index.html`. It uses relative image paths and is meant to open directly in Chrome or Edge, but that was not tested; it was tested over a localhost server (`.claude/launch.json` `r8-gallery`, port 8772). Choices are saved per browser and origin. Then export JSON or TXT. Seven decisions, none pre-selected:
+  - **Recommended:** adaptive scrim, near-full chat hairline, outlined secondary buttons, unified Compliments, V7 type.
+  - **Your V7 choices offered with a critique alternative:** credits card emphasis, Profile title bar.
+- Install `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-Replacement-V8-20261112-ee87648.apk` on a phone.
 
-## Known issues
+## Known limitations
 
 | Item | State |
 |---|---|
-| Compliment composer title at font 2.0 | "Compliment" breaks mid-word. Page still works. |
-| Pills at font 1.5 and 2.0 | The second or third pill runs off the edge and scrolls sideways. |
-| Unread count badge at font 2.0 | Digit looks cramped in Messages. |
+| Real integrations | OTP, persistence, delivery, push, billing, moderation and release signing are not present (on-device demo). Notification routing is in-app links only. |
+| Server guarantees | Atomic send plus debit, cross-device idempotency and server-enforced reciprocity must come from a backend (CONVERSATION_CONTRACT.md). |
+| Read and delivery ticks | Not shown, because no backend reports them. |
+| Old Compliments inbox and request page | Unreachable (routes redirect); code kept for the lab and recovery. |
+| Editorial fonts | Bundled for the comparison (about 5 MB). Unregister them if the comparison is rejected. |
+| Figma | Six nodes read; the desktop plugin was not used (needs `/mcp` sign-in). |
+| Art | V7 assets only; the old V8 "3D art" reference was never supplied. |
+| Quirky direction | Deferred to a later branch. |
 
 ## Not verified
 
-- Physical phone, iOS, screen reader.
-- Live Figma comparison for the selections. The owner chose from rendered app screens.
-- Web `npm run check` and e2e. No web change; CRLF failures and the missing Playwright browser predate V7.
+Physical phone, iOS, screen reader, hardware profiling, web checks (no web change).
 
-## Release blockers
+## Private photos
 
-Front-end test build only: no backend, real sign-in, real purchases, push notifications, file upload or production signing. Legal text is draft and safety contacts need checking. See `docs/product/mvp-focus-v5/LAUNCH_READINESS.md`.
+The demo photos (`pics/`, `apps/numaya_mobile/assets/demo/photos/`) are local and git-ignored. They appear in the screenshots, the gallery and the APK. **No private backup exists.**

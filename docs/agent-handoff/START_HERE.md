@@ -1,11 +1,10 @@
 # Start here: agent handoff
 
-> **2026-11-12, return to V7. Read this first.**
-> - **V7 is the approved starting point.** Branch `v8-replacement-from-v7-20261112` starts at `b5e5245`, the selected V7 candidate. That is the V7 lab (`71564be`, handoff `2fb12f9`) with the owner's export `v7-71564be-2026-11-10` applied: all 36 decisions, with the 12 undecided groups still deferred.
-> - **The previous V8 and V9 implementations and their briefs are archived and superseded.** They are on `archive/superseded-v8-v9-20261112` (`eb38d9f`, which holds V8 and V9) and `archive/superseded-v8-20261112` (`47ba247`). `version-8` and `version-9` are left as they were. Do not use them, or `docs/design/v8` / `docs/v9` from them, as the direction.
-> - **The replacement V8 requirements have not arrived yet.**
-> - **Do not begin any redesign or new implementation until the owner provides them.**
-
+> **2026-11-12, replacement V8 delivered (premium candidate). Read this first.**
+> - **Branch:** `experiment/numaya-v8-premium-rebuild-20261112-1945`, from the selected V7 `b5e5245` (all 36 owner selections kept). App source `ee87648`.
+> - **Brief:** `NUMAYA_V8_REPLACEMENT_PREMIUM.zip`. Records are in [docs/v8-replacement](../v8-replacement/DECISIONS.md).
+> - **Superseded:** the earlier V8 and V9 are archived on `archive/superseded-v8-v9-20261112` and `archive/superseded-v8-20261112`; do not use them as the direction.
+> - **Next:** the owner reviews the gallery and the phone folder, then exports choices. The quirky direction is deferred to a later branch. No new work until the owner replies.
 
 This folder carries Numaya work across Claude sessions and accounts. A new session reads it before
 doing anything else, and the session that stops updates it before it ends.

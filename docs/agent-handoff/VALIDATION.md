@@ -1,5 +1,18 @@
 # Validation
 
+> **Replacement V8 (`ee87648`):**
+> - **Analyzer:** `flutter analyze` reports one older deprecation info in a test file.
+> - **Tests:** `flutter test` 646 passed, 42 skipped (the same 42 as V7), 0 failed, with no skips added.
+>   - New: `conversation_contract_test` (5) and `large_text_regression_test` (2, failing before the fix).
+>   - Updated to the intended changes: the scrim widget, the outlined secondary button, the chevron and the registry prefix rule.
+> - **Emulator (Pixel 10 AVD), all at `ee87648`:**
+>   - Full harness: 210 captures, 0 skipped; 206 PNGs after the builder's de-duplication, each recorded in `CAPTURE_MANIFEST.md`.
+>   - 19 key screens each at font 1.5, font 2.0 and 360dp, 0 skipped.
+>   - 11 comparison renders, and 19 renders of the editorial-type build.
+> - **APK:** release mode, debug-key signed, installed with `-r` (data kept) and launched to Welcome with no crash in logcat.
+> - **Gallery:** served on localhost; 81 of 81 image URLs returned 200; a selection and a note persisted across a reload; JSON and TXT export produced files; an import with the V7 review ID was refused.
+> - **Not run:** web `npm run check` and e2e (no web change), physical phone, iOS, screen reader, hardware profiling.
+
 > **2026-11-12:** nothing new was built or run. `v8-replacement-from-v7-20261112` is the V7 selected candidate `b5e5245` unchanged, apart from these handoff records. The V7 validation below still describes the app.
 
 

@@ -400,3 +400,17 @@ Newest first. One entry per session: date, who, what changed, commits, what was 
 - Verified the selected V7: `b5e5245` has the V7 handoff `2fb12f9` as an ancestor. Only the selection pass (`3ca3b67`, `014ac35`, `b5e5245`) lies between them. All 36 export decisions match the `proposed` values in `lab_registry.dart`. The October `experiment/tiimo-inspired-v7` branch is already in V7's history, so it is not a candidate.
 - Created `v8-replacement-from-v7-20261112` from `b5e5245`, in this same folder. The demo photos are git-ignored and still present.
 
+## 2026-11-12, replacement V8 (premium candidate)
+
+- Brief `NUMAYA_V8_REPLACEMENT_PREMIUM.zip` (documents 01–07) read before any edit. Branch `experiment/numaya-v8-premium-rebuild-20261112-1945` created from the selected V7 (via `3941b88`, which changes records only).
+- Figma: six Ente nodes read live. Mobbin evidence reused from earlier in this session. Skills used: `design-review` (pilot critique 3/4) and `apple-design` (motion check).
+- Implemented:
+  - Unified Compliment conversations, with the behaviour ported from the archive and reviewed, a one-row-per-person guard, the owner's photo-led choice carried into the thread, and Dismiss wording.
+  - Outlined secondary buttons, the adaptive photo scrim, the Messages hairline, and the chevron with no disc.
+  - Seven gallery comparisons, including the build-flag editorial type.
+- Fixed during review:
+  - The menu wording.
+  - The hairline inset.
+  - Two 200% text defects in shared widgets: `BalancedText` mid-word breaks and the `CountBadge` height.
+- Delivered the phone folder (206 PNGs), the offline gallery and the APK, all from `ee87648`.
+
