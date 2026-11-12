@@ -69,5 +69,7 @@ final devToolsAvailableProvider = Provider<bool>(
 /// compile-time [ReleaseScope.chatAttachments]; tests of the dormant attachment code turn it on.
 final chatAttachmentsProvider = Provider<bool>(
   // Live builds: attachments have no server storage yet (docs/backend/PROVIDER_STATUS.md).
-  (ref) => ReleaseScope.chatAttachments && !LiveConfig.enabled,
+  (ref) =>
+      ReleaseScope.chatAttachments &&
+      (!LiveConfig.enabled || LiveConfig.attachmentsEnabled),
 );

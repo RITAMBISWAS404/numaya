@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -12,8 +14,10 @@ import '../../features/dating/application/dating_controller.dart';
 import '../../features/dating/data/media_picker.dart';
 import '../../features/dating/domain/live_directory.dart';
 import '../../features/dating/domain/sample_people.dart';
+import 'live_config.dart';
 import 'live_errors.dart';
 import 'live_people.dart';
+import 'live_profile_repository.dart' show sanitizePhoto;
 import 'live_providers.dart';
 
 /// Something the server decided that the UI should react to (pushed by an app-level listener so
@@ -181,20 +185,44 @@ class LiveDatingController extends DatingController {
       () => _db
           .from('messages')
           .select(
-            'seq, sender_id, client_message_id, kind, body, context, created_at',
+            'seq, sender_id, client_message_id, kind, body, context, created_at, '
+            'attachment:attachments(kind, processed_path, duration_ms)',
           )
           .eq('conversation_id', convId)
           .gt('seq', after)
           .order('seq')
           .limit(200),
     );
-    return [
-      for (final m in rows)
-        if (!_knownClientIds.contains(m['client_message_id'])) _toDemo(m),
-    ];
+    final out = <DemoMessage>[];
+    for (final m in rows) {
+      if (_knownClientIds.contains(m['client_message_id'])) continue;
+      out.add(_toDemo(m, attachment: await _attachmentOf(m)));
+    }
+    return out;
   }
 
-  DemoMessage _toDemo(Map<String, dynamic> m) {
+  Future<MessageAttachment?> _attachmentOf(Map<String, dynamic> m) async {
+    final a = m['attachment'] as Map<String, dynamic>?;
+    final path = a?['processed_path'] as String?;
+    if (a == null || path == null) return null;
+    try {
+      final url = await _db.storage
+          .from('chat-media')
+          .createSignedUrl(path, LiveConfig.signedUrlSeconds);
+      final ms = a['duration_ms'] as int?;
+      return MessageAttachment(
+        kind: a['kind'] == 'voice'
+            ? AttachmentKind.voice
+            : AttachmentKind.photo,
+        source: url,
+        duration: ms == null ? null : Duration(milliseconds: ms),
+      );
+    } on Object {
+      return null; // access revoked (block) or expired: shown as unavailable
+    }
+  }
+
+  DemoMessage _toDemo(Map<String, dynamic> m, {MessageAttachment? attachment}) {
     final ctx = m['context'] as Map<String, dynamic>?;
     return DemoMessage(
       id: m['seq'] as int,
@@ -202,6 +230,7 @@ class LiveDatingController extends DatingController {
       status: MessageStatus.onDevice,
       at: DateTime.parse(m['created_at'] as String).toLocal(),
       mine: m['sender_id'] == _me,
+      attachment: attachment,
       context: ctx == null
           ? null
           : ctx['kind'] == 'prompt'
@@ -238,6 +267,12 @@ class LiveDatingController extends DatingController {
     }
     if (_knownClientIds.contains(m['client_message_id'])) {
       return; // our own send, already shown
+    }
+    if (m['attachment_id'] != null) {
+      unawaited(
+        _syncConversations(),
+      ); // needs a signed URL: fetched with the history
+      return;
     }
     final seq = m['seq'] as int;
     if (seq <= (_lastSeq[convId] ?? 0)) return; // duplicate delivery
@@ -330,12 +365,12 @@ class LiveDatingController extends DatingController {
     final body = text.trim();
     final conv = _convByPerson[id];
     // Attachments are not on the server yet (PROVIDER_STATUS); the live build hides them.
-    if (body.isEmpty ||
-        attachment != null ||
+    if ((body.isEmpty && attachment == null) ||
         conv == null ||
         !state.isActive(id)) {
       return;
     }
+    if (attachment != null && !LiveConfig.attachmentsEnabled) return;
     if (!status(id).canSend || !canSendMore(id)) return;
     final localId = state.nextMessageId;
     final clientId = _uuid();
@@ -345,6 +380,7 @@ class LiveDatingController extends DatingController {
       id: localId,
       text: body,
       at: DateTime.now(),
+      attachment: attachment,
       status: ref.read(connectivityProvider)
           ? MessageStatus.sending
           : MessageStatus.waiting,
@@ -356,6 +392,9 @@ class LiveDatingController extends DatingController {
   }
 
   Future<void> _deliver(String id, String conv, DemoMessage message) async {
+    if (message.attachment != null) {
+      return _deliverAttachment(id, conv, message);
+    }
     try {
       final r = await guardLive(
         () => _db.rpc<dynamic>(
@@ -372,6 +411,95 @@ class LiveDatingController extends DatingController {
       _put(id, message.withStatus(MessageStatus.onDevice));
     } on LiveFailure catch (e) {
       _log.warning('Send failed: ${e.code}');
+      _put(
+        id,
+        message.withStatus(
+          e.offline ? MessageStatus.waiting : MessageStatus.failed,
+        ),
+      );
+    }
+  }
+
+  final Map<int, String> _attachmentByLocal = {};
+
+  /// Upload -> register -> wait for server processing (backoff, about a minute) -> send.
+  /// Every step is retry-safe: the attachment id is kept per local message and the send reuses
+  /// the same client message id.
+  Future<void> _deliverAttachment(
+    String id,
+    String conv,
+    DemoMessage message,
+  ) async {
+    final a = message.attachment!;
+    try {
+      var attId = _attachmentByLocal[message.id];
+      if (attId == null) {
+        if (a.kind == AttachmentKind.video || a.source == null) {
+          throw const LiveFailure('kind_not_supported');
+        }
+        final raw = await File(a.source!).readAsBytes();
+        final isVoice = a.kind == AttachmentKind.voice;
+        final bytes = isVoice ? raw : await compute(sanitizePhoto, raw);
+        if (bytes == null) throw const LiveFailure('type_not_allowed');
+        final ogg = a.source!.toLowerCase().endsWith('.ogg');
+        final ext = isVoice ? (ogg ? 'ogg' : 'm4a') : 'jpg';
+        final mime = isVoice ? (ogg ? 'audio/ogg' : 'audio/mp4') : 'image/jpeg';
+        final path = '$conv/$_me/${_uuid()}.$ext';
+        await guardLive(
+          () => _db.storage
+              .from('chat-media')
+              .uploadBinary(
+                path,
+                bytes,
+                fileOptions: FileOptions(contentType: mime),
+              ),
+        );
+        final r = await guardLive(
+          () => _db.rpc<dynamic>(
+            'register_attachment',
+            params: {
+              'p_conversation': conv,
+              'p_object_path': path,
+              'p_kind': isVoice ? 'voice' : 'image',
+              'p_duration_ms': a.duration?.inMilliseconds,
+            },
+          ),
+        ) as Map;
+        attId = r['attachment_id'] as String;
+        _attachmentByLocal[message.id] = attId;
+      }
+      for (var i = 0; ; i++) {
+        final st = await guardLive(
+          () => _db.rpc<dynamic>(
+            'attachment_status',
+            params: {'p_attachment': attId},
+          ),
+        ) as Map;
+        if (st['processing'] == 'ready') break;
+        if (st['processing'] == 'failed') {
+          throw LiveFailure('attachment_${st['failure_reason'] ?? 'failed'}');
+        }
+        if (i >= 20) throw const LiveFailure('offline'); // still processing
+        await Future<void>.delayed(
+          Duration(milliseconds: 500 * (i < 6 ? i + 1 : 6)),
+        );
+      }
+      final r = await guardLive(
+        () => _db.rpc<dynamic>(
+          'send_attachment',
+          params: {
+            'p_conversation': conv,
+            'p_client_message_id': _clientIdByLocal[message.id],
+            'p_attachment': attId,
+            'p_caption': message.text.isEmpty ? null : message.text,
+          },
+        ),
+      ) as Map;
+      final seq = r['seq'] as int;
+      if (seq > (_lastSeq[conv] ?? 0)) _lastSeq[conv] = seq;
+      _put(id, message.withStatus(MessageStatus.onDevice));
+    } on LiveFailure catch (e) {
+      _log.warning('Attachment send failed: ${e.code}');
       _put(
         id,
         message.withStatus(
@@ -433,6 +561,27 @@ class LiveDatingController extends DatingController {
       openedMatches: {...state.openedMatches, id},
       lastRead: {...state.lastRead, id: DateTime.now()},
     );
+  }
+
+  @override
+  ExtendResult extend(String id) {
+    final result = super.extend(id);
+    final conv = _convByPerson[id];
+    if (result == ExtendResult.extended && conv != null) {
+      // The server is authoritative; a refusal is corrected by the next sync (real deadline).
+      unawaited(
+        guardLive(
+          () => _db.rpc<dynamic>(
+            'extend_match',
+            params: {'p_conversation': conv},
+          ),
+        ).then((_) => _syncConversations()).catchError((Object e) {
+          _log.warning('Extension refused: $e');
+          return _syncConversations();
+        }),
+      );
+    }
+    return result;
   }
 
   // Safety (always free) -------------------------------------------------------------------

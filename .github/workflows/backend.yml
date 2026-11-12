@@ -1,0 +1,73 @@
+# Backend CI. Local checks always run (no secrets needed). Real-service tests and the scheduled
+# worker run only when the repository has the development-project secrets configured; otherwise
+# they report "skipped: not configured" instead of passing.
+name: backend
+on:
+  push:
+    branches: ['experiment/numaya-backend-*']
+    paths: ['supabase/**', 'tools/backend/**', 'apps/numaya_mobile/**', '.github/workflows/backend.yml']
+  pull_request:
+    paths: ['supabase/**', 'tools/backend/**']
+  schedule:
+    - cron: '*/15 * * * *'   # worker + monitor (only effective once secrets exist)
+  workflow_dispatch:
+
+jobs:
+  local-checks:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: tools/backend } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24', cache: npm, cache-dependency-path: tools/backend/package-lock.json }
+      - run: npm ci
+      - run: npm run check:local   # SQL lint, PGlite semantic checks, contract tests
+
+  flutter:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: apps/numaya_mobile } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { flutter-version: '3.47.8', channel: stable }
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+
+  real-service:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: development
+    defaults: { run: { working-directory: tools/backend } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - run: npm ci
+      - name: Write supabase/.env.local from secrets
+        env:
+          ENV_LOCAL: ${{ secrets.NUMAYA_DEV_ENV_LOCAL }}
+        run: |
+          if [ -z "$ENV_LOCAL" ]; then echo "skipped: NUMAYA_DEV_ENV_LOCAL not configured"; exit 0; fi
+          printf '%s\n' "$ENV_LOCAL" > ../../supabase/.env.local
+          npm test
+
+  worker:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    environment: development
+    defaults: { run: { working-directory: tools/backend } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - run: npm ci
+      - env:
+          ENV_LOCAL: ${{ secrets.NUMAYA_DEV_ENV_LOCAL }}
+        run: |
+          if [ -z "$ENV_LOCAL" ]; then echo "skipped: not configured"; exit 0; fi
+          printf '%s\n' "$ENV_LOCAL" > ../../supabase/.env.local
+          node worker/run.mjs --once
+          node scripts/monitor.mjs

@@ -122,6 +122,8 @@ returns boolean language sql stable security definer set search_path = '' as $$
     select 1 from public.photos where processed_path = object_name and status = 'pending' and processing = 'ready')
 $$;
 grant execute on function private.staff_can_read_object(text) to authenticated;
+create policy photos_staff_review on storage.objects for select to authenticated
+  using (bucket_id = 'photos' and private.staff_can_read_object(name));
 
 -- ---------------------------------------------------------------------------------------------
 -- Chat media: images and voice notes (video is not in the MVP and is refused).

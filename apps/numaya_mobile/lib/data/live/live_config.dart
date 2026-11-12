@@ -20,6 +20,12 @@ abstract final class LiveConfig {
 
   static bool get enabled => url.isNotEmpty && publishableKey.isNotEmpty;
 
+  /// Chat photos and voice notes on the server. Off until verified on the real project
+  /// (ACTIVATION_RUNBOOK); `--dart-define=NUMAYA_LIVE_ATTACHMENTS=true` turns them on.
+  static const bool attachmentsEnabled = bool.fromEnvironment(
+    'NUMAYA_LIVE_ATTACHMENTS',
+  );
+
   /// Release guard: a release build must never point at a development backend.
   static void assertSafeForThisBuild() {
     if (kReleaseMode && enabled && label == 'development') {
