@@ -105,12 +105,15 @@ class SummaryBar extends StatelessWidget {
     super.key,
     required this.parts,
     required this.onPurple,
-    required this.spoken,
+    this.spoken,
   });
 
   final List<(int, bool)> parts;
   final bool onPurple;
-  final String spoken;
+
+  /// What the bar adds for a screen reader. Null when a detail line already says it, so the
+  /// fact is not read twice.
+  final String? spoken;
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +122,7 @@ class SummaryBar extends StatelessWidget {
     final total = parts.fold<int>(0, (n, p) => n + p.$1);
     return Semantics(
       label: spoken,
+      excludeSemantics: true,
       child: ExcludeSemantics(
         child: SizedBox(
           height: 8,

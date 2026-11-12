@@ -271,7 +271,7 @@ class StreakScreen extends ConsumerWidget {
                     value: l10n.streakDays(run.length),
                     bar: (onPurple) => SummaryBar(
                       onPurple: onPurple,
-                      spoken: l10n.streakCycle(progress),
+                      // "Day n of 7" is the detail line just below.
                       parts: [
                         for (var i = 0; i < cycle; i++) (1, i < progress),
                       ],
