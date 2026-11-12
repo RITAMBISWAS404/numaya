@@ -12537,6 +12537,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You complimented their answer'**
   String get fxPhraseSentAnswer;
+
+  /// No description provided for @fxSpendOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly credits are spent first'**
+  String get fxSpendOrder;
+
+  /// No description provided for @fxNextCreditIn.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Your next credit arrives today} =1{1 more day to your next credit} other{{count} more days to your next credit}}'**
+  String fxNextCreditIn(int count);
+
+  /// No description provided for @fxDaysToGo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Today} =1{1 day} other{{count} days}}'**
+  String fxDaysToGo(int count);
+
+  /// No description provided for @fxNextCreditInLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Next credit in'**
+  String get fxNextCreditInLabel;
 }
 
 class _AppLocalizationsDelegate

@@ -127,4 +127,36 @@ void main() {
       }
     },
   );
+
+  for (final option in ['A', 'B']) {
+    testWidgets(
+      'fx-wallet $option: the balance is the ledger total and Get Compliments opens the pack',
+      (tester) async {
+        await usePhoneSize(tester);
+        final c = await quickStartApp(tester);
+        c.read(labChoicesProvider.notifier).choose('fx-wallet', option);
+        final total = c.read(creditBalanceProvider);
+        await goTo(c, tester, Routes.wallet);
+        await settle(tester);
+        // The real balance leads the screen.
+        expect(find.textContaining(RegExp('^$total( |\$)')), findsWidgets);
+        await tester.tap(find.bySemanticsLabel('Get Compliments').first);
+        await settle(tester);
+        expect(find.text('3 Compliments'), findsWidgets);
+        expect(c.read(creditBalanceProvider), total, reason: 'nothing bought');
+      },
+    );
+
+    testWidgets('fx-streak $option: shows the real run and today’s state', (
+      tester,
+    ) async {
+      await usePhoneSize(tester);
+      final c = await quickStartApp(tester);
+      c.read(labChoicesProvider.notifier).choose('fx-streak', option);
+      await goTo(c, tester, Routes.streak);
+      await settle(tester);
+      expect(find.textContaining('Today'), findsWidgets);
+      expect(find.text('A day counts when you'), findsOneWidget);
+    });
+  }
 }

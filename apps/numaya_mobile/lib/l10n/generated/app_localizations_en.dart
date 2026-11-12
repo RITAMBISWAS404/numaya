@@ -7444,4 +7444,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fxPhraseSentAnswer => 'You complimented their answer';
+
+  @override
+  String get fxSpendOrder => 'Weekly credits are spent first';
+
+  @override
+  String fxNextCreditIn(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more days to your next credit',
+      one: '1 more day to your next credit',
+      zero: 'Your next credit arrives today',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String fxDaysToGo(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '1 day',
+      zero: 'Today',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get fxNextCreditInLabel => 'Next credit in';
 }

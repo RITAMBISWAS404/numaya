@@ -3831,5 +3831,11 @@
   "fxPhrasePhoto": "Complimented your photo",
   "fxPhraseAnswer": "Complimented your answer",
   "fxPhraseSentPhoto": "You complimented their photo",
-  "fxPhraseSentAnswer": "You complimented their answer"
+  "fxPhraseSentAnswer": "You complimented their answer",
+  "fxSpendOrder": "Weekly credits are spent first",
+  "fxNextCreditIn": "{count, plural, =0{Your next credit arrives today} =1{1 more day to your next credit} other{{count} more days to your next credit}}",
+  "@fxNextCreditIn": {"placeholders": {"count": {"type": "int"}}},
+  "fxDaysToGo": "{count, plural, =0{Today} =1{1 day} other{{count} days}}",
+  "fxNextCreditInLabel": "Next credit in",
+  "@fxDaysToGo": {"placeholders": {"count": {"type": "int"}}}
 }

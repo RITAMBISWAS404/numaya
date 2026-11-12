@@ -322,25 +322,32 @@ class FxHeroCard extends StatelessWidget {
   /// The height the art zone keeps inside the card, beside the copy.
   static const double artZone = 84;
 
+  Widget _copy(Color muted) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.end,
+    children: [
+      Text(label, style: AppTypography.label.copyWith(color: muted)),
+      const SizedBox(height: AppSpacing.s1),
+      Text(
+        value,
+        style: AppTypography.hero.copyWith(color: AppColors.inkForeground),
+      ),
+      if (detail != null)
+        Text(detail!, style: AppTypography.body.copyWith(color: muted)),
+    ],
+  );
+
   @override
   Widget build(BuildContext context) {
     final large = MediaQuery.textScalerOf(context).scale(10) > 13;
     final brand = tone == FxHeroTone.brand;
     // On purple every line is full white (4.90:1); the dark card can afford a muted label.
     final muted = brand ? AppColors.accentForeground : AppColors.onHeroMuted;
-    final copy = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Text(label, style: AppTypography.label.copyWith(color: muted)),
-        const SizedBox(height: AppSpacing.s1),
-        Text(
-          value,
-          style: AppTypography.hero.copyWith(color: AppColors.inkForeground),
-        ),
-        if (detail != null)
-          Text(detail!, style: AppTypography.body.copyWith(color: muted)),
-      ],
+    final copy = Semantics(
+      container: true,
+      header: true,
+      label: spoken,
+      child: ExcludeSemantics(child: _copy(muted)),
     );
     final card = Container(
       width: double.infinity,
@@ -418,9 +425,9 @@ class FxHeroCard extends StatelessWidget {
       padding: const EdgeInsets.only(top: artRise),
       child: stack,
     );
-    if (onTap == null) {
-      return Semantics(container: true, label: spoken, child: padded);
-    }
+    // Without [onTap] the copy zone is one spoken summary and the body and action keep their
+    // own semantics (a real button stays a button).
+    if (onTap == null) return padded;
     return Pressable(
       onTap: onTap,
       semanticLabel: spoken,

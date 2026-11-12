@@ -1548,6 +1548,18 @@ const List<LabGroup> kLabGroups = [
         'baseline',
         'A solid purple card with the label then the total; three bucket rows below.',
       ),
+      LabVariant(
+        'A',
+        'Number-led card',
+        'quiet editorial',
+        'A white card: the number large with art beside it, the three buckets as labelled numbers, and Get Compliments inside the card.',
+      ),
+      LabVariant(
+        'B',
+        'Credit hero and tiles',
+        'expressive',
+        'The dark feature card with the action inside it; the buckets become three short tiles. Artwork-pending.',
+      ),
     ],
   ),
   LabGroup(
@@ -1564,6 +1576,18 @@ const List<LabGroup> kLabGroups = [
         'Streak card',
         'baseline',
         'Flame, the count, seven bars, two lines of status.',
+      ),
+      LabVariant(
+        'A',
+        'Week strip',
+        'quiet editorial',
+        'The count as the large number; seven numbered days with counted days checked, the next day ringed and the reward on day 7.',
+      ),
+      LabVariant(
+        'B',
+        'Next credit',
+        'expressive',
+        'A dark feature card that leads with how many days remain to the next credit. Artwork-pending.',
       ),
     ],
   ),

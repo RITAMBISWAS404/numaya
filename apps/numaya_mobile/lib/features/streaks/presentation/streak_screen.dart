@@ -11,6 +11,8 @@ import '../../commerce/application/economy_controller.dart';
 import '../../commerce/domain/catalog.dart';
 import '../../commerce/presentation/store_screens.dart';
 import '../../dating/application/dating_controller.dart';
+import '../../fable_lab/fx_profile.dart';
+import '../../fable_lab/fx_wallet_streak.dart';
 import '../../lab/lab_registry.dart';
 import '../../premium/application/premium_controller.dart';
 import '../domain/streak.dart';
@@ -49,6 +51,10 @@ class StreakScreen extends ConsumerWidget {
 
     final hero = ref.watch(labVariantProvider('v6-streak-hero')) == 'A';
     final v7 = ref.watch(labVariantProvider('v7-streak'));
+    // Fable lab `fx-streak`: A the week as seven numbered days; B the next credit as a feature card.
+    final fx = ref.watch(labVariantProvider('fx-streak'));
+    final todayLine = todayCounts ? l10n.streakToday : l10n.streakTodayOpen;
+    final toGo = cycle - progress;
     final fg = hero ? AppColors.accentForeground : AppColors.ink;
     final head = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +107,70 @@ class StreakScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
-          if (v7 == 'A')
+          if (fx == 'A')
+            WhiteCard(
+              padding: const EdgeInsets.all(AppLayout.heroPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Semantics(
+                    header: true,
+                    label: l10n.streakDays(run.length),
+                    child: ExcludeSemantics(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Text('${run.length}', style: AppTypography.metric),
+                          const SizedBox(width: AppSpacing.s2),
+                          Expanded(
+                            child: Text(
+                              l10n.fxStreakUnit(run.length),
+                              style: AppTypography.card,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.s4),
+                  FxWeekStrip(
+                    done: progress,
+                    total: cycle,
+                    spoken: '${l10n.streakCycle(progress)}. $todayLine',
+                  ),
+                  const SizedBox(height: AppSpacing.s4),
+                  Text(todayLine, style: AppTypography.bodySm),
+                  Text(l10n.fxNextCreditIn(toGo), style: AppTypography.helper),
+                ],
+              ),
+            )
+          else if (fx == 'B')
+            FxHeroCard(
+              label: toGo == 0 ? l10n.fxNextCredit : l10n.fxNextCreditInLabel,
+              value: l10n.fxDaysToGo(toGo),
+              detail: l10n.streakDays(run.length),
+              art: NumayaIllustration.mascotCheer,
+              spoken: [
+                l10n.streakDays(run.length),
+                l10n.fxNextCreditIn(toGo),
+                todayLine,
+              ].join('. '),
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _CycleDots(done: progress, total: cycle, onAccent: true),
+                  const SizedBox(height: AppSpacing.s3),
+                  Text(
+                    '${l10n.streakCycle(progress)} · $todayLine',
+                    style: AppTypography.bodySm.copyWith(
+                      color: AppColors.inkForeground,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else if (v7 == 'A')
             Column(
               children: [
                 Text(
