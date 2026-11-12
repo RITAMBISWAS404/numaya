@@ -55,7 +55,8 @@ function adapt(sql) {
     .replace(/select cron\.schedule\([^;]*;/g, '-- cron.schedule: hosted only');
 }
 
-export async function runLocalSemanticCheck({ log = console.log } = {}) {
+/** A fresh PGlite database with the stand-in and every migration applied (LOCAL ONLY). */
+export async function buildLocalDb({ log = () => {} } = {}) {
   const db = new PGlite();
   await db.exec(SHIM);
   const dir = resolve(repoRoot, 'supabase', 'migrations');
@@ -67,6 +68,11 @@ export async function runLocalSemanticCheck({ log = console.log } = {}) {
       throw new Error(`${f}: ${e.message}`);
     }
   }
+  return db;
+}
+
+export async function runLocalSemanticCheck({ log = console.log } = {}) {
+  const db = await buildLocalDb({ log });
 
   const users = {};
   let staleAs = '';
