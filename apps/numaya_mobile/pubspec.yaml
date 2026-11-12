@@ -56,6 +56,15 @@ flutter:
   # github.com/google/fonts (ofl/figtree). Licence: assets/fonts/OFL-Figtree.txt (SIL OFL 1.1).
   # The baseline's Hanken Grotesk file stays in assets/fonts/ (unregistered) for comparison.
   fonts:
+    # Editorial type comparison only (NUMAYA_EDITORIAL_TYPE; docs/v8-replacement/FONT_ASSET_INVENTORY.md).
+    # google/fonts ofl/googlesans and ofl/breeserif, SIL OFL 1.1 (assets/fonts/OFL-GoogleSans.txt,
+    # OFL-BreeSerif.txt). "Google Sans" is a Google trademark; the unmodified file keeps its name.
+    - family: Google Sans
+      fonts:
+        - asset: assets/fonts/GoogleSans-Variable.ttf
+    - family: Bree Serif
+      fonts:
+        - asset: assets/fonts/BreeSerif-Regular.ttf
     - family: Figtree
       fonts:
         - asset: assets/fonts/Figtree-Variable.ttf

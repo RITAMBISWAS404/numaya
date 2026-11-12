@@ -42,7 +42,9 @@ void main() {
         if (g.kind == LabKind.screen &&
             !g.id.startsWith('v4-') &&
             !g.id.startsWith('v6-') &&
-            !g.id.startsWith('v7-')) {
+            !g.id.startsWith('v7-') &&
+            // Replacement V8 comparisons: the V7 choice plus one or two real options, no padding.
+            !g.id.startsWith('r8-')) {
           expect(g.ids, ['O', 'A', 'B', 'C'], reason: g.id);
         }
         // Dependencies name real groups and variants.
@@ -204,53 +206,42 @@ void main() {
     });
   });
 
-  group('R03 Heart tab', () {
-    testWidgets('two parts; Compliments are free to read and reply', (
-      tester,
-    ) async {
-      await usePhoneSize(tester);
-      final c = await quickStartApp(tester);
-      await openTab(tester, 'Likes');
-      expect(find.byKey(const ValueKey('heart-tab-likes')), findsOneWidget);
-      expect(
-        find.byKey(const ValueKey('heart-tab-compliments')),
-        findsOneWidget,
-      );
-      expect(find.text('Matches'), findsNothing);
-      // Free: the Likes part is the locked count.
-      expect(find.byKey(const ValueKey('likes-locked')), findsOneWidget);
-      await tapOn(tester, find.byKey(const ValueKey('heart-tab-compliments')));
-      await tester.pump(const Duration(milliseconds: 400));
-      expect(find.byKey(const ValueKey('compliment-seed-sam')), findsOneWidget);
-      // Selected card B: Reply opens the request page, whose reply makes exactly one
-      // conversation.
-      await tapOn(
-        tester,
-        find.byKey(const ValueKey('compliment-reply-seed-sam')),
-      );
-      await tester.pump(const Duration(milliseconds: 600));
-      await tester.enterText(find.byType(TextField), 'Thank you!');
-      await tester.pump();
-      await tapOn(tester, find.bySemanticsLabel('Send'));
-      await tester.pump(const Duration(milliseconds: 600));
-      final dating = c.read(datingProvider.notifier);
-      expect(dating.conversations().where((p) => p.id == 'sam').length, 1);
-      expect(c.read(complimentsProvider.notifier).requests().length, 1);
-      await settle(tester);
-    });
+  group('V8 Heart tab and Compliment conversations', () {
+    testWidgets(
+      'Likes only; a Compliment opens from Messages and replies once',
+      (tester) async {
+        await usePhoneSize(tester);
+        final c = await quickStartApp(tester);
+        await openTab(tester, 'Likes');
+        expect(
+          find.byKey(const ValueKey('heart-tab-compliments')),
+          findsNothing,
+        );
+        expect(find.byKey(const ValueKey('likes-locked')), findsOneWidget);
+        await goTo(c, tester, '${Routes.likes}?tab=compliments');
+        // The old Compliments link lands on Messages.
+        expect(find.byKey(const ValueKey('conversation-sam')), findsOneWidget);
+        await tapOn(tester, find.byKey(const ValueKey('conversation-sam')));
+        await tester.pump(const Duration(milliseconds: 600));
+        await tester.enterText(find.byType(TextField), 'Thank you!');
+        await tester.pump();
+        await tapOn(tester, find.bySemanticsLabel('Send'));
+        await tester.pump(const Duration(milliseconds: 600));
+        final dating = c.read(datingProvider.notifier);
+        expect(dating.conversations().where((p) => p.id == 'sam').length, 1);
+        expect(c.read(complimentsProvider.notifier).requests().length, 1);
+        await settle(tester);
+      },
+    );
 
-    testWidgets('dismissing asks first and leaves no duplicate', (
-      tester,
-    ) async {
+    testWidgets('Not now asks first and leaves no duplicate', (tester) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
-      await goTo(c, tester, '${Routes.likes}?tab=compliments');
+      await goTo(c, tester, '${Routes.request}/seed-chloe');
       await tester.pump(const Duration(milliseconds: 400));
-      // Selected card B: Not now is on the card and asks first.
-      await tapOn(
-        tester,
-        find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
-      );
+      await tapOn(tester, find.bySemanticsLabel('Conversation options'));
+      await tester.pump(const Duration(milliseconds: 400));
+      await tapOn(tester, find.text('Not now'));
       await tester.pump(const Duration(milliseconds: 600));
       await tapOn(tester, find.byKey(const ValueKey('dismiss-confirm')));
       await tester.pump(const Duration(milliseconds: 600));
@@ -323,13 +314,11 @@ void main() {
     ) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
-      await goTo(c, tester, '${Routes.likes}?tab=compliments');
+      await goTo(c, tester, '${Routes.chat}/chloe');
       await tester.pump(const Duration(milliseconds: 400));
-      // Selected card B: Not now is on the card and asks first.
-      await tapOn(
-        tester,
-        find.byKey(const ValueKey('compliment-dismiss-seed-chloe')),
-      );
+      await tapOn(tester, find.bySemanticsLabel('Conversation options'));
+      await tester.pump(const Duration(milliseconds: 400));
+      await tapOn(tester, find.text('Not now'));
       await tester.pump(const Duration(milliseconds: 600));
       final close = find.byKey(const ValueKey('sheet-close'));
       expect(close, findsOneWidget);

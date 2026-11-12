@@ -184,6 +184,10 @@ void main() {
         ('wallet', Routes.wallet),
         ('streak', Routes.streak),
         ('likes', Routes.likes),
+        ('thread-received', '${Routes.chat}/sam'),
+        ('thread-sent', '${Routes.chat}/finn'),
+        ('premium', Routes.premium),
+        ('help', Routes.help),
       ];
       for (final (slug, path) in key) {
         await step('key $slug', () async {

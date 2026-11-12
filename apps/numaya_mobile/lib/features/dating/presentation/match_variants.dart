@@ -289,6 +289,7 @@ class MatchIdentityHero extends StatelessWidget {
                     bottom: 0,
                     child: PhotoScrim(
                       fade: 120,
+                      sample: personTileImage(person),
                       padding: const EdgeInsets.fromLTRB(
                         AppSpacing.s5,
                         0,

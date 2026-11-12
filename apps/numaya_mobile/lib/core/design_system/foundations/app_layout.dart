@@ -153,6 +153,9 @@ abstract final class AppRadii {
 /// Stroke widths.
 abstract final class AppBorders {
   static const double hairline = NumayaSizeTokens.borderHairline;
+
+  /// Outlined buttons: 1pt.
+  static const double control = 1;
   static const double selected = NumayaSizeTokens.borderSelected;
   static const double focus = NumayaSizeTokens.borderFocus;
 }

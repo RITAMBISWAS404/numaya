@@ -296,3 +296,14 @@ abstract final class MonoShadows {
     BoxShadow(color: Color(0x2918181B), blurRadius: 4, offset: Offset(0, 1)),
   ];
 }
+
+/// Replacement V8 outlined controls (docs/v8-replacement/DESIGN_CONTRACT.md, C-03). The label
+/// carries the contrast (ink 16.8:1, brand 4.90:1 on white); the 1pt edge only shapes the target,
+/// so it stays quiet. Used for secondary, quiet and brand buttons.
+abstract final class MonoButtons {
+  /// Ink at 20%: the secondary button edge on white or the page grey.
+  static const Color outline = Color(0x33111111);
+
+  /// Brand purple at 45%: the brand button edge.
+  static const Color accentOutline = Color(0x737262C7);
+}

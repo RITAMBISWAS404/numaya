@@ -235,20 +235,12 @@ class InfoCard extends StatelessWidget {
           ),
           if (trailingArrow) ...[
             const SizedBox(width: AppSpacing.s3),
-            ExcludeSemantics(
-              child: Container(
-                width: AppSizes.iconButton,
-                height: AppSizes.iconButton,
-                decoration: const BoxDecoration(
-                  color: AppColors.fill,
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: const NumayaIcon(
-                  NumayaIcons.arrowRight,
-                  size: AppSizes.iconSm,
-                  color: AppColors.ink,
-                ),
+            // Replacement V8 (C-05): the chevron sits on the card, with no grey disc behind it.
+            const ExcludeSemantics(
+              child: NumayaIcon(
+                NumayaIcons.chevronRight,
+                size: AppSizes.iconMd,
+                color: AppColors.textMuted,
               ),
             ),
           ],

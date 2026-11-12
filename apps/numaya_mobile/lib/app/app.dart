@@ -43,6 +43,11 @@ class NumayaApp extends ConsumerWidget {
       'M2' => MotionPreset.m2,
       _ => MotionPreset.m1,
     };
+    // Replacement V8 app-wide comparisons: the proposed values everywhere but the Design Lab.
+    NumayaButton.outlinedSecondary =
+        ref.watch(labVariantProvider('r8-secondary-button')) == 'A';
+    PhotoScrim.adaptive =
+        ref.watch(labVariantProvider('r8-photo-scrim')) == 'A';
     return MaterialApp.router(
       onGenerateTitle: (context) => context.l10n.appName,
       debugShowCheckedModeBanner: false,

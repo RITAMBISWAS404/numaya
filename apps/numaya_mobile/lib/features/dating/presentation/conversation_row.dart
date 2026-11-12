@@ -23,7 +23,14 @@ class ConversationRow extends ConsumerWidget {
     required this.now,
     required this.onTap,
     this.variant,
+    this.compliment = false,
   });
+
+  /// Where the text starts (avatar 56 + gap 16): the inset of the hairline between rows.
+  static const double textInset = 72;
+
+  /// The conversation is a Compliment nobody has answered yet.
+  final bool compliment;
 
   final SamplePerson person;
   final DemoMessage last;
@@ -47,11 +54,13 @@ class ConversationRow extends ConsumerWidget {
             if (last.text.isNotEmpty) last.text,
           ].join(': ');
     final preview = last.mine ? l10n.youPrefix(text) : text;
+    final kind = compliment ? l10n.v8ComplimentTag : null;
     final time = shortTime(l10n, last.at, now);
     final semantics = [
       person.verified
           ? '${person.name}, ${l10n.photoVerifiedLabel}'
           : person.name,
+      ?kind,
       preview,
       time,
       if (unread > 0) l10n.unreadCount(unread),
@@ -236,11 +245,13 @@ class ConversationRow extends ConsumerWidget {
           ),
         );
       default:
+        // V8 (WhatsApp's list rhythm): 56 avatar, name and time on one line, the preview under
+        // it; the time turns purple while something is unread.
         content = Padding(
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.s3),
           child: Row(
             children: [
-              avatar(64),
+              avatar(56),
               const SizedBox(width: AppSpacing.s4),
               Expanded(
                 child: Column(
@@ -250,12 +261,27 @@ class ConversationRow extends ConsumerWidget {
                       children: [
                         Expanded(child: name()),
                         const SizedBox(width: AppSpacing.s2),
-                        Text(time, style: AppTypography.micro),
+                        Text(
+                          time,
+                          style: AppTypography.micro.copyWith(
+                            color: unread > 0
+                                ? AppColors.accentOnTint
+                                : AppColors.textMuted,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 2),
                     Row(
                       children: [
+                        if (compliment) ...[
+                          const MobileIcon(
+                            NumayaMobileIcons.compliment,
+                            size: 16,
+                            color: AppColors.accentOnTint,
+                          ),
+                          const SizedBox(width: AppSpacing.s1),
+                        ],
                         Expanded(
                           child: Text(
                             preview,

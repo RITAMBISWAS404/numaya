@@ -24,7 +24,7 @@ clear_anr() {
   fi
 }
 ack() { "$ADB" -s "$DEVICE" shell run-as "$APP" touch cache/ui_review_ack; }
-flutter test "${TEST:-integration_test/visual_lab_gallery_test.dart}" -d "$DEVICE" ${ONLY:+--dart-define=ONLY=$ONLY} 2>&1 | tee "${RAW:-/dev/null}" | while IFS= read -r line; do
+flutter test "${TEST:-integration_test/visual_lab_gallery_test.dart}" -d "$DEVICE" ${ONLY:+--dart-define=ONLY=$ONLY} ${DEFINES:-} 2>&1 | tee "${RAW:-/dev/null}" | while IFS= read -r line; do
   case "$line" in
     *@@CAP@@*)
       rest="${line#*@@CAP@@|}"

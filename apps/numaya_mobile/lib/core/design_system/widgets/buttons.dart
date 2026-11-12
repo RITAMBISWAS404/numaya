@@ -58,6 +58,10 @@ class NumayaButton extends StatelessWidget {
   final bool? expand;
   bool get _fills => expand ?? !small;
 
+  /// Secondary, quiet and brand buttons are outlined (replacement V8 default). Set once from the
+  /// app root; false is the V7 filled comparison.
+  static bool outlinedSecondary = true;
+
   @override
   Widget build(BuildContext context) {
     final disabled = onPressed == null && !loading;
@@ -91,10 +95,20 @@ class NumayaButton extends StatelessWidget {
         AppColors.accentForeground,
         null,
       ),
-      // Filled neutral: surface contrast, not a stroke, says "less important".
+      // Replacement V8 (C-03): secondary actions are a quiet 1pt outline with no fill, so only
+      // the primary action is solid. [outlinedSecondary] false restores V7's filled neutral for
+      // comparison (lab group r8-secondary-button).
+      NumayaButtonVariant.secondary || NumayaButtonVariant.quiet
+          when outlinedSecondary =>
+        (Colors.transparent, AppColors.ink, AppColors.buttonOutline),
       NumayaButtonVariant.secondary => (AppColors.field, AppColors.ink, null),
       NumayaButtonVariant.quiet => (AppColors.field, AppColors.ink, null),
-      // V4: no lavender fill; a neutral button whose purple label marks the brand action.
+      // The brand action: a purple label, outlined in faint purple (V7: on the neutral fill).
+      NumayaButtonVariant.brand when outlinedSecondary => (
+        Colors.transparent,
+        AppColors.accentOnTint,
+        AppColors.accentOutline,
+      ),
       NumayaButtonVariant.brand => (
         AppColors.field,
         AppColors.accentOnTint,
@@ -157,7 +171,7 @@ class NumayaButton extends StatelessWidget {
               ? null
               : Border.all(
                   color: ring,
-                  width: AppBorders.hairline,
+                  width: AppBorders.control,
                   strokeAlign: BorderSide.strokeAlignInside,
                 ),
         ),

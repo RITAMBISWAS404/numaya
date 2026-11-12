@@ -160,6 +160,9 @@ class ProfileHeaderCover extends StatelessWidget {
                   // name that wraps at large text never reaches the faint top of the fade.
                   PhotoScrim(
                     fade: _fade,
+                    sample: data.photo == null
+                        ? null
+                        : localImage(data.photo!, width: 720),
                     padding: const EdgeInsets.fromLTRB(
                       AppSpacing.s5,
                       0,

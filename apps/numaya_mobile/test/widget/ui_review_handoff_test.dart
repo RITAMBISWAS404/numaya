@@ -254,7 +254,7 @@ void main() {
   });
 
   group('UI-002/UI-007/UI-009/UI-010: shared components', () {
-    testWidgets('a standalone secondary action is a filled button', (
+    testWidgets('a standalone secondary action is a quiet outlined button', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -276,7 +276,11 @@ void main() {
           matching: find.byType(AnimatedContainer),
         ),
       );
-      expect((box.decoration! as BoxDecoration).color, AppColors.field);
+      // Replacement V8 (C-03): no fill, a 1pt quiet edge; only the primary action is solid.
+      final deco = box.decoration! as BoxDecoration;
+      expect(deco.color, const Color(0x00000000));
+      expect((deco.border! as Border).top.color, AppColors.buttonOutline);
+      expect((deco.border! as Border).top.width, AppBorders.control);
       expect(
         tester.getSize(find.byType(NumayaButton)).height,
         AppSizes.buttonHeight,

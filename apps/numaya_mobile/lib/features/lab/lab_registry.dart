@@ -1292,6 +1292,81 @@ const List<LabGroup> kLabGroups = [
       'C': ['discover-photo:C', 'prompt-card:B'],
     },
   ),
+  // Replacement V8 comparisons (docs/v8-replacement/DECISIONS.md). Each `proposed` is the
+  // recommended candidate; `O` is the selected V7 treatment, kept for the owner's choice.
+  LabGroup(
+    id: 'r8-secondary-button',
+    title: 'Secondary buttons',
+    kind: LabKind.screen,
+    question: 'Should secondary actions be outlined, so only the primary action is solid?',
+    usages: ['Every secondary, quiet and brand button'],
+    proposed: 'A',
+    variants: [
+      LabVariant(
+        _o,
+        'Filled neutral',
+        'V7 selected',
+        'A light grey fill says less important; a page can show several grey blocks.',
+      ),
+      LabVariant(
+        'A',
+        'Quiet outline',
+        'recommended',
+        'No fill and a 1pt edge; the one solid button on a page is the main action.',
+      ),
+    ],
+  ),
+  LabGroup(
+    id: 'r8-photo-scrim',
+    title: 'Text over photos',
+    kind: LabKind.screen,
+    question:
+        'Should the gradient behind a name follow how bright the photo is?',
+    usages: ['Discover, profile, match, likes grid, own profile cover'],
+    proposed: 'A',
+    variants: [
+      LabVariant(
+        _o,
+        'Fixed 24%',
+        'V7 selected',
+        'The same light gradient on every photo; faint on bright photos.',
+      ),
+      LabVariant(
+        'A',
+        'Adaptive',
+        'recommended',
+        'Measures the lower photo once: 24% on dark photos up to 52% on white ones, only under the name.',
+      ),
+    ],
+  ),
+  LabGroup(
+    id: 'r8-chat-dividers',
+    title: 'Chat list separators',
+    kind: LabKind.screen,
+    question: 'How should conversations in Messages be separated?',
+    usages: ['Messages list, archive'],
+    proposed: 'A',
+    variants: [
+      LabVariant(
+        _o,
+        'Spacing only',
+        'V7 selected',
+        'Rows separated by space alone.',
+      ),
+      LabVariant(
+        'A',
+        'Near-full hairline',
+        'recommended',
+        'A quiet line across the content width, the same margin at both ends.',
+      ),
+      LabVariant(
+        'B',
+        'Inset to the text',
+        'alternative',
+        'The line starts under the name, as messaging apps often do.',
+      ),
+    ],
+  ),
   LabGroup(
     id: 'motion',
     title: 'Motion preset',

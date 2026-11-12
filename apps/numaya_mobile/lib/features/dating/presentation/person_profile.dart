@@ -156,12 +156,14 @@ class PersonHeroCard extends StatelessWidget {
                           'P' => PhotoScrim(
                             fade: 48,
                             padding: inset,
+                            sample: personTileImage(person),
                             child: _overlayIdentity(context, l10n),
                           ),
                           // G (default): a smooth gradient behind the name, no backing.
                           _ => PhotoScrim(
                             fade: 96,
                             padding: inset,
+                            sample: personTileImage(person),
                             child: _overlayIdentity(
                               context,
                               l10n,

@@ -8662,6 +8662,84 @@ abstract class AppLocalizations {
   /// **'Compliment {name}'**
   String complimentTitle(Object name);
 
+  /// No description provided for @v8ComplimentTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment'**
+  String get v8ComplimentTag;
+
+  /// No description provided for @v8ComplimentFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} sent you a Compliment'**
+  String v8ComplimentFrom(String name);
+
+  /// No description provided for @v8ComplimentYouSent.
+  ///
+  /// In en, this message translates to:
+  /// **'You sent {name} a Compliment'**
+  String v8ComplimentYouSent(String name);
+
+  /// No description provided for @v8ComplimentWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {name}'**
+  String v8ComplimentWaiting(String name);
+
+  /// No description provided for @v8ComplimentOnYourPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment on your photo'**
+  String get v8ComplimentOnYourPhoto;
+
+  /// No description provided for @v8ComplimentOnYourPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment on your prompt'**
+  String get v8ComplimentOnYourPrompt;
+
+  /// No description provided for @v8ComplimentOnTheirPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Compliment on their photo'**
+  String get v8ComplimentOnTheirPhoto;
+
+  /// No description provided for @v8ComplimentOnTheirPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Compliment on their prompt'**
+  String get v8ComplimentOnTheirPrompt;
+
+  /// No description provided for @v8ComplimentOnAPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'On a photo'**
+  String get v8ComplimentOnAPhoto;
+
+  /// No description provided for @v8ComplimentPhotoNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {n}'**
+  String v8ComplimentPhotoNumber(int n);
+
+  /// No description provided for @v8ComplimentYours.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Compliment'**
+  String get v8ComplimentYours;
+
+  /// No description provided for @v8ComplimentTheirs.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}’s Compliment'**
+  String v8ComplimentTheirs(String name);
+
+  /// No description provided for @v8ReplyPrivately.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply privately'**
+  String get v8ReplyPrivately;
+
   /// No description provided for @v7CommonGround.
   ///
   /// In en, this message translates to:

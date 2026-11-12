@@ -42,10 +42,11 @@ class HomeShell extends ConsumerWidget {
     final dating = ref.read(datingProvider.notifier);
     // R03: the Heart tab counts unanswered likes and pending Compliments together.
     ref.watch(complimentsProvider);
-    final newLikes =
-        dating.unansweredLikes() +
+    // V8: pending Compliments are conversations, so they count on Messages, not Likes.
+    final newLikes = dating.unansweredLikes();
+    final newMatches =
+        dating.unopenedMatches() +
         ref.read(complimentsProvider.notifier).requests().length;
-    final newMatches = dating.unopenedMatches();
     final tabs = AppTab.active(events: ref.watch(eventsAvailableProvider));
     final home = tabs.indexOf(AppTab.discover);
     // Android back on another tab's root returns to Home first; back on Home leaves the app.

@@ -123,21 +123,16 @@ void main() {
   });
 
   testWidgets(
-    'R03: replying to a Compliment from the Heart tab opens one chat',
+    'V8: a Compliment is a conversation in Messages; replying opens it in place',
     (tester) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
-      // Requests are no longer in Chats.
       await openTab(tester, 'Messages');
       expect(find.byKey(const ValueKey('chats-requests')), findsNothing);
-      await goTo(c, tester, '${Routes.likes}?tab=compliments');
+      await tapOn(tester, find.byKey(const ValueKey('conversation-sam')));
       await tester.pump(const Duration(milliseconds: 600));
-      // Selected card B: Reply opens the request page.
-      await tapOn(
-        tester,
-        find.byKey(const ValueKey('compliment-reply-seed-sam')),
-      );
-      await tester.pump(const Duration(milliseconds: 600));
+      // The Compliment is the first message, quoting the photo it was about.
+      expect(find.byKey(const ValueKey('compliment-bubble')), findsOneWidget);
       await tester.enterText(
         find.byType(TextField),
         'Thank you! Goa, last March.',
@@ -147,6 +142,10 @@ void main() {
       await tester.pump(const Duration(milliseconds: 600));
       expect(c.read(datingProvider).threads['sam'], hasLength(2));
       expect(find.byKey(const ValueKey('chat-composer-bar')), findsOneWidget);
+      // Still one row for Sam, now a chat.
+      await tapOn(tester, find.bySemanticsLabel('Back to messages'));
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(find.byKey(const ValueKey('conversation-sam')), findsOneWidget);
       await settle(tester);
     },
   );

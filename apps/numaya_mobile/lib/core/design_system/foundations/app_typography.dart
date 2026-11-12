@@ -25,10 +25,18 @@ import 'app_colors.dart';
 /// through the `wght` axis as well as [FontWeight]; restyle a role's weight with [weight], never
 /// `copyWith(fontWeight:)` alone (that keeps the old axis value; test/typography guards it).
 abstract final class AppTypography {
-  static const String family = 'Figtree';
+  /// The optional editorial comparison (replacement V8, DECISIONS T-02): Bree Serif for page-level
+  /// titles and Google Sans for every functional role. Off in the recommended build; only a build
+  /// with `--dart-define=NUMAYA_EDITORIAL_TYPE=true` (the gallery comparison) turns it on.
+  static const bool editorial = bool.fromEnvironment('NUMAYA_EDITORIAL_TYPE');
+
+  static const String family = editorial ? 'Google Sans' : 'Figtree';
 
   /// Headings, names and metrics.
-  static const String display = 'Plus Jakarta Sans';
+  static const String display = editorial ? 'Google Sans' : 'Plus Jakarta Sans';
+
+  /// The editorial comparison's title face (one real weight, 400).
+  static const String serif = 'Bree Serif';
 
   static const double regular = 400;
   static const double medium = 500;
@@ -46,10 +54,14 @@ abstract final class AppTypography {
 
   /// R12 (Visual Lab V2): the expanded large title of Ente Header v2, under the leading control,
   /// collapsing into [appBarTitle]. Plus Jakarta Sans 30/36 bold.
-  static final TextStyle largeTitle = _style(display, 30, 36, bold, 0);
+  static final TextStyle largeTitle = editorial
+      ? _style(serif, 32, 38, regular, 0)
+      : _style(display, 30, 36, bold, 0);
 
   /// Ente Display-2. Onboarding and editorial page headings: 24/32 semibold.
-  static final TextStyle flowTitle = _style(display, 24, 32, bold, 0);
+  static final TextStyle flowTitle = editorial
+      ? _style(serif, 28, 34, regular, 0)
+      : _style(display, 24, 32, bold, 0);
 
   /// Ente Display-2. Result titles and the Profile name: 24/32 semibold.
   static final TextStyle headline = _style(display, 24, 32, bold, 0);
@@ -60,7 +72,9 @@ abstract final class AppTypography {
   static final TextStyle section = _style(display, 18, 24, semibold, 0);
 
   /// Ente Display-3. Empty-state titles: 20/28 semibold.
-  static final TextStyle emptyTitle = _style(display, 20, 28, semibold, 0);
+  static final TextStyle emptyTitle = editorial
+      ? _style(serif, 22, 28, regular, 0)
+      : _style(display, 20, 28, semibold, 0);
 
   // Headings: Figtree -------------------------------------------------------------------------
 
@@ -96,7 +110,8 @@ abstract final class AppTypography {
   /// and 21).
   static TextStyle wordmark({bool small = false}) {
     final size = small ? 22.0 : 28.0;
-    return _style(family, size, size, bold, -0.03);
+    // The logotype keeps its own face in every type direction.
+    return _style('Figtree', size, size, bold, -0.03);
   }
 
   // Text: Figtree -----------------------------------------------------------------------------
@@ -226,10 +241,14 @@ abstract final class AppTypography {
   static double even(double size) => (size / 2).roundToDouble() * 2;
 
   /// Returns [style] at a different variable-font weight.
-  static TextStyle weight(TextStyle style, double weight) => style.copyWith(
-    fontWeight: _nearest(weight),
-    fontVariations: [FontVariation('wght', weight)],
-  );
+  static TextStyle weight(TextStyle style, double weight) =>
+      style.fontFamily == serif
+      // Bree Serif has one weight; it is never synthetically emboldened.
+      ? style
+      : style.copyWith(
+          fontWeight: _nearest(weight),
+          fontVariations: [FontVariation('wght', weight)],
+        );
 
   static TextStyle _style(
     String face,
@@ -243,8 +262,8 @@ abstract final class AppTypography {
       fontSize: size,
       height: line / size,
       letterSpacing: em * size,
-      fontWeight: _nearest(w),
-      fontVariations: [FontVariation('wght', w)],
+      fontWeight: face == serif ? FontWeight.w400 : _nearest(w),
+      fontVariations: face == serif ? null : [FontVariation('wght', w)],
       color: AppColors.textPrimary,
       leadingDistribution: TextLeadingDistribution.even,
     );

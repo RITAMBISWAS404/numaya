@@ -5,10 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
-import '../../compliments/application/compliments_controller.dart';
 import '../../compliments/domain/compliment.dart';
 import '../../compliments/presentation/compliment_screens.dart';
-import '../../compliments/presentation/compliments_inbox.dart';
 import '../../home/presentation/large_title_page.dart';
 import '../../lab/lab_registry.dart';
 import '../../lab/likes_grid.dart';
@@ -67,17 +65,10 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    ref.watch(complimentsProvider);
-    final requests = ref.read(complimentsProvider.notifier).requests();
     ref.watch(datingProvider);
-    final likeCount = ref
-        .read(datingProvider.notifier)
-        .likes()
-        .where((l) => !l.matched)
-        .length;
     // Screen group `screen-heart`: directions fix the card variants inside this screen.
     final direction = ref.watch(labVariantProvider('screen-heart'));
-    final (String? likeV, String? complimentV) = switch (direction) {
+    final (String? likeV, String? _) = switch (direction) {
       'A' => ('B', 'C'),
       'B' => (null, 'B'),
       'C' => ('A', 'D'),
@@ -87,19 +78,8 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
     return LargeTitlePage(
       title: l10n.heartTitle,
       scrollController: _scroll,
-      // Owner selection: two pills, the same pill pattern as Chats' filters (no tab switcher).
-      pinned: HeartPills(
-        selected: _tab,
-        likes: likeCount,
-        compliments: requests.length,
-        onSelect: _switch,
-      ),
-      child: KeyedSubtree(
-        key: ValueKey('heart-${_tab.name}'),
-        child: _tab == HeartTab.likes
-            ? _likesBody(context)
-            : ComplimentsInbox(requests: requests, cardVariant: complimentV),
-      ),
+      // V8: Compliments are conversations now (Messages); this tab is likes only.
+      child: _likesBody(context),
     );
   }
 
