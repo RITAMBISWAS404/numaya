@@ -7,6 +7,9 @@ import 'package:numaya_mobile/features/auth/application/session_controller.dart'
 import 'package:numaya_mobile/features/compliments/application/compliments_controller.dart';
 import 'package:numaya_mobile/features/compliments/domain/compliment.dart';
 import 'package:numaya_mobile/features/lab/lab_registry.dart';
+import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
+import 'package:numaya_mobile/features/profile/application/profile_details_controller.dart';
+import 'package:numaya_mobile/features/profile/domain/profile_details.dart';
 
 import '../helpers/journeys.dart';
 import '../helpers/test_app.dart';
@@ -43,6 +46,17 @@ void main() {
         find.byKey(const ValueKey('profile-completion-pill')),
         findsOneWidget,
       );
+      // The pill states the same percentage as Complete your profile.
+      final percent = ProfileCompletion.of(
+        c.read(onboardingProvider).draft,
+        c.read(profileDetailsProvider),
+      ).percent;
+      expect(find.text('Profile $percent% complete'), findsOneWidget);
+      await goTo(c, tester, Routes.completion);
+      await settle(tester);
+      expect(find.bySemanticsLabel('$percent% complete'), findsWidgets);
+      await goTo(c, tester, Routes.profile);
+      await settle(tester);
       expect(find.byKey(const ValueKey('hub-wallet')), findsOneWidget);
       expect(find.byKey(const ValueKey('hub-streak')), findsOneWidget);
 
