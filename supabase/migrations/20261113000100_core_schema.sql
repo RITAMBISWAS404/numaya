@@ -38,6 +38,7 @@ create table private.accounts (
   created_at timestamptz not null default now(),
   onboarded_at timestamptz,
   deleted_at timestamptz,
+  review_hold boolean not null default false, -- abuse control: out of discovery pending staff review
   constraint birth_date_sane check (birth_date is null or birth_date > date '1900-01-01')
 );
 
@@ -176,6 +177,14 @@ create table public.photos (
   status public.photo_status not null default 'pending',
   reject_reason text,
   bytes integer check (bytes is null or bytes between 1 and 10485760),
+  -- Server-side pipeline: uploaded (quarantine) -> processing -> ready (re-encoded, no metadata)
+  processing text not null default 'uploaded' check (processing in ('uploaded', 'processing', 'ready', 'failed')),
+  processed_path text unique,
+  width integer,
+  height integer,
+  attempts integer not null default 0,
+  processing_started_at timestamptz,
+  failure_reason text,
   created_at timestamptz not null default now(),
   decided_at timestamptz
 );

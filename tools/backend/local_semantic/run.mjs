@@ -50,7 +50,9 @@ function adapt(sql) {
   return sql
     .replace(/create extension if not exists postgis with schema extensions;/g, '-- postgis: stand-in')
     .replace(/extensions\.geography\(point, 4326\)/g, 'extensions.geography')
-    .replace(/create index locations_point_idx[^;]*;/g, '-- gist index: n/a in stand-in');
+    .replace(/create index locations_point_idx[^;]*;/g, '-- gist index: n/a in stand-in')
+    .replace(/create extension if not exists pg_cron;/g, '-- pg_cron: hosted only')
+    .replace(/select cron\.schedule\([^;]*;/g, '-- cron.schedule: hosted only');
 }
 
 export async function runLocalSemanticCheck({ log = console.log } = {}) {
@@ -67,13 +69,17 @@ export async function runLocalSemanticCheck({ log = console.log } = {}) {
   }
 
   const users = {};
+  let staleAs = '';
   for (const n of ['A', 'B', 'C', 'S', 'K']) {
     users[n] = (await db.query(`insert into auth.users (email) values ($1) returning id`, [`${n}@example.invalid`])).rows[0].id;
   }
   await db.query(`insert into private.staff_members (user_id, role, granted_by) values ($1, 'moderator', 'local')`, [users.S]);
 
   const as = async (who, sql, params = []) => {
-    await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${users[who] ?? ''}', false); set role authenticated;`);
+    const amr = JSON.stringify({ amr: [{ method: 'otp', timestamp: Math.floor(Date.now() / 1000) - (who === 'STALE' ? 3600 : 0) }] });
+    const sub = who === 'STALE' ? staleAs : (users[who] ?? '');
+    await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${sub}', false);
+      select set_config('request.jwt.claims', '${amr}', false); set role authenticated;`);
     try {
       return (await db.query(sql, params)).rows;
     } finally {
@@ -93,6 +99,17 @@ export async function runLocalSemanticCheck({ log = console.log } = {}) {
     try { await body(); results.push(['ok', name]); } catch (e) { results.push(['FAIL', `${name}: ${e.message}`]); }
   };
 
+  // Stand-in for the media worker: claim, "process" (a new object under processed/), complete.
+  async function processPhotos() {
+    const jobs = (await db.query(`select * from private.claim_photo_jobs(50)`)).rows;
+    for (const j of jobs) {
+      const out = `${j.user_id}/processed/${j.id}.jpg`;
+      await db.query(`insert into storage.objects (bucket_id, name, owner, metadata) values ('photos', $1, $2, '{"mimetype":"image/jpeg","size":100}')`, [out, j.user_id]);
+      await db.query(`select private.complete_photo_job($1, $2, 100, 100)`, [j.id, out]);
+    }
+    return jobs.length;
+  }
+
   async function onboard(who, gender, openTo, birth = '1995-06-15', lat = 19.07) {
     const id = users[who];
     await as(who, `update public.profiles set first_name = $2, gender = $3, open_to = $4::public.gender[], bio = 'bio',
@@ -108,6 +125,7 @@ export async function runLocalSemanticCheck({ log = console.log } = {}) {
     const res = await rpc(who, 'complete_onboarding', { p_birth_date: birth, p_terms_version: 'v',
       p_privacy_version: 'v', p_community_version: 'v' });
     await rpc(who, 'set_location', { p_lat: lat, p_lng: 72.88, p_city: 'Mumbai' });
+    await processPhotos();
     for (const p of photos) await rpc('S', 'staff_decide_photo', { p_photo: p, p_approve: true });
     return { res, photos };
   }
@@ -139,7 +157,9 @@ export async function runLocalSemanticCheck({ log = console.log } = {}) {
     await as('B', `insert into storage.objects (bucket_id, name, owner, metadata) values ('photos', $1, $2, '{"mimetype":"image/jpeg","size":10}')`, [path, users.B]);
     await rpc('B', 'register_photo', { p_object_path: path, p_position: 3 });
     assert.equal((await as('C', `select name from storage.objects where name = $1`, [path])).length, 0);
-    assert.equal((await as('C', `select name from storage.objects where name = $1`, [`${users.B}/1.jpg`])).length, 1);
+    assert.equal((await as('C', `select name from storage.objects where name = $1`, [`${users.B}/1.jpg`])).length, 0, 'originals stay private');
+    const processed = (await db.query(`select processed_path from public.photos where user_id = $1 and position = 1`, [users.B])).rows[0].processed_path;
+    assert.equal((await as('C', `select name from storage.objects where name = $1`, [processed])).length, 1, 'processed approved photo readable');
   });
   await check('six-photo limit and type checks', async () => {
     for (const pos of [4, 5, 6]) {
@@ -267,7 +287,11 @@ export async function runLocalSemanticCheck({ log = console.log } = {}) {
     assert.ok(Array.isArray((await rpc('C', 'likes_summary')).people));
   });
   await check('export: own data only; deletion hides, restore within window, purge scheduling', async () => {
-    const ex = await rpc('C', 'request_export');
+    const req = await rpc('C', 'request_export');
+    assert.equal(req.result, 'export_scheduled');
+    staleAs = users.C;
+    assert.equal(await err('STALE', 'request_export'), 'reauth_required', 'an old sign-in must re-verify first');
+    const ex = (await db.query(`select private.build_export($1) as e`, [users.C])).rows[0].e;
     assert.ok(ex.profile && Array.isArray(ex.messages_sent));
     assert.ok(!JSON.stringify(ex.messages_sent).includes('Coffee?'), 'another member\'s words are not exported');
     await rpc('C', 'request_account_deletion');
@@ -286,6 +310,138 @@ export async function runLocalSemanticCheck({ log = console.log } = {}) {
     const rpcDenied = await db.query(`select public.discovery_feed(5)`).then(() => false, () => true);
     await db.exec('reset role;');
     assert.ok(denied && rpcDenied);
+  });
+
+  // ----- Continuation: pipelines, chat media, outbox, push, abuse, store, ops ------------------
+  const newMember = async (label, gender, openTo) => {
+    users[label] = (await db.query(`insert into auth.users (email) values ($1) returning id`, [`${label}@example.invalid`])).rows[0].id;
+    return onboard(label, gender, openTo);
+  };
+  await check('photo pipeline: approval needs processing; failures retry then reject', async () => {
+    const u = (await db.query(`insert into auth.users (email) values ('P1@example.invalid') returning id`)).rows[0].id;
+    users.P1 = u;
+    const path = `${u}/9.jpg`;
+    await as('P1', `insert into storage.objects (bucket_id, name, owner, metadata) values ('photos', $1, $2, '{"mimetype":"image/jpeg","size":10}')`, [path, u]);
+    const id = (await rpc('P1', 'register_photo', { p_object_path: path, p_position: 1 })).photo_id;
+    assert.equal(await err('S', 'staff_decide_photo', { p_photo: id, p_approve: true }), 'not_found', 'cannot approve unprocessed');
+    const queue = await rpc('S', 'staff_photo_queue');
+    assert.ok(!queue.some((x) => x.photo_id === id), 'unprocessed photos are not in the review queue');
+    for (let i = 0; i < 5; i++) {
+      const claimed = (await db.query(`select id from private.claim_photo_jobs(50)`)).rows.map((r) => r.id);
+      assert.ok(claimed.includes(id));
+      await db.query(`select private.fail_photo_job($1, 'timeout', true)`, [id]);
+    }
+    const ph = (await db.query(`select processing, status from public.photos where id = $1`, [id])).rows[0];
+    assert.equal(ph.processing, 'failed');
+    assert.equal(ph.status, 'rejected', 'after five retryable failures the photo is rejected, never approved');
+  });
+
+  let mediaConv;
+  await check('chat media: upload only into your open conversation; ready before send; members only', async () => {
+    await newMember('M1', 'woman', ['man']);
+    await newMember('M2', 'man', ['woman']);
+    await rpc('M1', 'decide', { p_target: users.M2, p_kind: 'like', p_key: 'media-like-0001' });
+    mediaConv = (await rpc('M2', 'decide', { p_target: users.M1, p_kind: 'like', p_key: 'media-like-0002' })).conversation_id;
+    const own = `${mediaConv}/${users.M1}/a.jpg`;
+    assert.ok(await as('C', `insert into storage.objects (bucket_id, name, metadata) values ('chat-media', $1, '{}')`,
+      [`${mediaConv}/${users.C}/x.jpg`]).then(() => false, () => true), 'outsider cannot upload into the conversation');
+    await as('M1', `insert into storage.objects (bucket_id, name, owner, metadata) values ('chat-media', $1, $2, '{"mimetype":"image/jpeg","size":2000}')`, [own, users.M1]);
+    const att = (await rpc('M1', 'register_attachment', { p_conversation: mediaConv, p_object_path: own, p_kind: 'image' })).attachment_id;
+    assert.equal(await err('M1', 'send_attachment', { p_conversation: mediaConv, p_client_message_id: '00000000-0000-4000-8000-0000000000a1', p_attachment: att }), 'attachment_not_ready');
+    assert.equal(await err('M1', 'register_attachment', { p_conversation: mediaConv, p_object_path: own, p_kind: 'video' }), 'kind_not_supported');
+    const jobs = (await db.query(`select * from private.claim_attachment_jobs(10)`)).rows;
+    const out = `${mediaConv}/${users.M1}/processed-${att}.jpg`;
+    await db.query(`insert into storage.objects (bucket_id, name, owner, metadata) values ('chat-media', $1, $2, '{"mimetype":"image/jpeg","size":900}')`, [out, users.M1]);
+    await db.query(`select private.complete_attachment_job($1, $2)`, [jobs[0].id, out]);
+    const sent = await rpc('M1', 'send_attachment', { p_conversation: mediaConv, p_client_message_id: '00000000-0000-4000-8000-0000000000a2', p_attachment: att, p_caption: 'look' });
+    assert.equal(sent.seq, 1);
+    assert.equal(await err('M1', 'send_attachment', { p_conversation: mediaConv, p_client_message_id: '00000000-0000-4000-8000-0000000000a3', p_attachment: att }), 'already_used');
+    assert.equal((await as('M2', `select name from storage.objects where name = $1`, [out])).length, 1, 'the other member reads the processed file');
+    assert.equal((await as('M2', `select name from storage.objects where name = $1`, [own])).length, 0, 'never the original');
+    assert.equal((await as('C', `select name from storage.objects where name = $1`, [out])).length, 0, 'outsiders read nothing');
+    await rpc('M2', 'block_member', { p_other: users.M1 });
+    assert.equal((await as('M2', `select name from storage.objects where name = $1`, [out])).length, 0, 'a block revokes media access');
+  });
+
+  await check('outbox: claim once, retry with backoff, dead after 8 attempts', async () => {
+    const id = (await db.query(`insert into private.outbox (kind, recipient, payload, dedupe_key) values ('match', $1, '{}', 'test-dead-1') returning id`, [users.A])).rows[0].id;
+    for (let i = 0; i < 8; i++) {
+      await db.query(`update private.outbox set available_at = now() - interval '1 second' where id = $1`, [id]);
+      const claimed = (await db.query(`select id from private.claim_outbox(array['match'], 100)`)).rows.map((r) => Number(r.id));
+      assert.ok(claimed.includes(Number(id)), `attempt ${i + 1} claimed`);
+      const again = (await db.query(`select id from private.claim_outbox(array['match'], 100)`)).rows.map((r) => Number(r.id));
+      assert.ok(!again.includes(Number(id)), 'not claimed twice while processing');
+      await db.query(`select private.finish_outbox($1, 'retry', 'provider 503')`, [id]);
+    }
+    assert.equal((await db.query(`select status from private.outbox where id = $1`, [id])).rows[0].status, 'dead');
+  });
+
+  await check('push targets: active devices, preferences honoured, revoked excluded', async () => {
+    await rpc('A', 'register_device', { p_platform: 'android', p_token: 'token-A-1' });
+    await rpc('A', 'register_device', { p_platform: 'android', p_token: 'token-A-2' });
+    await rpc('A', 'unregister_device', { p_token: 'token-A-2' });
+    const ob = (await db.query(`insert into private.outbox (kind, recipient, payload, dedupe_key) values ('message', $1, '{}', 'push-t-1') returning id`, [users.A])).rows[0].id;
+    let t = (await db.query(`select * from private.push_targets($1)`, [ob])).rows;
+    assert.deepEqual(t.map((x) => x.push_token), ['token-A-1']);
+    await rpc('A', 'set_notification_prefs', { p_matches: true, p_messages: false, p_compliments: true });
+    t = (await db.query(`select * from private.push_targets($1)`, [ob])).rows;
+    assert.equal(t.length, 0, 'message pushes off');
+    assert.ok(await as('B', `select public.register_device('android', 'token-A-1')`).then(() => true), 'token moves to the new owner');
+    assert.equal((await db.query(`select user_id from public.devices where push_token = 'token-A-1'`)).rows[0].user_id, users.B);
+  });
+
+  await check('abuse: three distinct reporters put a member on review hold; staff clears it', async () => {
+    await newMember('H1', 'man', ['woman']);
+    const r1 = await newMember('R1', 'woman', ['man']); const r2 = await newMember('R2', 'woman', ['man']); const r3 = await newMember('R3', 'woman', ['man']);
+    assert.ok(r1 && r2 && r3);
+    assert.ok((await rpc('R1', 'discovery_feed', { p_limit: 20 })).some((x) => x.user_id === users.H1));
+    for (const r of ['R1', 'R2', 'R3']) await rpc(r, 'report_member', { p_subject: users.H1, p_category: 'scam', p_note: 'x' });
+    assert.ok(!(await rpc('R1', 'discovery_feed', { p_limit: 20 })).some((x) => x.user_id === users.H1), 'held member leaves discovery');
+    await rpc('S', 'staff_clear_hold', { p_user: users.H1, p_note: 'reviewed' });
+    assert.ok((await rpc('R1', 'discovery_feed', { p_limit: 20 })).some((x) => x.user_id === users.H1));
+  });
+
+  await check('abuse: ten unanswered messages in a row, then too_many_unanswered', async () => {
+    await newMember('U1', 'woman', ['man']); await newMember('U2', 'man', ['woman']);
+    await rpc('U1', 'decide', { p_target: users.U2, p_kind: 'like', p_key: 'unans-like-0001' });
+    const c = (await rpc('U2', 'decide', { p_target: users.U1, p_kind: 'like', p_key: 'unans-like-0002' })).conversation_id;
+    for (let i = 0; i < 10; i++) {
+      await rpc('U1', 'send_message', { p_conversation: c, p_client_message_id: `00000000-0000-4000-8000-0000000001${String(i).padStart(2, '0')}`, p_body: `m${i}` });
+    }
+    assert.equal(await err('U1', 'send_message', { p_conversation: c, p_client_message_id: '00000000-0000-4000-8000-000000000199', p_body: 'x' }), 'too_many_unanswered');
+    await rpc('U2', 'send_message', { p_conversation: c, p_client_message_id: '00000000-0000-4000-8000-000000000200', p_body: 'hi back' });
+    assert.ok((await rpc('U1', 'send_message', { p_conversation: c, p_client_message_id: '00000000-0000-4000-8000-000000000201', p_body: 'yay' })).seq);
+  });
+
+  await check('store: verified state grants Premium; stale events ignored; sandbox never grants; refunds reverse', async () => {
+    const u = users.D;
+    const apply = async (key, product, env, state, expiresHrs, eventMinutesAgo) => (await db.query(
+      `select private.apply_purchase_state($1, 'google_play', $2, $3, $4, $5, now() + make_interval(hours => $6), now() - make_interval(mins => $7)) as r`,
+      [u, key, product, env, state, expiresHrs, eventMinutesAgo])).rows[0].r;
+    assert.equal(await apply('sub-1', 'numaya_premium_monthly', 'production', 'active', 720, 10), 'applied');
+    assert.equal((await rpc('D', 'my_wallet')).premium, true);
+    assert.equal(await apply('sub-1', 'numaya_premium_monthly', 'production', 'revoked', 720, 30), 'stale_event', 'older event ignored');
+    assert.equal((await rpc('D', 'my_wallet')).premium, true);
+    assert.equal(await apply('sub-1', 'numaya_premium_monthly', 'production', 'revoked', 720, 1), 'applied');
+    assert.equal((await rpc('D', 'my_wallet')).premium, false, 'revocation removes Premium');
+    assert.equal(await apply('sub-sb', 'numaya_premium_weekly', 'sandbox', 'active', 24, 1), 'environment_not_granting');
+    assert.equal((await rpc('D', 'my_wallet')).premium, false, 'sandbox purchases never grant production benefits');
+    const before = (await rpc('D', 'my_wallet')).purchased;
+    await apply('pack-1', 'numaya_compliments_3', 'production', 'active', 0, 5);
+    await apply('pack-1', 'numaya_compliments_3', 'production', 'active', 0, 4);
+    assert.equal((await rpc('D', 'my_wallet')).purchased, before + 3, 'granted once');
+    await apply('pack-1', 'numaya_compliments_3', 'production', 'refunded', 0, 1);
+    assert.equal((await rpc('D', 'my_wallet')).purchased, before, 'refund reverses');
+    const other = (await db.query(`select private.apply_purchase_state($1, 'google_play', 'pack-1', 'numaya_compliments_3', 'production', 'active', now(), now()) as r`, [users.A])).rows[0].r;
+    assert.equal(other, 'account_mismatch', 'a purchase stays bound to its account');
+  });
+
+  await check('ops: staff health snapshot and housekeeping run; members refused', async () => {
+    assert.equal(await err('A', 'staff_ops_health'), 'forbidden');
+    const h = await rpc('S', 'staff_ops_health');
+    assert.ok('outbox_dead' in h && 'photos_waiting_review' in h);
+    const hk = (await db.query(`select private.housekeeping() as h`)).rows[0].h;
+    assert.ok('rate_events_deleted' in hk);
   });
 
   await db.close();

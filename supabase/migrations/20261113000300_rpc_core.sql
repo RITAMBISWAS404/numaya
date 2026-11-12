@@ -188,9 +188,10 @@ returns jsonb language sql stable security definer set search_path = '' as $$
             where l1.user_id = viewer and l2.user_id = uid) x),
     'prompts', coalesce((select jsonb_agg(jsonb_build_object('id', pr.id, 'question', pr.question,
         'answer', pr.answer) order by pr.position) from public.prompts pr where pr.user_id = uid), '[]'),
-    'photos', coalesce((select jsonb_agg(jsonb_build_object('id', ph.id, 'path', ph.object_path,
+    -- Only the processed object (metadata stripped) of an approved photo is ever shared.
+    'photos', coalesce((select jsonb_agg(jsonb_build_object('id', ph.id, 'path', ph.processed_path,
         'position', ph.position) order by ph.position)
-        from public.photos ph where ph.user_id = uid and ph.status = 'approved'), '[]')
+        from public.photos ph where ph.user_id = uid and ph.status = 'approved' and ph.processing = 'ready'), '[]')
   )
   from public.profiles p join private.accounts a on a.user_id = p.user_id
   where p.user_id = uid
@@ -538,6 +539,9 @@ begin
   if conv.status = 'compliment_pending' then perform private.fail('awaiting_reply'); end if;
   if conv.status <> 'open' or private.is_blocked(uid, other) then perform private.fail('unavailable'); end if;
   if conv.first_message_at is null and conv.match_deadline < now() then perform private.fail('match_expired'); end if;
+  if private.unanswered_run(conv.id, uid) >= private.setting('max_unanswered_messages')::int then
+    perform private.fail('too_many_unanswered');
+  end if;
   perform private.rate_check(uid, 'message', 30, interval '1 minute'); -- FIXTURE
   s := conv.next_seq;
   insert into public.messages (conversation_id, seq, sender_id, client_message_id, kind, body)
@@ -599,8 +603,8 @@ begin
         o.user_id as other_id,
         o.first_name as other_name,
         o.verified as other_verified,
-        (select ph.object_path from public.photos ph where ph.user_id = o.user_id and ph.status = 'approved'
-          order by ph.position limit 1) as other_photo_path,
+        (select ph.processed_path from public.photos ph where ph.user_id = o.user_id and ph.status = 'approved'
+          and ph.processing = 'ready' order by ph.position limit 1) as other_photo_path,
         case
           when c.status = 'compliment_pending' and cm.recipient_id = uid then 'pending_incoming'
           when c.status in ('compliment_pending', 'dismissed') then 'pending_outgoing'
