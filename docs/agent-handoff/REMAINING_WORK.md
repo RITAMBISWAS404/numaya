@@ -1,5 +1,8 @@
 # Remaining work
 
+> **2026-11-12:** the open item is the owner's replacement V8 brief. The V7 items below still apply to this baseline. The V8 and V9 lists are archived on `archive/superseded-v8-v9-20261112`.
+
+
 State on 10 November 2026. App source `014ac35`, selections applied. See [SELECTIONS.md](../design/creative-lab-v7/SELECTIONS.md).
 
 ## Waiting on the owner

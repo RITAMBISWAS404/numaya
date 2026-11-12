@@ -392,3 +392,11 @@ Newest first. One entry per session: date, who, what changed, commits, what was 
 - Status banner C went into the shared `StatusBanner`. Wallet A and streak O had no slot in the selected Profile, so they now fill Your activity.
 - Added `ReleaseScope.devTools`, default off.
 
+## 2026-11-12, return to V7
+
+- The owner changed direction: V7 is the baseline, and the V8 and V9 work and briefs are superseded.
+- Archived V8 and V9 on `archive/superseded-v8-v9-20261112` (`eb38d9f`) and `archive/superseded-v8-20261112` (`47ba247`), and pushed both. Verified with `git ls-remote`. The only uncommitted file was the local `.claude/launch.json`, which stays untracked.
+- Moved the local-only V9 outputs (206 screenshots and `namaya-v9.apk`, both showing private photos) out of the repo to `C:\Users\biswa\OneDrive\Desktop\Numaya V8-V9 Superseded (local only)`. Nothing was deleted.
+- Verified the selected V7: `b5e5245` has the V7 handoff `2fb12f9` as an ancestor. Only the selection pass (`3ca3b67`, `014ac35`, `b5e5245`) lies between them. All 36 export decisions match the `proposed` values in `lab_registry.dart`. The October `experiment/tiimo-inspired-v7` branch is already in V7's history, so it is not a candidate.
+- Created `v8-replacement-from-v7-20261112` from `b5e5245`, in this same folder. The demo photos are git-ignored and still present.
+

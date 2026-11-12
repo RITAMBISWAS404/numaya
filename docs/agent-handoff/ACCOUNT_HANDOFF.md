@@ -1,6 +1,19 @@
 # Account handoff
 
+> **2026-11-12, return to V7. Read this first.**
+> - **V7 is the approved starting point.** Branch `v8-replacement-from-v7-20261112` starts at `b5e5245`, the selected V7 candidate. That is the V7 lab (`71564be`, handoff `2fb12f9`) with the owner's export `v7-71564be-2026-11-10` applied: all 36 decisions, with the 12 undecided groups still deferred.
+> - **The previous V8 and V9 implementations and their briefs are archived and superseded.** They are on `archive/superseded-v8-v9-20261112` (`eb38d9f`, which holds V8 and V9) and `archive/superseded-v8-20261112` (`47ba247`). `version-8` and `version-9` are left as they were. Do not use them, or `docs/design/v8` / `docs/v9` from them, as the direction.
+> - **The replacement V8 requirements have not arrived yet.**
+> - **Do not begin any redesign or new implementation until the owner provides them.**
+
 Open this same folder on the next account, then read this file and START_HERE. A fresh clone is not needed.
+
+- **Branch:** `v8-replacement-from-v7-20261112`. Verify with `git status -sb` and `git ls-remote origin v8-replacement-from-v7-20261112`.
+- **Baseline:** `b5e5245`, the V7 selected candidate (tag `checkpoint/v7-selected-baseline-20261111`, also `experiment/numaya-v7-selected-20261110`). App source `014ac35`; later commits change only records.
+- **Archived, superseded:** `archive/superseded-v8-v9-20261112` (V8 and V9), `archive/superseded-v8-20261112` (V8). Local-only V9 outputs are in `C:\Users\biswa\OneDrive\Desktop\Numaya V8-V9 Superseded (local only)`.
+- **Next action:** wait for the owner's replacement V8 brief. No redesign or implementation before it arrives.
+
+V7 details (unchanged):
 
 - **Branch:** `experiment/numaya-v7-selected-20261110`. Verify with `git status -sb` and `git ls-remote origin experiment/numaya-v7-selected-20261110`.
 - **Checkpoint before selections:** tag `checkpoint/pre-v7-selection-20261110` (`2fb12f9`), the unselected V7 lab.

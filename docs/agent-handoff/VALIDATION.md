@@ -1,5 +1,8 @@
 # Validation
 
+> **2026-11-12:** nothing new was built or run. `v8-replacement-from-v7-20261112` is the V7 selected candidate `b5e5245` unchanged, apart from these handoff records. The V7 validation below still describes the app.
+
+
 > **V7 selected candidate (`014ac35`):** `flutter test` 638 passed, 42 skipped (no new skips), 0 failed; analyzer has only the older deprecation info. `selected_candidate_test.dart` asserts all 36 decisions and that development controls are absent; the Compliment sheet regression passes. Emulator: 208 captures, 0 skipped, all from `014ac35`, with real taps through chat keyboard, quoted replies, voice controls, Compliment send and failure, filters, wallet and profile; 15 key screens each at font 1.5, font 2.0 and 360 dp with 0 skipped. APK installed with `-r` and launched. 43 screens changed by the selections were inspected at phone size; the rest as contact sheets. Tests that encoded replaced looks were updated: banner fill and icon alignment, squircle match avatar, card tap to open. Not run: web `npm run check` and e2e (no web change), physical phone, screen reader, live Figma comparison.
 
 
