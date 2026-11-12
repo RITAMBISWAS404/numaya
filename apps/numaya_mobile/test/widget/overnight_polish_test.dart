@@ -90,6 +90,8 @@ void main() {
     ) async {
       await usePhoneSize(tester, size: const Size(390, 844));
       final c = await quickStartApp(tester);
+      // This checks the cover hero of Profile O (kept in the Design Lab).
+      c.read(labChoicesProvider.notifier).choose('fx-profile', 'O');
       // Pins the O profile header this test describes (owner picked A; see visual_lab_v2).
       c.read(labChoicesProvider.notifier).choose('profile-header', 'O');
       await goTo(c, tester, Routes.profile);

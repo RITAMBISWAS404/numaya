@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/premium/application/premium_controller.dart';
+import 'package:numaya_mobile/features/lab/lab_registry.dart';
 
 import '../helpers/journeys.dart';
 import '../helpers/test_app.dart';
@@ -97,7 +98,8 @@ void main() {
       await tapOn(tester, _action('Back to messages'));
       await tester.pump(const Duration(milliseconds: 600));
       await openTab(tester, 'Messages');
-      expect(find.text('Conversations'), findsOneWidget);
+      // Selections pass: Messages A groups by turn (no Conversations heading).
+      expect(find.textContaining(RegExp('Your turn|Waiting on them')), findsWidgets);
       expect(find.text('You: Which record shop?'), findsOneWidget);
       await settle(tester);
     },
@@ -411,6 +413,11 @@ void main() {
     await tester.enterText(find.byType(TextField), 'zebra');
     await tester.pump();
     expect(find.text('Nothing matches “zebra”'), findsOneWidget);
+    // The Unread filter is part of Messages O (kept in the Design Lab); A has no filter row.
+    ProviderScope.containerOf(
+      tester.element(find.byType(MaterialApp)),
+    ).read(labChoicesProvider.notifier).choose('fx-messages', 'O');
+    await tester.pump(const Duration(milliseconds: 300));
     await tapOn(tester, find.bySemanticsLabel('Unread, 0'));
     await openChatFromMatch(tester);
     await tester.enterText(find.byType(TextField), '');

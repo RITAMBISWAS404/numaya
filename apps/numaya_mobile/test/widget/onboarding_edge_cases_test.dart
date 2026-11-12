@@ -164,7 +164,8 @@ void main() {
     await tester.binding.handlePopRoute();
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
-    expect(find.text('Conversations'), findsOneWidget);
+    // Selections pass: Messages A groups by turn (no Conversations heading).
+      expect(find.textContaining(RegExp('Your turn|Waiting on them')), findsWidgets);
     await settle(tester);
   });
 

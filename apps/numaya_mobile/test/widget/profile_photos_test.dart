@@ -75,8 +75,11 @@ void main() {
       await goTo(c, tester, Routes.profile);
       expect(
         find.byWidgetPredicate(
-          // UI-042: the Profile summary photo is the large 128pt circle.
-          (w) => w is Image && w.width == 128,
+          // Selections pass (fx-profile A): the Profile photo is the 88pt circle.
+          (w) =>
+              w is ClipOval &&
+              w.child is SizedBox &&
+              (w.child! as SizedBox).width == 88,
         ),
         findsOneWidget,
       );

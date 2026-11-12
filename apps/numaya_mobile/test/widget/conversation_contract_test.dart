@@ -55,11 +55,13 @@ void main() {
         await settle(tester);
         expect(path(c), '${Routes.chat}/sam');
         expect(find.byKey(const ValueKey('compliment-bubble')), findsOneWidget);
-        // The owner's photo-led choice: the sender's photo comes first.
+        // Selections pass (fx-compliment-thread A): an incoming message quoting your photo, with
+        // no separate sender photo above it.
         expect(
           find.byKey(const ValueKey('compliment-sender-photo')),
-          findsOneWidget,
+          findsNothing,
         );
+        expect(find.text('Your photo'), findsOneWidget);
         expect(
           find.byKey(const ValueKey('compliment-reply-composer')),
           findsOneWidget,

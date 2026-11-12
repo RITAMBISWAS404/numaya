@@ -12,6 +12,7 @@ import 'package:numaya_mobile/features/premium/application/premium_controller.da
 import 'package:numaya_mobile/features/profile/application/profile_details_controller.dart';
 import 'package:numaya_mobile/features/profile/presentation/profile_setup_card.dart';
 import 'package:numaya_mobile/features/verification/application/verification_controller.dart';
+import 'package:numaya_mobile/features/lab/lab_registry.dart';
 
 import '../helpers/journeys.dart';
 import '../helpers/test_app.dart';
@@ -108,7 +109,9 @@ void main() {
     tester,
   ) async {
     await usePhoneSize(tester);
-    await quickStartApp(tester);
+    final c = await quickStartApp(tester);
+    // The filter row exists in Messages O (kept in the Design Lab); A replaces it with groups.
+    c.read(labChoicesProvider.notifier).choose('fx-messages', 'O');
     await openTab(tester, 'Messages');
     expect(find.text('New matches (3)'), findsOneWidget);
     expect(
@@ -474,7 +477,8 @@ void main() {
     await usePhoneSize(tester);
     final c = await quickStartApp(tester);
     await openTab(tester, 'Messages');
-    expect(find.text('Conversations'), findsOneWidget);
+    // Selections pass: Messages A groups by turn (no Conversations heading).
+    expect(find.textContaining(RegExp('Your turn|Waiting on them')), findsWidgets);
     await tester.binding.handlePopRoute();
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));

@@ -80,23 +80,23 @@ void main() {
         ),
       );
       final g = (box.decoration! as BoxDecoration).gradient! as LinearGradient;
-      // Replacement V8 (C-07): without a measured photo the scrim keeps the light 24% edge.
-      expect(g.colors.first.a, closeTo(0.24, 0.01));
+      // Selections pass: no text shadow, so an unmeasured photo starts at a 40% edge.
+      expect(g.colors.first.a, closeTo(0.40, 0.01));
       expect(g.colors.last.a, 0);
       for (final c in g.colors) {
-        expect(c.a, lessThan(0.25));
+        expect(c.a, lessThanOrEqualTo(0.41));
       }
     });
 
     test(
-      'the adaptive scrim strengthens only for bright photos, capped at 52%',
+      'the adaptive scrim strengthens for bright photos, capped at 62% (no text shadow)',
       () {
-        expect(PhotoScrim.edgeFor(null), 0.24);
-        expect(PhotoScrim.edgeFor(0.05), 0.24);
-        expect(PhotoScrim.edgeFor(0.4), closeTo(0.387, 0.01));
-        expect(PhotoScrim.edgeFor(0.9), closeTo(0.52, 0.001));
+        expect(PhotoScrim.edgeFor(null), 0.40);
+        expect(PhotoScrim.edgeFor(0.05), 0.32);
+        expect(PhotoScrim.edgeFor(0.4), closeTo(0.477, 0.01));
+        expect(PhotoScrim.edgeFor(0.9), closeTo(0.62, 0.001));
         PhotoScrim.adaptive = false;
-        expect(PhotoScrim.edgeFor(0.9), 0.24, reason: 'V7 comparison');
+        expect(PhotoScrim.edgeFor(0.9), 0.40, reason: 'fixed comparison');
         PhotoScrim.adaptive = true;
       },
     );

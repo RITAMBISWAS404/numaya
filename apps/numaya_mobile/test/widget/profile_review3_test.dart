@@ -19,6 +19,8 @@ void main() {
   Future<ProviderContainer> open(WidgetTester tester, String route) async {
     await usePhoneSize(tester);
     final c = await quickStartApp(tester);
+      // This checks the cover hero of Profile O (kept in the Design Lab).
+      c.read(labChoicesProvider.notifier).choose('fx-profile', 'O');
     await goTo(c, tester, route);
     return c;
   }

@@ -29,55 +29,63 @@ class FxIdentityRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final photo = ExcludeSemantics(
+      child: ClipOval(
+        child: SizedBox.square(
+          dimension: _photo,
+          child: data.picture(initialSize: 32),
+        ),
+      ),
+    );
+    final info = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Semantics(
+          header: true,
+          child: NameWithBadge(
+            name: data.name,
+            verified: data.verified,
+            verifiedLabel: l10n.photoVerifiedLabel,
+            style: AppTypography.headline,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.s2),
+        Wrap(
+          spacing: AppSpacing.s2,
+          runSpacing: AppSpacing.s2,
+          children: [
+            data.badge(context),
+            if (completion != null)
+              StatusBadge(
+                key: const ValueKey('profile-completion-pill'),
+                label: l10n.profileCompletionLabel(completion!),
+                icon: NumayaIcons.check,
+                tone: completion == 100 ? BadgeTone.brand : BadgeTone.neutral,
+              ),
+          ],
+        ),
+      ],
+    );
+    // At large text or on a narrow phone the photo stacks above the name, so the name keeps the
+    // full width (OP-04).
+    final stacked =
+        MediaQuery.textScalerOf(context).scale(10) > 13 ||
+        MediaQuery.sizeOf(context).width < 340;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            ExcludeSemantics(
-              child: ClipOval(
-                child: SizedBox.square(
-                  dimension: _photo,
-                  child: data.picture(initialSize: 32),
-                ),
-              ),
-            ),
-            const SizedBox(width: AppSpacing.s4),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Semantics(
-                    header: true,
-                    child: NameWithBadge(
-                      name: data.name,
-                      verified: data.verified,
-                      verifiedLabel: l10n.photoVerifiedLabel,
-                      style: AppTypography.headline,
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.s2),
-                  Wrap(
-                    spacing: AppSpacing.s2,
-                    runSpacing: AppSpacing.s2,
-                    children: [
-                      data.badge(context),
-                      if (completion != null)
-                        StatusBadge(
-                          key: const ValueKey('profile-completion-pill'),
-                          label: l10n.profileCompletionLabel(completion!),
-                          icon: NumayaIcons.check,
-                          tone: completion == 100
-                              ? BadgeTone.brand
-                              : BadgeTone.neutral,
-                        ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        if (stacked) ...[
+          Align(alignment: AlignmentDirectional.centerStart, child: photo),
+          const SizedBox(height: AppSpacing.s3),
+          info,
+        ] else
+          Row(
+            children: [
+              photo,
+              const SizedBox(width: AppSpacing.s4),
+              Expanded(child: info),
+            ],
+          ),
         const SizedBox(height: AppSpacing.s4),
         NumayaButtonGroup(
           children: [

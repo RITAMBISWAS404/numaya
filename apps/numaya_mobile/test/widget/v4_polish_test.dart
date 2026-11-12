@@ -121,6 +121,8 @@ void main() {
   ) async {
     phone(tester, narrow: true);
     final c = await quickStartApp(tester);
+      // This checks the cover hero of Profile O (kept in the Design Lab).
+      c.read(labChoicesProvider.notifier).choose('fx-profile', 'O');
     c.read(onboardingProvider.notifier).setFirstName('Maximiliana-Alexandria');
     // The cover is Visual Lab V2 `profile-header` A (was EXP-002 A).
     c.read(labChoicesProvider.notifier).choose('profile-header', 'A');
