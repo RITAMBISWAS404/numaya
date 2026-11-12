@@ -1,0 +1,12 @@
+Resume Numaya backend activation. I have finished the manual setup items listed below; the values are in C:\Users\biswa\Projects\Numaya-backend\supabase\.env.local (do not print them).
+
+Done (edit this list before sending): A1 Supabase dev project, A2 access token, A3 phone test numbers, A4 backup key, A5 staff account. Optional: A6 worker schedule (GitHub / this PC), A7 FCM, A8 store.
+
+Instructions:
+1. Work only in the backend worktree C:\Users\biswa\Projects\Numaya-backend on branch experiment/numaya-backend-20261112-2255. Read docs/backend/START_HERE.md, CURRENT_STATE.md, ACTIVATION_RUNBOOK.md and MANUAL_SETUP.md first; confirm the branch and HEAD match CURRENT_STATE.md and report any mismatch. Do not touch the frontend checkout, its branch or its emulator.
+2. In tools/backend: npm ci, npm run check:local, then npm run activate -- --check. If configuration is invalid, tell me exactly which MANUAL_SETUP item and field to fix, and stop.
+3. Tell me the project ref and host that will be targeted and confirm it is the development project. Then run npm run activate -- --confirm-project=<ref> --plan-only, show me the pending migrations, and apply with npm run activate -- --confirm-project=<ref>. Resume failed steps with the printed --from= command; diagnose real failures rather than retrying blindly.
+4. Do not enable paid services, do not set STORE_VERIFICATION_ENABLED, do not run destructive commands (reset, drop, prune, delete), and do not point anything at production.
+5. When tests pass: install the dev APK on the emulator, run the two-user check in ACTIVATION_RUNBOOK section 2 (approving photos with npm run staff), run npm run backup and npm run restore:drill, and fix any defects found, re-running the affected checks.
+6. Record evidence tied to the commit: commit docs/backend/evidence/activation-*.json; update VALIDATION.md, PROVIDER_STATUS.md, CURRENT_STATE.md, WORK_LOG.md and ACTIVE_TASK.md; commit, push, and verify the remote SHA.
+7. Report feature by feature: verified on the real dev project / provider verification pending / blocked / deferred, with the APK path and SHA-256. Do not claim production readiness; MANUAL_SETUP parts B-D remain.

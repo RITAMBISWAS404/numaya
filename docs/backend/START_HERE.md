@@ -7,6 +7,8 @@ Backend work runs in its **own worktree**, separate from UI work.
 - **Base:** `c890d02` (replacement V8 delivery; app source `ee87648`), verified equal to origin on 2026-11-12.
 - **UI checkout:** `C:\Users\biswa\Projects\Numaya` on `experiment/numaya-v8-premium-rebuild-20261112-1945`. Never edit, switch or commit it from here.
 
+**Owner setup and activation:** [MANUAL_SETUP.md](MANUAL_SETUP.md) (owner actions only) · [ACTIVATION_RUNBOOK.md](ACTIVATION_RUNBOOK.md) (`npm run activate`) · [RESUME_AFTER_SETUP.txt](RESUME_AFTER_SETUP.txt) (copy-ready prompt).
+
 Read in order:
 1. [CURRENT_STATE.md](CURRENT_STATE.md): what works, against which backend, at which commit.
 2. [DECISIONS_REQUIRED.md](DECISIONS_REQUIRED.md): the single owner checklist (credentials, policies, people).

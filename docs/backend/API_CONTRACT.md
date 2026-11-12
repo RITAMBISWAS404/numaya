@@ -60,3 +60,22 @@ Replaying the same key with the same payload returns the original result with `r
 **Storage:** the private bucket `photos`, with uploads only into `<uid>/`. Signed URLs are issued per object while visibility holds; the app asks for 300-second URLs.
 
 **Realtime:** `postgres_changes` on `messages` and `conversations`, filtered by the same RLS.
+
+## Added in the continuation
+| RPC | Params | Returns | Rules / errors |
+|---|---|---|---|
+| `register_attachment` | `p_conversation, p_object_path, p_kind image\|voice, p_duration_ms?` | `{attachment_id, processing: pending}` | Path `<conversation>/<uid>/…` in `chat-media`; open conversation only. Sniffed type (`type_not_allowed`), `size_not_allowed`, voice ≤120 s, `kind_not_supported` (video), rate-limited. |
+| `attachment_status` | `p_attachment` | `{processing, failure_reason}` | Uploader only. |
+| `send_attachment` | `p_conversation, p_client_message_id, p_attachment, p_caption?` | `{result: sent, seq, …}` | Attachment must be `ready` (`attachment_not_ready`); idempotent on the client id. |
+| `set_notification_prefs` | `p_matches, p_messages, p_compliments bool` | — | Own preferences. |
+| `unregister_device` | `p_token` | — | Own device. |
+| `request_export` | — | `{request_id, status: pending}` | Now **asynchronous**. Requires a sign-in within 15 minutes (`reauth_required`); the worker writes a 7-day object to `exports/<uid>/`. |
+| `staff_photo_queue` / `staff_decide_photo` | | | Only `processing = ready` photos. |
+| `staff_clear_hold`, `staff_ops_health` | | | Moderator; audited. |
+| `service_apply_purchase_state`, `service_record_store_event`, `service_purchase_by_key` | | | `service_role` only (Edge Functions). |
+
+**Edge Functions:**
+- `POST /functions/v1/verify-purchase`, with a member JWT and body `{store: google_play | app_store, product_id, purchase_token | signed_transaction}`.
+- `POST /functions/v1/store-notifications/google` (Pub/Sub push, OIDC) and `/apple` (signed payload).
+
+Both answer 503 `store_not_configured` until enabled.

@@ -7,14 +7,17 @@
     "node": ">=20"
   },
   "scripts": {
-    "check:local": "node scripts/lint_sql.mjs && node local_semantic/run.mjs && node --test --test-concurrency=1 unit/",
-    "test": "node --test --test-concurrency=1 tests/",
+    "check:local": "node scripts/lint_sql.mjs && node local_semantic/run.mjs && node --test --test-concurrency=1 \"unit/*.test.mjs\"",
+    "test": "node --test --test-concurrency=1 \"tests/*.test.mjs\"",
     "db:push": "node scripts/db_push.mjs",
     "backup": "node scripts/backup.mjs",
     "restore:drill": "node scripts/restore_drill.mjs",
     "privacy:worker": "node scripts/privacy_worker.mjs",
-    "test:unit": "node --test --test-concurrency=1 unit/",
-    "worker": "node worker/run.mjs --once"
+    "test:unit": "node --test --test-concurrency=1 \"unit/*.test.mjs\"",
+    "worker": "node worker/run.mjs --once",
+    "activate": "node scripts/activate.mjs",
+    "staff": "node scripts/staff.mjs",
+    "monitor": "node scripts/monitor.mjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.16",

@@ -19,3 +19,24 @@
   - No demo sign-in in live builds.
 - **Tooling** (pinned in `tools/backend/package.json`): Supabase CLI 3.1.0, supabase-js 2.119.0, pg 8.23.1, libpg-query 18.2.2, PGlite 0.5.16. Flutter: `supabase_flutter ^2.18.3`, `image ^4.12.0`.
 - **Skills:** the repo already has the relevant Flutter and design skills; the official `supabase/agent-skills` Postgres skill was **not installed** in this run (see DECISIONS / next steps).
+
+## 2026-11-13 · Continuation: everything implementable without owner credentials
+The owner deferred all account, credential and provider setup. The work proceeded around it, with nothing faked.
+
+**Commits**
+- `8d3176c`: media pipeline, chat media, outbox retries and dead letters, push preferences and device lifecycle, async export with re-auth, abuse controls, store purchase state, ops health, pg_cron housekeeping.
+- `b418edb`: Node workers. sharp re-encode, voice validation, FCM HTTP v1 adapter, export builder, storage sweep, purge. Contract tests 6/6.
+- `2a0f85e`: store verification for Google Play and the App Store as runtime-neutral TypeScript; `verify-purchase` and `store-notifications` functions (disabled until configured). Contract tests 7/7.
+- `108f481`: real-service tests follow the pipeline; media test.
+- `1af5e31`: Flutter session restore, live chat attachments behind `NUMAYA_LIVE_ATTACHMENTS`, server match extension, signed-URL voice playback; staff CLI; monitor; CI workflow; staff photo-preview storage policy.
+- **This commit:** `scripts/activate.mjs`, a resumable, non-destructive activation (config, confirm, connect, auth, migrate, schema, store-env, secrets, functions, schedules, worker, monitor, tests, apk). Activation config contract tests 4/4. Fixed the npm test globs (Node 24 does not expand a bare directory). `.env.example` completed. Docs: MANUAL_SETUP, ACTIVATION_RUNBOOK, RESUME_AFTER_SETUP.txt; status docs refreshed.
+
+**Defects found by local checks and fixed**
+- Store events were recorded before processing, so redeliveries would have been lost.
+- An attachment branch was dead code.
+- SQL functions referenced columns before they were added.
+- The exports policy came before its column.
+- `@peculiar/x509` was missing `reflect-metadata`.
+- Unit-test globs were wrong.
+
+**Still not verified:** anything on a real Supabase project, FCM, the stores, or a device (VALIDATION).

@@ -3,6 +3,8 @@
 Status: ☐ open · ☑ done. Never paste credentials into chat; put them in `supabase/.env.local`.
 
 ## Credentials and accounts
+**Superseded by [MANUAL_SETUP.md](MANUAL_SETUP.md)**, which gives exact steps, costs and verification commands. The list below is kept for history.
+
 - ☐ **Supabase dev project** (free, no payment method): URL, publishable key, secret key, DB password, session-pooler URL in `supabase/.env.local`. *Blocks: applying migrations, all live tests, the dev APK.*
 - ☐ **Phone provider** enabled with two **test numbers + OTPs** (Auth → Sign In / Providers → Phone → Test Phone Numbers and OTPs, with an expiry date). Add them as `NUMAYA_TEST_PHONE_A/B`, `NUMAYA_TEST_OTP_A/B`. *Blocks: phone sign-in in the APK.*
 - ☐ **SMS provider and budget** for real OTP delivery (and India DLT sender registration if applicable). Until then only test numbers sign in.
@@ -27,3 +29,12 @@ Status: ☐ open · ☑ done. Never paste credentials into chat; put them in `su
 - ☐ Privacy/safety owner, moderation lead, support contact, designated child-safety contact.
 - ☐ Approval of Terms, Privacy Policy, Community Guidelines (versions recorded as `2026-11` in dev).
 - ☐ Who may hold the staff (moderator/admin) role; staff MFA.
+
+## Added in the continuation (FIXTURE values in code until decided)
+| # | Decision | Dev value used | Where |
+|---|---|---|---|
+| P10 | Monitor thresholds: photo review age, report age, dead outbox, overdue deletions, failed photos per day, pending exports | 240 min, 24 h, 0, 0, 50, 10 | `scripts/monitor.mjs` |
+| P11 | Distinct reporters in 24 h that place an automatic review hold | 3 | `private.settings.report_hold_threshold` |
+| P12 | Chat media limits: image ≤ 10 MB, voice ≤ 15 MB and ≤ 120 s, 30 uploads/hour, no video | as listed | `register_attachment` |
+| P13 | Product IDs and prices (`numaya_premium_weekly/monthly/yearly`, `numaya_compliments_3`) | IDs only; no prices | `_shared/store/common.ts` |
+| P14 | Worker schedule host: GitHub Actions (secrets in GitHub) or this PC | none | MANUAL_SETUP A6 |

@@ -1,22 +1,30 @@
-# Active task: backend V1, waiting for dev project credentials
+# Active task: waiting for owner setup (deferred by the owner, on purpose)
 
-**Owner action:**
-1. Create the free Supabase dev project.
-2. Enable Phone with two test numbers.
-3. Fill `supabase/.env.local` from `.env.example`, adding `NUMAYA_BACKUP_KEY` (32 random bytes, base64).
+## Owner
+Complete the items you want from [MANUAL_SETUP.md](MANUAL_SETUP.md) Part A:
+- **Minimum:** A1 (dev project).
+- **For a usable APK:** A3 (phone test numbers) and A5 (staff account).
+- **Strongly advised:** A2 (access token), A4 (backup key) and A6 (worker schedule).
 
-The full list is in [DECISIONS_REQUIRED.md](DECISIONS_REQUIRED.md).
+Then paste [RESUME_AFTER_SETUP.txt](RESUME_AFTER_SETUP.txt) into a new session, editing its "Done" line first.
 
-**Then the backend session:**
-1. `npm run db:push`.
-2. `npm test`.
+## Next backend session
+Run [ACTIVATION_RUNBOOK.md](ACTIVATION_RUNBOOK.md):
+1. `npm run activate -- --check`.
+2. `--plan-only`, then the full run.
 3. Fix platform findings.
-4. Build the dev APK:
+4. Two-user journey on devices.
+5. Backup and restore drill.
+6. Record evidence.
 
-   `flutter build apk --debug --dart-define=NUMAYA_SUPABASE_URL=… --dart-define=NUMAYA_SUPABASE_PUBLISHABLE_KEY=… --dart-define=NUMAYA_BACKEND_LABEL=development`
+## Engineering work that needs no owner input (candidates for the next sessions)
+- App-side push token capture (`firebase_messaging`; needs `google-services.json` from A7 to build).
+- Billing client (`in_app_purchase`) wired to `verify-purchase`, only when the owner schedules store work.
+- Device location → `set_location`; an export entry point if the frontend adds one.
+- Frontend states U1–U5 (UI_INTEGRATION).
 
-5. Run the two-user journey (emulator plus phone, or two emulators).
-6. Record evidence in VALIDATION.
-7. Merge the latest completed frontend commit only at a FILE_OWNERSHIP checkpoint.
-
-**Do not:** apply migrations to any non-development project, enable billing, or publish the APK.
+**Do not:**
+- Apply migrations to any non-development project.
+- Enable billing or paid add-ons.
+- Set `STORE_VERIFICATION_ENABLED` without the owner.
+- Publish the APK.

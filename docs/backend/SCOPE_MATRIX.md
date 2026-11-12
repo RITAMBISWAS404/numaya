@@ -17,13 +17,14 @@ Events and Health are excluded (not routed in the V8 app; no APIs). Opening Move
 | Compliment reply / Not now | `reply_compliment`, `dismiss_compliment` | recipient | same | compliment tests | written |
 | Messages list, archive, new matches | `list_conversations` | member | conversations | archive/expiry tests | written |
 | Chat send, retry, offline | `send_message` (client id) | member of an open conversation | messages | sequence/retry tests | written |
+| Chat photo / voice note | Storage `chat-media` + `register_attachment` → worker → `send_attachment` | member of an open conversation | attachments, messages | PGlite chat media; `media.test` | written; **live flag off** until verified |
 | Chat realtime | Realtime `postgres_changes` | RLS | messages | realtime test | written |
-| Extend match | `extend_match` | member | conversations | expiry test | server written; app still uses its local rule |
+| Extend match | `extend_match` | member | conversations | expiry test | written; app calls the server in live mode |
 | Unmatch / block / unblock / report | RPCs | member | blocks, reports | safety tests | written |
 | Wallet, streak | `my_wallet` | member | ledger, daily_usage | streak/cap tests | written |
-| Store: Premium, credit packs, streak recovery | none (no billing) | — | — | — | **not started**; purchases fail in live builds |
-| Settings: notifications, privacy toggles | — | — | — | — | on-device only |
+| Store: Premium, credit packs, streak recovery | `verify-purchase` + `store-notifications` (server) | member JWT; account binding | store_purchases, entitlements, ledger | store contract tests; PGlite store | server written, **disabled**; no billing client in the app, so purchases fail in live builds |
+| Settings: notifications, privacy toggles | `set_notification_prefs` (server ready) | own | notification_prefs | PGlite push targets | server written; app toggles still on-device |
 | Delete / restore / delete for good | RPCs + worker | member; service | tombstones | privacy test | written |
-| Export my data | `request_export` | member | — | export test | server written; **no app entry point** in V8 |
+| Export my data | `request_export` (async, recent sign-in) → worker → signed download | member | privacy_requests, `exports` bucket | PGlite; `privacy.test` | server written; **no app entry point** in V8 |
 | Photo verification (`/profile/verify`) | — | — | — | — | deferred (vendor) |
 | Help, legal | static | — | — | — | unchanged |
