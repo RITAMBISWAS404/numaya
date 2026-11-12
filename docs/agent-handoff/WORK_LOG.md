@@ -1,5 +1,11 @@
 # Work log
 
+## 2026-11-13 · Selected designs (Windows, Claude desktop)
+- Checkpoint tag on the Fable lab, new branch. The owner's export applied as defaults with every note; shared SummaryCard for Credits and Streak; Welcome demo entry.
+- Backend boundary inspected read-only and recorded; nothing merged.
+- Full emulator capture reviewed by eye. It found the completion pill disagreeing with Complete your profile (83% against 45%), fixed in `3264e94`. The recapture showed the two Profile pills misaligned and a tick beside an incomplete percentage, fixed in `ae10663`, then a final full capture.
+- Demo APK installed and walked on the emulator. Journey evidence and FINAL_REVIEW written.
+
 ## 2026-11-10 · MVP Focus V5 (Windows, Claude desktop)
 - Checkpoint tag, separate branch. Events and Health gated out with stable tabs and guarded links.
 - Three-screen benchmark rendered and corrected first, then spacing, gradient and icon roles propagated. Compliment debit moved to after acknowledgement.

@@ -1,30 +1,29 @@
 # Remaining work
 
-State on 13 November 2026. Branch `experiment/numaya-fable-design-20261113-0048`, app source `da197b7`.
+State on 13 November 2026. Branch `experiment/numaya-selected-20261113-0232`, app source `ae10663`.
 
 ## Waiting on the owner
 
-- Review `C:\Users\biswa\OneDrive\Desktop\Numaya Fable Lab Review\2026-11-13 da197b7\index.html` and export choices (JSON or TXT). Seven decisions: six lab groups and the still-open photo scrim.
-- Install `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-Fable-Lab-20261113-da197b7-debug-lab.apk` to try the options on a phone: tap the purple area on Welcome → Demo hub → Quick start; then Demo hub → Visual Lab V2.
-- Decide whether to commission artwork for the feature card (Profile B/C, Credits B, Streak B).
+- Review `C:\Users\biswa\OneDrive\Desktop\Numaya Selected Design Review\2026-11-13 ae10663\index.html` and install `C:\Users\biswa\OneDrive\Desktop\Numaya Test Builds\Numaya-Selected-20261113-ae10663-debug-demo.apk` (tap Explore the demo on Welcome).
 
-## Then
+## External blockers (not frontend work)
 
-Follow [QA_HANDOFF.md](../design/fable-lab/QA_HANDOFF.md): apply the choices, run the unchecked items, capture the chosen screens on the emulator.
+- A development Supabase project (backend A1), the phone OTP provider and test numbers (A3), a billing client and push token capture. Until then, real sign-in, server debits, purchases and notifications cannot be verified. See [BACKEND_BOUNDARY.md](../design/selections/BACKEND_BOUNDARY.md).
+- Merging the backend branch is a separate, recorded step (its FILE_OWNERSHIP rule). No conflicts are expected in the files this pass changed.
 
-## Backlog (not built)
+## Not walked on the device in this pass
 
-Reply composer (R1/R2), sent confirmation (S1/S2), sheet headers, alert cards, settings groups, welcome composition, paywall comparison, a motion clip. See [EXPERIMENTS.md](../design/fable-lab/EXPERIMENTS.md).
+Profile edit, Dismiss, archive and expiry, Premium and purchase states, rapid taps, report, block and unmatch. Each is covered by widget tests. See [JOURNEY_EVIDENCE.csv](../design/selections/JOURNEY_EVIDENCE.csv).
 
 ## Known limitations
 
 | Item | State |
 |---|---|
-| Artwork | The mascot is a stand-in in every feature card. |
-| Renders | Flutter test renders, not emulator screenshots; no status bar. |
-| Release builds | Demo sign-in is compiled out of release builds, so a release APK stops at Welcome. Use debug builds until real auth exists. The 12 November replacement V8 APK is affected. |
-| Real integrations | None: on-device demo only. |
+| Device | Pixel 10 emulator only; no physical phone. |
+| Release builds | The demo sign-in is compiled out, so a release APK stops at Welcome. Review builds are debug. |
+| Icons | Tabler has no filled Compliment glyph; that mark stays outline. |
+| Artwork | The mascot is still a stand-in wherever it appears. |
 
 ## Private photos
 
-The demo photos are local and git-ignored. They appear in the gallery, the render folder and the APK, which therefore stay local. **No private backup exists.**
+The demo photos are local and git-ignored. They appear in the screenshots, the review page and the APK, which therefore stay local. **No private backup exists.**

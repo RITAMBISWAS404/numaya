@@ -1,5 +1,12 @@
 # Validation
 
+> **Selected designs (`ae10663`):**
+> - **Analyzer:** one older deprecation info in a test file (`ente_alignment_test.dart`).
+> - **Tests:** `flutter test` 660 passed, 43 skipped, 0 failed. New: `selections_test.dart` (5), including that the completion pill matches Complete your profile.
+> - **Screens:** full emulator capture at `ae10663`: 207 captures, 203 in the flat folder (the builder keeps only the top of Discover out of likes; its lower positions repeat the feed), all 1080 x 2424, numbered 001 to 203 without gaps. Review page links checked on disk (408 and 19, none missing) and over localhost (16 images, none broken). Two states skipped by design (Unread and Your move: Messages A has no filter row).
+> - **APK:** debug, built from `ae10663` without development tools; fresh install on the Pixel 10 emulator; walked Welcome, Explore the demo, Profile, Credits, Streak, Messages, Sam's Compliment and a reply, sign out and re-entry.
+> - **Backend:** BLOCKED; nothing verified against a server.
+
 > **Fable design lab (`da197b7`):**
 > - **Analyzer:** one older deprecation info in a test file.
 > - **Tests:** `flutter test` 655 passed, 43 skipped (the earlier 42 plus the opt-in render harness), 0 failed. Nine new targeted tests in `fx_lab_test.dart`.

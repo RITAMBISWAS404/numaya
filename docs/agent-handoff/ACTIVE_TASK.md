@@ -1,4 +1,11 @@
-# Active task: owner review of the Fable design lab
+# Active task: owner review of the selected designs
+
+> **2026-11-13, selected designs applied. Read this first.**
+> - **Folder:** `C:\Users\biswa\Projects\Numaya-fable-lab` (a worktree). **Branch:** `experiment/numaya-selected-20261113-0232`, from the Fable lab `c6a31a4` (tag `checkpoint/fable-lab-20261113-0232`). App source `ae10663`.
+> - **What it is:** the owner's export `fx-da197b7-2026-11-13` applied as the app defaults, with every note (Discover O with notes, Profile A, Messages A, Received Compliment A, Credits O and Streak O on one summary card), plus a labelled Explore the demo entry on Welcome.
+> - **Records:** [docs/design/selections](../design/selections/FINAL_REVIEW.md): FINAL_REVIEW, JOURNEY_EVIDENCE.csv, BACKEND_BOUNDARY.
+> - **Real backend:** BLOCKED (no Supabase project, OTP not configured, no billing or push). The backend branch is not merged here.
+> - **Other checkouts:** `C:\Users\biswa\Projects\Numaya` and `C:\Users\biswa\Projects\Numaya-backend` are separate work. Do not switch or edit them from here.
 
 > **2026-11-13, Fable design lab. Read this first.**
 > - **Folder:** `C:\Users\biswa\Projects\Numaya-fable-lab` (a worktree). **Branch:** `experiment/numaya-fable-design-20261113-0048`, based on the replacement V8 `c890d02`. App source `da197b7`.
