@@ -236,6 +236,9 @@ class WalletSummaryCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final v = variant ?? ref.watch(labVariantProvider('wallet-card'));
+    // Replacement V8 comparison r8-wallet-value: A leads with the number and drops the repeated
+    // spend-order sentence (the Wallet screen states it). O is the owner's V7 card unchanged.
+    final valueLed = ref.watch(labVariantProvider('r8-wallet-value')) == 'A';
     final l10n = context.l10n;
     final d = data;
     final total = d.weekly + d.earned + d.purchased;
@@ -282,7 +285,34 @@ class WalletSummaryCard extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              heading(),
+              if (valueLed) ...[
+                Row(
+                  children: [
+                    const MobileIcon(
+                      NumayaMobileIcons.wallet,
+                      size: AppSizes.iconMd,
+                      color: AppColors.ink,
+                    ),
+                    const SizedBox(width: AppSpacing.s2),
+                    Expanded(
+                      child: Text(
+                        l10n.walletTitle,
+                        style: AppTypography.weight(
+                          AppTypography.body,
+                          AppTypography.semibold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.s2),
+                Text(
+                  l10n.walletTotal(total),
+                  key: const ValueKey('wallet-card-value'),
+                  style: AppTypography.pageTitle,
+                ),
+              ] else
+                heading(),
               const SizedBox(height: AppSpacing.s3),
               ExcludeSemantics(
                 child: ClipRRect(
@@ -330,8 +360,10 @@ class WalletSummaryCard extends ConsumerWidget {
                     ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.s2),
-              Text(l10n.walletOrderShort, style: AppTypography.caption),
+              if (!valueLed) ...[
+                const SizedBox(height: AppSpacing.s2),
+                Text(l10n.walletOrderShort, style: AppTypography.caption),
+              ],
             ],
           ),
         );

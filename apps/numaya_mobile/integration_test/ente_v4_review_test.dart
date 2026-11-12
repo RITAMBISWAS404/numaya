@@ -257,6 +257,8 @@ void main() {
         // The member's own cover is the brightest seeded photo, where the scrims differ most.
         'r8-photo-scrim': Routes.profile,
         'r8-chat-dividers': Routes.messages,
+        'r8-wallet-value': Routes.profile,
+        'r8-profile-bar': Routes.profile,
       };
       for (final g in kLabGroups) {
         if (isDeferredLabGroup(g.id) || g.kind == LabKind.motion) continue;
@@ -278,6 +280,7 @@ void main() {
               await cap('crop__${g.id}__$v', g.id, v, 'crop', '${g.id} $v');
             } else {
               await go(route!);
+              if (g.id == 'r8-wallet-value') await scrollDown(700);
               if (g.id == 'v7-filters') {
                 await tester.tap(find.bySemanticsLabel('Filters').first);
                 await _wait(tester, 900);

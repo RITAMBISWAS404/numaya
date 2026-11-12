@@ -1368,6 +1368,50 @@ const List<LabGroup> kLabGroups = [
     ],
   ),
   LabGroup(
+    id: 'r8-wallet-value',
+    title: 'Credits card emphasis',
+    kind: LabKind.screen,
+    question: 'Should the Profile credits card lead with the number?',
+    usages: ['Profile, Your activity'],
+    proposed: 'O',
+    variants: [
+      LabVariant(
+        _o,
+        'Your V7 card',
+        'V7 selected',
+        'Title and total on one line, bar, legend, then the spend order sentence.',
+      ),
+      LabVariant(
+        'A',
+        'Number first',
+        'critique',
+        'The total as the large line; the spend order stays on the Wallet screen.',
+      ),
+    ],
+  ),
+  LabGroup(
+    id: 'r8-profile-bar',
+    title: 'Profile title bar',
+    kind: LabKind.screen,
+    question: 'Help and Settings appear in the bar and as rows: keep both?',
+    usages: ['Profile'],
+    proposed: 'O',
+    variants: [
+      LabVariant(
+        _o,
+        'Help and Settings',
+        'V7 selected',
+        'Both icons in the bar, as well as the Safety and support rows.',
+      ),
+      LabVariant(
+        'A',
+        'Settings only',
+        'critique',
+        'Settings stays in the bar; Help is reached from its row.',
+      ),
+    ],
+  ),
+  LabGroup(
     id: 'motion',
     title: 'Motion preset',
     kind: LabKind.motion,

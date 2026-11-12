@@ -303,11 +303,14 @@ class ProfileScreen extends ConsumerWidget {
     return LargeTitlePage(
       title: l10n.tabProfile,
       actions: [
-        NavIconButton(
-          icon: NumayaIcons.help,
-          label: l10n.helpTitle,
-          onPressed: () => context.push(Routes.help),
-        ),
+        // Replacement V8 comparison r8-profile-bar: A keeps Settings alone in the bar, since Help
+        // is also the Safety and support row. O is the owner's V7 bar.
+        if (ref.watch(labVariantProvider('r8-profile-bar')) != 'A')
+          NavIconButton(
+            icon: NumayaIcons.help,
+            label: l10n.helpTitle,
+            onPressed: () => context.push(Routes.help),
+          ),
         NavIconButton(
           icon: NumayaIcons.settings,
           label: l10n.profileSettings,

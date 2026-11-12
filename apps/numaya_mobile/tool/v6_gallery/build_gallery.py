@@ -14,6 +14,11 @@ for a in ('current', 'commit', 'baseline', 'branch', 'out'):
     ap.add_argument('--' + a, required=True)
 ap.add_argument('--stress', nargs='*', default=[])
 ap.add_argument('--archive', nargs='*', default=[])
+# Replacement V8: the review-ID prefix (exports from different runs never validate against each
+# other) and extra groups rendered from separate builds, as JSON
+# {"group": {"title", "question", "flow", "recommended", "variants": [{"id", "name", "note", "images": [[path, label], ...]}]}}.
+ap.add_argument('--review-prefix', default='v7')
+ap.add_argument('--extra', default=None)
 A = ap.parse_args()
 here = os.path.dirname(os.path.abspath(__file__))
 app = os.path.dirname(os.path.dirname(here))
@@ -34,6 +39,7 @@ V6 = {
 }
 
 
+FLOW.update({'r8-secondary-button': 'Shared', 'r8-photo-scrim': 'Discover and Profile', 'r8-chat-dividers': 'Messages', 'r8-wallet-value': 'Profile', 'r8-profile-bar': 'Profile'})
 X = json.load(open(os.path.join(app, '..', '..', 'docs', 'design', 'creative-lab-v7', 'experiments.json'), encoding='utf-8'))
 for _gid, _x in X['groups'].items():
     FLOW[_gid] = _x['flow']
@@ -103,7 +109,7 @@ for gid, by in sorted(stills.items(), key=lambda kv: (FLOW[kv[0]], kv[0])):
     if not g['variants']:
         g['variants'] = [{'id': v['id'], 'name': v.get('name', v['id']), 'pass': v.get('pass', ''), 'note': v.get('note', ''), 'images': []} for v in old.get('variants', [])] or [{'id': k, 'name': k, 'pass': '', 'note': '', 'images': []} for k in sorted(by)]
     g['requires'] = old.get('requires') or {}
-    run = 'V7 Creative Lab' if gid.startswith('v7-') else 'V6 refinement' if gid.startswith('v6-') else 'Earlier option, re-rendered'
+    run = 'Replacement V8' if gid.startswith('r8-') else 'V7 Creative Lab' if gid.startswith('v7-') else 'V6 refinement' if gid.startswith('v6-') else 'Earlier option, re-rendered'
     g.update(flow=FLOW[gid], run=run, source=A.commit[:7], status='current', earlier=[], level=g.get('surface', 'screen'), impl='Implemented in Flutter, selectable in Visual Lab', directions={})
     if gid in X['groups']:
         x = X['groups'][gid]
@@ -120,6 +126,17 @@ for gid, by in sorted(stills.items(), key=lambda kv: (FLOW[kv[0]], kv[0])):
             jpg(src, f'{OUT}/current/{name}', crop)
             v['images'].append({'path': 'current/' + name, 'label': 'Current render'})
     groups.append(g)
+if A.extra:
+    for gid, e in json.load(open(A.extra, encoding='utf-8')).items():
+        vs = []
+        for v in e['variants']:
+            ims = []
+            for i, (src, label) in enumerate(v['images']):
+                name = f"{gid}__{v['id']}__{i}.jpg"
+                jpg(src, f'{OUT}/current/{name}')
+                ims.append({'path': 'current/' + name, 'label': label})
+            vs.append({'id': v['id'], 'name': v['name'], 'pass': v.get('pass', ''), 'note': v.get('note', ''), 'images': ims})
+        groups.append({'id': gid, 'title': e['title'], 'surface': 'screen', 'question': e['question'], 'recommended': e['recommended'], 'requires': {}, 'flow': e['flow'], 'run': 'Replacement V8', 'source': A.commit[:7], 'status': 'current', 'earlier': [], 'level': 'screen', 'impl': e.get('impl', 'Implemented in Flutter'), 'directions': {}, 'variants': vs})
 current = {g['id'] for g in groups}
 
 deferred = lambda i: bool(re.search('event|insight|metric-widget|health|ea-met-card', i))
@@ -191,7 +208,7 @@ for spec in A.stress:
             stress.append({'path': 'stress/' + name, 'label': f"{r['variant']}, {LABELS.get(tag, tag)}", 'setting': LABELS.get(tag, tag)})
 
 generated = datetime.datetime.now().astimezone().replace(microsecond=0).isoformat()
-review = f'v7-{A.commit[:7]}-{generated[:10]}'
+review = f'{A.review_prefix}-{A.commit[:7]}-{generated[:10]}'
 manifest = {'schemaVersion': 3, 'directions': X['directions'], 'directionBound': X['directionBound'], 'exclusive': X['exclusive'], 'recommendedPath': [g for g in X['recommendedPath'] if any(x['id'] == g for x in groups)], 'sequences': sequences, 'reviewId': review, 'sourceCommit': A.commit, 'baselineCommit': A.baseline, 'branch': A.branch, 'generatedAt': generated, 'groups': groups, 'stress': stress}
 json.dump(manifest, open(OUT + '/manifest.json', 'w', encoding='utf-8'), indent=1)
 tpl = open(here + '/template.html', encoding='utf-8').read()
