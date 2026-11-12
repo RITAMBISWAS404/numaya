@@ -212,7 +212,10 @@ void main() {
       });
     }
 
-    if (_only.isEmpty || _only == 'variants' || _only == 'v7') {
+    if (_only.isEmpty ||
+        _only == 'variants' ||
+        _only == 'v7' ||
+        _only == 'r8') {
       final dating = c.read(datingProvider.notifier);
       final first = c.read(datingProvider).threads['priya']!.first;
       await dating.send('priya', 'Saturday works for me.', replyToId: first.id);
@@ -249,10 +252,16 @@ void main() {
         'screen-chats': Routes.messages,
         'screen-profile': Routes.profile,
         'screen-discover': Routes.home,
+        // Replacement V8 comparisons.
+        'r8-secondary-button': Routes.profile,
+        // The member's own cover is the brightest seeded photo, where the scrims differ most.
+        'r8-photo-scrim': Routes.profile,
+        'r8-chat-dividers': Routes.messages,
       };
       for (final g in kLabGroups) {
         if (isDeferredLabGroup(g.id) || g.kind == LabKind.motion) continue;
         if (_only == 'v7' && !g.id.startsWith('v7-')) continue;
+        if (_only == 'r8' && !g.id.startsWith('r8-')) continue;
         final component = g.kind == LabKind.component;
         final route = screens[g.id];
         if (!component && route == null) continue;
