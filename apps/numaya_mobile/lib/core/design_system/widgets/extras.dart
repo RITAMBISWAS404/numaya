@@ -508,9 +508,10 @@ class CountBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    constraints: const BoxConstraints(minWidth: 22),
-    height: 22,
-    padding: const EdgeInsets.symmetric(horizontal: 6),
+    // A minimum, not a fixed height: at large text the digit grows and the badge with it
+    // (it was clipped at 200%).
+    constraints: const BoxConstraints(minWidth: 22, minHeight: 22),
+    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
     decoration: BoxDecoration(
       color: AppColors.accent,
       borderRadius: AppRadii.all(AppRadii.pill),

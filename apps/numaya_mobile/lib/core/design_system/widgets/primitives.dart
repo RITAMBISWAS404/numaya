@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -207,10 +209,30 @@ class BalancedText extends StatelessWidget {
           return count;
         }
 
+        // Never narrower than the longest word: below that a word breaks inside itself
+        // ("Complim / ent" at 200% text) while the line count still looks unchanged.
+        double widestWord() {
+          var widest = 0.0;
+          for (final w in content.toPlainText().split(RegExp(r'\s+'))) {
+            if (w.isEmpty) continue;
+            final painter = TextPainter(
+              text: TextSpan(text: w, style: style),
+              textDirection: direction,
+              textScaler: scaler,
+            )..layout();
+            widest = math.max(widest, painter.width);
+            painter.dispose();
+          }
+          return widest.ceilToDouble() + 1;
+        }
+
         final target = lines(box.maxWidth);
         var width = box.maxWidth;
         if (target > 1) {
-          var lo = box.maxWidth / 2;
+          var lo = math.min(
+            box.maxWidth,
+            math.max(box.maxWidth / 2, widestWord()),
+          );
           var hi = box.maxWidth;
           while (hi - lo > 1) {
             final mid = (lo + hi) / 2;
