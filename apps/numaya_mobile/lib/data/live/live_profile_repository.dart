@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:image/image.dart' as img;
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/logging/app_logger.dart';
@@ -148,17 +151,19 @@ class LiveProfileRepository implements ProfileRepository {
       if (_uploaded.containsKey(source)) continue;
       final file = File(source);
       if (!file.existsSync()) continue;
-      final ext = source.toLowerCase().endsWith('.png') ? 'png' : 'jpg';
+      // Re-encoded on the device before upload: drops every metadata block (EXIF GPS included)
+      // and caps the long side at 1600 px. The server-side worker is still required
+      // (PROVIDER_STATUS: image processing) because the device is not trusted.
+      final clean = await compute(sanitizePhoto, await file.readAsBytes());
+      if (clean == null) throw const LiveFailure('type_not_allowed');
       final objectPath =
-          '$userId/${DateTime.now().microsecondsSinceEpoch}-$position.$ext';
+          '$userId/${DateTime.now().microsecondsSinceEpoch}-$position.jpg';
       await _client.storage
           .from('photos')
-          .upload(
+          .uploadBinary(
             objectPath,
-            file,
-            fileOptions: FileOptions(
-              contentType: ext == 'png' ? 'image/png' : 'image/jpeg',
-            ),
+            clean,
+            fileOptions: const FileOptions(contentType: 'image/jpeg'),
           );
       await _client.rpc<dynamic>(
         'register_photo',
@@ -194,4 +199,20 @@ class LiveProfileRepository implements ProfileRepository {
   static Gender? _gender(String? v) =>
       v == null ? null : Gender.values.asNameMap()[v];
   static LookingFor? _lookingFor(String v) => LookingFor.values.asNameMap()[v];
+}
+
+/// Decodes any supported image, applies its EXIF orientation, drops all metadata and returns a
+/// JPEG at most 1600 px on the long side; null when the bytes are not an image.
+Uint8List? sanitizePhoto(Uint8List bytes) {
+  final decoded = img.decodeImage(bytes);
+  if (decoded == null) return null;
+  var image = img.bakeOrientation(decoded);
+  image.exif = img.ExifData();
+  final long = image.width > image.height ? image.width : image.height;
+  if (long > 1600) {
+    image = image.width >= image.height
+        ? img.copyResize(image, width: 1600)
+        : img.copyResize(image, height: 1600);
+  }
+  return img.encodeJpg(image, quality: 88);
 }
