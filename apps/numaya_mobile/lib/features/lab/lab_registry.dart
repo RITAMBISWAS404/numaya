@@ -1419,8 +1419,7 @@ const List<LabGroup> kLabGroups = [
     id: 'fx-discover',
     title: 'Discover profile',
     kind: LabKind.screen,
-    question:
-        'Can someone decide about a person in one screen, and see how to say something?',
+    question: 'Can someone decide about a person in one screen, and see how to say something?',
     usages: ['Discover'],
     proposed: _o,
     variants: [
@@ -1448,8 +1447,7 @@ const List<LabGroup> kLabGroups = [
     id: 'fx-profile',
     title: 'Profile hub',
     kind: LabKind.screen,
-    question:
-        'Can a member see their credits and streak, and reach editing, without scrolling?',
+    question: 'Can a member see their credits and streak, and reach editing, without scrolling?',
     usages: ['Profile'],
     proposed: _o,
     variants: [
@@ -1471,14 +1469,19 @@ const List<LabGroup> kLabGroups = [
         'expressive',
         'A short cover; one dark number-first credit card with artwork; streak and setup as two quieter blocks.',
       ),
+      LabVariant(
+        'C',
+        'Credit hero, purple',
+        'palette study of B',
+        'B with the feature card in solid brand purple. Same layout and data; the artwork sits on a white disc.',
+      ),
     ],
   ),
   LabGroup(
     id: 'fx-messages',
     title: 'Messages with Compliments',
     kind: LabKind.screen,
-    question:
-        'Can a member tell a Compliment that needs a reply from an ordinary chat?',
+    question: 'Can a member tell a Compliment that needs a reply from an ordinary chat?',
     usages: ['Messages'],
     proposed: _o,
     variants: [
@@ -1490,15 +1493,15 @@ const List<LabGroup> kLabGroups = [
       ),
       LabVariant(
         'A',
-        'Context rows',
+        'Whose turn',
         'quiet editorial',
-        'Still one list. A Compliment row says what it was about and shows that photo; the filters sit beside the heading.',
+        'Two groups replace the filter row: Your turn, then Waiting on them. A Compliment says its state in words under the preview.',
       ),
       LabVariant(
         'B',
-        'Compliment shelf',
+        'Context rows',
         'expressive',
-        'Received Compliments move into a shelf of cards above the chats, each with its words and a Reply action. Changes the one-list rule.',
+        'One list with the filters. A Compliment row leads with what it was about and shows that photo at the end.',
       ),
     ],
   ),
@@ -1506,8 +1509,7 @@ const List<LabGroup> kLabGroups = [
     id: 'fx-compliment-thread',
     title: 'Received Compliment',
     kind: LabKind.screen,
-    question:
-        'Can a member see what was complimented, who sent it, and how to answer?',
+    question: 'Can a member see what was complimented, who sent it, and how to answer?',
     usages: ['Chat: a Compliment before the first reply'],
     proposed: _o,
     variants: [
@@ -1519,15 +1521,15 @@ const List<LabGroup> kLabGroups = [
       ),
       LabVariant(
         'A',
-        'Your photo, their words',
+        'Compact context card',
         'quiet editorial',
-        'What they complimented leads, with their words attached to it; the sender is a compact row that opens their profile.',
+        'No separate sender photo. One card: your photo or your own answer as the quoted block, then their words in the reading size.',
       ),
       LabVariant(
         'B',
-        'Introduction card',
+        'Decide first',
         'expressive',
-        'One card: their portrait beside who they are, their words large underneath, and what it was about as a chip.',
+        'Their photo with the name on it, their words as the large line, then Dismiss and Reply as a pair. Reply opens the composer.',
       ),
     ],
   ),
@@ -1535,7 +1537,8 @@ const List<LabGroup> kLabGroups = [
     id: 'fx-wallet',
     title: 'Compliment credits screen',
     kind: LabKind.screen,
-    question: 'Is the balance, and where it came from, clear before the history?',
+    question:
+        'Is the balance, and where it came from, clear before the history?',
     usages: ['Profile: Compliment credits'],
     proposed: _o,
     variants: [
@@ -1545,25 +1548,14 @@ const List<LabGroup> kLabGroups = [
         'baseline',
         'A solid purple card with the label then the total; three bucket rows below.',
       ),
-      LabVariant(
-        'A',
-        'Number and bar',
-        'quiet editorial',
-        'The number leads on white; one bar shows the spend order; buckets are a legend, not rows.',
-      ),
-      LabVariant(
-        'B',
-        'Credit hero',
-        'expressive',
-        'The dark number-first hero from Profile with artwork and Get Compliments inside it; buckets as three tiles.',
-      ),
     ],
   ),
   LabGroup(
     id: 'fx-streak',
     title: 'Streak screen',
     kind: LabKind.screen,
-    question: 'Is today’s state, and what earns the next credit, clear at once?',
+    question:
+        'Is today’s state, and what earns the next credit, clear at once?',
     usages: ['Profile: Streak'],
     proposed: _o,
     variants: [
@@ -1572,18 +1564,6 @@ const List<LabGroup> kLabGroups = [
         'Streak card',
         'baseline',
         'Flame, the count, seven bars, two lines of status.',
-      ),
-      LabVariant(
-        'A',
-        'Week track',
-        'quiet editorial',
-        'The count as the large line; seven numbered days with the reward marked on day 7.',
-      ),
-      LabVariant(
-        'B',
-        'Streak hero',
-        'expressive',
-        'A dark hero with artwork: the count, today’s state and the week track together.',
       ),
     ],
   ),

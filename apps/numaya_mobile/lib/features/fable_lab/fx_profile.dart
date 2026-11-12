@@ -265,12 +265,24 @@ class FxStatTiles extends StatelessWidget {
   }
 }
 
-/// The dark feature card (Ente's storage card, 12099:96480, with supplied reference 2's split):
-/// information on the left, one piece of artwork on the right that rises above the card's top
-/// edge, and a quiet action zone at the foot. One of these per screen at most.
+/// The surface of a feature card.
+enum FxHeroTone {
+  /// Near-black (Ente's storage card, 12099:96480).
+  dark,
+
+  /// Solid brand purple: the same geometry, as a palette comparison.
+  brand,
+}
+
+/// The feature card (Ente's storage card with supplied reference 2's split and research
+/// reference 07's zones): a copy zone on the left, one piece of artwork in its own zone on the
+/// right that rises above the card's top edge, supporting facts at full width, and one action
+/// across the foot. One of these per screen at most.
 ///
-/// The artwork never takes touches and never overlaps text: the top lines keep [artWidth] clear
-/// on the right, and everything below the art's foot uses the full width.
+/// Art slot: [artWidth] wide, anchored top-right, rising [artRise] above the card; the subject
+/// should fill the slot's width and sit on its bottom edge. The copy zone never runs under it,
+/// the art never takes touches, and at large text the art gives its room to the words.
+/// The mascot used today is a stand-in: these options are artwork-pending.
 class FxHeroCard extends StatelessWidget {
   const FxHeroCard({
     super.key,
@@ -278,6 +290,7 @@ class FxHeroCard extends StatelessWidget {
     required this.value,
     required this.art,
     required this.spoken,
+    this.tone = FxHeroTone.dark,
     this.detail,
     this.body,
     this.action,
@@ -289,68 +302,71 @@ class FxHeroCard extends StatelessWidget {
   /// The large line: the number first.
   final String value;
   final String? detail;
+  final FxHeroTone tone;
 
-  /// Under the top lines, full width: a bar, a track, a legend.
+  /// Under the top zones, full width: labelled balances, a track.
   final Widget? body;
 
-  /// The quiet action at the foot (a pill). Decorative when [onTap] makes the whole card one
-  /// target; a real control otherwise.
+  /// The action across the foot. Decorative when [onTap] makes the whole card one target; a real
+  /// control otherwise.
   final Widget? action;
   final NumayaIllustration art;
   final String spoken;
   final VoidCallback? onTap;
 
-  static const double artWidth = 92;
+  static const double artWidth = 136;
 
   /// How far the artwork rises above the card. The caller leaves this much room above.
-  static const double artRise = 14;
+  static const double artRise = 28;
+
+  /// The height the art zone keeps inside the card, beside the copy.
+  static const double artZone = 84;
 
   @override
   Widget build(BuildContext context) {
     final large = MediaQuery.textScalerOf(context).scale(10) > 13;
+    final brand = tone == FxHeroTone.brand;
+    // On purple every line is full white (4.90:1); the dark card can afford a muted label.
+    final muted = brand ? AppColors.accentForeground : AppColors.onHeroMuted;
+    final copy = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(label, style: AppTypography.label.copyWith(color: muted)),
+        const SizedBox(height: AppSpacing.s1),
+        Text(
+          value,
+          style: AppTypography.hero.copyWith(color: AppColors.inkForeground),
+        ),
+        if (detail != null)
+          Text(detail!, style: AppTypography.body.copyWith(color: muted)),
+      ],
+    );
     final card = Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppLayout.heroPadding),
       decoration: BoxDecoration(
-        color: AppColors.surfaceHero,
+        color: brand ? AppColors.accent : AppColors.surfaceHero,
         borderRadius: AppRadii.all(AppRadii.heroCard),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            // The art's safe zone: text never runs under it.
-            padding: EdgeInsets.only(right: large ? 0 : artWidth),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: AppTypography.label.copyWith(
-                    color: AppColors.onHeroMuted,
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.s1),
-                Text(
-                  value,
-                  style: AppTypography.hero.copyWith(
-                    color: AppColors.inkForeground,
-                  ),
-                ),
-                if (detail != null)
-                  Text(
-                    detail!,
-                    style: AppTypography.body.copyWith(
-                      color: AppColors.onHeroMuted,
-                    ),
-                  ),
-              ],
+          if (large)
+            copy
+          else
+            ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: artZone),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(child: copy),
+                  // The art zone: kept clear; the art itself is drawn over it below.
+                  const SizedBox(width: artWidth - AppSpacing.s2),
+                ],
+              ),
             ),
-          ),
-          if (body != null) ...[
-            const SizedBox(height: AppSpacing.s4),
-            body!,
-          ],
+          if (body != null) ...[const SizedBox(height: AppSpacing.s4), body!],
           if (action != null) ...[
             const SizedBox(height: AppSpacing.s4),
             action!,
@@ -362,17 +378,36 @@ class FxHeroCard extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         card,
-        // At large text the art gives its room to the words (it is decoration, not content).
         if (!large)
           Positioned(
             top: -artRise,
             right: AppSpacing.s3,
             width: artWidth,
+            height: artRise + AppLayout.heroPadding + artZone,
             child: IgnorePointer(
               child: ExcludeSemantics(
                 child: KeyedSubtree(
                   key: const ValueKey('fx-hero-art'),
-                  child: IllustrationView(art, width: artWidth),
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      // On purple the purple mascot needs a stage to stay visible.
+                      if (brand)
+                        Container(
+                          width: artWidth - 16,
+                          height: artWidth - 16,
+                          decoration: const BoxDecoration(
+                            color: AppColors.surface,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      FittedBox(
+                        fit: BoxFit.contain,
+                        alignment: Alignment.bottomCenter,
+                        child: IllustrationView(art, width: artWidth),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -397,19 +432,21 @@ class FxHeroCard extends StatelessWidget {
   }
 }
 
-/// The pill inside a hero card: white on a translucent white wash, with a chevron.
+/// The action across a feature card's foot: white with ink text and a chevron, the card's one
+/// solid control.
 class FxHeroPill extends StatelessWidget {
-  const FxHeroPill({super.key, required this.label, this.solid = false});
+  const FxHeroPill({super.key, required this.label, this.solid = true});
 
   final String label;
 
-  /// White with dark text: the hero's one real action (Get Compliments on the credits screen).
+  /// White with dark text. False draws the quiet translucent version.
   final bool solid;
 
   @override
   Widget build(BuildContext context) {
     final fg = solid ? AppColors.ink : AppColors.inkForeground;
     return Container(
+      width: double.infinity,
       constraints: const BoxConstraints(minHeight: AppSizes.buttonHeightSm),
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.s4,
@@ -420,7 +457,7 @@ class FxHeroPill extends StatelessWidget {
         borderRadius: AppRadii.all(AppRadii.control),
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Flexible(
             child: Text(
@@ -429,9 +466,57 @@ class FxHeroPill extends StatelessWidget {
             ),
           ),
           const SizedBox(width: AppSpacing.s1),
-          NumayaIcon(NumayaIcons.chevronRight, size: AppSizes.iconSm, color: fg),
+          NumayaIcon(
+            NumayaIcons.chevronRight,
+            size: AppSizes.iconSm,
+            color: fg,
+          ),
         ],
       ),
+    );
+  }
+}
+
+/// The three credit buckets as labelled numbers in spend order: the label says which is which,
+/// so nothing depends on telling two purple dots apart.
+class FxBalanceColumns extends StatelessWidget {
+  const FxBalanceColumns({super.key, required this.data, this.onHero = true});
+
+  final WalletData data;
+
+  /// On a feature card (white text); false for a white surface.
+  final bool onHero;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final buckets = [
+      (l10n.walletWeekly, data.weekly),
+      (l10n.walletEarned, data.earned),
+      (l10n.walletPurchased, data.purchased),
+    ];
+    final number = AppTypography.card.copyWith(
+      color: onHero ? AppColors.inkForeground : AppColors.ink,
+    );
+    final label = AppTypography.caption.copyWith(
+      color: onHero ? AppColors.inkForeground : AppColors.textSecondary,
+    );
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (var i = 0; i < buckets.length; i++) ...[
+          if (i > 0) const SizedBox(width: AppSpacing.s3),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${buckets[i].$2}', style: number),
+                Text(buckets[i].$1, style: label),
+              ],
+            ),
+          ),
+        ],
+      ],
     );
   }
 }
@@ -456,12 +541,16 @@ class FxCreditBar extends StatelessWidget {
       (
         l10n.walletEarned,
         data.earned,
-        onDark ? AppColors.accentLine : AppColors.accent.withValues(alpha: 0.55),
+        onDark
+            ? AppColors.accentLine
+            : AppColors.accent.withValues(alpha: 0.55),
       ),
       (
         l10n.walletPurchased,
         data.purchased,
-        onDark ? AppColors.inkForeground : AppColors.accent.withValues(alpha: 0.25),
+        onDark
+            ? AppColors.inkForeground
+            : AppColors.accent.withValues(alpha: 0.25),
       ),
     ];
     final legend = AppTypography.caption.copyWith(
@@ -520,12 +609,18 @@ class FxCreditBar extends StatelessWidget {
   }
 }
 
-/// B: the one feature card of the Profile tab: credits, number first, on the dark hero.
+/// B (dark) and C (purple): the one feature card of the Profile tab: credits, number first.
 class FxCreditHero extends StatelessWidget {
-  const FxCreditHero({super.key, required this.data, required this.onTap});
+  const FxCreditHero({
+    super.key,
+    required this.data,
+    required this.onTap,
+    this.tone = FxHeroTone.dark,
+  });
 
   final WalletData data;
   final VoidCallback onTap;
+  final FxHeroTone tone;
 
   @override
   Widget build(BuildContext context) {
@@ -533,15 +628,19 @@ class FxCreditHero extends StatelessWidget {
     final total = data.weekly + data.earned + data.purchased;
     return FxHeroCard(
       key: const ValueKey('hub-wallet'),
+      tone: tone,
       label: l10n.walletTitle,
       value: l10n.walletTotal(total),
       art: NumayaIllustration.mascotWaiting,
-      spoken: '${l10n.walletTitle}, ${l10n.walletTotal(total)}',
-      body: FxCreditBar(data: data),
-      action: Align(
-        alignment: AlignmentDirectional.centerEnd,
-        child: FxHeroPill(label: l10n.fxSeeCredits),
-      ),
+      spoken: [
+        l10n.walletTitle,
+        l10n.walletTotal(total),
+        '${l10n.walletWeekly} ${data.weekly}',
+        '${l10n.walletEarned} ${data.earned}',
+        '${l10n.walletPurchased} ${data.purchased}',
+      ].join(', '),
+      body: FxBalanceColumns(data: data),
+      action: FxHeroPill(label: l10n.fxSeeCredits),
       onTap: onTap,
     );
   }

@@ -3821,5 +3821,15 @@
   "@fxCreditsToSend": {"placeholders": {"count": {"type": "int"}}},
   "fxRewardDay": "Credit",
   "fxToday": "Today",
-  "fxNextCredit": "Next credit"
+  "fxNextCredit": "Next credit",
+  "fxShowMore": "Show more",
+  "fxShowLess": "Show less",
+  "fxYourTurn": "Your turn",
+  "fxTheirTurn": "Waiting on them",
+  "fxStatusReply": "Compliment · reply to start chatting",
+  "fxStatusWaiting": "Compliment sent · waiting for a reply",
+  "fxPhrasePhoto": "Complimented your photo",
+  "fxPhraseAnswer": "Complimented your answer",
+  "fxPhraseSentPhoto": "You complimented their photo",
+  "fxPhraseSentAnswer": "You complimented their answer"
 }

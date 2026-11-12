@@ -44,7 +44,9 @@ void main() {
             !g.id.startsWith('v6-') &&
             !g.id.startsWith('v7-') &&
             // Replacement V8 comparisons: the V7 choice plus one or two real options, no padding.
-            !g.id.startsWith('r8-')) {
+            !g.id.startsWith('r8-') &&
+            // Fable lab groups list only implemented options (baseline plus up to two).
+            !g.id.startsWith('fx-')) {
           expect(g.ids, ['O', 'A', 'B', 'C'], reason: g.id);
         }
         // Dependencies name real groups and variants.

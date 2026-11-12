@@ -12,6 +12,8 @@ import '../../dating/presentation/chat_header.dart';
 import '../../dating/presentation/person_profile.dart';
 import '../../dating/presentation/safety_sheets.dart';
 import '../../dating/presentation/time_format.dart';
+import '../../fable_lab/fx_thread.dart';
+import '../../lab/lab_registry.dart';
 import '../application/compliments_controller.dart';
 import '../domain/compliment.dart';
 import 'compliment_screens.dart' show ownProfilePersonProvider, promptAt;
@@ -40,9 +42,24 @@ class ComplimentThread extends ConsumerStatefulWidget {
 
 class _ComplimentThreadState extends ConsumerState<ComplimentThread> {
   final _reply = TextEditingController();
+  final _replyFocus = FocusNode();
+
+  /// Fable lab `fx-compliment-thread` B: the composer appears once Reply is chosen.
+  bool _replying = false;
+
+  Future<void> _dismiss() async {
+    final done = await confirmComplimentDismiss(
+      context,
+      ref,
+      widget.compliment,
+      widget.person,
+    );
+    if (done && mounted) widget.onBack();
+  }
 
   @override
   void dispose() {
+    _replyFocus.dispose();
     _reply.dispose();
     super.dispose();
   }
@@ -112,6 +129,10 @@ class _ComplimentThreadState extends ConsumerState<ComplimentThread> {
     final person = widget.person;
     final now = ref.read(clockProvider)();
     final received = !c.fromMe;
+    // Fable lab: only the received, unanswered thread has alternatives.
+    final fx = received
+        ? ref.watch(labVariantProvider('fx-compliment-thread'))
+        : 'O';
     // The quoted thing: your photo or prompt when it was sent to you, theirs when you sent it.
     final owner = received ? ref.watch(ownProfilePersonProvider) : person;
     final onPhoto = c.target.kind == ComplimentTargetKind.photo;
@@ -152,44 +173,89 @@ class _ComplimentThreadState extends ConsumerState<ComplimentThread> {
               : l10n.v8ComplimentYouSent(person.name),
         ),
         ChatSystemLine(dayLine(l10n, c.sentAt, now)),
-        // The owner's V7 choice (v7-request B, photo-led): you meet the sender before their
-        // words. Tapping the photo opens their profile.
-        if (received) ...[
-          Pressable(
-            key: const ValueKey('compliment-sender-photo'),
-            onTap: () => context.push('${Routes.person}/${person.id}'),
-            semanticLabel: l10n.viewProfile(person.name),
-            excludeChildSemantics: true,
-            pressedScale: 0.98,
-            borderRadius: AppRadii.all(AppRadii.photo),
-            child: PhotoPlaceholder(
-              label: l10n.discoverPhotoLabel(person.name, 1),
-              aspectRatio: 4 / 3,
-              child: personPhotoImage(person, 1),
+        if (fx == 'A')
+          // Lab A: one compact card; the header already says who it is from.
+          Semantics(
+            label: l10n.chatTheirMessageLabel(person.name, c.text),
+            child: ExcludeSemantics(
+              child: FxComplimentCard(
+                label: onPhoto ? l10n.fxOnYourPhoto : l10n.fxOnYourAnswer,
+                contextTitle: quoteText,
+                contextBody: !onPhoto && c.referenceAvailable
+                    ? prompt?.answer
+                    : null,
+                thumbnail: onPhoto && c.referenceAvailable
+                    ? personPhotoImage(owner, c.target.index + 1)
+                    : null,
+                words: c.text,
+                time: DateFormat('HH:mm').format(c.sentAt),
+              ),
             ),
-          ),
-          const SizedBox(height: AppSpacing.s2),
-          Text('${person.name}, ${person.age}', style: AppTypography.card),
-          if (person.lookingFor != null)
-            Text(person.lookingFor!, style: AppTypography.helper),
-          const SizedBox(height: AppSpacing.s4),
-        ],
-        Semantics(
-          label: received
-              ? l10n.chatTheirMessageLabel(person.name, c.text)
-              : c.text,
-          child: ExcludeSemantics(
-            child: MessageBubble(
-              key: const ValueKey('compliment-bubble'),
-              text: c.text,
-              mine: !received,
-              replyAuthor: quoteAuthor,
-              replyText: quoteText,
-              replyThumbnail: thumbnail,
+          )
+        else if (fx == 'B')
+          // Lab B: who, what they said, what it was about; the answer is in the footer.
+          Semantics(
+            label: l10n.chatTheirMessageLabel(person.name, c.text),
+            child: FxIntroduction(
+              photo: personPhotoImage(person, 1),
+              photoLabel: l10n.discoverPhotoLabel(person.name, 1),
+              sample: personTileImage(person),
+              name: '${person.name}, ${person.age}',
+              detail: person.lookingFor,
+              words: c.text,
+              contextLine: [
+                if (onPhoto) l10n.fxOnYourPhoto else l10n.fxOnYourAnswer,
+                quoteText,
+              ].join(' · '),
+              thumbnail: onPhoto && c.referenceAvailable
+                  ? personPhotoImage(owner, c.target.index + 1)
+                  : null,
               time: DateFormat('HH:mm').format(c.sentAt),
+              onOpenProfile: () =>
+                  context.push('${Routes.person}/${person.id}'),
+              profileLabel: l10n.viewProfile(person.name),
+            ),
+          )
+        else ...[
+          // The owner's V7 choice (v7-request B, photo-led): you meet the sender before their
+          // words. Tapping the photo opens their profile.
+          if (received) ...[
+            Pressable(
+              key: const ValueKey('compliment-sender-photo'),
+              onTap: () => context.push('${Routes.person}/${person.id}'),
+              semanticLabel: l10n.viewProfile(person.name),
+              excludeChildSemantics: true,
+              pressedScale: 0.98,
+              borderRadius: AppRadii.all(AppRadii.photo),
+              child: PhotoPlaceholder(
+                label: l10n.discoverPhotoLabel(person.name, 1),
+                aspectRatio: 4 / 3,
+                child: personPhotoImage(person, 1),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.s2),
+            Text('${person.name}, ${person.age}', style: AppTypography.card),
+            if (person.lookingFor != null)
+              Text(person.lookingFor!, style: AppTypography.helper),
+            const SizedBox(height: AppSpacing.s4),
+          ],
+          Semantics(
+            label: received
+                ? l10n.chatTheirMessageLabel(person.name, c.text)
+                : c.text,
+            child: ExcludeSemantics(
+              child: MessageBubble(
+                key: const ValueKey('compliment-bubble'),
+                text: c.text,
+                mine: !received,
+                replyAuthor: quoteAuthor,
+                replyText: quoteText,
+                replyThumbnail: thumbnail,
+                time: DateFormat('HH:mm').format(c.sentAt),
+              ),
             ),
           ),
-        ),
+        ],
         if (!received) ...[
           const SizedBox(height: AppSpacing.s6),
           // V7's mascot, whose stated purpose is waiting on someone else.
@@ -241,13 +307,38 @@ class _ComplimentThreadState extends ConsumerState<ComplimentThread> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Composer(
-                      key: const ValueKey('compliment-reply-composer'),
-                      controller: _reply,
-                      placeholder: l10n.v8ReplyPrivately,
-                      sendLabel: l10n.chatSend,
-                      onSend: (_) => _send(),
-                    ),
+                    if (fx == 'B' && !_replying)
+                      // Lab B: decide first. Reply reveals the composer with the keyboard.
+                      NumayaButtonGroup(
+                        children: [
+                          NumayaButton(
+                            key: const ValueKey('compliment-dismiss'),
+                            label: l10n.requestDismiss,
+                            variant: NumayaButtonVariant.secondary,
+                            onPressed: _dismiss,
+                          ),
+                          NumayaButton(
+                            key: const ValueKey('compliment-reply'),
+                            label: l10n.fxReply,
+                            icon: NumayaIcons.message,
+                            onPressed: () {
+                              setState(() => _replying = true);
+                              WidgetsBinding.instance.addPostFrameCallback(
+                                (_) => _replyFocus.requestFocus(),
+                              );
+                            },
+                          ),
+                        ],
+                      )
+                    else
+                      Composer(
+                        key: const ValueKey('compliment-reply-composer'),
+                        controller: _reply,
+                        focusNode: _replyFocus,
+                        placeholder: l10n.v8ReplyPrivately,
+                        sendLabel: l10n.chatSend,
+                        onSend: (_) => _send(),
+                      ),
                     const SizedBox(height: AppSpacing.s2),
                     Text(
                       l10n.requestReplyHint,

@@ -230,10 +230,9 @@ class ProfileScreen extends ConsumerWidget {
         : null;
     void openSetup() {
       final next = health.missing.firstOrNull;
-      context.push(
-        next == null ? Routes.completion : healthFactorRoute(next),
-      );
+      context.push(next == null ? Routes.completion : healthFactorRoute(next));
     }
+
     // Owner selections wallet-card A and streak-card O, inside the selected baseline Profile.
     final activityCards = NumayaSection(
       title: l10n.hubActivity,
@@ -269,10 +268,14 @@ class ProfileScreen extends ConsumerWidget {
           supportGroup,
         ],
         // B: a short cover, one dark credit hero, then two quieter blocks.
-        _ when fx == 'B' => [
+        _ when fx == 'B' || fx == 'C' => [
           ProfileHeaderCover(data: header(), compact: true),
           small,
-          FxCreditHero(data: wallet, onTap: toWallet),
+          FxCreditHero(
+            data: wallet,
+            onTap: toWallet,
+            tone: fx == 'C' ? FxHeroTone.brand : FxHeroTone.dark,
+          ),
           small,
           FxQuietPair(
             streak: streak,

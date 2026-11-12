@@ -24,7 +24,20 @@ class ConversationRow extends ConsumerWidget {
     required this.onTap,
     this.variant,
     this.compliment = false,
+    this.fxStatus,
+    this.fxWaiting = false,
+    this.fxThumb,
   });
+
+  /// Fable lab `fx-messages` (variants `FA`, `FB`): the Compliment's state in words. In `FA` it
+  /// is a third line under the preview; in `FB` it leads the preview and says what it was about.
+  final String? fxStatus;
+
+  /// The status is waiting on the other person (drawn muted, not in the brand colour).
+  final bool fxWaiting;
+
+  /// `FB`: the complimented photo, at the row's end.
+  final Widget? fxThumb;
 
   /// Where the text starts (avatar 56 + gap 16): the inset of the hairline between rows.
   static const double textInset = 72;
@@ -54,7 +67,7 @@ class ConversationRow extends ConsumerWidget {
             if (last.text.isNotEmpty) last.text,
           ].join(': ');
     final preview = last.mine ? l10n.youPrefix(text) : text;
-    final kind = compliment ? l10n.v8ComplimentTag : null;
+    final kind = fxStatus ?? (compliment ? l10n.v8ComplimentTag : null);
     final time = shortTime(l10n, last.at, now);
     final semantics = [
       person.verified
@@ -94,8 +107,142 @@ class ConversationRow extends ConsumerWidget {
         ? StatusBadge(label: l10n.yourMoveTag)
         : const SizedBox.shrink();
 
+    final statusStyle = AppTypography.weight(
+      AppTypography.caption,
+      AppTypography.semibold,
+    ).copyWith(color: fxWaiting ? AppColors.textMuted : AppColors.accentOnTint);
+    final timeText = Text(
+      time,
+      style: AppTypography.micro.copyWith(
+        color: unread > 0 ? AppColors.accentOnTint : AppColors.textMuted,
+      ),
+    );
     final Widget content;
     switch (v) {
+      case 'FA':
+        // Lab A (recipe M1, quiet list): name and time, the preview, then a Compliment's state
+        // in words. No turn pill: the section heading already says whose turn it is.
+        content = Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.s3),
+          child: Row(
+            children: [
+              avatar(56),
+              const SizedBox(width: AppSpacing.s4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(child: name()),
+                        const SizedBox(width: AppSpacing.s2),
+                        timeText,
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            preview,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: previewStyle,
+                          ),
+                        ),
+                        if (unread > 0) ...[
+                          const SizedBox(width: AppSpacing.s2),
+                          CountBadge(count: unread),
+                        ],
+                      ],
+                    ),
+                    if (fxStatus != null) ...[
+                      const SizedBox(height: 2),
+                      Row(
+                        children: [
+                          MobileIcon(
+                            NumayaMobileIcons.compliment,
+                            size: 14,
+                            color: statusStyle.color!,
+                          ),
+                          const SizedBox(width: AppSpacing.s1),
+                          Expanded(child: Text(fxStatus!, style: statusStyle)),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      case 'FB':
+        // Lab B (recipe M2, context rows): a Compliment row leads with what it was about and
+        // shows that photo; ordinary chats stay as they are.
+        content = Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.s3),
+          child: Row(
+            children: [
+              avatar(56),
+              const SizedBox(width: AppSpacing.s4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(child: name()),
+                        const SizedBox(width: AppSpacing.s2),
+                        timeText,
+                      ],
+                    ),
+                    if (fxStatus != null) ...[
+                      const SizedBox(height: 2),
+                      Text(fxStatus!, style: statusStyle),
+                    ],
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            preview,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: previewStyle,
+                          ),
+                        ),
+                        // With a photo at the row's end, the unread count sits on the photo.
+                        if ((yourMove || unread > 0) &&
+                            !(fxThumb != null && unread > 0)) ...[
+                          const SizedBox(width: AppSpacing.s2),
+                          trailingBadge(),
+                        ],
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              if (fxThumb != null) ...[
+                const SizedBox(width: AppSpacing.s3),
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    ClipRRect(
+                      borderRadius: AppRadii.all(AppRadii.tag),
+                      child: SizedBox(width: 44, height: 58, child: fxThumb),
+                    ),
+                    if (unread > 0)
+                      Positioned(
+                        top: -6,
+                        right: -6,
+                        child: CountBadge(count: unread),
+                      ),
+                  ],
+                ),
+              ],
+            ],
+          ),
+        );
       case 'A':
         // Your turn first: the turn label takes the time's place; time drops under it.
         content = Padding(

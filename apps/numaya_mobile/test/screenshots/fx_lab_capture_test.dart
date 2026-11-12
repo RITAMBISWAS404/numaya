@@ -60,6 +60,7 @@ final List<_Scene> _scenes = [
     _s('fx-wallet', o, 'top', Routes.wallet),
     _s('fx-streak', o, 'top', Routes.streak),
   ],
+  _s('fx-profile', 'C', 'top', Routes.profile),
 ];
 
 void main() {
@@ -73,7 +74,9 @@ void main() {
 
   for (final s in _scenes) {
     if (_only.isNotEmpty && !s.group.startsWith(_only)) continue;
-    final known = kLabGroups.any((g) => g.id == s.group);
+    final known = kLabGroups.any(
+      (g) => g.id == s.group && g.ids.contains(s.option),
+    );
     testWidgets('${s.group} ${s.option} ${s.view}', skip: !known, (
       tester,
     ) async {
@@ -96,10 +99,7 @@ void main() {
         await tester.pump(const Duration(milliseconds: 300));
       }
       if (s.scroll > 0) {
-        await tester.drag(
-          find.byType(Scrollable).first,
-          Offset(0, -s.scroll),
-        );
+        await tester.drag(find.byType(Scrollable).first, Offset(0, -s.scroll));
         for (var i = 0; i < 3; i++) {
           await tester.runAsync(
             () => Future<void>.delayed(const Duration(milliseconds: 150)),

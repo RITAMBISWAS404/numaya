@@ -7414,4 +7414,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fxNextCredit => 'Next credit';
+
+  @override
+  String get fxShowMore => 'Show more';
+
+  @override
+  String get fxShowLess => 'Show less';
+
+  @override
+  String get fxYourTurn => 'Your turn';
+
+  @override
+  String get fxTheirTurn => 'Waiting on them';
+
+  @override
+  String get fxStatusReply => 'Compliment · reply to start chatting';
+
+  @override
+  String get fxStatusWaiting => 'Compliment sent · waiting for a reply';
+
+  @override
+  String get fxPhrasePhoto => 'Complimented your photo';
+
+  @override
+  String get fxPhraseAnswer => 'Complimented your answer';
+
+  @override
+  String get fxPhraseSentPhoto => 'You complimented their photo';
+
+  @override
+  String get fxPhraseSentAnswer => 'You complimented their answer';
 }

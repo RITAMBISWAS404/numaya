@@ -206,7 +206,11 @@ class FxPhotoComplimentBar extends StatelessWidget {
 
 typedef _Fact = ({String emoji, String label, String value});
 
-List<_Fact> _facts(AppLocalizations l10n, SamplePerson p, {bool intent = true}) => [
+List<_Fact> _facts(
+  AppLocalizations l10n,
+  SamplePerson p, {
+  bool intent = true,
+}) => [
   if (p.identity != null)
     (emoji: ProfileFactEmoji.identity, label: '', value: p.identity!),
   if (intent && p.lookingFor != null)

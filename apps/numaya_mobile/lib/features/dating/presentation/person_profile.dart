@@ -171,11 +171,7 @@ class PersonHeroCard extends StatelessWidget {
                             padding: inset,
                             sample: personTileImage(person),
                             child: photoFooter == null
-                                ? _overlayIdentity(
-                                    context,
-                                    l10n,
-                                    backed: false,
-                                  )
+                                ? _overlayIdentity(context, l10n, backed: false)
                                 : Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.stretch,

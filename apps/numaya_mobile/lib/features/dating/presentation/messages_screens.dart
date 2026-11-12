@@ -13,6 +13,8 @@ import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../compliments/application/compliments_controller.dart';
 import '../../compliments/domain/compliment.dart';
+import '../../compliments/presentation/compliment_screens.dart'
+    show ownProfilePersonProvider;
 import '../../compliments/presentation/compliment_thread.dart';
 import '../../experiments/experiments.dart';
 import '../../home/presentation/home_shell.dart';
@@ -46,8 +48,11 @@ class _Entry {
     required this.unread,
     required this.yourMove,
     this.compliment = false,
+    this.source,
   });
 
+  /// The pending Compliment behind a Compliment row.
+  final Compliment? source;
   final SamplePerson person;
   final DemoMessage last;
   final int unread;
@@ -240,6 +245,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             unread: !c.fromMe && _unseen(state, c) ? 1 : 0,
             yourMove: !c.fromMe,
             compliment: true,
+            source: c,
           ),
     ]..sort((a, b) => b.last.at.compareTo(a.last.at));
     final all = entries;
@@ -252,42 +258,103 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     };
 
     final dividers = ref.watch(labVariantProvider('r8-chat-dividers'));
+    // Fable lab `fx-messages`: A sections by whose turn it is with a status line on Compliments;
+    // B keeps one list and gives Compliment rows their context.
+    final fx = ref.watch(labVariantProvider('fx-messages'));
+    final own = ref.watch(ownProfilePersonProvider);
+    Widget divider() => Padding(
+      // A (r8-chat-dividers) runs edge to edge of the content; B starts under the name.
+      padding: EdgeInsetsDirectional.only(
+        start: dividers == 'B' ? ConversationRow.textInset : 0,
+      ),
+      child: const ExcludeSemantics(
+        child: SizedBox(
+          height: AppBorders.hairline,
+          width: double.infinity,
+          child: ColoredBox(color: AppColors.divider),
+        ),
+      ),
+    );
+    Widget row(_Entry e) {
+      final c = e.source;
+      final onPhoto = c?.target.kind == ComplimentTargetKind.photo;
+      return ConversationRow(
+        key: ValueKey('conversation-${e.person.id}'),
+        person: e.person,
+        last: e.last,
+        unread: e.unread,
+        yourMove: e.yourMove,
+        compliment: e.compliment,
+        now: now,
+        onTap: () => _open(e.person),
+        variant: switch (fx) {
+          'A' => 'FA',
+          'B' => 'FB',
+          _ => rowV,
+        },
+        fxStatus: c == null
+            ? null
+            : switch ((fx, c.fromMe, onPhoto)) {
+                ('A', false, _) => l10n.fxStatusReply,
+                ('A', true, _) => l10n.fxStatusWaiting,
+                ('B', false, true) => l10n.fxPhrasePhoto,
+                ('B', false, false) => l10n.fxPhraseAnswer,
+                ('B', true, true) => l10n.fxPhraseSentPhoto,
+                ('B', true, false) => l10n.fxPhraseSentAnswer,
+                _ => null,
+              },
+        fxWaiting: c?.fromMe ?? false,
+        // The complimented photo, never one that is no longer available.
+        fxThumb: fx == 'B' && c != null && onPhoto && c.referenceAvailable
+            ? personPhotoImage(c.fromMe ? e.person : own, c.target.index + 1)
+            : null,
+      );
+    }
+
+    Widget rowsOf(List<_Entry> entries) => Column(
+      children: [
+        for (var i = 0; i < entries.length; i++) ...[
+          if (i > 0 && dividers != 'O') divider(),
+          row(entries[i]),
+        ],
+      ],
+    );
+
+    final theirMove = all.where((e) => !e.yourMove).toList();
     final Widget list;
-    if (rows.isNotEmpty) {
+    if (fx == 'A' && all.isNotEmpty) {
+      // Lab A: two groups instead of the filter row. Your turn first, newest first in each.
       list = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          for (var i = 0; i < rows.length; i++) ...[
-            // Replacement V8 (lab r8-chat-dividers): A near-full hairline (recommended), B inset to
-            // the text, O spacing only (V7).
-            if (i > 0 && dividers != 'O')
-              Padding(
-                // The list already sits inside the page gutter, so A runs edge to edge of the
-                // content (avatar to time); B starts under the name.
-                padding: EdgeInsetsDirectional.only(
-                  start: dividers == 'B' ? ConversationRow.textInset : 0,
-                ),
-                child: const ExcludeSemantics(
-                  child: SizedBox(
-                    height: AppBorders.hairline,
-                    width: double.infinity,
-                    child: ColoredBox(color: AppColors.divider),
-                  ),
-                ),
+          if (yourMove.isNotEmpty) ...[
+            Semantics(
+              header: true,
+              child: Text(
+                '${l10n.fxYourTurn} (${yourMove.length})',
+                style: listHeading,
               ),
-            ConversationRow(
-              key: ValueKey('conversation-${rows[i].person.id}'),
-              person: rows[i].person,
-              last: rows[i].last,
-              unread: rows[i].unread,
-              yourMove: rows[i].yourMove,
-              compliment: rows[i].compliment,
-              now: now,
-              onTap: () => _open(rows[i].person),
-              variant: rowV,
             ),
+            const SizedBox(height: AppSpacing.s1),
+            rowsOf(yourMove),
+          ],
+          if (theirMove.isNotEmpty) ...[
+            if (yourMove.isNotEmpty)
+              const SizedBox(height: AppSpacing.sectionGap),
+            Semantics(
+              header: true,
+              child: Text(
+                '${l10n.fxTheirTurn} (${theirMove.length})',
+                style: listHeading,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.s1),
+            rowsOf(theirMove),
           ],
         ],
       );
+    } else if (rows.isNotEmpty) {
+      list = rowsOf(rows);
     } else if (q.isNotEmpty && all.isEmpty) {
       list = EmptyState(
         art: const NumayaIcon(
@@ -396,23 +463,26 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             ),
           ],
           const SizedBox(height: AppSpacing.sectionGap),
-          Semantics(
-            header: true,
-            child: Text(l10n.conversationsTitle, style: listHeading),
-          ),
-          const SizedBox(height: AppSpacing.s3),
-          ViewTabs(
-            label: l10n.conversationsTitle,
-            bleed: AppLayout.screenGutter,
-            selected: _filter.index,
-            onSelect: (i) => setState(() => _filter = _ConvFilter.values[i]),
-            options: [
-              (label: l10n.convFilterAll, count: all.length),
-              (label: l10n.convFilterUnread, count: unread.length),
-              (label: l10n.convFilterMove, count: yourMove.length),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.s3),
+          // Lab A replaces the heading and filter row with its two groups.
+          if (fx != 'A' || all.isEmpty) ...[
+            Semantics(
+              header: true,
+              child: Text(l10n.conversationsTitle, style: listHeading),
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            ViewTabs(
+              label: l10n.conversationsTitle,
+              bleed: AppLayout.screenGutter,
+              selected: _filter.index,
+              onSelect: (i) => setState(() => _filter = _ConvFilter.values[i]),
+              options: [
+                (label: l10n.convFilterAll, count: all.length),
+                (label: l10n.convFilterUnread, count: unread.length),
+                (label: l10n.convFilterMove, count: yourMove.length),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.s3),
+          ],
           list,
           if (laterCount > 0 && q.isEmpty) ...[
             const SizedBox(height: AppSpacing.sectionGap),

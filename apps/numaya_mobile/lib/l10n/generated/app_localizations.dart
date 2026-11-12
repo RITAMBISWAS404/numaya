@@ -12477,6 +12477,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next credit'**
   String get fxNextCredit;
+
+  /// No description provided for @fxShowMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Show more'**
+  String get fxShowMore;
+
+  /// No description provided for @fxShowLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get fxShowLess;
+
+  /// No description provided for @fxYourTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Your turn'**
+  String get fxYourTurn;
+
+  /// No description provided for @fxTheirTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting on them'**
+  String get fxTheirTurn;
+
+  /// No description provided for @fxStatusReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment · reply to start chatting'**
+  String get fxStatusReply;
+
+  /// No description provided for @fxStatusWaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment sent · waiting for a reply'**
+  String get fxStatusWaiting;
+
+  /// No description provided for @fxPhrasePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Complimented your photo'**
+  String get fxPhrasePhoto;
+
+  /// No description provided for @fxPhraseAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Complimented your answer'**
+  String get fxPhraseAnswer;
+
+  /// No description provided for @fxPhraseSentPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'You complimented their photo'**
+  String get fxPhraseSentPhoto;
+
+  /// No description provided for @fxPhraseSentAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'You complimented their answer'**
+  String get fxPhraseSentAnswer;
 }
 
 class _AppLocalizationsDelegate
