@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
-import 'package:numaya_mobile/features/premium/application/premium_controller.dart';
 import 'package:numaya_mobile/features/lab/lab_registry.dart';
+import 'package:numaya_mobile/features/premium/application/premium_controller.dart';
 
 import '../helpers/journeys.dart';
 import '../helpers/test_app.dart';
