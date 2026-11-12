@@ -7,7 +7,9 @@
 import { createClient } from '@supabase/supabase-js';
 import pg from 'pg';
 import { randomUUID, randomBytes } from 'node:crypto';
+import sharp from 'sharp';
 import { loadEnv } from './env.mjs';
+import { processPhotoJobs, processAttachmentJobs, processExports } from '../worker/jobs.mjs';
 
 export const env = loadEnv();
 export const runId = `t${Date.now().toString(36)}${randomBytes(2).toString('hex')}`;
@@ -46,9 +48,13 @@ export const tinyJpeg = Buffer.from(
   '//////////////////////////////////////////////////////////////////////////////wAALCAABAAEBAREA/8QA' +
   'FAABAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAD8AKp//2Q==', 'base64');
 
+/** A real 400x400 JPEG with EXIF (harmless generated fixture) for the server pipeline. */
+export const fixtureJpeg = () => sharp({ create: { width: 400, height: 400, channels: 3, background: '#6a5acd' } })
+  .withExif({ IFD0: { Make: 'NumayaFixture' } }).jpeg().toBuffer();
+
 export async function uploadPhoto(user, position) {
   const path = `${user.id}/${randomUUID()}.jpg`;
-  const up = await user.client.storage.from('photos').upload(path, tinyJpeg, { contentType: 'image/jpeg' });
+  const up = await user.client.storage.from('photos').upload(path, await fixtureJpeg(), { contentType: 'image/jpeg' });
   if (up.error) throw up.error;
   const reg = await rpc(user, 'register_photo', { p_object_path: path, p_position: position });
   return { path, photoId: reg.photo_id };
@@ -104,10 +110,14 @@ export async function member(label, {
   await rpc(u, 'complete_onboarding', { p_birth_date: birth, p_terms_version: '2026-11',
     p_privacy_version: '2026-11', p_community_version: '2026-11' });
   await rpc(u, 'set_location', { p_lat: lat, p_lng: lng, p_city: 'Mumbai' });
+  // The real worker processes the uploads (metadata stripped, re-encoded) before review.
+  await runWorker('photos');
   if (approve) {
     const s = await staff();
     for (const p of u.photos) await rpc(s, 'staff_decide_photo', { p_photo: p.photoId, p_approve: true });
   }
+  u.photos = await Promise.all(u.photos.map(async (p) => ({ ...p,
+    processed: (await sql('select processed_path from public.photos where id = $1', [p.photoId]))[0].processed_path })));
   return u;
 }
 
@@ -123,4 +133,13 @@ export async function cleanup() {
   created.length = 0;
   await pool?.end();
   pool = undefined;
+}
+
+/** Runs one worker job against the development project (the same code the scheduler runs). */
+export async function runWorker(job) {
+  const args = { db: db(), storage: admin.storage };
+  if (job === 'photos') return processPhotoJobs({ ...args, limit: 50 });
+  if (job === 'attachments') return processAttachmentJobs({ ...args, limit: 50 });
+  if (job === 'exports') return processExports({ ...args, limit: 20 });
+  throw new Error(`unknown job ${job}`);
 }

@@ -2,7 +2,7 @@
 // worker completes it (sessions, storage, auth user).
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { member, rpc, rpcError, cleanup, key, sql, admin } from '../lib/harness.mjs';
+import { member, rpc, rpcError, cleanup, key, sql, admin, runWorker } from '../lib/harness.mjs';
 import { processDeletions } from '../scripts/privacy_worker.mjs';
 
 after(cleanup);
@@ -14,7 +14,16 @@ test('export returns own data and none of the counterpart\'s words', async () =>
   const { conversation_id: conv } = await rpc(b, 'decide', { p_target: a.id, p_kind: 'like', p_key: key() });
   await rpc(a, 'send_message', { p_conversation: conv, p_client_message_id: key(), p_body: 'mine' });
   await rpc(b, 'send_message', { p_conversation: conv, p_client_message_id: key(), p_body: 'theirs secret' });
-  const ex = await rpc(a, 'request_export');
+  const req = await rpc(a, 'request_export');
+  assert.equal(req.result, 'export_scheduled');
+  await runWorker('exports');
+  const { data: done } = await a.client.from('privacy_requests').select('object_path, expires_at').eq('id', req.request_id).single();
+  assert.ok(done.object_path && done.expires_at, 'export ready with an expiry');
+  const dl = await a.client.storage.from('exports').download(done.object_path);
+  assert.equal(dl.error, null, 'the member downloads their own export');
+  const ex = JSON.parse(await dl.data.text());
+  const other = await b.client.storage.from('exports').download(done.object_path);
+  assert.ok(other.error, 'nobody else can');
   const text = JSON.stringify(ex);
   assert.ok(text.includes('mine'));
   assert.ok(!text.includes('theirs secret'));

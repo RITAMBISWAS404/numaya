@@ -90,7 +90,9 @@ test('storage: own-folder uploads only; pending photos private; approved photos 
   const own = await b.client.storage.from('photos').createSignedUrl(pending.path, 60);
   assert.equal(own.error, null, 'owner can read own pending photo');
 
-  const approved = b.photos[0].path;
+  const approved = b.photos[0].processed;
+  const original = await c.client.storage.from('photos').createSignedUrl(b.photos[0].path, 60);
+  assert.ok(original.error, 'originals (with metadata) are never readable by others');
   const s2 = await c.client.storage.from('photos').createSignedUrl(approved, 60);
   assert.equal(s2.error, null, 'approved photo of a discoverable member is readable');
 
