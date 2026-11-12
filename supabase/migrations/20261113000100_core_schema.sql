@@ -116,6 +116,8 @@ create table private.outbox (
 create table private.deletion_tombstones (
   user_id uuid primary key,
   requested_at timestamptz not null default now(),
+  -- Approved restore window (B-75, F27): 28 days, unless the member deletes for good.
+  purge_after timestamptz not null default now() + interval '28 days',
   completed_at timestamptz
 );
 

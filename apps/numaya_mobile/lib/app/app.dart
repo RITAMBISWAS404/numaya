@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/connectivity/connectivity.dart';
 import '../core/design_system/design_system.dart';
+import '../data/live/live_config.dart';
+import '../data/live/live_dating_controller.dart';
 import '../features/auth/application/session_expiry.dart';
 import '../features/demo/application/demo_motion.dart';
 import '../features/lab/lab_registry.dart';
@@ -37,6 +39,21 @@ class NumayaApp extends ConsumerWidget {
         unawaited(ref.read(routerProvider).push<void>(Routes.reauth));
       }
     });
+    // Live backend (backend V1): the match screen opens only once the server confirms the match;
+    // a like the server refused for the daily allowance opens the allowance page, as in the demo.
+    if (LiveConfig.enabled) {
+      ref.listen(liveEventsProvider, (_, next) {
+        final router = ref.read(routerProvider);
+        switch (next.value) {
+          case LiveMatched(:final personId):
+            unawaited(router.push<void>('${Routes.match}/$personId'));
+          case LiveOutOfLikes():
+            unawaited(router.push<void>(Routes.allowance));
+          case null:
+            break;
+        }
+      });
+    }
     // Visual Lab V2 motion preset (MOT07): debug Design Lab choice, M1 everywhere else.
     AppMotion.preset = switch (ref.watch(labVariantProvider('motion'))) {
       'M0' => MotionPreset.m0,

@@ -15,7 +15,8 @@ export async function processDeletions({ only = null, log = () => {} } = {}) {
   try {
     const { rows } = await pool.query(
       `select user_id from private.deletion_tombstones where completed_at is null
-       and ($1::uuid[] is null or user_id = any($1::uuid[])) order by requested_at limit 100`, [only]);
+       and purge_after <= now() and ($1::uuid[] is null or user_id = any($1::uuid[]))
+       order by requested_at limit 100`, [only]);
     for (const { user_id: id } of rows) {
       try {
         for (;;) {

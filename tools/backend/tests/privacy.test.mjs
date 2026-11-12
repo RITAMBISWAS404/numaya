@@ -34,6 +34,18 @@ test('deletion hides the member immediately, closes chats and the worker complet
   const third = await member('delC', { gender: 'man', openTo: ['woman'] });
   assert.ok(!(await rpc(third, 'discovery_feed', { p_limit: 20 })).some((x) => x.user_id === a.id), 'gone from discovery');
 
+  // Inside the 28-day window the worker leaves the account alone and it can be restored.
+  assert.equal((await processDeletions({ only: [a.id] })).completed, 0);
+  const st = await rpc(a, 'account_state');
+  assert.equal(st.status, 'deleted');
+  assert.ok(st.restorable_until);
+  await rpc(a, 'restore_account');
+  assert.ok(Array.isArray(await rpc(a, 'discovery_feed', { p_limit: 5 })), 'restored member is active again');
+  assert.ok(!(await rpc(b, 'list_conversations')).some((x) => x.conversation_id === conv), 'closed chats stay closed');
+
+  // Delete again, then "delete for good": the worker purges.
+  await rpc(a, 'request_account_deletion');
+  await rpc(a, 'purge_account');
   const done = await processDeletions({ only: [a.id] });
   assert.equal(done.completed, 1);
   const { data } = await admin.auth.admin.getUserById(a.id);

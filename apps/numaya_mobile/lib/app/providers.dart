@@ -1,11 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/config/app_config.dart';
+import '../data/live/live_config.dart';
+import '../data/live/live_profile_repository.dart';
+import '../data/live/live_providers.dart';
+import '../data/live/supabase_auth_repository.dart';
 import '../features/auth/data/demo_auth_repository.dart';
 import '../features/auth/data/unconfigured_auth_repository.dart';
 import '../features/auth/domain/auth_repository.dart';
 import '../features/onboarding/data/in_memory_profile_repository.dart';
 import '../features/onboarding/domain/profile_repository.dart';
+import '../features/profile/application/profile_details_controller.dart';
 import 'release_scope.dart';
 
 /// App-wide dependencies. Tests override these with fakes (ProviderScope overrides).
@@ -19,7 +24,9 @@ final clockProvider = Provider<DateTime Function()>((ref) => DateTime.now);
 
 /// The demo auth service, or null when demo sign-in is not allowed (release / production).
 final demoAuthProvider = Provider<DemoAuthRepository?>((ref) {
-  if (!AppConfig.demoAuthAllowed ||
+  // A live-backend build never offers demo sign-in (backend V1).
+  if (LiveConfig.enabled ||
+      !AppConfig.demoAuthAllowed ||
       !ref.watch(appConfigProvider).demoAuthEnabled) {
     return null;
   }
@@ -29,11 +36,21 @@ final demoAuthProvider = Provider<DemoAuthRepository?>((ref) {
 });
 
 final authRepositoryProvider = Provider<AuthRepository>(
-  (ref) => ref.watch(demoAuthProvider) ?? const UnconfiguredAuthRepository(),
+  (ref) => LiveConfig.enabled
+      ? SupabaseAuthRepository(ref.watch(supabaseClientProvider))
+      : ref.watch(demoAuthProvider) ?? const UnconfiguredAuthRepository(),
 );
 
 final profileRepositoryProvider = Provider<ProfileRepository>(
-  (ref) => InMemoryProfileRepository(),
+  (ref) => LiveConfig.enabled
+      ? LiveProfileRepository(
+          ref.watch(supabaseClientProvider),
+          extras: () {
+            final d = ref.read(profileDetailsProvider);
+            return (bio: d.bio, heightCm: d.heightCm);
+          },
+        )
+      : InMemoryProfileRepository(),
 );
 
 /// Whether Events is available in this build (MVP: no). Defaults to the compile-time
@@ -51,5 +68,6 @@ final devToolsAvailableProvider = Provider<bool>(
 /// Whether chat attachments are offered (MVP: no, text and emoji only). Defaults to the
 /// compile-time [ReleaseScope.chatAttachments]; tests of the dormant attachment code turn it on.
 final chatAttachmentsProvider = Provider<bool>(
-  (ref) => ReleaseScope.chatAttachments,
+  // Live builds: attachments have no server storage yet (docs/backend/PROVIDER_STATUS.md).
+  (ref) => ReleaseScope.chatAttachments && !LiveConfig.enabled,
 );

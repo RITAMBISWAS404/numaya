@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/providers.dart';
 import '../../../core/logging/app_logger.dart';
 import '../../../core/time/ist.dart';
+import '../../../data/live/live_config.dart';
+import '../../../data/live/live_economy_controller.dart';
 import '../../dating/application/dating_controller.dart'
     show DemoWorld, demoWorldProvider;
 import '../../likes/domain/allowances.dart';
@@ -405,5 +407,6 @@ EconomyState _seedFullWorld(EconomyState s, DateTime now, AllowancePolicy p) {
 }
 
 final economyProvider = NotifierProvider<EconomyController, EconomyState>(
-  EconomyController.new,
+  // Live backend builds read the server wallet (backend V1); demo builds are unchanged.
+  () => LiveConfig.enabled ? LiveEconomyController() : EconomyController(),
 );

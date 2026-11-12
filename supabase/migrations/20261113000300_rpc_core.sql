@@ -169,6 +169,7 @@ returns jsonb language sql stable security definer set search_path = '' as $$
   select jsonb_build_object(
     'user_id', p.user_id,
     'first_name', p.first_name,
+    'gender', p.gender,
     'age', private.age_years(a.birth_date),
     'verified', p.verified,
     'pronouns', case when p.show_pronouns then to_jsonb(p.pronouns) else '[]'::jsonb end,
@@ -627,6 +628,22 @@ begin
     ) x), '[]'::jsonb);
 end $$;
 
+
+-- One member's public card: only a counterpart, or someone discoverable to the caller, never
+-- across a block. Same safe projection as the feed (no DOB, no coordinates).
+create or replace function public.member_card(p_user uuid)
+returns jsonb language plpgsql security definer set search_path = '' as $$
+declare uid uuid := private.require_active();
+begin
+  if p_user = uid then return private.profile_card(uid, uid); end if;
+  if private.is_blocked(uid, p_user)
+     or not (private.is_counterpart(p_user)
+             or (private.is_discoverable(p_user) and private.compatible(uid, p_user))) then
+    perform private.fail('not_found');
+  end if;
+  return private.profile_card(uid, p_user);
+end $$;
+
 -- ---------------------------------------------------------------------------------------------
 -- Likes and wallet
 create or replace function public.likes_summary()
@@ -768,8 +785,9 @@ begin
   return out;
 end $$;
 
--- Hides the account at once; the cleanup worker (tools/backend/privacy_worker.mjs, secret key)
--- revokes sessions, deletes storage objects and finally the auth user.
+-- Hides the account at once. It can be restored for 28 days (approved B-75/F27); after that, or
+-- at once with purge_account(), the worker (tools/backend/scripts/privacy_worker.mjs, secret
+-- key) deletes storage objects and the auth user (which revokes every session).
 create or replace function public.request_account_deletion()
 returns jsonb language plpgsql security definer set search_path = '' as $$
 declare uid uuid := private.require_user(); rid uuid;
@@ -779,10 +797,52 @@ begin
   update public.conversations set status = 'closed' where uid in (user_a, user_b) and status <> 'blocked';
   update public.compliments set status = 'closed' where (sender_id = uid or recipient_id = uid) and status = 'pending';
   update public.devices set revoked = true where user_id = uid;
-  insert into private.deletion_tombstones (user_id) values (uid) on conflict do nothing;
+  insert into private.deletion_tombstones (user_id) values (uid)
+    on conflict (user_id) do update set requested_at = now(), purge_after = now() + interval '28 days',
+      completed_at = null;
   insert into public.privacy_requests (user_id, kind) values (uid, 'delete') returning id into rid;
   insert into private.audit_log (actor, action, subject) values (uid, 'account_deletion_requested', uid);
   return jsonb_build_object('result', 'deletion_scheduled', 'request_id', rid);
+end $$;
+
+
+create or replace function public.account_state()
+returns jsonb language plpgsql security definer set search_path = '' as $$
+declare uid uuid := private.require_user(); acc private.accounts; t private.deletion_tombstones;
+begin
+  select * into acc from private.accounts where user_id = uid;
+  select * into t from private.deletion_tombstones where user_id = uid and completed_at is null;
+  -- The member's own birth date (their data; never returned for anyone else).
+  return jsonb_build_object('status', acc.status, 'has_profile', acc.onboarded_at is not null,
+    'birth_date', acc.birth_date,
+    'restorable_until', case when acc.status = 'deleted' and t.purge_after > now() then t.purge_after end);
+end $$;
+
+-- Restores a deleted account inside the window. Closed conversations stay closed.
+create or replace function public.restore_account()
+returns jsonb language plpgsql security definer set search_path = '' as $$
+declare uid uuid := private.require_user(); t private.deletion_tombstones;
+begin
+  select * into t from private.deletion_tombstones where user_id = uid and completed_at is null for update;
+  if not found or t.purge_after <= now() then perform private.fail('not_restorable'); end if;
+  update private.accounts set status = case when onboarded_at is null then 'onboarding' else 'active' end::public.account_status,
+    deleted_at = null where user_id = uid and status = 'deleted';
+  update public.profiles set paused = false where user_id = uid;
+  delete from private.deletion_tombstones where user_id = uid;
+  update public.privacy_requests set status = 'failed', completed_at = now()
+    where user_id = uid and kind = 'delete' and status = 'pending';
+  insert into private.audit_log (actor, action, subject) values (uid, 'account_restored', uid);
+  return jsonb_build_object('result', 'restored');
+end $$;
+
+-- "Delete for good": the worker purges at its next run.
+create or replace function public.purge_account()
+returns jsonb language plpgsql security definer set search_path = '' as $$
+declare uid uuid := private.require_user();
+begin
+  update private.deletion_tombstones set purge_after = now() where user_id = uid and completed_at is null;
+  if not found then perform private.fail('not_found'); end if;
+  return jsonb_build_object('result', 'purge_scheduled');
 end $$;
 
 -- ---------------------------------------------------------------------------------------------
@@ -846,9 +906,9 @@ begin
            where n.nspname = 'public' and p.prokind = 'f'
              and p.proname in ('complete_onboarding', 'set_location', 'register_photo', 'remove_photo',
                'reorder_photos', 'discovery_feed', 'decide', 'send_compliment', 'reply_compliment',
-               'dismiss_compliment', 'send_message', 'mark_read', 'extend_match', 'list_conversations',
+               'dismiss_compliment', 'send_message', 'mark_read', 'extend_match', 'list_conversations', 'member_card',
                'likes_summary', 'my_wallet', 'unmatch', 'block_member', 'unblock_member', 'report_member',
-               'register_device', 'request_export', 'request_account_deletion', 'staff_photo_queue',
+               'register_device', 'request_export', 'request_account_deletion', 'account_state', 'restore_account', 'purge_account', 'staff_photo_queue',
                'staff_decide_photo', 'staff_report_queue', 'staff_resolve_report')
   loop
     execute format('revoke all on function %s from public, anon', f.sig);

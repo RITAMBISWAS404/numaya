@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../../../core/media/demo_photos.dart';
 import '../../onboarding/domain/profile_draft.dart';
 import '../../profile/domain/profile_details.dart';
+import 'live_directory.dart';
 
 /// A profile in the demo. Every one is a **sample**: an invented person from the web prototype's
 /// fixtures (`PEOPLE` in src/flows/data.js), shown with grey photo placeholders and labelled as a
@@ -275,6 +276,9 @@ int demoPhotoIndex(String id) {
 }
 
 SamplePerson? personById(String id) {
+  // Live backend members first (empty in demo builds).
+  final live = liveDirectory[id];
+  if (live != null) return live;
   for (final p in [...kSamplePeople, ...kExtraPeople, ...kSeedMatchPeople]) {
     if (p.id == id) return p;
   }

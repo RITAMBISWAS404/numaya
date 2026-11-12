@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/providers.dart';
 import '../../../core/connectivity/connectivity.dart';
 import '../../../core/logging/app_logger.dart';
+import '../../../data/live/live_compliments_controller.dart';
+import '../../../data/live/live_config.dart';
 import '../../commerce/application/economy_controller.dart';
 import '../../commerce/domain/credit_ledger.dart';
 import '../../dating/application/dating_controller.dart';
@@ -227,7 +229,10 @@ class ComplimentsController extends Notifier<List<Compliment>> {
 
 final complimentsProvider =
     NotifierProvider<ComplimentsController, List<Compliment>>(
-      ComplimentsController.new,
+      // Live backend builds send and answer Compliments on the server (backend V1).
+      () => LiveConfig.enabled
+          ? LiveComplimentsController()
+          : ComplimentsController(),
     );
 
 /// Credits the member can spend on Compliments now.
