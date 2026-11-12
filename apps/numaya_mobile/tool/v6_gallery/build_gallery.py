@@ -194,6 +194,8 @@ for sid, conf in X['sequences'].items():
             steps.append({'path': f'current/seq/{fn[:-4]}.jpg', 'label': conf['steps'].get(key, key)})
         name = 'Baseline' if vid == 'O' else X['directions'][vid]['name'] if sid == 'direction' else next(v['name'] for v in bound['variants'] if v['id'] == vid)
         rows.append({'variant': vid, 'name': name, 'steps': steps})
+    if not rows:
+        continue  # not part of this capture set (replacement V8 renders no V7 journeys)
     sequences.append({'id': sid, 'title': conf['title'], 'note': conf['note'] + (f" Not captured end to end, so not shown: {', '.join(incomplete)}." if incomplete else ''), 'rows': rows})
 
 stress = []

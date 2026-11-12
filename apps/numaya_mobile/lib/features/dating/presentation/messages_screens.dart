@@ -261,11 +261,10 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             // the text, O spacing only (V7).
             if (i > 0 && dividers != 'O')
               Padding(
+                // The list already sits inside the page gutter, so A runs edge to edge of the
+                // content (avatar to time); B starts under the name.
                 padding: EdgeInsetsDirectional.only(
-                  start: dividers == 'B'
-                      ? ConversationRow.textInset
-                      : AppLayout.screenGutter,
-                  end: AppLayout.screenGutter,
+                  start: dividers == 'B' ? ConversationRow.textInset : 0,
                 ),
                 child: const ExcludeSemantics(
                   child: SizedBox(
