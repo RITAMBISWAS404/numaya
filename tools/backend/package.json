@@ -7,11 +7,17 @@
     "node": ">=20"
   },
   "scripts": {
+    "check:local": "node scripts/lint_sql.mjs && node local_semantic/run.mjs",
     "test": "node --test --test-concurrency=1 tests/",
-    "db:push": "node scripts/db_push.mjs"
+    "db:push": "node scripts/db_push.mjs",
+    "backup": "node scripts/backup.mjs",
+    "restore:drill": "node scripts/restore_drill.mjs",
+    "privacy:worker": "node scripts/privacy_worker.mjs"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.16",
     "@supabase/supabase-js": "2.119.0",
+    "libpg-query": "18.2.2",
     "pg": "8.23.1",
     "supabase": "3.1.0"
   }

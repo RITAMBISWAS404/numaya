@@ -339,15 +339,15 @@ end $$;
 -- Decisions: like or pass, idempotent per key, quota-checked, atomic reciprocal match.
 create or replace function public.decide(p_target uuid, p_kind text, p_key text)
 returns jsonb language plpgsql security definer set search_path = '' as $$
-declare uid uuid := private.require_active(); prior public.decisions; kind public.decision_kind;
+declare uid uuid := private.require_active(); prior public.decisions; v_kind public.decision_kind;
   d date := private.ist_day(); used int; lim int; conv public.conversations; result text := 'recorded';
   cid uuid; comp public.compliments;
 begin
   if p_kind not in ('like', 'pass') then perform private.fail('kind_invalid'); end if;
-  kind := p_kind::public.decision_kind;
+  v_kind := p_kind::public.decision_kind;
   select * into prior from public.decisions where actor_id = uid and idempotency_key = p_key;
   if found then
-    if prior.target_id = p_target and prior.kind = kind then
+    if prior.target_id = p_target and prior.kind = v_kind then
       return jsonb_build_object('result', prior.result, 'conversation_id', prior.conversation_id, 'replayed', true);
     end if;
     perform private.fail('idempotency_conflict');
@@ -363,7 +363,7 @@ begin
     perform private.fail('unavailable');
   end if;
 
-  if kind = 'like' then
+  if v_kind = 'like' then
     insert into private.daily_usage (user_id, day) values (uid, d) on conflict do nothing;
     select likes into used from private.daily_usage where user_id = uid and day = d for update;
     lim := case when private.is_premium(uid) then 15 else 5 end;
@@ -385,7 +385,7 @@ begin
         perform private.fail('unavailable');
       end if;
     elsif exists (select 1 from public.decisions
-                  where actor_id = p_target and target_id = uid and kind = 'like') then
+                  where actor_id = p_target and target_id = uid and decisions.kind = 'like') then
       insert into public.conversations (user_a, user_b, status, origin, matched_at, match_deadline)
       values (least(uid, p_target), greatest(uid, p_target), 'open', 'like', now(), now() + interval '24 hours')
       returning id into cid;
@@ -399,10 +399,10 @@ begin
   end if;
 
   insert into public.decisions (actor_id, target_id, kind, idempotency_key, result, conversation_id)
-  values (uid, p_target, kind, p_key, result, cid);
+  values (uid, p_target, v_kind, p_key, result, cid);
   perform private.record_activity(uid, 'decision');
   return jsonb_build_object('result', result, 'conversation_id', cid,
-    'likes_left', case when kind = 'like' then lim - used - 1 end);
+    'likes_left', case when v_kind = 'like' then lim - used - 1 end);
 end $$;
 
 -- ---------------------------------------------------------------------------------------------
