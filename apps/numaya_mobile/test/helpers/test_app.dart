@@ -84,6 +84,8 @@ Future<void> loadAppFonts() async {
     ('Figtree', 'assets/fonts/Figtree-Variable.ttf'),
     ('Plus Jakarta Sans', 'assets/fonts/PlusJakartaSans-Variable.ttf'),
     ('Noto Color Emoji', '/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf'),
+    // Windows hosts: Segoe UI Emoji stands in for the phone's colour emoji in renders.
+    ('Noto Color Emoji', r'C:\Windows\Fonts\seguiemj.ttf'),
     // Flutter's Material Icons (the app's icons, RD-04), from the SDK running the tests.
     (
       'MaterialIcons',

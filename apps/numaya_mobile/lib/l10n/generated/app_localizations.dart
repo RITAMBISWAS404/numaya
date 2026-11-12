@@ -12309,6 +12309,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reserve'**
   String get evReserveShort;
+
+  /// No description provided for @fxCompliment.
+  ///
+  /// In en, this message translates to:
+  /// **'Compliment'**
+  String get fxCompliment;
+
+  /// No description provided for @fxSendCompliment.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a Compliment'**
+  String get fxSendCompliment;
+
+  /// No description provided for @fxBothLike.
+  ///
+  /// In en, this message translates to:
+  /// **'You both like {things}'**
+  String fxBothLike(String things);
+
+  /// No description provided for @fxJoinAnd.
+  ///
+  /// In en, this message translates to:
+  /// **'{first} and {last}'**
+  String fxJoinAnd(String first, String last);
+
+  /// No description provided for @fxLookingFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for'**
+  String get fxLookingFor;
+
+  /// No description provided for @fxLivesInLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Lives in'**
+  String get fxLivesInLabel;
+
+  /// No description provided for @fxBasics.
+  ///
+  /// In en, this message translates to:
+  /// **'The basics'**
+  String get fxBasics;
+
+  /// No description provided for @fxCommonGround.
+  ///
+  /// In en, this message translates to:
+  /// **'Common ground'**
+  String get fxCommonGround;
+
+  /// No description provided for @fxSeeCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'See credits'**
+  String get fxSeeCredits;
+
+  /// No description provided for @fxSeeStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'See streak'**
+  String get fxSeeStreak;
+
+  /// No description provided for @fxSetupShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile setup'**
+  String get fxSetupShort;
+
+  /// No description provided for @fxSetupCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} done'**
+  String fxSetupCount(int done, int total);
+
+  /// No description provided for @fxOnYourPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'On your photo'**
+  String get fxOnYourPhoto;
+
+  /// No description provided for @fxOnYourAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'On your answer'**
+  String get fxOnYourAnswer;
+
+  /// No description provided for @fxOnTheirPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'On their photo'**
+  String get fxOnTheirPhoto;
+
+  /// No description provided for @fxOnTheirAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'On their answer'**
+  String get fxOnTheirAnswer;
+
+  /// No description provided for @fxShelfTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 Compliment to answer} other{{count} Compliments to answer}}'**
+  String fxShelfTitle(int count);
+
+  /// No description provided for @fxReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply'**
+  String get fxReply;
+
+  /// No description provided for @fxWrote.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} wrote'**
+  String fxWrote(String name);
+
+  /// No description provided for @fxViewProfileShort.
+  ///
+  /// In en, this message translates to:
+  /// **'View profile'**
+  String get fxViewProfileShort;
+
+  /// No description provided for @fxYourPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Your photo'**
+  String get fxYourPhoto;
+
+  /// No description provided for @fxYourAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Your answer'**
+  String get fxYourAnswer;
+
+  /// No description provided for @fxCreditsUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{credit} other{credits}}'**
+  String fxCreditsUnit(int count);
+
+  /// No description provided for @fxStreakUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{day streak} other{day streak}}'**
+  String fxStreakUnit(int count);
+
+  /// No description provided for @fxCreditsToSend.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No Compliments to send} =1{1 Compliment to send} other{{count} Compliments to send}}'**
+  String fxCreditsToSend(int count);
+
+  /// No description provided for @fxRewardDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit'**
+  String get fxRewardDay;
+
+  /// No description provided for @fxToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get fxToday;
+
+  /// No description provided for @fxNextCredit.
+  ///
+  /// In en, this message translates to:
+  /// **'Next credit'**
+  String get fxNextCredit;
 }
 
 class _AppLocalizationsDelegate

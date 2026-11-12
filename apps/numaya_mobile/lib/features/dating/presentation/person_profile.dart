@@ -29,7 +29,13 @@ class PersonHeroCard extends StatelessWidget {
     this.photoAction,
     this.complimentAction,
     this.layout,
+    this.photoFooter,
   });
+
+  /// Fable lab `fx-discover` B: a full-width control under the name, inside the photo's foot
+  /// (the labelled Compliment bar). It replaces [complimentAction], so nothing is reserved at
+  /// the right of the name.
+  final Widget? photoFooter;
 
   /// R05: the Compliment squircle, bottom-right on the photo. The identity text reserves its
   /// width, so the name never runs under it.
@@ -164,11 +170,26 @@ class PersonHeroCard extends StatelessWidget {
                             fade: 96,
                             padding: inset,
                             sample: personTileImage(person),
-                            child: _overlayIdentity(
-                              context,
-                              l10n,
-                              backed: false,
-                            ),
+                            child: photoFooter == null
+                                ? _overlayIdentity(
+                                    context,
+                                    l10n,
+                                    backed: false,
+                                  )
+                                : Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      _overlayIdentity(
+                                        context,
+                                        l10n,
+                                        backed: false,
+                                      ),
+                                      const SizedBox(height: AppSpacing.s3),
+                                      photoFooter!,
+                                    ],
+                                  ),
                           ),
                         };
                       },

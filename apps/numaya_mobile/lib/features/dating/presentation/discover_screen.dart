@@ -14,6 +14,7 @@ import '../../../l10n/l10n.dart';
 import '../../commerce/application/economy_controller.dart';
 import '../../compliments/domain/compliment.dart';
 import '../../compliments/presentation/compliment_screens.dart';
+import '../../fable_lab/fx_discover.dart';
 import '../../home/application/discovery_filters.dart';
 import '../../home/presentation/filters_sheet.dart';
 import '../../home/presentation/tab_screens.dart';
@@ -445,6 +446,8 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
     final discoverPhotoV =
         photoV ?? ref.watch(labVariantProvider('discover-photo'));
     final v7 = ref.watch(labVariantProvider('v7-discover'));
+    // Fable lab `fx-discover`: A essentials first, B photo-led (lib/features/fable_lab).
+    final fx = ref.watch(labVariantProvider('fx-discover'));
     final page = TabPage(
       header: header,
       scrollController: _scroll,
@@ -503,13 +506,26 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
                     label: l10n.discoverOptions,
                     onPressed: () => _options(person),
                   ),
-                  complimentAction: ComplimentAnchor(
-                    key: const ValueKey('compliment-photo-0'),
-                    name: person.name,
-                    onPressed: () =>
-                        compliment(const ComplimentTarget.photo(0)),
-                  ),
+                  // A: the photo stays clean (the labelled action follows it). B: a labelled
+                  // bar on the photo's foot, with distance and intention above it.
+                  complimentAction: fx == 'O'
+                      ? ComplimentAnchor(
+                          key: const ValueKey('compliment-photo-0'),
+                          name: person.name,
+                          onPressed: () =>
+                              compliment(const ComplimentTarget.photo(0)),
+                        )
+                      : null,
+                  photoFooter: fx == 'B'
+                      ? FxPhotoComplimentBar(
+                          key: const ValueKey('compliment-photo-0'),
+                          name: person.name,
+                          onPressed: () =>
+                              compliment(const ComplimentTarget.photo(0)),
+                        )
+                      : null,
                   layout: switch (v7) {
+                    _ when fx == 'B' => 'C',
                     'A' => 'F',
                     'B' => 'N',
                     _ => discoverPhotoV,
@@ -522,13 +538,22 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
             ),
             // UI-016: no decision buttons; the photo is swiped.
             const SizedBox(height: AppLayout.itemGap),
-            ...personSections(
-              context,
-              person,
-              onPhoto: openPhotos,
-              onCompliment: compliment,
-              promptVariant: promptV,
-            ),
+            if (fx == 'O')
+              ...personSections(
+                context,
+                person,
+                onPhoto: openPhotos,
+                onCompliment: compliment,
+                promptVariant: promptV,
+              )
+            else
+              ...fxPersonSections(
+                context,
+                person,
+                variant: fx,
+                onPhoto: openPhotos,
+                onCompliment: compliment,
+              ),
             const SizedBox(height: AppLayout.sectionGap),
             // happn's "Report & block" and Bumble's "Hide and Report" close the profile.
             Center(
@@ -706,12 +731,14 @@ class _SwipeCard extends StatefulWidget {
     this.photoAction,
     this.complimentAction,
     this.layout,
+    this.photoFooter,
   });
 
   final SamplePerson person;
   final double? photoHeight;
   final Widget? photoAction;
   final Widget? complimentAction;
+  final Widget? photoFooter;
   final String? layout;
   final VoidCallback onOpenPhotos;
   final VoidCallback onMore;
@@ -814,6 +841,7 @@ class _SwipeCardState extends State<_SwipeCard> {
           photoHeight: widget.photoHeight,
           photoAction: widget.photoAction,
           complimentAction: widget.complimentAction,
+          photoFooter: widget.photoFooter,
           layout: widget.layout,
         ),
       ),

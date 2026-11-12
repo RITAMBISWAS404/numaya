@@ -11,6 +11,7 @@ import '../../../core/time/ist.dart';
 import '../../../l10n/l10n.dart';
 import '../../commerce/application/economy_controller.dart';
 import '../../commerce/presentation/wallet_screen.dart';
+import '../../fable_lab/fx_profile.dart';
 import '../../health/application/health_providers.dart';
 import '../../home/presentation/large_title_page.dart';
 import '../../lab/activity_cards.dart';
@@ -207,6 +208,32 @@ class ProfileScreen extends ConsumerWidget {
     const gap = SizedBox(height: AppLayout.sectionGap);
     const small = SizedBox(height: AppSpacing.s3);
     final setup = ProfileSetupCard(health: health, variant: setupV);
+    // Fable lab `fx-profile`: A compact hub, B credit hero (lib/features/fable_lab).
+    final fx = ref.watch(labVariantProvider('fx-profile'));
+    final promptSection = draft.prompt == null
+        ? null
+        : NumayaSection(
+            title: l10n.profilePromptTitle,
+            child: PromptCard(
+              question: draft.prompt!.question,
+              answer: draft.prompt!.answer,
+              editLabel: l10n.promptEditLabel,
+              onTap: () => context.push(Routes.editPrompt),
+            ),
+          );
+    final premiumCard = premium.active
+        ? _PremiumCard(
+            active: premium.active,
+            until: premium.activeUntil,
+            onTap: () => context.push(Routes.premium),
+          )
+        : null;
+    void openSetup() {
+      final next = health.missing.firstOrNull;
+      context.push(
+        next == null ? Routes.completion : healthFactorRoute(next),
+      );
+    }
     // Owner selections wallet-card A and streak-card O, inside the selected baseline Profile.
     final activityCards = NumayaSection(
       title: l10n.hubActivity,
@@ -222,6 +249,44 @@ class ProfileScreen extends ConsumerWidget {
 
     final body = <Widget>[
       ...switch (direction) {
+        // A: identity and its two actions, then credits and streak in the first screen.
+        _ when fx == 'A' => [
+          FxIdentityRow(data: header()),
+          const SizedBox(height: AppSpacing.s5),
+          FxStatTiles(
+            wallet: wallet,
+            streak: streak,
+            onWallet: toWallet,
+            onStreak: toStreak,
+          ),
+          small,
+          ProfileSetupCard(health: health, variant: 'B'),
+          gap,
+          profileGroup,
+          gap,
+          if (promptSection != null) ...[promptSection, gap],
+          if (premiumCard != null) ...[premiumCard, gap],
+          supportGroup,
+        ],
+        // B: a short cover, one dark credit hero, then two quieter blocks.
+        _ when fx == 'B' => [
+          ProfileHeaderCover(data: header(), compact: true),
+          small,
+          FxCreditHero(data: wallet, onTap: toWallet),
+          small,
+          FxQuietPair(
+            streak: streak,
+            health: health,
+            onStreak: toStreak,
+            onSetup: openSetup,
+          ),
+          gap,
+          profileGroup,
+          gap,
+          if (promptSection != null) ...[promptSection, gap],
+          if (premiumCard != null) ...[premiumCard, gap],
+          supportGroup,
+        ],
         // Quiet editorial: one identity block, one line of activity, then plain groups.
         'A' => [
           hero,

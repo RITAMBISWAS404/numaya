@@ -104,9 +104,14 @@ class ProfileHeaderCover extends StatelessWidget {
     super.key,
     required this.data,
     this.square = false,
+    this.compact = false,
   });
 
   final ProfileHeaderData data;
+
+  /// Fable lab `fx-profile` B: a short cover (about a quarter of the screen), leaving the first
+  /// screen to the credit hero.
+  final bool compact;
 
   /// Square corners, for a cover that runs to the screen edges.
   final bool square;
@@ -122,10 +127,9 @@ class ProfileHeaderCover extends StatelessWidget {
     final l10n = context.l10n;
     // At least 40% of the screen; taller when the name needs it (V4-04: a long name at large text
     // ran into the initial and the Edit pill when the cover had a fixed height).
-    final minHeight = (MediaQuery.sizeOf(context).height * 0.4).clamp(
-      220.0,
-      360.0,
-    );
+    final minHeight = compact
+        ? (MediaQuery.sizeOf(context).height * 0.25).clamp(180.0, 230.0)
+        : (MediaQuery.sizeOf(context).height * 0.4).clamp(220.0, 360.0);
     return ClipRRect(
       key: const ValueKey('profile-header-cover'),
       borderRadius: square
@@ -150,7 +154,7 @@ class ProfileHeaderCover extends StatelessWidget {
               minWidth: double.infinity,
             ),
             child: Padding(
-              padding: const EdgeInsets.only(top: _topRoom - _fade),
+              padding: EdgeInsets.only(top: (compact ? 72 : _topRoom) - _fade),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,

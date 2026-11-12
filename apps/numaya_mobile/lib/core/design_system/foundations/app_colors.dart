@@ -102,6 +102,12 @@ abstract final class AppColors {
   static const Color surfaceBrand = accentTint;
   static const Color surfaceInverse = ink;
 
+  /// Fable lab: the dark feature card (Ente's storage card, 12099:96480). White on it is
+  /// 17.4:1; [onHeroMuted] (70% white) is 9.0:1; [heroTrack] is an empty track or a quiet pill.
+  static const Color surfaceHero = _M.text2;
+  static const Color onHeroMuted = Color(0xB3FFFFFF);
+  static const Color heroTrack = Color(0x29FFFFFF);
+
   /// Text colour roles (FT-02, Figma type and icons pass 2026-11-07), mapped from Ente's
   /// `text/base` and `text/light` (Design system 57:6281; Menu Item 4055:18734, Bottom sheet
   /// 4809:8074, Settings 12099:96480):

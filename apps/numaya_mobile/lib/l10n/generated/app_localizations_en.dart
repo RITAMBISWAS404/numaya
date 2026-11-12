@@ -7289,4 +7289,129 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get evReserveShort => 'Reserve';
+
+  @override
+  String get fxCompliment => 'Compliment';
+
+  @override
+  String get fxSendCompliment => 'Send a Compliment';
+
+  @override
+  String fxBothLike(String things) {
+    return 'You both like $things';
+  }
+
+  @override
+  String fxJoinAnd(String first, String last) {
+    return '$first and $last';
+  }
+
+  @override
+  String get fxLookingFor => 'Looking for';
+
+  @override
+  String get fxLivesInLabel => 'Lives in';
+
+  @override
+  String get fxBasics => 'The basics';
+
+  @override
+  String get fxCommonGround => 'Common ground';
+
+  @override
+  String get fxSeeCredits => 'See credits';
+
+  @override
+  String get fxSeeStreak => 'See streak';
+
+  @override
+  String get fxSetupShort => 'Profile setup';
+
+  @override
+  String fxSetupCount(int done, int total) {
+    return '$done of $total done';
+  }
+
+  @override
+  String get fxOnYourPhoto => 'On your photo';
+
+  @override
+  String get fxOnYourAnswer => 'On your answer';
+
+  @override
+  String get fxOnTheirPhoto => 'On their photo';
+
+  @override
+  String get fxOnTheirAnswer => 'On their answer';
+
+  @override
+  String fxShelfTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Compliments to answer',
+      one: '1 Compliment to answer',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get fxReply => 'Reply';
+
+  @override
+  String fxWrote(String name) {
+    return '$name wrote';
+  }
+
+  @override
+  String get fxViewProfileShort => 'View profile';
+
+  @override
+  String get fxYourPhoto => 'Your photo';
+
+  @override
+  String get fxYourAnswer => 'Your answer';
+
+  @override
+  String fxCreditsUnit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'credits',
+      one: 'credit',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String fxStreakUnit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'day streak',
+      one: 'day streak',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String fxCreditsToSend(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Compliments to send',
+      one: '1 Compliment to send',
+      zero: 'No Compliments to send',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get fxRewardDay => 'Credit';
+
+  @override
+  String get fxToday => 'Today';
+
+  @override
+  String get fxNextCredit => 'Next credit';
 }
