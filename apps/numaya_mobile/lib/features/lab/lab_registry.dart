@@ -1421,7 +1421,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.screen,
     question: 'Can someone decide about a person in one screen, and see how to say something?',
     usages: ['Discover'],
-    proposed: _o,
+    proposed: _o, // Owner choice fx-da197b7-2026-11-13 (with notes).
     variants: [
       LabVariant(
         _o,
@@ -1449,7 +1449,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.screen,
     question: 'Can a member see their credits and streak, and reach editing, without scrolling?',
     usages: ['Profile'],
-    proposed: _o,
+    proposed: 'A', // Owner choice fx-da197b7-2026-11-13.
     variants: [
       LabVariant(
         _o,
@@ -1483,7 +1483,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.screen,
     question: 'Can a member tell a Compliment that needs a reply from an ordinary chat?',
     usages: ['Messages'],
-    proposed: _o,
+    proposed: 'A', // Owner choice fx-da197b7-2026-11-13.
     variants: [
       LabVariant(
         _o,
@@ -1511,7 +1511,7 @@ const List<LabGroup> kLabGroups = [
     kind: LabKind.screen,
     question: 'Can a member see what was complimented, who sent it, and how to answer?',
     usages: ['Chat: a Compliment before the first reply'],
-    proposed: _o,
+    proposed: 'A', // Owner choice fx-da197b7-2026-11-13.
     variants: [
       LabVariant(
         _o,
@@ -1523,7 +1523,7 @@ const List<LabGroup> kLabGroups = [
         'A',
         'Compact context card',
         'quiet editorial',
-        'No separate sender photo. One card: your photo or your own answer as the quoted block, then their words in the reading size.',
+        'Owner note applied: the Compliment is an incoming message from the sender, with your photo or answer quoted inside the bubble.',
       ),
       LabVariant(
         'B',
@@ -1540,7 +1540,7 @@ const List<LabGroup> kLabGroups = [
     question:
         'Is the balance, and where it came from, clear before the history?',
     usages: ['Profile: Compliment credits'],
-    proposed: _o,
+    proposed: _o, // Owner choice fx-da197b7-2026-11-13 (with notes).
     variants: [
       LabVariant(
         _o,
@@ -1569,7 +1569,7 @@ const List<LabGroup> kLabGroups = [
     question:
         'Is today’s state, and what earns the next credit, clear at once?',
     usages: ['Profile: Streak'],
-    proposed: _o,
+    proposed: _o, // Owner choice fx-da197b7-2026-11-13 (with notes).
     variants: [
       LabVariant(
         _o,

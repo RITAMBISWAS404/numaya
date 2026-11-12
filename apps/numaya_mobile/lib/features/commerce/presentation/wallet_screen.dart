@@ -97,30 +97,30 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
               ),
             )
           else if (ref.watch(labVariantProvider('v6-wallet-header')) == 'A')
-            Container(
-              padding: const EdgeInsets.all(AppLayout.heroPadding),
-              decoration: BoxDecoration(
-                color: AppColors.accent,
-                borderRadius: AppRadii.all(AppRadii.heroCard),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.walletTitle,
-                    style: AppTypography.bodySm.copyWith(
-                      color: AppColors.accentForeground,
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.s1),
-                  Text(
-                    '${ledger.total} ${l10n.walletUnit(ledger.total)}',
-                    style: AppTypography.pageTitle.copyWith(
-                      color: AppColors.accentForeground,
-                    ),
-                  ),
+            // The selected purple card in the shared summary anatomy (owner note): icon and
+            // heading, the balance, a bar of its parts in spend order, then which part is which.
+            SummaryCard(
+              key: const ValueKey('wallet-summary'),
+              purple: true,
+              icon: NumayaMobileIcons.wallet,
+              heading: l10n.walletTitle,
+              value: '${ledger.total} ${l10n.walletUnit(ledger.total)}',
+              bar: (onPurple) => SummaryBar(
+                onPurple: onPurple,
+                spoken: l10n.walletOrder,
+                parts: [
+                  (ledger.weekly, true),
+                  (ledger.earned, true),
+                  (ledger.purchased, true),
                 ],
               ),
+              details: [
+                [
+                  '${l10n.walletWeekly} ${ledger.weekly}',
+                  '${l10n.walletEarned} ${ledger.earned}',
+                  '${l10n.walletPurchased} ${ledger.purchased}',
+                ].join(' · '),
+              ],
             )
           else
             MetricTile(

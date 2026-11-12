@@ -12561,6 +12561,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next credit in'**
   String get fxNextCreditInLabel;
+
+  /// No description provided for @welcomeDemoEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore the demo'**
+  String get welcomeDemoEntry;
+
+  /// No description provided for @welcomeDemoNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Review build: a sample account on this phone. Nothing is sent to a server.'**
+  String get welcomeDemoNote;
 }
 
 class _AppLocalizationsDelegate

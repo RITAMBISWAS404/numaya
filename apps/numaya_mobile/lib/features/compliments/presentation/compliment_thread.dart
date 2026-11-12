@@ -174,20 +174,24 @@ class _ComplimentThreadState extends ConsumerState<ComplimentThread> {
         ),
         ChatSystemLine(dayLine(l10n, c.sentAt, now)),
         if (fx == 'A')
-          // Lab A: one compact card; the header already says who it is from.
+          // Selected A with the owner's note: the Compliment is an ordinary incoming message from
+          // the sender, replying to your photo or prompt, which is quoted inside the bubble.
           Semantics(
             label: l10n.chatTheirMessageLabel(person.name, c.text),
             child: ExcludeSemantics(
-              child: FxComplimentCard(
-                label: onPhoto ? l10n.fxOnYourPhoto : l10n.fxOnYourAnswer,
-                contextTitle: quoteText,
-                contextBody: !onPhoto && c.referenceAvailable
-                    ? prompt?.answer
-                    : null,
-                thumbnail: onPhoto && c.referenceAvailable
-                    ? personPhotoImage(owner, c.target.index + 1)
-                    : null,
-                words: c.text,
+              child: MessageBubble(
+                key: const ValueKey('compliment-bubble'),
+                text: c.text,
+                mine: false,
+                replyAuthor: onPhoto ? l10n.fxYourPhoto : l10n.fxYourAnswer,
+                // Your own answer (or the photo's number); a removed target says so, and never
+                // shows anyone else's picture.
+                replyText: !c.referenceAvailable
+                    ? l10n.chatQuoteUnavailable
+                    : onPhoto
+                    ? quoteText
+                    : (prompt?.answer ?? quoteText),
+                replyThumbnail: thumbnail,
                 time: DateFormat('HH:mm').format(c.sentAt),
               ),
             ),

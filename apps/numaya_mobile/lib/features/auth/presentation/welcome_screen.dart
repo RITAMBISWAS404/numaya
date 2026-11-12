@@ -10,6 +10,7 @@ import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../lab/lab_registry.dart';
 import '../application/phone_entry_controller.dart';
+import '../application/session_controller.dart';
 import '../domain/auth_repository.dart';
 
 /// B-02 Welcome in V16 form: the stone page, the wordmark, V11's emoji sticker hero (interests,
@@ -135,6 +136,32 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                                 variant: NumayaButtonVariant.quiet,
                                 onPressed: () => _start(AuthIntent.signIn),
                               ),
+                              // Review builds only (debug/profile, development environment): a
+                              // labelled way into the on-device sample account. Release builds
+                              // compile the demo service out, so this never ships; real phone
+                              // sign-in above is unchanged.
+                              if (ref.watch(demoAuthProvider) != null) ...[
+                                const SizedBox(height: AppSpacing.s2),
+                                Center(
+                                  child: TextLink(
+                                    key: const ValueKey('welcome-demo'),
+                                    label: l10n.welcomeDemoEntry,
+                                    onPressed: () async {
+                                      await ref
+                                          .read(sessionProvider.notifier)
+                                          .quickStart();
+                                      if (context.mounted) {
+                                        context.go(Routes.home);
+                                      }
+                                    },
+                                  ),
+                                ),
+                                Text(
+                                  l10n.welcomeDemoNote,
+                                  textAlign: TextAlign.center,
+                                  style: AppTypography.micro,
+                                ),
+                              ],
                               const SizedBox(height: AppSpacing.s4),
                               Text.rich(
                                 TextSpan(

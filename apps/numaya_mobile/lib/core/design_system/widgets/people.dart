@@ -1832,10 +1832,11 @@ class PhotoScrim extends StatefulWidget {
 
   /// The bottom-edge opacity for a photo whose lower part has relative luminance [luma].
   static double edgeFor(double? luma) {
-    if (luma == null || !adaptive) return 0.24;
-    // Dark photos (luma < 0.18) keep 24%; bright ones (0.6+) reach 52%.
+    // Owner note (selections pass): no text shadow, so the gradient carries the contrast alone.
+    // Unmeasured or the fixed comparison: 40%. Dark photos keep 32%; bright ones reach 62%.
+    if (luma == null || !adaptive) return 0.40;
     final t = ((luma - 0.18) / 0.42).clamp(0.0, 1.0);
-    return 0.24 + 0.28 * t;
+    return 0.32 + 0.30 * t;
   }
 
   @override

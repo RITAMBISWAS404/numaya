@@ -262,7 +262,25 @@ class StreakScreen extends ConsumerWidget {
                     ),
                     child: head,
                   )
-                : WhiteCard(child: head),
+                // The selected streak card in the shared summary anatomy (owner note).
+                : SummaryCard(
+                    key: const ValueKey('streak-summary'),
+                    icon: NumayaMobileIcons.flame,
+                    iconFilled: run.length > 0,
+                    heading: l10n.streakTitle,
+                    value: l10n.streakDays(run.length),
+                    bar: (onPurple) => SummaryBar(
+                      onPurple: onPurple,
+                      spoken: l10n.streakCycle(progress),
+                      parts: [
+                        for (var i = 0; i < cycle; i++) (1, i < progress),
+                      ],
+                    ),
+                    details: [
+                      l10n.streakCycle(progress),
+                      todayCounts ? l10n.streakToday : l10n.streakTodayOpen,
+                    ],
+                  ),
           if (offer != null) ...[
             const SizedBox(height: AppSpacing.s4),
             StatusBanner(

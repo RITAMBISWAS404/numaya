@@ -7474,4 +7474,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fxNextCreditInLabel => 'Next credit in';
+
+  @override
+  String get welcomeDemoEntry => 'Explore the demo';
+
+  @override
+  String get welcomeDemoNote =>
+      'Review build: a sample account on this phone. Nothing is sent to a server.';
 }

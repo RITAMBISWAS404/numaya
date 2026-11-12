@@ -13,6 +13,7 @@ import '../../commerce/application/economy_controller.dart';
 import '../../commerce/presentation/wallet_screen.dart';
 import '../../fable_lab/fx_profile.dart';
 import '../../health/application/health_providers.dart';
+import '../../health/domain/profile_health.dart';
 import '../../home/presentation/large_title_page.dart';
 import '../../lab/activity_cards.dart';
 import '../../lab/lab_registry.dart';
@@ -250,7 +251,14 @@ class ProfileScreen extends ConsumerWidget {
       ...switch (direction) {
         // A: identity and its two actions, then credits and streak in the first screen.
         _ when fx == 'A' => [
-          FxIdentityRow(data: header()),
+          FxIdentityRow(
+            data: header(),
+            completion:
+                ((HealthFactor.values.length - health.missing.length) *
+                        100 /
+                        HealthFactor.values.length)
+                    .round(),
+          ),
           const SizedBox(height: AppSpacing.s5),
           FxStatTiles(
             wallet: wallet,

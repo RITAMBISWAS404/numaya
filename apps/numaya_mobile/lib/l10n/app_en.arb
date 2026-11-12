@@ -3837,5 +3837,7 @@
   "@fxNextCreditIn": {"placeholders": {"count": {"type": "int"}}},
   "fxDaysToGo": "{count, plural, =0{Today} =1{1 day} other{{count} days}}",
   "fxNextCreditInLabel": "Next credit in",
-  "@fxDaysToGo": {"placeholders": {"count": {"type": "int"}}}
+  "@fxDaysToGo": {"placeholders": {"count": {"type": "int"}}},
+  "welcomeDemoEntry": "Explore the demo",
+  "welcomeDemoNote": "Review build: a sample account on this phone. Nothing is sent to a server."
 }

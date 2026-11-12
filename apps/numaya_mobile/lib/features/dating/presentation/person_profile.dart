@@ -376,19 +376,19 @@ class PersonHeroCard extends StatelessWidget {
             child: Text.rich(
               TextSpan(
                 children: [
-                  // The glyph only earns its place on a backing; on the photo it adds noise.
-                  if (backed)
-                    const WidgetSpan(
-                      alignment: PlaceholderAlignment.middle,
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 6),
-                        child: NumayaIcon(
-                          NumayaIcons.user,
-                          size: AppSizes.iconSm,
-                          color: AppColors.inkForeground,
-                        ),
+                  // Owner note: the line under the name carries its icon (filled at this size).
+                  const WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 6),
+                      child: MobileIcon(
+                        NumayaMobileIcons.work,
+                        size: AppSizes.iconSm,
+                        filled: true,
+                        color: AppColors.inkForeground,
                       ),
                     ),
+                  ),
                   TextSpan(text: person.job!),
                 ],
               ),

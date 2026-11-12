@@ -16,11 +16,15 @@ import '../profile/presentation/profile_variants.dart';
 /// A: who you are in one row: photo, name, verification state (which opens verification while
 /// unverified), then the two things you do here as an equal pair.
 class FxIdentityRow extends StatelessWidget {
-  const FxIdentityRow({super.key, required this.data});
+  const FxIdentityRow({super.key, required this.data, this.completion});
 
   final ProfileHeaderData data;
 
-  static const double _photo = 76;
+  /// Profile setup done, 0-100, from the real setup state (the same factors as the setup row).
+  /// Null hides the pill.
+  final int? completion;
+
+  static const double _photo = 88;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +35,7 @@ class FxIdentityRow extends StatelessWidget {
         Row(
           children: [
             ExcludeSemantics(
-              child: ClipRRect(
-                borderRadius: AppRadii.all(AppRadii.heroCard),
+              child: ClipOval(
                 child: SizedBox.square(
                   dimension: _photo,
                   child: data.picture(initialSize: 32),
@@ -53,8 +56,23 @@ class FxIdentityRow extends StatelessWidget {
                       style: AppTypography.headline,
                     ),
                   ),
-                  const SizedBox(height: AppSpacing.s1),
-                  data.badge(context),
+                  const SizedBox(height: AppSpacing.s2),
+                  Wrap(
+                    spacing: AppSpacing.s2,
+                    runSpacing: AppSpacing.s2,
+                    children: [
+                      data.badge(context),
+                      if (completion != null)
+                        StatusBadge(
+                          key: const ValueKey('profile-completion-pill'),
+                          label: l10n.profileCompletionLabel(completion!),
+                          icon: NumayaIcons.check,
+                          tone: completion == 100
+                              ? BadgeTone.brand
+                              : BadgeTone.neutral,
+                        ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -143,13 +161,14 @@ class FxStatTiles extends StatelessWidget {
     final l10n = context.l10n;
     final total = wallet.weekly + wallet.earned + wallet.purchased;
     final buckets = _bucketLine(l10n, wallet);
+    // One anatomy for both tiles (owner note): outline icon, the number, its label, one short
+    // line. No progress bar on either: a credit balance has no denominator to fill against.
     Widget tile({
       required Key key,
       required NumayaMobileIcons icon,
-      required bool filled,
       required String number,
       required String unit,
-      required Widget foot,
+      required String foot,
       required String spoken,
       required VoidCallback onTap,
     }) => Pressable(
@@ -173,7 +192,6 @@ class FxStatTiles extends StatelessWidget {
                 MobileIcon(
                   icon,
                   size: AppSizes.iconMd,
-                  filled: filled,
                   color: AppColors.accent,
                 ),
                 const Spacer(),
@@ -194,8 +212,8 @@ class FxStatTiles extends StatelessWidget {
                 AppTypography.semibold,
               ),
             ),
-            const SizedBox(height: AppSpacing.s3),
-            foot,
+            const SizedBox(height: AppSpacing.s1),
+            Text(foot, style: AppTypography.caption),
           ],
         ),
       ),
@@ -204,30 +222,22 @@ class FxStatTiles extends StatelessWidget {
     final credits = tile(
       key: const ValueKey('hub-wallet'),
       icon: NumayaMobileIcons.wallet,
-      filled: false,
       number: '$total',
       unit: l10n.walletTitle,
-      foot: Text(
-        buckets.isEmpty ? l10n.fxCreditsToSend(0) : buckets,
-        style: AppTypography.caption,
-      ),
-      spoken: '${l10n.walletTitle}, ${l10n.walletTotal(total)}',
+      foot: l10n.fxCreditsToSend(total),
+      spoken: [
+        l10n.walletTitle,
+        l10n.walletTotal(total),
+        if (buckets.isNotEmpty) buckets,
+      ].join('. '),
       onTap: onWallet,
     );
     final streakTile = tile(
       key: const ValueKey('hub-streak'),
       icon: NumayaMobileIcons.flame,
-      filled: streak.length > 0,
       number: '${streak.length}',
       unit: l10n.fxStreakUnit(streak.length),
-      foot: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          FxStreakDots(data: streak),
-          const SizedBox(height: AppSpacing.s2),
-          Text(l10n.streakCycle(streak.progress), style: AppTypography.caption),
-        ],
-      ),
+      foot: l10n.streakCycle(streak.progress),
       spoken: [
         l10n.streakDays(streak.length),
         l10n.streakCycle(streak.progress),

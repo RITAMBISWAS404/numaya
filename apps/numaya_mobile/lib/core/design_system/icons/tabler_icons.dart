@@ -163,6 +163,8 @@ const Map<NumayaIcons, TablerGlyph> kTablerIcons = {
 
 /// Glyphs the mobile app needs beyond the shared web set.
 enum NumayaMobileIcons {
+  /// Work (the job line under a name).
+  work,
   video,
   play,
   pause,
@@ -207,6 +209,8 @@ const Map<NumayaMobileIcons, TablerGlyph> kTablerMobileIcons = {
   NumayaMobileIcons.compliment: (outline: 'message-heart', filled: null),
   // streak
   NumayaMobileIcons.flame: (outline: 'flame', filled: 'flame'),
+  // job under a name on a photo (selections pass, 2026-11-13)
+  NumayaMobileIcons.work: (outline: 'briefcase', filled: 'briefcase'),
   // credit wallet
   NumayaMobileIcons.wallet: (outline: 'wallet', filled: null),
   // streak reward
