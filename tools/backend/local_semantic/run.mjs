@@ -450,6 +450,13 @@ export async function runLocalSemanticCheck({ log = console.log } = {}) {
     assert.ok('rate_events_deleted' in hk);
   });
 
+  await check('store service functions are not callable by members', async () => {
+    const denied = await as('A', `select public.service_apply_purchase_state($1, 'google_play', 'k', 'numaya_premium_weekly', 'production', 'active', now() + interval '1 day', now())`, [users.A])
+      .then(() => false, () => true);
+    const denied2 = await as('A', `select public.service_record_store_event('google_play', 'x')`).then(() => false, () => true);
+    assert.ok(denied && denied2);
+  });
+
   await db.close();
   for (const [s, n] of results) log(`${s.padEnd(4)} ${n}`);
   const failed = results.filter(([s]) => s !== 'ok').length;
