@@ -234,14 +234,14 @@ void main() {
       },
     );
 
-    testWidgets('Not now asks first and leaves no duplicate', (tester) async {
+    testWidgets('Dismiss asks first and leaves no duplicate', (tester) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
       await goTo(c, tester, '${Routes.request}/seed-chloe');
       await tester.pump(const Duration(milliseconds: 400));
       await tapOn(tester, find.bySemanticsLabel('Conversation options'));
       await tester.pump(const Duration(milliseconds: 400));
-      await tapOn(tester, find.text('Not now'));
+      await tapOn(tester, find.text('Dismiss'));
       await tester.pump(const Duration(milliseconds: 600));
       await tapOn(tester, find.byKey(const ValueKey('dismiss-confirm')));
       await tester.pump(const Duration(milliseconds: 600));
@@ -318,7 +318,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 400));
       await tapOn(tester, find.bySemanticsLabel('Conversation options'));
       await tester.pump(const Duration(milliseconds: 400));
-      await tapOn(tester, find.text('Not now'));
+      await tapOn(tester, find.text('Dismiss'));
       await tester.pump(const Duration(milliseconds: 600));
       final close = find.byKey(const ValueKey('sheet-close'));
       expect(close, findsOneWidget);

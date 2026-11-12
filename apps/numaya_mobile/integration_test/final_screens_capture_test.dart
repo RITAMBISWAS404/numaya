@@ -676,7 +676,7 @@ void main() {
         () async {
           await h.go('${Routes.request}/seed-sam');
           await h.tapLabel(_l.conversationOptions);
-          await h.tapText(_l.complimentNotNow);
+          await h.tapText(_l.requestDismiss);
         },
       );
       await h.page(
@@ -1329,11 +1329,11 @@ void main() {
       f,
       'Dismiss-compliment-sheet',
       'Confirm',
-      'Compliment > Not now',
+      'Compliment > Dismiss',
       () async {
         await h.go('${Routes.request}/seed-sam');
         await h.tapLabel(_l.conversationOptions);
-        await h.tapText(_l.complimentNotNow);
+        await h.tapText(_l.requestDismiss);
       },
     );
     // ignore: avoid_print

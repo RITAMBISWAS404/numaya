@@ -72,7 +72,7 @@ class _ComplimentThreadState extends ConsumerState<ComplimentThread> {
         if (received)
           (
             icon: NumayaIcons.close,
-            label: l10n.complimentNotNow,
+            label: l10n.requestDismiss,
             destructive: false,
           ),
         (icon: NumayaIcons.flag, label: l10n.optionReport, destructive: true),
