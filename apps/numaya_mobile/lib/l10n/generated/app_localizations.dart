@@ -12729,6 +12729,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Get 3 credits a week with Premium'**
   String get walletWeeklyAction;
+
+  /// No description provided for @v8Plan3Months.
+  ///
+  /// In en, this message translates to:
+  /// **'3 months'**
+  String get v8Plan3Months;
+
+  /// No description provided for @v8Plan6Months.
+  ///
+  /// In en, this message translates to:
+  /// **'6 months'**
+  String get v8Plan6Months;
+
+  /// No description provided for @v8PlanShortWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'1 wk'**
+  String get v8PlanShortWeek;
+
+  /// No description provided for @v8PlanShortMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'1 mo'**
+  String get v8PlanShortMonth;
+
+  /// No description provided for @v8PlanShort3.
+  ///
+  /// In en, this message translates to:
+  /// **'3 mo'**
+  String get v8PlanShort3;
+
+  /// No description provided for @v8PlanShort6.
+  ///
+  /// In en, this message translates to:
+  /// **'6 mo'**
+  String get v8PlanShort6;
+
+  /// No description provided for @v8PlanShortYear.
+  ///
+  /// In en, this message translates to:
+  /// **'1 yr'**
+  String get v8PlanShortYear;
+
+  /// No description provided for @v8PlanPricePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Price pending'**
+  String get v8PlanPricePending;
+
+  /// No description provided for @v8PlanPendingDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available yet'**
+  String get v8PlanPendingDetail;
+
+  /// No description provided for @v8PremiumIncluded.
+  ///
+  /// In en, this message translates to:
+  /// **'What’s included'**
+  String get v8PremiumIncluded;
+
+  /// No description provided for @v8PremiumHeroSlot.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium mascot, 16:9'**
+  String get v8PremiumHeroSlot;
 }
 
 class _AppLocalizationsDelegate

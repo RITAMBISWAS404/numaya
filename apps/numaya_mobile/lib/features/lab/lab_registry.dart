@@ -714,6 +714,40 @@ const List<LabGroup> kLabGroups = [
     ],
   ),
   LabGroup(
+    id: 'v8-paywall',
+    title: 'Premium paywall (UI-076)',
+    kind: LabKind.screen,
+    question: 'How should the five Premium durations be chosen?',
+    usages: ['Paywall (every Premium entry point)'],
+    proposed: 'A',
+    variants: [
+      LabVariant(
+        _o,
+        'Selected V8 paywall',
+        'baseline',
+        'Benefits list, three plan rows, no artwork slot (before UI-076).',
+      ),
+      LabVariant(
+        'A',
+        'Benefits first, stacked plans',
+        'UI-076 direction 1',
+        'The 16:9 artwork slot, the title, every benefit in one grouped card, then five stacked plan rows; 3 and 6 months show Price pending and cannot be chosen.',
+      ),
+      LabVariant(
+        'B',
+        'Plans first, comparison cards',
+        'UI-076 direction 2',
+        'The artwork slot and title, then plan cards two to a row with Yearly across the width, then the benefits card.',
+      ),
+      LabVariant(
+        'C',
+        'Duration picker, selected plan',
+        'UI-076 direction 3',
+        'A five-way duration picker and one card with the chosen plan in detail, then the benefits card.',
+      ),
+    ],
+  ),
+  LabGroup(
     id: 'v8-compliment',
     title: 'Sending a Compliment (UI-083)',
     kind: LabKind.screen,

@@ -11,6 +11,7 @@ import '../../help/domain/help_articles.dart';
 import '../../lab/lab_registry.dart';
 import '../../lab/plan_picker.dart';
 import '../application/premium_controller.dart';
+import 'paywall_v8.dart';
 
 /// What Premium adds (PRD 06): allowances and information, never ranking.
 List<(NumayaIcons?, NumayaMobileIcons?, String)> premiumBenefits(
@@ -155,6 +156,11 @@ class PaywallScreen extends ConsumerStatefulWidget {
 class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   Product? _plan;
 
+  /// UI-076: the chosen duration in the V8 directions (A, B, C).
+  String? _option;
+
+  void _choose(String id) => setState(() => _option = id);
+
   String _title(AppLocalizations l10n) => switch (widget.feature) {
     PremiumFeature.likes => l10n.premiumForLikes,
     PremiumFeature.seeLikes => l10n.premiumForSeeLikes,
@@ -200,6 +206,8 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       );
     }
 
+    final v8 = ref.watch(labVariantProvider('v8-paywall'));
+    if (v8 != 'O') return _v8(context, v8, plans, premium);
     final plan = _plan;
     return NumayaScreen(
       top: NumayaTopBar(
@@ -278,6 +286,78 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+extension on _PaywallScreenState {
+  /// UI-076 (V8): the reworked paywall in direction [v] (A, B or C).
+  Widget _v8(
+    BuildContext context,
+    String v,
+    List<Product> plans,
+    PremiumState premium,
+  ) {
+    final l10n = context.l10n;
+    final options = paywallOptions(l10n, plans, (p) => planBilling(l10n, p));
+    final chosen = options.where((o) => o.id == _option).firstOrNull;
+    final plan = chosen?.product;
+    Widget glyph(NumayaIcons? icon, NumayaMobileIcons? mobile) => icon != null
+        ? NumayaIcon(icon, size: 20, filled: true, color: AppColors.accent)
+        : MobileIcon(mobile!, size: 20, filled: true, color: AppColors.accent);
+    return NumayaScreen(
+      top: NumayaTopBar(
+        onBack: () => context.pop(),
+        backLabel: l10n.close,
+        closeIcon: true,
+        title: l10n.premiumName,
+      ),
+      footer: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          NumayaButton(
+            key: const ValueKey('paywall-continue'),
+            label: plan == null
+                ? l10n.paywallChoose
+                : l10n.paywallContinuePlan(chosen!.title),
+            loading: premium.purchasing,
+            onPressed: plan == null || premium.purchasing
+                ? null
+                : () => startPurchase(context, ref, plan.kind),
+          ),
+          const SizedBox(height: AppSpacing.s2),
+          Text(
+            plan == null
+                ? l10n.pricesProvisional
+                : '${l10n.planRenewal(formatInr(plan.pricePaise))} ${l10n.pricesProvisional}',
+            textAlign: TextAlign.center,
+            style: AppTypography.micro,
+          ),
+        ],
+      ),
+      body: PaywallV8Body(
+        variant: v,
+        title: _title(l10n),
+        options: options,
+        selected: _option,
+        onSelect: (o) => _choose(o.id),
+        benefits: [
+          for (final (icon, mobile, label) in premiumBenefits(l10n))
+            (glyph(icon, mobile), label),
+        ],
+        footnote: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.premiumFreeStays, style: AppTypography.helper),
+            const SizedBox(height: AppSpacing.s2),
+            TextLink(
+              label: l10n.paywallRestore,
+              onPressed: () =>
+                  NumayaToast.show(context, l10n.paywallRestoreNone),
+            ),
+          ],
+        ),
       ),
     );
   }

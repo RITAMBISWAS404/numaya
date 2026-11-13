@@ -21,6 +21,7 @@ export 'icons/tabler_icons.dart'
         tablerOutlineStroke,
         withTablerStroke;
 export 'widgets/age_range_slider.dart';
+export 'widgets/artwork_slot.dart';
 export 'widgets/buttons.dart';
 export 'widgets/content.dart';
 export 'widgets/extras.dart';

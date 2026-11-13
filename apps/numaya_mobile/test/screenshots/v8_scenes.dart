@@ -125,6 +125,24 @@ final List<V8Scene> v8Scenes = [
     },
   ),
   const V8Scene('flow-chat-maya-new', '${Routes.chat}/maya'),
+  for (final v in ['O', 'A', 'B', 'C'])
+    V8Scene(
+      'exp-paywall-$v',
+      Routes.paywall,
+      choices: {'v8-paywall': v},
+      height: 1500,
+    ),
+  V8Scene(
+    'exp-paywall-A-selected',
+    Routes.paywall,
+    choices: const {'v8-paywall': 'A'},
+    setup: (t, c) async {
+      await t.ensureVisible(find.byKey(const ValueKey('plan-yearly')));
+      await t.pump(const Duration(milliseconds: 300));
+      await t.tap(find.byKey(const ValueKey('plan-yearly')));
+      await t.pump(const Duration(milliseconds: 400));
+    },
+  ),
   const V8Scene('base-typography', Routes.reviewTypography),
   const V8Scene(
     'base-typography-14',

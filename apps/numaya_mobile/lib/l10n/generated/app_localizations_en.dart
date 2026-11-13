@@ -7578,4 +7578,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletWeeklyAction => 'Get 3 credits a week with Premium';
+
+  @override
+  String get v8Plan3Months => '3 months';
+
+  @override
+  String get v8Plan6Months => '6 months';
+
+  @override
+  String get v8PlanShortWeek => '1 wk';
+
+  @override
+  String get v8PlanShortMonth => '1 mo';
+
+  @override
+  String get v8PlanShort3 => '3 mo';
+
+  @override
+  String get v8PlanShort6 => '6 mo';
+
+  @override
+  String get v8PlanShortYear => '1 yr';
+
+  @override
+  String get v8PlanPricePending => 'Price pending';
+
+  @override
+  String get v8PlanPendingDetail => 'Not available yet';
+
+  @override
+  String get v8PremiumIncluded => 'What’s included';
+
+  @override
+  String get v8PremiumHeroSlot => 'Premium mascot, 16:9';
 }

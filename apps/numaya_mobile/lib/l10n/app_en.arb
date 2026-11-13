@@ -3873,5 +3873,16 @@
   "v8ComplimentReplying": "Complimenting {name}",
   "@v8ComplimentReplying": {"placeholders": {"name": {"type": "String"}}},
   "walletEarnAction": "Earn credits with your streak",
-  "walletWeeklyAction": "Get 3 credits a week with Premium"
+  "walletWeeklyAction": "Get 3 credits a week with Premium",
+  "v8Plan3Months": "3 months",
+  "v8Plan6Months": "6 months",
+  "v8PlanShortWeek": "1 wk",
+  "v8PlanShortMonth": "1 mo",
+  "v8PlanShort3": "3 mo",
+  "v8PlanShort6": "6 mo",
+  "v8PlanShortYear": "1 yr",
+  "v8PlanPricePending": "Price pending",
+  "v8PlanPendingDetail": "Not available yet",
+  "v8PremiumIncluded": "What’s included",
+  "v8PremiumHeroSlot": "Premium mascot, 16:9"
 }
