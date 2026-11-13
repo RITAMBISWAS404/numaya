@@ -45,7 +45,8 @@ class NumayaSegmented extends StatelessWidget {
         padding: const EdgeInsets.all(3),
         decoration: BoxDecoration(
           color: AppColors.fill,
-          borderRadius: AppRadii.all(AppRadii.pill),
+          // UI-050: 8pt tabs inside a track 3pt larger, so the curves share a centre.
+          borderRadius: AppRadii.all(AppRadii.chip + 3),
         ),
         child: LayoutBuilder(
           builder: (context, box) {
@@ -64,7 +65,7 @@ class NumayaSegmented extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         color: AppColors.surface,
-                        borderRadius: AppRadii.all(AppRadii.pill),
+                        borderRadius: AppRadii.all(AppRadii.chip),
                         boxShadow: AppElevation.subtle,
                       ),
                     ),
@@ -121,7 +122,7 @@ class _Option extends StatelessWidget {
       child: Pressable(
         onTap: onTap,
         pressedScale: 1,
-        borderRadius: AppRadii.all(AppRadii.pill),
+        borderRadius: AppRadii.all(AppRadii.chip),
         child: Container(
           constraints: const BoxConstraints(
             minHeight: NumayaSegmented.height - 6,

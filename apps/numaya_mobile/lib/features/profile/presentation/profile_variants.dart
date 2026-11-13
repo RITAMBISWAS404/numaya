@@ -55,7 +55,7 @@ class ProfileHeaderData {
             onTap: onVerify,
             semanticLabel: '${status(l10n)}. ${l10n.editVerify}',
             excludeChildSemantics: true,
-            borderRadius: AppRadii.all(AppRadii.pill),
+            borderRadius: AppRadii.all(AppRadii.chip),
             child: pill,
           );
   }
@@ -212,7 +212,7 @@ class ProfileHeaderCover extends StatelessWidget {
               onTap: data.onEdit,
               semanticLabel: l10n.profileEdit,
               excludeChildSemantics: true,
-              borderRadius: AppRadii.all(AppRadii.pill),
+              borderRadius: AppRadii.all(AppRadii.chip),
               child: PhotoGlass(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.s3,

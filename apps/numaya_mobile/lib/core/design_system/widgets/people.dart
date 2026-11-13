@@ -308,7 +308,7 @@ class StatusBadge extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: AppRadii.all(AppRadii.pill),
+        borderRadius: AppRadii.all(AppRadii.chip),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -430,7 +430,7 @@ class InfoChip extends StatelessWidget {
       // (RD-05); on the page it's white.
       decoration: BoxDecoration(
         color: onPage ? AppColors.surface : AppColors.canvas,
-        borderRadius: AppRadii.all(AppRadii.pill),
+        borderRadius: AppRadii.all(AppRadii.chip),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

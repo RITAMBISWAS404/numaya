@@ -191,22 +191,49 @@ abstract final class MonoGlass {
 
 /// Corner radii: generous, role-specific (premium TOKENS.md "Shape"). Larger surfaces take larger
 /// corners; nested corners are the container's minus the inset.
+///
+/// V8 radius system (UI-050, 2026-11-14): one scale, 4 / 8 / 12 / 16 / 20, by role.
+/// 4 tiny badges and checkbox corners; 8 chips, pill tabs, tooltips and compact controls;
+/// 12 buttons, icon-button containers, fields, search and standalone rows; 16 regular cards,
+/// alerts, chat bubbles, menus and medium tiles; 20 large cards, large images, the floating
+/// navigation shell, dialogs and sheet tops. Circles stay circles (avatars, radios, switches,
+/// slider thumbs, status dots, count badges, thin progress tracks and the chat composer's round
+/// controls). Nested corners are derived: outer minus inset.
 abstract final class MonoRadii {
-  static const double tag = 12;
+  /// Small tags and compact rectangular controls (UI-050: 8).
+  static const double tag = 8;
 
-  /// Ente Checkbox: radius/sm (4) on 16, scaled with the 20pt mark.
-  static const double checkbox = 5;
+  /// Chips and pill tabs: filter and interest chips, profile detail pills, overlay pills (8).
+  static const double chip = 8;
+
+  /// Tiny badges and compact status labels (4).
+  static const double badge = 4;
+
+  /// Checkbox corners (4).
+  static const double checkbox = 4;
 
   /// Rounded-square icon tiles in rows (40pt tile; 14 for the 48pt one).
   static const double iconTile = 12;
   static const double iconTileLg = 12;
-  static const double field = 16;
-  static const double control = 20;
+  static const double field = 12;
+
+  /// Standard buttons (12).
+  static const double control = 12;
   static const double iconButton = 12;
   static const double tile = 16;
-  static const double card = 20;
-  static const double heroCard = 24;
-  static const double image = 16;
+
+  /// Regular content cards, grouped lists, alerts, menus (16).
+  static const double card = 16;
+
+  /// Large cards and profile summary surfaces (20).
+  static const double heroCard = 20;
+
+  /// Large images and profile photos (20).
+  static const double image = 20;
+
+  /// The floating navigation shell (20) and its items (12, inset 8 so 20 - 8 = 12).
+  static const double navShell = 20;
+  static const double navItem = 12;
 
   /// Ente: "button and sheet corners are xl" (radius/xl 20; Ente alignment V3, EA-S01).
   static const double sheet = 20;
@@ -301,8 +328,12 @@ abstract final class MonoShadows {
 /// carries the contrast (ink 16.8:1, brand 4.90:1 on white); the 1pt edge only shapes the target,
 /// so it stays quiet. Used for secondary, quiet and brand buttons.
 abstract final class MonoButtons {
-  /// Ink at 20%: the secondary button edge on white or the page grey.
-  static const Color outline = Color(0x33111111);
+  /// UI-002 (V8): the lighter secondary button edge, the existing hairline grey #E0E0E0 (was ink
+  /// at 20%, #CFCFCF on white). Visible on white and on the #F4F4F4 page.
+  static const Color outline = Color(0xFFE0E0E0);
+
+  /// UI-057: the disabled button edge, one step lighter still, with a grey label.
+  static const Color disabledOutline = Color(0xFFEAEAEA);
 
   /// Brand purple at 45%: the brand button edge.
   static const Color accentOutline = Color(0x737262C7);

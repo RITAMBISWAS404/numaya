@@ -71,8 +71,8 @@ class NumayaButton extends StatelessWidget {
         : textOnly
         ? AppSizes.buttonHeightQuiet
         : AppSizes.buttonHeight;
-    // Ente Button Large (2207:41760): a 20pt rounded rectangle, not a pill.
-    const radius = AppRadii.control;
+    // UI-050: standard buttons 12; UI-062: the compact button for cards and menus is 8.
+    final radius = small ? AppRadii.tag : AppRadii.control;
 
     // A small button that isn't primary, tint or solid red is the outlined pill.
     final effective = small && variant == NumayaButtonVariant.destructive
@@ -85,10 +85,12 @@ class NumayaButton extends StatelessWidget {
         AppColors.disabledForeground,
         null,
       ),
+      // UI-057 (V8): disabled is an outlined, muted button with no grey fill, for every
+      // variant; enabled primaries are brand purple.
       _ when disabled => (
-        AppColors.disabled,
+        Colors.transparent,
         AppColors.disabledForeground,
-        null,
+        AppColors.disabledOutline,
       ),
       NumayaButtonVariant.primary => (
         AppColors.accent,
@@ -222,9 +224,17 @@ class NumayaFab extends StatelessWidget {
         width: AppSizes.fab,
         height: AppSizes.fab,
         // A rounded square like every other icon button (RD-02).
+        // UI-057: disabled is outlined and muted, like every disabled button.
         decoration: BoxDecoration(
           borderRadius: AppRadii.all(AppRadii.control),
-          color: enabled ? AppColors.accent : AppColors.disabled,
+          color: enabled ? AppColors.accent : Colors.transparent,
+          border: enabled
+              ? null
+              : Border.all(
+                  color: AppColors.disabledOutline,
+                  width: AppBorders.control,
+                  strokeAlign: BorderSide.strokeAlignInside,
+                ),
         ),
         alignment: Alignment.center,
         child: loading

@@ -210,6 +210,12 @@ abstract final class AppColors {
   /// Outlined secondary and quiet buttons (replacement V8, C-03).
   static const Color buttonOutline = MonoButtons.outline;
 
+  /// UI-060: passive callouts (no outline): one step darker than the #F4F4F4 page.
+  static const Color calloutFill = _M.fill;
+
+  /// UI-057: the outlined disabled button: a light edge, no fill, grey label.
+  static const Color disabledOutline = MonoButtons.disabledOutline;
+
   /// The outlined brand button.
   static const Color accentOutline = MonoButtons.accentOutline;
 

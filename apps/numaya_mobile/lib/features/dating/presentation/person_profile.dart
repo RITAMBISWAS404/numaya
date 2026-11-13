@@ -287,7 +287,7 @@ class PersonHeroCard extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: AppRadii.all(AppRadii.pill),
+          borderRadius: AppRadii.all(AppRadii.chip),
           boxShadow: AppElevation.subtle,
         ),
         child: NameWithBadge(

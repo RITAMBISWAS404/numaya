@@ -134,7 +134,7 @@ class ProfilePromptCard extends ConsumerWidget {
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.accentTint,
-                  borderRadius: AppRadii.all(AppRadii.pill),
+                  borderRadius: AppRadii.all(AppRadii.chip),
                 ),
                 child: Text(
                   question,

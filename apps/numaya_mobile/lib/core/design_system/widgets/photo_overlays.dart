@@ -18,7 +18,7 @@ class PhotoGlass extends StatelessWidget {
   const PhotoGlass({
     super.key,
     required this.child,
-    this.radius = AppRadii.pill,
+    this.radius = AppRadii.chip,
     this.padding = EdgeInsets.zero,
   });
 

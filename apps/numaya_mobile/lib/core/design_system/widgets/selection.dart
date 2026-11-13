@@ -309,7 +309,7 @@ class NumayaChip extends StatelessWidget {
       selected: selected,
       excludeChildSemantics: true,
       pressedScale: 0.97,
-      borderRadius: AppRadii.all(AppRadii.pill),
+      borderRadius: AppRadii.all(AppRadii.chip),
       child: AnimatedContainer(
         duration: AppMotion.duration(context, AppMotion.base),
         curve: AppMotion.easeOut,
@@ -327,7 +327,7 @@ class NumayaChip extends StatelessWidget {
               : onCard
               ? AppColors.fill
               : AppColors.surface,
-          borderRadius: AppRadii.all(AppRadii.pill),
+          borderRadius: AppRadii.all(AppRadii.chip),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

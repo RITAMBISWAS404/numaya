@@ -341,19 +341,22 @@ class NumayaTabBar extends StatelessWidget {
           child: LayoutBuilder(
             builder: (context, box) {
               final n = items.length;
-              final room = box.maxWidth - 2 * AppSizes.tabPadding;
+              // UI-026 + UI-050 (V8): 8pt from the shell to every tile, 4pt between tiles,
+              // 38 x 48 tiles, shell 20 and tiles 12 (20 - 8). The 44pt hit areas reach into the
+              // transparent padding, so the visible tile stays compact.
+              final room = box.maxWidth - 2 * _shellPadX;
               final width = n == 0
-                  ? AppSizes.tabItemWidth
-                  : (room / n).clamp(
-                      AppSizes.tabItemMin,
-                      AppSizes.tabItemWidth,
-                    );
+                  ? _hitW
+                  : (room / n).clamp(AppSizes.touchMin, _hitW);
               return Container(
                 key: pillKey,
-                padding: const EdgeInsets.all(AppSizes.tabPadding),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: _shellPadX,
+                  vertical: _shellPadY,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.surface,
-                  borderRadius: AppRadii.all(AppRadii.pill),
+                  borderRadius: AppRadii.all(AppRadii.navShell),
                   boxShadow: AppElevation.navigation,
                 ),
                 child: Row(
@@ -393,13 +396,16 @@ class NumayaTabBar extends StatelessWidget {
               : item.label,
           excludeChildSemantics: true,
           pressedScale: 0.95,
-          borderRadius: AppRadii.all(AppRadii.pill),
+          borderRadius: AppRadii.all(AppRadii.navItem),
           child: SizedBox(
             key: ValueKey('tab-item-$i'),
             width: width,
-            height: AppSizes.tabItem,
+            height: _tileH + 2 * _tilePadY,
             child: Padding(
-              padding: const EdgeInsets.all(AppSizes.tabItemInset),
+              padding: const EdgeInsets.symmetric(
+                horizontal: _tileGap / 2,
+                vertical: _tilePadY,
+              ),
               child: AnimatedContainer(
                 key: ValueKey('tab-tile-$i'),
                 duration: duration,
@@ -408,7 +414,7 @@ class NumayaTabBar extends StatelessWidget {
                   color: current
                       ? AppColors.iconSelectedFill
                       : const Color(0x00FFFFFF),
-                  borderRadius: AppRadii.all(AppRadii.pill),
+                  borderRadius: AppRadii.all(AppRadii.navItem),
                 ),
                 alignment: Alignment.center,
                 child: Stack(
@@ -447,6 +453,15 @@ class NumayaTabBar extends StatelessWidget {
       ),
     );
   }
+  // UI-026 compact bar geometry (V8): 8pt shell-to-tile on every side, 4pt between tiles.
+  static const double _tileH = 38;
+  static const double _tileW = 48;
+  static const double _tileGap = 4;
+  static const double _tilePadY = 3;
+  static const double _shellPadY = 8 - _tilePadY;
+  static const double _shellPadX = 8 - _tileGap / 2;
+  static const double _hitW = _tileW + _tileGap;
+
 
   /// Opaque: the pill on a strip of page colour, as approved. Frosted: content shows around and
   /// beneath the pill, except under the system navigation (the three buttons or the gesture
@@ -896,6 +911,29 @@ class ListRow extends StatelessWidget {
 /// A titled group of rows (`.list-group`): a section heading, the rows on one white card, a
 /// secondary footnote. Rows are separated by quiet [AppColors.divider] hairlines that start where
 /// the row's text starts (never through its icon tile) and stop at the card's padding (FP-02).
+/// UI-003 (V8): the one divider between distinct items that share a card: a fine light line,
+/// inset equally at both ends by the card's horizontal content padding. Use it inside any white
+/// card that stacks rows or control blocks (filters, wallet, settings, review rows).
+class CardDivider extends StatelessWidget {
+  const CardDivider({super.key, this.inset = AppLayout.cardPadding, this.end});
+
+  /// Leading inset; [end] defaults to the same value.
+  final double inset;
+  final double? end;
+
+  @override
+  Widget build(BuildContext context) => ExcludeSemantics(
+    child: Padding(
+      padding: EdgeInsetsDirectional.only(start: inset, end: end ?? inset),
+      child: const SizedBox(
+        height: AppBorders.hairline,
+        width: double.infinity,
+        child: ColoredBox(color: AppColors.divider),
+      ),
+    ),
+  );
+}
+
 class ListGroup extends StatelessWidget {
   const ListGroup({
     super.key,
@@ -938,10 +976,8 @@ class ListGroup extends StatelessWidget {
               child: Text(title!, style: AppTypography.section),
             ),
           ),
-        // OV-02: related rows share one white 20pt card with no hairlines, as Ente's newer
-        // Settings composition (Updated screens, 12099:96480) groups them; a one-row group is the
-        // single-row card of its Account screen. (The older menu item list, 5906:38912, gave
-        // every row its own card; on long menus that read as a tower of separate buttons.)
+        // OV-02: related rows share one white card; a one-row group is a single-row card.
+        // UI-003 (V8) restores the shared inset divider between rows inside the card.
         // Selectable option lists keep their separate cards (UI-003, OptionGroup).
         // On a white surface ([flush]) the rows sit on it, divided by hairlines.
         if (!flush)
@@ -952,9 +988,16 @@ class ListGroup extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: AppRadii.all(AppRadii.card),
+              // UI-003 (V8): a shared light divider at every boundary between distinct rows,
+              // inset equally at both ends by the card's content padding.
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: children,
+                children: [
+                  for (var i = 0; i < children.length; i++) ...[
+                    if (i > 0 && dividers) const CardDivider(),
+                    children[i],
+                  ],
+                ],
               ),
             ),
           )

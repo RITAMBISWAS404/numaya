@@ -125,6 +125,10 @@ abstract final class AppMedia {
 /// filters and tabs. A nested corner is its container's minus the inset.
 abstract final class AppRadii {
   static const double tag = MonoRadii.tag;
+  static const double chip = MonoRadii.chip;
+  static const double badge = MonoRadii.badge;
+  static const double navShell = MonoRadii.navShell;
+  static const double navItem = MonoRadii.navItem;
   static const double checkbox = MonoRadii.checkbox;
   static const double iconTile = MonoRadii.iconTile;
   static const double iconTileLg = MonoRadii.iconTileLg;
@@ -139,8 +143,8 @@ abstract final class AppRadii {
   static const double dialog = MonoRadii.dialog;
   static const double pill = MonoRadii.pill;
 
-  /// Segmented track: a full pill; segments are pills inside it.
-  static const double segment = MonoRadii.pill;
+  /// Segmented track (UI-050: pill tabs are 8 with a 12 track around a 4pt inset).
+  static const double segment = MonoRadii.control;
 
   static BorderRadius all(double r) => BorderRadius.all(Radius.circular(r));
 

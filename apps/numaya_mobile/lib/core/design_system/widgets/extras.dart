@@ -405,9 +405,9 @@ class ComparisonRow extends StatelessWidget {
 enum BannerTone { info, pending, success, error }
 
 /// A status banner (states-and-recovery: `StatusBanner`): pending review, approved, rejected,
-/// offline. Ente's Banner (14590:125245, OV-01): a white card with no tint or border; the status
-/// shows in the icon (centred on the content, Tabler MVP pass) and, for errors and success, in the
-/// title colour, as Ente's "Subscribe" and "Enable" banners do. Body muted; optional action below.
+/// offline, and passive callouts such as the welcome credits. UI-060 (V8): no outline, a light
+/// neutral fill slightly darker than the page; the icon is top-aligned with the title (UI-010).
+/// Body muted (#666 on the fill: 4.61:1); optional action below.
 class StatusBanner extends StatelessWidget {
   const StatusBanner({
     super.key,
@@ -440,10 +440,11 @@ class StatusBanner extends StatelessWidget {
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(AppSpacing.s4),
-        // Owner selection, status-banner C: outlined, no fill, icon level with the title.
+        // UI-060 (V8): a passive callout has no outline; a light neutral fill a step darker than
+        // the page carries its boundary. The icon sits at the top of the content (UI-010).
         decoration: BoxDecoration(
+          color: AppColors.calloutFill,
           borderRadius: AppRadii.all(AppRadii.card),
-          border: Border.all(color: AppColors.border),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
