@@ -45,6 +45,15 @@ class V8Scene {
   final Future<void> Function(WidgetTester tester, ProviderContainer c)? setup;
 }
 
+/// UI-085's fixed comparison set: a hero name over a photo, a chat, a form step and a settings
+/// page (long titles, body, fields, buttons, rows).
+const List<(String, String)> _typeScreens = [
+  ('discover', Routes.home),
+  ('chat', '${Routes.chat}/priya'),
+  ('form', Routes.setupName),
+  ('settings', Routes.settings),
+];
+
 /// Representative screens for the shared-system passes (baseline evidence and iteration).
 final List<V8Scene> v8Scenes = [
   const V8Scene('base-discover', Routes.home),
@@ -171,6 +180,22 @@ final List<V8Scene> v8Scenes = [
       Routes.profile,
       choices: {'v8-profile': v},
       height: 1400,
+    ),
+  // UI-085: every display x UI pairing on the same four screens and data, at the default 15pt
+  // body; then the 14pt body on the baseline families.
+  for (final d in DisplayFace.values)
+    for (final u in UiFace.values)
+      for (final (name, route) in _typeScreens)
+        V8Scene(
+          'type-${d.id}--${u.id}--15--$name',
+          route,
+          type: TypeSettings(display: d, ui: u),
+        ),
+  for (final (name, route) in _typeScreens)
+    V8Scene(
+      'type-baseline--baseline--14--$name',
+      route,
+      type: const TypeSettings(bodySize: 14),
     ),
   const V8Scene('base-typography', Routes.reviewTypography),
   const V8Scene(
