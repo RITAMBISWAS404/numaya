@@ -27,6 +27,7 @@ import '../features/dating/presentation/messages_screens.dart';
 import '../features/dating/presentation/photo_viewer_screen.dart';
 import '../features/demo/presentation/demo_hub_screen.dart';
 import '../features/demo/presentation/design_lab_screen.dart';
+import '../features/demo/presentation/typography_settings_screen.dart';
 import '../features/events_mvp/presentation/event_detail_screens.dart';
 import '../features/events_mvp/presentation/events_feed_screen.dart';
 import '../features/events_mvp/presentation/my_events_screens.dart';
@@ -96,6 +97,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       // The Demo Hub and its labs exist only in internal builds with demo sign-in.
       if ((path == Routes.demo ||
               path == Routes.designLab ||
+              path == Routes.reviewTypography ||
               path == Routes.experimentLab ||
               path.startsWith(Routes.visualLab)) &&
           (!ref.read(devToolsAvailableProvider) ||
@@ -136,6 +138,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path.startsWith(Routes.help) ||
                 path == Routes.demo ||
                 path == Routes.designLab ||
+                path == Routes.reviewTypography ||
                 path == Routes.experimentLab
             ? null
             : Routes.restore;
@@ -532,6 +535,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       _route(
         path: Routes.designLab,
         builder: (_, _) => const DesignLabScreen(),
+      ),
+      _route(
+        path: Routes.reviewTypography,
+        builder: (_, _) => const TypographySettingsScreen(),
       ),
       _route(
         path: '${Routes.like}/:id',

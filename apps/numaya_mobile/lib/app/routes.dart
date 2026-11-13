@@ -138,6 +138,9 @@ abstract final class Routes {
   /// Development-only Design Lab (Monochrome Meetup components and states), under the Demo Hub.
   static const designLab = '/design-lab';
 
+  /// DEVELOPMENT ONLY: the typography comparison (UI-085, 14/15 body), under the Demo Hub.
+  static const reviewTypography = '/review-typography';
+
   /// DEVELOPMENT ONLY: overnight v3 layout experiments (Current / A / B / C per experiment).
   static const experimentLab = '/experiment-lab';
 

@@ -9,6 +9,7 @@ export 'foundations/app_motion.dart';
 export 'foundations/app_theme.dart';
 export 'foundations/app_transitions.dart';
 export 'foundations/app_typography.dart';
+export 'foundations/type_settings.dart';
 export 'icons/numaya_icon_data.g.dart';
 export 'icons/tabler_icons.dart'
     show

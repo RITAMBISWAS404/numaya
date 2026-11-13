@@ -9,6 +9,7 @@ import '../core/connectivity/connectivity.dart';
 import '../core/design_system/design_system.dart';
 import '../features/auth/application/session_expiry.dart';
 import '../features/demo/application/demo_motion.dart';
+import '../features/demo/application/type_settings_controller.dart';
 import '../features/lab/lab_registry.dart';
 import '../features/settings/application/account_prefs.dart';
 import '../l10n/l10n.dart';
@@ -30,6 +31,16 @@ class NumayaApp extends ConsumerWidget {
     final haptics = ref.watch(accountPrefsProvider.select((p) => p.haptics));
     final reduceMotion = ref.watch(demoReduceMotionProvider);
     final online = ref.watch(connectivityProvider);
+    // Review-build typography (UI-085, 14/15 body): applied before the theme is built. A change
+    // rebuilds every element on the next frame so explicit styles follow, not just the theme.
+    AppTypography.apply(ref.watch(typeSettingsProvider));
+    ref.listen(typeSettingsProvider, (was, now) {
+      if (was == now) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final root = WidgetsBinding.instance.rootElement;
+        if (root != null) rebuildAllElements(root);
+      });
+    });
     // A session the server ended: ask to sign in again over the current screen, so it is still
     // there afterwards.
     ref.listen(sessionExpiryProvider, (was, expired) {

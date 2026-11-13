@@ -72,3 +72,29 @@ flutter:
     - family: Plus Jakarta Sans
       fonts:
         - asset: assets/fonts/PlusJakartaSans-Variable.ttf
+    # UI-085 typography comparison (review builds; Prototype tools > Typography). All SIL OFL 1.1
+    # from github.com/google/fonts (ofl/fraunces, instrumentserif, dmserifdisplay, manrope,
+    # poppins), licences beside each file. Instrument Serif and DM Serif Display ship one weight
+    # (400) and are never synthetically emboldened; Poppins ships static 400/500/600/700.
+    - family: Fraunces
+      fonts:
+        - asset: assets/fonts/Fraunces-Variable.ttf
+    - family: Instrument Serif
+      fonts:
+        - asset: assets/fonts/InstrumentSerif-Regular.ttf
+    - family: DM Serif Display
+      fonts:
+        - asset: assets/fonts/DMSerifDisplay-Regular.ttf
+    - family: Manrope
+      fonts:
+        - asset: assets/fonts/Manrope-Variable.ttf
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700

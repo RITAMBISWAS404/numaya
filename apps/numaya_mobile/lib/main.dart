@@ -8,6 +8,7 @@ import 'app/app.dart';
 import 'core/design_system/design_system.dart' show AppSystemUi;
 import 'core/logging/app_logger.dart';
 import 'core/media/demo_photos.dart';
+import 'features/demo/application/type_settings_controller.dart';
 
 void main() {
   const log = AppLogger('App');
@@ -26,6 +27,8 @@ void main() {
     };
     // The local demo photo set (git-ignored; empty means grey placeholders, as before).
     await DemoPhotoLibrary.load();
+    // Review builds: the saved typography comparison (UI-085, 14/15 body) before the first frame.
+    await TypeSettingsStore.restore();
     runApp(const ProviderScope(child: NumayaApp()));
   }, (error, stack) => log.error('Uncaught error', error, stack));
 }

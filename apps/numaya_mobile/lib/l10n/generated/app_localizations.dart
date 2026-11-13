@@ -12573,6 +12573,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Review build: a sample account on this phone. Nothing is sent to a server.'**
   String get welcomeDemoNote;
+
+  /// No description provided for @reviewTypeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Typography'**
+  String get reviewTypeTitle;
+
+  /// No description provided for @demoTypography.
+  ///
+  /// In en, this message translates to:
+  /// **'Typography'**
+  String get demoTypography;
+
+  /// No description provided for @demoTypographyDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Display font, UI font and body size (14 or 15)'**
+  String get demoTypographyDetail;
+
+  /// No description provided for @reviewTypeBodySize.
+  ///
+  /// In en, this message translates to:
+  /// **'Base body size'**
+  String get reviewTypeBodySize;
+
+  /// No description provided for @reviewTypeBodySizeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading text, list rows, fields, placeholders, labels and helper sentences. Headings, buttons, metadata and icons keep their sizes. The line stays 20pt.'**
+  String get reviewTypeBodySizeNote;
+
+  /// No description provided for @reviewTypeBodyDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'{size}pt (default)'**
+  String reviewTypeBodyDefault(int size);
+
+  /// No description provided for @reviewTypeBodyOption.
+  ///
+  /// In en, this message translates to:
+  /// **'{size}pt'**
+  String reviewTypeBodyOption(int size);
+
+  /// No description provided for @reviewTypeDisplay.
+  ///
+  /// In en, this message translates to:
+  /// **'Display font'**
+  String get reviewTypeDisplay;
+
+  /// No description provided for @reviewTypeDisplayNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Hero headings, page titles, sheet titles, large names and metrics.'**
+  String get reviewTypeDisplayNote;
+
+  /// No description provided for @reviewTypeOneWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'One weight (400), never bolded'**
+  String get reviewTypeOneWeight;
+
+  /// No description provided for @reviewTypeUi.
+  ///
+  /// In en, this message translates to:
+  /// **'UI font'**
+  String get reviewTypeUi;
+
+  /// No description provided for @reviewTypeUiNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Section titles, app-bar titles, body, buttons, fields, labels and metadata.'**
+  String get reviewTypeUiNote;
+
+  /// No description provided for @reviewTypeReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to default'**
+  String get reviewTypeReset;
+
+  /// No description provided for @reviewTypeCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Now: {display} · {ui} · {size}pt body. Kept on this phone.'**
+  String reviewTypeCurrent(String display, String ui, int size);
+
+  /// No description provided for @reviewTypeSampleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Maya, 29'**
+  String get reviewTypeSampleTitle;
+
+  /// No description provided for @reviewTypeSampleSection.
+  ///
+  /// In en, this message translates to:
+  /// **'About me'**
+  String get reviewTypeSampleSection;
+
+  /// No description provided for @reviewTypeSampleBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekend hikes, a long list of bakeries to try and a strong opinion about the best window seat.'**
+  String get reviewTypeSampleBody;
+
+  /// No description provided for @reviewTypeSampleMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Active today · 3 km away'**
+  String get reviewTypeSampleMeta;
 }
 
 class _AppLocalizationsDelegate

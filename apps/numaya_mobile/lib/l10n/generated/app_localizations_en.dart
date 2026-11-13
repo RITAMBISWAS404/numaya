@@ -7481,4 +7481,69 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get welcomeDemoNote =>
       'Review build: a sample account on this phone. Nothing is sent to a server.';
+
+  @override
+  String get reviewTypeTitle => 'Typography';
+
+  @override
+  String get demoTypography => 'Typography';
+
+  @override
+  String get demoTypographyDetail =>
+      'Display font, UI font and body size (14 or 15)';
+
+  @override
+  String get reviewTypeBodySize => 'Base body size';
+
+  @override
+  String get reviewTypeBodySizeNote =>
+      'Reading text, list rows, fields, placeholders, labels and helper sentences. Headings, buttons, metadata and icons keep their sizes. The line stays 20pt.';
+
+  @override
+  String reviewTypeBodyDefault(int size) {
+    return '${size}pt (default)';
+  }
+
+  @override
+  String reviewTypeBodyOption(int size) {
+    return '${size}pt';
+  }
+
+  @override
+  String get reviewTypeDisplay => 'Display font';
+
+  @override
+  String get reviewTypeDisplayNote =>
+      'Hero headings, page titles, sheet titles, large names and metrics.';
+
+  @override
+  String get reviewTypeOneWeight => 'One weight (400), never bolded';
+
+  @override
+  String get reviewTypeUi => 'UI font';
+
+  @override
+  String get reviewTypeUiNote =>
+      'Section titles, app-bar titles, body, buttons, fields, labels and metadata.';
+
+  @override
+  String get reviewTypeReset => 'Reset to default';
+
+  @override
+  String reviewTypeCurrent(String display, String ui, int size) {
+    return 'Now: $display · $ui · ${size}pt body. Kept on this phone.';
+  }
+
+  @override
+  String get reviewTypeSampleTitle => 'Maya, 29';
+
+  @override
+  String get reviewTypeSampleSection => 'About me';
+
+  @override
+  String get reviewTypeSampleBody =>
+      'Weekend hikes, a long list of bakeries to try and a strong opinion about the best window seat.';
+
+  @override
+  String get reviewTypeSampleMeta => 'Active today · 3 km away';
 }

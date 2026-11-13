@@ -71,6 +71,13 @@ class DemoHubScreen extends ConsumerWidget {
                 onTap: () => context.push(Routes.designLab),
               ),
               ListRow(
+                key: const ValueKey('demo-typography'),
+                leading: NumayaIcons.palette,
+                label: l10n.demoTypography,
+                detail: l10n.demoTypographyDetail,
+                onTap: () => context.push(Routes.reviewTypography),
+              ),
+              ListRow(
                 key: const ValueKey('demo-visual-lab'),
                 leading: NumayaIcons.sparkle,
                 label: 'Visual Lab V2',
