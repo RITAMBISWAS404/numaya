@@ -55,7 +55,10 @@ void main() {
   });
 
   test('single-weight serifs are never synthetically emboldened', () {
-    for (final face in [DisplayFace.instrumentSerif, DisplayFace.dmSerifDisplay]) {
+    for (final face in [
+      DisplayFace.instrumentSerif,
+      DisplayFace.dmSerifDisplay,
+    ]) {
       AppTypography.apply(TypeSettings(display: face));
       final title = AppTypography.pageTitle;
       expect(title.fontWeight, FontWeight.w400);

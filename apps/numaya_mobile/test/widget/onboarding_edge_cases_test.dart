@@ -53,7 +53,8 @@ void main() {
       );
       expect(fabEnabled(tester), isFalse);
       await typeDate(tester, '29', '02', '1996');
-      expect(find.text('You’re 30'), findsOneWidget);
+      // UI-052 (V8): no inline age; the confirmation sheet shows it.
+      expect(find.text('You’re 30'), findsNothing);
       expect(fabEnabled(tester), isTrue);
       await settle(tester);
     },
@@ -136,7 +137,8 @@ void main() {
       c.read(routerProvider).go(Routes.interests);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 600));
-      expect(find.textContaining('1/5'), findsWidgets);
+      // UI-054 (V8): the footer carries the count.
+      expect(find.textContaining('1/5 interests'), findsWidgets);
       await settle(tester);
     },
   );
@@ -165,7 +167,8 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
     // Selections pass: Messages A groups by turn (no Conversations heading).
-      expect(find.textContaining(RegExp('Your turn|Waiting on them')), findsWidgets);
+    // UI-068 (V8): one conversation list.
+    expect(find.text('Conversations'), findsOneWidget);
     await settle(tester);
   });
 

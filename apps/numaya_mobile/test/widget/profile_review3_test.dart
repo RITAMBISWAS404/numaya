@@ -19,8 +19,8 @@ void main() {
   Future<ProviderContainer> open(WidgetTester tester, String route) async {
     await usePhoneSize(tester);
     final c = await quickStartApp(tester);
-      // This checks the cover hero of Profile O (kept in the Design Lab).
-      c.read(labChoicesProvider.notifier).choose('fx-profile', 'O');
+    // This checks the cover hero of Profile O (kept in the Design Lab).
+    c.read(labChoicesProvider.notifier).choose('fx-profile', 'O');
     await goTo(c, tester, route);
     return c;
   }
@@ -37,8 +37,9 @@ void main() {
           find.bySemanticsLabel(RegExp('^$likes people like you')),
           findsNothing,
         );
-        // Owner selection O (v7 export): a circle inside a ring that empties.
-        expect(find.byType(CountdownAvatar), findsWidgets);
+        // UI-033 (V8): square, image-only tiles (no ring); the time left is spoken.
+        expect(find.byType(CountdownAvatar), findsNothing);
+        expect(find.byKey(const ValueKey('match-tile-jo')), findsOneWidget);
         // R02 supersedes the MVP caption: no time under the avatar; it is spoken instead.
         expect(find.text('21h left'), findsNothing);
         expect(
@@ -151,7 +152,7 @@ void main() {
 
     for (final (part, landmark) in [
       ('Photos', 'Edit profile'),
-      ('Interests', 'Interests'),
+      ('Interests', 'Interests and prompt'),
       ('About you', 'Edit profile'),
       ('More about you', 'Edit profile'),
     ]) {

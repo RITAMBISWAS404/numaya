@@ -98,8 +98,12 @@ void main() {
       await tapOn(tester, _action('Back to messages'));
       await tester.pump(const Duration(milliseconds: 600));
       await openTab(tester, 'Messages');
-      // Selections pass: Messages A groups by turn (no Conversations heading).
-      expect(find.textContaining(RegExp('Your turn|Waiting on them')), findsWidgets);
+      // UI-068 (V8): one list, no Your turn / Waiting sections.
+      expect(
+        find.textContaining(RegExp('Your turn|Waiting on them')),
+        findsNothing,
+      );
+      expect(find.text('Conversations'), findsOneWidget);
       expect(find.text('You: Which record shop?'), findsOneWidget);
       await settle(tester);
     },
@@ -414,9 +418,9 @@ void main() {
     await tester.pump();
     expect(find.text('Nothing matches “zebra”'), findsOneWidget);
     // The Unread filter is part of Messages O (kept in the Design Lab); A has no filter row.
-    ProviderScope.containerOf(
-      tester.element(find.byType(MaterialApp)),
-    ).read(labChoicesProvider.notifier).choose('fx-messages', 'O');
+    ProviderScope.containerOf(tester.element(find.byType(MaterialApp)))
+        .read(labChoicesProvider.notifier)
+        .choose('fx-messages', 'O');
     await tester.pump(const Duration(milliseconds: 300));
     await tapOn(tester, find.bySemanticsLabel('Unread, 0'));
     await openChatFromMatch(tester);

@@ -111,8 +111,9 @@ void main() {
       final c = await quickStartApp(tester);
       await goTo(c, tester, Routes.home);
       final tile = tester.getRect(find.byKey(const ValueKey('tab-tile-2')));
-      // 2pt outside the visible pill, still inside the item's 4pt inset (UC-03).
-      await tester.tapAt(Offset(tile.right + 2, tile.bottom + 2));
+      // Just outside the visible tile, still inside the item's 2pt side and 3pt bottom inset
+      // (UI-026 V8: 4pt between tiles).
+      await tester.tapAt(Offset(tile.right + 1, tile.bottom + 2));
       await tester.pump(const Duration(milliseconds: 600));
       expect(location(c), Routes.messages);
       await settle(tester);

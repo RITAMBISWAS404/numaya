@@ -103,15 +103,18 @@ class _InterestsScreenState extends ConsumerState<InterestsScreen> {
       ],
     ];
 
+    final countLine = count < ProfileRules.minInterests
+        ? '${l10n.interestsCount(count)} · '
+              '${l10n.interestsPickMore(ProfileRules.minInterests - count)}'
+        : l10n.interestsCount(count);
     if (!widget.editing) {
       return OnboardingStepScaffold(
         step: SetupStep.interests,
         title: l10n.interestsTitle,
         lede: l10n.interestsLede,
         art: const IllustrationView(NumayaIllustration.interests, width: 72),
-        caption: count < ProfileRules.minInterests
-            ? l10n.interestsPickMore(ProfileRules.minInterests - count)
-            : l10n.interestsCount(count),
+        // UI-054 (V8): the footer is the one visible selection count, always.
+        caption: countLine,
         canContinue: valid,
         onContinue: () => continueFrom(context, ref, SetupStep.interests),
         children: content,
@@ -125,7 +128,23 @@ class _InterestsScreenState extends ConsumerState<InterestsScreen> {
           backLabel: l10n.back,
           title: l10n.setupInterestsLabel,
         ),
-        footer: NumayaButton(label: l10n.save, onPressed: valid ? _save : null),
+        // UI-054: the count lives with the action, as in setup.
+        footer: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Semantics(
+              liveRegion: true,
+              child: Text(
+                countLine,
+                textAlign: TextAlign.center,
+                style: AppTypography.caption,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.s2),
+            NumayaButton(label: l10n.save, onPressed: valid ? _save : null),
+          ],
+        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

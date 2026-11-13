@@ -7,6 +7,7 @@ import 'package:numaya_mobile/features/commerce/application/economy_controller.d
 import 'package:numaya_mobile/features/compliments/application/compliments_controller.dart';
 import 'package:numaya_mobile/features/compliments/domain/compliment.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
+import 'package:numaya_mobile/features/lab/lab_registry.dart';
 
 import '../helpers/journeys.dart';
 import '../helpers/test_app.dart';
@@ -45,6 +46,9 @@ void main() {
     ) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
+      // The service contract on the separate page (lab v8-compliment O); the UI-083 chat flow
+      // has the same contract tests in v8_review_test.dart.
+      c.read(labChoicesProvider.notifier).choose('v8-compliment', 'O');
       await goTo(c, tester, composer);
       await tester.pump(const Duration(milliseconds: 400));
       final before = balance(c);
@@ -68,6 +72,9 @@ void main() {
     ) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
+      // The service contract on the separate page (lab v8-compliment O); the UI-083 chat flow
+      // has the same contract tests in v8_review_test.dart.
+      c.read(labChoicesProvider.notifier).choose('v8-compliment', 'O');
       await goTo(c, tester, composer);
       await tester.pump(const Duration(milliseconds: 400));
       final before = balance(c);
@@ -93,6 +100,9 @@ void main() {
     ) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
+      // The service contract on the separate page (lab v8-compliment O); the UI-083 chat flow
+      // has the same contract tests in v8_review_test.dart.
+      c.read(labChoicesProvider.notifier).choose('v8-compliment', 'O');
       await tester.pump();
       final n = c.read(complimentsProvider.notifier);
       final first = n.send(
@@ -125,6 +135,9 @@ void main() {
     testWidgets('no credits leads to the pack, with no debit', (tester) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
+      // The service contract on the separate page (lab v8-compliment O); the UI-083 chat flow
+      // has the same contract tests in v8_review_test.dart.
+      c.read(labChoicesProvider.notifier).choose('v8-compliment', 'O');
       await tester.pump();
       final economy = c.read(economyProvider.notifier);
       for (var i = 0; balance(c) > 0 && i < 20; i++) {
@@ -142,6 +155,9 @@ void main() {
     ) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
+      // The service contract on the separate page (lab v8-compliment O); the UI-083 chat flow
+      // has the same contract tests in v8_review_test.dart.
+      c.read(labChoicesProvider.notifier).choose('v8-compliment', 'O');
       await goTo(c, tester, composer);
       await tester.pump(const Duration(milliseconds: 400));
       await type(tester, 'Half a thought');

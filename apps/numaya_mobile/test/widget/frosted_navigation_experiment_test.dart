@@ -74,7 +74,7 @@ void main() {
     Finder pillOf() => find.byKey(NumayaTabBar.pillKey);
 
     testWidgets(
-      'nav bar: opaque white, fully rounded, soft shadow, no blur (UI-026, UI-027)',
+      'nav bar: opaque white, 20pt corners, soft shadow, no blur (UI-026, UI-027, UI-050)',
       (tester) async {
         await usePhoneSize(tester);
         await quickStartApp(tester);
@@ -88,10 +88,10 @@ void main() {
         final pill = tester.widget<Container>(pillOf());
         final deco = pill.decoration! as BoxDecoration;
         expect(deco.color, AppColors.surface);
-        // UC-03: a stadium at any width.
-        expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
+        // V8 (UI-050/UI-026): a 20pt shell, 54pt tall (38pt tiles, 8pt around them).
+        expect(deco.borderRadius, AppRadii.all(AppRadii.navShell));
         expect(deco.boxShadow, AppElevation.navigation);
-        expect(tester.getSize(pillOf()).height, AppSizes.tabBar);
+        expect(tester.getSize(pillOf()).height, 54);
         await settle(tester);
       },
     );

@@ -8,6 +8,7 @@ import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/commerce/application/economy_controller.dart';
 import 'package:numaya_mobile/features/compliments/application/compliments_controller.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
+import 'package:numaya_mobile/features/lab/lab_registry.dart';
 import 'package:numaya_mobile/features/onboarding/application/onboarding_controller.dart';
 
 import '../helpers/journeys.dart';
@@ -94,6 +95,9 @@ void main() {
   ) async {
     await usePhoneSize(tester);
     final c = await quickStartApp(tester);
+    // The separate Compliment page (lab v8-compliment O); the UI-083 chat flow is covered in
+    // v8_review_test.dart.
+    c.read(labChoicesProvider.notifier).choose('v8-compliment', 'O');
     final before = c.read(creditBalanceProvider);
     final first = c.read(datingProvider.notifier).queue().first;
     // R04: no persistent likes-left line while likes remain.

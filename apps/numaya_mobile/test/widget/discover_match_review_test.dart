@@ -382,18 +382,18 @@ void main() {
     );
   });
 
-  group('Navigation (UC-03 stadium bar; supersedes the Tabler MVP and UI-026/027 geometry)', () {
+  group('Navigation (V8: UI-026 compact bar, UI-050 corners)', () {
     testWidgets(
-      'stadium bar, 8pt inside, four equal 48pt items, 4pt-inset pills, four destinations',
+      '20pt shell, 8pt from shell to every tile, 4pt between 38 x 48 tiles, four destinations',
       (tester) async {
         final c = await home(tester);
         final pill = find.byKey(NumayaTabBar.pillKey);
         final deco =
             tester.widget<Container>(pill).decoration! as BoxDecoration;
         expect(deco.boxShadow, AppElevation.navigation);
-        expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
+        expect(deco.borderRadius, AppRadii.all(AppRadii.navShell));
         final bar = tester.getRect(pill);
-        expect(bar.height, AppSizes.tabBar);
+        expect(bar.height, 54);
         // MVP Focus V5: Discover, Likes, Chats and Profile.
         final items = [
           for (var i = 0; i < 4; i++)
@@ -404,19 +404,18 @@ void main() {
             tester.getRect(find.byKey(ValueKey('tab-tile-$i'))),
         ];
         expect(find.byKey(const ValueKey('tab-tile-4')), findsNothing);
-        // 8 inside the bar on all four sides.
-        expect(items.first.left - bar.left, closeTo(8, 0.01));
-        expect(bar.right - items.last.right, closeTo(8, 0.01));
-        expect(items.first.top - bar.top, closeTo(8, 0.01));
-        expect(bar.bottom - items.first.bottom, closeTo(8, 0.01));
+        // 8 from the shell to every visible tile; the 44pt hit areas reach into the padding.
+        expect(tiles.first.left - bar.left, closeTo(8, 0.01));
+        expect(bar.right - tiles.last.right, closeTo(8, 0.01));
+        expect(tiles.first.top - bar.top, closeTo(8, 0.01));
+        expect(bar.bottom - tiles.first.bottom, closeTo(8, 0.01));
         for (var i = 0; i < 4; i++) {
-          expect(items[i].height, 48);
-          expect(items[i].width, closeTo(items[0].width, 0.01));
-          // 4 inside each item on all four sides.
-          expect(tiles[i].left - items[i].left, closeTo(4, 0.01));
-          expect(items[i].right - tiles[i].right, closeTo(4, 0.01));
-          expect(tiles[i].top - items[i].top, closeTo(4, 0.01));
-          expect(items[i].bottom - tiles[i].bottom, closeTo(4, 0.01));
+          expect(items[i].height, 44);
+          expect(tiles[i].height, closeTo(38, 0.01));
+          expect(tiles[i].width, closeTo(48, 0.01));
+          // 4 between adjacent tiles.
+          if (i > 0)
+            expect(tiles[i].left - tiles[i - 1].right, closeTo(4, 0.01));
           if (i > 0) expect(items[i].left, closeTo(items[i - 1].right, 0.01));
         }
         // Every remaining destination still works, and the selected one is the filled glyph on

@@ -104,6 +104,7 @@ class StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = data;
+    final large = MediaQuery.textScalerOf(context).scale(10) > 14;
     final head = Row(
       children: [
         MobileIcon(
@@ -210,11 +211,13 @@ class StatCard extends StatelessWidget {
       StatTemplate.cadence => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // The figure may wrap under the heading at large text rather than overflow.
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(child: head),
-              figure(size: 28),
+              const SizedBox(width: AppSpacing.s2),
+              Flexible(child: figure(size: 28)),
             ],
           ),
           const SizedBox(height: AppSpacing.s4),
@@ -232,6 +235,17 @@ class StatCard extends StatelessWidget {
         ],
       ),
       StatTemplate.sideArt => const SizedBox.shrink(),
+      // At large text the split stacks (figure above the details) instead of overflowing.
+      StatTemplate.split when large => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          head,
+          const SizedBox(height: AppSpacing.s2),
+          figure(size: 40),
+          const SizedBox(height: AppSpacing.s2),
+          ...details,
+        ],
+      ),
       StatTemplate.split => IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,

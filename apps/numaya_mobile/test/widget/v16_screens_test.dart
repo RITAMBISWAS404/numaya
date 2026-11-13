@@ -32,7 +32,8 @@ void main() {
     for (final i in ['Natural wine', 'Cooking', 'Jazz', 'Poetry', 'Climbing']) {
       await _tap(tester, find.text(i));
     }
-    expect(find.text('5/5 selected'), findsOneWidget); // R07 sentence case
+    // UI-054 (V8): the footer is the count.
+    expect(find.text('5/5 interests'), findsOneWidget);
     final travel = tester.widget<NumayaChip>(
       find.ancestor(of: find.text('Travel'), matching: find.byType(NumayaChip)),
     );
@@ -40,7 +41,9 @@ void main() {
     await settle(tester);
   });
 
-  testWidgets('prompt editor explains why Save is disabled', (tester) async {
+  testWidgets('prompt editor: Save stays disabled until there is an answer', (
+    tester,
+  ) async {
     await usePhoneSize(tester);
     await _toInterests(tester, testAuth());
     for (final i in ['Jazz', 'Poetry', 'Travel']) {
@@ -53,14 +56,16 @@ void main() {
     // UI-008: the answer is written in the prompt's sheet.
     await _tap(tester, find.text('A perfect first date'));
     await tester.pump(const Duration(milliseconds: 600));
-    expect(find.text('Write an answer to save.'), findsOneWidget);
+    // UI-055 (V8): no helper line; the outlined disabled Save says it (UI-057).
+    expect(find.text('Write an answer to save.'), findsNothing);
     expect(find.text('150 characters left'), findsOneWidget);
     await tester.enterText(find.byType(TextField).last, 'Hello');
     await tester.pump();
     expect(find.text('145 characters left'), findsOneWidget);
+    // UI-055 (V8): no helper line under Save.
     expect(
       find.text('Saved prompts show on your profile straight away.'),
-      findsOneWidget,
+      findsNothing,
     );
     await _tap(tester, find.text('Save prompt'));
     await tester.pump(const Duration(milliseconds: 600));
@@ -70,7 +75,16 @@ void main() {
     await tester.pump(const Duration(milliseconds: 600));
     await _tap(tester, find.text('A perfect first date'));
     await tester.pump(const Duration(milliseconds: 600));
-    expect(find.text('No changes yet.'), findsOneWidget);
+    // UI-055/057 (V8): Save stays outlined and disabled with nothing changed; no helper line.
+    expect(find.text('No changes yet.'), findsNothing);
+    expect(
+      tester
+          .widget<NumayaButton>(
+            find.widgetWithText(NumayaButton, 'Save prompt'),
+          )
+          .onPressed,
+      isNull,
+    );
     await settle(tester);
   });
 

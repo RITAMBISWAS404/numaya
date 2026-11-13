@@ -99,7 +99,8 @@ void main() {
 
       await goTo(c, tester, Routes.messages);
       expect(
-        find.textContaining('Photo: The stall I mentioned'),
+        // UI-067 (V8): the caption shows, with the filled photo glyph instead of "Photo:".
+        find.textContaining('The stall I mentioned'),
         findsOneWidget,
       );
       await settle(tester);

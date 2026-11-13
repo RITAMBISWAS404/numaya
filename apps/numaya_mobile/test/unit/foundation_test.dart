@@ -121,11 +121,16 @@ void main() {
 
     test('geometry follows the Ente radii and sizes', () {
       // radius/lg 16, radius/xl 20 (11112:4508); 24 for the hero card and sheet top (NX).
-      expect(AppRadii.field, 16);
-      expect(AppRadii.control, 20);
-      expect(AppRadii.card, 20);
-      expect(AppRadii.heroCard, 24);
-      expect(AppRadii.photo, 16); // nested: hero 24 minus its 8pt inset
+      // V8 radius roles (UI-050): 4 / 8 / 12 / 16 / 20.
+      expect(AppRadii.badge, 4);
+      expect(AppRadii.chip, 8);
+      expect(AppRadii.field, 12);
+      expect(AppRadii.control, 12);
+      expect(AppRadii.card, 16);
+      expect(AppRadii.heroCard, 20);
+      expect(AppRadii.photo, 20);
+      expect(AppRadii.navShell, 20);
+      expect(AppRadii.navItem, 12);
       // Ente alignment V3 (EA-S01): sheet corners are radius/xl 20, as Ente's rules state.
       expect(AppRadii.sheet, 20);
       expect(AppRadii.iconButton, 12);

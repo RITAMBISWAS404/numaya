@@ -149,8 +149,10 @@ void main() {
       await tester.enterText(fields.at(2), '04');
       await tester.enterText(fields.at(3), '1995');
       await tester.pump();
-      expect(find.text('You’re 31'), findsOneWidget);
+      // UI-052 (V8): the age appears only in the confirmation sheet.
+      expect(find.text('You’re 31'), findsNothing);
       await tapNext(tester);
+      expect(find.text('You’re 31'), findsOneWidget);
       expect(find.text('Born April 12, 1995'), findsOneWidget);
       await tapText(tester, 'That’s right');
       await tester.pumpAndSettle();
@@ -195,7 +197,8 @@ void main() {
 
       // Interests: three picks.
       expect(find.text('What are you into?'), findsOneWidget);
-      expect(find.text('Pick 3 more'), findsOneWidget);
+      // UI-054 (V8): the footer shows the count with what is left to pick.
+      expect(find.text('0/5 interests · Pick 3 more'), findsOneWidget);
       await tapText(tester, 'Jazz');
       await tapText(tester, 'Cooking');
       await tapText(tester, 'Climbing');

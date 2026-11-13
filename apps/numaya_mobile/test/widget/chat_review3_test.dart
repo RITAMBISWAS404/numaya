@@ -51,37 +51,38 @@ void main() {
   }
 
   group('UI-035 exact times', () {
-    testWidgets('V8: every bubble shows its time; the day line stays', (
-      tester,
-    ) async {
-      await openPriya(tester);
-      expect(find.text('Today'), findsOneWidget);
-      for (final t in ['07:00', '10:26']) {
-        expect(
-          find.descendant(
-            of: find.byType(MessageBubble),
-            matching: find.text(t),
-          ),
-          findsWidgets,
-          reason: t,
-        );
-      }
-      // The separate swipe reveal stays hidden at rest.
-      for (final t in ['07:00', '10:26']) {
-        for (final e in _reveal(t).evaluate()) {
-          final o = tester.widget<Opacity>(
-            find
-                .ancestor(
-                  of: find.byWidget(e.widget),
-                  matching: find.byType(Opacity),
-                )
-                .first,
+    testWidgets(
+      'V8 review (UI-035): no bubble shows its time at rest; the day line stays',
+      (tester) async {
+        await openPriya(tester);
+        expect(find.text('Today'), findsOneWidget);
+        for (final t in ['07:00', '10:26']) {
+          expect(
+            find.descendant(
+              of: find.byType(MessageBubble),
+              matching: find.text(t),
+            ),
+            findsNothing,
+            reason: t,
           );
-          expect(o.opacity, 0, reason: t);
         }
-      }
-      await settle(tester);
-    });
+        // The separate swipe reveal stays hidden at rest.
+        for (final t in ['07:00', '10:26']) {
+          for (final e in _reveal(t).evaluate()) {
+            final o = tester.widget<Opacity>(
+              find
+                  .ancestor(
+                    of: find.byWidget(e.widget),
+                    matching: find.byType(Opacity),
+                  )
+                  .first,
+            );
+            expect(o.opacity, 0, reason: t);
+          }
+        }
+        await settle(tester);
+      },
+    );
 
     testWidgets('a left drag reveals that message’s time; release hides it', (
       tester,

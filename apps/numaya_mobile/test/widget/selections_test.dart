@@ -62,8 +62,10 @@ void main() {
 
       await goTo(c, tester, Routes.messages);
       await settle(tester);
-      expect(find.textContaining('Your turn'), findsOneWidget);
-      expect(find.textContaining('Waiting on them'), findsOneWidget);
+      // UI-068 (V8) supersedes Messages A's two sections: one list with a Your move pill.
+      expect(find.textContaining('Your turn'), findsNothing);
+      expect(find.text('Conversations'), findsOneWidget);
+      expect(find.byKey(const ValueKey('row-your-move')), findsWidgets);
 
       await goTo(c, tester, Routes.wallet);
       await settle(tester);

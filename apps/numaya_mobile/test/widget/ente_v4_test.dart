@@ -81,25 +81,24 @@ void main() {
       );
       final g = (box.decoration! as BoxDecoration).gradient! as LinearGradient;
       // Selections pass: no text shadow, so an unmeasured photo starts at a 40% edge.
-      expect(g.colors.first.a, closeTo(0.40, 0.01));
+      // UI-066 (V8): about 10% darker than the selections scrim.
+      expect(g.colors.first.a, closeTo(0.46, 0.01));
       expect(g.colors.last.a, 0);
       for (final c in g.colors) {
-        expect(c.a, lessThanOrEqualTo(0.41));
+        expect(c.a, lessThanOrEqualTo(0.47));
       }
     });
 
-    test(
-      'the adaptive scrim strengthens for bright photos, capped at 62% (no text shadow)',
-      () {
-        expect(PhotoScrim.edgeFor(null), 0.40);
-        expect(PhotoScrim.edgeFor(0.05), 0.32);
-        expect(PhotoScrim.edgeFor(0.4), closeTo(0.477, 0.01));
-        expect(PhotoScrim.edgeFor(0.9), closeTo(0.62, 0.001));
-        PhotoScrim.adaptive = false;
-        expect(PhotoScrim.edgeFor(0.9), 0.40, reason: 'fixed comparison');
-        PhotoScrim.adaptive = true;
-      },
-    );
+    test('the adaptive scrim strengthens for bright photos, capped at 70% (UI-066, no text shadow)', () {
+      // UI-066 (V8): unmeasured 46%, dark 37%, bright up to 70%.
+      expect(PhotoScrim.edgeFor(null), 0.46);
+      expect(PhotoScrim.edgeFor(0.05), 0.37);
+      expect(PhotoScrim.edgeFor(0.4), closeTo(0.543, 0.01));
+      expect(PhotoScrim.edgeFor(0.9), closeTo(0.70, 0.001));
+      PhotoScrim.adaptive = false;
+      expect(PhotoScrim.edgeFor(0.9), 0.46, reason: 'fixed comparison');
+      PhotoScrim.adaptive = true;
+    });
   });
 
   group('Surfaces and accents', () {

@@ -132,14 +132,15 @@ void main() {
                     .widget<Container>(find.byKey(NumayaTabBar.pillKey))
                     .decoration!
                 as BoxDecoration;
-        expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
-        expect(bar.height, 64);
+        // V8: a 20pt shell (UI-050), 54pt tall (UI-026).
+        expect(deco.borderRadius, AppRadii.all(AppRadii.navShell));
+        expect(bar.height, 54);
         expect(bar.left, greaterThanOrEqualTo(16), reason: '$width');
         expect(bar.right, lessThanOrEqualTo(width - 16), reason: '$width');
         for (var i = 0; i < 4; i++) {
           final item = tester.getRect(find.byKey(ValueKey('tab-item-$i')));
-          expect(item.width, greaterThanOrEqualTo(48), reason: '$width $i');
-          expect(item.height, 48);
+          expect(item.width, greaterThanOrEqualTo(44), reason: '$width $i');
+          expect(item.height, 44);
         }
         // Each selected position draws the stadium pill on the light neutral.
         for (final (label, index) in [
@@ -157,7 +158,7 @@ void main() {
                       .decoration!
                   as BoxDecoration;
           expect(tile.color, AppColors.iconSelectedFill);
-          expect(tile.borderRadius, AppRadii.all(AppRadii.pill));
+          expect(tile.borderRadius, AppRadii.all(AppRadii.navItem));
         }
         expect(c, isNotNull);
         await settle(tester);

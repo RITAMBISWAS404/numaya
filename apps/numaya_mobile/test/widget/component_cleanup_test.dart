@@ -144,8 +144,9 @@ void main() {
     expect(cards, hasLength(2));
     expect(cards.first.color, AppColors.surface);
     expect(cards.first.border, isNull);
-    expect(cards.last.color, isNull);
-    expect(cards.last.border, Border.all(color: AppColors.border));
+    // UI-060 (V8): the passive callout has no outline and a light neutral fill.
+    expect(cards.last.color, AppColors.calloutFill);
+    expect(cards.last.border, isNull);
     final infoIcon = tester.widget<NumayaIcon>(
       find.byWidgetPredicate(
         (w) => w is NumayaIcon && w.icon == NumayaIcons.info,

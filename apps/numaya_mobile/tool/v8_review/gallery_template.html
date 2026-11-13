@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numaya V8 Review Gallery</title>
+<style>
+:root{--ink:#18181b;--muted:#5f5f66;--line:#e2e2e6;--bg:#f4f4f5;--card:#fff;--brand:#7262c7;--brand-ink:#5b4caf;--tint:#efecfa;--warn:#9a6700;--bad:#b42318;--ok:#1f7a45}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+.bar{max-width:1240px;margin:0 auto;padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.bar h1{font-size:18px;margin:0 12px 0 0}
+.bar .meta{color:var(--muted);font-size:12px;flex-basis:100%}
+input[type=search]{flex:1;min-width:180px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;font:inherit}
+button,.btn{font:inherit;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px 12px;cursor:pointer;color:var(--ink)}
+button.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,label:focus-within{outline:3px solid var(--brand);outline-offset:2px}
+main{max-width:1240px;margin:0 auto;padding:16px}
+#status{margin:0 0 12px;padding:10px 12px;border-radius:12px;background:var(--tint);color:var(--brand-ink);display:none}
+#status.show{display:block}#status.bad{background:#fde8e6;color:var(--bad)}
+section.group{background:var(--card);border-radius:16px;padding:16px;margin:0 0 16px}
+section.group h2{margin:0;font-size:19px}
+.ids{color:var(--muted);font-size:12px;margin:2px 0 8px}
+.q{margin:0 0 8px}
+.rec{background:var(--tint);border-radius:12px;padding:10px 12px;margin:8px 0 12px;font-size:14px}
+.rec b{color:var(--brand-ink)}
+.options{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.opt{border:2px solid var(--line);border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:8px;position:relative}
+.opt.chosen{border-color:var(--brand);background:#faf9ff}
+.opt label.pick{display:flex;gap:8px;align-items:flex-start;font-weight:600;cursor:pointer}
+.opt label.pick input{margin-top:3px;accent-color:var(--brand);width:18px;height:18px}
+.opt .tag{font-size:11px;border-radius:8px;padding:2px 6px;background:#eee;color:var(--muted);align-self:flex-start}
+.opt .tag.base{background:#e8f3ec;color:var(--ok)}.opt .tag.recd{background:var(--tint);color:var(--brand-ink)}.opt .tag.concept{background:#fff4d6;color:var(--warn)}.opt .tag.blocked{background:#fde8e6;color:var(--bad)}
+.thumbs{display:flex;gap:6px;overflow-x:auto}
+.thumbs a{flex:0 0 auto}
+.thumbs img{height:300px;width:auto;border-radius:12px;border:1px solid var(--line);display:block;background:#ddd}
+.none{height:120px;display:grid;place-items:center;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px;text-align:center;padding:8px}
+.desc{font-size:13px;margin:0}.trade{font-size:12px;color:var(--muted);margin:0}
+textarea{width:100%;min-height:58px;border:1px solid var(--line);border-radius:12px;padding:8px;font:inherit;font-size:14px}
+.typo .ctrls{display:flex;flex-wrap:wrap;gap:12px;margin:8px 0}
+.typo select{padding:8px;border-radius:12px;border:1px solid var(--line);font:inherit}
+.typo .shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.typo .shots img{width:100%;border-radius:12px;border:1px solid var(--line)}
+.hidden{display:none!important}
+@media (max-width:560px){.thumbs img{height:240px}.bar h1{flex-basis:100%}}
+</style>
+</head>
+<body>
+<header><div class="bar">
+<h1>Numaya V8 review</h1>
+<input id="q" type="search" placeholder="Search by issue (UI-084), screen or option" aria-label="Search groups">
+<button class="primary" id="export">Export choices (JSON)</button>
+<label class="btn" for="file">Import JSON</label><input id="file" type="file" accept="application/json,.json" class="hidden">
+<button id="clear">Clear choices</button>
+<div class="meta" id="meta"></div>
+</div></header>
+<main>
+<p id="status" role="status" aria-live="polite"></p>
+<div id="groups"></div>
+</main>
+<script>
+const REG=/*REGISTRY*/null;
+const KEY='numaya-v8-review:'+REG.galleryRevision;
+const $=s=>document.querySelector(s);
+let state={choices:{},notes:{},typography:{displayFamily:'baseline',uiFamily:'baseline',baseBodySize:15}};
+let storageOk=true;
+function load(){try{const raw=localStorage.getItem(KEY);if(raw){const s=JSON.parse(raw);if(s&&typeof s==='object')state=Object.assign(state,s);}}catch(e){storageOk=false;}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){if(storageOk){storageOk=false;say('This browser is not keeping choices between visits here. Use Export to save them as a file.',true);}}}
+function say(t,bad){const s=$('#status');s.textContent=t;s.className='show'+(bad?' bad':'');}
+function el(tag,attrs,...kids){const e=document.createElement(tag);for(const[k,v]of Object.entries(attrs||{})){if(k==='class')e.className=v;else if(k==='text')e.textContent=v;else e.setAttribute(k,v);}for(const k of kids)if(k)e.append(k);return e;}
+function render(){
+ $('#meta').textContent=`Gallery ${REG.galleryRevision} · app source ${REG.appSourceSha.slice(0,7)} · ${REG.viewport}`+(REG.missingImages.length?` · Missing images: ${REG.missingImages.join(', ')}`:'');
+ const root=$('#groups');root.textContent='';
+ for(const g of REG.groups){
+  const sec=el('section',{class:'group',id:g.id,'data-search':(g.id+' '+g.title+' '+g.sourceIssueIds.join(' ')+' '+g.options.map(o=>o.label).join(' ')).toLowerCase()});
+  sec.append(el('h2',{text:g.title}),el('div',{class:'ids',text:`${g.id} · ${g.sourceIssueIds.join(', ')} · ${g.scope}`+(g.dependencies.length?` · relates to ${g.dependencies.join(', ')}`:'')}),el('p',{class:'q',text:g.question}));
+  const rec=el('div',{class:'rec'});
+  rec.append(el('b',{text:g.recommendationId?`Recommendation (not preselected): ${g.recommendationId}. `:'No recommendation. '}),document.createTextNode(g.recommendationWhy||''));
+  sec.append(rec);
+  const grid=el('div',{class:'options',role:'radiogroup','aria-label':g.title});
+  for(const o of g.options){
+   const chosen=state.choices[g.id]===o.id;
+   const card=el('div',{class:'opt'+(chosen?' chosen':'')});
+   const selectable=o.status==='implemented-rendered';
+   const input=el('input',{type:'radio',name:'g-'+g.id,value:o.id,'aria-describedby':g.id+'-'+o.id+'-d'});
+   if(chosen)input.checked=true;if(!selectable)input.disabled=true;
+   input.addEventListener('change',()=>{state.choices[g.id]=o.id;save();render();});
+   card.append(el('label',{class:'pick'},input,document.createTextNode(`${o.id} · ${o.label}`)));
+   const tags=el('div',{});
+   if(o.id===g.baselineId)tags.append(el('span',{class:'tag base',text:'baseline'}));
+   if(o.id===g.recommendationId)tags.append(el('span',{class:'tag recd',text:'recommended'}));
+   if(o.status==='concept-only')tags.append(el('span',{class:'tag concept',text:'concept only: not in the APK'}));
+   if(o.status==='blocked')tags.append(el('span',{class:'tag blocked',text:'blocked'}));
+   if(o.status==='implemented-unrendered')tags.append(el('span',{class:'tag concept',text:'implemented, not rendered'}));
+   card.append(tags);
+   const th=el('div',{class:'thumbs'});
+   if(o.images.length===0)th.append(el('div',{class:'none',text:'No render: '+(o.status==='concept-only'?'concept only':'image missing')}));
+   for(const im of o.images){
+    if(REG.missingImages.includes(im)){th.append(el('div',{class:'none',text:'Missing image: '+im}));continue;}
+    const a=el('a',{href:'img/'+im,target:'_blank',rel:'noopener','aria-label':`${o.label}: full size ${im}`});
+    a.append(el('img',{src:'img/'+im,alt:`${g.title}, ${o.label} (${im})`,loading:'lazy'}));th.append(a);
+   }
+   card.append(th,el('p',{class:'desc',id:g.id+'-'+o.id+'-d',text:o.description}));
+   if(o.tradeoffs)card.append(el('p',{class:'trade',text:'Tradeoff: '+o.tradeoffs}));
+   grid.append(card);
+  }
+  sec.append(grid);
+  const ta=el('textarea',{'aria-label':`Notes for ${g.title}`,placeholder:'Notes for this group (plain text)'});
+  ta.value=state.notes[g.id]||'';
+  ta.addEventListener('input',()=>{state.notes[g.id]=ta.value;save();});
+  sec.append(el('p',{class:'ids',text:'Notes'}),ta);
+  root.append(sec);
+ }
+ // Typography (UI-085 + the 14/15 body decision): three independent controls.
+ const T=REG.typography;const sec=el('section',{class:'group typo',id:'typography','data-search':'typography ui-085 ui-012 font body 14 15 fraunces manrope poppins serif'});
+ sec.append(el('h2',{text:'Typography: display font, UI font, base body size'}),el('div',{class:'ids',text:'UI-085, UI-012 · independent of every layout choice · the build default is the baseline families at 15pt'}),
+  el('p',{class:'q',text:'The same four screens with the same data for every pairing. Change the selectors to compare; your choice is exported with the layouts. In the APK: Prototype tools > Typography (kept across relaunches, with Reset).'}));
+ const c=el('div',{class:'ctrls'});
+ function sel(key,opts,label){const s=el('select',{'aria-label':label});for(const o of opts){const v=Array.isArray(o)?o[0]:String(o);const t=Array.isArray(o)?o[1]:o+'pt';const op=el('option',{value:v,text:t});if(String(state.typography[key])===v)op.selected=true;s.append(op);}
+  s.addEventListener('change',()=>{state.typography[key]=key==='baseBodySize'?Number(s.value):s.value;save();shots();});return el('label',{},document.createTextNode(label+' '),s);}
+ c.append(sel('displayFamily',T.displayFamily,'Display font'),sel('uiFamily',T.uiFamily,'UI font'),sel('baseBodySize',T.baseBodySize,'Body size'));
+ const sh=el('div',{class:'shots'});
+ function shots(){sh.textContent='';const t=state.typography;
+  if(t.baseBodySize===14&&(t.displayFamily!=='baseline'||t.uiFamily!=='baseline'))sh.append(el('div',{class:'none',text:'14pt was rendered on the baseline families only; the APK applies 14pt to any pairing.'}));
+  for(const s of T.screens){const fam=t.baseBodySize===14?'baseline--baseline':`${t.displayFamily}--${t.uiFamily}`;const im=`type-${fam}--${t.baseBodySize}--${s}.png`;
+   if(REG.missingImages.includes(im)){sh.append(el('div',{class:'none',text:'Missing image: '+im}));continue;}
+   const a=el('a',{href:'img/'+im,target:'_blank',rel:'noopener'});a.append(el('img',{src:'img/'+im,alt:`${s} with ${fam}, ${t.baseBodySize}pt body`,loading:'lazy'}));sh.append(a);}}
+ shots();sec.append(c,sh);
+ const ta=el('textarea',{'aria-label':'Notes for typography',placeholder:'Notes on typography (plain text)'});ta.value=state.notes.typography||'';ta.addEventListener('input',()=>{state.notes.typography=ta.value;save();});
+ sec.append(el('p',{class:'ids',text:'Notes'}),ta);root.append(sec);
+ filter();
+}
+function filter(){const q=$('#q').value.trim().toLowerCase();for(const s of document.querySelectorAll('section.group')){s.classList.toggle('hidden',!!q&&!s.dataset.search.includes(q));}}
+function exportJson(){
+ const choices=[];for(const g of REG.groups){if(state.choices[g.id])choices.push({groupId:g.id,optionId:state.choices[g.id],note:state.notes[g.id]||''});}
+ const out={schemaVersion:1,galleryRevision:REG.galleryRevision,appSourceSha:REG.appSourceSha,exportedAt:new Date().toISOString(),choices,
+  typography:Object.assign({},state.typography,{note:state.notes.typography||''}),unresolvedGroups:REG.groups.filter(g=>!state.choices[g.id]).map(g=>g.id)};
+ const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`numaya-v8-choices-${REG.galleryRevision}.json`;document.body.append(a);a.click();a.remove();
+ say(`Exported ${choices.length} choices; unresolved: ${out.unresolvedGroups.join(', ')||'none'}.`);
+}
+function validate(d){
+ const errs=[];if(!d||typeof d!=='object')return['Not a JSON object.'];
+ if(d.schemaVersion!==1)errs.push('Unknown schemaVersion '+d.schemaVersion+'.');
+ if(d.galleryRevision!==REG.galleryRevision){const m=REG.migration[d.galleryRevision];
+  if(m)return{migrated:true,msg:`That export is ${d.galleryRevision}: ${m.note} Nothing from it maps to this gallery's groups, so nothing was imported.`};
+  errs.push(`Revision ${d.galleryRevision} does not match this gallery (${REG.galleryRevision}). Rejected rather than guessed.`);}
+ const seen=new Set();for(const c of (d.choices||[])){const g=REG.groups.find(x=>x.id===c.groupId);
+  if(!g){errs.push('Unknown group '+c.groupId+'.');continue;}
+  if(seen.has(c.groupId))errs.push('Duplicate group '+c.groupId+'.');seen.add(c.groupId);
+  const o=g.options.find(x=>x.id===c.optionId);if(!o)errs.push(`Unknown option ${c.optionId} in ${c.groupId}.`);else if(o.status!=='implemented-rendered')errs.push(`${c.groupId} ${c.optionId} is ${o.status} and cannot be chosen.`);
+  if(c.note!==undefined&&typeof c.note!=='string')errs.push('A note must be text.');}
+ const t=d.typography||{};const T=REG.typography;
+ if(t.displayFamily&&!T.displayFamily.some(x=>x[0]===t.displayFamily))errs.push('Unknown display family '+t.displayFamily+'.');
+ if(t.uiFamily&&!T.uiFamily.some(x=>x[0]===t.uiFamily))errs.push('Unknown UI family '+t.uiFamily+'.');
+ if(t.baseBodySize!==undefined&&![14,15].includes(t.baseBodySize))errs.push('Body size must be 14 or 15.');
+ return errs;
+}
+function importJson(text){
+ let d;try{d=JSON.parse(text);}catch(e){say('That file is not valid JSON.',true);return;}
+ const r=validate(d);if(r.migrated){say(r.msg);return;}if(r.length){say('Import rejected: '+r.join(' '),true);return;}
+ state.choices={};state.notes={};for(const c of d.choices||[]){state.choices[c.groupId]=c.optionId;if(c.note)state.notes[c.groupId]=String(c.note);}
+ const t=d.typography||{};state.typography={displayFamily:t.displayFamily||'baseline',uiFamily:t.uiFamily||'baseline',baseBodySize:t.baseBodySize||15};if(t.note)state.notes.typography=String(t.note);
+ save();render();say(`Imported ${Object.keys(state.choices).length} choices from ${d.exportedAt||'an export'}.`);
+}
+$('#q').addEventListener('input',filter);
+$('#export').addEventListener('click',exportJson);
+$('#clear').addEventListener('click',()=>{state.choices={};save();render();say('Choices cleared (notes kept).');});
+$('#file').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;f.text().then(importJson);e.target.value='';});
+window.numayaGallery={validate,importJson,exportState:()=>JSON.parse(JSON.stringify(state)),REG};
+load();render();if(!storageOk)say('This browser is not keeping choices between visits here. Use Export to save them as a file.',true);
+</script>
+</body>
+</html>

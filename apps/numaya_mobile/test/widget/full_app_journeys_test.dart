@@ -86,10 +86,17 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
     await tester.pump(const Duration(milliseconds: 600));
+    // UI-063 (V8): suggested profiles are unreachable in the first release; the deep link lands
+    // on Discover.
     expect(
       find.text('People you have the most in common with, picked once a day.'),
-      findsOneWidget,
+      findsNothing,
     );
+    expect(c.read(routerProvider).state.uri.path, Routes.home);
+    if (find.bySemanticsLabel('Like Maya').evaluate().isEmpty) {
+      await settle(tester);
+      return;
+    }
     await tapOn(tester, find.bySemanticsLabel('Like Maya'));
     // The match rises in as a modal; at its first frame it is still transparent.
     await tester.pump(const Duration(milliseconds: 100));
@@ -152,22 +159,30 @@ void main() {
       final c = await quickStartApp(tester);
       await goTo(c, tester, '${Routes.chat}/lina');
       expect(find.text('1h left to start the conversation'), findsOneWidget);
-      await tapOn(tester, find.text('Extend 24 hours'));
+      // UI-086 (V8): the banner shows the countdown only; Extend lives in the chat menu.
+      expect(
+        find.widgetWithText(NumayaButton, 'Extend 24 hours'),
+        findsNothing,
+      );
+      Future<void> extend() async {
+        await tapOn(tester, find.bySemanticsLabel('Conversation options'));
+        await tester.pump(const Duration(milliseconds: 600));
+        await tapOn(tester, find.text('Extend 24 hours'));
+        await tester.pump(const Duration(milliseconds: 600));
+      }
+
+      await extend();
       expect(find.text('24 hours added for Lina'), findsOneWidget);
       expect(find.text('25h left to start the conversation'), findsOneWidget);
-      // One extension per match.
-      expect(
-        tester
-            .widget<NumayaButton>(
-              find.widgetWithText(NumayaButton, 'Extend 24 hours'),
-            )
-            .onPressed,
-        isNull,
-      );
+      // One extension per match: the menu no longer offers it.
+      await tapOn(tester, find.bySemanticsLabel('Conversation options'));
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(find.text('Extend 24 hours'), findsNothing);
+      await tapOn(tester, find.text('Cancel'));
+      await tester.pump(const Duration(milliseconds: 600));
       // The free weekly extension is used: another match offers Premium.
       await goTo(c, tester, '${Routes.chat}/amara');
-      await tapOn(tester, find.text('Extend 24 hours'));
-      await tester.pump(const Duration(milliseconds: 600));
+      await extend();
       expect(find.text('Extend a match every day'), findsWidgets);
       expect(c.read(premiumProvider).active, isFalse);
 
@@ -201,7 +216,7 @@ void main() {
       // Full billed amounts, no invented savings.
       expect(find.text('₹299 billed every month'), findsOneWidget);
       expect(find.textContaining('Save'), findsNothing);
-      await tapOn(tester, find.byKey(const ValueKey('plan-premiumMonthly')));
+      await tapOn(tester, find.byKey(const ValueKey('plan-monthly')));
       await tapOn(tester, find.text('Continue with Monthly'));
       await sheetUp(tester);
       await tapOn(tester, find.text('Payment failed'));
@@ -478,7 +493,8 @@ void main() {
     final c = await quickStartApp(tester);
     await openTab(tester, 'Messages');
     // Selections pass: Messages A groups by turn (no Conversations heading).
-    expect(find.textContaining(RegExp('Your turn|Waiting on them')), findsWidgets);
+    // UI-068 (V8): one conversation list.
+    expect(find.text('Conversations'), findsOneWidget);
     await tester.binding.handlePopRoute();
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));

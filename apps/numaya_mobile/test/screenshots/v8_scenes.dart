@@ -197,6 +197,12 @@ final List<V8Scene> v8Scenes = [
       route,
       type: const TypeSettings(bodySize: 14),
     ),
+  const V8Scene('exp-profile-O', Routes.profile, height: 1400),
+  const V8Scene(
+    'flow-compliment-page',
+    '${Routes.compliment}/maya?kind=photo&index=0',
+    choices: {'v8-compliment': 'O'},
+  ),
   const V8Scene('base-typography', Routes.reviewTypography),
   const V8Scene(
     'base-typography-14',

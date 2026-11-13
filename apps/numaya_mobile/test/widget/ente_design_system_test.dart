@@ -50,7 +50,8 @@ void main() {
         matching: find.byType(AnimatedContainer),
       ),
     );
-    expect((box.decoration! as BoxDecoration).borderRadius, AppRadii.all(20));
+    // UI-050 (V8): standard buttons are 12.
+    expect((box.decoration! as BoxDecoration).borderRadius, AppRadii.all(12));
     final label = tester.widget<Text>(find.text('Save')).style!;
     expect(label.fontSize, 15);
     // FT-01: Ente Button Large (2207:41759) labels are Body, 14/20 medium.

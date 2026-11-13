@@ -46,7 +46,9 @@ void main() {
             // Replacement V8 comparisons: the V7 choice plus one or two real options, no padding.
             !g.id.startsWith('r8-') &&
             // Fable lab groups list only implemented options (baseline plus up to two).
-            !g.id.startsWith('fx-')) {
+            !g.id.startsWith('fx-') &&
+            // V8 review groups: the selected baseline plus the requested directions.
+            !g.id.startsWith('v8-')) {
           expect(g.ids, ['O', 'A', 'B', 'C'], reason: g.id);
         }
         // Dependencies name real groups and variants.
@@ -123,6 +125,7 @@ void main() {
           'ea-event-filters': Routes.events,
           'ea-event-action': '${Routes.evEvent}/ev-board-games-bandra',
           'ea-met-card': '${Routes.evMet}/ev-book-swap',
+          'v8-stats': Routes.reviewStats,
         };
         await usePhoneSize(tester, size: const Size(320, 568));
         tester.platformDispatcher.textScaleFactorTestValue = 2;
@@ -177,33 +180,36 @@ void main() {
   });
 
   group('R01 / R02 Chats', () {
-    testWidgets('Chats lists Archive, no Requests; new matches show a ring', (
-      tester,
-    ) async {
-      await usePhoneSize(tester);
-      await quickStartApp(tester);
-      await openTab(tester, 'Messages');
-      expect(find.byKey(const ValueKey('chats-archive')), findsOneWidget);
-      expect(find.byKey(const ValueKey('chats-requests')), findsNothing);
-      // Owner selection O: a circle inside a ring that empties.
-      expect(find.byType(CountdownAvatar), findsWidgets);
-      await tapOn(tester, find.byKey(const ValueKey('chats-archive')));
-      await tester.pump(const Duration(milliseconds: 600));
-      expect(find.byKey(const ValueKey('archived-rafa')), findsOneWidget);
-      expect(find.byKey(const ValueKey('expired-ollie')), findsOneWidget);
-      // A quiet chat is never called expired.
-      expect(find.textContaining('expired chat'), findsNothing);
-      await settle(tester);
-    });
+    testWidgets(
+      'Chats lists Archive, no Requests; new matches are square tiles',
+      (tester) async {
+        await usePhoneSize(tester);
+        await quickStartApp(tester);
+        await openTab(tester, 'Messages');
+        expect(find.byKey(const ValueKey('chats-archive')), findsOneWidget);
+        expect(find.byKey(const ValueKey('chats-requests')), findsNothing);
+        // UI-033 (V8): square image-only tiles, no ring.
+        expect(find.byType(CountdownAvatar), findsNothing);
+        await tapOn(tester, find.byKey(const ValueKey('chats-archive')));
+        await tester.pump(const Duration(milliseconds: 600));
+        expect(find.byKey(const ValueKey('archived-rafa')), findsOneWidget);
+        // UI-081 (V8): Archive holds archived conversations only, no expired matches.
+        expect(find.byKey(const ValueKey('expired-ollie')), findsNothing);
+        // A quiet chat is never called expired.
+        expect(find.textContaining('expired chat'), findsNothing);
+        await settle(tester);
+      },
+    );
 
-    testWidgets('inside a new match: exact end time and the extension', (
+    testWidgets('inside a new match: a countdown-only banner (UI-086)', (
       tester,
     ) async {
       await usePhoneSize(tester);
       final c = await quickStartApp(tester);
       await goTo(c, tester, '${Routes.chat}/jo');
-      expect(find.textContaining('The match ends '), findsOneWidget);
-      expect(find.text('Extend 24 hours'), findsOneWidget);
+      expect(find.byKey(const ValueKey('chat-countdown')), findsOneWidget);
+      expect(find.textContaining('The match ends '), findsNothing);
+      expect(find.text('Extend 24 hours'), findsNothing);
       await settle(tester);
     });
   });

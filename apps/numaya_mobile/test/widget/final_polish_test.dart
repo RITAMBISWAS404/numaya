@@ -345,45 +345,43 @@ void main() {
       expect(find.byType(IconTile), findsNothing);
     });
 
-    testWidgets(
-      'off a sheet, related rows share one white 20pt card with no hairlines '
-      '(OV-02, Ente Settings DS)',
-      (tester) async {
-        await tester.pumpWidget(
-          host(
-            const ListGroup(
-              children: [
-                ListRow(leading: NumayaIcons.user, label: 'One'),
-                ListRow(leading: NumayaIcons.link, label: 'Two'),
-                ListRow(label: 'Three'),
-              ],
-            ),
+    testWidgets('off a sheet, related rows share one white card with a shared inset divider between '
+        'rows (OV-02 grouping, UI-003 V8 dividers)', (tester) async {
+      await tester.pumpWidget(
+        host(
+          const ListGroup(
+            children: [
+              ListRow(leading: NumayaIcons.user, label: 'One'),
+              ListRow(leading: NumayaIcons.link, label: 'Two'),
+              ListRow(label: 'Three'),
+            ],
           ),
+        ),
+      );
+      final lines = find.byWidgetPredicate(
+        (w) => w is ColoredBox && w.color == AppColors.divider,
+      );
+      // UI-003 (V8): one divider at each boundary between the three rows.
+      expect(lines, findsNWidgets(2));
+      final cards = find.descendant(
+        of: find.byType(ListGroup),
+        matching: find.byWidgetPredicate(
+          (w) =>
+              w is DecoratedBox &&
+              w.decoration is BoxDecoration &&
+              (w.decoration as BoxDecoration).color == AppColors.surface &&
+              (w.decoration as BoxDecoration).borderRadius ==
+                  AppRadii.all(AppRadii.card),
+        ),
+      );
+      expect(cards, findsOneWidget);
+      for (final label in ['One', 'Two', 'Three']) {
+        expect(
+          find.descendant(of: cards, matching: find.text(label)),
+          findsOneWidget,
         );
-        final lines = find.byWidgetPredicate(
-          (w) => w is ColoredBox && w.color == AppColors.divider,
-        );
-        expect(lines, findsNothing);
-        final cards = find.descendant(
-          of: find.byType(ListGroup),
-          matching: find.byWidgetPredicate(
-            (w) =>
-                w is DecoratedBox &&
-                w.decoration is BoxDecoration &&
-                (w.decoration as BoxDecoration).color == AppColors.surface &&
-                (w.decoration as BoxDecoration).borderRadius ==
-                    AppRadii.all(AppRadii.card),
-          ),
-        );
-        expect(cards, findsOneWidget);
-        for (final label in ['One', 'Two', 'Three']) {
-          expect(
-            find.descendant(of: cards, matching: find.text(label)),
-            findsOneWidget,
-          );
-        }
-      },
-    );
+      }
+    });
 
     testWidgets('groups can opt out of dividers', (tester) async {
       await tester.pumpWidget(
@@ -580,7 +578,7 @@ void main() {
       },
     );
 
-    testWidgets('the selected tab is a light neutral stadium pill (UC-03)', (
+    testWidgets('the selected tab is a light neutral 12pt tile (UI-050)', (
       tester,
     ) async {
       await usePhoneSize(tester);
@@ -598,9 +596,8 @@ void main() {
       final deco =
           tester.widget<AnimatedContainer>(selected).decoration!
               as BoxDecoration;
-      // UC-03: a fully rounded pill 4pt inside its item (supersedes the Tabler MVP's 12pt
-      // tile corners).
-      expect(deco.borderRadius, AppRadii.all(AppRadii.pill));
+      // V8 (UI-050): the selected tile is 12, 8pt inside the 20pt shell.
+      expect(deco.borderRadius, AppRadii.all(AppRadii.navItem));
       await settle(tester);
     });
 

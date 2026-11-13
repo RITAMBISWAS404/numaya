@@ -286,7 +286,7 @@ void main() {
     await step('S34', () async {
       await go(Routes.paywall);
       await cap(tester, 'S34', 'Premium plans provisional INR');
-      await tapOn(tester, find.byKey(const ValueKey('plan-premiumYearly')));
+      await tapOn(tester, find.byKey(const ValueKey('plan-yearly')));
       await cap(tester, 'S34', 'Premium yearly selected renewal terms');
       await tapOn(tester, find.text('Continue with Yearly'));
       await cap(tester, 'S34', 'Demo checkout sheet', settleMs: 1400);
