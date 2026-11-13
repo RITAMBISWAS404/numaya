@@ -12849,6 +12849,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No shared interests listed yet. A question about their photos is a good start.'**
   String get v8MatchSayHello;
+
+  /// No description provided for @v8ProfileManage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your profile'**
+  String get v8ProfileManage;
+
+  /// No description provided for @v8ProfileNextStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your profile'**
+  String get v8ProfileNextStep;
 }
 
 class _AppLocalizationsDelegate

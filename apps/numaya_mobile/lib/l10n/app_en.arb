@@ -3896,5 +3896,7 @@
   "v8StatReviewTitle": "Statistics cards",
   "demoStatTemplates": "Statistics cards (UI-078)",
   "demoStatTemplatesDetail": "Six templates for credits, streak and completion",
-  "v8MatchSayHello": "No shared interests listed yet. A question about their photos is a good start."
+  "v8MatchSayHello": "No shared interests listed yet. A question about their photos is a good start.",
+  "v8ProfileManage": "Manage your profile",
+  "v8ProfileNextStep": "Complete your profile"
 }

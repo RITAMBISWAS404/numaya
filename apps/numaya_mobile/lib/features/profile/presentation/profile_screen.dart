@@ -1,3 +1,6 @@
+import '../../lab/stat_templates.dart';
+import 'profile_hub_v8.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -247,8 +250,40 @@ class ProfileScreen extends ConsumerWidget {
       ),
     );
 
+    // UI-084 (V8) review: ten whole-page directions from the same blocks; O keeps Profile A.
+    final hubV8 = ref.watch(labVariantProvider('v8-profile'));
+    final stats = statFamily(ref, l10n);
     final body = <Widget>[
       ...switch (direction) {
+        _ when hubV8 != 'O' => profileHubV8(
+          context,
+          hubV8,
+          ProfileHubBlocks(
+            header: header(),
+            completion: ProfileCompletion.of(draft, details).percent,
+            identityRow: FxIdentityRow(
+              data: header(),
+              completion: ProfileCompletion.of(draft, details).percent,
+            ),
+            statTiles: FxStatTiles(
+              wallet: wallet,
+              streak: streak,
+              onWallet: toWallet,
+              onStreak: toStreak,
+            ),
+            credits: stats.credits,
+            streak: stats.streak,
+            progress: stats.completion,
+            setup: ProfileSetupCard(health: health, variant: 'B'),
+            profileGroup: profileGroup,
+            supportGroup: supportGroup,
+            prompt: promptSection,
+            premium: premiumCard,
+            onWallet: toWallet,
+            onStreak: toStreak,
+            onSetup: openSetup,
+          ),
+        ),
         // A: identity and its two actions, then credits and streak in the first screen.
         _ when fx == 'A' => [
           FxIdentityRow(

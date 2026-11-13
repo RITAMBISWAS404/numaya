@@ -7652,4 +7652,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get v8MatchSayHello =>
       'No shared interests listed yet. A question about their photos is a good start.';
+
+  @override
+  String get v8ProfileManage => 'Manage your profile';
+
+  @override
+  String get v8ProfileNextStep => 'Complete your profile';
 }

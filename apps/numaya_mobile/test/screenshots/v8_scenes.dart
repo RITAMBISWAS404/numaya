@@ -117,7 +117,10 @@ final List<V8Scene> v8Scenes = [
     'flow-compliment-sent',
     '${Routes.compliment}/noor?kind=photo&index=1',
     setup: (t, c) async {
-      await t.enterText(find.byType(EditableText).last, 'Where was this taken?');
+      await t.enterText(
+        find.byType(EditableText).last,
+        'Where was this taken?',
+      );
       await t.pump(const Duration(milliseconds: 400));
       await t.tap(find.bySemanticsLabel('Send Compliment').last);
       await t.pump();
@@ -162,6 +165,13 @@ final List<V8Scene> v8Scenes = [
       choices: {'v8-match': m},
     ),
   ],
+  for (final v in ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9', 'P10'])
+    V8Scene(
+      'exp-profile-$v',
+      Routes.profile,
+      choices: {'v8-profile': v},
+      height: 1400,
+    ),
   const V8Scene('base-typography', Routes.reviewTypography),
   const V8Scene(
     'base-typography-14',

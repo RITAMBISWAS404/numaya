@@ -38,8 +38,7 @@ void main() {
   final dir = stress ? 'v8/stress/w${_width}_x$_scale' : 'v8';
 
   for (final s in v8Scenes) {
-    if (_only.isNotEmpty &&
-        !_only.split(',').any((p) => s.id.startsWith(p))) {
+    if (_only.isNotEmpty && !_only.split(',').any((p) => s.id.startsWith(p))) {
       continue;
     }
     testWidgets(s.id, (tester) async {
