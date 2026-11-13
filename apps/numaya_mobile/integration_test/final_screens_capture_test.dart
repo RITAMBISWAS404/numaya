@@ -554,13 +554,7 @@ void main() {
           await h.tapLabel(_l.discoverOptions);
         },
       );
-      await h.page(
-        f,
-        'For-you',
-        'Populated',
-        Routes.forYou,
-        'Discover > For you',
-      );
+      // UI-063 (V8): For you is unreachable in the first release; no capture.
       await h.page(
         f,
         'Person-profile-decide',
@@ -1084,7 +1078,7 @@ void main() {
       await h.step('Yearly', () async {
         await h.go(Routes.home);
         await h.go(Routes.paywall);
-        await h.tapKey('plan-premiumYearly');
+        await h.tapKey('plan-yearly');
         await h.shot(
           f,
           'Paywall-yearly-selected',
@@ -1113,6 +1107,21 @@ void main() {
         Routes.settings,
         'Profile > Settings',
       );
+      // V8 review controls (Prototype tools, review builds only).
+      await h.page(
+        f,
+        'Review-typography',
+        'Display, UI font and 14/15 body',
+        Routes.reviewTypography,
+        'Prototype tools > Typography',
+      );
+      await h.page(
+        f,
+        'Review-statistics-cards',
+        'Six templates (UI-078)',
+        Routes.reviewStats,
+        'Prototype tools > Statistics cards',
+      );
       await h.sheet(
         f,
         'Snooze-sheet',
@@ -1134,18 +1143,7 @@ void main() {
           await h.tapText(_l.recoveryEmailLabel);
         },
       );
-      await h.sheet(
-        f,
-        'Travel-sheet',
-        'Premium member',
-        'Settings > Travel',
-        () async {
-          await premium(true);
-          await h.go(Routes.home);
-          await h.go(Routes.settings);
-          await h.tapText(_l.travelTitle);
-        },
-      );
+      // UI-075 (V8): Travel is deferred beyond the MVP; no capture.
       await premium(false);
       await h.sheet(
         f,
@@ -1380,7 +1378,7 @@ void main() {
         keepFocus: true,
         scroll: false,
       );
-      await tester.tap(find.byKey(const ValueKey('compliment-send')));
+      await tester.tap(find.bySemanticsLabel('Send Compliment').last);
       await h.wait(1500);
       await h.shot(f, 'Composer-sent', 'sent', 'composer', scroll: false);
       await h.go(Routes.home);
@@ -1449,7 +1447,7 @@ void main() {
       await h.tapText('Keep writing');
     });
     await h.step('Composer sent', () async {
-      await tester.tap(find.byKey(const ValueKey('compliment-send')));
+      await tester.tap(find.bySemanticsLabel('Send Compliment').last);
       await h.wait(1500);
       await h.shot(
         _likes,
@@ -1476,7 +1474,7 @@ void main() {
       );
       c.read(connectivityProvider.notifier).setOnline(false);
       await h.wait(400);
-      await tester.tap(find.byKey(const ValueKey('compliment-send')));
+      await tester.tap(find.bySemanticsLabel('Send Compliment').last);
       await h.wait(1500);
       await h.shot(
         _likes,
