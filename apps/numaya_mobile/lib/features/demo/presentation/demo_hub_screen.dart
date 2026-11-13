@@ -78,6 +78,13 @@ class DemoHubScreen extends ConsumerWidget {
                 onTap: () => context.push(Routes.reviewTypography),
               ),
               ListRow(
+                key: const ValueKey('demo-stat-templates'),
+                leadingMobile: NumayaMobileIcons.chart,
+                label: l10n.demoStatTemplates,
+                detail: l10n.demoStatTemplatesDetail,
+                onTap: () => context.push(Routes.reviewStats),
+              ),
+              ListRow(
                 key: const ValueKey('demo-visual-lab'),
                 leading: NumayaIcons.sparkle,
                 label: 'Visual Lab V2',

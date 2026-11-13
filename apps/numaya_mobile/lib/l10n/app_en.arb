@@ -3884,5 +3884,16 @@
   "v8PlanPricePending": "Price pending",
   "v8PlanPendingDetail": "Not available yet",
   "v8PremiumIncluded": "What’s included",
-  "v8PremiumHeroSlot": "Premium mascot, 16:9"
+  "v8PremiumHeroSlot": "Premium mascot, 16:9",
+  "v8StatEarnedOf": "Earned {earned} of {cap}",
+  "@v8StatEarnedOf": {"placeholders": {"earned": {"type": "int"}, "cap": {"type": "int"}}},
+  "v8StatDayStreak": "{count, plural, =1{day streak} other{day streak}}",
+  "@v8StatDayStreak": {"placeholders": {"count": {"type": "int"}}},
+  "v8StatProfile": "Profile",
+  "v8StatComplete": "complete",
+  "v8StatPartsDone": "{done} of {total} parts done",
+  "@v8StatPartsDone": {"placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}},
+  "v8StatReviewTitle": "Statistics cards",
+  "demoStatTemplates": "Statistics cards (UI-078)",
+  "demoStatTemplatesDetail": "Six templates for credits, streak and completion"
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../lab/stat_templates.dart';
 import '../../../app/providers.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
@@ -107,7 +108,14 @@ class StreakScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
-          if (fx == 'A')
+          // UI-078 review: a chosen statistics template replaces the header card.
+          if (chosenStatTemplate(ref) != null)
+            StatCard(
+              key: const ValueKey('streak-stat'),
+              data: statFamily(ref, l10n).streak,
+              template: chosenStatTemplate(ref)!,
+            )
+          else if (fx == 'A')
             WhiteCard(
               padding: const EdgeInsets.all(AppLayout.heroPadding),
               child: Column(

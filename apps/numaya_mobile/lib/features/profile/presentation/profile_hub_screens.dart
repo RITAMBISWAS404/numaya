@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../lab/stat_templates.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
@@ -94,62 +95,72 @@ class CompletionHubScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
-          Container(
-            padding: const EdgeInsets.all(AppLayout.heroPadding),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: AppRadii.all(AppRadii.card),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  l10n.completionYourProfile,
-                  style: AppTypography.label.copyWith(
-                    color: AppColors.textMuted,
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.s1),
-                Semantics(
-                  header: true,
-                  label: l10n.completionPercent(c.percent),
-                  excludeSemantics: true,
-                  child: Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: '${c.percent}%',
-                          style: AppTypography.metric,
-                        ),
-                        TextSpan(
-                          text: '  ${l10n.completionUnit}',
-                          style: AppTypography.metricUnit,
-                        ),
-                      ],
+          // UI-078 review: a chosen statistics template replaces the summary card.
+          if (chosenStatTemplate(ref) != null)
+            StatCard(
+              key: const ValueKey('completion-stat'),
+              data: statFamily(ref, l10n).completion,
+              template: chosenStatTemplate(ref)!,
+            )
+          else
+            Container(
+              padding: const EdgeInsets.all(AppLayout.heroPadding),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: AppRadii.all(AppRadii.card),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    l10n.completionYourProfile,
+                    style: AppTypography.label.copyWith(
+                      color: AppColors.textMuted,
                     ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.s3),
-                ClipRRect(
-                  borderRadius: AppRadii.all(AppRadii.pill),
-                  child: LinearProgressIndicator(
-                    value: c.percent / 100,
-                    minHeight: 8,
-                    color: AppColors.accent,
-                    backgroundColor: AppColors.fill,
-                    semanticsLabel: l10n.completionPercent(c.percent),
+                  const SizedBox(height: AppSpacing.s1),
+                  Semantics(
+                    header: true,
+                    label: l10n.completionPercent(c.percent),
+                    excludeSemantics: true,
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '${c.percent}%',
+                            style: AppTypography.metric,
+                          ),
+                          TextSpan(
+                            text: '  ${l10n.completionUnit}',
+                            style: AppTypography.metricUnit,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.s3),
-                Text(
-                  c.percent >= 100 ? l10n.completionDone : l10n.completionLede,
-                  style: AppTypography.bodySm.copyWith(
-                    color: AppColors.textMuted,
+                  const SizedBox(height: AppSpacing.s3),
+                  ClipRRect(
+                    borderRadius: AppRadii.all(AppRadii.pill),
+                    child: LinearProgressIndicator(
+                      value: c.percent / 100,
+                      minHeight: 8,
+                      color: AppColors.accent,
+                      backgroundColor: AppColors.fill,
+                      semanticsLabel: l10n.completionPercent(c.percent),
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: AppSpacing.s3),
+                  Text(
+                    c.percent >= 100
+                        ? l10n.completionDone
+                        : l10n.completionLede,
+                    style: AppTypography.bodySm.copyWith(
+                      color: AppColors.textMuted,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
           const SizedBox(height: AppSpacing.s4),
           ListGroup(
             children: [

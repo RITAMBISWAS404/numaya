@@ -143,6 +143,13 @@ final List<V8Scene> v8Scenes = [
       await t.pump(const Duration(milliseconds: 400));
     },
   ),
+  for (final t in ['T1', 'T2', 'T3', 'T4', 'T5', 'T6'])
+    V8Scene(
+      'exp-stats-$t',
+      Routes.reviewStats,
+      choices: {'v8-stats': t},
+      height: 1100,
+    ),
   const V8Scene('base-typography', Routes.reviewTypography),
   const V8Scene(
     'base-typography-14',

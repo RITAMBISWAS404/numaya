@@ -714,6 +714,63 @@ const List<LabGroup> kLabGroups = [
     ],
   ),
   LabGroup(
+    id: 'v8-stats',
+    title: 'Statistics cards (UI-078)',
+    kind: LabKind.component,
+    question:
+        'Which one card template should credits, streak and completion share?',
+    usages: [
+      'Compliment credits header',
+      'Streak header',
+      'Complete your profile header',
+    ],
+    proposed: _o,
+    variants: [
+      LabVariant(
+        _o,
+        'Selected cards',
+        'baseline',
+        'Each screen keeps its selected summary (the purple credits and streak cards, the completion card).',
+      ),
+      LabVariant(
+        'T1',
+        'Number first',
+        'Withings-style headline figure',
+        'Icon and heading, the figure large, then the detail lines. No bar.',
+      ),
+      LabVariant(
+        'T2',
+        'Progress rail',
+        'Binance balance with allocation bar',
+        'The figure, then one full-width rail: credit buckets in spend order, the week, or the six profile parts.',
+      ),
+      LabVariant(
+        'T3',
+        'Goal ring',
+        'Fitness ring',
+        'A ring with the figure inside; the ring only fills against a real denominator (earned credits of the cap, day of 7, percent).',
+      ),
+      LabVariant(
+        'T4',
+        'Cadence marks',
+        'WHOOP week row',
+        'Heading and figure on one line, then discrete marks: the days of the cycle, the profile parts, the credit buckets.',
+      ),
+      LabVariant(
+        'T5',
+        'Side art',
+        'UI-061 illustrated card',
+        'A square artwork slot beside the figures and a compact rail (artwork pending).',
+      ),
+      LabVariant(
+        'T6',
+        'Split metric',
+        'Compact two-column stat',
+        'The figure on the left, a divider, then the heading and supporting detail on the right.',
+      ),
+    ],
+  ),
+  LabGroup(
     id: 'v8-paywall',
     title: 'Premium paywall (UI-076)',
     kind: LabKind.screen,

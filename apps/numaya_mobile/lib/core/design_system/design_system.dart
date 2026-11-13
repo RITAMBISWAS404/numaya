@@ -39,5 +39,6 @@ export 'widgets/segmented.dart';
 export 'widgets/selection.dart';
 export 'widgets/slider_thumbs.dart';
 export 'widgets/squircle_button.dart';
+export 'widgets/stat_card.dart';
 export 'widgets/summary_card.dart';
 export 'widgets/toast.dart';

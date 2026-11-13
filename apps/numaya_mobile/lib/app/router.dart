@@ -28,6 +28,7 @@ import '../features/dating/presentation/photo_viewer_screen.dart';
 import '../features/demo/presentation/demo_hub_screen.dart';
 import '../features/demo/presentation/design_lab_screen.dart';
 import '../features/demo/presentation/typography_settings_screen.dart';
+import '../features/lab/stat_templates.dart';
 import '../features/events_mvp/presentation/event_detail_screens.dart';
 import '../features/events_mvp/presentation/events_feed_screen.dart';
 import '../features/events_mvp/presentation/my_events_screens.dart';
@@ -98,6 +99,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       if ((path == Routes.demo ||
               path == Routes.designLab ||
               path == Routes.reviewTypography ||
+              path == Routes.reviewStats ||
               path == Routes.experimentLab ||
               path.startsWith(Routes.visualLab)) &&
           (!ref.read(devToolsAvailableProvider) ||
@@ -543,6 +545,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       _route(
         path: Routes.reviewTypography,
         builder: (_, _) => const TypographySettingsScreen(),
+      ),
+      _route(
+        path: Routes.reviewStats,
+        builder: (_, _) => const StatTemplatesScreen(),
       ),
       _route(
         path: '${Routes.like}/:id',

@@ -11,6 +11,7 @@ import '../../lab/activity_cards.dart' show WalletData;
 import '../../lab/lab_registry.dart';
 import '../../premium/application/premium_controller.dart';
 import '../application/economy_controller.dart';
+import '../../lab/stat_templates.dart';
 import '../domain/credit_ledger.dart';
 import 'store_screens.dart';
 
@@ -73,7 +74,14 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
-          if (fx == 'A')
+          // UI-078 review: a chosen statistics template replaces the header card.
+          if (chosenStatTemplate(ref) != null)
+            StatCard(
+              key: const ValueKey('wallet-stat'),
+              data: statFamily(ref, l10n).credits,
+              template: chosenStatTemplate(ref)!,
+            )
+          else if (fx == 'A')
             FxWalletSidecar(
               data: data,
               actionLabel: l10n.complimentGetMore,

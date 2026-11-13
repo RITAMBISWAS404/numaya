@@ -7611,4 +7611,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get v8PremiumHeroSlot => 'Premium mascot, 16:9';
+
+  @override
+  String v8StatEarnedOf(int earned, int cap) {
+    return 'Earned $earned of $cap';
+  }
+
+  @override
+  String v8StatDayStreak(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'day streak',
+      one: 'day streak',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get v8StatProfile => 'Profile';
+
+  @override
+  String get v8StatComplete => 'complete';
+
+  @override
+  String v8StatPartsDone(int done, int total) {
+    return '$done of $total parts done';
+  }
+
+  @override
+  String get v8StatReviewTitle => 'Statistics cards';
+
+  @override
+  String get demoStatTemplates => 'Statistics cards (UI-078)';
+
+  @override
+  String get demoStatTemplatesDetail =>
+      'Six templates for credits, streak and completion';
 }

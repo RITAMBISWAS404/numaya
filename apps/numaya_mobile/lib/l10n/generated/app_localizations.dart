@@ -12795,6 +12795,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Premium mascot, 16:9'**
   String get v8PremiumHeroSlot;
+
+  /// No description provided for @v8StatEarnedOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned {earned} of {cap}'**
+  String v8StatEarnedOf(int earned, int cap);
+
+  /// No description provided for @v8StatDayStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{day streak} other{day streak}}'**
+  String v8StatDayStreak(int count);
+
+  /// No description provided for @v8StatProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get v8StatProfile;
+
+  /// No description provided for @v8StatComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'complete'**
+  String get v8StatComplete;
+
+  /// No description provided for @v8StatPartsDone.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} parts done'**
+  String v8StatPartsDone(int done, int total);
+
+  /// No description provided for @v8StatReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics cards'**
+  String get v8StatReviewTitle;
+
+  /// No description provided for @demoStatTemplates.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics cards (UI-078)'**
+  String get demoStatTemplates;
+
+  /// No description provided for @demoStatTemplatesDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Six templates for credits, streak and completion'**
+  String get demoStatTemplatesDetail;
 }
 
 class _AppLocalizationsDelegate

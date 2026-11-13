@@ -141,6 +141,9 @@ abstract final class Routes {
   /// DEVELOPMENT ONLY: the typography comparison (UI-085, 14/15 body), under the Demo Hub.
   static const reviewTypography = '/review-typography';
 
+  /// DEVELOPMENT ONLY: the statistics card templates (UI-078), under the Demo Hub.
+  static const reviewStats = '/review-stats';
+
   /// DEVELOPMENT ONLY: overnight v3 layout experiments (Current / A / B / C per experiment).
   static const experimentLab = '/experiment-lab';
 
