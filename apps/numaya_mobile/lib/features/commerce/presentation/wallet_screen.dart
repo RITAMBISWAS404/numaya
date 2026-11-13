@@ -152,7 +152,10 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
             ),
           ] else ...[
             const SizedBox(height: AppSpacing.sectionGap),
+            // UI-003 (V8, mixed actions and information): the three balances are information
+            // only; the ways to get more are actions, in their own card.
             ListGroup(
+              key: const ValueKey('wallet-balances'),
               footnote: fx == 'A' ? null : l10n.walletOrder,
               children: [
                 ListRow(
@@ -161,7 +164,6 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                   label: l10n.walletWeekly,
                   value: fx == 'A' ? null : '${ledger.weekly}',
                   detail: weeklyDetail,
-                  onTap: toPremium,
                 ),
                 ListRow(
                   key: const ValueKey('wallet-earned'),
@@ -172,7 +174,6 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                     ledger.earned,
                     controller.policy.earnedCap,
                   ),
-                  onTap: () => context.push(Routes.streak),
                 ),
                 ListRow(
                   key: const ValueKey('wallet-purchased'),
@@ -181,6 +182,25 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                   value: fx == 'A' ? null : '${ledger.purchased}',
                   detail: l10n.walletPurchasedDetail,
                 ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.s3),
+            ListGroup(
+              key: const ValueKey('wallet-actions'),
+              children: [
+                ListRow(
+                  key: const ValueKey('wallet-earn-streak'),
+                  leadingMobile: NumayaMobileIcons.flame,
+                  label: l10n.walletEarnAction,
+                  onTap: () => context.push(Routes.streak),
+                ),
+                if (toPremium != null)
+                  ListRow(
+                    key: const ValueKey('wallet-weekly-premium'),
+                    leading: NumayaIcons.premium,
+                    label: l10n.walletWeeklyAction,
+                    onTap: toPremium,
+                  ),
               ],
             ),
           ],
@@ -192,19 +212,33 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                 ListRow(label: l10n.walletHistoryEmpty)
               else
                 for (final e in history.take(20))
+                  // UI-053/UI-070 (V8): each entry names its kind with a compact glyph.
                   ListRow(
+                    leadingMobile: walletEntryIcon(e),
                     label: walletEntryLabel(l10n, e),
                     detail: shortDateTime(e.at),
                     value: e.amount > 0 ? '+${e.amount}' : '${e.amount}',
                   ),
             ],
           ),
-          const SizedBox(height: AppSpacing.s3),
-          const ProvisionalPriceNote(),
+          // UI-041/055: the wallet shows no prices, so no provisional-price footer here.
         ],
       ),
     );
   }
+}
+
+/// The glyph for a ledger entry: welcome and streak rewards, Premium weekly credits, purchases,
+/// Compliments sent, expired credits and refunds each have their own.
+NumayaMobileIcons walletEntryIcon(LedgerEntry e) {
+  if (e.source == 'welcome') return NumayaMobileIcons.gift;
+  if (e.source.startsWith('streak')) return NumayaMobileIcons.flame;
+  if (e.source.startsWith('premium_week')) return NumayaMobileIcons.wallet;
+  if (e.kind == LedgerKind.expiry) return NumayaMobileIcons.hourglass;
+  if (e.source.startsWith('purchase')) return NumayaMobileIcons.receipt;
+  if (e.source.startsWith('compliment')) return NumayaMobileIcons.compliment;
+  if (e.kind == LedgerKind.reversal) return NumayaMobileIcons.trendingUp;
+  return NumayaMobileIcons.wallet;
 }
 
 /// The member-facing name of a ledger entry (wallet history, wallet card variant D).

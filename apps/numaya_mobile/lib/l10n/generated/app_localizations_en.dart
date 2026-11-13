@@ -7572,4 +7572,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String v8ComplimentReplying(String name) {
     return 'Complimenting $name';
   }
+
+  @override
+  String get walletEarnAction => 'Earn credits with your streak';
+
+  @override
+  String get walletWeeklyAction => 'Get 3 credits a week with Premium';
 }

@@ -12717,6 +12717,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Complimenting {name}'**
   String v8ComplimentReplying(String name);
+
+  /// No description provided for @walletEarnAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Earn credits with your streak'**
+  String get walletEarnAction;
+
+  /// No description provided for @walletWeeklyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Get 3 credits a week with Premium'**
+  String get walletWeeklyAction;
 }
 
 class _AppLocalizationsDelegate

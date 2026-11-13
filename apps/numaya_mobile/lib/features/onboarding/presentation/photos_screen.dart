@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/config/app_config.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../core/media/local_image.dart';
 import '../../../l10n/l10n.dart';
@@ -217,9 +216,6 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
 
 /// S08: photo moderation. The demo approves photos instantly and says so; a live build shows each
 /// photo's review status from the server and counts only approved photos toward discovery.
-List<Widget> _moderationNote(AppLocalizations l10n) => [
-  if (AppConfig.demoAuthAllowed) ...[
-    const SizedBox(height: AppSpacing.s4),
-    Text(l10n.obPhotosModeration, style: AppTypography.helper),
-  ],
-];
+/// UI-041 (V8): the demo-only moderation sentence is no longer shown on the product page; the
+/// demo behaviour (instant approval) is recorded in BACKEND_BOUNDARY instead.
+List<Widget> _moderationNote(AppLocalizations l10n) => const [];

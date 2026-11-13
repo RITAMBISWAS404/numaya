@@ -3871,5 +3871,7 @@
   "v8ComplimentPhotoN": "Photo {n}",
   "@v8ComplimentPhotoN": {"placeholders": {"n": {"type": "int"}}},
   "v8ComplimentReplying": "Complimenting {name}",
-  "@v8ComplimentReplying": {"placeholders": {"name": {"type": "String"}}}
+  "@v8ComplimentReplying": {"placeholders": {"name": {"type": "String"}}},
+  "walletEarnAction": "Earn credits with your streak",
+  "walletWeeklyAction": "Get 3 credits a week with Premium"
 }

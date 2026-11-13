@@ -775,6 +775,8 @@ class ListRow extends StatelessWidget {
         ] else if (leading != null || leadingMobile != null) ...[
           // Ente Menu Item Icon (4055:5652): a 36pt slot, the glyph alone (no tile background) in
           // the supporting icon grey (X15-I), red on a destructive row to match its label.
+          // UI-070 (V8): a compact glyph inside a card is Tabler's filled twin where one exists
+          // (names without one keep their outline; nothing is invented).
           SizedBox.square(
             dimension: AppSizes.iconTile,
             child: Center(
@@ -782,6 +784,7 @@ class ListRow extends StatelessWidget {
                   ? NumayaIcon(
                       leading!,
                       size: AppSizes.iconMd,
+                      filled: true,
                       color: danger
                           ? AppColors.negative
                           : AppColors.iconSupporting,
@@ -789,6 +792,7 @@ class ListRow extends StatelessWidget {
                   : MobileIcon(
                       leadingMobile!,
                       size: AppSizes.iconMd,
+                      filled: true,
                       color: danger
                           ? AppColors.negative
                           : AppColors.iconSupporting,
