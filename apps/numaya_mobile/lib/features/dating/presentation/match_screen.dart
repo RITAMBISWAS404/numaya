@@ -13,6 +13,8 @@ import '../../experiments/experiments.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../onboarding/domain/profile_draft.dart';
 import '../domain/sample_people.dart';
+import '../../lab/lab_registry.dart';
+import 'match_v8.dart';
 import 'match_variants.dart';
 import 'person_profile.dart';
 
@@ -31,9 +33,16 @@ import 'person_profile.dart';
 ///
 /// The match stays in Messages whichever way the member leaves. No countdown (P-03 is open).
 class MatchScreen extends ConsumerStatefulWidget {
-  const MatchScreen({super.key, required this.personId});
+  const MatchScreen({
+    super.key,
+    required this.personId,
+    this.hideShared = false,
+  });
 
   final String personId;
+
+  /// Review builds only (UI-082 renders): show the match as if nothing is shared.
+  final bool hideShared;
 
   @override
   ConsumerState<MatchScreen> createState() => _MatchScreenState();
@@ -122,6 +131,54 @@ class _MatchScreenState extends ConsumerState<MatchScreen>
             alignment: localImageFocus(ownSource),
             errorBuilder: (_, _, _) => const SizedBox.shrink(),
           );
+
+    final v8 = ref.watch(labVariantProvider('v8-match'));
+    final actions = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        NumayaButton(
+          key: const ValueKey('match-open-chat'),
+          label: l10n.matchOpenChat,
+          icon: NumayaIcons.message,
+          onPressed: () =>
+              context.pushReplacement('${Routes.chat}/${person.id}'),
+        ),
+        const SizedBox(height: AppSpacing.s3),
+        NumayaButton(
+          key: const ValueKey('match-view-profile'),
+          label: l10n.matchViewProfile,
+          variant: NumayaButtonVariant.secondary,
+          onPressed: () => context.push('${Routes.person}/${person.id}'),
+        ),
+      ],
+    );
+    if (v8 != 'O') {
+      return NumayaScreen(
+        top: Semantics(
+          liveRegion: true,
+          child: NumayaTopBar(
+            onBack: _close,
+            backLabel: l10n.matchClose,
+            closeIcon: true,
+          ),
+        ),
+        footer: MatchV8Body.actionsInBody(v8) ? null : actions,
+        body: _enter(
+          MatchV8Body(
+            variant: v8,
+            person: person,
+            shared: widget.hideShared ? const [] : person.shared,
+            ownName: ownName,
+            ownInitial: ownInitial,
+            ownPhoto: ownPhoto,
+            actions: actions,
+          ),
+          from: 0.05,
+          rise: 0,
+        ),
+      );
+    }
 
     // Any touch finishes the celebration; nothing waits for it.
     return Listener(

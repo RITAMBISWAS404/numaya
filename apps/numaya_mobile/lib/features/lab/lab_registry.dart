@@ -714,6 +714,58 @@ const List<LabGroup> kLabGroups = [
     ],
   ),
   LabGroup(
+    id: 'v8-match',
+    title: 'Match screen (UI-082)',
+    kind: LabKind.screen,
+    question: 'How should a new match be presented?',
+    usages: ['It\'s a match'],
+    proposed: _o,
+    variants: [
+      LabVariant(
+        _o,
+        'Selected match',
+        'baseline',
+        'The 3:4 photo, the line under it, the shared-interests card and the two actions.',
+      ),
+      LabVariant(
+        'M1',
+        'Photo spotlight',
+        'UI-082 direction 1',
+        'Their portrait leads; the title and name sit on the shared gradient; interests below.',
+      ),
+      LabVariant(
+        'M2',
+        'Two portraits',
+        'UI-082 direction 2',
+        'Your portrait and theirs side by side under the title; shared interests just below.',
+      ),
+      LabVariant(
+        'M3',
+        'Shared interests first',
+        'UI-082 direction 3',
+        'The title, then one card leading with what you both like and a smaller portrait beside it.',
+      ),
+      LabVariant(
+        'M4',
+        'Match ticket',
+        'UI-082 direction 4',
+        'One white card: the portrait at the top, a light inset divider, then the details and interests; actions outside.',
+      ),
+      LabVariant(
+        'M5',
+        'Celebration sheet',
+        'UI-082 direction 5',
+        'A large portrait above a raised white panel with the title, interests and both actions, a thin purple accent at the join.',
+      ),
+      LabVariant(
+        'M6',
+        'Framed portrait',
+        'UI-082 direction 6',
+        'The portrait in a slightly offset frame over a small purple accent; a clean vertical stack; actions at the bottom.',
+      ),
+    ],
+  ),
+  LabGroup(
     id: 'v8-stats',
     title: 'Statistics cards (UI-078)',
     kind: LabKind.component,

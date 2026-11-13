@@ -150,6 +150,18 @@ final List<V8Scene> v8Scenes = [
       choices: {'v8-stats': t},
       height: 1100,
     ),
+  for (final m in ['O', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6']) ...[
+    V8Scene(
+      'exp-match-$m-shared',
+      '${Routes.match}/maya',
+      choices: {'v8-match': m},
+    ),
+    V8Scene(
+      'exp-match-$m-none',
+      '${Routes.match}/maya?shared=none',
+      choices: {'v8-match': m},
+    ),
+  ],
   const V8Scene('base-typography', Routes.reviewTypography),
   const V8Scene(
     'base-typography-14',

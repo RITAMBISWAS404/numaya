@@ -7648,4 +7648,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get demoStatTemplatesDetail =>
       'Six templates for credits, streak and completion';
+
+  @override
+  String get v8MatchSayHello =>
+      'No shared interests listed yet. A question about their photos is a good start.';
 }

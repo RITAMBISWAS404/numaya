@@ -12843,6 +12843,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Six templates for credits, streak and completion'**
   String get demoStatTemplatesDetail;
+
+  /// No description provided for @v8MatchSayHello.
+  ///
+  /// In en, this message translates to:
+  /// **'No shared interests listed yet. A question about their photos is a good start.'**
+  String get v8MatchSayHello;
 }
 
 class _AppLocalizationsDelegate

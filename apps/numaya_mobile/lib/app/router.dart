@@ -557,8 +557,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '${Routes.match}/:id',
-        pageBuilder: (_, state) =>
-            _modal(state, MatchScreen(personId: state.pathParameters['id']!)),
+        pageBuilder: (_, state) => _modal(
+          state,
+          MatchScreen(
+            personId: state.pathParameters['id']!,
+            // UI-082 review renders only: the same match without shared interests.
+            hideShared:
+                ref.read(devToolsAvailableProvider) &&
+                state.uri.queryParameters['shared'] == 'none',
+          ),
+        ),
       ),
       _route(
         path: '${Routes.chat}/:id',

@@ -3895,5 +3895,6 @@
   "@v8StatPartsDone": {"placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}},
   "v8StatReviewTitle": "Statistics cards",
   "demoStatTemplates": "Statistics cards (UI-078)",
-  "demoStatTemplatesDetail": "Six templates for credits, streak and completion"
+  "demoStatTemplatesDetail": "Six templates for credits, streak and completion",
+  "v8MatchSayHello": "No shared interests listed yet. A question about their photos is a good start."
 }
