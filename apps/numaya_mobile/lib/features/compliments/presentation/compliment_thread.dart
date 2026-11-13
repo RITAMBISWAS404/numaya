@@ -192,7 +192,6 @@ class _ComplimentThreadState extends ConsumerState<ComplimentThread> {
                     ? quoteText
                     : (prompt?.answer ?? quoteText),
                 replyThumbnail: thumbnail,
-                time: DateFormat('HH:mm').format(c.sentAt),
               ),
             ),
           )
@@ -255,7 +254,6 @@ class _ComplimentThreadState extends ConsumerState<ComplimentThread> {
                 replyAuthor: quoteAuthor,
                 replyText: quoteText,
                 replyThumbnail: thumbnail,
-                time: DateFormat('HH:mm').format(c.sentAt),
               ),
             ),
           ),

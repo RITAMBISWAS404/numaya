@@ -269,6 +269,10 @@ enum NavButtonStyle {
   /// Ente Icon Button Type=Circular (5518:37854): a 38pt fill/dark circle, the sheet close button
   /// and controls over photos.
   circular,
+
+  /// UI-072 (V8): the chat composer's round controls (Plus, microphone, Send): a 44pt circle
+  /// with the shared light stroke and no fill.
+  outlined,
 }
 
 /// Round icon button (`.nav-button`). Always has an accessible [label].
@@ -295,12 +299,18 @@ class NavIconButton extends StatelessWidget {
   /// A brand action (Like in a list): the subtle purple surface with a purple icon.
   final bool brand;
 
+  /// The outlined composer circle's diameter (UI-072), shared with Send.
+  static const double composerControl = 44;
+
   @override
   Widget build(BuildContext context) {
-    final size = style == NavButtonStyle.flat
-        ? AppSizes.iconButtonSm
-        : AppSizes.iconButton;
-    final radius = style == NavButtonStyle.circular
+    final size = switch (style) {
+      NavButtonStyle.flat => AppSizes.iconButtonSm,
+      NavButtonStyle.outlined => composerControl,
+      _ => AppSizes.iconButton,
+    };
+    final radius =
+        style == NavButtonStyle.circular || style == NavButtonStyle.outlined
         ? AppRadii.pill
         : AppRadii.iconButton;
     final (Color bg, Color? ring) = brand
@@ -311,6 +321,10 @@ class NavIconButton extends StatelessWidget {
             NavButtonStyle.flat => (AppColors.fill, null),
             NavButtonStyle.plain => (Colors.transparent, null),
             NavButtonStyle.circular => (AppColors.fill, null),
+            NavButtonStyle.outlined => (
+              Colors.transparent,
+              AppColors.buttonOutline,
+            ),
           };
     return Tooltip(
       message: label,
@@ -331,7 +345,7 @@ class NavIconButton extends StatelessWidget {
                 ? null
                 : Border.all(
                     color: ring,
-                    width: AppBorders.hairline,
+                    width: AppBorders.control,
                     strokeAlign: BorderSide.strokeAlignInside,
                   ),
           ),

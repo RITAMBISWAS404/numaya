@@ -218,7 +218,6 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     final queueShown = queued
         .where((m) => q.isEmpty || m.person.name.toLowerCase().contains(q))
         .toList();
-    final laterCount = archived.length + expired.length;
     final now = ref.read(clockProvider)();
     // One list: chats and not-yet-answered Compliments, newest activity first.
     final entries = <_Entry>[
@@ -288,7 +287,8 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
         now: now,
         onTap: () => _open(e.person),
         variant: switch (fx) {
-          'A' => 'FA',
+          // V8 default (UI-067/068): one list, the Your move pill, muted previews, no times.
+          'A' => 'V8',
           'B' => 'FB',
           _ => rowV,
         },
@@ -314,45 +314,20 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     Widget rowsOf(List<_Entry> entries) => Column(
       children: [
         for (var i = 0; i < entries.length; i++) ...[
-          if (i > 0 && dividers != 'O') divider(),
+          // UI-003 (V8 inbox): the shared divider from the text column to the row's end.
+          if (i > 0 && (fx == 'A' || dividers != 'O'))
+            fx == 'A'
+                ? const CardDivider(inset: ConversationRow.textInset, end: 0)
+                : divider(),
           row(entries[i]),
         ],
       ],
     );
 
-    final theirMove = all.where((e) => !e.yourMove).toList();
     final Widget list;
     if (fx == 'A' && all.isNotEmpty) {
-      // Lab A: two groups instead of the filter row. Your turn first, newest first in each.
-      list = Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (yourMove.isNotEmpty) ...[
-            Semantics(
-              header: true,
-              child: Text(
-                '${l10n.fxYourTurn} (${yourMove.length})',
-                style: listHeading,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.s1),
-            rowsOf(yourMove),
-          ],
-          if (theirMove.isNotEmpty) ...[
-            if (yourMove.isNotEmpty)
-              const SizedBox(height: AppSpacing.sectionGap),
-            Semantics(
-              header: true,
-              child: Text(
-                '${l10n.fxTheirTurn} (${theirMove.length})',
-                style: listHeading,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.s1),
-            rowsOf(theirMove),
-          ],
-        ],
-      );
+      // UI-068 (V8): one list, newest first; whose turn it is shows on the row itself.
+      list = rowsOf(all);
     } else if (rows.isNotEmpty) {
       list = rowsOf(rows);
     } else if (q.isNotEmpty && all.isEmpty) {
@@ -451,7 +426,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                       key: ValueKey('match-tile-${m.person.id}'),
                       person: m.person,
                       fraction: m.fraction,
-                      variant: avatarV,
+                      variant: fx == 'A' ? 'Q' : avatarV,
                       semanticLabel: l10n.queueMatchLabel(
                         m.person.name,
                         timeLeft(l10n, m.remaining),
@@ -463,7 +438,14 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             ),
           ],
           const SizedBox(height: AppSpacing.sectionGap),
-          // Lab A replaces the heading and filter row with its two groups.
+          // V8 (A): a plain heading over the one list, no filter row (UI-068).
+          if (fx == 'A' && all.isNotEmpty) ...[
+            Semantics(
+              header: true,
+              child: Text(l10n.conversationsTitle, style: listHeading),
+            ),
+            const SizedBox(height: AppSpacing.s1),
+          ],
           if (fx != 'A' || all.isEmpty) ...[
             Semantics(
               header: true,
@@ -484,7 +466,9 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             const SizedBox(height: AppSpacing.s3),
           ],
           list,
-          if (laterCount > 0 && q.isEmpty) ...[
+          // UI-069/UI-081 (V8): one Archive entry at the end, archived conversations only (no
+          // expired matches), no explanatory copy; the count sits just before the chevron.
+          if (archived.isNotEmpty && q.isEmpty) ...[
             const SizedBox(height: AppSpacing.sectionGap),
             ListGroup(
               children: [
@@ -492,9 +476,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                   key: const ValueKey('chats-archive'),
                   leadingMobile: NumayaMobileIcons.archive,
                   label: l10n.chatsArchiveRow,
-                  detail: archived.isEmpty
-                      ? l10n.chatsArchiveExpiredOnly(expired.length)
-                      : l10n.chatsArchiveDetail(archived.length),
+                  value: '${archived.length}',
                   onTap: () => context.push(Routes.archive),
                 ),
               ],
@@ -720,9 +702,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     });
   }
 
-  Future<void> _menu(SamplePerson person, {required bool talked}) async {
+  Future<void> _menu(
+    SamplePerson person, {
+    required bool talked,
+    bool canExtend = false,
+  }) async {
     final l10n = context.l10n;
     final actions = [
+      // UI-086: Extend left the countdown banner; the existing rule stays reachable here.
+      if (canExtend)
+        (icon: NumayaIcons.clock, label: l10n.chatExtend, destructive: false),
       (
         icon: NumayaIcons.user,
         label: l10n.optionViewProfile,
@@ -767,7 +756,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     );
     if (!mounted || choice == null) return;
     final label = actions[choice].label;
-    if (label == l10n.optionViewProfile) {
+    if (canExtend && label == l10n.chatExtend) {
+      await _extend(person);
+    } else if (label == l10n.optionViewProfile) {
       unawaited(context.push('${Routes.person}/${person.id}'));
     } else if (label == l10n.optionShareDate ||
         label == l10n.optionShareDateEdit) {
@@ -854,7 +845,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final state = ref.watch(datingProvider);
-    final premium = ref.watch(premiumProvider);
     final person = personById(widget.personId);
     if (person == null) return const SizedBox.shrink();
     final ended = state.ended[person.id];
@@ -906,7 +896,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final header = ChatHeader(
       person: person,
       onBack: _back,
-      onMenu: () => _menu(person, talked: messages.isNotEmpty),
+      onMenu: () => _menu(
+        person,
+        talked: messages.isNotEmpty,
+        canExtend:
+            messages.isEmpty &&
+            !controller.isExpired(person.id) &&
+            !ref.read(datingProvider).extendedUntil.containsKey(person.id),
+      ),
     );
 
     final Widget body;
@@ -961,22 +958,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             style: AppTypography.helper,
           ),
           const SizedBox(height: AppSpacing.s4),
-          StatusBanner(
-            tone: left.inHours < 2 ? BannerTone.pending : BannerTone.info,
-            title: l10n.chatExpiresIn(timeLeft(l10n, left)),
-            // R02: the exact end, then the extension rule (one per match).
-            body:
-                '${l10n.chatEndsAt(deadlineWhen(l10n, controller.expiresAt(person.id), now))} '
-                '${premium.active ? l10n.chatExtendPremiumNote : l10n.chatExtendFreeNote}',
-            action: NumayaButton(
-              label: l10n.chatExtend,
-              small: true,
-              expand: false,
-              variant: NumayaButtonVariant.secondary,
-              onPressed: state.extendedUntil.containsKey(person.id)
-                  ? null
-                  : () => _extend(person),
-            ),
+          // UI-086 (V8): a white inline banner with the time left only: no exact end time, no
+          // Extend control or explanation here (Extend stays in the chat menu; Instant is not in
+          // this release). The countdown comes from the match's real expiry and is not reset by
+          // a rebuild.
+          CountdownBanner(
+            key: const ValueKey('chat-countdown'),
+            text: l10n.chatExpiresIn(timeLeft(l10n, left)),
+            urgent: left.inHours < 2,
           ),
           // UI-031: ordinary messaging only; no Opening Move in the first release.
           if (ReleaseScope.openingMoves && person.openingMove != null) ...[
@@ -1093,7 +1082,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     mine: m.mine,
                     grouped: grouped,
                     dimmed: dimmed,
-                    time: DateFormat('HH:mm').format(m.at),
                     replyAuthor: quoted == null
                         ? (m.context == null
                               ? null
@@ -1449,7 +1437,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                               key: const ValueKey('chat-voice'),
                                               icon: NumayaIcons.mic,
                                               label: l10n.chatRecordVoice,
-                                              style: NavButtonStyle.plain,
+                                              style: NavButtonStyle.outlined,
                                               onPressed: () {
                                                 FocusScope.of(context)
                                                     .unfocus();
@@ -1472,7 +1460,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                                 NavIconButton(
                                                   icon: NumayaIcons.plus,
                                                   label: l10n.chatAttach,
-                                                  style: NavButtonStyle.plain,
+                                                  style:
+                                                      NavButtonStyle.outlined,
                                                   onPressed: _attach,
                                                 ),
                                                 if (ref.watch(
@@ -1487,7 +1476,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                                     ),
                                                     icon: NumayaIcons.mic,
                                                     label: l10n.chatRecordVoice,
-                                                    style: NavButtonStyle.plain,
+                                                    style:
+                                                        NavButtonStyle.outlined,
                                                     onPressed: () => setState(
                                                       () => _recording = true,
                                                     ),

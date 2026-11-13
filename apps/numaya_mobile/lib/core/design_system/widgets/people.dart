@@ -727,6 +727,9 @@ class Composer extends StatefulWidget {
   /// An attachment is waiting, so Send works with an empty field (the text is its caption).
   final bool hasAttachment;
 
+  /// UI-073 (V8): the input's neutral fill, shared by the pending reply preview above it.
+  static const Color inputFill = AppColors.fill;
+
   @override
   State<Composer> createState() => _ComposerState();
 }
@@ -786,7 +789,7 @@ class _ComposerState extends State<Composer> {
             // field sits in the white composer bar, so it takes the light fill to read as a field
             // (as Bumble's composer does); focused keeps the 2pt Numaya-purple edge.
             decoration: BoxDecoration(
-              color: AppColors.fill,
+              color: Composer.inputFill,
               borderRadius: AppRadii.all(AppRadii.field),
               border: Border.all(
                 color: focused ? AppColors.focusField : const Color(0x00EAEAEA),
@@ -841,11 +844,20 @@ class _ComposerState extends State<Composer> {
               child: Center(
                 child: AnimatedContainer(
                   duration: AppMotion.duration(context, AppMotion.base),
-                  width: 44,
-                  height: 44,
+                  width: NavIconButton.composerControl,
+                  height: NavIconButton.composerControl,
+                  // UI-072 (V8): the same circular boundary and shared stroke as Plus and the
+                  // microphone; the brand-purple arrow marks Send as the action.
                   decoration: BoxDecoration(
-                    color: canSend ? AppColors.accent : AppColors.disabled,
+                    color: Colors.transparent,
                     shape: BoxShape.circle,
+                    border: Border.all(
+                      color: canSend
+                          ? AppColors.buttonOutline
+                          : AppColors.disabledOutline,
+                      width: AppBorders.control,
+                      strokeAlign: BorderSide.strokeAlignInside,
+                    ),
                   ),
                   alignment: Alignment.center,
                   // UI-039: a plain upward arrow.
@@ -853,7 +865,7 @@ class _ComposerState extends State<Composer> {
                     NumayaIcons.arrowUp,
                     size: 22,
                     color: canSend
-                        ? AppColors.inkForeground
+                        ? AppColors.accentOnTint
                         : AppColors.disabledForeground,
                   ),
                 ),
@@ -903,8 +915,91 @@ class MessageBubble extends StatelessWidget {
   final String? replyAuthor;
   final String? replyText;
 
+  /// Body inset (16 across, 12 down) and the quote's inset: half the body's (UI-071).
+  static const double _padX = AppSpacing.s4;
+  static const double _padY = AppSpacing.s3;
+  static const double _quoteInset = _padX / 2;
+
+  /// The sender-side tail corner (UI-050 tiny, 4); every other corner is the 16pt bubble.
+  static const double _tail = AppRadii.badge;
+
   @override
   Widget build(BuildContext context) {
+    // Ente Comment Bubble: one tight corner on the sender's side. UI-040: Numaya purple for your
+    // own, white for theirs.
+    final tl = mine ? AppRadii.card : _tail;
+    final tr = mine ? _tail : AppRadii.card;
+    final hasQuote = replyText != null;
+    final fg = mine ? AppColors.accentForeground : AppColors.ink;
+    final textBlock = Padding(
+      padding: EdgeInsets.fromLTRB(
+        _padX,
+        hasQuote ? AppSpacing.s2 : _padY,
+        _padX,
+        _padY,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // UI-079: the text sets the bubble's width (up to the cap), not the row.
+          Text(text, style: AppTypography.body.copyWith(color: fg)),
+          // UI-035 (V8): no time at rest. A caller may still pass one (Design Lab specimens).
+          if (time != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Text(
+                time!,
+                style: AppTypography.micro.copyWith(
+                  color: mine
+                      ? AppColors.accentForeground.withValues(alpha: 0.78)
+                      : AppColors.textMuted,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+    Widget content = textBlock;
+    if (hasQuote) {
+      // UI-071 (V8): the quote sits half the body inset (8) from the bubble's top, left and
+      // right edges and keeps 8 inside. Its top corners follow the bubble's (outer minus 8);
+      // its lower corners do not track a bubble corner, so they take the small 8 role.
+      content = IntrinsicWidth(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                _quoteInset,
+                _quoteInset,
+                _quoteInset,
+                0,
+              ),
+              child: _QuotedReply(
+                author: replyAuthor ?? '',
+                text: replyText!,
+                onAccent: mine,
+                thumbnail: replyThumbnail,
+                onTap: onQuoteTap,
+                style: quoteStyle,
+                radius: BorderRadius.only(
+                  topLeft: Radius.circular(AppRadii.nested(tl, _quoteInset)),
+                  topRight: Radius.circular(AppRadii.nested(tr, _quoteInset)),
+                  bottomLeft: const Radius.circular(AppRadii.chip),
+                  bottomRight: const Radius.circular(AppRadii.chip),
+                ),
+              ),
+            ),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: textBlock,
+            ),
+          ],
+        ),
+      );
+    }
     return Align(
       alignment: mine ? Alignment.centerRight : Alignment.centerLeft,
       child: ConstrainedBox(
@@ -914,63 +1009,18 @@ class MessageBubble extends StatelessWidget {
         child: Opacity(
           opacity: dimmed ? AppOpacity.pending : 1,
           child: Container(
+            // UI-080: 4 between messages from the same sender, 12 when the sender changes.
             margin: EdgeInsets.only(top: grouped ? 4 : AppSpacing.s3),
-            // Ente Comment Bubble (5412:23548 / 5412:23575): 20pt corners with one 6pt corner on
-            // the sender's side. UI-040: Numaya purple for your own, white for theirs.
-            // Inset 16 across and 12 down (Ente uses 16 all round; tightened for chat density).
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.s4,
-              vertical: AppSpacing.s3,
-            ),
             decoration: BoxDecoration(
               color: mine ? AppColors.accent : AppColors.surface,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(mine ? AppRadii.card : 6),
-                topRight: Radius.circular(mine ? 6 : AppRadii.card),
+                topLeft: Radius.circular(tl),
+                topRight: Radius.circular(tr),
                 bottomLeft: const Radius.circular(AppRadii.card),
                 bottomRight: const Radius.circular(AppRadii.card),
               ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (replyText != null) ...[
-                  _QuotedReply(
-                    author: replyAuthor ?? '',
-                    text: replyText!,
-                    onAccent: mine,
-                    thumbnail: replyThumbnail,
-                    onTap: onQuoteTap,
-                    style: quoteStyle,
-                  ),
-                  const SizedBox(height: AppSpacing.s2),
-                ],
-                Text(
-                  text,
-                  style: AppTypography.body.copyWith(
-                    color: mine ? AppColors.accentForeground : AppColors.ink,
-                  ),
-                ),
-                if (time != null)
-                  Align(
-                    alignment: AlignmentDirectional.centerEnd,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Text(
-                        time!,
-                        style: AppTypography.micro.copyWith(
-                          color: mine
-                              ? AppColors.accentForeground.withValues(
-                                  alpha: 0.78,
-                                )
-                              : AppColors.textMuted,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
+            child: content,
           ),
         ),
       ),
@@ -991,9 +1041,13 @@ class _QuotedReply extends StatelessWidget {
     this.thumbnail,
     this.onTap,
     this.style = QuoteStyle.block,
+    this.radius,
   });
 
   final QuoteStyle style;
+
+  /// Per-corner shape (UI-071); null keeps the 16pt tile.
+  final BorderRadius? radius;
   final String author;
   final String text;
   final bool onAccent;
@@ -1011,7 +1065,7 @@ class _QuotedReply extends StatelessWidget {
       stripe: style == QuoteStyle.plain
           ? null
           : (onAccent ? AppColors.accentForeground : AppColors.accent),
-      radius: AppRadii.tile,
+      radius: radius ?? AppRadii.all(AppRadii.tile),
       trailing: thumbnail,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1062,10 +1116,12 @@ class ReplyPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // UI-073 (V8): the pending reply shares the composer input's neutral fill and its 12pt
+    // field corners; it is not a sent bubble.
     return _QuoteBlock(
-      color: AppColors.canvas,
+      color: Composer.inputFill,
       stripe: AppColors.accent,
-      radius: AppRadii.tile,
+      radius: AppRadii.all(AppRadii.field),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -1119,17 +1175,15 @@ class _QuoteBlock extends StatelessWidget {
 
   final Color? color;
   final Color? stripe;
-  final double radius;
+  final BorderRadius radius;
   final Widget child;
   final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: AppRadii.all(radius),
-      ),
+      // The stripe is a capsule inside the 8pt inner padding, so it never reaches a corner.
+      decoration: BoxDecoration(color: color, borderRadius: radius),
       padding: const EdgeInsets.all(AppSpacing.s2),
       child: IntrinsicHeight(
         child: Row(

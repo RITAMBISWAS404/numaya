@@ -46,6 +46,16 @@ class MatchAvatarTile extends ConsumerWidget {
     final ringColor = _urgent ? AppColors.negative : AppColors.accent;
     Widget tile;
     switch (v) {
+      case 'Q':
+        // UI-033 (V8): a larger square tile, image only, 16pt corners (UI-050 medium tile). No
+        // name, countdown caption or ring; the time left stays in the spoken label and the chat.
+        tile = SizedBox.square(
+          dimension: 88,
+          child: ClipRRect(
+            borderRadius: AppRadii.all(AppRadii.tile),
+            child: _photo(personPhotoImage(person, 1), person, focus),
+          ),
+        );
       case 'A':
         // Owner selection: the squircle ring on a 3:4 portrait (width : height).
         tile = _SquircleRing(

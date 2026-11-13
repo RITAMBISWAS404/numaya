@@ -101,6 +101,30 @@ final List<V8Scene> v8Scenes = [
   const V8Scene('flow-setup-verify', Routes.setupVerify),
   const V8Scene('flow-setup-done', Routes.setupDone),
   const V8Scene('flow-welcome', Routes.welcome),
+  const V8Scene(
+    'flow-compliment-photo',
+    '${Routes.compliment}/maya?kind=photo&index=0',
+  ),
+  V8Scene(
+    'flow-compliment-typed',
+    '${Routes.compliment}/maya?kind=prompt&index=0',
+    setup: (t, c) async {
+      await t.enterText(find.byType(EditableText).last, 'This made me laugh.');
+      await t.pump(const Duration(milliseconds: 400));
+    },
+  ),
+  V8Scene(
+    'flow-compliment-sent',
+    '${Routes.compliment}/noor?kind=photo&index=1',
+    setup: (t, c) async {
+      await t.enterText(find.byType(EditableText).last, 'Where was this taken?');
+      await t.pump(const Duration(milliseconds: 400));
+      await t.tap(find.bySemanticsLabel('Send Compliment').last);
+      await t.pump();
+      await t.pump(const Duration(seconds: 2));
+    },
+  ),
+  const V8Scene('flow-chat-maya-new', '${Routes.chat}/maya'),
   const V8Scene('base-typography', Routes.reviewTypography),
   const V8Scene(
     'base-typography-14',

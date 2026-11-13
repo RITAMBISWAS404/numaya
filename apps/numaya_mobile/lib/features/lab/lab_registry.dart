@@ -714,6 +714,28 @@ const List<LabGroup> kLabGroups = [
     ],
   ),
   LabGroup(
+    id: 'v8-compliment',
+    title: 'Sending a Compliment (UI-083)',
+    kind: LabKind.screen,
+    question: 'Where is a Compliment written?',
+    usages: ['Compliment from a photo or prompt'],
+    proposed: 'A',
+    variants: [
+      LabVariant(
+        _o,
+        'Separate page',
+        'selected designs',
+        'A full composer page with the photo or prompt card above a text field.',
+      ),
+      LabVariant(
+        'A',
+        'In the chat',
+        'UI-083 (approved)',
+        'The chat opens in reply mode: the photo or prompt is quoted in the standard reply preview above the regular composer; after sending, the Compliment shows as a reply and a status says the chat continues once they reply.',
+      ),
+    ],
+  ),
+  LabGroup(
     id: 'v7-compliment',
     title: 'Compliment journey',
     kind: LabKind.screen,

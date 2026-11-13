@@ -376,6 +376,215 @@ class _ComplimentComposerScreenState
     }
   }
 
+  /// UI-083 (V8): the recipient's chat in reply mode. The exact photo or prompt is quoted in the
+  /// standard reply preview over the regular composer; nothing is sent or spent until Send, and
+  /// the send goes through the same [ComplimentsController.send] (one debit, repeat sends refused,
+  /// failures keep the words and charge nothing). The quote cannot be removed to write a free
+  /// pre-match message: its cancel closes the Compliment (asking first if words were written).
+  Widget _chat(
+    BuildContext context,
+    SamplePerson person,
+    int balance,
+    ComplimentsController controller,
+  ) {
+    final l10n = context.l10n;
+    final max = controller.maxLength;
+    final problem = complimentProblem(_text.text, max);
+    final block = controller.blockFor(person.id);
+    final isPrompt = widget.target.kind == ComplimentTargetKind.prompt;
+    final prompt = isPrompt ? promptAt(person, widget.target.index) : null;
+    final quoteTitle = isPrompt
+        ? l10n.complimentOnPrompt
+        : l10n.complimentOnPhoto;
+    final quoteText = isPrompt
+        ? (prompt == null ? l10n.complimentReferenceGone : prompt.answer)
+        : l10n.v8ComplimentPhotoN(widget.target.index + 1);
+    Widget? thumb() => isPrompt
+        ? null
+        : ClipRRect(
+            borderRadius: AppRadii.all(AppRadii.tag),
+            child: SizedBox.square(
+              dimension: 36,
+              child: personPhotoImage(person, widget.target.index + 1),
+            ),
+          );
+    final blockText = switch (block) {
+      // After this page's own send, the waiting status below says it instead.
+      ComplimentBlock.alreadySent when _sent => null,
+      ComplimentBlock.alreadySent => l10n.complimentAlreadySent(person.name),
+      ComplimentBlock.alreadyReceived => l10n.complimentAlreadyReceived(
+        person.name,
+      ),
+      ComplimentBlock.connected => l10n.complimentConnected(person.name),
+      ComplimentBlock.unavailable => l10n.complimentUnavailable,
+      null => null,
+    };
+
+    final Widget bottom;
+    if (_sent) {
+      bottom = Row(
+        key: const ValueKey('compliment-waiting'),
+        children: [
+          const NumayaIcon(
+            NumayaIcons.clock,
+            size: AppSizes.iconMd,
+            filled: true,
+            color: AppColors.textSecondary,
+          ),
+          const SizedBox(width: AppSpacing.s3),
+          Expanded(
+            child: Semantics(
+              liveRegion: true,
+              child: Text(
+                l10n.v8ComplimentWaiting(person.name),
+                style: AppTypography.bodySm.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.s3),
+          NumayaButton(
+            key: const ValueKey('compliment-done'),
+            label: l10n.done,
+            small: true,
+            expand: false,
+            variant: NumayaButtonVariant.secondary,
+            onPressed: _leave,
+          ),
+        ],
+      );
+    } else if (blockText != null) {
+      bottom = StatusBanner(title: blockText);
+    } else if (balance <= 0) {
+      bottom = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(l10n.complimentBalance(0), style: AppTypography.helper),
+          const SizedBox(height: AppSpacing.s3),
+          NumayaButton(
+            label: l10n.complimentGetMore,
+            onPressed: () => context.push(Routes.storeCompliments),
+          ),
+        ],
+      );
+    } else {
+      bottom = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ReplyPreview(
+            key: const ValueKey('compliment-quote'),
+            title: quoteTitle,
+            text: quoteText,
+            thumbnail: thumb(),
+            cancelLabel: l10n.close,
+            onCancel: _close,
+          ),
+          if (_failed) ...[
+            const SizedBox(height: AppSpacing.s2),
+            Semantics(
+              liveRegion: true,
+              child: Text(
+                '${l10n.complimentFailedTitle} ${l10n.complimentFailedBody}',
+                style: AppTypography.caption.copyWith(
+                  color: AppColors.negative,
+                ),
+              ),
+            ),
+          ],
+          if (problem == ComplimentProblem.tooLong) ...[
+            const SizedBox(height: AppSpacing.s2),
+            Text(
+              l10n.complimentTooLong(max),
+              style: AppTypography.caption.copyWith(color: AppColors.negative),
+            ),
+          ],
+          const SizedBox(height: AppSpacing.s2),
+          Composer(
+            key: const ValueKey('compliment-field'),
+            controller: _text,
+            placeholder: l10n.complimentPlaceholder,
+            sendLabel: l10n.complimentSend,
+            enabled: !_sending,
+            onSend: (_) {
+              if (problem == null && !_sending) _send(person);
+            },
+          ),
+          const SizedBox(height: AppSpacing.s1),
+          Text(
+            '${l10n.complimentCounter(complimentLength(_text.text), max)} · '
+            '${l10n.complimentBalance(balance)}',
+            textAlign: TextAlign.end,
+            style: AppTypography.micro,
+          ),
+        ],
+      );
+    }
+
+    final thread = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ChatSystemLine(l10n.v8ComplimentIntro(person.name)),
+        if (_sent)
+          MessageBubble(
+            key: const ValueKey('compliment-sent-bubble'),
+            text: _text.text.trim(),
+            replyAuthor: quoteTitle,
+            replyText: quoteText,
+            replyThumbnail: thumb(),
+          ),
+      ],
+    );
+
+    return PopScope(
+      canPop: !_dirty,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _close();
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.canvas,
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              NumayaTopBar(
+                onBack: _sent ? _leave : _close,
+                backLabel: l10n.close,
+                title: person.name,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  reverse: true,
+                  padding: const EdgeInsets.fromLTRB(
+                    AppLayout.screenGutter,
+                    AppSpacing.s3,
+                    AppLayout.screenGutter,
+                    AppSpacing.s4,
+                  ),
+                  child: thread,
+                ),
+              ),
+              // UI-038: the full-width white composer bar.
+              Container(
+                width: double.infinity,
+                color: AppColors.surface,
+                padding: EdgeInsets.fromLTRB(
+                  AppLayout.screenGutter,
+                  AppSpacing.s3,
+                  AppLayout.screenGutter,
+                  AppSpacing.s3 + MediaQuery.paddingOf(context).bottom,
+                ),
+                child: bottom,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -399,6 +608,11 @@ class _ComplimentComposerScreenState
     }
     final v7 = ref.watch(labVariantProvider('v7-compliment'));
     final max = controller.maxLength;
+    // UI-083 (V8): the Compliment is written in the recipient's chat (lab O keeps the page).
+    if (!widget.embedded &&
+        ref.watch(labVariantProvider('v8-compliment')) == 'A') {
+      return _chat(context, person, balance, controller);
+    }
     final block = controller.blockFor(person.id);
     final problem = complimentProblem(_text.text, max);
     final used = complimentLength(_text.text);

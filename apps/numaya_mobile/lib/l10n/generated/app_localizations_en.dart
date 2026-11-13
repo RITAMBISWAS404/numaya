@@ -5033,7 +5033,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String v8ComplimentWaiting(String name) {
-    return 'Waiting for $name';
+    return 'Sent. You can keep chatting once $name replies.';
   }
 
   @override
@@ -7557,4 +7557,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsPremiumManage => 'Manage';
+
+  @override
+  String v8ComplimentIntro(String name) {
+    return 'Send $name one Compliment on this. A chat opens only if they reply.';
+  }
+
+  @override
+  String v8ComplimentPhotoN(int n) {
+    return 'Photo $n';
+  }
+
+  @override
+  String v8ComplimentReplying(String name) {
+    return 'Complimenting $name';
+  }
 }

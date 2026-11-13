@@ -3863,5 +3863,13 @@
   "reviewTypeSampleMeta": "Active today · 3 km away",
   "settingsPremiumPromoBody": "See who likes you, send more likes and filter by what matters.",
   "settingsPremiumPromoActive": "Your plan is active. Manage or cancel it any time.",
-  "settingsPremiumManage": "Manage"
+  "settingsPremiumManage": "Manage",
+  "v8ComplimentIntro": "Send {name} one Compliment on this. A chat opens only if they reply.",
+  "@v8ComplimentIntro": {"placeholders": {"name": {"type": "String"}}},
+  "v8ComplimentWaiting": "Sent. You can keep chatting once {name} replies.",
+  "@v8ComplimentWaiting": {"placeholders": {"name": {"type": "String"}}},
+  "v8ComplimentPhotoN": "Photo {n}",
+  "@v8ComplimentPhotoN": {"placeholders": {"n": {"type": "int"}}},
+  "v8ComplimentReplying": "Complimenting {name}",
+  "@v8ComplimentReplying": {"placeholders": {"name": {"type": "String"}}}
 }

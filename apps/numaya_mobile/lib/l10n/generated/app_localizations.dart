@@ -8683,7 +8683,7 @@ abstract class AppLocalizations {
   /// No description provided for @v8ComplimentWaiting.
   ///
   /// In en, this message translates to:
-  /// **'Waiting for {name}'**
+  /// **'Sent. You can keep chatting once {name} replies.'**
   String v8ComplimentWaiting(String name);
 
   /// No description provided for @v8ComplimentOnYourPhoto.
@@ -12699,6 +12699,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Manage'**
   String get settingsPremiumManage;
+
+  /// No description provided for @v8ComplimentIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Send {name} one Compliment on this. A chat opens only if they reply.'**
+  String v8ComplimentIntro(String name);
+
+  /// No description provided for @v8ComplimentPhotoN.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {n}'**
+  String v8ComplimentPhotoN(int n);
+
+  /// No description provided for @v8ComplimentReplying.
+  ///
+  /// In en, this message translates to:
+  /// **'Complimenting {name}'**
+  String v8ComplimentReplying(String name);
 }
 
 class _AppLocalizationsDelegate

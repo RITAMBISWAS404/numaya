@@ -404,6 +404,53 @@ class ComparisonRow extends StatelessWidget {
 
 enum BannerTone { info, pending, success, error }
 
+/// UI-086 (V8): the new-match countdown: a white inline banner with a clock and the time left,
+/// nothing else. Under two hours the clock takes the warning colour; the words carry the state.
+class CountdownBanner extends StatelessWidget {
+  const CountdownBanner({super.key, required this.text, this.urgent = false});
+
+  final String text;
+  final bool urgent;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    container: true,
+    liveRegion: true,
+    child: Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s4,
+        vertical: AppSpacing.s3,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.card),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          NumayaIcon(
+            NumayaIcons.clock,
+            size: AppSizes.iconMd,
+            filled: true,
+            color: urgent ? AppColors.warningIcon : AppColors.textSecondary,
+          ),
+          const SizedBox(width: AppSpacing.s3),
+          Expanded(
+            child: Text(
+              text,
+              style: AppTypography.weight(
+                AppTypography.body,
+                AppTypography.semibold,
+              ).copyWith(color: AppColors.ink),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 /// A status banner (states-and-recovery: `StatusBanner`): pending review, approved, rejected,
 /// offline, and passive callouts such as the welcome credits. UI-060 (V8): no outline, a light
 /// neutral fill slightly darker than the page; the icon is top-aligned with the title (UI-010).

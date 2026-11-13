@@ -5,6 +5,7 @@ import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../../lab/lab_registry.dart';
 import '../application/dating_controller.dart';
+import '../data/media_picker.dart';
 import '../domain/sample_people.dart';
 import 'chat_attachments.dart';
 import 'person_profile.dart';
@@ -119,6 +120,97 @@ class ConversationRow extends ConsumerWidget {
     );
     final Widget content;
     switch (v) {
+      case 'V8':
+        // UI-067/068/035 (V8): one list row. Name, then the preview in the shared muted grey
+        // whether read or not; a compact filled grey glyph names a Compliment, photo, video or
+        // voice note, with its text when there is some and a short type label otherwise. No
+        // time on the row. The unread count is the trailing badge; "Your move" is a compact
+        // pill beside the name, so the two never collide.
+        final a = last.attachment;
+        final Widget? glyph = compliment
+            // Tabler has no filled message-heart: the Compliment mark stays the outline glyph
+            // rather than an invented filled one (recorded limitation).
+            ? const MobileIcon(
+                NumayaMobileIcons.compliment,
+                size: 16,
+                color: AppColors.textMuted,
+              )
+            : switch (a?.kind) {
+                AttachmentKind.photo => const NumayaIcon(
+                  NumayaIcons.image,
+                  size: 16,
+                  filled: true,
+                  color: AppColors.textMuted,
+                ),
+                AttachmentKind.video => const MobileIcon(
+                  NumayaMobileIcons.video,
+                  size: 16,
+                  filled: true,
+                  color: AppColors.textMuted,
+                ),
+                AttachmentKind.voice => const NumayaIcon(
+                  NumayaIcons.mic,
+                  size: 16,
+                  filled: true,
+                  color: AppColors.textMuted,
+                ),
+                null => null,
+              };
+        final body = a == null
+            ? last.text
+            : (last.text.isNotEmpty ? last.text : attachmentSummary(l10n, a));
+        final line = last.mine ? l10n.youPrefix(body) : body;
+        content = Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.s3),
+          child: Row(
+            children: [
+              avatar(56),
+              const SizedBox(width: AppSpacing.s4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(child: name()),
+                        if (yourMove) ...[
+                          const SizedBox(width: AppSpacing.s2),
+                          StatusBadge(
+                            key: const ValueKey('row-your-move'),
+                            label: l10n.yourMoveTag,
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        if (glyph != null) ...[
+                          glyph,
+                          const SizedBox(width: AppSpacing.s1 + 2),
+                        ],
+                        Expanded(
+                          child: Text(
+                            line,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.bodySm.copyWith(
+                              color: AppColors.textMuted,
+                            ),
+                          ),
+                        ),
+                        if (unread > 0) ...[
+                          const SizedBox(width: AppSpacing.s2),
+                          CountBadge(count: unread),
+                        ],
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
       case 'FA':
         // Lab A (recipe M1, quiet list): name and time, the preview, then a Compliment's state
         // in words. No turn pill: the section heading already says whose turn it is.
