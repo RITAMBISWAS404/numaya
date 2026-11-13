@@ -94,23 +94,26 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
       context: context,
       title: l10n.photoTipsTitle,
       closeLabel: l10n.close,
-      builder: (context) => Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // UI-053: the tips as rows in one white card on the grey sheet, each with an icon
-          // that names its topic, divided by the shared inset divider.
-          InfoList(
-            items: [
-              (NumayaIcons.user, l10n.photoTip1),
-              (NumayaIcons.camera, l10n.photoTip2),
-              (NumayaIcons.heart, l10n.photoTip3),
-              (NumayaIcons.eyeOff, l10n.photoTip4),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.s4),
-          Text(l10n.photoTipsNote, style: AppTypography.helper),
-        ],
+      // Large text on a small phone: the tips scroll inside the sheet instead of overflowing.
+      builder: (context) => SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // UI-053: the tips as rows in one white card on the grey sheet, each with an icon
+            // that names its topic, divided by the shared inset divider.
+            InfoList(
+              items: [
+                (NumayaIcons.user, l10n.photoTip1),
+                (NumayaIcons.camera, l10n.photoTip2),
+                (NumayaIcons.heart, l10n.photoTip3),
+                (NumayaIcons.eyeOff, l10n.photoTip4),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.s4),
+            Text(l10n.photoTipsNote, style: AppTypography.helper),
+          ],
+        ),
       ),
     );
   }
