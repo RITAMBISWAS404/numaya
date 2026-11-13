@@ -415,8 +415,8 @@ class PersonHeroCard extends StatelessWidget {
     spacing: AppLayout.groupGap,
     runSpacing: AppLayout.groupGap,
     children: [
-      // UI-041: no "Sample profile" badge; your own preview keeps its "Preview" label.
-      if (own) StatusBadge(label: l10n.previewBadge, tone: BadgeTone.onPhoto),
+      // UI-041/UI-058: no "Sample profile" or "Preview" badge: the owner preview matches the
+      // public profile exactly (the screen title already says it is a preview).
       // BM-01: Verified moved from the photo to a tick beside the name (Bumble), so the photo
       // carries at most the sample/preview notice, "New here" and the photo count.
       if (person.isNew)
@@ -661,8 +661,13 @@ List<Widget> personSections(
       (ProfileFactEmoji.detail(d.key, d.value), d.value),
   ];
   final hasBio = person.bio != null && person.bio!.isNotEmpty;
+  // UI-059 (V8): one content order for every profile, the owner preview included: main photo
+  // (the hero card above), bio, photo 2, prompt 1, photo 3, prompt 2, photo 4, prompt 3,
+  // photo 5, photo 6, then location. Missing photos or prompts are skipped and the rest keep
+  // their relative order. The detail pills stay in the About me card with the bio (UI-018);
+  // shared interests follow the bio card (UI-015), before photo 2.
+  final prompts = [?person.prompt, ...person.morePrompts];
   final sections = <Widget>[
-    if (person.prompt != null) prompt(person.prompt!),
     // UI-018: one About me card, the bio first in the primary content style (UI-020), a divider,
     // then the detail pills.
     if (facts.isNotEmpty || hasBio)
@@ -711,9 +716,10 @@ List<Widget> personSections(
           ],
         ),
       ),
-    if (person.photoCount > 1) photo(2),
-    if (person.photoCount > 2) photo(3),
-    for (final p in person.morePrompts) prompt(p),
+    for (var k = 0; k < 5; k++) ...[
+      if (person.photoCount > k + 1) photo(k + 2),
+      if (k < prompts.length) prompt(prompts[k]),
+    ],
     if (showDistance || person.livesIn != null)
       ProfileSectionCard(
         title: l10n.discoverLocation,
@@ -735,7 +741,6 @@ List<Widget> personSections(
           ],
         ),
       ),
-    for (var i = 4; i <= person.photoCount; i++) photo(i),
   ];
   return [
     for (var i = 0; i < sections.length; i++) ...[

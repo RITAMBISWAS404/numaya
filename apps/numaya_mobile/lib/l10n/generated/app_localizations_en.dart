@@ -7546,4 +7546,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reviewTypeSampleMeta => 'Active today · 3 km away';
+
+  @override
+  String get settingsPremiumPromoBody =>
+      'See who likes you, send more likes and filter by what matters.';
+
+  @override
+  String get settingsPremiumPromoActive =>
+      'Your plan is active. Manage or cancel it any time.';
+
+  @override
+  String get settingsPremiumManage => 'Manage';
 }

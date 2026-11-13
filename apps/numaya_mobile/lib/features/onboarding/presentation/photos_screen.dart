@@ -99,29 +99,17 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          for (final tip in [
-            l10n.photoTip1,
-            l10n.photoTip2,
-            l10n.photoTip3,
-            l10n.photoTip4,
-          ]) ...[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 2),
-                  child: NumayaIcon(
-                    NumayaIcons.check,
-                    size: AppSizes.iconMd,
-                    color: AppColors.accent,
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.s3),
-                Expanded(child: Text(tip, style: AppTypography.body)),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.s3),
-          ],
+          // UI-053: the tips as rows in one white card on the grey sheet, each with an icon
+          // that names its topic, divided by the shared inset divider.
+          InfoList(
+            items: [
+              (NumayaIcons.user, l10n.photoTip1),
+              (NumayaIcons.camera, l10n.photoTip2),
+              (NumayaIcons.heart, l10n.photoTip3),
+              (NumayaIcons.eyeOff, l10n.photoTip4),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.s4),
           Text(l10n.photoTipsNote, style: AppTypography.helper),
         ],
       ),

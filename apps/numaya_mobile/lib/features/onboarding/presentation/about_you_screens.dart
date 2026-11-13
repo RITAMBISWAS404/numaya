@@ -179,7 +179,8 @@ class _NameBirthdayScreenState extends ConsumerState<NameBirthdayScreen> {
         Semantics(
           liveRegion: true,
           child: Text(
-            dateError ?? (age == null ? '' : l10n.obAgeHint(age)),
+            // UI-052: no inline age; the confirmation sheet shows it with the date.
+            dateError ?? '',
             style: AppTypography.caption.copyWith(
               color: dateError == null
                   ? AppColors.textMuted

@@ -12681,6 +12681,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Active today · 3 km away'**
   String get reviewTypeSampleMeta;
+
+  /// No description provided for @settingsPremiumPromoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'See who likes you, send more likes and filter by what matters.'**
+  String get settingsPremiumPromoBody;
+
+  /// No description provided for @settingsPremiumPromoActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Your plan is active. Manage or cancel it any time.'**
+  String get settingsPremiumPromoActive;
+
+  /// No description provided for @settingsPremiumManage.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage'**
+  String get settingsPremiumManage;
 }
 
 class _AppLocalizationsDelegate

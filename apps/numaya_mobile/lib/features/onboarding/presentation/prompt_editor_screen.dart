@@ -282,16 +282,7 @@ class _PromptAnswerFormState extends State<_PromptAnswerForm> {
           label: l10n.promptSave,
           onPressed: canSave ? () => Navigator.of(context).pop(answer) : null,
         ),
-        const SizedBox(height: AppSpacing.s2),
-        Text(
-          answer.isEmpty
-              ? l10n.promptWriteToSave
-              : changed
-              ? l10n.promptSavedHint
-              : l10n.promptNoChanges,
-          textAlign: TextAlign.center,
-          style: AppTypography.helper,
-        ),
+        // UI-055: no helper line; the button's enabled state says when it can be saved.
       ],
     );
   }

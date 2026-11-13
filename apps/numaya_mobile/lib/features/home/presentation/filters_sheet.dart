@@ -108,11 +108,11 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
         child: Text(text, style: AppTypography.headerCaps),
       ),
     );
-    Widget group(List<Widget> children, {Key? key}) => WhiteCard(
+    Widget group(List<Widget> children, {Key? key, double? top}) => WhiteCard(
       key: key,
-      padding: const EdgeInsets.fromLTRB(
+      padding: EdgeInsets.fromLTRB(
         AppSpacing.s4,
-        AppSpacing.s3,
+        top ?? AppSpacing.s3,
         AppSpacing.s4,
         AppSpacing.s1,
       ),
@@ -197,6 +197,8 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
             _draft.copyWith(minAge: v.start.round(), maxAge: v.end.round()),
           ),
         ),
+        // UI-003 (V8): the slider block and its fallback switch are distinct items.
+        const CardDivider(inset: 0),
         ListGroup(
           flush: true,
           children: [
@@ -227,6 +229,8 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
             onChanged: (v) => _set(_draft.copyWith(maxDistanceKm: v.round())),
           ),
         ),
+        // UI-003 (V8): the slider block and its fallback switch are distinct items.
+        const CardDivider(inset: 0),
         ListGroup(
           flush: true,
           children: [
@@ -240,7 +244,9 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
       ]),
       const SizedBox(height: AppSpacing.s5),
       heading(l10n.filtersVerifiedHeading),
-      group(key: const ValueKey('filters-verified-card'), [
+      // UI-044 (V8): this single-row card's top inset matches its bottom (the single-row
+      // convention); sides and bottom unchanged.
+      group(key: const ValueKey('filters-verified-card'), top: AppSpacing.s1, [
         ListGroup(
           flush: true,
           children: [
@@ -270,21 +276,21 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
     final minHeight = _draft.minHeightCm ?? DetailRules.minHeight;
     final advanced = <Widget>[
       if (!premium) ...[
-        StatusBanner(
+        // UI-061 (V8): the illustrated white promotion card with a compact See Premium action
+        // and the reserved square artwork area.
+        PromoCard(
+          key: const ValueKey('filters-premium-promo'),
           title: l10n.filtersAdvancedLocked,
           body: l10n.filtersAdvancedLockedBody,
-          action: NumayaButton(
-            label: l10n.premiumSee,
-            small: true,
-            expand: false,
-            icon: NumayaIcons.lock,
-            onPressed: () {
-              Navigator.of(context).pop();
-              context.push(
-                '${Routes.paywall}?feature=${PremiumFeature.advancedFilters.name}',
-              );
-            },
-          ),
+          actionLabel: l10n.premiumSee,
+          slot: 'promo_advanced_filters',
+          slotLabel: 'Premium artwork',
+          onAction: () {
+            Navigator.of(context).pop();
+            context.push(
+              '${Routes.paywall}?feature=${PremiumFeature.advancedFilters.name}',
+            );
+          },
         ),
         const SizedBox(height: AppSpacing.s5),
       ],

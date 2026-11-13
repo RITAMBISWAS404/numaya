@@ -95,96 +95,102 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                                 : const WelcomeBrandImage(),
                           ),
                         ),
-                        Container(
-                          padding: EdgeInsets.fromLTRB(
-                            AppSpacing.s5,
-                            AppSpacing.s6,
-                            AppSpacing.s5,
-                            AppSpacing.s4 + bottomInset,
+                        ColoredBox(
+                          // UI-001: the image continues behind the card's rounded top corners.
+                          color: WelcomeBrandImage.background(
+                            ref.watch(labVariantProvider('v4-welcome')),
                           ),
-                          decoration: const BoxDecoration(
-                            color: AppColors.surface,
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(AppRadii.sheet),
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(
+                              AppSpacing.s5,
+                              AppSpacing.s6,
+                              AppSpacing.s5,
+                              AppSpacing.s4 + bottomInset,
                             ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Semantics(
-                                header: true,
-                                child: Text(
-                                  l10n.welcomeTitle,
-                                  style: AppTypography.hero,
-                                ),
+                            decoration: const BoxDecoration(
+                              color: AppColors.surface,
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(AppRadii.sheet),
                               ),
-                              const SizedBox(height: AppSpacing.s3),
-                              Text(
-                                l10n.welcomeLede,
-                                style: AppTypography.body.copyWith(
-                                  color: AppColors.textMuted,
-                                ),
-                              ),
-                              const SizedBox(height: AppSpacing.s6),
-                              NumayaButton(
-                                label: l10n.welcomeCreateAccount,
-                                onPressed: () => _start(AuthIntent.signUp),
-                              ),
-                              const SizedBox(height: AppSpacing.s3),
-                              NumayaButton(
-                                label: l10n.welcomeHaveAccount,
-                                variant: NumayaButtonVariant.quiet,
-                                onPressed: () => _start(AuthIntent.signIn),
-                              ),
-                              // Review builds only (debug/profile, development environment): a
-                              // labelled way into the on-device sample account. Release builds
-                              // compile the demo service out, so this never ships; real phone
-                              // sign-in above is unchanged.
-                              if (ref.watch(demoAuthProvider) != null) ...[
-                                const SizedBox(height: AppSpacing.s2),
-                                Center(
-                                  child: TextLink(
-                                    key: const ValueKey('welcome-demo'),
-                                    label: l10n.welcomeDemoEntry,
-                                    onPressed: () async {
-                                      await ref
-                                          .read(sessionProvider.notifier)
-                                          .quickStart();
-                                      if (context.mounted) {
-                                        context.go(Routes.home);
-                                      }
-                                    },
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Semantics(
+                                  header: true,
+                                  child: Text(
+                                    l10n.welcomeTitle,
+                                    style: AppTypography.hero,
                                   ),
                                 ),
+                                const SizedBox(height: AppSpacing.s3),
                                 Text(
-                                  l10n.welcomeDemoNote,
+                                  l10n.welcomeLede,
+                                  style: AppTypography.body.copyWith(
+                                    color: AppColors.textMuted,
+                                  ),
+                                ),
+                                const SizedBox(height: AppSpacing.s6),
+                                NumayaButton(
+                                  label: l10n.welcomeCreateAccount,
+                                  onPressed: () => _start(AuthIntent.signUp),
+                                ),
+                                const SizedBox(height: AppSpacing.s3),
+                                NumayaButton(
+                                  label: l10n.welcomeHaveAccount,
+                                  variant: NumayaButtonVariant.quiet,
+                                  onPressed: () => _start(AuthIntent.signIn),
+                                ),
+                                // Review builds only (debug/profile, development environment): a
+                                // labelled way into the on-device sample account. Release builds
+                                // compile the demo service out, so this never ships; real phone
+                                // sign-in above is unchanged.
+                                if (ref.watch(demoAuthProvider) != null) ...[
+                                  const SizedBox(height: AppSpacing.s2),
+                                  Center(
+                                    child: TextLink(
+                                      key: const ValueKey('welcome-demo'),
+                                      label: l10n.welcomeDemoEntry,
+                                      onPressed: () async {
+                                        await ref
+                                            .read(sessionProvider.notifier)
+                                            .quickStart();
+                                        if (context.mounted) {
+                                          context.go(Routes.home);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  Text(
+                                    l10n.welcomeDemoNote,
+                                    textAlign: TextAlign.center,
+                                    style: AppTypography.micro,
+                                  ),
+                                ],
+                                const SizedBox(height: AppSpacing.s4),
+                                Text.rich(
+                                  TextSpan(
+                                    style: AppTypography.micro,
+                                    children: [
+                                      TextSpan(text: l10n.welcomeLegalPrefix),
+                                      TextSpan(
+                                        text: l10n.welcomeLegalTerms,
+                                        style: linkStyle,
+                                        recognizer: _terms,
+                                      ),
+                                      TextSpan(text: l10n.welcomeLegalMiddle),
+                                      TextSpan(
+                                        text: l10n.welcomeLegalPrivacy,
+                                        style: linkStyle,
+                                        recognizer: _privacy,
+                                      ),
+                                      TextSpan(text: l10n.welcomeLegalSuffix),
+                                    ],
+                                  ),
                                   textAlign: TextAlign.center,
-                                  style: AppTypography.micro,
                                 ),
                               ],
-                              const SizedBox(height: AppSpacing.s4),
-                              Text.rich(
-                                TextSpan(
-                                  style: AppTypography.micro,
-                                  children: [
-                                    TextSpan(text: l10n.welcomeLegalPrefix),
-                                    TextSpan(
-                                      text: l10n.welcomeLegalTerms,
-                                      style: linkStyle,
-                                      recognizer: _terms,
-                                    ),
-                                    TextSpan(text: l10n.welcomeLegalMiddle),
-                                    TextSpan(
-                                      text: l10n.welcomeLegalPrivacy,
-                                      style: linkStyle,
-                                      recognizer: _privacy,
-                                    ),
-                                    TextSpan(text: l10n.welcomeLegalSuffix),
-                                  ],
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       ],
@@ -239,16 +245,20 @@ class WelcomeBrandImage extends ConsumerWidget {
 
   static const String brandName = 'numaya';
 
+  /// The image's fill for a `v4-welcome` variant: the card below sits on it, so its rounded top
+  /// corners show against the image rather than the page (UI-001).
+  static Color background(String? v) => switch (v) {
+    'S' => AppColors.accent,
+    'N' => AppColors.canvas,
+    _ => AppColors.accentTint,
+  };
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final v = variant ?? ref.watch(labVariantProvider('v4-welcome'));
     // S: solid brand. N: neutral page. O: the previous lavender, kept for comparison.
     final solid = v == 'S';
-    final bg = switch (v) {
-      'S' => AppColors.accent,
-      'N' => AppColors.canvas,
-      _ => AppColors.accentTint,
-    };
+    final bg = background(v);
     final fg = solid ? AppColors.accentForeground : AppColors.accentOnTint;
     return ExcludeSemantics(
       child: ColoredBox(

@@ -64,31 +64,7 @@ class _InterestsScreenState extends ConsumerState<InterestsScreen> {
         onChanged: (v) => setState(() => _query = v),
       ),
       const SizedBox(height: AppSpacing.s5),
-      // V16 chip-group label: small bold capitals, the count in muted tracked capitals.
-      Row(
-        children: [
-          Expanded(child: FieldLabel(l10n.interestsLabel)),
-          const SizedBox(width: AppSpacing.s2),
-          // Flexible: at 200% text on a 320pt phone the count wraps instead of overflowing
-          // (found by the overnight route-gap sweep).
-          Flexible(
-            child: Semantics(
-              liveRegion: true,
-              child: Text(
-                l10n.interestsSelected(count),
-                textAlign: TextAlign.end,
-                style: AppTypography.labelCaps.copyWith(
-                  color: AppColors.textMuted,
-                  fontWeight: FontWeight.w400,
-                  fontVariations: const [FontVariation('wght', 400)],
-                  fontFeatures: const [FontFeature.tabularFigures()],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      const SizedBox(height: AppSpacing.s3),
+      // UI-054: no summary row under search; the footer carries the live count.
       if (groups.isEmpty) ...[
         const SizedBox(height: AppSpacing.s4),
         Text(

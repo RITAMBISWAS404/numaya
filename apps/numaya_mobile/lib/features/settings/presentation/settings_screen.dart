@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/providers.dart';
+import '../../../app/release_scope.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
@@ -209,35 +210,20 @@ class SettingsScreen extends ConsumerWidget {
         children: [
           const SizedBox(height: AppSpacing.s4),
           if (ref.watch(labVariantProvider('v6-settings-plan')) == 'A') ...[
-            Pressable(
-              onTap: () => context.push(Routes.premium),
-              semanticLabel: l10n.premiumName,
-              excludeChildSemantics: true,
-              borderRadius: AppRadii.all(AppRadii.heroCard),
-              child: Container(
-                padding: const EdgeInsets.all(AppLayout.heroPadding),
-                decoration: BoxDecoration(
-                  color: AppColors.accent,
-                  borderRadius: AppRadii.all(AppRadii.heroCard),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        l10n.premiumName,
-                        style: AppTypography.section.copyWith(
-                          color: AppColors.accentForeground,
-                        ),
-                      ),
-                    ),
-                    const NumayaIcon(
-                      NumayaIcons.chevronRight,
-                      size: AppSizes.iconMd,
-                      color: AppColors.accentForeground,
-                    ),
-                  ],
-                ),
-              ),
+            // UI-061 (V8): the shared white Premium promotion card at the top of Settings:
+            // heading and short copy on one side, the reserved square artwork on the other.
+            PromoCard(
+              key: const ValueKey('settings-premium-promo'),
+              title: l10n.premiumName,
+              body: premium.active
+                  ? l10n.settingsPremiumPromoActive
+                  : l10n.settingsPremiumPromoBody,
+              actionLabel: premium.active
+                  ? l10n.settingsPremiumManage
+                  : l10n.premiumSee,
+              slot: 'promo_settings_premium',
+              slotLabel: 'Premium artwork',
+              onAction: () => context.push(Routes.premium),
             ),
             const SizedBox(height: AppSpacing.sectionGap),
           ],
@@ -318,15 +304,21 @@ class SettingsScreen extends ConsumerWidget {
                         }
                       },
               ),
-              ListRow(
-                leading: premium.active ? NumayaIcons.public : NumayaIcons.lock,
-                tone: AccentTone.brand,
-                label: l10n.travelTitle,
-                value: premium.travelCity == null
-                    ? (premium.active ? l10n.travelOffValue : l10n.premiumOnly)
-                    : l10n.travelOnValue,
-                onTap: () => _travel(context, ref),
-              ),
+              // UI-075: Travel is deferred beyond the MVP.
+              if (ReleaseScope.travel)
+                ListRow(
+                  leading: premium.active
+                      ? NumayaIcons.public
+                      : NumayaIcons.lock,
+                  tone: AccentTone.brand,
+                  label: l10n.travelTitle,
+                  value: premium.travelCity == null
+                      ? (premium.active
+                            ? l10n.travelOffValue
+                            : l10n.premiumOnly)
+                      : l10n.travelOnValue,
+                  onTap: () => _travel(context, ref),
+                ),
             ],
           ),
           const SizedBox(height: AppSpacing.sectionGap),

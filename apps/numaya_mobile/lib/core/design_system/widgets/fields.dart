@@ -167,6 +167,11 @@ class NumayaTextField extends StatefulWidget {
 }
 
 class _NumayaTextFieldState extends State<NumayaTextField> {
+  /// Typed text and placeholder: the body-tier input role; multi-line keeps a 22pt reading line.
+  TextStyle get _textStyle => widget.multiline
+      ? AppTypography.input.copyWith(height: 22 / AppTypography.input.fontSize!)
+      : AppTypography.input;
+
   FocusNode? _ownFocus;
   FocusNode get _focus => widget.focusNode ?? (_ownFocus ??= FocusNode());
 
@@ -245,17 +250,14 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
                 style:
                     // Typed text is the 15/20 body in every field (X15); multi-line keeps a 22pt
                     // reading line.
-                    (widget.multiline
-                            ? AppTypography.input.copyWith(height: 22 / 15)
-                            : AppTypography.input)
-                        .copyWith(
-                          color: widget.enabled
-                              ? AppColors.textPrimary
-                              : AppColors.textSubtle,
-                          fontFeatures: widget.multiline
-                              ? null
-                              : const [FontFeature.tabularFigures()],
-                        ),
+                    _textStyle.copyWith(
+                      color: widget.enabled
+                          ? AppColors.textPrimary
+                          : AppColors.textSubtle,
+                      fontFeatures: widget.multiline
+                          ? null
+                          : const [FontFeature.tabularFigures()],
+                    ),
                 cursorColor: AppColors.accent,
                 decoration: InputDecoration(
                   isCollapsed: true,
@@ -266,10 +268,9 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
                       ? EdgeInsets.zero
                       : const EdgeInsets.symmetric(vertical: 16),
                   hintText: widget.placeholder,
-                  hintStyle: AppTypography.weight(
-                    widget.multiline ? AppTypography.body : AppTypography.input,
-                    400,
-                  ).copyWith(color: AppColors.textMuted),
+                  // UI-012 (V8): the placeholder shares the typed text's metrics (face, size,
+                  // weight, line); only the colour differs.
+                  hintStyle: _textStyle.copyWith(color: AppColors.textMuted),
                 ),
               ),
             ),

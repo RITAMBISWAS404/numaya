@@ -13,6 +13,14 @@ abstract final class ReleaseScope {
   static const bool superSwipe = bool.fromEnvironment('NUMAYA_SUPER_SWIPE');
   static const bool follow = false;
 
+  /// UI-075: Travel is deferred beyond the MVP. Its Settings row, paywall entry and route-level
+  /// entry points are hidden; the Premium controller keeps the backend-facing state.
+  static const bool travel = bool.fromEnvironment('NUMAYA_TRAVEL');
+
+  /// UI-063: For You and other suggested-profile surfaces are inaccessible in the first release
+  /// (navigation, demo links and deep links). The screen and its data stay for later.
+  static const bool forYou = bool.fromEnvironment('NUMAYA_FOR_YOU');
+
   /// Events (the tab, event pages, creating an event) is not in the MVP. Its screens, data,
   /// controller and repository stay in `lib/features/events/` untouched; with this off the tab is
   /// not built, every entry point is hidden, and `/events`, `/event/...` and their child routes

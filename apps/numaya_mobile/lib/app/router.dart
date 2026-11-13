@@ -109,6 +109,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (path == Routes.openingMoves && !ReleaseScope.openingMoves) {
         return Routes.profile;
       }
+      // First release (UI-063): suggested profiles (For You) are unreachable, deep links included.
+      if (path.startsWith(Routes.forYou) && !ReleaseScope.forYou) {
+        return Routes.home;
+      }
       // MVP (Tabler MVP pass): Events is unavailable, so its tab route, event pages and their
       // child routes (people, edit, new), deep links included, land on Discover.
       // Events MVP: the old dormant module's links (`/event/...`) land on the new feed.

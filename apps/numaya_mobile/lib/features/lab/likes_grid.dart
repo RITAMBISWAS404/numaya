@@ -183,7 +183,8 @@ class LikesGrid extends ConsumerWidget {
           ],
         );
       default:
-        final cols = v == 'C' ? 3 : 2;
+        // UI-064 (V8): Likes profiles in one column, across filters and memberships.
+        const cols = 1;
         final gap = v == 'C' ? AppSpacing.s2 : AppSpacing.s3;
         return LayoutBuilder(
           builder: (context, box) {

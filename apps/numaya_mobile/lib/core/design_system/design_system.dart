@@ -33,6 +33,7 @@ export 'widgets/navigation.dart';
 export 'widgets/people.dart';
 export 'widgets/photo_overlays.dart';
 export 'widgets/primitives.dart';
+export 'widgets/promo_card.dart';
 export 'widgets/segmented.dart';
 export 'widgets/selection.dart';
 export 'widgets/slider_thumbs.dart';

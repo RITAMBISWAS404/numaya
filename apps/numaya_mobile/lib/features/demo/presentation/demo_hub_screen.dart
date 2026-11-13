@@ -275,7 +275,7 @@ class DemoHubScreen extends ConsumerWidget {
                 detail: signedIn ? null : needsSession,
                 onTap: signedIn ? () => context.go(Routes.home) : null,
               ),
-              link(l10n.forYouTitle, Routes.forYou),
+              if (ReleaseScope.forYou) link(l10n.forYouTitle, Routes.forYou),
               ListRow(
                 label: l10n.filtersTitle,
                 detail: signedIn ? null : needsSession,

@@ -297,7 +297,14 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
             child: Text(l10n.obReviewPublicTitle, style: AppTypography.section),
           ),
           const SizedBox(height: AppSpacing.s3),
-          PersonHeroCard(person: me, own: true, showAge: details.showAge),
+          // UI-058: the owner preview is the public profile: the same photo card with the
+          // name and identity on the main photo over the shared gradient.
+          PersonHeroCard(
+            person: me,
+            own: true,
+            showAge: details.showAge,
+            photoHeight: 0,
+          ),
           const SizedBox(height: AppSpacing.s3),
           ...personSections(context, me, own: true, showDistance: false),
           const SizedBox(height: AppSpacing.s4),

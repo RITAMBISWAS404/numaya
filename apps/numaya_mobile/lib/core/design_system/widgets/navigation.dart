@@ -453,6 +453,7 @@ class NumayaTabBar extends StatelessWidget {
       ),
     );
   }
+
   // UI-026 compact bar geometry (V8): 8pt shell-to-tile on every side, 4pt between tiles.
   static const double _tileH = 38;
   static const double _tileW = 48;
@@ -461,7 +462,6 @@ class NumayaTabBar extends StatelessWidget {
   static const double _shellPadY = 8 - _tilePadY;
   static const double _shellPadX = 8 - _tileGap / 2;
   static const double _hitW = _tileW + _tileGap;
-
 
   /// Opaque: the pill on a strip of page colour, as approved. Frosted: content shows around and
   /// beneath the pill, except under the system navigation (the three buttons or the gesture
@@ -932,6 +932,58 @@ class CardDivider extends StatelessWidget {
       ),
     ),
   );
+}
+
+/// UI-053: a dense informational list (tips, benefits, facts) as rows in one white card: a
+/// leading icon that identifies each item, the text wrapping beside it, consistent padding and
+/// the shared [CardDivider] between items. Not tappable; use [ListGroup] for actions.
+class InfoList extends StatelessWidget {
+  const InfoList({super.key, required this.items, this.iconColor});
+
+  final List<(NumayaIcons, String)> items;
+
+  /// Defaults to the secondary ink; compact glyphs are filled (UI-070).
+  final Color? iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.card),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (var i = 0; i < items.length; i++) ...[
+            if (i > 0) const CardDivider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppLayout.cardPadding,
+                vertical: AppSpacing.s3 + 2,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 1),
+                    child: NumayaIcon(
+                      items[i].$1,
+                      size: AppSizes.iconSm,
+                      filled: true,
+                      color: iconColor ?? AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.s3),
+                  Expanded(child: Text(items[i].$2, style: AppTypography.body)),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
 }
 
 class ListGroup extends StatelessWidget {

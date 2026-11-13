@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -96,7 +98,7 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
     final premium = ref.watch(premiumProvider).active;
     final hidden = controller.likes().where((l) => !l.matched).toList();
     if (!premium && hidden.isNotEmpty) {
-      return _LockedLikes(count: hidden.length);
+      return _LockedLikes(people: [for (final l in hidden) l.person]);
     }
 
     final Widget body;
@@ -214,81 +216,83 @@ class _LikesScreenState extends ConsumerState<LikesScreen> {
 }
 
 /// S18 free state: the count, locked tiles and the Premium offer; Discover stays the free path.
+/// The free member's Likes (S18, PRD 06: who liked you is a Premium benefit). UI-064/UI-065 (V8):
+/// one column, each photo fully covered by a heavy blur, no name; the count, the offer and its
+/// action come first so they sit in the first view. The blur is presentation only: the service
+/// still decides what a free member may receive (BACKEND_BOUNDARY: a production build must not send
+/// clear likers' photos to a free client at all).
 class _LockedLikes extends ConsumerWidget {
-  const _LockedLikes({required this.count});
+  const _LockedLikes({required this.people});
 
-  final int count;
+  final List<SamplePerson> people;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final countLed = ref.watch(labVariantProvider('v7-likes-locked')) == 'A';
+    final count = people.length;
+    void upgrade() => context.push(
+      '${Routes.paywall}?feature=${PremiumFeature.seeLikes.name}',
+    );
     return Column(
       key: const ValueKey('likes-locked'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (countLed)
-          Text(
-            '$count',
-            style: AppTypography.hero.copyWith(
-              fontSize: 64,
-              height: 72 / 64,
-              color: AppColors.accent,
-            ),
-          )
-        else
-          LayoutBuilder(
-            builder: (context, box) {
-              final w = (box.maxWidth - AppSpacing.s3) / 2;
-              return Wrap(
-                spacing: AppSpacing.s3,
-                runSpacing: AppSpacing.s3,
-                children: [
-                  // V4: one row, so the action sits in the first view above the floating bar.
-                  for (var i = 0; i < count.clamp(1, 2); i++)
-                    SizedBox(
-                      width: w,
-                      child: PhotoPlaceholder(
-                        label: l10n.likesLockedTile,
-                        aspectRatio: AppMedia.personPhoto,
-                        child: const Center(
-                          child: NumayaIcon(
-                            NumayaIcons.lock,
-                            size: 28,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              );
-            },
-          ),
-        const SizedBox(height: AppSpacing.s5),
         Semantics(
           header: true,
           child: Text(
-            countLed
-                ? l10n.v7LikesCountLabel(count)
-                : l10n.likesLockedTitle(count),
+            l10n.likesLockedTitle(count),
             style: AppTypography.section,
           ),
         ),
         const SizedBox(height: AppSpacing.s2),
         Text(l10n.likesLockedBody, style: AppTypography.bodySm),
         const SizedBox(height: AppSpacing.s4),
-        NumayaButton(
-          label: l10n.likesLockedCta,
-          onPressed: () => context.push(
-            '${Routes.paywall}?feature=${PremiumFeature.seeLikes.name}',
-          ),
-        ),
+        NumayaButton(label: l10n.likesLockedCta, onPressed: upgrade),
         const SizedBox(height: AppSpacing.s3),
         NumayaButton(
           label: l10n.goToHome,
           variant: NumayaButtonVariant.secondary,
           onPressed: () => context.go(Routes.home),
         ),
+        const SizedBox(height: AppSpacing.sectionGap),
+        for (final (i, p) in people.indexed) ...[
+          if (i > 0) const SizedBox(height: AppSpacing.s3),
+          Pressable(
+            key: ValueKey('likes-locked-$i'),
+            onTap: upgrade,
+            semanticLabel: l10n.likesLockedTile,
+            excludeChildSemantics: true,
+            pressedScale: 0.98,
+            borderRadius: AppRadii.all(AppRadii.photo),
+            child: ClipRRect(
+              borderRadius: AppRadii.all(AppRadii.photo),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // UI-065: a heavy blur over the whole photo, so no face or detail reads.
+                  ImageFiltered(
+                    imageFilter: ImageFilter.blur(
+                      sigmaX: 36,
+                      sigmaY: 36,
+                      tileMode: TileMode.decal,
+                    ),
+                    child: PhotoPlaceholder(
+                      label: l10n.likesLockedTile,
+                      aspectRatio: AppMedia.personPhoto,
+                      child: personPhotoImage(p, 1),
+                    ),
+                  ),
+                  const NumayaIcon(
+                    NumayaIcons.lock,
+                    size: 28,
+                    filled: true,
+                    color: AppColors.accentForeground,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }
@@ -328,7 +332,9 @@ class LikeProfileScreen extends ConsumerWidget {
         top: NumayaTopBar(onBack: () => context.pop(), backLabel: l10n.back),
         body: Padding(
           padding: const EdgeInsets.only(top: AppSpacing.s6),
-          child: _LockedLikes(count: controller.likes().length),
+          child: _LockedLikes(
+            people: [for (final l in controller.likes()) l.person],
+          ),
         ),
       );
     }

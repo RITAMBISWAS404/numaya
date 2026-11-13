@@ -1,7 +1,25 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
+
+Future<void> _tapLabel(WidgetTester t, String label) async {
+  await t.tap(find.bySemanticsLabel(RegExp('^${RegExp.escape(label)}')).first);
+  await t.pump();
+  await t.pump(const Duration(milliseconds: 700));
+}
+
+Future<void> _tapText(WidgetTester t, String text) async {
+  await t.tap(find.text(text).last);
+  await t.pump();
+  await t.pump(const Duration(milliseconds: 700));
+}
+
+Future<void> _scrollLast(WidgetTester t, double dy) async {
+  await t.drag(find.byType(Scrollable).last, Offset(0, -dy));
+  await t.pump(const Duration(milliseconds: 500));
+}
 
 /// One V8 review render: a route in the full demo world with optional lab choices, typography,
 /// Premium, a setup step (open a sheet, type) and a scroll offset.
@@ -48,6 +66,41 @@ final List<V8Scene> v8Scenes = [
   const V8Scene('base-setup-meet', Routes.setupMeet),
   const V8Scene('base-setup-prompts', Routes.setupPrompts),
   const V8Scene('base-setup-review', Routes.setupReview),
+  V8Scene(
+    'flow-filters-basic',
+    Routes.home,
+    setup: (t, c) => _tapLabel(t, 'Filters'),
+  ),
+  V8Scene(
+    'flow-filters-basic-bottom',
+    Routes.home,
+    setup: (t, c) async {
+      await _tapLabel(t, 'Filters');
+      await _scrollLast(t, 700);
+    },
+  ),
+  V8Scene(
+    'flow-filters-advanced',
+    Routes.home,
+    setup: (t, c) async {
+      await _tapLabel(t, 'Filters');
+      await _tapText(t, 'Advanced');
+    },
+  ),
+  const V8Scene('flow-match-maya', '${Routes.match}/maya'),
+  const V8Scene('flow-like-profile', '${Routes.like}/noor'),
+  const V8Scene('flow-likes-premium', Routes.likes, premium: true),
+  V8Scene(
+    'flow-photo-tips',
+    Routes.photos,
+    setup: (t, c) => _tapText(t, 'Photo tips'),
+  ),
+  const V8Scene('flow-setup-interests', Routes.interests),
+  const V8Scene('flow-setup-height', Routes.setupHeight),
+  const V8Scene('flow-setup-name', Routes.setupName),
+  const V8Scene('flow-setup-verify', Routes.setupVerify),
+  const V8Scene('flow-setup-done', Routes.setupDone),
+  const V8Scene('flow-welcome', Routes.welcome),
   const V8Scene('base-typography', Routes.reviewTypography),
   const V8Scene(
     'base-typography-14',

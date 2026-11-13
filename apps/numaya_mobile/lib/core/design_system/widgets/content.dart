@@ -309,7 +309,10 @@ class PromptCard extends StatelessWidget {
             hasAnswer ? answer! : (emptyLabel ?? ''),
             style: hasAnswer
                 ? AppTypography.promptAnswer
-                : AppTypography.body.copyWith(color: AppColors.textMuted),
+                // UI-007 (V8): the empty prompt's placeholder uses the answer's style, muted.
+                : AppTypography.promptAnswer.copyWith(
+                    color: AppColors.textMuted,
+                  ),
           ),
         ],
       ),
