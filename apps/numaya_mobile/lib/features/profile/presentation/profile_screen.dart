@@ -1,6 +1,3 @@
-import '../../lab/stat_templates.dart';
-import 'profile_hub_v8.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -19,12 +16,14 @@ import '../../health/application/health_providers.dart';
 import '../../home/presentation/large_title_page.dart';
 import '../../lab/activity_cards.dart';
 import '../../lab/lab_registry.dart';
+import '../../lab/stat_templates.dart';
 import '../../onboarding/application/onboarding_controller.dart';
 import '../../premium/application/premium_controller.dart';
 import '../../verification/application/verification_controller.dart';
 import '../application/profile_details_controller.dart';
 import '../domain/profile_details.dart';
 import 'profile_header_more.dart';
+import 'profile_hub_v8.dart';
 import 'profile_setup_card.dart';
 import 'profile_variants.dart';
 

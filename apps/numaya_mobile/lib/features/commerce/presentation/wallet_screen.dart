@@ -9,9 +9,9 @@ import '../../fable_lab/fx_profile.dart';
 import '../../fable_lab/fx_wallet_streak.dart';
 import '../../lab/activity_cards.dart' show WalletData;
 import '../../lab/lab_registry.dart';
+import '../../lab/stat_templates.dart';
 import '../../premium/application/premium_controller.dart';
 import '../application/economy_controller.dart';
-import '../../lab/stat_templates.dart';
 import '../domain/credit_ledger.dart';
 import 'store_screens.dart';
 

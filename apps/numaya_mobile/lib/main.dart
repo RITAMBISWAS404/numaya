@@ -9,6 +9,7 @@ import 'core/design_system/design_system.dart' show AppSystemUi;
 import 'core/logging/app_logger.dart';
 import 'core/media/demo_photos.dart';
 import 'features/demo/application/type_settings_controller.dart';
+import 'features/lab/lab_registry.dart' show LabChoicesStore;
 
 void main() {
   const log = AppLogger('App');
@@ -29,6 +30,7 @@ void main() {
     await DemoPhotoLibrary.load();
     // Review builds: the saved typography comparison (UI-085, 14/15 body) before the first frame.
     await TypeSettingsStore.restore();
+    await LabChoicesStore.restore();
     runApp(const ProviderScope(child: NumayaApp()));
   }, (error, stack) => log.error('Uncaught error', error, stack));
 }

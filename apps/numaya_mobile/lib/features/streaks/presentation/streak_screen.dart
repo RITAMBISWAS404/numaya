@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../lab/stat_templates.dart';
 import '../../../app/providers.dart';
 import '../../../app/routes.dart';
 import '../../../core/design_system/design_system.dart';
@@ -15,6 +14,7 @@ import '../../dating/application/dating_controller.dart';
 import '../../fable_lab/fx_profile.dart';
 import '../../fable_lab/fx_wallet_streak.dart';
 import '../../lab/lab_registry.dart';
+import '../../lab/stat_templates.dart';
 import '../../premium/application/premium_controller.dart';
 import '../domain/streak.dart';
 

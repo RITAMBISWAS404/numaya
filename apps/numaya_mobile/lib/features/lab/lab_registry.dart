@@ -1,6 +1,12 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../app/providers.dart';
+import '../../core/config/app_config.dart';
 
 /// DEVELOPMENT ONLY. Visual Lab V2 (2026-11-08) variant registry: every card family, priority
 /// screen and motion preset that has alternatives, with stable IDs shared by the Design Lab, the
@@ -1892,22 +1898,79 @@ const List<LabVariant> _directions = [
 LabGroup labGroup(String id) => kLabGroups.firstWhere((g) => g.id == id);
 
 /// The Design Lab's choices: group ID → variant ID. Empty means the proposed default everywhere.
+/// V8 review builds keep them across relaunches ([LabChoicesStore]); release builds have none.
 class LabChoices extends Notifier<Map<String, String>> {
   @override
-  Map<String, String> build() => const {};
+  Map<String, String> build() => LabChoicesStore.restored;
 
-  void choose(String group, String variant) =>
-      state = {...state, group: variant};
+  void _save() => unawaited(LabChoicesStore.write(state));
+
+  void choose(String group, String variant) {
+    state = {...state, group: variant};
+    _save();
+  }
 
   /// Every group to [variant] where it exists (the Lab's "show all O" / direction shortcuts).
-  void chooseAll(String variant, {LabKind? kind}) => state = {
-    ...state,
-    for (final g in kLabGroups)
-      if ((kind == null || g.kind == kind) && g.ids.contains(variant))
-        g.id: variant,
-  };
+  void chooseAll(String variant, {LabKind? kind}) {
+    state = {
+      ...state,
+      for (final g in kLabGroups)
+        if ((kind == null || g.kind == kind) && g.ids.contains(variant))
+          g.id: variant,
+    };
+    _save();
+  }
 
-  void reset() => state = const {};
+  void reset() {
+    state = const {};
+    _save();
+  }
+}
+
+/// Saves the Design Lab's choices in a small JSON file in the app's support folder, so a review
+/// build reopens with the layouts the reviewer picked (V8 review contract). Debug and profile
+/// builds of the development environment only; unknown group or variant ids are dropped on read.
+abstract final class LabChoicesStore {
+  static const fileName = 'numaya_review_lab_choices.json';
+
+  /// The choices read by [restore] before the first frame.
+  static Map<String, String> restored = const {};
+
+  static Future<File> _file() async =>
+      File('${(await getApplicationSupportDirectory()).path}/$fileName');
+
+  static Future<void> restore() async {
+    if (!AppConfig.demoAuthAllowed) return;
+    try {
+      final f = await _file();
+      if (!await f.exists()) return;
+      final raw = jsonDecode(await f.readAsString());
+      if (raw is! Map) return;
+      restored = {
+        for (final e in raw.entries)
+          if (e.key is String &&
+              e.value is String &&
+              kLabGroups.any((g) => g.id == e.key && g.ids.contains(e.value)))
+            e.key as String: e.value as String,
+      };
+    } on Object {
+      // Tests have no path_provider; a damaged file means the defaults.
+    }
+  }
+
+  static Future<void> write(Map<String, String> choices) async {
+    if (!AppConfig.demoAuthAllowed) return;
+    try {
+      final f = await _file();
+      if (choices.isEmpty) {
+        if (await f.exists()) await f.delete();
+      } else {
+        await f.writeAsString(jsonEncode(choices), flush: true);
+      }
+    } on Object {
+      // Best effort: the choice still applies for this session.
+    }
+  }
 }
 
 final labChoicesProvider = NotifierProvider<LabChoices, Map<String, String>>(
