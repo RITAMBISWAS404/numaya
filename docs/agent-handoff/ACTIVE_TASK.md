@@ -1,4 +1,14 @@
-# Active task: owner review of the V8 UI review build
+# Active task: owner review of the UI-087 to UI-102 build
+
+> **2026-11-15, UI-087 to UI-102 review phase. Read this first.**
+> - **Folder:** `C:\Users\biswa\Projects\Numaya-fable-lab` (a worktree). **Branch:** `experiment/numaya-ui087-102-20261115-0309`, from `96c7872` (tag `checkpoint/pre-ui087-102-20261115-0309`). App source `e3c50cd`.
+> - **What it is:** the 16 new issues (UI-087 to UI-102) and 14 amended ones, applied. Dev Mode (Settings > Prototype tools > Dev Mode): four fixed font pairs, 14/15 body, three brand colours, two button shapes, two secondary surfaces, Reset all. UI-099 and UI-100 are BLOCKED (no updated PRD, no approved ranking rules).
+> - **Records:** [docs/ui087-102](../ui087-102/IMPLEMENTATION_REPORT.md): ACTIVE_SCOPE, IMPLEMENTATION_REPORT, IMPLEMENTATION_TRACKER.csv, DEV_MODE, TYPOGRAPHY_CATALOG, REFERENCE_LOG.
+> - **Review folder:** `C:\Users\biswa\OneDrive\Desktop\Numaya UI-087-102 Review\2026-11-15 e3c50cd` (APK SHA-256 `e851a6ff…c155`, 153 screenshots).
+> - **Not verified on a device:** no emulator was attached; the user had asked not to start one.
+> - **Other checkouts:** `C:\Users\biswa\Projects\Numaya` and `C:\Users\biswa\Projects\Numaya-backend` are separate work. Do not switch or edit them from here.
+> - **Next:** the owner reviews the screenshots and Dev Mode, then decides the production font pair, body size, brand, shape, secondary surface and status surface; supplies the updated PRD (UI-099) and ranking rules (UI-100). Outstanding: UI-094 on five more status screens, UI-049 on the remaining overlays, the UI-012/UI-074 per-screen sweeps, and an on-device pass.
+
 
 > **2026-11-14, V8 UI review applied. Read this first.**
 > - **Folder:** `C:\Users\biswa\Projects\Numaya-fable-lab` (a worktree). **Branch:** `experiment/numaya-v8-review-20261114-0321`, from `7cd7aa4` (tag `checkpoint/selected-20261114-0321`). App source `fe44b27`.

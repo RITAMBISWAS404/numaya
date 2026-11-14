@@ -1,5 +1,13 @@
 # Validation
 
+> **UI-087 to UI-102 (`e3c50cd`):**
+> - **Analyzer:** 2 infos, both present at baseline.
+> - **Tests:** `flutter test` 693 passed, 47 skipped, 0 failed (baseline at `96c7872`: 674 passed, 45 skipped). New: `ui087_102_test.dart` (12) and the rewritten `type_settings_test.dart`.
+> - **Renders:** 37 before (checkpoint) and 37 after scenes at 393 x 852 @3x, 42 Dev Mode, 37 at 320pt and 200% text; all pass with no overflow.
+> - **APK:** debug with dev tools, SHA-256 `e851a6ffa7a088a9593fdf7bc0f360613b8116fed706fc2958749d38c28ec155`. Not installed: no emulator attached.
+> - **Not run:** integration tests (need a device), iOS, web checks (no web change). **Backend:** BLOCKED.
+
+
 > **V8 UI review (`fe44b27`):**
 > - **Analyzer:** one older deprecation info (`ente_alignment_test.dart`).
 > - **Tests:** `flutter test` 674 passed, 44 skipped (opt-in comparison renders and dormant Events suites), 0 failed, at `fe44b27`. New: `v8_review_test.dart` (9), `type_settings_test.dart` (5). 22 earlier test files were updated where they encoded replaced designs (listed in TEST_RESULTS.md); none was deleted.

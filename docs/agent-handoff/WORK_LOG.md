@@ -1,5 +1,12 @@
 # Work log
 
+## 2026-11-15 · UI-087 to UI-102 review phase (Windows, Claude desktop)
+- Read both packages; wrote docs/ui087-102/ACTIVE_SCOPE.md. Checkpoint tag and new branch pushed.
+- Batches: foundations (three text greys, row icons outline, media glyphs filled, overlay insets), components (capsule pills, birthday placeholders, SliderBlock, white info card, capsule tab bar, status template, continuous progress, no scroll stroke), Dev Mode (font pairs with bundled OFL fonts, brand, shape, secondary surface, reset all), Messages (ringed circular matches, unread dot, trailing Your move, inline countdown, composer fills, reply thumbnail, metadata split, filled Send).
+- QA: before/after renders from the checkpoint and e3c50cd (same scenes and data), Dev Mode presets, 320pt 200% stress. Found and fixed DEF-01 (reply thumbnail overflow) and DEF-02 (pill squeezing names). 14 outdated assertions updated to newer decisions.
+- Blocked: UI-099 (no updated PRD), UI-100 (no ranking rules); Figma connector not authorised.
+
+
 ## 2026-11-14 · V8 UI review (Windows, Claude desktop)
 - Checkpoint tag on the selected designs, new branch. Typography controls first (14/15 body, display and UI fonts, Reset, persisted).
 - Shared passes: radius roles, compact navigation, card dividers, outlined disabled, callouts, darker scrim, filled compact glyphs.
