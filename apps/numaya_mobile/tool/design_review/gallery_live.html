@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numaya Design Options</title>
+<style>
+:root{--ink:#18181b;--muted:#5f5f66;--line:#e2e2e6;--bg:#f4f4f5;--card:#fff;--brand:#7262c7;--brand-ink:#5b4caf;--tint:#efecfa;--ok:#1f7a45}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+.bar{max-width:1400px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.bar h1{font-size:18px;margin:0 10px 0 0}
+input[type=search]{flex:1;min-width:180px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;font:inherit}
+button{font:inherit;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px 12px;cursor:pointer;color:var(--ink)}
+button.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.meta{color:var(--muted);font-size:12px;flex-basis:100%}
+main{max-width:1400px;margin:0 auto;padding:16px}
+#status{display:none;margin:0 0 12px;padding:10px 12px;border-radius:12px;background:var(--tint);color:var(--brand-ink)}#status.show{display:block}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+nav.toc a{font-size:13px;color:var(--brand-ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 8px;text-decoration:none}
+section.screen{background:var(--card);border-radius:18px;padding:16px;margin:0 0 20px}
+section.screen>h2{margin:0;font-size:21px}
+.where{color:var(--muted);font-size:12px;margin:2px 0 10px}
+.selector{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+.selector h3{margin:0;font-size:16px}
+.sub{color:var(--muted);font-size:12px;margin:2px 0 4px;word-break:break-word}
+.q{font-size:13px;margin:0 0 8px}
+.row{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;align-items:flex-start}
+.opt{flex:0 0 290px;border:2px solid var(--line);border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:7px}
+.opt.win{border-color:var(--brand);background:#faf9ff}
+.opt h4{font-size:15px;margin:0}
+.tag{font-size:11px;border-radius:6px;padding:2px 6px;background:#e8f3ec;color:var(--ok);align-self:flex-start}
+.thumbs{display:flex;gap:6px;overflow-x:auto}
+.thumbs figure{margin:0;flex:0 0 auto}
+.thumbs img{height:330px;width:auto;border-radius:10px;border:1px solid var(--line);display:block;background:#ddd}
+.thumbs figcaption{font-size:11px;color:var(--muted)}
+.desc{font-size:13px;margin:0}.path{font-size:11px;color:var(--muted);word-break:break-word;margin:0}
+label.win{display:flex;gap:6px;align-items:center;font-weight:600;font-size:13px;cursor:pointer}
+label.win input{accent-color:var(--brand);width:17px;height:17px}
+textarea{width:100%;min-height:64px;border:1px solid var(--line);border-radius:10px;padding:8px;font:inherit;font-size:14px;margin-top:12px}
+.hidden{display:none!important}
+@media (max-width:560px){.opt{flex-basis:84vw}.thumbs img{height:260px}}
+</style>
+</head>
+<body>
+<header><div class="bar">
+<h1>Numaya design options</h1>
+<input id="q" type="search" placeholder="Search screens, selectors, options" aria-label="Search">
+<button class="primary" id="export">Export choices and notes (Markdown)</button>
+<button id="clear">Clear</button>
+<div class="meta" id="meta"></div>
+</div></header>
+<main>
+<p id="status" role="status" aria-live="polite"></p>
+<nav class="toc" id="toc" aria-label="Screens"></nav>
+<div id="list"></div>
+</main>
+<script>
+const DATA=/*DATA*/null;
+const KEY='numaya-design-options:'+DATA.build.id;
+let st={pick:{},notes:{}};
+try{const r=localStorage.getItem(KEY);if(r)st=Object.assign(st,JSON.parse(r));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){say('This browser is not keeping choices here; use Export to save them.');}}
+function say(t){const s=document.getElementById('status');s.textContent=t;s.className='show';}
+function el(t,a,...k){const e=document.createElement(t);for(const[x,y]of Object.entries(a||{})){if(x==='class')e.className=y;else if(x==='text')e.textContent=y;else e.setAttribute(x,y);}for(const c of k)if(c)e.append(c);return e;}
+function sid(s){return 's-'+s.name.toLowerCase().replace(/[^a-z0-9]+/g,'-');}
+function render(){
+ const nsel=DATA.screens.reduce((a,s)=>a+s.selectors.length,0), nopt=DATA.screens.reduce((a,s)=>a+s.selectors.reduce((b,e)=>b+e.options.length,0),0);
+ document.getElementById('meta').textContent=`${DATA.screens.length} screens, ${nsel} selectors, ${nopt} selectable options. Build: ${DATA.build.label}. Renders: ${DATA.build.renders}.`;
+ const toc=document.getElementById('toc'),list=document.getElementById('list');toc.textContent='';list.textContent='';
+ for(const s of DATA.screens){
+  toc.append(el('a',{href:'#'+sid(s),text:s.name}));
+  const sec=el('section',{class:'screen',id:sid(s)});
+  sec.dataset.search=(s.name+' '+s.selectors.map(e=>e.title+' '+e.id+' '+e.options.map(o=>o.label+' '+o.name).join(' ')).join(' ')).toLowerCase();
+  sec.append(el('h2',{text:s.name}),el('div',{class:'where',text:'Where: '+s.where+` · ${s.selectors.length} selector${s.selectors.length>1?'s':''}`}));
+  for(const e of s.selectors){
+   const box=el('div',{class:'selector'});
+   box.append(el('h3',{text:e.title}),el('div',{class:'sub',text:`Selector ${e.id} · current default: ${e.default}`+(Object.keys(e.context).length?` · shown with ${Object.entries(e.context).map(([k,v])=>k+' '+v).join(', ')} so it is visible`:'')}));
+   if(e.question)box.append(el('p',{class:'q',text:e.question}));
+   const row=el('div',{class:'row',role:'radiogroup','aria-label':'Preferred option: '+e.title});
+   for(const o of e.options){
+    const card=el('div',{class:'opt'+(st.pick[e.id]===o.label?' win':'')});
+    card.append(el('h4',{text:`${o.label} · ${o.name}`}));
+    if(o.default)card.append(el('span',{class:'tag',text:'current default'}));
+    const th=el('div',{class:'thumbs'});
+    for(const im of o.images){const a=el('a',{href:im.path,target:'_blank',rel:'noopener','aria-label':`${e.title} ${o.label}: ${im.label}, full size`});a.append(el('img',{src:im.path,alt:`${s.name}, ${e.title}, option ${o.label}, ${im.label}`,loading:'lazy'}));th.append(el('figure',{},a,el('figcaption',{text:im.label})));}
+    card.append(th,el('p',{class:'desc',text:o.change}),el('p',{class:'path',text:'Path: '+o.path}));
+    const r=el('input',{type:'radio',name:'p-'+e.id,value:o.label});if(st.pick[e.id]===o.label)r.checked=true;
+    r.addEventListener('change',()=>{st.pick[e.id]=o.label;save();for(const c of row.children)c.classList.remove('win');card.classList.add('win');});
+    card.append(el('label',{class:'win'},r,document.createTextNode('Preferred')));
+    row.append(card);
+   }
+   box.append(row);sec.append(box);
+  }
+  const ta=el('textarea',{placeholder:`Notes on ${s.name}`,'aria-label':`Notes on ${s.name}`});ta.value=st.notes[s.name]||'';
+  ta.addEventListener('input',()=>{st.notes[s.name]=ta.value;save();});sec.append(ta);
+  list.append(sec);
+ }
+ filter();
+}
+function filter(){const q=document.getElementById('q').value.trim().toLowerCase();for(const s of document.querySelectorAll('section.screen'))s.classList.toggle('hidden',!!q&&!s.dataset.search.includes(q));}
+function md(){
+ const L=['# Numaya design option choices','',`Exported ${new Date().toISOString()} · build ${DATA.build.label}`,''];
+ for(const s of DATA.screens){
+  const picks=s.selectors.filter(e=>st.pick[e.id]);const note=(st.notes[s.name]||'').trim();
+  if(!picks.length&&!note)continue;
+  L.push(`## ${s.name}`,'');
+  for(const e of s.selectors){const p=st.pick[e.id];if(!p)continue;const o=e.options.find(x=>x.label===p);L.push(`- **${e.title}** (\`${e.id}\`): \`${p}\` · ${o?o.name:''}${o&&o.default?' (current default)':''}`);}
+  if(note)L.push('',`Notes: ${note.replace(/\n+/g,' ')}`);
+  L.push('');
+ }
+ const open=DATA.screens.flatMap(s=>s.selectors.filter(e=>!st.pick[e.id]).map(e=>`${s.name} › ${e.title} (\`${e.id}\`)`));
+ L.push(`## Not chosen (${open.length})`,'',...open.map(x=>'- '+x),'');
+ return L.join('\n');
+}
+document.getElementById('export').addEventListener('click',()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([md()],{type:'text/markdown'}));a.download='numaya-design-option-choices.md';document.body.append(a);a.click();a.remove();say('Exported your choices and notes as Markdown.');});
+document.getElementById('clear').addEventListener('click',()=>{if(confirm('Clear every choice and note in this browser?')){st={pick:{},notes:{}};save();render();say('Cleared.');}});
+document.getElementById('q').addEventListener('input',filter);
+window.optionsGallery={md,state:()=>JSON.parse(JSON.stringify(st)),DATA};
+render();
+</script>
+</body>
+</html>
