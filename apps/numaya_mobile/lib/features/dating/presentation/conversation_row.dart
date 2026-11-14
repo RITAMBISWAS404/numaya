@@ -164,6 +164,7 @@ class ConversationRow extends ConsumerWidget {
             ? last.text
             : (last.text.isNotEmpty ? last.text : attachmentSummary(l10n, a));
         final line = last.mine ? l10n.youPrefix(body) : body;
+        final stackPill = MediaQuery.textScalerOf(context).scale(15) > 21;
         content = Padding(
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.s3),
           child: Row(
@@ -205,10 +206,19 @@ class ConversationRow extends ConsumerWidget {
                         ),
                       ],
                     ),
+                    // DEF-02: at large text a trailing pill would squeeze the name to one
+                    // letter, so it moves under the preview there.
+                    if (yourMove && stackPill) ...[
+                      const SizedBox(height: AppSpacing.s1),
+                      StatusBadge(
+                        key: const ValueKey('row-your-move'),
+                        label: l10n.yourMoveTag,
+                      ),
+                    ],
                   ],
                 ),
               ),
-              if (yourMove) ...[
+              if (yourMove && !stackPill) ...[
                 const SizedBox(width: AppSpacing.s3),
                 StatusBadge(
                   key: const ValueKey('row-your-move'),

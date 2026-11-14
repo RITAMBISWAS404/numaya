@@ -15,7 +15,7 @@ import '../helpers/test_app.dart';
 
 /// UI-085/095/096/097/098 evidence (2026-11-15): every Dev Mode preset on the same screens and
 /// data at 393 x 852 logical, 3x. The setting goes through the real controller, as a tap in Dev
-/// Mode does, so the app root's apply-and-rebuild path is the one exercised. Writes
+/// Mode does (apply and rebuild), so the app root's path is the one exercised. Writes
 /// `test/screenshots/ui087/dev/<id>.png` (git-ignored).
 ///
 ///     flutter test --tags comparison --run-skipped --update-goldens \
@@ -125,7 +125,10 @@ void main() {
       addTearDown(tester.view.reset);
       final c = await quickStartApp(tester, world: DemoWorld.full);
       c.read(onboardingProvider.notifier).loadSample();
-      await c.read(typeSettingsProvider.notifier).set(s.settings);
+      // The controller's apply-and-rebuild path without the settings-file write (real file IO
+      // never completes under the test's fake clock).
+      c.read(typeSettingsProvider.notifier).restore(s.settings);
+      await tester.pump();
       await goTo(c, tester, s.route);
       Future<void> decode([int n = 4]) async {
         for (var i = 0; i < n; i++) {

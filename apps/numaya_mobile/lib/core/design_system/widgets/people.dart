@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart' show OverflowBoxFit;
+import 'package:flutter/rendering.dart' show OverflowBoxFit, RenderProxyBox;
 import 'package:flutter/semantics.dart' show CustomSemanticsAction;
 
 import '../foundations/app_colors.dart';
@@ -1144,7 +1144,9 @@ class ReplyPreview extends StatelessWidget {
                   borderRadius: AppRadii.all(
                     AppRadii.nested(AppRadii.field, AppSpacing.s2),
                   ),
-                  child: SizedBox.expand(child: thumb),
+                  // The photo must not size the panel: its natural size (often 1080
+                  // px) would enter the panel's intrinsic height (DEF-01).
+                  child: _NoIntrinsicSize(child: SizedBox.expand(child: thumb)),
                 ),
               ),
             ),
@@ -1996,4 +1998,25 @@ class _PhotoScrimState extends State<PhotoScrim> {
       ],
     );
   }
+}
+
+/// Reports zero intrinsic size, so a child such as a full-resolution photo cannot drive an
+/// IntrinsicHeight ancestor; it still fills whatever constraints layout gives it (UI-091).
+class _NoIntrinsicSize extends SingleChildRenderObjectWidget {
+  const _NoIntrinsicSize({required Widget super.child});
+
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _RenderNoIntrinsicSize();
+}
+
+class _RenderNoIntrinsicSize extends RenderProxyBox {
+  @override
+  double computeMinIntrinsicWidth(double height) => 0;
+  @override
+  double computeMaxIntrinsicWidth(double height) => 0;
+  @override
+  double computeMinIntrinsicHeight(double width) => 0;
+  @override
+  double computeMaxIntrinsicHeight(double width) => 0;
 }
