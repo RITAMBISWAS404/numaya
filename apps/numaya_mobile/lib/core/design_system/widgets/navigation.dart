@@ -330,20 +330,22 @@ class NumayaTabBar extends StatelessWidget {
       frosted: true,
       systemInset: bottom,
       child: Padding(
+        // UI-026 (new build): the bar floats a visible [navClearance] above the bottom safe area
+        // (gesture handle or three-button bar), or above the screen edge where there is none.
         padding: EdgeInsets.fromLTRB(
           AppSpacing.s4,
           AppSpacing.s2,
           AppSpacing.s4,
-          bottom > 0 ? bottom : AppSpacing.s4,
+          bottom + navClearance,
         ),
         child: Center(
           heightFactor: 1,
           child: LayoutBuilder(
             builder: (context, box) {
               final n = items.length;
-              // UI-026 + UI-050 (V8): 8pt from the shell to every tile, 4pt between tiles,
-              // 38 x 48 tiles, shell 20 and tiles 12 (20 - 8). The 44pt hit areas reach into the
-              // transparent padding, so the visible tile stays compact.
+              // UI-026 (new build): 8pt from the shell to every tile, 4pt between tiles, and
+              // larger 44 x 60 tiles around the unchanged 24pt glyphs; shell and tiles are
+              // capsules (the shell's radius = the tile's + 8).
               final room = box.maxWidth - 2 * _shellPadX;
               final width = n == 0
                   ? _hitW
@@ -454,11 +456,18 @@ class NumayaTabBar extends StatelessWidget {
     );
   }
 
-  // UI-026 compact bar geometry (V8): 8pt shell-to-tile on every side, 4pt between tiles.
-  static const double _tileH = 38;
-  static const double _tileW = 48;
+  // UI-026 floating bar geometry (new build, 2026-11-15): 8pt shell-to-tile on every side and
+  // 4pt between tiles (kept from V8); the tiles grow from 38 x 48 to 44 x 60 by internal padding
+  // (10pt above and below, 18pt beside the 24pt glyph), so the selected grey surface and the tap
+  // target are larger while the glyph is not. The Figma nodes (7634:54339) could not be re-read
+  // in this session (connector not authorised); the values follow the stated relationships.
+  static const double _tileH = 44;
+  static const double _tileW = 60;
   static const double _tileGap = 4;
-  static const double _tilePadY = 3;
+  static const double _tilePadY = 2;
+
+  /// The visible gap between the bar and the bottom safe area (UI-026).
+  static const double navClearance = AppSpacing.s3;
   static const double _shellPadY = 8 - _tilePadY;
   static const double _shellPadX = 8 - _tileGap / 2;
   static const double _hitW = _tileW + _tileGap;
@@ -775,8 +784,9 @@ class ListRow extends StatelessWidget {
         ] else if (leading != null || leadingMobile != null) ...[
           // Ente Menu Item Icon (4055:5652): a 36pt slot, the glyph alone (no tile background) in
           // the supporting icon grey (X15-I), red on a destructive row to match its label.
-          // UI-070 (V8): a compact glyph inside a card is Tabler's filled twin where one exists
-          // (names without one keep their outline; nothing is invented).
+          // UI-088 (2026-11-15): menu and list-card row icons are outline glyphs, consistently.
+          // This supersedes UI-070's filled-where-available rule for rows, which mixed filled
+          // and outline glyphs in one list.
           SizedBox.square(
             dimension: AppSizes.iconTile,
             child: Center(
@@ -784,7 +794,6 @@ class ListRow extends StatelessWidget {
                   ? NumayaIcon(
                       leading!,
                       size: AppSizes.iconMd,
-                      filled: true,
                       color: danger
                           ? AppColors.negative
                           : AppColors.iconSupporting,
@@ -792,7 +801,6 @@ class ListRow extends StatelessWidget {
                   : MobileIcon(
                       leadingMobile!,
                       size: AppSizes.iconMd,
-                      filled: true,
                       color: danger
                           ? AppColors.negative
                           : AppColors.iconSupporting,
@@ -854,8 +862,8 @@ class ListRow extends StatelessWidget {
             child: NumayaSwitch(value: switchValue!, onChanged: onSwitch),
           ),
         if (selected ?? false)
-          const Padding(
-            padding: EdgeInsets.only(left: AppSpacing.s2),
+          Padding(
+            padding: const EdgeInsets.only(left: AppSpacing.s2),
             child: NumayaIcon(
               NumayaIcons.verified,
               size: AppSizes.iconLg,
@@ -971,10 +979,10 @@ class InfoList extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 1),
+                    // UI-088: list-card row glyphs are outlines.
                     child: NumayaIcon(
                       items[i].$1,
                       size: AppSizes.iconSm,
-                      filled: true,
                       color: iconColor ?? AppColors.textSecondary,
                     ),
                   ),
@@ -1095,8 +1103,14 @@ class ListGroup extends StatelessWidget {
   }
 }
 
-/// Empty state (Meetup, Jomo): a white card with the illustration slot, a bold title and the
-/// body, centred, and an optional compact action.
+/// UI-094 (2026-11-15): the one status and empty-state template. A content group of an [art]
+/// slot (an icon, or a reserved illustration area), a heading, optional supporting copy and the
+/// relevant [actions] stacked under it. Callers centre the group in the available area
+/// ([StatusLayout] for a standalone screen, `TabPage(centered: true)` inside a tab).
+///
+/// Surface: the white card is the shared option the reviewer asked to explore. [cardSurface] is
+/// set from the Design Lab group `ui094-status-surface` (O white card, the existing EmptyState
+/// look; A no card, on the page). The production choice is pending review.
 class EmptyState extends StatelessWidget {
   const EmptyState({
     super.key,
@@ -1104,12 +1118,25 @@ class EmptyState extends StatelessWidget {
     required this.body,
     this.art,
     this.action,
+    this.actions = const [],
+    this.links,
   });
 
   final String title;
   final String body;
   final Widget? art;
+
+  /// One action (the common case).
   final Widget? action;
+
+  /// Several stacked actions, primary first (retry, then Done). Each fills the group's width.
+  final List<Widget> actions;
+
+  /// Quiet links under the actions (Restore purchases, Get help).
+  final Widget? links;
+
+  /// See the class note. Set once from the app root.
+  static bool cardSurface = true;
 
   @override
   Widget build(BuildContext context) {
@@ -1118,14 +1145,18 @@ class EmptyState extends StatelessWidget {
     final side = MediaQuery.textScalerOf(context).scale(14) > 21
         ? AppSpacing.s4
         : AppSpacing.s6;
+    final all = [?action, ...actions];
     return Container(
+      key: const ValueKey('status-template'),
       width: double.infinity,
       margin: const EdgeInsets.only(top: AppSpacing.s4),
       padding: EdgeInsets.fromLTRB(side, AppSpacing.s8, side, AppSpacing.s8),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: AppRadii.all(AppRadii.card),
-      ),
+      decoration: cardSurface
+          ? BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: AppRadii.all(AppRadii.card),
+            )
+          : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -1142,20 +1173,53 @@ class EmptyState extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: AppSpacing.s2),
-          Text(
-            body,
-            textAlign: TextAlign.center,
-            style: AppTypography.body.copyWith(color: AppColors.textSecondary),
-          ),
-          if (action != null) ...[
-            const SizedBox(height: AppSpacing.s5),
-            action!,
+          if (body.isNotEmpty) ...[
+            const SizedBox(height: AppSpacing.s2),
+            Text(
+              body,
+              textAlign: TextAlign.center,
+              style: AppTypography.body.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
           ],
+          for (var i = 0; i < all.length; i++) ...[
+            SizedBox(height: i == 0 ? AppSpacing.s5 : AppSpacing.s3),
+            all[i],
+          ],
+          if (links != null) ...[const SizedBox(height: AppSpacing.s4), links!],
         ],
       ),
     );
   }
+}
+
+/// UI-094: centres a status group vertically and horizontally in the space a screen has under
+/// its top bar, and scrolls when the group is taller (large text, a short phone), so every
+/// action stays reachable.
+class StatusLayout extends StatelessWidget {
+  const StatusLayout({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, box) => SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.gutter,
+        vertical: AppSpacing.s4,
+      ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: (box.maxHeight - 2 * AppSpacing.s4).clamp(
+            0,
+            double.infinity,
+          ),
+        ),
+        child: Center(child: child),
+      ),
+    ),
+  );
 }
 
 /// Marks rows of a flush [ListGroup], so [ListRow] drops its horizontal card padding.

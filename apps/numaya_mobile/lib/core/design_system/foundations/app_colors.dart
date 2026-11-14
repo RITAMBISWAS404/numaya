@@ -1,6 +1,7 @@
 import 'package:flutter/painting.dart';
 
 import '../tokens/monochrome_tokens.dart';
+import 'type_settings.dart';
 
 typedef _M = MonoColors;
 
@@ -62,18 +63,26 @@ abstract final class AppColors {
 
   // Purple -----------------------------------------------------------------------------------
   /// The brand purple: primary actions, selected controls, active tab, progress, switch on.
-  static const Color accent = _M.brand;
-  static const Color accentHover = _M.brandPressed;
+  ///
+  /// UI-095 (Dev Mode): the brand roles are read from the active [BrandPalette], so the review
+  /// build can compare #7262C7, #7E77F8 and #A07ADD live. [BrandPalette.baseline] is the verified
+  /// palette and the only one release builds use. Neutral and semantic roles never change.
+  static BrandPalette _brand = BrandPalette.baseline;
+  static BrandPalette get brandPalette => _brand;
+  static void applyBrand(BrandPalette palette) => _brand = palette;
+
+  static Color get accent => _brand.brand;
+  static Color get accentHover => _brand.pressed;
   static const Color accentForeground = _M.onBrand;
 
   /// Subtle purple surface: badges, info cards, selected chips.
-  static const Color accentTint = _M.brandSubtle;
+  static Color get accentTint => _brand.subtle;
 
   /// Purple text and icons on light surfaces; links.
-  static const Color accentOnTint = _M.brandText;
+  static Color get accentOnTint => _brand.text;
 
   /// Edge of a selected chip.
-  static const Color accentLine = _M.brandLine;
+  static Color get accentLine => _brand.line;
 
   /// Initials avatars: the neutral photo grey with a charcoal initial (purple is kept for
   /// actions; a dark disc was too heavy at profile size).
@@ -99,7 +108,7 @@ abstract final class AppColors {
   static const Color surfaceSoft = fill;
   static const Color surfaceSunken = photo;
   static const Color surfacePhoto = photo;
-  static const Color surfaceBrand = accentTint;
+  static Color get surfaceBrand => accentTint;
   static const Color surfaceInverse = ink;
 
   /// Fable lab: the dark feature card (Ente's storage card, 12099:96480). White on it is
@@ -124,9 +133,20 @@ abstract final class AppColors {
   /// - Inverse: [inkForeground] white. Semantic: [negative], [success], [warning], [info].
   /// Before this pass [textSecondary] was #1A1A1A, a near-black that made supporting text as
   /// dark as titles.
+  ///
+  /// UI-012 (new build, 2026-11-15): three emphasis levels on light surfaces, assigned by
+  /// purpose. [textPrimary] near-black for headings and main information; [textSecondary] a dark
+  /// grey #4D4D4D for supporting copy, subtitles and helper sentences (8.45:1 on white, 7.69:1 on
+  /// the page, 7.03:1 on the #EAEAEA fill); [textTertiary] the lighter readable #666666 for
+  /// low-emphasis metadata, counters, timestamps and placeholders (5.74 / 5.22 / 4.77:1, all
+  /// above 4.5:1, so small metadata stays readable). Before this pass secondary and metadata
+  /// shared #666 and were told apart by size alone.
   static const Color textPrimary = ink;
-  static const Color textSecondary = _M.muted;
-  static const Color textMuted = textSecondary;
+  static const Color textSecondary = Color(0xFF4D4D4D);
+  static const Color textTertiary = _M.muted;
+
+  /// The name most call sites use for muted text (previews, placeholders, metadata): tertiary.
+  static const Color textMuted = textTertiary;
 
   /// Supporting icons (X15-I): list-row leading glyphs and row chevrons, the control grey #8A8A8A
   /// (3.45:1 on white cards, 3.14:1 on the page; meaningful graphics need 3:1). One step lighter
@@ -143,29 +163,29 @@ abstract final class AppColors {
   static const Color iconSelectedFill = _M.fill;
   static const Color iconInactive = _M.iconInactive;
   static const Color textSubtle = disabledForeground;
-  static const Color textBrand = accentOnTint;
-  static const Color textBrandDeep = accentOnTint;
+  static Color get textBrand => accentOnTint;
+  static Color get textBrandDeep => accentOnTint;
   static const Color textOnInverse = inkForeground;
 
   static const Color borderSubtle = border;
   static const Color borderControl = control;
 
-  static const Color brand = accent;
-  static const Color brandHover = accentHover;
-  static const Color brandTint = accentTint;
-  static const Color brandTintStrong = accentTint;
-  static const Color brandSubtle = accentTint;
+  static Color get brand => accent;
+  static Color get brandHover => accentHover;
+  static Color get brandTint => accentTint;
+  static Color get brandTintStrong => accentTint;
+  static Color get brandSubtle => accentTint;
   static const Color onBrand = accentForeground;
 
   /// Purple is the selected control (radio, segment, pill) and the primary action.
-  static const Color controlSelected = accent;
+  static Color get controlSelected => accent;
   static const Color controlSelectedText = accentForeground;
   static const Color controlTrackOff = fill;
 
-  static const Color focusField = accent;
+  static Color get focusField => accent;
 
   /// Brand at 24%.
-  static const Color focusHalo = Color(0x3D7262C7);
+  static Color get focusHalo => accent.withValues(alpha: 0x3D / 255);
   static const Color scrim = _M.scrim;
 
   /// Solid translucent panel for text over photos (no gradient scrims).
@@ -213,12 +233,17 @@ abstract final class AppColors {
   /// UI-060: passive callouts (no outline): one step darker than the #F4F4F4 page.
   static const Color calloutFill = _M.fill;
 
+  /// UI-098 (Dev Mode Filled): the subtle secondary surface, black at 8% over its background, and
+  /// its disabled state at 4%.
+  static const Color secondaryFill = Color(0x14000000);
+  static const Color secondaryFillDisabled = Color(0x0A000000);
+
   /// UI-057: the outlined disabled button: a light edge, no fill, grey label.
   static const Color disabledOutline = MonoButtons.disabledOutline;
 
   /// The outlined brand button.
-  static const Color accentOutline = MonoButtons.accentOutline;
+  static Color get accentOutline => accent.withValues(alpha: 0x73 / 255);
 
   /// The Numaya mark's dot: brand purple.
-  static const Color accentRose = accent;
+  static Color get accentRose => accent;
 }

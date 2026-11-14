@@ -198,7 +198,7 @@ void main() {
     }
 
     test('text colours meet 4.5:1 on every surface they sit on', () {
-      const surfaces = {
+      final surfaces = {
         'surface': AppColors.surface,
         'canvas': AppColors.canvas,
         'field': AppColors.field,
@@ -210,7 +210,7 @@ void main() {
         'infoTint': AppColors.infoTint,
         'socialTint': AppColors.socialTint,
       };
-      const texts = {
+      final texts = {
         'ink': AppColors.ink,
         'textSecondary': AppColors.textSecondary,
         'textMuted': AppColors.textMuted,

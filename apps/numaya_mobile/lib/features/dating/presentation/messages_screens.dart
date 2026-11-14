@@ -81,6 +81,18 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   /// Bumble's Chats keep search behind a header icon (ER-03); the field opens on demand.
   bool _searching = false;
 
+  /// UI-033: the New matches rings come from the real deadlines; a rebuild each minute lets an
+  /// open list show them shrinking. Cancelled on dispose.
+  Timer? _tick;
+
+  @override
+  void initState() {
+    super.initState();
+    _tick = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
   void _closeSearch() {
     _search.clear();
     setState(() {
@@ -91,6 +103,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
 
   @override
   void dispose() {
+    _tick?.cancel();
     _search.dispose();
     super.dispose();
   }
@@ -605,9 +618,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     }
   }
 
+  /// UI-086: the inline countdown follows the real deadline while the chat is open (rebuilt
+  /// each minute; cancelled on dispose).
+  Timer? _tick;
+
   @override
   void initState() {
     super.initState();
+    _tick = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (mounted) setState(() {});
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final dating = ref.read(datingProvider.notifier);
@@ -617,6 +637,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   @override
   void dispose() {
+    _tick?.cancel();
     _text.dispose();
     _focus.dispose();
     _scroll.dispose();
@@ -952,20 +973,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             ),
           ),
           const SizedBox(height: AppSpacing.s1),
-          Text(
-            l10n.chatIntro,
-            textAlign: TextAlign.center,
-            style: AppTypography.helper,
-          ),
-          const SizedBox(height: AppSpacing.s4),
-          // UI-086 (V8): a white inline banner with the time left only: no exact end time, no
-          // Extend control or explanation here (Extend stays in the chat menu; Instant is not in
-          // this release). The countdown comes from the match's real expiry and is not reset by
-          // a rebuild.
+          // UI-086 (new build): photo, name, then one inline line with a clock and the time left,
+          // directly under the name on the page (Bumble's match header). No card, no exact end
+          // time, no Extend control (Extend stays in the chat menu; Instant is not in this
+          // release). The value comes from the match's real expiry and is not reset by a rebuild.
           CountdownBanner(
             key: const ValueKey('chat-countdown'),
             text: l10n.chatExpiresIn(timeLeft(l10n, left)),
             urgent: left.inHours < 2,
+          ),
+          const SizedBox(height: AppSpacing.s3),
+          Text(
+            l10n.chatIntro,
+            textAlign: TextAlign.center,
+            style: AppTypography.helper,
           ),
           // UI-031: ordinary messaging only; no Opening Move in the first release.
           if (ReleaseScope.openingMoves && person.openingMove != null) ...[
@@ -1371,17 +1392,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                           r.attachment?.kind ==
                                                   AttachmentKind.photo &&
                                               r.attachment?.source != null
-                                          ? ClipRRect(
-                                              borderRadius: AppRadii.all(
-                                                AppRadii.tag,
-                                              ),
-                                              child: SizedBox.square(
-                                                dimension: 36,
-                                                child: AttachmentImage(
-                                                  attachment: r.attachment!,
-                                                  width: 36,
-                                                ),
-                                              ),
+                                          // UI-091: sized by ReplyPreview.
+                                          ? AttachmentImage(
+                                              attachment: r.attachment!,
+                                              width: 96,
                                             )
                                           : null,
                                       onCancel: () =>
@@ -1540,14 +1554,15 @@ class _EndedView extends StatelessWidget {
     };
     return NumayaScreen(
       top: NumayaTopBar(onBack: onBack, backLabel: l10n.backToMessages),
-      footer: NumayaButton(label: l10n.backToMessages, onPressed: onBack),
-      body: Padding(
-        padding: const EdgeInsets.only(top: AppSpacing.s10),
-        child: ResultPanel(
-          illustration: art,
-          illustrationWidth: 160,
+      // UI-094: the shared centred status template.
+      scrollable: false,
+      bodyPadding: EdgeInsets.zero,
+      body: StatusLayout(
+        child: EmptyState(
+          art: IllustrationView(art, width: 132),
           title: title,
           body: body,
+          action: NumayaButton(label: l10n.backToMessages, onPressed: onBack),
         ),
       ),
     );

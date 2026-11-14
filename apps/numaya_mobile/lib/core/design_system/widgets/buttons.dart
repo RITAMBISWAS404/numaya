@@ -4,6 +4,7 @@ import '../foundations/app_colors.dart';
 import '../foundations/app_layout.dart';
 import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
+import '../foundations/dev_mode.dart';
 import '../icons/numaya_icon_data.g.dart';
 import 'primitives.dart';
 
@@ -58,9 +59,15 @@ class NumayaButton extends StatelessWidget {
   final bool? expand;
   bool get _fills => expand ?? !small;
 
-  /// Secondary, quiet and brand buttons are outlined (replacement V8 default). Set once from the
-  /// app root; false is the V7 filled comparison.
-  static bool outlinedSecondary = true;
+  /// Secondary, quiet and brand buttons are outlined (replacement V8 default, C-03). UI-098: Dev
+  /// Mode's Filled surface turns this off for the comparison.
+  static bool get outlinedSecondary => !DevModeStyles.filledSecondary;
+
+  /// UI-096: the corner radius of a shaped button. Default keeps each variant's radius (12, or 8
+  /// for compact buttons, UI-050/UI-062); Dev Mode's Fully rounded gives capsule ends.
+  static double radiusFor({required bool small}) => DevModeStyles.pillButtons
+      ? AppRadii.pill
+      : (small ? AppRadii.tag : AppRadii.control);
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +78,9 @@ class NumayaButton extends StatelessWidget {
         : textOnly
         ? AppSizes.buttonHeightQuiet
         : AppSizes.buttonHeight;
-    // UI-050: standard buttons 12; UI-062: the compact button for cards and menus is 8.
-    final radius = small ? AppRadii.tag : AppRadii.control;
+    // UI-050: standard buttons 12; UI-062: the compact button for cards and menus is 8. UI-096:
+    // capsule ends in Dev Mode's Fully rounded comparison.
+    final radius = radiusFor(small: small);
 
     // A small button that isn't primary, tint or solid red is the outlined pill.
     final effective = small && variant == NumayaButtonVariant.destructive
@@ -87,6 +95,14 @@ class NumayaButton extends StatelessWidget {
       ),
       // UI-057 (V8): disabled is an outlined, muted button with no grey fill, for every
       // variant; enabled primaries are brand purple.
+      // UI-098 Filled: a disabled secondary keeps a fainter fill (black at 4%) and the grey
+      // label, with no edge, so it stays distinct from the enabled 8% fill and from primary.
+      _
+          when disabled &&
+              !outlinedSecondary &&
+              effective != NumayaButtonVariant.primary &&
+              effective != NumayaButtonVariant.destructiveSolid =>
+        (AppColors.secondaryFillDisabled, AppColors.disabledForeground, null),
       _ when disabled => (
         Colors.transparent,
         AppColors.disabledForeground,
@@ -103,8 +119,18 @@ class NumayaButton extends StatelessWidget {
       NumayaButtonVariant.secondary || NumayaButtonVariant.quiet
           when outlinedSecondary =>
         (Colors.transparent, AppColors.ink, AppColors.buttonOutline),
-      NumayaButtonVariant.secondary => (AppColors.field, AppColors.ink, null),
-      NumayaButtonVariant.quiet => (AppColors.field, AppColors.ink, null),
+      // UI-098 Filled: a subtle neutral, black at 8% over whatever the button sits on, so it
+      // reads one step darker on the page, a white card or a grey sheet alike.
+      NumayaButtonVariant.secondary => (
+        AppColors.secondaryFill,
+        AppColors.ink,
+        null,
+      ),
+      NumayaButtonVariant.quiet => (
+        AppColors.secondaryFill,
+        AppColors.ink,
+        null,
+      ),
       // The brand action: a purple label, outlined in faint purple (V7: on the neutral fill).
       NumayaButtonVariant.brand when outlinedSecondary => (
         Colors.transparent,
@@ -112,7 +138,7 @@ class NumayaButton extends StatelessWidget {
         AppColors.accentOutline,
       ),
       NumayaButtonVariant.brand => (
-        AppColors.field,
+        AppColors.secondaryFill,
         AppColors.accentOnTint,
         null,
       ),
@@ -217,7 +243,7 @@ class NumayaFab extends StatelessWidget {
       semanticLabel: semanticLabel,
       excludeChildSemantics: true,
       pressedScale: 0.94,
-      borderRadius: AppRadii.all(AppRadii.control),
+      borderRadius: AppRadii.all(NumayaButton.radiusFor(small: false)),
       child: AnimatedContainer(
         duration: AppMotion.duration(context, AppMotion.base),
         curve: AppMotion.easeOut,
@@ -226,7 +252,7 @@ class NumayaFab extends StatelessWidget {
         // A rounded square like every other icon button (RD-02).
         // UI-057: disabled is outlined and muted, like every disabled button.
         decoration: BoxDecoration(
-          borderRadius: AppRadii.all(AppRadii.control),
+          borderRadius: AppRadii.all(NumayaButton.radiusFor(small: false)),
           color: enabled ? AppColors.accent : Colors.transparent,
           border: enabled
               ? null

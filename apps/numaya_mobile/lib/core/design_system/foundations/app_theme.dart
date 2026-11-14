@@ -30,7 +30,7 @@ abstract final class AppSystemUi {
 /// this covers the platform pieces (text selection, page transitions, system bars).
 abstract final class AppTheme {
   static ThemeData light() {
-    const scheme = ColorScheme(
+    final scheme = ColorScheme(
       brightness: Brightness.light,
       primary: AppColors.accent,
       onPrimary: AppColors.accentForeground,
@@ -74,7 +74,7 @@ abstract final class AppTheme {
       // Numaya controls give their own press feedback (scale), as the web design does.
       splashFactory: NoSplash.splashFactory,
       highlightColor: Colors.transparent,
-      textSelectionTheme: const TextSelectionThemeData(
+      textSelectionTheme: TextSelectionThemeData(
         cursorColor: AppColors.accent,
         selectionColor: AppColors.accentTint,
         selectionHandleColor: AppColors.accent,

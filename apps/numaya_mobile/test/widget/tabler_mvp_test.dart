@@ -111,9 +111,9 @@ void main() {
       final c = await quickStartApp(tester);
       await goTo(c, tester, Routes.home);
       final tile = tester.getRect(find.byKey(const ValueKey('tab-tile-2')));
-      // Just outside the visible tile, still inside the item's 2pt side and 3pt bottom inset
-      // (UI-026 V8: 4pt between tiles).
-      await tester.tapAt(Offset(tile.right + 1, tile.bottom + 2));
+      // Just outside the visible tile, still inside the item's 2pt side and 2pt bottom inset
+      // (UI-026 new build: 44pt tiles in 48pt items, 4pt between tiles).
+      await tester.tapAt(Offset(tile.right + 1, tile.bottom + 1));
       await tester.pump(const Duration(milliseconds: 600));
       expect(location(c), Routes.messages);
       await settle(tester);
@@ -242,38 +242,48 @@ void main() {
       );
     }
 
-    testWidgets('InfoCard icon stays centred at 320pt and 200% text', (
-      tester,
-    ) async {
-      tester.view.physicalSize = const Size(640, 1386);
-      tester.view.devicePixelRatio = 2;
-      tester.platformDispatcher.textScaleFactorTestValue = 2;
-      addTearDown(tester.view.reset);
-      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: InfoCard(
-              icon: NumayaIcons.info,
-              title: 'Only you can see this',
-              body: 'Nothing here is shared with your matches.',
+    testWidgets(
+      'InfoCard icon stays on the heading line at 320pt and 200% text',
+      (tester) async {
+        tester.view.physicalSize = const Size(640, 1386);
+        tester.view.devicePixelRatio = 2;
+        tester.platformDispatcher.textScaleFactorTestValue = 2;
+        addTearDown(tester.view.reset);
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: InfoCard(
+                icon: NumayaIcons.info,
+                title: 'Only you can see this',
+                body: 'Nothing here is shared with your matches.',
+              ),
             ),
           ),
-        ),
-      );
-      expect(tester.takeException(), isNull);
-      final icon = tester.getRect(find.byType(NumayaIcon));
-      final content = tester.getRect(
-        find
-            .ancestor(
-              of: find.text('Only you can see this'),
-              matching: find.byType(Column),
-            )
-            .first,
-      );
-      expect(content.height, greaterThan(icon.height * 3));
-      expect((icon.center.dy - content.center.dy).abs(), lessThanOrEqualTo(1));
-    });
+        );
+        expect(tester.takeException(), isNull);
+        final icon = tester.getRect(find.byType(NumayaIcon));
+        final content = tester.getRect(
+          find
+              .ancestor(
+                of: find.text('Only you can see this'),
+                matching: find.byType(Column),
+              )
+              .first,
+        );
+        expect(content.height, greaterThan(icon.height * 3));
+        // UI-010/UI-060 (new build, 2026-11-15): the icon sits at the top left, centred on the
+        // heading's first line at any text size (supersedes centring on the whole block).
+        final title = tester.getRect(find.text('Only you can see this'));
+        final line =
+            2 * AppTypography.bodySm.fontSize! * AppTypography.bodySm.height!;
+        expect(
+          (icon.center.dy - (title.top + line / 2)).abs(),
+          lessThanOrEqualTo(1),
+        );
+        expect(icon.center.dy, lessThan(content.center.dy));
+      },
+    );
   });
 
   group('Events is unavailable in the MVP', skip: 'Superseded: Events MVP replaces Health/Insights (H-13); old event routes redirect to /events', () {

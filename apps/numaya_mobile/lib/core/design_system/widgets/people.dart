@@ -308,7 +308,7 @@ class StatusBadge extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: AppRadii.all(AppRadii.chip),
+        borderRadius: AppRadii.all(AppRadii.infoPill),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -430,7 +430,7 @@ class InfoChip extends StatelessWidget {
       // (RD-05); on the page it's white.
       decoration: BoxDecoration(
         color: onPage ? AppColors.surface : AppColors.canvas,
-        borderRadius: AppRadii.all(AppRadii.chip),
+        borderRadius: AppRadii.all(AppRadii.infoPill),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -727,8 +727,15 @@ class Composer extends StatefulWidget {
   /// An attachment is waiting, so Send works with an empty field (the text is its caption).
   final bool hasAttachment;
 
-  /// UI-073 (V8): the input's neutral fill, shared by the pending reply preview above it.
-  static const Color inputFill = AppColors.fill;
+  /// UI-073 (new build, 2026-11-15): the input and the pending reply preview above it both use
+  /// the standard app-background token (the page colour), on the white composer tray. Was the
+  /// neutral fill in V8.
+  static const Color inputFill = AppColors.canvas;
+
+  /// The width from the field's trailing edge to the composer's: the 6pt gap and Send's 48dp
+  /// slot. Metadata aligned with the field's right edge insets by this (UI-092).
+  static const double trailingSlot =
+      AppSpacing.s2 - 2 + kMinInteractiveDimension;
 
   @override
   State<Composer> createState() => _ComposerState();
@@ -767,11 +774,10 @@ class _ComposerState extends State<Composer> {
         widget.enabled &&
         (widget.controller.text.trim().isNotEmpty || widget.hasAttachment);
     final focused = _focus.hasFocus;
-    // Restrained composer (CL-06): attachment, a filled pill field and send on the page, with
-    // no surrounding tray. Bottom-aligned, so the actions stay level with the last line as the
-    // field grows.
+    // Restrained composer (CL-06): attachment, a filled pill field and send. UI-093 (2026-11-15):
+    // the field and the controls share one vertical midpoint, in every composer.
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (widget.leading != null) ...[
           widget.leading!,
@@ -846,18 +852,19 @@ class _ComposerState extends State<Composer> {
                   duration: AppMotion.duration(context, AppMotion.base),
                   width: NavIconButton.composerControl,
                   height: NavIconButton.composerControl,
-                  // UI-072 (V8): the same circular boundary and shared stroke as Plus and the
-                  // microphone; the brand-purple arrow marks Send as the action.
+                  // UI-093 (2026-11-15): an enabled Send is a solid brand circle with a white
+                  // arrow (supersedes UI-072's outlined Send). With nothing to send it keeps the
+                  // shared circular outline in the disabled grey, like the idle Plus and mic.
                   decoration: BoxDecoration(
-                    color: Colors.transparent,
+                    color: canSend ? AppColors.accent : Colors.transparent,
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: canSend
-                          ? AppColors.buttonOutline
-                          : AppColors.disabledOutline,
-                      width: AppBorders.control,
-                      strokeAlign: BorderSide.strokeAlignInside,
-                    ),
+                    border: canSend
+                        ? null
+                        : Border.all(
+                            color: AppColors.disabledOutline,
+                            width: AppBorders.control,
+                            strokeAlign: BorderSide.strokeAlignInside,
+                          ),
                   ),
                   alignment: Alignment.center,
                   // UI-039: a plain upward arrow.
@@ -865,7 +872,7 @@ class _ComposerState extends State<Composer> {
                     NumayaIcons.arrowUp,
                     size: 22,
                     color: canSend
-                        ? AppColors.accentOnTint
+                        ? AppColors.accentForeground
                         : AppColors.disabledForeground,
                   ),
                 ),
@@ -1111,29 +1118,37 @@ class ReplyPreview extends StatelessWidget {
   final String cancelLabel;
   final VoidCallback onCancel;
 
-  /// A small picture of the photo being answered.
+  /// The photo being answered: pass the bare image (cover-fitted); the preview sizes and clips it.
   final Widget? thumbnail;
 
   @override
   Widget build(BuildContext context) {
-    // UI-073 (V8): the pending reply shares the composer input's neutral fill and its 12pt
+    // UI-073: the pending reply shares the composer input's fill (the page colour) and its 12pt
     // field corners; it is not a sent bubble.
-    return _QuoteBlock(
+    // UI-091 (2026-11-15): the thumbnail fills the panel's height inside the same 8pt insets the
+    // quote line keeps at its top, bottom and left (so top, bottom and right match), with corners
+    // nested in the panel's (12 - 8 = 4). Dismiss sits outside the tinted panel, centred on it.
+    final thumb = thumbnail;
+    final panel = _QuoteBlock(
+      key: const ValueKey('reply-preview-panel'),
       color: Composer.inputFill,
       stripe: AppColors.accent,
       radius: AppRadii.all(AppRadii.field),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ?thumbnail,
-          NavIconButton(
-            icon: NumayaIcons.close,
-            label: cancelLabel,
-            style: NavButtonStyle.plain,
-            onPressed: onCancel,
-          ),
-        ],
-      ),
+      trailing: thumb == null
+          ? null
+          : ExcludeSemantics(
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: ClipRRect(
+                  key: const ValueKey('reply-preview-thumb'),
+                  borderRadius: AppRadii.all(
+                    AppRadii.nested(AppRadii.field, AppSpacing.s2),
+                  ),
+                  child: SizedBox.expand(child: thumb),
+                ),
+              ),
+            ),
+      minHeight: replyMinHeight,
       child: Semantics(
         liveRegion: true,
         child: Column(
@@ -1159,18 +1174,36 @@ class ReplyPreview extends StatelessWidget {
         ),
       ),
     );
+    return Row(
+      children: [
+        Expanded(child: panel),
+        NavIconButton(
+          key: const ValueKey('reply-preview-dismiss'),
+          icon: NumayaIcons.close,
+          label: cancelLabel,
+          style: NavButtonStyle.plain,
+          onPressed: onCancel,
+        ),
+      ],
+    );
   }
+
+  /// The panel's least height: two caption lines plus the 8pt insets, so a thumbnail is a
+  /// readable 40pt square even when the copy is one line.
+  static const double replyMinHeight = 56;
 }
 
 /// A quoted block: rounded surface, an inset capsule stripe, then the copy. Its height comes from
 /// the copy, and the stripe stretches inside the inset.
 class _QuoteBlock extends StatelessWidget {
   const _QuoteBlock({
+    super.key,
     required this.color,
     required this.stripe,
     required this.radius,
     required this.child,
     this.trailing,
+    this.minHeight = 0,
   });
 
   final Color? color;
@@ -1178,11 +1211,13 @@ class _QuoteBlock extends StatelessWidget {
   final BorderRadius radius;
   final Widget child;
   final Widget? trailing;
+  final double minHeight;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       // The stripe is a capsule inside the 8pt inner padding, so it never reaches a corner.
+      constraints: BoxConstraints(minHeight: minHeight),
       decoration: BoxDecoration(color: color, borderRadius: radius),
       padding: const EdgeInsets.all(AppSpacing.s2),
       child: IntrinsicHeight(

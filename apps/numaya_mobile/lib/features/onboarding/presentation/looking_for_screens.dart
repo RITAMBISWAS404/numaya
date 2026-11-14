@@ -99,11 +99,13 @@ class _MeetScreenState extends ConsumerState<MeetScreen> {
         // UI-004: the label, the range read-out and both thumbs share one dedicated card.
         WhiteCard(
           key: const ValueKey('age-range-card'),
+          // UI-090: the reference clearance now comes from SliderBlock (8pt above and below the
+          // control), so the card adds none at the bottom; the rendered spacing is unchanged.
           padding: const EdgeInsets.fromLTRB(
             AppSpacing.s4,
             AppSpacing.s4,
             AppSpacing.s4,
-            AppSpacing.s2,
+            0,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -123,16 +125,17 @@ class _MeetScreenState extends ConsumerState<MeetScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.s2),
-              AgeRangeSlider(
-                values: _ages,
-                min: DiscoveryFilters.ageFloor,
-                max: DiscoveryFilters.ageCeiling,
-                onChanged: (v) {
-                  // Keep at least two years between the ends.
-                  if (v.end - v.start < 2) return;
-                  setState(() => _ages = v);
-                },
+              SliderBlock(
+                child: AgeRangeSlider(
+                  values: _ages,
+                  min: DiscoveryFilters.ageFloor,
+                  max: DiscoveryFilters.ageCeiling,
+                  onChanged: (v) {
+                    // Keep at least two years between the ends.
+                    if (v.end - v.start < 2) return;
+                    setState(() => _ages = v);
+                  },
+                ),
               ),
             ],
           ),

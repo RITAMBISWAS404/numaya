@@ -129,8 +129,9 @@ void main() {
       expect(AppRadii.card, 16);
       expect(AppRadii.heroCard, 20);
       expect(AppRadii.photo, 20);
-      expect(AppRadii.navShell, 20);
-      expect(AppRadii.navItem, 12);
+      // UI-026 (new build): capsules replace UI-050's 20/12 for the floating bar.
+      expect(AppRadii.navShell, AppRadii.pill);
+      expect(AppRadii.navItem, AppRadii.pill);
       // Ente alignment V3 (EA-S01): sheet corners are radius/xl 20, as Ente's rules state.
       expect(AppRadii.sheet, 20);
       expect(AppRadii.iconButton, 12);

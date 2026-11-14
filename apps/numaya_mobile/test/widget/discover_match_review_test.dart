@@ -384,7 +384,7 @@ void main() {
 
   group('Navigation (V8: UI-026 compact bar, UI-050 corners)', () {
     testWidgets(
-      '20pt shell, 8pt from shell to every tile, 4pt between 38 x 48 tiles, four destinations',
+      'UI-026 new build: capsule shell, 8pt from shell to every tile, 4pt between 44 x 60 tiles, four destinations',
       (tester) async {
         final c = await home(tester);
         final pill = find.byKey(NumayaTabBar.pillKey);
@@ -393,7 +393,7 @@ void main() {
         expect(deco.boxShadow, AppElevation.navigation);
         expect(deco.borderRadius, AppRadii.all(AppRadii.navShell));
         final bar = tester.getRect(pill);
-        expect(bar.height, 54);
+        expect(bar.height, 60);
         // MVP Focus V5: Discover, Likes, Chats and Profile.
         final items = [
           for (var i = 0; i < 4; i++)
@@ -410,9 +410,9 @@ void main() {
         expect(tiles.first.top - bar.top, closeTo(8, 0.01));
         expect(bar.bottom - tiles.first.bottom, closeTo(8, 0.01));
         for (var i = 0; i < 4; i++) {
-          expect(items[i].height, 44);
-          expect(tiles[i].height, closeTo(38, 0.01));
-          expect(tiles[i].width, closeTo(48, 0.01));
+          expect(items[i].height, 48);
+          expect(tiles[i].height, closeTo(44, 0.01));
+          expect(tiles[i].width, closeTo(60, 0.01));
           // 4 between adjacent tiles.
           if (i > 0) {
             expect(tiles[i].left - tiles[i - 1].right, closeTo(4, 0.01));

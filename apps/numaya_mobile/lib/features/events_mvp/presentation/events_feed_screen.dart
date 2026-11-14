@@ -201,7 +201,7 @@ class EventsFeedScreen extends ConsumerWidget {
               ),
               child: Row(
                 children: [
-                  const NumayaIcon(
+                  NumayaIcon(
                     NumayaIcons.location,
                     size: AppSizes.iconMd,
                     color: AppColors.accent,

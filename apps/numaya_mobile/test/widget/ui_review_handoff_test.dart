@@ -327,7 +327,7 @@ void main() {
 
     // Superseded by the Tabler MVP pass: the alert icon is centred on the full content height
     // (was UI-010's first-line alignment).
-    testWidgets('alert icon is centred on multiline copy (Tabler MVP pass)', (
+    testWidgets('alert icon sits on the first heading line of multiline copy', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -346,16 +346,14 @@ void main() {
       final icon = tester.getRect(find.byType(NumayaIcon));
       final text = tester.getRect(find.textContaining('The selfie'));
       expect(text.height, greaterThan(icon.height * 1.5)); // multiline
-      // Centred on the content column (the title block), not the first line.
-      final content = tester.getRect(
-        find
-            .ancestor(
-              of: find.textContaining('The selfie'),
-              matching: find.byType(Column),
-            )
-            .first,
+      // UI-010/UI-060 (new build, 2026-11-15): the icon is at the top left, centred on the
+      // heading's first line, not on the whole multiline block.
+      final line =
+          AppTypography.bodySm.fontSize! * AppTypography.bodySm.height!;
+      expect(
+        (icon.center.dy - (text.top + line / 2)).abs(),
+        lessThanOrEqualTo(1),
       );
-      expect((icon.center.dy - content.center.dy).abs(), lessThanOrEqualTo(1));
     });
   });
 }

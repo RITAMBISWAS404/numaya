@@ -118,8 +118,8 @@ void main() {
     });
   });
 
-  testWidgets('OV-01 InfoCard is white; StatusBanner is the selected outlined '
-      'treatment with the status in the icon', (tester) async {
+  testWidgets('OV-01/UI-060 InfoCard and StatusBanner share the white card '
+      'with the status in the icon', (tester) async {
     await tester.pumpWidget(
       host(
         const Column(
@@ -144,9 +144,12 @@ void main() {
     expect(cards, hasLength(2));
     expect(cards.first.color, AppColors.surface);
     expect(cards.first.border, isNull);
-    // UI-060 (V8): the passive callout has no outline and a light neutral fill.
-    expect(cards.last.color, AppColors.calloutFill);
+    // UI-060 (new build, 2026-11-15): one informational card family: white, no outline, the
+    // shared subtle shadow (supersedes V8's grey passive-callout fill).
+    expect(cards.last.color, AppColors.surface);
     expect(cards.last.border, isNull);
+    expect(cards.first.boxShadow, AppElevation.subtle);
+    expect(cards.last.boxShadow, AppElevation.subtle);
     final infoIcon = tester.widget<NumayaIcon>(
       find.byWidgetPredicate(
         (w) => w is NumayaIcon && w.icon == NumayaIcons.info,
@@ -254,7 +257,9 @@ void main() {
         (w) =>
             w is AnimatedContainer &&
             w.decoration is BoxDecoration &&
-            (w.decoration! as BoxDecoration).color == AppColors.fill,
+            // UI-073 (new build, 2026-11-15): the field takes the app-background token, as
+            // the pending reply preview does (V8 used the neutral fill).
+            (w.decoration! as BoxDecoration).color == AppColors.canvas,
       ),
     );
     expect(

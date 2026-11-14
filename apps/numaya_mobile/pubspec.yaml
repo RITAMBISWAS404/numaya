@@ -72,29 +72,34 @@ flutter:
     - family: Plus Jakarta Sans
       fonts:
         - asset: assets/fonts/PlusJakartaSans-Variable.ttf
-    # UI-085 typography comparison (review builds; Prototype tools > Typography). All SIL OFL 1.1
-    # from github.com/google/fonts (ofl/fraunces, instrumentserif, dmserifdisplay, manrope,
-    # poppins), licences beside each file. Instrument Serif and DM Serif Display ship one weight
-    # (400) and are never synthetically emboldened; Poppins ships static 400/500/600/700.
-    - family: Fraunces
+    # UI-085 fixed font pairings (review builds; Prototype tools > Dev Mode). Display first, UI
+    # second: Halant + Nunito Sans, Yeseva One + Josefin Sans, Bree Serif (above) + DM Sans. All SIL
+    # OFL 1.1 from github.com/google/fonts (ofl/halant, nunitosans, yesevaone, josefinsans, dmsans),
+    # licences beside each file. Halant ships static 300-700; Yeseva One ships one weight (400) and
+    # is never synthetically emboldened; Nunito Sans, Josefin Sans and DM Sans are variable (wght).
+    # The earlier independent candidates (Fraunces, Instrument Serif, DM Serif Display, Manrope,
+    # Poppins) are retired with the old per-family selectors (scope rules, 2026-11-15).
+    - family: Halant
       fonts:
-        - asset: assets/fonts/Fraunces-Variable.ttf
-    - family: Instrument Serif
-      fonts:
-        - asset: assets/fonts/InstrumentSerif-Regular.ttf
-    - family: DM Serif Display
-      fonts:
-        - asset: assets/fonts/DMSerifDisplay-Regular.ttf
-    - family: Manrope
-      fonts:
-        - asset: assets/fonts/Manrope-Variable.ttf
-    - family: Poppins
-      fonts:
-        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Halant-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Halant-Regular.ttf
           weight: 400
-        - asset: assets/fonts/Poppins-Medium.ttf
+        - asset: assets/fonts/Halant-Medium.ttf
           weight: 500
-        - asset: assets/fonts/Poppins-SemiBold.ttf
+        - asset: assets/fonts/Halant-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/Poppins-Bold.ttf
+        - asset: assets/fonts/Halant-Bold.ttf
           weight: 700
+    - family: Nunito Sans
+      fonts:
+        - asset: assets/fonts/NunitoSans-Variable.ttf
+    - family: Yeseva One
+      fonts:
+        - asset: assets/fonts/YesevaOne-Regular.ttf
+    - family: Josefin Sans
+      fonts:
+        - asset: assets/fonts/JosefinSans-Variable.ttf
+    - family: DM Sans
+      fonts:
+        - asset: assets/fonts/DMSans-Variable.ttf

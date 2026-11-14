@@ -131,6 +131,7 @@ class NumayaTextField extends StatefulWidget {
     this.multiline = false,
     this.trailingNote,
     this.subLabel = false,
+    this.labelHidden = false,
   });
 
   final String label;
@@ -139,6 +140,11 @@ class NumayaTextField extends StatefulWidget {
   /// "Birthday"): the label is drawn in the subordinate caption role, so the group's label leads
   /// (TC-06). The semantic label is unchanged.
   final bool subLabel;
+
+  /// UI-089: no visible label at all; the group's own label and the [placeholder] (DD, MM,
+  /// YYYY) say what goes in. [label] stays the field's accessible name, so each part of a group
+  /// is still announced distinctly.
+  final bool labelHidden;
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final String? placeholder;
@@ -205,13 +211,16 @@ class _NumayaTextFieldState extends State<NumayaTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (widget.subLabel)
+        if (widget.labelHidden)
+          const SizedBox.shrink()
+        else if (widget.subLabel)
           ExcludeSemantics(
             child: Text(widget.label, style: AppTypography.caption),
           )
         else
           FieldLabel(widget.label),
-        SizedBox(height: widget.subLabel ? AppSpacing.s1 : AppSpacing.s2),
+        if (!widget.labelHidden)
+          SizedBox(height: widget.subLabel ? AppSpacing.s1 : AppSpacing.s2),
         InputSurface(
           focused: _focus.hasFocus,
           invalid: invalid,

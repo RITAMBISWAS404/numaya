@@ -52,7 +52,8 @@ void main() {
             : const NoPicker(),
       );
       c.read(onboardingProvider.notifier).loadSample();
-      if (s['premium'] == true) c.read(premiumProvider.notifier).setActive(true);
+      if (s['premium'] == true)
+        c.read(premiumProvider.notifier).setActive(true);
       final lab = c.read(labChoicesProvider.notifier);
       (s['choices'] as Map<String, dynamic>).forEach(
         (k, v) => lab.choose(k, v as String),
@@ -95,9 +96,15 @@ void main() {
       if (s['setup'] == 'reply') {
         // Reply to Priya's last message so a quoted reply shows in the thread.
         // Swipe right on the bubble (UI-036) to reply, then send from the keyboard.
-        await tester.drag(find.text('Have you been?').last, const Offset(160, 0));
+        await tester.drag(
+          find.text('Have you been?').last,
+          const Offset(160, 0),
+        );
         await tester.pump(const Duration(milliseconds: 700));
-        await tester.enterText(find.byType(TextField).last, 'Not yet. Saturday?');
+        await tester.enterText(
+          find.byType(TextField).last,
+          'Not yet. Saturday?',
+        );
         await tester.pump();
         await tester.testTextInput.receiveAction(TextInputAction.send);
         await tester.pump(const Duration(milliseconds: 900));

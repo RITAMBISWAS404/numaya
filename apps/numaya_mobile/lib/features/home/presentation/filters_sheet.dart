@@ -108,13 +108,18 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
         child: Text(text, style: AppTypography.headerCaps),
       ),
     );
-    Widget group(List<Widget> children, {Key? key, double? top}) => WhiteCard(
+    Widget group(
+      List<Widget> children, {
+      Key? key,
+      double? top,
+      double? bottom,
+    }) => WhiteCard(
       key: key,
       padding: EdgeInsets.fromLTRB(
         AppSpacing.s4,
         top ?? AppSpacing.s3,
         AppSpacing.s4,
-        AppSpacing.s1,
+        bottom ?? AppSpacing.s1,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -186,15 +191,18 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
           l10n.filtersAge,
           l10n.filtersAgeValue(_draft.minAge, _draft.maxAge),
         ),
-        AgeRangeSlider(
-          values: RangeValues(
-            _draft.minAge.toDouble(),
-            _draft.maxAge.toDouble(),
-          ),
-          min: DiscoveryFilters.ageFloor,
-          max: DiscoveryFilters.ageCeiling,
-          onChanged: (v) => _set(
-            _draft.copyWith(minAge: v.start.round(), maxAge: v.end.round()),
+        // UI-090: the shared slider clearance (onboarding "Their age" reference).
+        SliderBlock(
+          child: AgeRangeSlider(
+            values: RangeValues(
+              _draft.minAge.toDouble(),
+              _draft.maxAge.toDouble(),
+            ),
+            min: DiscoveryFilters.ageFloor,
+            max: DiscoveryFilters.ageCeiling,
+            onChanged: (v) => _set(
+              _draft.copyWith(minAge: v.start.round(), maxAge: v.end.round()),
+            ),
           ),
         ),
         // UI-003 (V8): the slider block and its fallback switch are distinct items.
@@ -217,16 +225,18 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
           l10n.filtersDistanceLabel,
           l10n.filtersDistanceValue(_draft.maxDistanceKm),
         ),
-        SliderTheme(
-          data: sliderTheme,
-          child: Slider(
-            value: _draft.maxDistanceKm.toDouble(),
-            min: 1,
-            max: DiscoveryFilters.distanceCeilingKm.toDouble(),
-            divisions: DiscoveryFilters.distanceCeilingKm - 1,
-            semanticFormatterCallback: (v) =>
-                l10n.filtersDistanceValue(v.round()),
-            onChanged: (v) => _set(_draft.copyWith(maxDistanceKm: v.round())),
+        SliderBlock(
+          child: SliderTheme(
+            data: sliderTheme,
+            child: Slider(
+              value: _draft.maxDistanceKm.toDouble(),
+              min: 1,
+              max: DiscoveryFilters.distanceCeilingKm.toDouble(),
+              divisions: DiscoveryFilters.distanceCeilingKm - 1,
+              semanticFormatterCallback: (v) =>
+                  l10n.filtersDistanceValue(v.round()),
+              onChanged: (v) => _set(_draft.copyWith(maxDistanceKm: v.round())),
+            ),
           ),
         ),
         // UI-003 (V8): the slider block and its fallback switch are distinct items.
@@ -295,30 +305,33 @@ class _FiltersFormState extends ConsumerState<_FiltersForm> {
         const SizedBox(height: AppSpacing.s5),
       ],
       heading(l10n.filtersHeightHeading),
-      group(key: const ValueKey('filters-height-card'), [
+      group(key: const ValueKey('filters-height-card'), bottom: 0, [
         label(
           l10n.filtersHeight,
           _draft.minHeightCm == null
               ? l10n.filtersAny
               : l10n.filtersTallerThan(_draft.minHeightCm!),
         ),
-        SliderTheme(
-          data: sliderTheme,
-          child: Slider(
-            value: minHeight.toDouble(),
-            min: DetailRules.minHeight.toDouble(),
-            max: 200,
-            divisions: 200 - DetailRules.minHeight,
-            semanticFormatterCallback: (v) => v.round() == DetailRules.minHeight
-                ? l10n.filtersAny
-                : l10n.filtersTallerThan(v.round()),
-            onChanged: premium
-                ? (v) => _set(
-                    v.round() == DetailRules.minHeight
-                        ? _draft.copyWith(clearHeight: true)
-                        : _draft.copyWith(minHeightCm: v.round()),
-                  )
-                : null,
+        SliderBlock(
+          child: SliderTheme(
+            data: sliderTheme,
+            child: Slider(
+              value: minHeight.toDouble(),
+              min: DetailRules.minHeight.toDouble(),
+              max: 200,
+              divisions: 200 - DetailRules.minHeight,
+              semanticFormatterCallback: (v) =>
+                  v.round() == DetailRules.minHeight
+                  ? l10n.filtersAny
+                  : l10n.filtersTallerThan(v.round()),
+              onChanged: premium
+                  ? (v) => _set(
+                      v.round() == DetailRules.minHeight
+                          ? _draft.copyWith(clearHeight: true)
+                          : _draft.copyWith(minHeightCm: v.round()),
+                    )
+                  : null,
+            ),
           ),
         ),
       ]),

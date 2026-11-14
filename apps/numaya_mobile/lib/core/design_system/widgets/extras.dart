@@ -9,6 +9,7 @@ import '../foundations/app_motion.dart';
 import '../foundations/app_typography.dart';
 import '../icons/numaya_icon_data.g.dart';
 import 'buttons.dart';
+import 'content.dart' show InfoCardLayout;
 import 'people.dart';
 import 'primitives.dart';
 
@@ -141,7 +142,7 @@ class CompletionCard extends StatelessWidget {
           Row(
             children: [
               if (done) ...[
-                const NumayaIcon(
+                NumayaIcon(
                   NumayaIcons.check,
                   size: AppSizes.iconMd,
                   color: AppColors.accent,
@@ -170,7 +171,7 @@ class CompletionCard extends StatelessWidget {
                       FractionallySizedBox(
                         alignment: AlignmentDirectional.centerStart,
                         widthFactor: fraction,
-                        child: const ColoredBox(color: AppColors.accent),
+                        child: ColoredBox(color: AppColors.accent),
                       ),
                     ],
                   ),
@@ -404,8 +405,10 @@ class ComparisonRow extends StatelessWidget {
 
 enum BannerTone { info, pending, success, error }
 
-/// UI-086 (V8): the new-match countdown: a white inline banner with a clock and the time left,
-/// nothing else. Under two hours the clock takes the warning colour; the words carry the state.
+/// UI-086 (new build, 2026-11-15): the new-match countdown is one inline line under the match's
+/// name on the screen background: a clock and the time left, nothing else (no card, no Extend,
+/// no Instant). Under two hours the clock takes the warning colour; the words carry the state.
+/// Supersedes the V8 white banner.
 class CountdownBanner extends StatelessWidget {
   const CountdownBanner({super.key, required this.text, this.urgent = false});
 
@@ -416,33 +419,32 @@ class CountdownBanner extends StatelessWidget {
   Widget build(BuildContext context) => Semantics(
     container: true,
     liveRegion: true,
-    child: Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.s4,
-        vertical: AppSpacing.s3,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: AppRadii.all(AppRadii.card),
-      ),
+    label: text,
+    child: ExcludeSemantics(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          NumayaIcon(
-            NumayaIcons.clock,
-            size: AppSizes.iconMd,
-            filled: true,
-            color: urgent ? AppColors.warningIcon : AppColors.textSecondary,
+          Padding(
+            // Centres the 16pt glyph on the first 20pt line of text.
+            padding: const EdgeInsets.only(top: 2),
+            child: NumayaIcon(
+              NumayaIcons.clock,
+              size: AppSizes.iconSm,
+              // UI-070: compact glyphs are filled.
+              filled: true,
+              color: urgent ? AppColors.warningIcon : AppColors.textSecondary,
+            ),
           ),
-          const SizedBox(width: AppSpacing.s3),
-          Expanded(
+          const SizedBox(width: AppLayout.compactIconGap),
+          Flexible(
             child: Text(
               text,
+              textAlign: TextAlign.center,
               style: AppTypography.weight(
-                AppTypography.body,
+                AppTypography.bodySm,
                 AppTypography.semibold,
-              ).copyWith(color: AppColors.ink),
+              ).copyWith(color: AppColors.textSecondary),
             ),
           ),
         ],
@@ -481,53 +483,22 @@ class StatusBanner extends StatelessWidget {
       BannerTone.success => (AppColors.successIcon, NumayaIcons.verified),
       BannerTone.error => (AppColors.dangerIcon, NumayaIcons.alert),
     };
+    // UI-010/UI-060 (new build): the shared informational card (white, subtle shadow, icon on
+    // the heading's first line). The tone sets only the icon and its colour.
     return Semantics(
       liveRegion: true,
       container: true,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(AppSpacing.s4),
-        // UI-060 (V8): a passive callout has no outline; a light neutral fill a step darker than
-        // the page carries its boundary. The icon sits at the top of the content (UI-010).
-        decoration: BoxDecoration(
-          color: AppColors.calloutFill,
-          borderRadius: AppRadii.all(AppRadii.card),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            NumayaIcon(icon, size: AppSizes.iconMd, color: mark, filled: true),
-            const SizedBox(width: AppSpacing.s3),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: AppTypography.weight(
-                      AppTypography.body,
-                      AppTypography.semibold,
-                    ).copyWith(color: AppColors.ink),
-                  ),
-                  if (body != null) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      body!,
-                      style: AppTypography.bodySm.copyWith(
-                        color: AppColors.textMuted,
-                      ),
-                    ),
-                  ],
-                  if (action != null) ...[
-                    const SizedBox(height: AppSpacing.s3),
-                    action!,
-                  ],
-                ],
-              ),
-            ),
-          ],
-        ),
+      child: InfoCardLayout(
+        icon: icon,
+        iconColor: mark,
+        title: title,
+        titleStyle: AppTypography.weight(
+          AppTypography.body,
+          AppTypography.semibold,
+        ).copyWith(color: AppColors.ink),
+        body: body,
+        bodyStyle: AppTypography.bodySm.copyWith(color: AppColors.textMuted),
+        action: action,
       ),
     );
   }
@@ -550,6 +521,31 @@ class ChatSystemLine extends StatelessWidget {
 }
 
 /// A count dot for unread messages (Withings blue, white figure).
+/// UI-067 (new build): the unread mark on a conversation avatar: one brand dot at the avatar's
+/// bottom-right with a ring in the page colour, so it separates from any photo. No number; the
+/// row's spoken label carries the unread state. Bumble's conversation list is the reference.
+class UnreadDot extends StatelessWidget {
+  const UnreadDot({super.key, this.ring = AppColors.canvas});
+
+  /// The colour around the dot: the surface the row sits on.
+  final Color ring;
+
+  static const double size = 14;
+
+  @override
+  Widget build(BuildContext context) => ExcludeSemantics(
+    child: Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: AppColors.accent,
+        shape: BoxShape.circle,
+        border: Border.all(color: ring, width: 2),
+      ),
+    ),
+  );
+}
+
 class CountBadge extends StatelessWidget {
   const CountBadge({super.key, required this.count});
   final int count;

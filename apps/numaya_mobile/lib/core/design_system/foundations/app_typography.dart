@@ -33,7 +33,7 @@ abstract final class AppTypography {
 
   /// The UI family: the review build's UI font (UI-085) or Figtree.
   static String get family =>
-      editorial ? 'Google Sans' : (_settings.ui.family ?? 'Figtree');
+      editorial ? 'Google Sans' : (_settings.pairing.ui ?? 'Figtree');
 
   /// The baseline heading face (headings, names and metrics). Roles in UI-085's display group
   /// take the review build's display font over it; section and app-bar titles take the UI font.
@@ -74,19 +74,15 @@ abstract final class AppTypography {
   static double get _bodyLine => MonoType.body14 ? 20 : MonoType.bodyLine;
 
   static String _dsp(String baselineFace) =>
-      editorial ? baselineFace : (_settings.display.family ?? baselineFace);
+      editorial ? baselineFace : (_settings.pairing.display ?? baselineFace);
   static String _ui(String baselineFace) =>
-      editorial ? baselineFace : (_settings.ui.family ?? baselineFace);
+      editorial ? baselineFace : (_settings.pairing.ui ?? baselineFace);
 
   static TextStyle _memo(String role, TextStyle Function() build) =>
       _cache[role] ??= build();
 
   /// Faces with a single real weight: never synthetically emboldened.
-  static const Set<String> singleWeightFamilies = {
-    serif,
-    'Instrument Serif',
-    'DM Serif Display',
-  };
+  static const Set<String> singleWeightFamilies = {serif, 'Yeseva One'};
 
   /// The editorial comparison's title face (one real weight, 400).
   static const String serif = 'Bree Serif';
@@ -240,8 +236,8 @@ abstract final class AppTypography {
       _memo('pill', () => _style(family, 12, 16, medium, 0));
 
   /// Ente Mini. Metadata, timestamps, row details, counters, banner bodies and field notes:
-  /// 12/16 medium, secondary (#666: 5.74:1 on white, 5.22:1 on the canvas, 4.77:1 on the field
-  /// fill). Was 13/18 before FT-01.
+  /// 12/16 medium in the tertiary metadata grey (UI-012: #666, 5.74:1 on white, 5.22:1 on the
+  /// canvas, 4.77:1 on the field fill). Was 13/18 before FT-01.
   static TextStyle get caption => _memo(
     'caption',
     () => _style(
@@ -250,7 +246,7 @@ abstract final class AppTypography {
       16,
       medium,
       0,
-    ).copyWith(color: AppColors.textSecondary),
+    ).copyWith(color: AppColors.textTertiary),
   );
 
   /// Ente Body in `text/light`. Explanatory sentences that stand on their own: the note under a

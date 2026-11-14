@@ -253,7 +253,6 @@ void main() {
         'screen-profile': Routes.profile,
         'screen-discover': Routes.home,
         // Replacement V8 comparisons.
-        'r8-secondary-button': Routes.profile,
         // The member's own cover is the brightest seeded photo, where the scrims differ most.
         'r8-photo-scrim': Routes.profile,
         'r8-chat-dividers': Routes.messages,

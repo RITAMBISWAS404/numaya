@@ -263,7 +263,13 @@ class AttachmentMessage extends StatelessWidget {
         child: _FileCard(
           width: width,
           mine: mine,
-          leading: MobileIcon(NumayaMobileIcons.play, size: 28, color: fg),
+          // UI-070: a filled play glyph on media.
+          leading: MobileIcon(
+            NumayaMobileIcons.play,
+            size: 28,
+            filled: true,
+            color: fg,
+          ),
           title: a.name ?? l10n.chatAttachmentVideo,
           detail: MetaText.join([
             l10n.chatAttachmentVideo,

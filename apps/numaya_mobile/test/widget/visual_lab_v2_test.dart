@@ -48,7 +48,9 @@ void main() {
             // Fable lab groups list only implemented options (baseline plus up to two).
             !g.id.startsWith('fx-') &&
             // V8 review groups: the selected baseline plus the requested directions.
-            !g.id.startsWith('v8-')) {
+            !g.id.startsWith('v8-') &&
+            // UI-087..102 phase: only the requested exploration (no padding options).
+            !g.id.startsWith('ui0')) {
           expect(g.ids, ['O', 'A', 'B', 'C'], reason: g.id);
         }
         // Dependencies name real groups and variants.
@@ -181,15 +183,16 @@ void main() {
 
   group('R01 / R02 Chats', () {
     testWidgets(
-      'Chats lists Archive, no Requests; new matches are square tiles',
+      'Chats lists Archive, no Requests; new matches are ringed circles',
       (tester) async {
         await usePhoneSize(tester);
         await quickStartApp(tester);
         await openTab(tester, 'Messages');
         expect(find.byKey(const ValueKey('chats-archive')), findsOneWidget);
         expect(find.byKey(const ValueKey('chats-requests')), findsNothing);
-        // UI-033 (V8): square image-only tiles, no ring.
-        expect(find.byType(CountdownAvatar), findsNothing);
+        // UI-033 (new build, 2026-11-15): circular photos at the conversation avatar's diameter
+        // inside an expiry ring (supersedes V8's square image-only tiles).
+        expect(find.byType(CountdownAvatar), findsWidgets);
         await tapOn(tester, find.byKey(const ValueKey('chats-archive')));
         await tester.pump(const Duration(milliseconds: 600));
         expect(find.byKey(const ValueKey('archived-rafa')), findsOneWidget);

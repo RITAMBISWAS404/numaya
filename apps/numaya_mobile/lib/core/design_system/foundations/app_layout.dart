@@ -127,8 +127,12 @@ abstract final class AppRadii {
   static const double tag = MonoRadii.tag;
   static const double chip = MonoRadii.chip;
   static const double badge = MonoRadii.badge;
-  static const double navShell = MonoRadii.navShell;
-  static const double navItem = MonoRadii.navItem;
+
+  /// UI-026 (new build, 2026-11-15): the floating navigation shell and its item surfaces are
+  /// fully rounded, replacing UI-050's fixed 20 and 12 for this component. With both as capsules
+  /// the nested rule holds by construction: the shell's radius is the item's plus the 8pt inset.
+  static const double navShell = MonoRadii.pill;
+  static const double navItem = MonoRadii.pill;
   static const double checkbox = MonoRadii.checkbox;
   static const double iconTile = MonoRadii.iconTile;
   static const double iconTileLg = MonoRadii.iconTileLg;
@@ -142,6 +146,11 @@ abstract final class AppRadii {
   static const double sheet = MonoRadii.sheet;
   static const double dialog = MonoRadii.dialog;
   static const double pill = MonoRadii.pill;
+
+  /// UI-087: identity and information pills (profile facts, interests, shared interests, status
+  /// badges, photo pills) and their selection chips are full capsules in every state. Buttons and
+  /// tabs keep their own radii.
+  static const double infoPill = MonoRadii.pill;
 
   /// Segmented track (UI-050: pill tabs are 8 with a 12 track around a 4pt inset).
   static const double segment = MonoRadii.control;

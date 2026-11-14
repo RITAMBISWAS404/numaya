@@ -579,7 +579,7 @@ class _ProfileSummary extends StatelessWidget {
                         onTap: onVerify,
                         semanticLabel: '$status. ${l10n.editVerify}',
                         excludeChildSemantics: true,
-                        borderRadius: AppRadii.all(AppRadii.chip),
+                        borderRadius: AppRadii.all(AppRadii.infoPill),
                         child: badge,
                       ),
               ),

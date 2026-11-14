@@ -447,6 +447,14 @@ class SettingsScreen extends ConsumerWidget {
                   label: l10n.demoHubTitle,
                   onTap: () => context.push(Routes.demo),
                 ),
+                // UI-085/095-098: the review comparisons, one tap from Settings.
+                ListRow(
+                  key: const ValueKey('settings-dev-mode'),
+                  leading: NumayaIcons.palette,
+                  label: l10n.demoTypography,
+                  detail: l10n.demoTypographyDetail,
+                  onTap: () => context.push(Routes.reviewTypography),
+                ),
                 ListRow(
                   leading: NumayaIcons.wifiOff,
                   tone: AccentTone.caution,

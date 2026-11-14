@@ -1541,25 +1541,35 @@ const List<LabGroup> kLabGroups = [
   ),
   // Replacement V8 comparisons (docs/v8-replacement/DECISIONS.md). Each `proposed` is the
   // recommended candidate; `O` is the selected V7 treatment, kept for the owner's choice.
+  // r8-secondary-button retired 2026-11-15: UI-098 made the secondary surface a Dev Mode
+  // setting (Prototype tools > Dev Mode), so the Design Lab no longer carries a second control.
+  // UI-094 (2026-11-15): the status template's surface. The reviewer asked to explore a white
+  // card as the shared surface; O keeps the existing EmptyState card, A puts the same centred
+  // group straight on the page. The production choice is pending review.
   LabGroup(
-    id: 'r8-secondary-button',
-    title: 'Secondary buttons',
+    id: 'ui094-status-surface',
+    title: 'Status and empty screens',
     kind: LabKind.screen,
-    question: 'Should secondary actions be outlined, so only the primary action is solid?',
-    usages: ['Every secondary, quiet and brand button'],
-    proposed: 'A',
+    question:
+        'Should the centred status group sit on a white card or on the page?',
+    usages: [
+      'Payment failed, pending and success',
+      'Discover no results, paused and offline',
+      'Likes, Messages, Archive and Compliments empty states',
+    ],
+    proposed: _o,
     variants: [
       LabVariant(
         _o,
-        'Filled neutral',
-        'V7 selected',
-        'A light grey fill says less important; a page can show several grey blocks.',
+        'White card',
+        'current EmptyState surface',
+        'The group sits on one white card, centred in the available area.',
       ),
       LabVariant(
         'A',
-        'Quiet outline',
-        'recommended',
-        'No fill and a 1pt edge; the one solid button on a page is the main action.',
+        'On the page',
+        'exploration',
+        'The same centred group with no card behind it.',
       ),
     ],
   ),

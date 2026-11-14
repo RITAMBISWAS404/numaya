@@ -207,13 +207,18 @@ class _ContactSupportScreenState extends ConsumerState<ContactSupportScreen> {
     if (_sent) {
       return NumayaScreen(
         top: NumayaTopBar(onBack: () => context.pop(), backLabel: l10n.back),
-        footer: NumayaButton(label: l10n.done, onPressed: () => context.pop()),
-        body: Padding(
-          padding: const EdgeInsets.only(top: AppSpacing.s10),
-          child: ResultPanel(
-            illustration: NumayaIllustration.hello,
+        // UI-094: the shared centred status template.
+        scrollable: false,
+        bodyPadding: EdgeInsets.zero,
+        body: StatusLayout(
+          child: EmptyState(
+            art: const IllustrationView(NumayaIllustration.hello, width: 132),
             title: l10n.contactSentTitle,
             body: l10n.contactSentBody,
+            action: NumayaButton(
+              label: l10n.done,
+              onPressed: () => context.pop(),
+            ),
           ),
         ),
       );

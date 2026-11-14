@@ -246,7 +246,7 @@ class MatchV8Body extends StatelessWidget {
                       color: AppColors.surface,
                       borderRadius: AppRadii.all(AppRadii.heroCard),
                       // The restrained purple accent at the join.
-                      border: const Border(
+                      border: Border(
                         top: BorderSide(color: AppColors.accent, width: 3),
                       ),
                       boxShadow: AppElevation.subtle,

@@ -51,7 +51,7 @@ class AllowanceUsedScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s6),
-          const Center(
+          Center(
             child: MobileIcon(
               NumayaMobileIcons.hourglass,
               size: 48,

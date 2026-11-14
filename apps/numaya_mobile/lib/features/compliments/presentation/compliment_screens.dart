@@ -399,7 +399,15 @@ class _ComplimentComposerScreenState
     final quoteText = isPrompt
         ? (prompt == null ? l10n.complimentReferenceGone : prompt.answer)
         : l10n.v8ComplimentPhotoN(widget.target.index + 1);
+    // UI-091: the bare photo; ReplyPreview sizes it to the panel's height and clips it.
+    // Without the photo file (a removed photo, no local demo set) the photo grey stands in, so
+    // the preview keeps its shape.
     Widget? thumb() => isPrompt
+        ? null
+        : (personPhotoImage(person, widget.target.index + 1) ??
+              const ColoredBox(color: AppColors.photo));
+    // The sent bubble's quote keeps its own small square.
+    Widget? bubbleThumb() => isPrompt
         ? null
         : ClipRRect(
             borderRadius: AppRadii.all(AppRadii.tag),
@@ -512,11 +520,27 @@ class _ComplimentComposerScreenState
             },
           ),
           const SizedBox(height: AppSpacing.s1),
-          Text(
-            '${l10n.complimentCounter(complimentLength(_text.text), max)} · '
-            '${l10n.complimentBalance(balance)}',
-            textAlign: TextAlign.end,
-            style: AppTypography.micro,
+          // UI-092 (2026-11-15): credit use and balance at the field's leading edge, the live
+          // character count at its trailing edge (the field ends where Send's slot begins). The
+          // credit line wraps at large text; the count never overlaps it.
+          Row(
+            key: const ValueKey('compliment-meta'),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  l10n.complimentBalance(balance),
+                  style: AppTypography.micro,
+                ),
+              ),
+              const SizedBox(width: AppSpacing.s3),
+              Text(
+                l10n.complimentCounter(complimentLength(_text.text), max),
+                key: const ValueKey('compliment-counter'),
+                style: AppTypography.micro,
+              ),
+              const SizedBox(width: Composer.trailingSlot),
+            ],
           ),
         ],
       );
@@ -533,7 +557,7 @@ class _ComplimentComposerScreenState
             text: _text.text.trim(),
             replyAuthor: quoteTitle,
             replyText: quoteText,
-            replyThumbnail: thumb(),
+            replyThumbnail: bubbleThumb(),
           ),
       ],
     );
@@ -646,7 +670,7 @@ class _ComplimentComposerScreenState
               child: Container(
                 width: 48,
                 height: 48,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: AppColors.accent,
                   shape: BoxShape.circle,
                 ),

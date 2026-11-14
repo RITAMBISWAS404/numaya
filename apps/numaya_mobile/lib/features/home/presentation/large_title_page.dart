@@ -95,15 +95,9 @@ class _LargeTitlePageState extends State<LargeTitlePage> {
       valueListenable: _collapse,
       builder: (context, t, _) {
         final shown = reduced ? (t >= 0.5 ? 1.0 : 0.0) : t;
+        // UI-102 (2026-11-15): the collapsed bar draws no bottom stroke while scrolled.
         return DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: AppColors.border.withValues(alpha: shown),
-                width: AppBorders.hairline,
-              ),
-            ),
-          ),
+          decoration: const BoxDecoration(),
           child: ConstrainedBox(
             constraints: const BoxConstraints(minHeight: AppSizes.topBar),
             child: Padding(

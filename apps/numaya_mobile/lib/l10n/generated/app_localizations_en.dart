@@ -7483,14 +7483,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Review build: a sample account on this phone. Nothing is sent to a server.';
 
   @override
-  String get reviewTypeTitle => 'Typography';
+  String get reviewTypeTitle => 'Dev Mode';
 
   @override
-  String get demoTypography => 'Typography';
+  String get demoTypography => 'Dev Mode';
 
   @override
   String get demoTypographyDetail =>
-      'Display font, UI font and body size (14 or 15)';
+      'Font pairing, brand colour, button shape, secondary surface, body size';
 
   @override
   String get reviewTypeBodySize => 'Base body size';
@@ -7510,11 +7510,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get reviewTypeDisplay => 'Display font';
+  String get reviewTypeDisplay => 'Font pairing';
 
   @override
   String get reviewTypeDisplayNote =>
-      'Hero headings, page titles, sheet titles, large names and metrics.';
+      'Display family first (hero headings, page and sheet titles, large names, metrics), UI family second (subheadings, app-bar titles, body, buttons, fields, labels, metadata). Both change together.';
 
   @override
   String get reviewTypeOneWeight => 'One weight (400), never bolded';
@@ -7527,12 +7527,42 @@ class AppLocalizationsEn extends AppLocalizations {
       'Section titles, app-bar titles, body, buttons, fields, labels and metadata.';
 
   @override
-  String get reviewTypeReset => 'Reset to default';
+  String get reviewTypeReset => 'Reset all Dev Mode settings';
 
   @override
   String reviewTypeCurrent(String display, String ui, int size) {
-    return 'Now: $display · $ui · ${size}pt body. Kept on this phone.';
+    return 'Now: $display · $ui · ${size}pt body. Kept on this phone; reset never touches your account or profile.';
   }
+
+  @override
+  String get reviewDevBrand => 'Brand colour';
+
+  @override
+  String get reviewDevBrandNote =>
+      'Primary buttons, selected controls, progress, links and brand tints. Neutral surfaces and success, warning and error colours do not change.';
+
+  @override
+  String get reviewDevShape => 'Button shape';
+
+  @override
+  String get reviewDevShapeNote =>
+      'Every shaped button: primary, outlined, disabled and compact.';
+
+  @override
+  String get reviewDevSecondary => 'Secondary button surface';
+
+  @override
+  String get reviewDevSecondaryNote =>
+      'Secondary, quiet and brand buttons. Filled is black at 8% over the background.';
+
+  @override
+  String get reviewDevSampleCancel => 'Cancel';
+
+  @override
+  String get reviewDevSampleSave => 'Save';
+
+  @override
+  String get reviewDevSampleDisabled => 'Unavailable';
 
   @override
   String get reviewTypeSampleTitle => 'Maya, 29';

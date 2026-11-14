@@ -309,7 +309,7 @@ class NumayaChip extends StatelessWidget {
       selected: selected,
       excludeChildSemantics: true,
       pressedScale: 0.97,
-      borderRadius: AppRadii.all(AppRadii.chip),
+      borderRadius: AppRadii.all(AppRadii.infoPill),
       child: AnimatedContainer(
         duration: AppMotion.duration(context, AppMotion.base),
         curve: AppMotion.easeOut,
@@ -327,7 +327,7 @@ class NumayaChip extends StatelessWidget {
               : onCard
               ? AppColors.fill
               : AppColors.surface,
-          borderRadius: AppRadii.all(AppRadii.chip),
+          borderRadius: AppRadii.all(AppRadii.infoPill),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -525,7 +525,7 @@ class _ChoiceMark extends StatelessWidget {
             ? Container(
                 width: 10,
                 height: 10,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: AppColors.accent,
                   shape: BoxShape.circle,
                 ),

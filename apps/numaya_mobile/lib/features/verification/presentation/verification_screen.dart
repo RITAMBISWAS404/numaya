@@ -52,7 +52,7 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
       case PhotoVerificationStatus.pending:
         body = [
           const SizedBox(height: AppSpacing.s8),
-          const Center(
+          Center(
             child: SizedBox.square(
               dimension: 48,
               child: CircularProgressIndicator(

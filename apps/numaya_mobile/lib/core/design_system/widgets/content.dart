@@ -166,9 +166,93 @@ class IllustrationView extends StatelessWidget {
   }
 }
 
-/// Information box, as Ente's Banner (14590:125245, OV-01): a white card on the grey page with no
-/// tint or border, a filled icon in Numaya purple centred on the content (Tabler MVP pass;
-/// supersedes UI-010), a semibold ink title and a muted body. It explains; it is not a card you open.
+/// UI-010 + UI-060 (new build, 2026-11-15): the one informational card layout. A white surface
+/// with the shared subtle shadow ([AppElevation.subtle]); the icon at the top left, centred on the
+/// heading's first line (not on the whole text block); optional supporting text below the
+/// heading on the same text edge. Used by [InfoCard] (photo guidance, privacy and verification
+/// notes) and [StatusBanner] (location, pending and passive reward callouts). Supersedes the grey
+/// passive-callout fill and the stacked icon variant for this family.
+class InfoCardLayout extends StatelessWidget {
+  const InfoCardLayout({
+    super.key,
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.titleStyle,
+    this.body,
+    this.bodyStyle,
+    this.action,
+    this.trailing,
+  });
+
+  final NumayaIcons icon;
+  final Color iconColor;
+  final String title;
+  final TextStyle titleStyle;
+  final String? body;
+  final TextStyle? bodyStyle;
+  final Widget? action;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    // Centre the glyph on the title's first line box: (line - icon) / 2, from the line height
+    // the title actually renders at (it follows the system text size).
+    final scaler = MediaQuery.textScalerOf(context);
+    final line = scaler.scale(titleStyle.fontSize!) * (titleStyle.height ?? 1);
+    final offset = ((line - AppSizes.iconMd) / 2).clamp(0.0, 40.0);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppLayout.cardPadding),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadii.all(AppRadii.card),
+        boxShadow: AppElevation.subtle,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            key: const ValueKey('info-card-icon'),
+            padding: EdgeInsets.only(top: offset),
+            child: NumayaIcon(
+              icon,
+              size: AppSizes.iconMd,
+              color: iconColor,
+              filled: true,
+            ),
+          ),
+          const SizedBox(width: AppSpacing.s3),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: titleStyle),
+                if (body != null) ...[
+                  const SizedBox(height: AppSpacing.s1),
+                  Text(body!, style: bodyStyle),
+                ],
+                if (action != null) ...[
+                  const SizedBox(height: AppSpacing.s3),
+                  action!,
+                ],
+              ],
+            ),
+          ),
+          if (trailing != null) ...[
+            const SizedBox(width: AppSpacing.s3),
+            Align(alignment: Alignment.center, child: trailing),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Information box (Ente's Banner, 14590:125245): a white informational card with a brand icon,
+/// a semibold ink title and a muted body. It explains; it is not a card you open. Layout:
+/// [InfoCardLayout] (UI-010/UI-060).
 class InfoCard extends StatelessWidget {
   const InfoCard({
     super.key,
@@ -182,72 +266,32 @@ class InfoCard extends StatelessWidget {
   final String title;
   final String? body;
 
-  /// V3-F01: the card is the child of a tap target (a [Pressable]), so it shows Ente's
-  /// actionable-banner affordance (14590:125245): a round fill button (the header icon-button
-  /// size) with an arrow,
-  /// centred on the right. Decorative; the wrapping control carries the semantics.
+  /// V3-F01: the card is the child of a tap target (a [Pressable]); a chevron shows it opens
+  /// something. Decorative; the wrapping control carries the semantics.
   final bool trailingArrow;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppLayout.cardPadding),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: AppRadii.all(AppRadii.card),
-      ),
-      // Tabler MVP pass (supersedes UI-010): the icon is centred on the full content height,
-      // however many lines the title and body take, and drawn with Tabler's filled artwork, as in
-      // Ente's Banners (14590:125245).
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          NumayaIcon(
-            icon,
-            size: AppSizes.iconMd,
-            color: AppColors.accent,
-            filled: true,
-          ),
-          const SizedBox(width: AppSpacing.s3),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTypography.weight(
-                    AppTypography.bodySm,
-                    AppTypography.semibold,
-                  ),
-                ),
-                if (body != null) ...[
-                  const SizedBox(height: AppSpacing.s1),
-                  Text(
-                    body!,
-                    style: AppTypography.caption.copyWith(
-                      color: AppColors.textMuted,
-                    ),
-                  ),
-                ],
-              ],
+  Widget build(BuildContext context) => InfoCardLayout(
+    icon: icon,
+    iconColor: AppColors.accent,
+    title: title,
+    titleStyle: AppTypography.weight(
+      AppTypography.bodySm,
+      AppTypography.semibold,
+    ),
+    body: body,
+    bodyStyle: AppTypography.caption.copyWith(color: AppColors.textMuted),
+    trailing: trailingArrow
+        // Replacement V8 (C-05): the chevron sits on the card, with no grey disc behind it.
+        ? const ExcludeSemantics(
+            child: NumayaIcon(
+              NumayaIcons.chevronRight,
+              size: AppSizes.iconMd,
+              color: AppColors.textMuted,
             ),
-          ),
-          if (trailingArrow) ...[
-            const SizedBox(width: AppSpacing.s3),
-            // Replacement V8 (C-05): the chevron sits on the card, with no grey disc behind it.
-            const ExcludeSemantics(
-              child: NumayaIcon(
-                NumayaIcons.chevronRight,
-                size: AppSizes.iconMd,
-                color: AppColors.textMuted,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
+          )
+        : null,
+  );
 }
 
 /// Prompt card (`.theme-withings .prompt`): a white card (14pt corner, no border) with the question
@@ -338,7 +382,7 @@ class PromptMark extends StatelessWidget {
   const PromptMark({super.key});
 
   @override
-  Widget build(BuildContext context) => const NumayaIcon(
+  Widget build(BuildContext context) => NumayaIcon(
     // The icon on its own beside the heading (RD-08); no holder.
     NumayaIcons.message,
     size: AppSizes.iconSm,

@@ -241,7 +241,7 @@ class StreakScreen extends ConsumerWidget {
                           ),
                           alignment: Alignment.center,
                           child: i < progress
-                              ? const NumayaIcon(
+                              ? NumayaIcon(
                                   NumayaIcons.check,
                                   size: 18,
                                   color: AppColors.accent,

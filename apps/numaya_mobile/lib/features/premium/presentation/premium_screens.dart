@@ -192,15 +192,20 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
           backLabel: l10n.close,
           closeIcon: true,
         ),
-        footer: NumayaButton(label: l10n.done, onPressed: () => context.pop()),
-        body: Padding(
-          padding: const EdgeInsets.only(top: AppSpacing.s10),
-          child: ResultPanel(
-            illustration: NumayaIllustration.hello,
+        // UI-094: the shared centred status template.
+        scrollable: false,
+        bodyPadding: EdgeInsets.zero,
+        body: StatusLayout(
+          child: EmptyState(
+            art: const IllustrationView(NumayaIllustration.hello, width: 132),
             title: l10n.paywallAlreadyTitle,
             body: premium.autoRenew
                 ? l10n.premiumRenews(shortDate(premium.paidThrough!))
                 : l10n.premiumEnds(shortDate(premium.paidThrough!)),
+            action: NumayaButton(
+              label: l10n.done,
+              onPressed: () => context.pop(),
+            ),
           ),
         ),
       );
@@ -303,9 +308,10 @@ extension on _PaywallScreenState {
     final options = paywallOptions(l10n, plans, (p) => planBilling(l10n, p));
     final chosen = options.where((o) => o.id == _option).firstOrNull;
     final plan = chosen?.product;
+    // UI-088: every "What's included" benefit glyph is the outline variant, like list-card rows.
     Widget glyph(NumayaIcons? icon, NumayaMobileIcons? mobile) => icon != null
-        ? NumayaIcon(icon, size: 20, filled: true, color: AppColors.accent)
-        : MobileIcon(mobile!, size: 20, filled: true, color: AppColors.accent);
+        ? NumayaIcon(icon, size: 20, color: AppColors.accent)
+        : MobileIcon(mobile!, size: 20, color: AppColors.accent);
     return NumayaScreen(
       top: NumayaTopBar(
         onBack: () => context.pop(),

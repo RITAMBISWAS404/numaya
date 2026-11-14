@@ -46,18 +46,38 @@ void main() {
       final c = await quickStartApp(tester);
       await goTo(c, tester, Routes.reviewTypography);
       expect(AppTypography.body.fontSize, 15);
-      await tapOn(tester, find.byKey(const ValueKey('type-body-14')));
+      await tapOn(tester, find.byKey(const ValueKey('dev-body-14')));
       await tester.pump(const Duration(milliseconds: 300));
       expect(c.read(typeSettingsProvider).bodySize, 14);
       expect(AppTypography.body.fontSize, 14);
       expect(AppTypography.button.fontSize, 15, reason: 'buttons keep theirs');
-      await tapOn(tester, find.byKey(const ValueKey('type-display-fraunces')));
-      expect(AppTypography.pageTitle.fontFamily, 'Fraunces');
-      expect(AppTypography.body.fontFamily, 'Figtree', reason: 'independent');
+      // UI-085: one tap switches both families of a fixed pair.
+      await tapOn(
+        tester,
+        find.byKey(const ValueKey('dev-font-halant-nunito-sans')),
+      );
+      expect(AppTypography.pageTitle.fontFamily, 'Halant');
+      expect(AppTypography.body.fontFamily, 'Nunito Sans');
+      // UI-095, UI-096, UI-098 together.
+      await tapOn(tester, find.byKey(const ValueKey('dev-brand-a07add')));
+      await tapOn(
+        tester,
+        find.byKey(const ValueKey('dev-shape-fully-rounded')),
+      );
+      await tapOn(tester, find.byKey(const ValueKey('dev-secondary-filled')));
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(AppColors.accent, const Color(0xFFA07ADD));
+      expect(NumayaButton.radiusFor(small: false), AppRadii.pill);
+      expect(NumayaButton.outlinedSecondary, isFalse);
+      // UI-097: one reset restores every Dev Mode setting.
       await tapOn(tester, find.byKey(const ValueKey('type-reset')));
       await tester.pump(const Duration(milliseconds: 300));
       expect(c.read(typeSettingsProvider), TypeSettings.baseline);
       expect(AppTypography.body.fontSize, 15);
+      expect(AppTypography.pageTitle.fontFamily, 'Plus Jakarta Sans');
+      expect(AppColors.accent, const Color(0xFF7262C7));
+      expect(NumayaButton.radiusFor(small: false), AppRadii.control);
+      expect(NumayaButton.outlinedSecondary, isTrue);
       await settle(tester);
     });
   });

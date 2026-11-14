@@ -397,9 +397,7 @@ class _DesignLabScreenState extends ConsumerState<DesignLabScreen> {
               onLike: () {},
             ),
             _section('States'),
-            const Center(
-              child: CircularProgressIndicator(color: AppColors.accent),
-            ),
+            Center(child: CircularProgressIndicator(color: AppColors.accent)),
             EmptyState(
               title: 'No incoming likes yet',
               body: 'When someone likes your profile, they’ll show up here.',

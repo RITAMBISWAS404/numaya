@@ -181,19 +181,14 @@ final List<V8Scene> v8Scenes = [
       choices: {'v8-profile': v},
       height: 1400,
     ),
-  // UI-085: every display x UI pairing on the same four screens and data, at the default 15pt
-  // body; then the 14pt body on the baseline families.
-  for (final d in DisplayFace.values)
-    for (final u in UiFace.values)
-      for (final (name, route) in _typeScreens)
-        V8Scene(
-          'type-${d.id}--${u.id}--15--$name',
-          route,
-          type: TypeSettings(display: d, ui: u),
-        ),
+  // UI-085 (2026-11-15): every fixed pairing on the same four screens and data, at the default
+  // 15pt body; then the 14pt body on the baseline families.
+  for (final p in FontPairing.values)
+    for (final (name, route) in _typeScreens)
+      V8Scene('type-${p.id}--15--$name', route, type: TypeSettings(pairing: p)),
   for (final (name, route) in _typeScreens)
     V8Scene(
-      'type-baseline--baseline--14--$name',
+      'type-default--14--$name',
       route,
       type: const TypeSettings(bodySize: 14),
     ),

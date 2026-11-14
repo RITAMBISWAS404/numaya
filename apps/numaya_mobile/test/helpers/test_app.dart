@@ -83,11 +83,12 @@ Future<void> loadAppFonts() async {
   for (final (family, file) in [
     ('Figtree', 'assets/fonts/Figtree-Variable.ttf'),
     ('Plus Jakarta Sans', 'assets/fonts/PlusJakartaSans-Variable.ttf'),
-    // UI-085 review fonts (Prototype tools > Typography).
-    ('Fraunces', 'assets/fonts/Fraunces-Variable.ttf'),
-    ('Instrument Serif', 'assets/fonts/InstrumentSerif-Regular.ttf'),
-    ('DM Serif Display', 'assets/fonts/DMSerifDisplay-Regular.ttf'),
-    ('Manrope', 'assets/fonts/Manrope-Variable.ttf'),
+    // UI-085 fixed pairings (Prototype tools > Dev Mode). Halant ships static weights (below).
+    ('Nunito Sans', 'assets/fonts/NunitoSans-Variable.ttf'),
+    ('Yeseva One', 'assets/fonts/YesevaOne-Regular.ttf'),
+    ('Josefin Sans', 'assets/fonts/JosefinSans-Variable.ttf'),
+    ('DM Sans', 'assets/fonts/DMSans-Variable.ttf'),
+    ('Bree Serif', 'assets/fonts/BreeSerif-Regular.ttf'),
     ('Noto Color Emoji', '/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf'),
     // Windows hosts: Segoe UI Emoji stands in for the phone's colour emoji in renders.
     ('Noto Color Emoji', r'C:\Windows\Fonts\seguiemj.ttf'),
@@ -104,15 +105,15 @@ Future<void> loadAppFonts() async {
       ..addFont(Future.value(ByteData.view(bytes.buffer)));
     await loader.load();
   }
-  // Poppins ships one file per weight: one loader, four fonts.
-  final poppins = FontLoader('Poppins');
-  for (final w in ['Regular', 'Medium', 'SemiBold', 'Bold']) {
-    final f = File('assets/fonts/Poppins-$w.ttf');
+  // Halant ships one file per weight: one loader, five fonts.
+  final halant = FontLoader('Halant');
+  for (final w in ['Light', 'Regular', 'Medium', 'SemiBold', 'Bold']) {
+    final f = File('assets/fonts/Halant-$w.ttf');
     if (!f.existsSync()) continue;
     final bytes = f.readAsBytesSync();
-    poppins.addFont(Future.value(ByteData.view(bytes.buffer)));
+    halant.addFont(Future.value(ByteData.view(bytes.buffer)));
   }
-  await poppins.load();
+  await halant.load();
   // Icons are Tabler SVG assets (lib/core/design_system/icons/tabler_icons.dart): the test asset
   // bundle serves them, so no icon font needs loading.
 }

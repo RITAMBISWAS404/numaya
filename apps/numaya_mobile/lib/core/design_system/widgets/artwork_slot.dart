@@ -48,7 +48,7 @@ class ArtworkSlot extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const NumayaIcon(
+                      NumayaIcon(
                         NumayaIcons.image,
                         size: AppSizes.iconLg,
                         color: AppColors.accentOnTint,

@@ -36,7 +36,7 @@ class _VoiceAction extends StatelessWidget {
         child: Container(
           width: 44,
           height: 44,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: AppColors.accent,
             shape: BoxShape.circle,
           ),
@@ -262,11 +262,13 @@ class _VoiceRecorderBarState extends ConsumerState<VoiceRecorderBar> {
                         child: SizedBox.square(
                           dimension: kMinInteractiveDimension,
                           child: Center(
+                            // UI-070: compact media glyphs are filled.
                             child: MobileIcon(
                               _playing
                                   ? NumayaMobileIcons.pause
                                   : NumayaMobileIcons.play,
                               size: AppSizes.iconMd,
+                              filled: true,
                             ),
                           ),
                         ),
@@ -487,11 +489,13 @@ class _VoiceMessageState extends ConsumerState<VoiceMessage> {
                         shape: BoxShape.circle,
                       ),
                       alignment: Alignment.center,
+                      // UI-070: solid play and pause bars, sent and received.
                       child: MobileIcon(
                         _playing
                             ? NumayaMobileIcons.pause
                             : NumayaMobileIcons.play,
                         size: 20,
+                        filled: true,
                         color: mine
                             ? AppColors.accent
                             : AppColors.accentForeground,

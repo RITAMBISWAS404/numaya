@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
 import 'package:numaya_mobile/features/dating/application/dating_controller.dart';
+import 'package:numaya_mobile/features/dating/presentation/conversation_row.dart';
 import 'package:numaya_mobile/features/lab/lab_registry.dart';
 import 'package:numaya_mobile/features/profile/application/profile_details_controller.dart';
 import 'package:numaya_mobile/features/verification/application/verification_controller.dart';
@@ -27,8 +28,8 @@ void main() {
 
   group('UI-033/034 New matches', () {
     testWidgets(
-      'no Likes tile (owner selection); R02: each match is a 3:4 photo in a '
-      'squircle progress ring with no countdown or name below',
+      'no Likes tile (owner selection); UI-033: each match is a circular photo at the '
+      'conversation avatar size in a progress ring with no countdown or name below',
       (tester) async {
         final c = await open(tester, Routes.messages);
         final likes = c.read(datingProvider.notifier).unansweredLikes();
@@ -37,9 +38,20 @@ void main() {
           find.bySemanticsLabel(RegExp('^$likes people like you')),
           findsNothing,
         );
-        // UI-033 (V8): square, image-only tiles (no ring); the time left is spoken.
-        expect(find.byType(CountdownAvatar), findsNothing);
+        // UI-033 (new build, 2026-11-15): a circular photo inside the expiry ring, at exactly the
+        // conversation avatar's diameter (supersedes V8's square tiles); the time left is spoken.
+        expect(find.byType(CountdownAvatar), findsWidgets);
         expect(find.byKey(const ValueKey('match-tile-jo')), findsOneWidget);
+        final matchPhoto = tester.getSize(
+          find
+              .descendant(
+                of: find.byKey(const ValueKey('match-tile-jo')),
+                matching: find.byType(InitialsAvatar),
+              )
+              .first,
+        );
+        expect(matchPhoto.width, ConversationRow.avatarSize);
+        expect(matchPhoto.height, ConversationRow.avatarSize);
         // R02 supersedes the MVP caption: no time under the avatar; it is spoken instead.
         expect(find.text('21h left'), findsNothing);
         expect(
@@ -226,7 +238,9 @@ void main() {
     final note = tester.widget<Text>(
       find.text('Your birthday can’t be changed after setup.'),
     );
-    expect(note.style!.color, AppColors.textMuted);
+    // UI-012 (new build): a note under a list card is supporting copy, the secondary grey
+    // (#4D4D4D); metadata takes the lighter tertiary grey. Both are muted against the title.
+    expect(note.style!.color, AppColors.textSecondary);
     await settle(tester);
   });
 

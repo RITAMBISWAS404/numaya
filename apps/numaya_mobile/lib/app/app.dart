@@ -31,9 +31,10 @@ class NumayaApp extends ConsumerWidget {
     final haptics = ref.watch(accountPrefsProvider.select((p) => p.haptics));
     final reduceMotion = ref.watch(demoReduceMotionProvider);
     final online = ref.watch(connectivityProvider);
-    // Review-build typography (UI-085, 14/15 body): applied before the theme is built. A change
-    // rebuilds every element on the next frame so explicit styles follow, not just the theme.
-    AppTypography.apply(ref.watch(typeSettingsProvider));
+    // Review-build Dev Mode (UI-085 fonts, UI-095 brand, UI-096 shape, UI-098 secondary surface,
+    // 14/15 body): applied before the theme is built. A change rebuilds every element on the next
+    // frame so explicit styles follow, not just the theme.
+    DevModeStyles.apply(ref.watch(typeSettingsProvider));
     ref.listen(typeSettingsProvider, (was, now) {
       if (was == now) return;
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -55,10 +56,13 @@ class NumayaApp extends ConsumerWidget {
       _ => MotionPreset.m1,
     };
     // Replacement V8 app-wide comparisons: the proposed values everywhere but the Design Lab.
-    NumayaButton.outlinedSecondary =
-        ref.watch(labVariantProvider('r8-secondary-button')) == 'A';
+    // UI-098 replaced the r8-secondary-button lab group: the secondary surface is a Dev Mode
+    // setting now (DevModeStyles.filledSecondary), so there is one control, not two.
     PhotoScrim.adaptive =
         ref.watch(labVariantProvider('r8-photo-scrim')) == 'A';
+    // UI-094: the status template's surface (white card unless the Design Lab says otherwise).
+    EmptyState.cardSurface =
+        ref.watch(labVariantProvider('ui094-status-surface')) != 'A';
     return MaterialApp.router(
       onGenerateTitle: (context) => context.l10n.appName,
       debugShowCheckedModeBanner: false,

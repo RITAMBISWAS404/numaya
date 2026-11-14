@@ -57,7 +57,7 @@ class TypeSettingsStore {
 
   /// Applies the saved settings before the first frame (called from `main`).
   static Future<void> restore() async {
-    AppTypography.apply(await const TypeSettingsStore().read());
+    DevModeStyles.apply(await const TypeSettingsStore().read());
   }
 }
 
@@ -69,11 +69,11 @@ final typeSettingsStoreProvider = Provider<TypeSettingsStore>(
 /// rebuilds every widget, so a change shows at once on every screen without a restart.
 class TypeSettingsController extends Notifier<TypeSettings> {
   @override
-  TypeSettings build() => AppTypography.settings;
+  TypeSettings build() => DevModeStyles.active;
 
   Future<void> set(TypeSettings settings) async {
     if (!TypeSettingsStore.enabled || settings == state) return;
-    AppTypography.apply(settings);
+    DevModeStyles.apply(settings);
     state = settings;
     await ref.read(typeSettingsStoreProvider).write(settings);
   }
@@ -81,11 +81,13 @@ class TypeSettingsController extends Notifier<TypeSettings> {
   /// Applies the settings read from this phone at startup (not written back).
   void restore(TypeSettings settings) {
     if (!TypeSettingsStore.enabled || settings == state) return;
-    AppTypography.apply(settings);
+    DevModeStyles.apply(settings);
     state = settings;
   }
 
-  /// Restores all three controls to the verified baseline (current families, 15pt body).
+  /// UI-097: restores every Dev Mode setting (font pairing, body size, brand colour, button shape
+  /// and secondary surface) to the verified baseline and deletes the saved file. Account, profile
+  /// and Design Lab data are untouched.
   Future<void> reset() => set(TypeSettings.baseline);
 }
 

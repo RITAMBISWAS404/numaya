@@ -171,7 +171,14 @@ Future<int?> showHeightSheet(BuildContext context, int? current) {
         children: [
           // UI-023: the read-out and its slider share one white card on the grey sheet; the
           // slider uses the shared full-width theme (UI-024).
+          // UI-090: the shared slider clearance; the card adds none under the control.
           WhiteCard(
+            padding: const EdgeInsets.fromLTRB(
+              AppLayout.cardPadding,
+              AppLayout.cardPadding,
+              AppLayout.cardPadding,
+              0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -180,17 +187,18 @@ Future<int?> showHeightSheet(BuildContext context, int? current) {
                   textAlign: TextAlign.center,
                   style: AppTypography.headline,
                 ),
-                const SizedBox(height: AppSpacing.s2),
-                SliderTheme(
-                  data: numayaSliderTheme(context),
-                  child: Slider(
-                    value: value.toDouble(),
-                    min: DetailRules.minHeight.toDouble(),
-                    max: DetailRules.maxHeight.toDouble(),
-                    divisions: DetailRules.maxHeight - DetailRules.minHeight,
-                    semanticFormatterCallback: (v) =>
-                        l10n.heightValue(v.round()),
-                    onChanged: (v) => setSheet(() => value = v.round()),
+                SliderBlock(
+                  child: SliderTheme(
+                    data: numayaSliderTheme(context),
+                    child: Slider(
+                      value: value.toDouble(),
+                      min: DetailRules.minHeight.toDouble(),
+                      max: DetailRules.maxHeight.toDouble(),
+                      divisions: DetailRules.maxHeight - DetailRules.minHeight,
+                      semanticFormatterCallback: (v) =>
+                          l10n.heightValue(v.round()),
+                      onChanged: (v) => setSheet(() => value = v.round()),
+                    ),
                   ),
                 ),
               ],

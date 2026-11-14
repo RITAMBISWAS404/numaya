@@ -71,6 +71,8 @@ class PhotoPill extends StatelessWidget {
   Widget build(BuildContext context) => ConstrainedBox(
     constraints: const BoxConstraints(minHeight: 26),
     child: PhotoGlass(
+      // UI-087: a photo pill is an information pill: capsule ends.
+      radius: AppRadii.infoPill,
       padding: const EdgeInsets.symmetric(
         horizontal: AppLayout.badgeInsetX,
         vertical: AppLayout.badgeInsetY,

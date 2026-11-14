@@ -150,25 +150,33 @@ void main() {
   });
 
   group('FT-02 text colour roles', () {
-    test('primary #000, secondary and metadata #666, both at 4.5:1 on every surface', () {
+    // UI-012 (new build, 2026-11-15) replaces FT-02's two levels with three: primary #000,
+    // secondary #4D4D4D for supporting copy, tertiary #666 for metadata. Each reaches 4.5:1 on
+    // white, the page and the fill, and the three stay in order of emphasis.
+    test('primary #000, secondary #4D4D4D, tertiary metadata #666, all 4.5:1 on every surface', () {
       expect(AppColors.textPrimary, const Color(0xFF000000));
-      expect(AppColors.textSecondary, const Color(0xFF666666));
-      expect(AppColors.textMuted, AppColors.textSecondary);
-      expect(AppTypography.caption.color, AppColors.textSecondary);
+      expect(AppColors.textSecondary, const Color(0xFF4D4D4D));
+      expect(AppColors.textTertiary, const Color(0xFF666666));
+      expect(AppColors.textMuted, AppColors.textTertiary);
+      expect(AppTypography.caption.color, AppColors.textTertiary);
+      expect(AppTypography.micro.color, AppColors.textTertiary);
       expect(AppTypography.helper.color, AppColors.textSecondary);
+      expect(
+        AppTypography.caption.fontSize,
+        lessThan(AppTypography.body.fontSize!),
+        reason: 'metadata is smaller than body',
+      );
       for (final surface in [
         AppColors.surface,
         AppColors.canvas,
         AppColors.fill,
       ]) {
-        expect(
-          ratio(AppColors.textSecondary, surface),
-          greaterThanOrEqualTo(4.5),
-        );
-        expect(
-          ratio(AppColors.textPrimary, surface),
-          greaterThanOrEqualTo(4.5),
-        );
+        final p = ratio(AppColors.textPrimary, surface);
+        final s2 = ratio(AppColors.textSecondary, surface);
+        final t = ratio(AppColors.textTertiary, surface);
+        expect(t, greaterThanOrEqualTo(4.5));
+        expect(s2, greaterThan(t));
+        expect(p, greaterThan(s2));
       }
     });
 

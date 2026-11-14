@@ -202,7 +202,7 @@ class _ToastViewState extends State<_ToastView> with TickerProviderStateMixin {
                                 child: Container(
                                   width: 4,
                                   height: 4,
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     color: AppColors.accent,
                                     shape: BoxShape.circle,
                                   ),

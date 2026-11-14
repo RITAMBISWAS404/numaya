@@ -143,7 +143,7 @@ class ComplimentPackScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: AppSpacing.s4),
-          const Center(
+          Center(
             child: MobileIcon(
               NumayaMobileIcons.compliment,
               size: 48,
@@ -265,36 +265,40 @@ class PurchaseOutcomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final (title, body, illustration) = switch (outcome) {
+    // UI-094 (2026-11-15): every outcome uses the shared status template, centred in the area
+    // under the top bar: an icon or the reserved illustration, the heading, the copy, then the
+    // relevant actions and links. Success keeps its illustration; the others take an icon
+    // (artwork for them is pending, UI-077).
+    final (title, body, Widget art) = switch (outcome) {
       PurchaseOutcome.success => (
         l10n.outcomeSuccessTitle,
         l10n.outcomeSuccessBody,
-        NumayaIllustration.hello,
+        const IllustrationView(NumayaIllustration.hello, width: 132),
       ),
       PurchaseOutcome.pending => (
         l10n.outcomePendingTitle,
         l10n.outcomePendingBody,
-        null,
+        const NumayaIcon(NumayaIcons.clock, size: 36, color: AppColors.ink),
       ),
       PurchaseOutcome.cancelled => (
         l10n.outcomeCancelledTitle,
         l10n.outcomeCancelledBody,
-        null,
+        const NumayaIcon(NumayaIcons.info, size: 36, color: AppColors.ink),
       ),
       PurchaseOutcome.failed => (
         l10n.outcomeFailedTitle,
         l10n.outcomeFailedBody,
-        null,
+        const NumayaIcon(NumayaIcons.alert, size: 36, color: AppColors.ink),
       ),
       PurchaseOutcome.unavailable => (
         l10n.outcomeUnavailableTitle,
         l10n.outcomeUnavailableBody,
-        null,
+        const NumayaIcon(NumayaIcons.info, size: 36, color: AppColors.ink),
       ),
       PurchaseOutcome.ineligible => (
         l10n.outcomeIneligibleTitle,
         l10n.outcomeIneligibleBody,
-        null,
+        const NumayaIcon(NumayaIcons.info, size: 36, color: AppColors.ink),
       ),
     };
     final k = kind;
@@ -312,50 +316,46 @@ class PurchaseOutcomeScreen extends ConsumerWidget {
 
     return NumayaScreen(
       top: NumayaTopBar(onBack: done, backLabel: l10n.close, closeIcon: true),
-      footer: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (retry) ...[
-            NumayaButton(
-              label: l10n.outcomeTryAgain,
-              // Back to the store page, where the plan or pack is still chosen.
-              onPressed: () => context.pop(),
-            ),
-            const SizedBox(height: AppSpacing.s3),
-          ],
-          NumayaButton(
-            label: l10n.done,
-            variant: retry
-                ? NumayaButtonVariant.secondary
-                : NumayaButtonVariant.primary,
-            onPressed: done,
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: AppSpacing.s10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ResultPanel(title: title, body: body, illustration: illustration),
-            const SizedBox(height: AppSpacing.s6),
-            Center(
-              child: Wrap(
-                spacing: AppSpacing.s5,
-                children: [
-                  TextLink(
-                    label: l10n.outcomeRestore,
-                    onPressed: () =>
-                        NumayaToast.show(context, l10n.paywallRestoreNone),
-                  ),
-                  TextLink(
-                    label: l10n.outcomeHelp,
-                    onPressed: () => context.push(Routes.helpContact),
-                  ),
-                ],
+      scrollable: false,
+      bodyPadding: EdgeInsets.zero,
+      body: StatusLayout(
+        child: EmptyState(
+          key: ValueKey('outcome-${outcome.name}'),
+          art: art,
+          title: title,
+          body: body,
+          actions: [
+            if (retry)
+              NumayaButton(
+                key: const ValueKey('outcome-retry'),
+                label: l10n.outcomeTryAgain,
+                // Back to the store page, where the plan or pack is still chosen.
+                onPressed: () => context.pop(),
               ),
+            NumayaButton(
+              key: const ValueKey('outcome-done'),
+              label: l10n.done,
+              variant: retry
+                  ? NumayaButtonVariant.secondary
+                  : NumayaButtonVariant.primary,
+              onPressed: done,
             ),
           ],
+          links: Wrap(
+            alignment: WrapAlignment.center,
+            spacing: AppSpacing.s5,
+            children: [
+              TextLink(
+                label: l10n.outcomeRestore,
+                onPressed: () =>
+                    NumayaToast.show(context, l10n.paywallRestoreNone),
+              ),
+              TextLink(
+                label: l10n.outcomeHelp,
+                onPressed: () => context.push(Routes.helpContact),
+              ),
+            ],
+          ),
         ),
       ),
     );

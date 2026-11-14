@@ -31,7 +31,7 @@ void main() {
     await loadAppFonts();
     await DemoPhotoLibrary.load();
   });
-  tearDown(() => AppTypography.apply(TypeSettings.baseline));
+  tearDown(() => DevModeStyles.apply(TypeSettings.baseline));
 
   final stress = _scale != '1' || _width != '393';
   final dir = stress ? 'v8/stress/w${_width}_x$_scale' : 'v8';
@@ -47,7 +47,7 @@ void main() {
       tester.platformDispatcher.textScaleFactorTestValue = double.parse(_scale);
       addTearDown(tester.view.reset);
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-      AppTypography.apply(s.type);
+      DevModeStyles.apply(s.type);
       final c = await quickStartApp(tester, world: DemoWorld.full);
       c.read(onboardingProvider.notifier).loadSample();
       if (s.premium) c.read(premiumProvider.notifier).setActive(true);

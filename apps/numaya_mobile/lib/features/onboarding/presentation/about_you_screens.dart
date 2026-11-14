@@ -121,9 +121,12 @@ class _NameBirthdayScreenState extends ConsumerState<NameBirthdayScreen> {
       FocusNode? next,
     ) => Expanded(
       flex: length,
+      // UI-089: the Birthday group label stays; Day, Month and Year are not drawn and the
+      // placeholders DD, MM and YYYY guide entry. Each field keeps its own accessible name and
+      // the existing date validation.
       child: NumayaTextField(
         label: label,
-        subLabel: true,
+        labelHidden: true,
         controller: c,
         focusNode: focus,
         placeholder: placeholder,

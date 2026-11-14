@@ -42,9 +42,13 @@ class SquircleIconButton extends StatelessWidget {
   static const double size = AppSizes.iconButton;
   static const double target = 48;
 
-  /// Visual inset from a photo's edge for controls laid over it, and the photo radius that keeps
-  /// the corners concentric (outer = inner + inset: 12 + 12 = 24, owner note).
-  static const double photoInset = 12;
+  /// Visual inset from a photo's edge for controls laid over it. UI-049 (new build, 2026-11-15):
+  /// the standard card padding (16), the same inset as text in a card, on every edge of an image
+  /// overlay. Was 12.
+  static const double photoInset = AppLayout.cardPadding;
+
+  /// The photo's corner keeps the controls on it concentric (UI-050: outer = inner + inset):
+  /// 12 + 16 = 28 with the UI-049 inset (was 12 + 12 = 24).
   static const double photoRadius = AppRadii.iconButton + photoInset;
 
   /// Positioned offset of the 48pt target so the 38pt squircle sits [photoInset] in.

@@ -12577,19 +12577,19 @@ abstract class AppLocalizations {
   /// No description provided for @reviewTypeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Typography'**
+  /// **'Dev Mode'**
   String get reviewTypeTitle;
 
   /// No description provided for @demoTypography.
   ///
   /// In en, this message translates to:
-  /// **'Typography'**
+  /// **'Dev Mode'**
   String get demoTypography;
 
   /// No description provided for @demoTypographyDetail.
   ///
   /// In en, this message translates to:
-  /// **'Display font, UI font and body size (14 or 15)'**
+  /// **'Font pairing, brand colour, button shape, secondary surface, body size'**
   String get demoTypographyDetail;
 
   /// No description provided for @reviewTypeBodySize.
@@ -12619,13 +12619,13 @@ abstract class AppLocalizations {
   /// No description provided for @reviewTypeDisplay.
   ///
   /// In en, this message translates to:
-  /// **'Display font'**
+  /// **'Font pairing'**
   String get reviewTypeDisplay;
 
   /// No description provided for @reviewTypeDisplayNote.
   ///
   /// In en, this message translates to:
-  /// **'Hero headings, page titles, sheet titles, large names and metrics.'**
+  /// **'Display family first (hero headings, page and sheet titles, large names, metrics), UI family second (subheadings, app-bar titles, body, buttons, fields, labels, metadata). Both change together.'**
   String get reviewTypeDisplayNote;
 
   /// No description provided for @reviewTypeOneWeight.
@@ -12649,14 +12649,68 @@ abstract class AppLocalizations {
   /// No description provided for @reviewTypeReset.
   ///
   /// In en, this message translates to:
-  /// **'Reset to default'**
+  /// **'Reset all Dev Mode settings'**
   String get reviewTypeReset;
 
   /// No description provided for @reviewTypeCurrent.
   ///
   /// In en, this message translates to:
-  /// **'Now: {display} · {ui} · {size}pt body. Kept on this phone.'**
+  /// **'Now: {display} · {ui} · {size}pt body. Kept on this phone; reset never touches your account or profile.'**
   String reviewTypeCurrent(String display, String ui, int size);
+
+  /// No description provided for @reviewDevBrand.
+  ///
+  /// In en, this message translates to:
+  /// **'Brand colour'**
+  String get reviewDevBrand;
+
+  /// No description provided for @reviewDevBrandNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary buttons, selected controls, progress, links and brand tints. Neutral surfaces and success, warning and error colours do not change.'**
+  String get reviewDevBrandNote;
+
+  /// No description provided for @reviewDevShape.
+  ///
+  /// In en, this message translates to:
+  /// **'Button shape'**
+  String get reviewDevShape;
+
+  /// No description provided for @reviewDevShapeNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Every shaped button: primary, outlined, disabled and compact.'**
+  String get reviewDevShapeNote;
+
+  /// No description provided for @reviewDevSecondary.
+  ///
+  /// In en, this message translates to:
+  /// **'Secondary button surface'**
+  String get reviewDevSecondary;
+
+  /// No description provided for @reviewDevSecondaryNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Secondary, quiet and brand buttons. Filled is black at 8% over the background.'**
+  String get reviewDevSecondaryNote;
+
+  /// No description provided for @reviewDevSampleCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get reviewDevSampleCancel;
+
+  /// No description provided for @reviewDevSampleSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get reviewDevSampleSave;
+
+  /// No description provided for @reviewDevSampleDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get reviewDevSampleDisabled;
 
   /// No description provided for @reviewTypeSampleTitle.
   ///

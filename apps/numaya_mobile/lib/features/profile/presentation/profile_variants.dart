@@ -55,7 +55,7 @@ class ProfileHeaderData {
             onTap: onVerify,
             semanticLabel: '${status(l10n)}. ${l10n.editVerify}',
             excludeChildSemantics: true,
-            borderRadius: AppRadii.all(AppRadii.chip),
+            borderRadius: AppRadii.all(AppRadii.infoPill),
             child: pill,
           );
   }
@@ -518,7 +518,7 @@ class _Bar extends StatelessWidget {
               FractionallySizedBox(
                 alignment: AlignmentDirectional.centerStart,
                 widthFactor: f,
-                child: const ColoredBox(color: AppColors.accent),
+                child: ColoredBox(color: AppColors.accent),
               ),
             ],
           ),
@@ -594,7 +594,7 @@ class CompletionBanner extends StatelessWidget {
                 Container(
                   width: AppSizes.iconButton,
                   height: AppSizes.iconButton,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: AppColors.accent,
                     shape: BoxShape.circle,
                   ),

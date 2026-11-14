@@ -126,7 +126,7 @@ class FxIntroduction extends StatelessWidget {
                     ),
                     const SizedBox(width: AppSpacing.s2),
                   ] else ...[
-                    const MobileIcon(
+                    MobileIcon(
                       NumayaMobileIcons.compliment,
                       size: 16,
                       color: AppColors.accentOnTint,

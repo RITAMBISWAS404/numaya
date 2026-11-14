@@ -46,16 +46,6 @@ class NumayaScreen extends StatefulWidget {
 }
 
 class _NumayaScreenState extends State<NumayaScreen> {
-  /// Content has scrolled under the top bar: show its hairline.
-  bool _scrolled = false;
-
-  bool _onScroll(ScrollNotification n) {
-    if (n.depth != 0 || n.metrics.axis != Axis.vertical) return false;
-    final scrolled = n.metrics.pixels > 0.5;
-    if (scrolled != _scrolled) setState(() => _scrolled = scrolled);
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     final bodyPadding = widget.bodyPadding;
@@ -111,18 +101,11 @@ class _NumayaScreenState extends State<NumayaScreen> {
       resizeToAvoidBottomInset: true,
       body: Column(
         children: [
+          // UI-102 (2026-11-15): no scroll-triggered stroke under the top bar; the bar is the
+          // page colour at rest and while content scrolls beneath it.
           if (top != null)
-            AnimatedContainer(
-              duration: AppMotion.duration(context, AppMotion.state),
-              decoration: BoxDecoration(
-                color: AppColors.canvas,
-                border: Border(
-                  bottom: BorderSide(
-                    color: _scrolled ? AppColors.border : AppColors.canvas,
-                    width: AppBorders.hairline,
-                  ),
-                ),
-              ),
+            ColoredBox(
+              color: AppColors.canvas,
               child: Padding(
                 padding: EdgeInsets.only(top: topInset),
                 child: column(top),
@@ -137,15 +120,12 @@ class _NumayaScreenState extends State<NumayaScreen> {
                     // Tapping outside a field dismisses the keyboard. Not a control, so screen
                     // readers don't see a screen-sized button.
                     Expanded(
-                      child: NotificationListener<ScrollNotification>(
-                        onNotification: _onScroll,
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          excludeFromSemantics: true,
-                          onTap: () =>
-                              FocusManager.instance.primaryFocus?.unfocus(),
-                          child: content,
-                        ),
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        excludeFromSemantics: true,
+                        onTap: () =>
+                            FocusManager.instance.primaryFocus?.unfocus(),
+                        child: content,
                       ),
                     ),
                     if (footer != null && !inlineFooter)
@@ -305,65 +285,56 @@ class HeaderActions extends StatelessWidget {
   }
 }
 
-/// Progress segments (`.progress`): ink on the fill (V16); done segments filled, the current one
-/// fills in on arrival.
+/// UI-101 (2026-11-15): header step progress is one continuous track with a single fill, not
+/// segments, so it reads the same however many steps the active path has. The fill is the share
+/// of the path's steps reached ([step] of [steps]) and eases forward from the previous step on
+/// arrival. The track keeps the old segmented bar's overall width. Statistics charts are a
+/// separate family (UI-078).
 class StepProgress extends StatelessWidget {
   const StepProgress({super.key, required this.step, required this.steps});
 
   final int step;
   final int steps;
 
+  /// The track's width: what five 4pt-spaced segments used to occupy, so headers keep their
+  /// balance around the centred bar.
+  static double get trackWidth =>
+      5 * AppSizes.progressSegmentWidth + 4 * AppSpacing.s1;
+
   @override
   Widget build(BuildContext context) {
+    final total = steps < 1 ? 1 : steps;
+    final to = (step.clamp(0, total)) / total;
+    final from = ((step - 1).clamp(0, total)) / total;
     return Semantics(
       label: 'Step $step of $steps',
       child: ExcludeSemantics(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (var i = 1; i <= steps; i++) ...[
-              if (i > 1) const SizedBox(width: 4),
-              _Segment(state: i < step ? 1 : (i == step ? 0.5 : 0)),
-            ],
-          ],
+        child: ClipRRect(
+          key: const ValueKey('step-progress-track'),
+          borderRadius: AppRadii.all(AppRadii.pill),
+          child: Container(
+            width: trackWidth,
+            height: AppSizes.progressSegmentHeight,
+            color: AppColors.fill,
+            alignment: Alignment.centerLeft,
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(begin: from, end: to),
+              duration: AppMotion.duration(context, AppMotion.progress),
+              curve: AppMotion.easeOut,
+              builder: (context, v, _) => FractionallySizedBox(
+                key: const ValueKey('step-progress-fill'),
+                widthFactor: v,
+                heightFactor: 1,
+                child: ClipRRect(
+                  borderRadius: AppRadii.all(AppRadii.pill),
+                  child: ColoredBox(color: AppColors.accent),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
-  }
-}
-
-class _Segment extends StatelessWidget {
-  const _Segment({required this.state});
-
-  /// 1 done, 0.5 current (animates in), 0 upcoming.
-  final double state;
-
-  @override
-  Widget build(BuildContext context) {
-    final track = ClipRRect(
-      borderRadius: AppRadii.all(AppRadii.pill),
-      child: Container(
-        width: AppSizes.progressSegmentWidth,
-        height: AppSizes.progressSegmentHeight,
-        color: AppColors.fill,
-        alignment: Alignment.centerLeft,
-        child: state == 0
-            ? null
-            : state == 1
-            ? Container(color: AppColors.accent)
-            : TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0, end: 1),
-                duration: AppMotion.duration(context, AppMotion.progress),
-                curve: AppMotion.easeOut,
-                builder: (context, v, _) => FractionallySizedBox(
-                  widthFactor: v,
-                  heightFactor: 1,
-                  child: Container(color: AppColors.accent),
-                ),
-              ),
-      ),
-    );
-    return track;
   }
 }
 

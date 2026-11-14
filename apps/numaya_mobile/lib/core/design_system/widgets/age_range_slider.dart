@@ -218,3 +218,23 @@ class _AgeRangeSliderState extends State<AgeRangeSlider> {
     );
   }
 }
+
+/// UI-090 (2026-11-15): the one vertical clearance around every slider, single-thumb or range,
+/// taken from the onboarding "Their age" card: [clearance] (8pt) above and below the slider's
+/// full 48pt control box, which already holds the thumbs, their touch targets and the value
+/// pop-up's track. A label above and a card edge, divider or switch below all sit at least that
+/// far from the control, so a thumb is never crowded and taps land on it.
+class SliderBlock extends StatelessWidget {
+  const SliderBlock({super.key, required this.child});
+
+  final Widget child;
+
+  static const double clearance = AppSpacing.s2;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    key: const ValueKey('slider-block'),
+    padding: const EdgeInsets.symmetric(vertical: clearance),
+    child: child,
+  );
+}

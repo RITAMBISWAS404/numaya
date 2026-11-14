@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/design_system/design_system.dart';
 import '../../lab/lab_registry.dart';
 import '../domain/sample_people.dart';
+import 'conversation_row.dart';
 import 'person_profile.dart';
 
 /// One new match in the Chats row (R02): the photo inside a progress ring showing the fraction of
@@ -47,14 +48,18 @@ class MatchAvatarTile extends ConsumerWidget {
     Widget tile;
     switch (v) {
       case 'Q':
-        // UI-033 (V8): a larger square tile, image only, 16pt corners (UI-050 medium tile). No
-        // name, countdown caption or ring; the time left stays in the spoken label and the chat.
-        tile = SizedBox.square(
-          dimension: 88,
-          child: ClipRRect(
-            borderRadius: AppRadii.all(AppRadii.tile),
-            child: _photo(personPhotoImage(person, 1), person, focus),
-          ),
+        // UI-033 (new build, 2026-11-15): a circular photo at exactly the conversation avatar's
+        // diameter (56), inside a progress ring drawn from the match's real deadline: the arc is
+        // the share of the window left, so it shrinks as expiry nears (red under a sixth). No
+        // name or caption; the time left is in the spoken label and the chat. Replaces the V8
+        // 88pt rounded-square tile, which had no ring.
+        tile = CountdownAvatar(
+          initial: person.initial,
+          fraction: fraction,
+          urgent: _urgent,
+          size: ConversationRow.avatarSize + 10,
+          image: image,
+          imageAlignment: focus,
         );
       case 'A':
         // Owner selection: the squircle ring on a 3:4 portrait (width : height).

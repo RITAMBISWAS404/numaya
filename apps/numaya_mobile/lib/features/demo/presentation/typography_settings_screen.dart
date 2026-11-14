@@ -7,18 +7,44 @@ import '../../../core/design_system/design_system.dart';
 import '../../../l10n/l10n.dart';
 import '../application/type_settings_controller.dart';
 
-/// DEVELOPMENT ONLY (UI-085 and the owner's 14/15 decision, 2026-11-14). Three independent
-/// review controls: the display font, the UI font and the base body size, plus Reset. Every
-/// screen follows a change at once and the choice is kept on this phone across relaunches.
-/// Release builds have no route to it and always use the baseline.
+/// DEVELOPMENT ONLY: Dev Mode, the review build's comparisons. UI-085 font pairing (four fixed
+/// pairs), the owner's 14/15 body size, UI-095 brand colour (three choices), UI-096 button shape
+/// (two), UI-098 secondary surface (two) and UI-097 Reset all. Every screen follows a change at
+/// once and the choice is kept on this phone across relaunches. Release builds have no route to
+/// it and always use the baseline.
 class TypographySettingsScreen extends ConsumerWidget {
   const TypographySettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final type = ref.watch(typeSettingsProvider);
+    final dev = ref.watch(typeSettingsProvider);
     final controller = ref.read(typeSettingsProvider.notifier);
+
+    Widget group<T>({
+      required String key,
+      required String title,
+      required String note,
+      required List<T> values,
+      required String Function(T) label,
+      required String Function(T) id,
+      required T current,
+      required TypeSettings Function(T) change,
+      String? Function(T)? detail,
+    }) => ListGroup(
+      title: title,
+      footnote: note,
+      children: [
+        for (final v in values)
+          ListRow(
+            key: ValueKey('dev-$key-${id(v)}'),
+            label: label(v),
+            detail: detail?.call(v),
+            selected: current == v,
+            onTap: () => controller.set(change(v)),
+          ),
+      ],
+    );
 
     return NumayaScreen(
       top: NumayaTopBar(
@@ -33,63 +59,77 @@ class TypographySettingsScreen extends ConsumerWidget {
           const SizedBox(height: AppSpacing.s4),
           const _Specimen(),
           const SizedBox(height: AppSpacing.sectionGap),
-          ListGroup(
-            title: l10n.reviewTypeBodySize,
-            footnote: l10n.reviewTypeBodySizeNote,
-            children: [
-              for (final size in TypeSettings.bodySizes)
-                ListRow(
-                  key: ValueKey('type-body-$size'),
-                  label: size == 15
-                      ? l10n.reviewTypeBodyDefault(size)
-                      : l10n.reviewTypeBodyOption(size),
-                  selected: type.bodySize == size,
-                  onTap: () => controller.set(type.copyWith(bodySize: size)),
-                ),
-            ],
-          ),
-          const SizedBox(height: AppSpacing.sectionGap),
-          ListGroup(
+          group<FontPairing>(
+            key: 'font',
             title: l10n.reviewTypeDisplay,
-            footnote: l10n.reviewTypeDisplayNote,
-            children: [
-              for (final face in DisplayFace.values)
-                ListRow(
-                  key: ValueKey('type-display-${face.id}'),
-                  label: face.label,
-                  detail: face.singleWeight ? l10n.reviewTypeOneWeight : null,
-                  selected: type.display == face,
-                  onTap: () => controller.set(type.copyWith(display: face)),
-                ),
-            ],
+            note: l10n.reviewTypeDisplayNote,
+            values: FontPairing.values,
+            label: (p) => p.label,
+            id: (p) => p.id,
+            detail: (p) =>
+                p.displaySingleWeight ? l10n.reviewTypeOneWeight : null,
+            current: dev.pairing,
+            change: (p) => dev.copyWith(pairing: p),
           ),
           const SizedBox(height: AppSpacing.sectionGap),
-          ListGroup(
-            title: l10n.reviewTypeUi,
-            footnote: l10n.reviewTypeUiNote,
-            children: [
-              for (final face in UiFace.values)
-                ListRow(
-                  key: ValueKey('type-ui-${face.id}'),
-                  label: face.label,
-                  selected: type.ui == face,
-                  onTap: () => controller.set(type.copyWith(ui: face)),
-                ),
-            ],
+          group<int>(
+            key: 'body',
+            title: l10n.reviewTypeBodySize,
+            note: l10n.reviewTypeBodySizeNote,
+            values: TypeSettings.bodySizes,
+            label: (size) => size == 15
+                ? l10n.reviewTypeBodyDefault(size)
+                : l10n.reviewTypeBodyOption(size),
+            id: (size) => '$size',
+            current: dev.bodySize,
+            change: (size) => dev.copyWith(bodySize: size),
+          ),
+          const SizedBox(height: AppSpacing.sectionGap),
+          group<BrandOption>(
+            key: 'brand',
+            title: l10n.reviewDevBrand,
+            note: l10n.reviewDevBrandNote,
+            values: BrandOption.values,
+            label: (b) => b.label,
+            id: (b) => b.id,
+            current: dev.brand,
+            change: (b) => dev.copyWith(brand: b),
+          ),
+          const SizedBox(height: AppSpacing.sectionGap),
+          group<ButtonShape>(
+            key: 'shape',
+            title: l10n.reviewDevShape,
+            note: l10n.reviewDevShapeNote,
+            values: ButtonShape.values,
+            label: (b) => b.label,
+            id: (b) => b.id,
+            current: dev.shape,
+            change: (b) => dev.copyWith(shape: b),
+          ),
+          const SizedBox(height: AppSpacing.sectionGap),
+          group<SecondarySurface>(
+            key: 'secondary',
+            title: l10n.reviewDevSecondary,
+            note: l10n.reviewDevSecondaryNote,
+            values: SecondarySurface.values,
+            label: (b) => b.label,
+            id: (b) => b.id,
+            current: dev.secondary,
+            change: (b) => dev.copyWith(secondary: b),
           ),
           const SizedBox(height: AppSpacing.sectionGap),
           NumayaButton(
             key: const ValueKey('type-reset'),
             label: l10n.reviewTypeReset,
             variant: NumayaButtonVariant.secondary,
-            onPressed: type.isBaseline ? null : () => controller.reset(),
+            onPressed: dev.isBaseline ? null : () => controller.reset(),
           ),
           const SizedBox(height: AppSpacing.s4),
           Text(
             l10n.reviewTypeCurrent(
-              type.display.label,
-              type.ui.label,
-              type.bodySize,
+              dev.pairing.label,
+              '${dev.brand.label} · ${dev.shape.label} · ${dev.secondary.label}',
+              dev.bodySize,
             ),
             style: AppTypography.caption,
           ),
@@ -100,7 +140,8 @@ class TypographySettingsScreen extends ConsumerWidget {
   }
 }
 
-/// One sample of each group: a display heading, a UI subheading, body, a field and metadata.
+/// One sample of each group (display heading, UI subheading, body, metadata) and the button
+/// treatments the shape and surface settings change, so a switch shows at once.
 class _Specimen extends StatelessWidget {
   const _Specimen();
 
@@ -118,6 +159,23 @@ class _Specimen extends StatelessWidget {
           Text(l10n.reviewTypeSampleBody, style: AppTypography.body),
           const SizedBox(height: AppSpacing.s2),
           Text(l10n.reviewTypeSampleMeta, style: AppTypography.caption),
+          const SizedBox(height: AppSpacing.s4),
+          NumayaButtonGroup(
+            children: [
+              NumayaButton(
+                label: l10n.reviewDevSampleCancel,
+                variant: NumayaButtonVariant.secondary,
+                onPressed: () {},
+              ),
+              NumayaButton(label: l10n.reviewDevSampleSave, onPressed: () {}),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.s3),
+          NumayaButton(
+            label: l10n.reviewDevSampleDisabled,
+            variant: NumayaButtonVariant.secondary,
+            onPressed: null,
+          ),
         ],
       ),
     );

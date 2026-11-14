@@ -40,6 +40,9 @@ class ConversationRow extends ConsumerWidget {
   /// `FB`: the complimented photo, at the row's end.
   final Widget? fxThumb;
 
+  /// The conversation avatar's diameter. UI-033: New matches photos use the same diameter.
+  static const double avatarSize = 56;
+
   /// Where the text starts (avatar 56 + gap 16): the inset of the hairline between rows.
   static const double textInset = 72;
 
@@ -121,11 +124,12 @@ class ConversationRow extends ConsumerWidget {
     final Widget content;
     switch (v) {
       case 'V8':
-        // UI-067/068/035 (V8): one list row. Name, then the preview in the shared muted grey
-        // whether read or not; a compact filled grey glyph names a Compliment, photo, video or
-        // voice note, with its text when there is some and a short type label otherwise. No
-        // time on the row. The unread count is the trailing badge; "Your move" is a compact
-        // pill beside the name, so the two never collide.
+        // UI-067/068/035 (new build, 2026-11-15): one list row. Name, then the preview in the
+        // shared muted grey whether read or not; a compact filled grey glyph names a
+        // Compliment, photo, video or voice note, with its text when there is some and a short
+        // type label otherwise. No time on the row. Unread is one dot on the avatar's
+        // bottom-right (Bumble), cleared when read; no number. "Your move" is a compact pill at
+        // the row's trailing edge, and the two coexist.
         final a = last.attachment;
         final Widget? glyph = compliment
             // Tabler has no filled message-heart: the Compliment mark stays the outline glyph
@@ -164,24 +168,24 @@ class ConversationRow extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.s3),
           child: Row(
             children: [
-              avatar(56),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  avatar(avatarSize),
+                  if (unread > 0)
+                    const Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: UnreadDot(key: ValueKey('row-unread-dot')),
+                    ),
+                ],
+              ),
               const SizedBox(width: AppSpacing.s4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Flexible(child: name()),
-                        if (yourMove) ...[
-                          const SizedBox(width: AppSpacing.s2),
-                          StatusBadge(
-                            key: const ValueKey('row-your-move'),
-                            label: l10n.yourMoveTag,
-                          ),
-                        ],
-                      ],
-                    ),
+                    name(),
                     const SizedBox(height: 2),
                     Row(
                       children: [
@@ -199,15 +203,18 @@ class ConversationRow extends ConsumerWidget {
                             ),
                           ),
                         ),
-                        if (unread > 0) ...[
-                          const SizedBox(width: AppSpacing.s2),
-                          CountBadge(count: unread),
-                        ],
                       ],
                     ),
                   ],
                 ),
               ),
+              if (yourMove) ...[
+                const SizedBox(width: AppSpacing.s3),
+                StatusBadge(
+                  key: const ValueKey('row-your-move'),
+                  label: l10n.yourMoveTag,
+                ),
+              ],
             ],
           ),
         );
@@ -514,7 +521,7 @@ class ConversationRow extends ConsumerWidget {
                     Row(
                       children: [
                         if (compliment) ...[
-                          const MobileIcon(
+                          MobileIcon(
                             NumayaMobileIcons.compliment,
                             size: 16,
                             color: AppColors.accentOnTint,

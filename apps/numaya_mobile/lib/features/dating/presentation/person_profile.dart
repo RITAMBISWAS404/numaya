@@ -114,14 +114,18 @@ class PersonHeroCard extends StatelessWidget {
                         final label = ref.watch(
                           labVariantProvider('v4-photo-label'),
                         );
+                        // UI-049 (new build): the standard card padding on the overlay's
+                        // left, right and bottom edges, as text sits in a card.
                         final inset = EdgeInsets.fromLTRB(
-                          AppSpacing.s3,
+                          AppLayout.cardPadding,
                           0,
-                          // R05: room for the 48pt Compliment target plus a gap.
+                          // R05: room for the Compliment control plus a gap.
                           complimentAction == null
-                              ? AppSpacing.s3
-                              : SquircleIconButton.target + AppSpacing.s2,
-                          AppSpacing.s3,
+                              ? AppLayout.cardPadding
+                              : SquircleIconButton.photoInset +
+                                    SquircleIconButton.size +
+                                    AppSpacing.s2,
+                          AppLayout.cardPadding,
                         );
                         return switch (label) {
                           // B: an edge-to-edge glass bar along the photo's foot.
@@ -198,16 +202,16 @@ class PersonHeroCard extends StatelessWidget {
                   // `discover-photo` B keeps the name chip at the top, so its tags sit at the
                   // bottom left, clear of the Compliment action.
                   Positioned(
-                    top: layout == 'B' ? null : AppSpacing.s3,
-                    bottom: layout == 'B' ? AppSpacing.s3 : null,
-                    left: AppSpacing.s3,
-                    right: layout == 'B' ? 64 : AppSpacing.s3,
+                    top: layout == 'B' ? null : AppLayout.cardPadding,
+                    bottom: layout == 'B' ? AppLayout.cardPadding : null,
+                    left: AppLayout.cardPadding,
+                    right: layout == 'B' ? 64 : AppLayout.cardPadding,
                     child: IgnorePointer(child: _badges(l10n)),
                   ),
                 if (layout == 'B' && _discover)
                   Positioned(
-                    top: AppSpacing.s3,
-                    left: AppSpacing.s3,
+                    top: AppLayout.cardPadding,
+                    left: AppLayout.cardPadding,
                     right: 64,
                     child: _nameChip(context, l10n),
                   ),
@@ -465,7 +469,7 @@ class PersonHeroCard extends StatelessWidget {
                   ),
                   child: Semantics(
                     label: l10n.discoverVerified,
-                    child: const NumayaIcon(
+                    child: NumayaIcon(
                       NumayaIcons.verified,
                       size: AppSizes.iconMd,
                       color: AppColors.accent,
