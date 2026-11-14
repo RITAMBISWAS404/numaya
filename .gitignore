@@ -15,3 +15,4 @@ apps/numaya_mobile/assets/demo/photos/*
 # Fable design lab renders (contain local-only demo photos; never published)
 apps/numaya_mobile/test/screenshots/fx/
 apps/numaya_mobile/test/screenshots/v8/
+apps/numaya_mobile/test/screenshots/design_review/

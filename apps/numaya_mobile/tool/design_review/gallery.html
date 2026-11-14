@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numaya Design Experiments</title>
+<style>
+:root{--ink:#18181b;--muted:#5f5f66;--line:#e2e2e6;--bg:#f4f4f5;--card:#fff;--brand:#7262c7;--brand-ink:#5b4caf;--tint:#efecfa;--warn:#9a6700;--bad:#b42318;--ok:#1f7a45}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+.bar{max-width:1400px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.bar h1{font-size:18px;margin:0 10px 0 0}
+input[type=search],select{padding:8px 10px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#fff}
+input[type=search]{flex:1;min-width:180px}
+button{font:inherit;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px 12px;cursor:pointer;color:var(--ink)}
+button.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.meta{color:var(--muted);font-size:12px;flex-basis:100%}
+main{max-width:1400px;margin:0 auto;padding:16px}
+#status{display:none;margin:0 0 12px;padding:10px 12px;border-radius:12px;background:var(--tint);color:var(--brand-ink)}#status.show{display:block}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+nav.toc a{font-size:12px;color:var(--brand-ink);background:#fff;border:1px solid var(--line);border-radius:8px;padding:3px 7px;text-decoration:none}
+nav.toc a.done{background:var(--tint)}
+section.exp{background:var(--card);border-radius:16px;padding:16px;margin:0 0 18px}
+section.exp h2{margin:0;font-size:19px}
+.sub{color:var(--muted);font-size:12px;margin:2px 0 6px}
+.q{margin:0 0 6px}
+.note{font-size:13px;background:var(--tint);border-radius:12px;padding:8px 10px;margin:6px 0}
+.row{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;align-items:flex-start}
+.opt{flex:0 0 300px;border:2px solid var(--line);border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:7px}
+.opt.win{border-color:var(--brand);background:#faf9ff}
+.opt h3{font-size:15px;margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:11px;border-radius:6px;padding:2px 6px;background:#eee;color:var(--muted)}
+.tag.def{background:#e8f3ec;color:var(--ok)}.tag.cap{background:#eef4ff;color:#2155b8}.tag.same{background:#fff4d6;color:var(--warn)}.tag.old{background:#f1eefc;color:var(--brand-ink)}.tag.concept{background:#fff4d6;color:var(--warn)}.tag.na{background:#fde8e6;color:var(--bad)}
+.thumbs{display:flex;gap:6px;overflow-x:auto}
+.thumbs figure{margin:0;flex:0 0 auto}
+.thumbs img{height:330px;width:auto;max-width:none;border-radius:10px;border:1px solid var(--line);display:block;background:#ddd}
+.thumbs figcaption{font-size:11px;color:var(--muted);max-width:180px}
+.empty{height:120px;display:grid;place-items:center;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:12px;text-align:center;padding:8px}
+.desc{font-size:13px;margin:0}.path{font-size:11px;color:var(--muted);word-break:break-word;margin:0}
+label.win{display:flex;gap:6px;align-items:center;font-weight:600;font-size:13px;cursor:pointer}
+label.win input{accent-color:var(--brand);width:17px;height:17px}
+textarea{width:100%;min-height:52px;border:1px solid var(--line);border-radius:10px;padding:7px;font:inherit;font-size:13px}
+.hidden{display:none!important}
+@media (max-width:560px){.opt{flex-basis:84vw}.thumbs img{height:260px}}
+</style>
+</head>
+<body>
+<header><div class="bar">
+<h1>Numaya design experiments</h1>
+<input id="q" type="search" placeholder="Search experiments, screens, options, issue IDs" aria-label="Search">
+<select id="f" aria-label="Filter by status"><option value="">All statuses</option></select>
+<button class="primary" id="export">Export choices and notes (Markdown)</button>
+<button id="clear">Clear</button>
+<div class="meta" id="meta"></div>
+</div></header>
+<main>
+<p id="status" role="status" aria-live="polite"></p>
+<nav class="toc" id="toc" aria-label="Experiments"></nav>
+<div id="list"></div>
+</main>
+<script>
+const DATA=/*DATA*/null;
+const KEY='numaya-design-review:'+DATA.appSha;
+let st={win:{},notes:{}};
+try{const r=localStorage.getItem(KEY);if(r)st=Object.assign(st,JSON.parse(r));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){say('This browser is not keeping notes here; use Export to save them.');}}
+function say(t){const s=document.getElementById('status');s.textContent=t;s.className='show';}
+function el(t,a,...k){const e=document.createElement(t);for(const[x,y]of Object.entries(a||{})){if(x==='class')e.className=y;else if(x==='text')e.textContent=y;else e.setAttribute(x,y);}for(const c of k)if(c)e.append(c);return e;}
+const TAG={'Captured (current build)':'cap','Captured, no visible change in this build':'same','Sourced from older evidence':'old','Concept only':'concept','Capture unavailable':'na'};
+const statuses=[...new Set(DATA.experiments.flatMap(e=>e.variants.map(v=>v.status)))];
+for(const s of statuses)document.getElementById('f').append(el('option',{value:s,text:s}));
+function render(){
+ const nv=DATA.experiments.reduce((a,e)=>a+e.variants.length,0);
+ document.getElementById('meta').textContent=`${DATA.experiments.length} experiments, ${nv} options. Native renders: real app, 393 x 852 logical at 3x (shown at 2x), full demo world, default typography, light theme, build ${DATA.appSha.slice(0,7)}. Older captures and HTML prototypes are labelled.`;
+ const toc=document.getElementById('toc');toc.textContent='';
+ const list=document.getElementById('list');list.textContent='';
+ for(const e of DATA.experiments){
+  toc.append(el('a',{href:'#'+e.id,class:st.win[e.id]?'done':'',text:e.title}));
+  const sec=el('section',{class:'exp',id:e.id});
+  sec.dataset.search=(e.id+' '+e.title+' '+e.screen+' '+(e.issue||'')+' '+e.variants.map(v=>v.title+' '+v.status).join(' ')).toLowerCase();
+  sec.dataset.statuses=e.variants.map(v=>v.status).join('|');
+  sec.append(el('h2',{text:e.title}),el('div',{class:'sub',text:`${e.id} · ${e.screen}`+(e.issue?` · ${e.issue}`:'')+` · current default: ${e.default}`}),el('p',{class:'q',text:e.question}));
+  if(e.note)sec.append(el('div',{class:'note',text:e.note}));
+  if(e.prototype){const a=el('a',{href:e.prototype,target:'_blank',rel:'noopener',text:'Open the HTML prototype (concept source, not the app)'});sec.append(el('p',{class:'desc'},a));}
+  const row=el('div',{class:'row',role:'radiogroup','aria-label':'Preferred option for '+e.title});
+  for(const v of e.variants){
+   const card=el('div',{class:'opt'+(st.win[e.id]===v.id?' win':'')});
+   card.dataset.status=v.status;
+   card.append(el('h3',{text:v.title}));
+   const tags=el('div',{class:'tags'});
+   if(v.id===e.default)tags.append(el('span',{class:'tag def',text:'current default'}));
+   tags.append(el('span',{class:'tag '+(TAG[v.status]||''),text:v.status}));
+   card.append(tags);
+   const th=el('div',{class:'thumbs'});
+   if(!v.images.length)th.append(el('div',{class:'empty',text:v.status+(v.reason?': '+v.reason:'')}));
+   for(const im of v.images){const a=el('a',{href:im.path,target:'_blank',rel:'noopener','aria-label':`${v.title}: ${im.label}, full size`});a.append(el('img',{src:im.path,alt:`${e.title}, ${v.title}, ${im.label}`,loading:'lazy'}));th.append(el('figure',{},a,el('figcaption',{text:im.label})));}
+   card.append(th,el('p',{class:'desc',text:v.change||''}));
+   if(v.reason&&v.images.length)card.append(el('p',{class:'desc',text:v.reason}));
+   card.append(el('p',{class:'path',text:(v.route?'Route: '+v.route+' · ':'')+'Selector: '+v.selector+(v.provenance?' · '+v.provenance:'')}));
+   const r=el('input',{type:'radio',name:'w-'+e.id,value:v.id});if(st.win[e.id]===v.id)r.checked=true;
+   r.addEventListener('change',()=>{st.win[e.id]=v.id;save();render();document.getElementById(e.id).scrollIntoView({block:'nearest'});});
+   card.append(el('label',{class:'win'},r,document.createTextNode('Preferred for this experiment')));
+   const k=e.id+'::'+v.id;const ta=el('textarea',{placeholder:'Notes on this option',"aria-label":`Notes on ${v.title}`});ta.value=st.notes[k]||'';
+   ta.addEventListener('input',()=>{st.notes[k]=ta.value;save();});
+   card.append(ta);row.append(card);
+  }
+  sec.append(row);list.append(sec);
+ }
+ filter();
+}
+function filter(){const q=document.getElementById('q').value.trim().toLowerCase();const f=document.getElementById('f').value;
+ for(const s of document.querySelectorAll('section.exp')){const ok=(!q||s.dataset.search.includes(q))&&(!f||s.dataset.statuses.split('|').includes(f));s.classList.toggle('hidden',!ok);
+  for(const c of s.querySelectorAll('.opt'))c.classList.toggle('hidden',!!f&&c.dataset.status!==f);}}
+function md(){
+ const L=[`# Numaya design experiment choices`,``,`Exported ${new Date().toISOString()} from the review gallery (build ${DATA.appSha.slice(0,7)}).`,``];
+ let n=0;
+ for(const e of DATA.experiments){
+  const w=st.win[e.id];const notes=e.variants.filter(v=>(st.notes[e.id+'::'+v.id]||'').trim());
+  if(!w&&!notes.length)continue;n++;
+  L.push(`## ${e.title} (\`${e.id}\`)`,``);
+  if(w){const v=e.variants.find(x=>x.id===w);L.push(`- **Preferred:** \`${w}\` · ${v?v.title.replace(/^\S+ · /,''):''}`);}
+  else L.push(`- **Preferred:** not chosen`);
+  for(const v of notes)L.push(`- **Note on \`${v.id}\`** (${v.title.replace(/^\S+ · /,'')}): ${st.notes[e.id+'::'+v.id].trim().replace(/\n+/g,' ')}`);
+  L.push('');
+ }
+ const undecided=DATA.experiments.filter(e=>!st.win[e.id]).map(e=>e.id);
+ L.push(`## Not chosen (${undecided.length})`,'',undecided.map(x=>'`'+x+'`').join(', ')||'None','');
+ return {text:L.join('\n'),n};
+}
+document.getElementById('export').addEventListener('click',()=>{const {text,n}=md();const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/markdown'}));a.download='numaya-design-choices.md';document.body.append(a);a.click();a.remove();say(`Exported ${n} experiments with choices or notes.`);});
+document.getElementById('clear').addEventListener('click',()=>{if(confirm('Clear every choice and note in this browser?')){st={win:{},notes:{}};save();render();say('Cleared.');}});
+document.getElementById('q').addEventListener('input',filter);document.getElementById('f').addEventListener('change',filter);
+window.reviewGallery={md,state:()=>JSON.parse(JSON.stringify(st)),DATA};
+render();
+</script>
+</body>
+</html>
