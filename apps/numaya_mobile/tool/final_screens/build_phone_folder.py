@@ -14,6 +14,8 @@ ap = argparse.ArgumentParser()
 for a in ('flat', 'gallery', 'commit', 'branch', 'coverage'):
     ap.add_argument('--' + a, required=True)
 ap.add_argument('capture')
+# V8 review: zero-padded width of the numbers (0001-...).
+ap.add_argument('--digits', type=int, default=3)
 A = ap.parse_args()
 
 SECTION = re.compile(r'^(.*)-(\d\d)-(top|middle|bottom)$')
@@ -52,6 +54,11 @@ order = [rows[k] for k in sorted(rows)]
 
 def index(key):
     hits = [i for i, r in enumerate(order) if r['key'] == key]
+    if not hits:
+        # V8: captures were added or removed, so step numbers shift; match by flow and name.
+        flow, base = key.split('/', 1)
+        name = base.split('-', 1)[1]
+        hits = [i for i, r in enumerate(order) if r['flow'] == flow and r['base'].split('-', 1)[1] == name]
     assert len(hits) == 1, key
     return hits[0]
 
@@ -74,7 +81,7 @@ def new_name(n, flow, name, top_only):
     first = label.split('-')[0].lower().rstrip('s')
     if screen.lower().startswith(first + '-') or screen.lower().startswith(first + 's-'):
         screen = screen.split('-', 1)[1]
-    return f'{n:03d}-{label}-{screen[0].upper()}{screen[1:]}.png'
+    return f'{n:0{A.digits}d}-{label}-{screen[0].upper()}{screen[1:]}.png'
 
 
 plan = []
@@ -108,7 +115,7 @@ with open(os.path.join(A.flat, 'SCREEN_LIST.txt'), 'w', encoding='utf-8', newlin
 names = sorted(e.name for e in os.scandir(A.flat) if e.name.endswith('.png'))
 assert len(names) == len(plan) == len({n.lower() for n in names}), 'duplicates or missing'
 assert not [e for e in os.scandir(A.flat) if e.is_dir()], 'subfolder'
-assert [n[:3] for n in names] == [f'{i:03d}' for i in range(1, len(names) + 1)], 'numbering'
+assert [n[:A.digits] for n in names] == [f'{i:0{A.digits}d}' for i in range(1, len(names) + 1)], 'numbering'
 hashes = [digest(os.path.join(A.flat, n)) for n in names]
 dup = len(hashes) - len(set(hashes))
 

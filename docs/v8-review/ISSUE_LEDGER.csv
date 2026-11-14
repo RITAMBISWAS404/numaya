@@ -1,0 +1,87 @@
+issue_id,title,disposition,code_location,affected_screens,test_evidence,visual_evidence,source_sha,limitation_or_conflict
+UI-001,UI-001 — Rework the Get Started layout,implemented,welcome_screen.dart (card on the image fill),Welcome,onboarding_flow_test,flat folder (emulator),73a745f,Upper image with the Numaya name: artwork pending (stand-in brand image kept).
+UI-002,UI-002 — Give standalone secondary actions a shared button style,implemented,"buttons.dart, monochrome_tokens MonoButtons.outline #E0E0E0",All secondary buttons,ente_design_system_test,test/screenshots/v8 (harness render),73a745f,
+UI-003,UI-003 — Separate selectable option rows,implemented,"navigation.dart CardDivider, ListGroup; filters_sheet; wallet; messages/archive inbox divider","Grouped cards, filters, wallet, inbox, archive",final_polish_test OV-02/UI-003,test/screenshots/v8 (harness render),73a745f,
+UI-004,UI-004 — Contain age-range selectors in a card,verified-existing,filters_sheet group(),"Filters, Who to meet",,test/screenshots/v8 (harness render),73a745f,
+UI-005,UI-005 — Show the active age value above the slider,verified-existing,age_range_slider.dart _ActiveThumbIndicator,Age sliders,existing slider tests,not re-captured mid-drag,73a745f,Tooltip body radius not re-measured against UI-050 8pt.
+UI-006,UI-006 — Make height selection inline,verified-existing,height step,Signup height,v16_screens_test,flat folder (emulator),73a745f,
+UI-007,UI-007 — Make the response primary in prompt cards,implemented,content.dart PromptCard empty style = answer style,Prompt cards,existing prompt tests,test/screenshots/v8 (harness render),73a745f,
+UI-008,UI-008 — Browse and answer prompts by category,verified-existing,profile_draft.dart kPromptCategories (11 per category),Prompt browser,v16_screens_test,flat folder (emulator),73a745f,"""three-day-to-time-driven response"" unresolved; nothing invented."
+UI-009,UI-009 — Stack illustrations above screen headings,verified-existing,step scaffolds,Onboarding headings,,flat folder (emulator),73a745f,
+UI-010,UI-010 — Align alert icons with the top of the content,verified-existing,extras.dart StatusBanner (icon top-aligned),Alerts,component_cleanup_test,test/screenshots/v8 (harness render),73a745f,
+UI-011,UI-011 — Standardize profile photos as portrait,verified-existing,PhotoPlaceholder 3:4,Profiles,,test/screenshots/v8 (harness render),73a745f,
+UI-012,UI-012 — Apply the typography scale consistently,implemented,app_typography.dart roles; fields.dart placeholder = typed metrics; type_settings.dart,All text,"type_settings_test, v8_review_test",type-* renders,73a745f,14 vs 15 production size pending owner.
+UI-013,UI-013 — Update the Discover header,verified-existing,"discover_screen header (backtrack, filters)",Discover,,test/screenshots/v8 (harness render),73a745f,
+UI-014,UI-014 — Simplify profile photo overlays,verified-existing,person_profile overlay,Discover photo,,test/screenshots/v8 (harness render),73a745f,
+UI-015,UI-015 — Move shared interests below the photo,verified-existing,personSections shared interests,Discover,,test/screenshots/v8 (harness render),73a745f,
+UI-016,UI-016 — Remove swipe decision buttons,verified-existing,no decision buttons,Discover,existing,test/screenshots/v8 (harness render),73a745f,
+UI-017,UI-017 — Keep profile actions in the photo menu,verified-existing,photo overflow menu,Discover,existing,flat folder (emulator),73a745f,
+UI-018,UI-018 — Separate the bio from profile details,verified-existing,About me card,Profiles,,test/screenshots/v8 (harness render),73a745f,
+UI-019,UI-019 — Use emoji in profile detail pills,verified-existing,InfoChip emoji,Profiles,,test/screenshots/v8 (harness render),73a745f,
+UI-020,UI-020 — Use a consistent content card hierarchy,verified-existing,ProfileSectionCard,Profiles,,test/screenshots/v8 (harness render),73a745f,
+UI-021,UI-021 — Replace Discover gender chips with a selector list,verified-existing,filters_sheet rows(),Filters,,test/screenshots/v8 (harness render),73a745f,"Cardinality preserved (multi-select, existing contract)."
+UI-022,UI-022 — Give inactive pill tabs a visible boundary,verified-existing,segmented.dart,Pill tabs,,test/screenshots/v8 (harness render),73a745f,
+UI-023,UI-023 — Standardize popup and bottom sheet surfaces,verified-existing,showNumayaSheet grey surface,Sheets,,test/screenshots/v8 (harness render),73a745f,
+UI-024,UI-024 — Use the available width for slider tracks,verified-existing,kSliderInset,Sliders,,test/screenshots/v8 (harness render),73a745f,
+UI-025,UI-025 — Correct the off state of shared switches,verified-existing,NumayaSwitch #D6D6D6,Switches,,test/screenshots/v8 (harness render),73a745f,"Off track 1.45:1 on white: below 3:1, owner choice, recorded."
+UI-026,UI-026 — Compact the shared bottom navigation,implemented,"navigation.dart _compact (38x48, 8 padding, 4 gaps)",Bottom navigation,"discover_match_review_test, ui_consistency_test",test/screenshots/v8 (harness render),73a745f,"Radius per UI-050 (20/12), not fully round."
+UI-027,UI-027 — Soften the bottom navigation shadow,verified-existing,AppElevation.navigation,Bottom navigation,frosted_navigation_experiment_test,test/screenshots/v8 (harness render),73a745f,
+UI-028,UI-028 — Rebuild the match header and photo layout,verified-existing,match_screen.dart baseline,Match,,test/screenshots/v8 (harness render),73a745f,Six alternatives under UI-082.
+UI-029,UI-029 — Put shared interests in a match card,verified-existing,match_screen.dart,Match,,test/screenshots/v8 (harness render),73a745f,
+UI-030,UI-030 — Replace the match composer with profile and chat actions,verified-existing,match_screen.dart actions,Match,full_app_journeys_test,test/screenshots/v8 (harness render),73a745f,
+UI-031,UI-031 — Exclude Opening Moves from the first release,verified-existing,ReleaseScope.openingMoves,Opening Moves,existing,,73a745f,
+UI-032,UI-032 — Exclude Follow from the first release,verified-existing,ReleaseScope.follow,Follow,existing,,73a745f,
+UI-033,UI-033 — Show larger square tiles for new matches,implemented,"match_avatar.dart Q (88pt square, 16)",Messages new matches,"profile_review3_test, v8_review_test",test/screenshots/v8 (harness render),73a745f,
+UI-034,UI-034 — Illustrate the Likes tile,concept-only,not built,Messages,,gallery v8-likes-tile,73a745f,Conflicts with the owner selection that moved Likes to its own tab; needs a decision and mascot art.
+UI-035,UI-035 — Reveal exact chat timestamps on a left swipe,implemented,MessageBubble no time; SwipeableMessage reveal; inbox rows without times,"Chat, inbox","chat_review3_test, v8_review_test",test/screenshots/v8 (harness render),73a745f,
+UI-036,UI-036 — Reply to chat messages with a right swipe,verified-existing,SwipeableMessage,Chat,chat_review3_test,,73a745f,
+UI-037,UI-037 — Remove heavy outlines from inactive text fields,verified-existing,"InputSurface, Composer idle",Fields,,test/screenshots/v8 (harness render),73a745f,
+UI-038,UI-038 — Place chat controls in a full-width white composer,verified-existing,chat composer bar,Chat,,test/screenshots/v8 (harness render),73a745f,
+UI-039,UI-039 — Use an up arrow for chat Send,verified-existing,Composer arrowUp,Chat,,test/screenshots/v8 (harness render),73a745f,
+UI-040,UI-040 — Use white bubbles for received chat messages,verified-existing,MessageBubble surface,Chat,,test/screenshots/v8 (harness render),73a745f,
+UI-041,UI-041 — Remove demo-only copy from the app UI,partial,"photos_screen (moderation note), wallet (price footer)",Product pages,,test/screenshots/v8 (harness render),73a745f,"Honest disclosures kept where an action is simulated (purchase confirm, report, support, share date). Welcome demo entry kept by design."
+UI-042,UI-042 — Rebuild the profile summary card,alternatives-pending-choice,profile_hub_v8.dart P10,Profile,visual_lab_v2_test,exp-profile-P10,73a745f,Selected Profile A remains the default until chosen.
+UI-043,UI-043 — Illustrate the profile completion card,alternatives-pending-choice,StatCard T5 / Profile P3,Profile,,"exp-stats-T5, exp-profile-P3",73a745f,"""If pursued"": offered as options."
+UI-044,UI-044 — Standardize inner padding in list cards,implemented,filters_sheet verified card top inset,Filters,,test/screenshots/v8 (harness render),73a745f,
+UI-045,UI-045 — Mute list card metadata and helper text,verified-existing,ListRow detail caption,List cards,,test/screenshots/v8 (harness render),73a745f,
+UI-046,UI-046 — Refine the Complete your profile screen,verified-existing,profile_hub_screens CompletionHubScreen,Completion,profile_review3_test,test/screenshots/v8 (harness render),73a745f,T1-T6 header options via v8-stats.
+UI-047,UI-047 — Use pill outlines only when the surface needs a boundary,verified-existing,chips/pills,Pills,,test/screenshots/v8 (harness render),73a745f,
+UI-048,UI-048 — Use lighter neutral grays where suitable,partial,"lighter button edge, disabled edge, callout fill",Neutral greys,,test/screenshots/v8 (harness render),73a745f,Not every grey in every screen re-audited.
+UI-049,UI-049 — Review padding consistency across the app,partial,shared tokens,Spacing,,test/screenshots/v8 (harness render),73a745f,No exhaustive per-screen padding audit this run.
+UI-050,UI-050 — Establish the Version 8 corner-radius system,implemented,"monochrome_tokens MonoRadii; chips, segmented, nav, bubbles, quote nested",All rounded components,"foundation_test, ente_design_system_test",test/screenshots/v8 (harness render),73a745f,
+UI-051,UI-051 — Standardize selection-card minimum height and gaps,partial,OptionCard family,Selection cards,,flat folder (emulator),73a745f,Minimum height/gap not re-measured against the gender sheet this run.
+UI-052,UI-052 — Show calculated age only in the confirmation sheet,implemented,about_you_screens (no inline age),Birthday,"onboarding_edge_cases_test, onboarding_flow_test",test/screenshots/v8 (harness render),73a745f,
+UI-053,UI-053 — Organize dense information lists,partial,"InfoList (photo tips), paywall benefits, wallet history glyphs",Dense lists,,test/screenshots/v8 (harness render),73a745f,Onboarding review edit/private rows: icons not added this run.
+UI-054,UI-054 — Remove the duplicate Interests summary row,implemented,interests_screen (no row; footer count always),Interests,"v16_screens_test, onboarding_flow_test",test/screenshots/v8 (harness render),73a745f,
+UI-055,UI-055 — Remove redundant UI copy,partial,prompt Save helper removed; stat captions de-duplicated,Copy,v16_screens_test,test/screenshots/v8 (harness render),73a745f,Full copy audit of every screen not completed.
+UI-056,UI-056 — Align paired labels and values consistently,partial,ListRow value alignment,Label/value rows,,test/screenshots/v8 (harness render),73a745f,Not re-audited.
+UI-057,UI-057 — Use outlined disabled buttons,implemented,buttons.dart disabled outline; NumayaFab,Buttons,"v16_screens_test, v8_review_test",test/screenshots/v8 (harness render),73a745f,
+UI-058,UI-058 — Match the owner preview to the public profile,implemented,"finish_screens, profile_hub_screens (photoHeight)",Owner preview,,test/screenshots/v8 (harness render),73a745f,
+UI-059,UI-059 — Standardize profile content order,implemented,person_profile.dart personSections order,Profiles,v8_review_test,test/screenshots/v8 (harness render),73a745f,
+UI-060,UI-060 — Standardize passive callout surfaces,implemented,StatusBanner calloutFill,Callouts,component_cleanup_test,test/screenshots/v8 (harness render),73a745f,
+UI-061,UI-061 — Use illustrated cards for promotions and summaries,implemented,"promo_card.dart (filters, settings)",Promotions,v8_review_test,test/screenshots/v8 (harness render),73a745f,Artwork pending: reserved square.
+UI-062,UI-062 — Add a compact button for cards and menus,implemented,NumayaButton small radius 8,Embedded actions,,test/screenshots/v8 (harness render),73a745f,
+UI-063,UI-063 — Hide suggested profiles for the initial release,implemented,"ReleaseScope.forYou, router redirect, demo hub link",For you,"full_app_journeys_test, v8_review_test",,73a745f,
+UI-064,UI-064 — Use one column for Likes profiles,implemented,likes_grid cols = 1,Likes,,test/screenshots/v8 (harness render),73a745f,
+UI-065,UI-065 — Blur Likes photos for non-Premium users,implemented,likes_screens _LockedLikes blur,Likes,v8_review_test,test/screenshots/v8 (harness render),73a745f,Frontend presentation only; the service must not send clear photos to free clients.
+UI-066,UI-066 — Darken gradients behind text on photos,implemented,PhotoScrim.edgeFor,Text on photos,ente_v4_test,test/screenshots/v8 (harness render),73a745f,
+UI-067,UI-067 — Standardize inbox previews and unread counts,implemented,conversation_row V8,Inbox,v8_review_test,test/screenshots/v8 (harness render),73a745f,Tabler has no filled message-heart: Compliment glyph stays outline.
+UI-068,UI-068 — Simplify conversation groups and turn status,implemented,"messages_screens one list, row-your-move",Inbox,"selections_test, v8_review_test",test/screenshots/v8 (harness render),73a745f,
+UI-069,UI-069 — Simplify the Archive entry,implemented,messages_screens archive row value,Inbox,v8_review_test,test/screenshots/v8 (harness render),73a745f,
+UI-070,UI-070 — Use filled icons at compact sizes,partial,ListRow leading filled; inbox glyphs; voice controls unchanged,Icons,,test/screenshots/v8 (harness render),73a745f,Voice-note play/pause glyph colour not re-checked.
+UI-071,UI-071 — Tighten quoted reply insets,implemented,"MessageBubble quote inset 8, nested corners",Chat replies,,test/screenshots/v8 (harness render),73a745f,
+UI-072,UI-072 — Outline chat composer icon buttons,implemented,"NavButtonStyle.outlined, Composer send circle",Chat composer,,test/screenshots/v8 (harness render),73a745f,"Send is an outlined circle with a purple arrow (literal reading of ""same stroke"")."
+UI-073,UI-073 — Match chat composer and reply preview fills,implemented,Composer.inputFill shared by ReplyPreview,Chat composer,,test/screenshots/v8 (harness render),73a745f,
+UI-074,UI-074 — Consolidate shared design tokens across Version 8,partial,passes 1-8 at shared-component level,Tokens,full suite,test/screenshots/v8 (harness render),73a745f,Not a full token consolidation of every one-off value.
+UI-075,UI-075 — Exclude Travel from the MVP,implemented,ReleaseScope.travel; settings row gated,Travel,v8_review_test,,73a745f,
+UI-076,UI-076 — Rework the Premium paywall,alternatives-pending-choice,"paywall_v8.dart (A default, B, C; O baseline)",Paywall,"v8_review_test, full_app_journeys_test",exp-paywall-*,73a745f,3 and 6 month prices and store products: BLOCKED (owner/store).
+UI-077,UI-077 — Plan mascot illustration placements across the app,partial,"ArtworkSlot, PromoCard slots, ARTWORK_SLOTS.csv","Empty states, special screens",,test/screenshots/v8 (harness render),73a745f,Placement survey limited to the slots listed; mascot art pending.
+UI-078,UI-078 — Standardize statistics summary cards,alternatives-pending-choice,stat_card.dart T1-T6; stat_templates.dart,"Credits, streak, completion","visual_lab_v2_test, v8_review_test",exp-stats-*,73a745f,
+UI-079,UI-079 — Size text bubbles to their content,implemented,MessageBubble hugs (no stretch),Chat,,test/screenshots/v8 (harness render),73a745f,
+UI-080,UI-080 — Space message groups by sender,verified-existing,grouped 4 / 12,Chat,,test/screenshots/v8 (harness render),73a745f,
+UI-081,UI-081 — Keep Archive focused on archived conversations,implemented,archive_screen archived only,Archive,"visual_lab_v2_test, v8_review_test",test/screenshots/v8 (harness render),73a745f,
+UI-082,UI-082 — Explore six Match screen layouts,alternatives-pending-choice,match_v8.dart M1-M6,Match,,exp-match-*,73a745f,Default stays the selected match.
+UI-083,UI-083 — Send Compliments through the chat composer,implemented,compliment_screens _chat; lab v8-compliment,Compliments,"v8_review_test, compliment_contract_test",test/screenshots/v8 (harness render),73a745f,Live send unverified: backend BLOCKED.
+UI-084,UI-084 — Explore ten Profile hub layouts,alternatives-pending-choice,profile_hub_v8.dart P1-P10,Profile,visual_lab_v2_test,exp-profile-*,73a745f,
+UI-085,UI-085 — Compare display and UI font pairings,implemented,"type_settings.dart, typography_settings_screen.dart",All text,"type_settings_test, v8_review_test",type-* renders,73a745f,Production pairing and size pending owner.
+UI-086,UI-086 — Show a countdown-only expiry banner,implemented,CountdownBanner; Extend in chat menu,New-match chat,"visual_lab_v2_test, full_app_journeys_test",test/screenshots/v8 (harness render),73a745f,Instant not offered.

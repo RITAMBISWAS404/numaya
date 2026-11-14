@@ -1925,6 +1925,12 @@ class LabChoices extends Notifier<Map<String, String>> {
     state = const {};
     _save();
   }
+
+  /// The choices saved on this phone, read after startup; anything chosen since wins.
+  void restore(Map<String, String> saved) {
+    if (saved.isEmpty) return;
+    state = {...saved, ...state};
+  }
 }
 
 /// Saves the Design Lab's choices in a small JSON file in the app's support folder, so a review
@@ -1939,14 +1945,17 @@ abstract final class LabChoicesStore {
   static Future<File> _file() async =>
       File('${(await getApplicationSupportDirectory()).path}/$fileName');
 
-  static Future<void> restore() async {
-    if (!AppConfig.demoAuthAllowed) return;
+  static Future<void> restore() async => restored = await load();
+
+  /// The saved choices, validated against the registry; empty when none or in release builds.
+  static Future<Map<String, String>> load() async {
+    if (!AppConfig.demoAuthAllowed) return const {};
     try {
       final f = await _file();
-      if (!await f.exists()) return;
+      if (!await f.exists()) return const {};
       final raw = jsonDecode(await f.readAsString());
-      if (raw is! Map) return;
-      restored = {
+      if (raw is! Map) return const {};
+      return {
         for (final e in raw.entries)
           if (e.key is String &&
               e.value is String &&
@@ -1955,6 +1964,7 @@ abstract final class LabChoicesStore {
       };
     } on Object {
       // Tests have no path_provider; a damaged file means the defaults.
+      return const {};
     }
   }
 

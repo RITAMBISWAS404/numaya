@@ -1,0 +1,6 @@
+# Skills and references used (V8 review, 2026-11-14)
+
+- **No optional design skill was invoked this run.** The register and companion were specific enough that decisions came from them, the Ente Figma components and the existing Numaya design system. The companion's named skills (Impeccable, Emil Kowalski, "Apple", "RAD-spacing", "audit design system", "accessibility check", "frontend-design") were not needed to resolve any open question, so none was installed or run; nothing here claims their review.
+- **Figma (Ente file 22AeTw6QiPj2fNYHLhC7MK):** Navigation 7634:54339 and Comment bubble 5427:23934 inspected live (screenshots); they confirmed the V8 nav structure and hugging bubbles with inset quotes. Other sections rely on earlier runs (FIGMA_COMPONENT_MAP.csv says which).
+- **Mobbin:** no new searches; the companion's six inspected references and the source previews (Shop, Doji, Sweatcoin, Cash App, Bumble, Hinge, WHOOP, Binance) informed the alternatives as named in the gallery notes.
+- **Automated checks used as evidence:** the Flutter test suite (including the Visual Lab 320dp/200% registry test, which found the StatCard overflow) and harness stress renders at 320dp and 2.0x text (which found the Photo tips overflow).

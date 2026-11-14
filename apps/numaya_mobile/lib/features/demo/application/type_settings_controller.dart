@@ -78,6 +78,13 @@ class TypeSettingsController extends Notifier<TypeSettings> {
     await ref.read(typeSettingsStoreProvider).write(settings);
   }
 
+  /// Applies the settings read from this phone at startup (not written back).
+  void restore(TypeSettings settings) {
+    if (!TypeSettingsStore.enabled || settings == state) return;
+    AppTypography.apply(settings);
+    state = settings;
+  }
+
   /// Restores all three controls to the verified baseline (current families, 15pt body).
   Future<void> reset() => set(TypeSettings.baseline);
 }

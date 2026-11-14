@@ -1,0 +1,9 @@
+slot_id,screen,meaning,aspect_ratio,bounds,safe_area,crop,replacement_key,state
+premium_hero,Paywall (UI-076 A/B/C),Premium mascot,16:9,full content width; 20pt corners,keep subject inside the central 80%,may crop at edges,ArtworkSlot(slot: premium_hero).art,reserved; artwork pending
+promo_advanced_filters,Filters > Advanced (non-Premium),Premium promotion art,1:1,88 x 88 inside the white PromoCard,whole square,may be cropped by the card edge,PromoCard(slot: promo_advanced_filters).art,reserved; artwork pending
+promo_settings_premium,Settings (top card),Premium promotion art,1:1,88 x 88,whole square,may be cropped by the card edge,PromoCard(slot: promo_settings_premium).art,reserved; artwork pending
+stat_credits,Statistics card T5 (UI-078),Credits illustration,1:1,88 x 88,whole square,none,StatData(slot: stat_credits),reserved (only when T5 is chosen)
+stat_streak,Statistics card T5 (UI-078),Streak illustration,1:1,88 x 88,whole square,none,StatData(slot: stat_streak),reserved (only when T5 is chosen)
+stat_completion,Statistics card T5 (UI-078),Profile completion illustration,1:1,88 x 88,whole square,none,StatData(slot: stat_completion),reserved (only when T5 is chosen)
+welcome_brand,Welcome (UI-001),Large image containing the Numaya name,fills the upper region,image area above the white card,keep the name above the card's top 20pt,cover,WelcomeBrandImage.build,stand-in brand mark; artwork pending
+likes_tile,Messages > New matches (UI-034),Likes tile illustration,1:1,88 x 88,whole square,none,not built,concept only; needs a decision
