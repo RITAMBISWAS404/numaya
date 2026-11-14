@@ -18,11 +18,16 @@ Updated 2026-11-14. Read this first after compaction or an account switch.
 ## Render harness
 `flutter test --tags comparison --run-skipped --update-goldens test/screenshots/v8_review_capture_test.dart --dart-define=V8_ONLY=<prefixes>`; scenes in `test/screenshots/v8_scenes.dart`; output `test/screenshots/v8/` (git-ignored).
 
-## Known test updates needed
-Tests encoding superseded geometry fail (stadium nav, 20pt buttons, outlined StatusBanner, no-hairline groups, old inbox sections, bubble time). Update them to the V8 rules; do not delete.
+5. Profile area (a4e775c); alternatives: Premium (b6fafe8), statistics (683dbc6), Match (77bced0), Profile (81e826d); lab persistence (554f534).
+6. Tests updated to the V8 rules and new V8 tests (f9cffe4); overflow fixes; startup fix (fe44b27, the APK's app source).
+7. Delivery records committed and pushed (8767b8d, remote verified).
+
+## Outputs (local, private)
+- Review folder: `C:\Users\biswa\OneDrive\Desktop\Numaya V8 Final Review\2026-11-14 73a745f` (screens-flat 222, gallery 96 renders, apk, device-walk, records).
+- APK: `apk\Numaya-V8-Review-20261114-fe44b27-debug.apk`, SHA-256 `4391d664f718a550e8470d5ed05d09dea7551e392438a72866eb2c2907c679b1`.
 
 ## Next
-Profile/Settings/Completion/Wallet (UI-041-048, 053, 070); lab choice persistence; experiments (UI-076 x3, UI-078 x6, UI-082 x6, UI-084 x10, UI-034 likes tile); fix tests; capture; gallery; APK; ledger; push.
+The owner reviews the gallery and the APK and exports choices (layouts plus display font, UI font, 14 or 15 body). Then apply the exported choices as defaults in a new pass; supply 3/6-month prices and artwork; decide UI-034.
 
 ## Active processes
-None.
+None. The emulator was left running; the gallery preview server (port 8775) is a local preview only.
