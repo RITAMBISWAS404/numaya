@@ -6,7 +6,6 @@ import 'package:numaya_mobile/app/router.dart';
 import 'package:numaya_mobile/app/routes.dart';
 import 'package:numaya_mobile/core/connectivity/connectivity.dart';
 import 'package:numaya_mobile/core/design_system/design_system.dart';
-import 'package:numaya_mobile/features/commerce/application/economy_controller.dart';
 import 'package:numaya_mobile/features/compliments/application/compliments_controller.dart';
 import 'package:numaya_mobile/features/demo/application/type_settings_controller.dart';
 import 'package:numaya_mobile/features/lab/lab_registry.dart';

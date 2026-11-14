@@ -414,9 +414,10 @@ void main() {
           expect(tiles[i].height, closeTo(38, 0.01));
           expect(tiles[i].width, closeTo(48, 0.01));
           // 4 between adjacent tiles.
-          if (i > 0)
+          if (i > 0) {
             expect(tiles[i].left - tiles[i - 1].right, closeTo(4, 0.01));
-          if (i > 0) expect(items[i].left, closeTo(items[i - 1].right, 0.01));
+            expect(items[i].left, closeTo(items[i - 1].right, 0.01));
+          }
         }
         // Every remaining destination still works, and the selected one is the filled glyph on
         // the light neutral tile.
