@@ -1,5 +1,11 @@
 # Validation
 
+> **V8 UI review (`fe44b27`):**
+> - **Analyzer:** one older deprecation info (`ente_alignment_test.dart`).
+> - **Tests:** `flutter test` 674 passed, 44 skipped (opt-in comparison renders and dormant Events suites), 0 failed, at `fe44b27`. New: `v8_review_test.dart` (9), `type_settings_test.dart` (5). 22 earlier test files were updated where they encoded replaced designs (listed in TEST_RESULTS.md); none was deleted.
+> - **Screens:** emulator capture, 222 PNGs at 1080 x 2424; harness renders 96 for the gallery (393 x 852 at 3x); stress renders at 320dp and 200% text for the new layouts (one overflow found and fixed: Photo tips sheet).
+> - **Backend:** BLOCKED; nothing verified against a server.
+
 > **Selected designs (`ae10663`):**
 > - **Analyzer:** one older deprecation info in a test file (`ente_alignment_test.dart`).
 > - **Tests:** `flutter test` 660 passed, 43 skipped, 0 failed. New: `selections_test.dart` (5), including that the completion pill matches Complete your profile.

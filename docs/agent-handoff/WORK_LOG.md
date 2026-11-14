@@ -1,5 +1,12 @@
 # Work log
 
+## 2026-11-14 · V8 UI review (Windows, Claude desktop)
+- Checkpoint tag on the selected designs, new branch. Typography controls first (14/15 body, display and UI fonts, Reset, persisted).
+- Shared passes: radius roles, compact navigation, card dividers, outlined disabled, callouts, darker scrim, filled compact glyphs.
+- Flows: onboarding copy and grouping, preview = public profile and content order, filters promo, Likes one column and blur, Messages one list, archive, bubbles, quote, composer, countdown, Compliments in the chat, MVP gating.
+- Alternatives: Premium x3, statistics x6, Match x6, Profile x10; Design Lab choices persist.
+- Tests updated where they encoded replaced designs; new v8_review_test; StatCard overflow and Photo tips overflow fixed.
+
 ## 2026-11-13 · Selected designs (Windows, Claude desktop)
 - Checkpoint tag on the Fable lab, new branch. The owner's export applied as defaults with every note; shared SummaryCard for Credits and Streak; Welcome demo entry.
 - Backend boundary inspected read-only and recorded; nothing merged.

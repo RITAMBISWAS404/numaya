@@ -8,14 +8,14 @@
 ## Source
 - **Folder:** `C:\Users\biswa\Projects\Numaya-fable-lab` (worktree), app `apps/numaya_mobile`.
 - **Branch:** `experiment/numaya-v8-review-20261114-0321`, from `7cd7aa4` (the selected designs, app source `ae10663`); pre-run tag `checkpoint/selected-20261114-0321`.
-- **App source:** `@@APPSHA@@`. Later commits change only tests, tooling and records.
+- **App source:** `fe44b27 (APK); screenshots and renders at 73a745f, which differs only in when saved review settings load at startup`. Later commits change only tests, tooling and records.
 - **Inputs:** NUMAYA_V8_UI_REVIEW_HANDOFF.zip and NUMAYA_V8_EXECUTION_COMPANION.zip (hashes in RUN_STATE.md).
 
 ## Outputs
-- **Review folder:** `@@OUT@@`
-  - `screens-flat/`: @@NSHOTS@@ emulator PNGs (1080 x 2424, density 420, font 1.0), numbered 0001 onwards.
-  - `gallery/index.html`: offline, selectable, notes, JSON export/import; @@NGALLERY@@ harness renders.
-  - `apk/@@APKNAME@@` (debug, demo entry, SHA-256 in BUILD_INFO.md).
+- **Review folder:** `C:\Users\biswa\OneDrive\Desktop\Numaya V8 Final Review\2026-11-14 73a745f`
+  - `screens-flat/`: 222 emulator PNGs (1080 x 2424, density 420, font 1.0), numbered 0001 onwards.
+  - `gallery/index.html`: offline, selectable, notes, JSON export/import; 96 harness renders.
+  - `apk/Numaya-V8-Review-20261114-fe44b27-debug.apk` (debug, demo entry, SHA-256 in BUILD_INFO.md).
   - `ISSUE_STATUS.md`, `TEST_RESULTS.md`, `OPEN_DECISIONS.md`, `COVERAGE.md`, `SCREEN_INDEX.md`, `BUILD_INFO.md`, `HANDOFF.md`.
 
 ## The 14/15 body size and fonts (your latest decision)
@@ -33,7 +33,9 @@ Prototype tools > Typography: Base body size (14 or 15, default 15), Display fon
 Issue-by-issue status with criteria, code and evidence: `ISSUE_LEDGER.csv` (in the repo and the review folder).
 
 ## Tests
-@@TESTS@@
+`flutter test` 674 passed, 44 skipped (opt-in comparison renders and dormant Events suites), 0 failed, at `fe44b27`. New: `v8_review_test.dart` (9), `type_settings_test.dart` (5). 22 earlier test files were updated where they encoded replaced designs (listed in TEST_RESULTS.md); none was deleted.
+
+Details, stress renders, the device walk and the gallery checks: TEST_RESULTS.md in the review folder.
 
 ## Limitations
 - Backend, OTP, billing and push: BLOCKED; Compliment sends, purchases and reports are on-device demo behaviour.
