@@ -1,0 +1,4 @@
+# QR-002: generated token outputs are LF on every platform, so the token check is byte-stable.
+src/design-system/tokens.css text eol=lf
+src/design-system/tokens.js text eol=lf
+apps/numaya_mobile/lib/core/design_system/tokens/numaya_tokens.g.dart text eol=lf

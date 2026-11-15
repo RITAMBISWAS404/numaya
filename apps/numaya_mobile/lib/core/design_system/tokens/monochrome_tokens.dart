@@ -60,9 +60,9 @@ abstract final class MonoColors {
   static const Color disabled = Color(0xFFEAEAEA);
   static const Color disabledText = Color(0xFF8A8A8A);
 
-  /// An unselected icon that still works (the idle tabs): a light grey at 3.46:1 on white, above
-  /// the 3:1 needed by meaningful non-text graphics (WCAG 1.4.11). Same value as [disabledText],
-  /// a separate role so "idle" never reads as "unavailable" in code.
+  /// An unselected icon that still works (idle tabs, row glyphs): #666666, 5.74:1 on white, above
+  /// the 3:1 needed by meaningful non-text graphics (WCAG 1.4.11). A separate role from
+  /// [disabledText] (#8A8A8A) so "idle" never reads as "unavailable" in code (QR-008).
   static const Color iconInactive = Color(0xFF666666);
 
   // Purple: the Numaya brand (#7262C7, canonical in tokens/numaya.tokens.json `purple.600`).
@@ -144,8 +144,8 @@ abstract final class MonoColors {
   /// Round buttons floating on photos: white at 90%.
   static const Color photoButton = Color(0xE6FFFFFF);
 
-  /// The bottom edge of a photo text gradient (V4 rule IMG-2): 10% black fading to clear. Owner
-  /// cap: under 25%. The gradient only settles the image; text carries its own glass backing.
+  /// The bottom edge of a photo text gradient (V4 rule IMG-2): black at 24% (0x3D) fading to
+  /// clear. Owner cap: under 25% (QR-008 corrected a stale "10%"). The gradient only settles the image; text carries its own glass backing.
   static const Color photoScrimEdge = Color(0x3D000000);
 }
 

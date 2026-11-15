@@ -50,7 +50,8 @@ abstract final class AppLayout {
   /// Between related items (cards in a list, rows of chips).
   static const double itemGap = AppSpacing.s3;
 
-  /// Inside cards: 20.
+  /// Inside cards: 16 (`MonoSpace.cardPadding`; QR-008 corrected a stale "20"). Also the inset
+  /// of content over images (UI-049).
   static const double cardPadding = MonoSpace.cardPadding;
 
   /// Inside hero cards (profile header, health status): 24.
@@ -154,6 +155,10 @@ abstract final class AppRadii {
 
   /// Segmented track (UI-050: pill tabs are 8 with a 12 track around a 4pt inset).
   static const double segment = MonoRadii.control;
+
+  /// QR-003 (owner, 2026-11-15): the largest finite corner. True circles and capsules ([pill],
+  /// [infoPill], round avatars and rings) are the named exceptions; nothing else may exceed it.
+  static const double maxFinite = 20;
 
   static BorderRadius all(double r) => BorderRadius.all(Radius.circular(r));
 

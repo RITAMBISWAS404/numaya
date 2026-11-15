@@ -612,12 +612,16 @@ void main() {
             w.borderRadius == AppRadii.all(SquircleIconButton.photoRadius),
       );
       expect(photo, findsWidgets);
-      // Discover photo O (owner selection): the controls sit inside the card padding and the
-      // radii are concentric: photo radius = squircle radius + its inset.
+      // QR-003 (owner, 2026-11-15) supersedes the concentric rule here: finite corners are at
+      // most 20, and a control floating on the photo is not a nested surface. The photo takes
+      // the 20pt image radius; the control keeps its 12pt shape and the 16pt card inset.
+      expect(SquircleIconButton.photoRadius, AppRadii.photo);
       expect(
         SquircleIconButton.photoRadius,
-        AppRadii.iconButton + SquircleIconButton.photoInset,
+        lessThanOrEqualTo(AppRadii.maxFinite),
       );
+      expect(AppRadii.iconButton, 12);
+      expect(SquircleIconButton.photoInset, AppLayout.cardPadding);
       await settle(tester);
     });
   });

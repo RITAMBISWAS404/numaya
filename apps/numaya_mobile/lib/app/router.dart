@@ -152,6 +152,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (path == Routes.reauth && !ref.read(sessionExpiryProvider)) {
         return Routes.home;
       }
+      // QR-013 sweep (DEF-QR-01): signed in with no code request pending, the verify step has
+      // nothing to show (it drew an empty, black page). Send the member home, as welcome and
+      // phone do; the success hand-over keeps its route while [verifying].
+      if (path == Routes.verify &&
+          !verifying &&
+          ref.read(verificationProvider).request == null) {
+        return Routes.home;
+      }
       if (path == Routes.restore && session.restorableUntil == null) {
         return Routes.home;
       }

@@ -50,7 +50,7 @@ Context colours keep their own tokens: actions (brand text), errors (negative), 
 
 | Category | Treatment | Size | Colour | Shared source |
 | --- | --- | --- | --- | --- |
-| Menu and list-card row leading icons (Profile menu, Settings, Streak tasks, Repair, credit balance and history, InfoList) | **Outline** (UI-088) | 24 | supporting grey #8A8A8A, red on destructive rows | `ListRow`, `InfoList` |
+| Menu and list-card row leading icons (Profile menu, Settings, Streak tasks, Repair, credit balance and history, InfoList) | **Outline** (UI-088) | 24 | supporting grey #666666 (`iconInactive`; corrected 2026-11-15, QR-008), red on destructive rows | `ListRow`, `InfoList` |
 | Premium "What's included" benefit glyphs | **Outline** (UI-088) | 20 | brand | `PremiumScreen._v8.glyph` |
 | Conversation preview type glyphs (photo, video, voice) | **Filled** (UI-070) | 16 | tertiary grey | `ConversationRow` V8 |
 | Compliment preview glyph | Outline (Tabler has no filled message-heart; nothing invented) | 16 | tertiary grey | `ConversationRow` V8 |

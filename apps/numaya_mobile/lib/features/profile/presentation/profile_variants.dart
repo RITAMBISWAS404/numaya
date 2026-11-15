@@ -167,11 +167,12 @@ class ProfileHeaderCover extends StatelessWidget {
                     sample: data.photo == null
                         ? null
                         : localImage(data.photo!, width: 720),
+                    // UI-049: the standard card padding on every overlay edge.
                     padding: const EdgeInsets.fromLTRB(
-                      AppSpacing.s5,
+                      AppLayout.cardPadding,
                       0,
-                      AppSpacing.s5,
-                      AppSpacing.s5,
+                      AppLayout.cardPadding,
+                      AppLayout.cardPadding,
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -204,9 +205,10 @@ class ProfileHeaderCover extends StatelessWidget {
               ),
             ),
           ),
+          // UI-049: the Edit control sits the standard card padding in from the photo's edges.
           Positioned(
-            top: AppSpacing.s3,
-            right: AppSpacing.s3,
+            top: AppLayout.cardPadding,
+            right: AppLayout.cardPadding,
             child: Pressable(
               key: const ValueKey('profile-header-edit'),
               onTap: data.onEdit,

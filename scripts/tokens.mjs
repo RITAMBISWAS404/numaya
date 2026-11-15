@@ -22,6 +22,7 @@ const SOURCE = resolve(ROOT, "tokens/numaya.tokens.json");
 const CSS_OUT = resolve(ROOT, "src/design-system/tokens.css");
 const JS_OUT = resolve(ROOT, "src/design-system/tokens.js");
 const LAYERS = ["primitive", "semantic", "component"];
+const lf = (text) => text.replace(/\r\n/g, "\n");
 const TYPES = new Set([
   "color", "dimension", "fontFamily", "fontWeight", "duration", "cubicBezier", "shadow", "number", "other",
 ]);
@@ -154,7 +155,12 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       const stale = [
         [CSS_OUT, css],
         [JS_OUT, js],
-      ].filter(([file, content]) => !existsSync(file) || readFileSync(file, "utf8") !== content);
+        // QR-002: compare values, not line endings. Git may check these files out with CRLF on
+        // Windows (core.autocrlf); the generator always writes LF (.gitattributes pins eol=lf).
+      ].filter(
+        ([file, content]) =>
+          !existsSync(file) || lf(readFileSync(file, "utf8")) !== lf(content),
+      );
       if (stale.length) {
         console.error(`Generated tokens are stale: ${stale.map(([f]) => f).join(", ")}\nRun: npm run tokens`);
         process.exit(1);

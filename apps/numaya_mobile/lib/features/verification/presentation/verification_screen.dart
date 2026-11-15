@@ -47,37 +47,37 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
     );
 
     Widget? footer;
+    Widget? status;
     final List<Widget> body;
     switch (state.status) {
+      // UI-094 / QR-007: the pending and verified results are status screens, so they use the
+      // shared centred template. Intro, capture and rejected (tips, retry) remain flow steps.
       case PhotoVerificationStatus.pending:
-        body = [
-          const SizedBox(height: AppSpacing.s8),
-          Center(
-            child: SizedBox.square(
-              dimension: 48,
-              child: CircularProgressIndicator(
-                color: AppColors.accent,
-                strokeWidth: 3,
-              ),
+        status = EmptyState(
+          key: const ValueKey('verify-status-pending'),
+          art: SizedBox.square(
+            dimension: 48,
+            child: CircularProgressIndicator(
+              color: AppColors.accent,
+              strokeWidth: 3,
             ),
           ),
-          const SizedBox(height: AppSpacing.s5),
-          StatusBanner(
-            tone: BannerTone.pending,
-            title: l10n.verifyPendingTitle,
-            body: l10n.verifyPendingBody,
-          ),
-        ];
+          title: l10n.verifyPendingTitle,
+          body: l10n.verifyPendingBody,
+        );
+        body = const [];
       case PhotoVerificationStatus.verified:
-        body = [
-          const SizedBox(height: AppSpacing.s6),
-          ResultPanel(
-            illustration: NumayaIllustration.verified,
-            title: l10n.verifyDoneTitle,
-            body: l10n.verifyDoneBody,
+        status = EmptyState(
+          key: const ValueKey('verify-status-done'),
+          art: const IllustrationView(NumayaIllustration.verified, width: 132),
+          title: l10n.verifyDoneTitle,
+          body: l10n.verifyDoneBody,
+          action: NumayaButton(
+            label: l10n.done,
+            onPressed: () => context.pop(),
           ),
-        ];
-        footer = NumayaButton(label: l10n.done, onPressed: () => context.pop());
+        );
+        body = const [];
       case PhotoVerificationStatus.rejected when _step == _Step.intro:
         final support =
             state.attempts >= PhotoVerificationController.maxAttempts;
@@ -227,14 +227,24 @@ class _VerificationScreenState extends ConsumerState<VerificationScreen> {
         }
     }
 
+    final top = NumayaTopBar(
+      onBack: () => _step == _Step.intro
+          ? context.pop()
+          : setState(() => _step = _Step.intro),
+      backLabel: l10n.back,
+      title: l10n.photoVerifyTitle,
+    );
+    final result = status;
+    if (result != null) {
+      return NumayaScreen(
+        top: top,
+        scrollable: false,
+        bodyPadding: EdgeInsets.zero,
+        body: StatusLayout(child: result),
+      );
+    }
     return NumayaScreen(
-      top: NumayaTopBar(
-        onBack: () => _step == _Step.intro
-            ? context.pop()
-            : setState(() => _step = _Step.intro),
-        backLabel: l10n.back,
-        title: l10n.photoVerifyTitle,
-      ),
+      top: top,
       footer: footer,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

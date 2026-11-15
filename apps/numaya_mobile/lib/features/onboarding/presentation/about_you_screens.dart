@@ -242,34 +242,30 @@ class UnderageScreen extends ConsumerWidget {
     final l10n = context.l10n;
     return PopScope(
       canPop: false,
+      // UI-094 / QR-007: the shared centred status template; both actions are kept.
       child: NumayaScreen(
-        footer: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            NumayaButton(
-              label: l10n.obUnderageSignOut,
-              onPressed: () => ref.read(sessionProvider.notifier).signOut(),
-            ),
-            const SizedBox(height: AppSpacing.s3),
-            NumayaButton(
-              label: l10n.obUnderageHelp,
-              variant: NumayaButtonVariant.quiet,
-              onPressed: () => context.push(
-                '${Routes.help}/${HelpArticleId.gettingStarted.name}',
+        scrollable: false,
+        bodyPadding: EdgeInsets.zero,
+        body: StatusLayout(
+          child: EmptyState(
+            key: const ValueKey('underage-status'),
+            art: const IllustrationView(NumayaIllustration.blocked, width: 132),
+            title: l10n.obUnderageTitle,
+            body: l10n.obUnderageBody,
+            actions: [
+              NumayaButton(
+                label: l10n.obUnderageSignOut,
+                onPressed: () => ref.read(sessionProvider.notifier).signOut(),
               ),
-            ),
-          ],
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: AppSpacing.s8),
-            ResultPanel(
-              illustration: NumayaIllustration.blocked,
-              title: l10n.obUnderageTitle,
-              body: l10n.obUnderageBody,
-            ),
-          ],
+              NumayaButton(
+                label: l10n.obUnderageHelp,
+                variant: NumayaButtonVariant.quiet,
+                onPressed: () => context.push(
+                  '${Routes.help}/${HelpArticleId.gettingStarted.name}',
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

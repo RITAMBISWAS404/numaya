@@ -148,9 +148,9 @@ abstract final class AppColors {
   /// The name most call sites use for muted text (previews, placeholders, metadata): tertiary.
   static const Color textMuted = textTertiary;
 
-  /// Supporting icons (X15-I): list-row leading glyphs and row chevrons, the control grey #8A8A8A
-  /// (3.45:1 on white cards, 3.14:1 on the page; meaningful graphics need 3:1). One step lighter
-  /// than the #666 supporting text, so the row's words lead. Not for icons on the #EAEAEA fill.
+  /// Supporting icons: list-row leading glyphs and row chevrons. The value is `iconInactive`
+  /// #666666 (5.74:1 on white cards, 5.22:1 on the page, 4.77:1 on the #EAEAEA fill), above the
+  /// 3:1 needed by meaningful graphics. QR-008 corrected a stale note that called it #8A8A8A.
   static const Color iconSupporting = _M.iconInactive;
 
   /// Strong neutral icon ink (#1A1A1A): the selected tab glyph and idle tab icons on the bar.
@@ -191,7 +191,8 @@ abstract final class AppColors {
   /// Solid translucent panel for text over photos (no gradient scrims).
   static const Color photoPanel = _M.photoPanel;
 
-  /// The lower edge of a photo text gradient (10% black; owner cap under 25%).
+  /// The lower edge of a photo text gradient: black at 24% (0x3D), under the owner's 25% cap
+  /// (QR-008 corrected a stale "10%").
   static const Color photoScrimEdge = _M.photoScrimEdge;
 
   /// Round buttons floating on photos.

@@ -1,7 +1,8 @@
 # Numaya
 
 Premium dating app. This repo holds the onboarding prototype, the design system and the UX
-research. **No production framework is chosen yet** ([architecture](docs/engineering/architecture.md)).
+research. The native app is Flutter, in `apps/numaya_mobile` (QR-008: the earlier "no framework chosen" note
+predates it); the web prototype at the root remains for reference ([architecture](docs/engineering/architecture.md)).
 
 ## Session handoff (read first, every session)
 Work moves between Claude sessions and accounts. The record is in [docs/agent-handoff/](docs/agent-handoff/START_HERE.md).

@@ -94,7 +94,8 @@ class _Portrait extends StatelessWidget {
     return Container(
       width: width,
       decoration: BoxDecoration(
-        borderRadius: AppRadii.all(AppRadii.heroCard + 4),
+        // QR-003: the frame is the 20pt cap; the photo nested 4pt inside it is 20 - 4 = 16.
+        borderRadius: AppRadii.all(AppRadii.heroCard),
         color: AppColors.surface,
         boxShadow: AppElevation.floating,
       ),
@@ -102,7 +103,7 @@ class _Portrait extends StatelessWidget {
       child: PhotoPlaceholder(
         label: label,
         aspectRatio: AppMedia.personPhoto,
-        radius: AppRadii.heroCard,
+        radius: AppRadii.nested(AppRadii.heroCard, 4),
         child: image ?? glyph,
       ),
     );

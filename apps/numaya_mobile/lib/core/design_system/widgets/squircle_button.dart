@@ -47,9 +47,11 @@ class SquircleIconButton extends StatelessWidget {
   /// overlay. Was 12.
   static const double photoInset = AppLayout.cardPadding;
 
-  /// The photo's corner keeps the controls on it concentric (UI-050: outer = inner + inset):
-  /// 12 + 16 = 28 with the UI-049 inset (was 12 + 12 = 24).
-  static const double photoRadius = AppRadii.iconButton + photoInset;
+  /// QR-003 (owner, 2026-11-15): finite corners are at most 20, so the photo takes the image
+  /// radius (20). A control floating on the photo is not a nested surface: it keeps its own 12pt
+  /// shape and the 16pt UI-049 inset, so the outer-equals-inner-plus-inset rule does not apply
+  /// to it (it produced 28, over the cap).
+  static const double photoRadius = AppRadii.photo;
 
   /// Positioned offset of the 48pt target so the 38pt squircle sits [photoInset] in.
   static const double photoOffset = photoInset - (target - size) / 2;
