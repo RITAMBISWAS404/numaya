@@ -1,5 +1,8 @@
 # Validation
 
+> **2026-11-15, device checks (owner authorised the emulator).** emulator-5554 (iPhone_16_Custom): review APK installed and launched; Dev Mode relaunch and Reset all, slider drag, mic permission, voice record/play, photo pick and reply, keyboard open/close all pass; onboarding integration test passes (test body repaired); profile-mode frame timings recorded (build thread fine; raster is software-rendered, not representative). See docs/quality-refinement/DEVICE_CHECKS.md. Not run: TalkBack, physical phone, iOS.
+
+
 > **Quality refinement (`db3101d`):** analyzer 2 infos (baseline); `flutter test` 732 passed, 49 skipped, 0 failed (baseline 693/47 rerun at e8f871a); both token checks exit 0 (root was exit 1); 159 renders at 393 and 80 at 320/200% pass. APK SHA-256 `3995c169b88d431bd02a15dd6a6029efe5a6047f89d3c496fdb4e40258c6b879`, not installed. Not run: device, integration, iOS, TalkBack, profiling, web e2e.
 
 

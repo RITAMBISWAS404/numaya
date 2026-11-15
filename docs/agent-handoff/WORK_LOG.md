@@ -1,5 +1,8 @@
 # Work log
 
+> **2026-11-15, device checks (owner authorised the emulator).** emulator-5554 (iPhone_16_Custom): review APK installed and launched; Dev Mode relaunch and Reset all, slider drag, mic permission, voice record/play, photo pick and reply, keyboard open/close all pass; onboarding integration test passes (test body repaired); profile-mode frame timings recorded (build thread fine; raster is software-rendered, not representative). See docs/quality-refinement/DEVICE_CHECKS.md. Not run: TalkBack, physical phone, iOS.
+
+
 ## 2026-11-15 · Quality refinement (Windows, Claude desktop)
 - Clean baseline rerun at the checkpoint (separate checkout): 693 passed, 47 skipped, 2 analyzer infos; root token check failed on CRLF only.
 - Fixed: token check line endings (QR-002), photo radius 28 -> 20 and match frame 24 -> 20/16 with a rendered-screen cap test (QR-003), verification pending/verified and underage on the status template (QR-007), own-profile header overlay insets (UI-049), stale comments (QR-008), /verify black page when signed in (DEF-QR-01).

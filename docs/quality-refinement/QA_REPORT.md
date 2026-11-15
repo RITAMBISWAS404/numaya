@@ -10,7 +10,7 @@
 | APK | `C:\Users\biswa\OneDrive\Desktop\Numaya Quality Refinement\2026-11-15 db3101d\apk\Numaya-QualityRefinement-20261115-db3101d-debug.apk` |
 | APK SHA-256 | `3995c169b88d431bd02a15dd6a6029efe5a6047f89d3c496fdb4e40258c6b879` (248,402,121 bytes) |
 | Build | `flutter build apk --debug --dart-define=NUMAYA_DEV_TOOLS=true`, Flutter 3.47.8. Demo world and Dev Mode on. Installed (`adb install -r`, hash checked) and launched on emulator-5554 (iPhone_16_Custom) after the owner authorised it. |
-| Screenshots | same folder, `screenshots\` (249 PNGs, flat, numbered; `INDEX.csv` maps file, flow, state, issue, revision, viewport, text scale and kind). Files 001-249 are **widget renders** (Flutter test renderer); 250-271 are **emulator screenshots** from emulator-5554. |
+| Screenshots | same folder, `screenshots\` (271 PNGs, flat, numbered; `INDEX.csv` maps file, flow, state, issue, revision, viewport, text scale and kind). Files 001-249 are **widget renders** (Flutter test renderer); 250-271 are **emulator screenshots** from emulator-5554. |
 
 Package inputs read: README, 00_SCOPE_AND_PRECEDENCE, GENERATION_SUMMARY, NEW_FINDINGS (QR-001..014),
 FINDING_SOURCE_LOCATIONS, LOCAL_CHECK_RESULTS, IMPLEMENTATION_ROADMAP. History (UI-001..102) read in the previous phase

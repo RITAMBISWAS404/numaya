@@ -1,5 +1,8 @@
 # Current state
 
+> **2026-11-15, device checks (owner authorised the emulator).** emulator-5554 (iPhone_16_Custom): review APK installed and launched; Dev Mode relaunch and Reset all, slider drag, mic permission, voice record/play, photo pick and reply, keyboard open/close all pass; onboarding integration test passes (test body repaired); profile-mode frame timings recorded (build thread fine; raster is software-rendered, not representative). See docs/quality-refinement/DEVICE_CHECKS.md. Not run: TalkBack, physical phone, iOS.
+
+
 > **2026-11-15, quality refinement. Read this first.**
 > - **Folder:** `C:\Users\biswa\Projects\Numaya-fable-lab`. **Branch:** `experiment/numaya-quality-refinement-20261115-1849`, from `e8f871a` (tag `checkpoint/pre-quality-refinement-20261115-1849`). App source `db3101d`.
 > - **What it is:** NUMAYA_QUALITY_REFINEMENT applied: finite radii capped at 20 (circles and capsules excepted), token check fixed for CRLF, more status screens on the UI-094 template, remaining overlay insets, a black /verify page fixed, route sweep of all 70 release routes.
