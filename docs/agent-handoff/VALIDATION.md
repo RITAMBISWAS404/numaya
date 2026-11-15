@@ -1,5 +1,8 @@
 # Validation
 
+> **Quality refinement (`db3101d`):** analyzer 2 infos (baseline); `flutter test` 732 passed, 49 skipped, 0 failed (baseline 693/47 rerun at e8f871a); both token checks exit 0 (root was exit 1); 159 renders at 393 and 80 at 320/200% pass. APK SHA-256 `3995c169b88d431bd02a15dd6a6029efe5a6047f89d3c496fdb4e40258c6b879`, not installed. Not run: device, integration, iOS, TalkBack, profiling, web e2e.
+
+
 > **UI-087 to UI-102 (`e3c50cd`):**
 > - **Analyzer:** 2 infos, both present at baseline.
 > - **Tests:** `flutter test` 693 passed, 47 skipped, 0 failed (baseline at `96c7872`: 674 passed, 45 skipped). New: `ui087_102_test.dart` (12) and the rewritten `type_settings_test.dart`.

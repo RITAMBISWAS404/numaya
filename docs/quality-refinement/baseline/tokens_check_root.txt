@@ -1,0 +1,2 @@
+Generated tokens are stale: C:\Users\biswa\Projects\Numaya-fable-lab\src\design-system\tokens.css, C:\Users\biswa\Projects\Numaya-fable-lab\src\design-system\tokens.js
+Run: npm run tokens

@@ -1,0 +1,2 @@
+Tokens OK: 437 tokens, generated files up to date.
+exit 0

@@ -1,0 +1,102 @@
+scope,screen (sweep name) or registered path,render 393x852 @1.0,render 320 @2.0,other states rendered at db3101d,note
+release,welcome,route 01,route 01 stress,see INDEX.csv,Signed-in demo session: guard redirects to Discover (expected)
+release,phone,route 02,route 02 stress,see INDEX.csv,Guard redirects to Discover when signed in (expected)
+release,verify-code,route 03,route 03 stress,see INDEX.csv,DEF-QR-01: drew a black page; now redirects to Discover when signed in with no request
+release,setup-hub,route 04,route 04 stress,see INDEX.csv,
+release,setup-name,route 05,route 05 stress,see INDEX.csv,
+release,setup-underage,route 06,route 06 stress,see INDEX.csv,
+release,setup-gender,route 07,route 07 stress,see INDEX.csv,
+release,setup-meet,route 08,route 08 stress,see INDEX.csv,
+release,setup-intentions,route 09,route 09 stress,see INDEX.csv,
+release,setup-height,route 10,route 10 stress,see INDEX.csv,
+release,setup-location,route 11,route 11 stress,see INDEX.csv,
+release,setup-photos,route 12,route 12 stress,see INDEX.csv,
+release,setup-interests,route 13,route 13 stress,see INDEX.csv,
+release,setup-prompts,route 14,route 14 stress,see INDEX.csv,
+release,setup-prompt-editor,route 15,route 15 stress,see INDEX.csv,
+release,setup-bio,route 16,route 16 stress,see INDEX.csv,
+release,setup-verify,route 17,route 17 stress,see INDEX.csv,
+release,setup-notifications,route 18,route 18 stress,see INDEX.csv,
+release,setup-review,route 19,route 19 stress,see INDEX.csv,
+release,setup-done,route 20,route 20 stress,see INDEX.csv,
+release,discover,route 21,route 21 stress,see INDEX.csv,
+release,likes,route 22,route 22 stress,see INDEX.csv,
+release,messages,route 23,route 23 stress,see INDEX.csv,
+release,archive,route 24,route 24 stress,see INDEX.csv,
+release,chat,route 25,route 25 stress,see INDEX.csv,
+release,compliment-photo,route 26,route 26 stress,see INDEX.csv,
+release,compliment-prompt,route 27,route 27 stress,see INDEX.csv,
+release,like-profile,route 28,route 28 stress,see INDEX.csv,
+release,match,route 29,route 29 stress,see INDEX.csv,
+release,person,route 30,route 30 stress,see INDEX.csv,
+release,person-photos,route 31,route 31 stress,see INDEX.csv,
+release,profile,route 32,route 32 stress,see INDEX.csv,
+release,profile-edit,route 33,route 33 stress,see INDEX.csv,
+release,edit-basics,route 34,route 34 stress,see INDEX.csv,
+release,edit-interests,route 35,route 35 stress,see INDEX.csv,
+release,edit-photos,route 36,route 36 stress,see INDEX.csv,
+release,edit-prompt,route 37,route 37 stress,see INDEX.csv,
+release,preview,route 38,route 38 stress,see INDEX.csv,
+release,completion,route 39,route 39 stress,see INDEX.csv,
+release,verify-photo,route 40,route 40 stress,see INDEX.csv,
+release,visibility,route 41,route 41 stress,see INDEX.csv,Retired route: redirects to Profile (existing test)
+release,visibility-about,route 42,route 42 stress,see INDEX.csv,Retired route: redirects to Profile (existing test)
+release,premium,route 43,route 43 stress,see INDEX.csv,
+release,paywall,route 44,route 44 stress,see INDEX.csv,
+release,streak,route 45,route 45 stress,see INDEX.csv,
+release,wallet,route 46,route 46 stress,see INDEX.csv,
+release,allowance,route 47,route 47 stress,see INDEX.csv,
+release,store-compliments,route 48,route 48 stress,see INDEX.csv,
+release,store-recovery,route 49,route 49 stress,see INDEX.csv,
+release,outcome-success,route 50,route 50 stress,see INDEX.csv,
+release,outcome-pending,route 51,route 51 stress,see INDEX.csv,
+release,outcome-failed,route 52,route 52 stress,see INDEX.csv,
+release,outcome-cancelled,route 53,route 53 stress,see INDEX.csv,
+release,outcome-unavailable,route 54,route 54 stress,see INDEX.csv,
+release,outcome-ineligible,route 55,route 55 stress,see INDEX.csv,
+release,settings,route 56,route 56 stress,see INDEX.csv,
+release,settings-notifications,route 57,route 57 stress,see INDEX.csv,
+release,settings-privacy,route 58,route 58 stress,see INDEX.csv,
+release,settings-blocked,route 59,route 59 stress,see INDEX.csv,
+release,settings-delete,route 60,route 60 stress,see INDEX.csv,
+release,safety,route 61,route 61 stress,see INDEX.csv,
+release,help,route 62,route 62 stress,see INDEX.csv,
+release,help-article,route 63,route 63 stress,see INDEX.csv,
+release,help-contact,route 64,route 64 stress,see INDEX.csv,
+release,help-requests,route 65,route 65 stress,see INDEX.csv,
+release,legal,route 66,route 66 stress,see INDEX.csv,
+release,legal-privacy,route 67,route 67 stress,see INDEX.csv,
+release,restore,route 68,route 68 stress,see INDEX.csv,Guard redirects to Discover (no restorable account)
+release,reauth,route 69,route 69 stress,see INDEX.csv,Guard redirects to Discover (session not expired)
+release,account-blocked,route 70,route 70 stress,see INDEX.csv,
+deferred (ReleaseScope),/events,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+deferred (ReleaseScope),/profile/opening-moves,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+deferred (ReleaseScope),/for-you,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+redirect only,/request/:id,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+redirect only,/chats/expired,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+redirect only,/reconnect/:id,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+redirect only,/profile/health,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+redirect only,about,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+redirect only,/profile/insights,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+redirect only,/profile/visibility,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+redirect only,about,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+deferred (ReleaseScope),/events/mine,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+deferred (ReleaseScope),/events/e/:id,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+deferred (ReleaseScope),/events/r/:id,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+deferred (ReleaseScope),/events/notice/:id,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+deferred (ReleaseScope),/events/met/:id,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+deferred (ReleaseScope),/events/proposals,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+deferred (ReleaseScope),/events/propose/:id,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+internal (dev tools),/staff,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+internal (dev tools),/staff/proposal/:id,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+internal (dev tools),/staff/event/:id,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+internal (dev tools),/demo,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+internal (dev tools),/visual-lab,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+internal (dev tools),/visual-lab/specimen,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+internal (dev tools),/visual-lab/preview/:group,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+internal (dev tools),/experiment-lab,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+internal (dev tools),/design-lab,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+internal (dev tools),/review-typography,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+internal (dev tools),/review-stats,not rendered,not rendered,,"Not reachable in the release build (dev tools, ReleaseScope or redirect)"
+gap,"Bottom sheets and dialogs (filters, reports, menus, pickers, confirmations)",partial,partial,"filters basic/advanced, reply preview",Not every sheet/dialog state was rendered at this revision
+gap,"Keyboard open, drag, relaunch, native permissions, TalkBack",—,—,,BLOCKED: no device authorised

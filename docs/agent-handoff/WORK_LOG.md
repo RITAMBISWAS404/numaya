@@ -1,5 +1,12 @@
 # Work log
 
+## 2026-11-15 · Quality refinement (Windows, Claude desktop)
+- Clean baseline rerun at the checkpoint (separate checkout): 693 passed, 47 skipped, 2 analyzer infos; root token check failed on CRLF only.
+- Fixed: token check line endings (QR-002), photo radius 28 -> 20 and match frame 24 -> 20/16 with a rendered-screen cap test (QR-003), verification pending/verified and underage on the status template (QR-007), own-profile header overlay insets (UI-049), stale comments (QR-008), /verify black page when signed in (DEF-QR-01).
+- Added: quality_refinement_test (cap, Android a11y guidelines, Reset boundary), state renders (chat photo reply, voice playing), a 70-route sweep at 393 and 320/200%.
+- Final at db3101d: 732 passed, 49 skipped, 0 failed; 2 infos; both token checks pass; 239 renders pass. APK built, not installed.
+
+
 ## 2026-11-15 · UI-087 to UI-102 review phase (Windows, Claude desktop)
 - Read both packages; wrote docs/ui087-102/ACTIVE_SCOPE.md. Checkpoint tag and new branch pushed.
 - Batches: foundations (three text greys, row icons outline, media glyphs filled, overlay insets), components (capsule pills, birthday placeholders, SliderBlock, white info card, capsule tab bar, status template, continuous progress, no scroll stroke), Dev Mode (font pairs with bundled OFL fonts, brand, shape, secondary surface, reset all), Messages (ringed circular matches, unread dot, trailing Your move, inline countdown, composer fills, reply thumbnail, metadata split, filled Send).

@@ -1,5 +1,14 @@
 # Current state
 
+> **2026-11-15, quality refinement. Read this first.**
+> - **Folder:** `C:\Users\biswa\Projects\Numaya-fable-lab`. **Branch:** `experiment/numaya-quality-refinement-20261115-1849`, from `e8f871a` (tag `checkpoint/pre-quality-refinement-20261115-1849`). App source `db3101d`.
+> - **What it is:** NUMAYA_QUALITY_REFINEMENT applied: finite radii capped at 20 (circles and capsules excepted), token check fixed for CRLF, more status screens on the UI-094 template, remaining overlay insets, a black /verify page fixed, route sweep of all 70 release routes.
+> - **Records:** [docs/quality-refinement](../quality-refinement/QA_REPORT.md): QA_REPORT, EXECUTION_TRACKER.csv, ROUTE_STATE_COVERAGE.csv, TOKEN_AND_COMPONENT_CATALOGUE, baseline/ and final/ logs.
+> - **Review folder:** `C:\Users\biswa\OneDrive\Desktop\Numaya Quality Refinement\2026-11-15 db3101d` (APK `3995c169…b879`, 249 widget renders with INDEX.csv).
+> - **Blocked:** device checks (no device authorised), UI-099/UI-100 (no PRD or rules). Outstanding: QR-004 scoped theme, QR-010 override sweep, DEF-QR-02 title breaks at 200%.
+> - **Other checkouts:** `Numaya` and `Numaya-backend` untouched.
+
+
 > **2026-11-15, UI-087 to UI-102 review phase. Read this first.**
 > - **Folder:** `C:\Users\biswa\Projects\Numaya-fable-lab` (a worktree). **Branch:** `experiment/numaya-ui087-102-20261115-0309`, from `96c7872` (tag `checkpoint/pre-ui087-102-20261115-0309`). App source `e3c50cd`.
 > - **What it is:** the 16 new issues (UI-087 to UI-102) and 14 amended ones, applied. Dev Mode (Settings > Prototype tools > Dev Mode): four fixed font pairs, 14/15 body, three brand colours, two button shapes, two secondary surfaces, Reset all. UI-099 and UI-100 are BLOCKED (no updated PRD, no approved ranking rules).
