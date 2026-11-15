@@ -1,0 +1,35 @@
+{
+  "discover_scroll": {
+    "frames": 124,
+    "build_ms_p50": 1.226,
+    "build_ms_p90": 3.298,
+    "build_ms_p99": 31.686,
+    "raster_ms_p50": 150.217,
+    "raster_ms_p90": 160.38,
+    "raster_ms_p99": 315.829,
+    "frames_over_16ms_build": 8,
+    "frames_over_16ms_raster": 124
+  },
+  "messages_scroll": {
+    "frames": 139,
+    "build_ms_p50": 1.973,
+    "build_ms_p90": 4.902,
+    "build_ms_p99": 30.759,
+    "raster_ms_p50": 90.057,
+    "raster_ms_p90": 99.055,
+    "raster_ms_p99": 216.686,
+    "frames_over_16ms_build": 6,
+    "frames_over_16ms_raster": 139
+  },
+  "chat_scroll": {
+    "frames": 144,
+    "build_ms_p50": 2.362,
+    "build_ms_p90": 6.336,
+    "build_ms_p99": 25.016,
+    "raster_ms_p50": 76.561,
+    "raster_ms_p90": 85.031,
+    "raster_ms_p99": 91.871,
+    "frames_over_16ms_build": 9,
+    "frames_over_16ms_raster": 144
+  }
+}

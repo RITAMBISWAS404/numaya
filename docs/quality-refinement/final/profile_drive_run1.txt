@@ -1,0 +1,61 @@
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.2.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  cupertino_ui 1.1.4 (1.1.6 available)
+  flutter_riverpod 3.4.3 (3.5.0 available)
+  flutter_svg 2.3.0 (2.4.0 available)
+  go_router 18.1.1 (18.1.4 available)
+  hooks 2.0.2 (2.2.0 available)
+  image_picker_ios 0.8.13+13 (0.8.13+15 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.8.0 (1.11.0 available)
+  meta 1.18.3 (1.19.0 available)
+  objective_c 9.5.0 (9.6.4 available)
+  petitparser 7.0.2 (7.1.0 available)
+  record 7.1.2 (7.2.0 available)
+  record_android 2.2.0 (2.3.0 available)
+  record_linux 2.1.3 (2.2.0 available)
+  record_platform_interface 2.1.0 (2.2.0 available)
+  record_use 0.6.0 (1.1.1 available)
+  record_web 2.1.3 (2.2.0 available)
+  record_windows 2.3.0 (2.4.0 available)
+  riverpod 3.4.3 (3.5.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_graphics 1.2.4 (1.3.1 available)
+  vector_graphics_codec 1.1.13 (1.2.0 available)
+  vector_graphics_compiler 1.3.3 (1.3.6 available)
+  vector_math 2.4.0 (2.4.4 available)
+  xml 7.0.1 (7.1.0 available)
+Got dependencies!
+27 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Running Gradle task 'assembleProfile'...                        
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by net.rubygrapefruit.platform.internal.NativeLibraryLoader in an unnamed module (file:/C:/Users/biswa/.gradle/wrapper/dists/gradle-9.3.1-all/9ot9r568e8zfvvd4mn8rbu1j0/gradle-9.3.1/lib/native-platform-0.22-milestone-29.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+Running Gradle task 'assembleProfile'...                           56.8s
+√ Built build\app\outputs\flutter-apk\app-profile.apk (39.2MB)
+Installing build\app\outputs\flutter-apk\app-profile.apk...        394ms
+I/Choreographer( 7584): Skipped 38 frames!  The application may be doing too much work on its main thread.
+D/WindowLayoutComponentImpl( 7584): Register WindowLayoutInfoListener on Context=com.numaya.numaya_mobile.MainActivity@7f4b873, of which baseContext=android.app.ContextImpl@1d868cf
+I/a.numaya_mobile( 7584): Compiler allocated 5042KB to compile void android.view.ViewRootImpl.performTraversals()
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:50966/y6SPCRur40g=/
+VMServiceFlutterDriver: Isolate found with number: 4461647283524131
+VMServiceFlutterDriver: Isolate 4461647283524131 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter ( 7584): 00:00 +0: scroll frame timings
+VMServiceFlutterDriver: Connected to Flutter application.
+D/InsetsController( 7584): hide(ime(), fromIme=false)
+I/ImeTracker( 7584): com.numaya.numaya_mobile:3b4e6af9: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+D/ProfileInstaller( 7584): Installing profile for com.numaya.numaya_mobile
+W/WindowOnBackDispatcher( 7584): sendCancelIfRunning: isInProgress=false callback=io.flutter.embedding.android.FlutterActivity$1@a3ffd08
+W/WindowOnBackDispatcher( 7584): sendCancelIfRunning: isInProgress=false callback=io.flutter.embedding.android.FlutterActivity$1@a3ffd08
+W/WindowOnBackDispatcher( 7584): sendCancelIfRunning: isInProgress=false callback=io.flutter.embedding.android.FlutterActivity$1@a3ffd08
+I/a.numaya_mobile( 7584): AssetManager2(0x76e851a179d8) locale list changing from [] to [en-US]
+I/flutter ( 7584): 00:44 +1: (tearDownAll)
+I/flutter ( 7584): 00:44 +2: All tests passed!
+All tests passed.

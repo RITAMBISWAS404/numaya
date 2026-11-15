@@ -9,8 +9,8 @@
 | Final app source | `db3101d` (APK and all evidence built from it; records follow in later commits) |
 | APK | `C:\Users\biswa\OneDrive\Desktop\Numaya Quality Refinement\2026-11-15 db3101d\apk\Numaya-QualityRefinement-20261115-db3101d-debug.apk` |
 | APK SHA-256 | `3995c169b88d431bd02a15dd6a6029efe5a6047f89d3c496fdb4e40258c6b879` (248,402,121 bytes) |
-| Build | `flutter build apk --debug --dart-define=NUMAYA_DEV_TOOLS=true`, Flutter 3.47.8. Demo world and Dev Mode on. **Not installed or launched**: no device authorised. |
-| Screenshots | same folder, `screenshots\` (249 PNGs, flat, numbered; `INDEX.csv` maps file, flow, state, issue, revision, viewport, text scale and kind). All are **widget renders** of the real app tree (Flutter test renderer), not emulator or device screenshots. |
+| Build | `flutter build apk --debug --dart-define=NUMAYA_DEV_TOOLS=true`, Flutter 3.47.8. Demo world and Dev Mode on. Installed (`adb install -r`, hash checked) and launched on emulator-5554 (iPhone_16_Custom) after the owner authorised it. |
+| Screenshots | same folder, `screenshots\` (249 PNGs, flat, numbered; `INDEX.csv` maps file, flow, state, issue, revision, viewport, text scale and kind). Files 001-249 are **widget renders** (Flutter test renderer); 250-271 are **emulator screenshots** from emulator-5554. |
 
 Package inputs read: README, 00_SCOPE_AND_PRECEDENCE, GENERATION_SUMMARY, NEW_FINDINGS (QR-001..014),
 FINDING_SOURCE_LOCATIONS, LOCAL_CHECK_RESULTS, IMPLEMENTATION_ROADMAP. History (UI-001..102) read in the previous phase
@@ -27,7 +27,10 @@ and carried by `docs/ui087-102`. Tracker: [EXECUTION_TRACKER.csv](EXECUTION_TRAC
 | `flutter test` | 693 passed, 47 skipped, 0 failed | 732 passed, 49 skipped, 0 failed |
 | Comparison renders (393 @1.0) | n/a | 159 passed |
 | Comparison renders (320 @2.0) | n/a | 80 passed (no layout overflow) |
-| Integration tests, device, iOS, TalkBack, profiling | not run | **not run: no device authorised** |
+| Integration test on device (`onboarding_test`) | not run | 1 passed on emulator-5554 (after repairing a retired test body) |
+| Device checks (Dev Mode relaunch and reset, slider drag, mic permission, voice, photo reply, keyboard) | not run | all pass on emulator-5554: [DEVICE_CHECKS.md](DEVICE_CHECKS.md) |
+| Profile-mode frame timings | not run | two runs recorded; build thread within budget; raster not representative (software renderer) |
+| TalkBack, physical phone, iOS | not run | **not run** |
 | Web `npm run check` / e2e | not run | not run: no web source changed (only the token script's comparison and `.gitattributes`) |
 
 Skipped tests are the opt-in `screenshots`/`comparison` tagged suites (`dart_test.yaml`; the comparison renders were run
@@ -38,20 +41,20 @@ Changed expectation: `final_polish_test` "Discover photo nests inside its hero c
 
 ## Completed and verified
 
-QR-002, QR-003, QR-007 (with recorded exceptions), QR-008, QR-012 (SDK guidelines on six screens), QR-013, DEF-QR-01,
+QR-002, QR-003, QR-007 (with recorded exceptions), QR-008, QR-009 (emulator), QR-012 (SDK guidelines on six screens), QR-013, DEF-QR-01,
 UI-049 (remaining overlays), UI-070 (playing voice render), UI-091 (chat photo reply render), UI-094 (comparable
 statuses). Regression of UI-087..098, 101, 102 and the amendments: full suite and fresh renders pass.
 
 ## Partial
 
-QR-001 (generators deterministic; handwritten Mono tokens not migrated), QR-005 (documented; no production palette
-chosen), QR-009 (widget-level only), QR-014 (catalogue, no CI gate), UI-012/UI-074 (no per-override sweep).
+QR-001 (generators deterministic; handwritten Mono tokens not migrated), QR-011 (build thread measured; raster not representative), QR-005 (documented; no production palette
+chosen), QR-014 (catalogue, no CI gate), UI-012/UI-074 (no per-override sweep).
 
 ## Blocked or outstanding
 
 - QR-004 scoped theme: not implemented; the static compatibility facade stays (reported as debt).
 - QR-010 style-candidate classification (613 hits): outstanding.
-- QR-011 performance and QR-009 native checks: blocked (no device).
+- QR-011: measured on the emulator; raster needs a GPU phone. QR-009: emulator checks pass; TalkBack and physical phone not run.
 - DEF-QR-02 large titles break inside words at 320pt and 200% text (pre-existing): needs a decision.
 - UI-099, UI-100: blocked (no approved PRD or discovery rules).
 - Production choices: font pair, body size, palette, button shape, secondary surface and status surface.
