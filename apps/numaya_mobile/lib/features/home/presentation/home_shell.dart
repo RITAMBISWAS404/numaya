@@ -123,19 +123,45 @@ class TabHeader extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: AppSizes.tabHeader),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppLayout.screenGutter),
-        child: Row(
-          children: [
-            Expanded(
-              child: Semantics(
-                header: true,
-                child: Text(title, style: AppTypography.pageTitle),
-              ),
-            ),
-            if (actions.isNotEmpty) ...[
-              const SizedBox(width: AppSpacing.s2),
-              HeaderActions(actions: actions),
-            ],
-          ],
+        // PR-008: when the title's longest word cannot fit beside the actions (narrow phone, large
+        // text), the actions keep their row and the title takes the full width below them; a word
+        // wider than even that is hyphenated, never broken silently or shrunk.
+        child: LayoutBuilder(
+          builder: (context, box) {
+            final style = AppTypography.pageTitle;
+            final heading = Semantics(
+              header: true,
+              child: HyphenatedText(title, style: style),
+            );
+            if (actions.isEmpty) return heading;
+            final actionsWidth =
+                actions.length * kMinInteractiveDimension +
+                (actions.length - 1) * AppLayout.headerActionLayoutGap +
+                AppSpacing.s2;
+            final fits =
+                HyphenatedText.widestWord(context, title, style) <=
+                box.maxWidth - actionsWidth;
+            if (fits) {
+              return Row(
+                children: [
+                  Expanded(child: heading),
+                  const SizedBox(width: AppSpacing.s2),
+                  HeaderActions(actions: actions),
+                ],
+              );
+            }
+            return Column(
+              key: const ValueKey('tab-header-stacked'),
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: HeaderActions(actions: actions),
+                ),
+                heading,
+              ],
+            );
+          },
         ),
       ),
     );

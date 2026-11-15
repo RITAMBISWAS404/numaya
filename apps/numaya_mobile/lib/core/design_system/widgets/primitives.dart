@@ -375,3 +375,88 @@ class _PressableState extends State<Pressable> {
     );
   }
 }
+
+/// PR-008 (2026-11-15): heading text that never breaks inside a word silently. A word wider than
+/// the line (a single long word at 320pt and 200% text) is split with an explicit hyphen at the
+/// last character that fits ("Notifica-" / "tions"); everything else wraps at spaces as usual.
+/// The text keeps its role, size and the system text scale: nothing is shrunk or clamped. The
+/// accessible label is always the original, unhyphenated text.
+class HyphenatedText extends StatelessWidget {
+  const HyphenatedText(
+    this.text, {
+    super.key,
+    required this.style,
+    this.textAlign,
+    this.maxLines,
+  });
+
+  final String text;
+  final TextStyle style;
+  final TextAlign? textAlign;
+  final int? maxLines;
+
+  /// The width [word] needs at [style] under the current text scale.
+  static double wordWidth(BuildContext context, String word, TextStyle style) {
+    final painter = TextPainter(
+      text: TextSpan(text: word, style: style),
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+      maxLines: 1,
+    )..layout();
+    final w = painter.width;
+    painter.dispose();
+    return w;
+  }
+
+  /// The widest single word of [text].
+  static double widestWord(BuildContext context, String text, TextStyle style) {
+    var widest = 0.0;
+    for (final w in text.split(RegExp(r'\s+'))) {
+      if (w.isEmpty) continue;
+      widest = math.max(widest, wordWidth(context, w, style));
+    }
+    return widest;
+  }
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, box) {
+      var shown = text;
+      if (box.hasBoundedWidth) {
+        final max = box.maxWidth - 1;
+        final out = <String>[];
+        for (final word in text.split(' ')) {
+          if (word.isEmpty || wordWidth(context, word, style) <= max) {
+            out.add(word);
+            continue;
+          }
+          // Split the word into pieces that each fit with a trailing hyphen.
+          final pieces = <String>[];
+          var rest = word;
+          while (rest.isNotEmpty && wordWidth(context, rest, style) > max) {
+            var n = rest.length - 1;
+            while (n > 1 &&
+                wordWidth(context, '${rest.substring(0, n)}-', style) > max) {
+              n--;
+            }
+            pieces.add('${rest.substring(0, n)}-');
+            rest = rest.substring(n);
+          }
+          if (rest.isNotEmpty) pieces.add(rest);
+          out.add(pieces.join('\n'));
+        }
+        shown = out.join(' ');
+      }
+      return Semantics(
+        label: text,
+        excludeSemantics: true,
+        child: Text(
+          shown,
+          style: style,
+          textAlign: textAlign,
+          maxLines: maxLines,
+        ),
+      );
+    },
+  );
+}
