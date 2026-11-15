@@ -42,6 +42,7 @@ class LiveComplimentsController extends ComplimentsController {
       final rows =
           await guardLive(() => _db.rpc<dynamic>('list_conversations')) as List;
       final out = <Compliment>[];
+      ({List<String> photos, List<String> prompts})? own;
       for (final row in rows.cast<Map<String, dynamic>>()) {
         final c = row['compliment'] as Map<String, dynamic>?;
         if (c == null) continue;
@@ -59,6 +60,13 @@ class LiveComplimentsController extends ComplimentsController {
         if (first == null) continue;
         final ctx = first['context'] as Map<String, dynamic>?;
         final isPrompt = c['target_kind'] == 'prompt';
+        final fromMe = c['from_me'] == true;
+        // PR-007: the exact photo or prompt, from the immutable snapshot the server stored with
+        // the Compliment (`photo_id` / `prompt_id`). Sent: it is on their profile; received: on
+        // mine. Was always index 0 (the first photo or prompt).
+        final refs = fromMe
+            ? liveTargets[other]
+            : (own ??= await _ownTargets());
         final status = switch (c['status'] as String?) {
           'pending' => ComplimentStatus.pending,
           'accepted' => ComplimentStatus.converted,
@@ -71,10 +79,12 @@ class LiveComplimentsController extends ComplimentsController {
           Compliment(
             id: id,
             personId: other,
-            fromMe: c['from_me'] == true,
-            target: isPrompt
-                ? const ComplimentTarget.prompt(0)
-                : const ComplimentTarget.photo(0),
+            fromMe: fromMe,
+            target: resolveLiveComplimentTarget(
+              isPrompt: isPrompt,
+              context: ctx,
+              refs: refs,
+            ),
             text: first['body'] as String? ?? '',
             sentAt: DateTime.parse(first['created_at'] as String).toLocal(),
             referenceText: isPrompt
@@ -88,6 +98,34 @@ class LiveComplimentsController extends ComplimentsController {
     } on LiveFailure catch (e) {
       _log.warning('Requests refresh failed: ${e.code}');
     }
+  }
+
+  /// My own approved photos and prompts, in display order (received Compliments point at them).
+  Future<({List<String> photos, List<String> prompts})> _ownTargets() async {
+    final uid = _db.auth.currentUser?.id;
+    if (uid == null) {
+      return (photos: const <String>[], prompts: const <String>[]);
+    }
+    final photos = await guardLive(
+      () => _db
+          .from('photos')
+          .select('id')
+          .eq('user_id', uid)
+          .eq('status', 'approved')
+          .order('position'),
+    ) as List;
+    final prompts = await guardLive(
+      () =>
+          _db.from('prompts').select('id').eq('user_id', uid).order('position'),
+    ) as List;
+    return (
+      photos: [
+        for (final r in photos.cast<Map<String, dynamic>>()) r['id'] as String,
+      ],
+      prompts: [
+        for (final r in prompts.cast<Map<String, dynamic>>()) r['id'] as String,
+      ],
+    );
   }
 
   @override
@@ -215,4 +253,21 @@ class LiveComplimentsController extends ComplimentsController {
     final h = b.map((x) => x.toRadixString(16).padLeft(2, '0')).join();
     return '${h.substring(0, 8)}-${h.substring(8, 12)}-${h.substring(12, 16)}-${h.substring(16, 20)}-${h.substring(20)}';
   }
+}
+
+/// PR-007: maps a Compliment's stored target snapshot (`context.photo_id` or `context.prompt_id`)
+/// to its current position in [refs] (the owner's photos or prompts, in display order). A target
+/// that is no longer there resolves to [ComplimentTarget.unavailableIndex], never to another photo.
+ComplimentTarget resolveLiveComplimentTarget({
+  required bool isPrompt,
+  required Map<String, dynamic>? context,
+  required ({List<String> photos, List<String> prompts})? refs,
+}) {
+  final ref = context?[isPrompt ? 'prompt_id' : 'photo_id'] as String?;
+  final list = refs == null ? null : (isPrompt ? refs.prompts : refs.photos);
+  final i = (ref == null || list == null) ? -1 : list.indexOf(ref);
+  final index = i < 0 ? ComplimentTarget.unavailableIndex : i;
+  return isPrompt
+      ? ComplimentTarget.prompt(index)
+      : ComplimentTarget.photo(index);
 }

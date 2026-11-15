@@ -26,6 +26,13 @@ class ComplimentTarget {
   /// Photo position (0-based) or prompt position (0-based) on the profile when it was sent.
   final int index;
 
+  /// PR-007: the target no longer exists on the profile (deleted or replaced since). Beyond any
+  /// photo or prompt count, so screens show their "no longer available" state instead of
+  /// another photo or prompt.
+  static const int unavailableIndex = 1 << 20;
+
+  bool get unavailable => index == unavailableIndex;
+
   @override
   bool operator ==(Object other) =>
       other is ComplimentTarget && other.kind == kind && other.index == index;
