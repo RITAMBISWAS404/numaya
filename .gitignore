@@ -25,3 +25,6 @@ supabase/.temp/
 *.dump
 backups/
 tools/backend/.out/
+
+# Gradle output from release builds (PR-001 checks)
+apps/numaya_mobile/android/build/
