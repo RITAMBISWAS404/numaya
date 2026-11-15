@@ -18,3 +18,10 @@ apps/numaya_mobile/test/screenshots/v8/
 apps/numaya_mobile/test/screenshots/ui087/
 apps/numaya_mobile/test/screenshots/qr/
 apps/numaya_mobile/test/screenshots/design_review/
+# Backend secrets and local artefacts (backend worktree)
+supabase/.env.local
+supabase/.env
+supabase/.temp/
+*.dump
+backups/
+tools/backend/.out/

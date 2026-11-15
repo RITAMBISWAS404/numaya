@@ -9,6 +9,9 @@ import 'demo_photos.dart';
 ImageProvider localImage(String source, {int? width}) {
   final ImageProvider image = source.startsWith('asset:')
       ? AssetImage(source.substring('asset:'.length))
+      // Live backend photos: short-lived signed URLs (backend V1).
+      : source.startsWith('https://')
+      ? NetworkImage(source)
       : FileImage(File(source));
   return width == null ? image : ResizeImage(image, width: width);
 }

@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/providers.dart';
 import '../../../core/connectivity/connectivity.dart';
 import '../../../core/logging/app_logger.dart';
+import '../../../data/live/live_config.dart';
+import '../../../data/live/live_session_restore.dart';
 import '../../account_health/application/visibility_report.dart';
 import '../../dating/application/dating_controller.dart';
 import '../../dating/data/media_picker.dart';
@@ -26,7 +28,14 @@ class SessionController extends Notifier<AuthSession?> {
   static const _log = AppLogger('Session');
 
   @override
-  AuthSession? build() => null;
+  AuthSession? build() {
+    // Live backend builds resume a stored, server-confirmed session (backend V1).
+    final restored = LiveConfig.enabled ? LiveSessionRestore.restored : null;
+    if (restored != null && restored.hasProfile) {
+      Future.microtask(() => ref.read(onboardingProvider.notifier).restore());
+    }
+    return restored;
+  }
 
   void start(AuthSession session) {
     state = session;

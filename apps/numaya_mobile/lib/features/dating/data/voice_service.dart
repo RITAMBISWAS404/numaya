@@ -125,8 +125,12 @@ class DeviceVoicePlayer implements VoicePlayer {
   Stream<void> get completed => _player.onPlayerComplete;
 
   @override
-  Future<void> play(MessageAttachment note) =>
-      _player.play(DeviceFileSource(note.source!));
+  Future<void> play(MessageAttachment note) => _player.play(
+    // Live backend voice notes are short-lived signed URLs (backend V1).
+    note.source!.startsWith('https://')
+        ? UrlSource(note.source!)
+        : DeviceFileSource(note.source!),
+  );
 
   @override
   Future<void> pause() => _player.pause();

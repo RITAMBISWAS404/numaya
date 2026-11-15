@@ -43,6 +43,9 @@
 > - **Next:** the owner reviews the gallery and exports choices. Then follow QA_HANDOFF. Do not pick options for the owner.
 > - **Other checkouts:** `C:\Users\biswa\Projects\Numaya` (replacement V8) and `C:\Users\biswa\Projects\Numaya-backend` are separate work. Do not switch or edit them from here.
 
+> **Merged from the backend worktree (experiment/numaya-backend-20261112-2255, 2026-11-15):**
+> **Backend V1 (2026-11-12/13, separate worktree):** `C:\Users\biswa\Projects\Numaya-backend`, branch `experiment/numaya-backend-20261112-2255` from `c890d02`. Supabase schema/RLS/RPCs, media/push/export/store workers and functions (disabled until configured), Flutter live layer (off unless built with the dev-defines); local semantic checks 27/27, contract tests 17/17 (fixtures). Real-service verification waits on owner setup: [MANUAL_SETUP](../backend/MANUAL_SETUP.md), then [RESUME_AFTER_SETUP.txt](../backend/RESUME_AFTER_SETUP.txt). Start at [docs/backend/START_HERE.md](../backend/START_HERE.md). The UI checkout stays on the V8 branch.
+
 > **2026-11-12, replacement V8 delivered (premium candidate). Read this first.**
 > - **Branch:** `experiment/numaya-v8-premium-rebuild-20261112-1945`, from the selected V7 `b5e5245` (all 36 owner selections kept). App source `ee87648`.
 > - **Brief:** `NUMAYA_V8_REPLACEMENT_PREMIUM.zip`. Records are in [docs/v8-replacement](../v8-replacement/DECISIONS.md).

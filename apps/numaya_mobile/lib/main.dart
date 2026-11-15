@@ -8,6 +8,7 @@ import 'app/app.dart';
 import 'core/design_system/design_system.dart' show AppSystemUi;
 import 'core/logging/app_logger.dart';
 import 'core/media/demo_photos.dart';
+import 'data/live/live_providers.dart';
 import 'features/demo/application/type_settings_controller.dart';
 import 'features/lab/lab_registry.dart'
     show LabChoicesStore, labChoicesProvider;
@@ -29,6 +30,9 @@ void main() {
     };
     // The local demo photo set (git-ignored; empty means grey placeholders, as before).
     await DemoPhotoLibrary.load();
+    // Live backend (backend V1): only when this build was given a project URL and publishable key.
+    // A no-op otherwise; demo builds are unchanged.
+    await initLiveBackend();
     final container = ProviderContainer();
     runApp(
       UncontrolledProviderScope(container: container, child: const NumayaApp()),

@@ -5,6 +5,8 @@ import '../../../app/providers.dart';
 import '../../../core/config/app_config.dart';
 import '../../../core/connectivity/connectivity.dart';
 import '../../../core/logging/app_logger.dart';
+import '../../../data/live/live_config.dart';
+import '../../../data/live/live_dating_controller.dart';
 import '../../commerce/application/economy_controller.dart';
 import '../../commerce/domain/catalog.dart';
 import '../../compliments/application/compliments_controller.dart';
@@ -1097,5 +1099,6 @@ class DatingController extends Notifier<DatingState> {
 }
 
 final datingProvider = NotifierProvider<DatingController, DatingState>(
-  DatingController.new,
+  // Live backend builds use the server-backed controller (backend V1); demo builds are unchanged.
+  () => LiveConfig.enabled ? LiveDatingController() : DatingController(),
 );
