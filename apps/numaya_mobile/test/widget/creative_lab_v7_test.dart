@@ -8,6 +8,7 @@ import 'package:numaya_mobile/features/dating/application/dating_controller.dart
 import 'package:numaya_mobile/features/lab/lab_registry.dart';
 
 import '../helpers/journeys.dart';
+import '../helpers/test_app.dart';
 
 const _routes = {
   'v7-nav': Routes.home,
@@ -36,6 +37,8 @@ void main() {
   testWidgets('Sheet direction opens over Discover and returns to it', (
     tester,
   ) async {
+    // A phone viewport: at the 800x600 default the photo's foot sits under the tab bar.
+    await usePhoneSize(tester);
     final c = await quickStartApp(tester);
     c.read(labChoicesProvider.notifier).choose('v7-compliment', 'B');
     await goTo(c, tester, Routes.home);
@@ -48,6 +51,8 @@ void main() {
   testWidgets('A failed send in the sheet keeps the words and the credit', (
     tester,
   ) async {
+    // A phone viewport: at the 800x600 default the photo's foot sits under the tab bar.
+    await usePhoneSize(tester);
     final c = await quickStartApp(tester);
     c.read(labChoicesProvider.notifier).choose('v7-compliment', 'B');
     await goTo(c, tester, Routes.home);

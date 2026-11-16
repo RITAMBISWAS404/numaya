@@ -10,6 +10,7 @@ import '../../lab/profile_prompt_card.dart';
 import '../../onboarding/domain/profile_draft.dart';
 import '../domain/profile_fact_emoji.dart';
 import '../domain/sample_people.dart';
+import 'v10_person_sections.dart';
 
 /// The first photo of a sample profile (premium refinement): an image-first card in Meetup's manner.
 /// The 4:3 photo stays clear, carrying only small white badges (sample, new) and the photo
@@ -109,51 +110,51 @@ class PersonHeroCard extends StatelessWidget {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    child: Consumer(
-                      builder: (context, ref, _) {
-                        final label = ref.watch(
-                          labVariantProvider('v4-photo-label'),
-                        );
-                        // UI-049 (new build): the standard card padding on the overlay's
-                        // left, right and bottom edges, as text sits in a card.
-                        final inset = EdgeInsets.fromLTRB(
-                          AppLayout.cardPadding,
-                          0,
-                          // R05: room for the Compliment control plus a gap.
-                          complimentAction == null
-                              ? AppLayout.cardPadding
-                              : SquircleIconButton.photoInset +
-                                    SquircleIconButton.size +
-                                    AppSpacing.s2,
-                          AppLayout.cardPadding,
-                        );
-                        return switch (label) {
-                          // B: an edge-to-edge glass bar along the photo's foot.
-                          'B' => PhotoGlass(
-                            radius: 0,
-                            padding: EdgeInsets.fromLTRB(
-                              AppSpacing.s4,
-                              AppSpacing.s3,
-                              inset.right + AppSpacing.s1,
-                              AppSpacing.s3,
-                            ),
-                            child: _overlayIdentity(
-                              context,
-                              l10n,
-                              backed: false,
-                            ),
-                          ),
-                          // O: the previous 55% panel, kept for comparison (over the 25% cap).
-                          'O' => DecoratedBox(
-                            decoration: const BoxDecoration(
-                              color: AppColors.photoPanel,
-                            ),
-                            child: Padding(
+                    child: LayoutBuilder(
+                      builder: (context, photoBox) => Consumer(
+                        builder: (context, ref, _) {
+                          final label = ref.watch(
+                            labVariantProvider('v4-photo-label'),
+                          );
+                          // V10 C-4/C-8: the labelled pill grows with the text. Where it would take
+                          // more than 40% of the photo (large text, narrow phone) the name block
+                          // sits above it instead of beside it, so no word breaks inside itself.
+                          final v10Pill =
+                              complimentAction is V10ComplimentButton;
+                          final pill = v10Pill
+                              ? V10ComplimentButton.measure(context)
+                              : Size.zero;
+                          final stacked =
+                              v10Pill && pill.width > photoBox.maxWidth * 0.4;
+                          // UI-049 (new build): the standard card padding on the overlay's
+                          // left, right and bottom edges, as text sits in a card.
+                          final inset = EdgeInsets.fromLTRB(
+                            AppLayout.cardPadding,
+                            0,
+                            // R05: room for the Compliment control plus a gap. V10's labelled
+                            // pill is wider than the 38pt squircle, so it reserves its own width.
+                            complimentAction == null || stacked
+                                ? AppLayout.cardPadding
+                                : SquircleIconButton.photoInset +
+                                      (v10Pill
+                                          ? pill.width
+                                          : SquircleIconButton.size) +
+                                      AppSpacing.s2,
+                            stacked
+                                ? SquircleIconButton.photoOffset +
+                                      pill.height +
+                                      AppSpacing.s2
+                                : AppLayout.cardPadding,
+                          );
+                          return switch (label) {
+                            // B: an edge-to-edge glass bar along the photo's foot.
+                            'B' => PhotoGlass(
+                              radius: 0,
                               padding: EdgeInsets.fromLTRB(
                                 AppSpacing.s4,
                                 AppSpacing.s3,
                                 inset.right + AppSpacing.s1,
-                                AppSpacing.s4,
+                                AppSpacing.s3,
                               ),
                               child: _overlayIdentity(
                                 context,
@@ -161,38 +162,61 @@ class PersonHeroCard extends StatelessWidget {
                                 backed: false,
                               ),
                             ),
-                          ),
-                          // P: the compact glass label, kept as an alternative.
-                          'P' => PhotoScrim(
-                            fade: 48,
-                            padding: inset,
-                            sample: personTileImage(person),
-                            child: _overlayIdentity(context, l10n),
-                          ),
-                          // G (default): a smooth gradient behind the name, no backing.
-                          _ => PhotoScrim(
-                            fade: 96,
-                            padding: inset,
-                            sample: personTileImage(person),
-                            child: photoFooter == null
-                                ? _overlayIdentity(context, l10n, backed: false)
-                                : Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      _overlayIdentity(
-                                        context,
-                                        l10n,
-                                        backed: false,
-                                      ),
-                                      const SizedBox(height: AppSpacing.s3),
-                                      photoFooter!,
-                                    ],
-                                  ),
-                          ),
-                        };
-                      },
+                            // O: the previous 55% panel, kept for comparison (over the 25% cap).
+                            'O' => DecoratedBox(
+                              decoration: const BoxDecoration(
+                                color: AppColors.photoPanel,
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                  AppSpacing.s4,
+                                  AppSpacing.s3,
+                                  inset.right + AppSpacing.s1,
+                                  AppSpacing.s4,
+                                ),
+                                child: _overlayIdentity(
+                                  context,
+                                  l10n,
+                                  backed: false,
+                                ),
+                              ),
+                            ),
+                            // P: the compact glass label, kept as an alternative.
+                            'P' => PhotoScrim(
+                              fade: 48,
+                              padding: inset,
+                              sample: personTileImage(person),
+                              child: _overlayIdentity(context, l10n),
+                            ),
+                            // G (default): a smooth gradient behind the name, no backing.
+                            _ => PhotoScrim(
+                              fade: 96,
+                              padding: inset,
+                              sample: personTileImage(person),
+                              child: photoFooter == null
+                                  ? _overlayIdentity(
+                                      context,
+                                      l10n,
+                                      backed: false,
+                                    )
+                                  : Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        _overlayIdentity(
+                                          context,
+                                          l10n,
+                                          backed: false,
+                                        ),
+                                        const SizedBox(height: AppSpacing.s3),
+                                        photoFooter!,
+                                      ],
+                                    ),
+                            ),
+                          };
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -599,6 +623,23 @@ List<Widget> personSections(
   ValueChanged<ComplimentTarget>? onCompliment,
   String? promptVariant,
 }) {
+  // V10 pilot: every profile body (Discover, Likes, person page, own preview, onboarding review)
+  // follows the selected direction, so a person looks the same wherever they appear.
+  final v10 = ProviderScope.containerOf(
+    context,
+    listen: false,
+  ).read(labVariantProvider('v10-direction'));
+  if (v10 != 'O') {
+    return v10PersonSections(
+      context,
+      person,
+      direction: v10,
+      onPhoto: onPhoto,
+      onCompliment: onCompliment,
+      own: own,
+      showDistance: showDistance,
+    );
+  }
   final l10n = context.l10n;
   // UI-007: a profile's prompt is the shared prompt card: small question, dominant answer, no
   // decorative icon. With [onCompliment], each prompt and photo carries a Compliment anchor (S11).

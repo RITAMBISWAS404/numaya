@@ -8668,6 +8668,18 @@ abstract class AppLocalizations {
   /// **'Compliment'**
   String get v8ComplimentTag;
 
+  /// No description provided for @v10ComplimentAboutPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'about your photo'**
+  String get v10ComplimentAboutPhoto;
+
+  /// No description provided for @v10ComplimentAboutPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'about your prompt'**
+  String get v10ComplimentAboutPrompt;
+
   /// No description provided for @v8ComplimentFrom.
   ///
   /// In en, this message translates to:

@@ -11,6 +11,7 @@ import 'package:numaya_mobile/features/dating/presentation/likes_screens.dart';
 import 'package:numaya_mobile/features/dating/presentation/match_screen.dart';
 import 'package:numaya_mobile/features/dating/presentation/person_profile.dart';
 import 'package:numaya_mobile/features/home/application/discovery_filters.dart';
+import 'package:numaya_mobile/features/lab/lab_registry.dart';
 import 'package:numaya_mobile/features/onboarding/domain/profile_draft.dart';
 import 'package:numaya_mobile/features/profile/presentation/profile_hub_screens.dart';
 
@@ -229,8 +230,12 @@ void main() {
   });
 
   group('UI-018 / UI-019 / UI-020: About me', () {
-    testWidgets('bio, a divider, then emoji detail pills', (tester) async {
-      await home(tester);
+    testWidgets('bio, a divider, then emoji detail pills (O baseline)', (
+      tester,
+    ) async {
+      final c = await home(tester);
+      c.read(labChoicesProvider.notifier).choose('v10-direction', 'O');
+      await settle(tester);
       final divider = find.byKey(const ValueKey('about-divider'));
       await tester.scrollUntilVisible(
         divider,
@@ -254,6 +259,45 @@ void main() {
       final body = tester.widget<Text>(bio);
       expect(label.style!.fontSize!, lessThan(body.style!.fontSize!));
       expect(label.style!.color, AppColors.textMuted);
+    });
+
+    // V10 A (DESIGN_CONTRACT C-2): one About sheet, bio first, then labelled facts.
+    testWidgets('V10 A: bio, a divider, then labelled facts', (tester) async {
+      await home(tester);
+      final divider = find.byKey(const ValueKey('about-divider'));
+      await tester.scrollUntilVisible(
+        divider,
+        200,
+        scrollable: find
+            .byWidgetPredicate(
+              (w) => w is Scrollable && w.axisDirection == AxisDirection.down,
+            )
+            .first,
+      );
+      final sheet = find.byKey(const ValueKey('v10-about-sheet'));
+      final bio = find.descendant(
+        of: sheet,
+        matching: find.textContaining('Designer by day', findRichText: true),
+      );
+      expect(
+        tester.getTopLeft(bio).dy,
+        lessThan(tester.getTopLeft(divider).dy),
+      );
+      final facts = find.byKey(const ValueKey('v10-facts'));
+      final label = find.descendant(of: facts, matching: find.text('Height'));
+      final value = find.descendant(of: facts, matching: find.text('168 cm'));
+      expect(label, findsOneWidget);
+      expect(value, findsOneWidget);
+      // Label above its value, and the value carries the emphasis.
+      expect(
+        tester.getTopLeft(label).dy,
+        lessThan(tester.getTopLeft(value).dy),
+      );
+      expect(
+        tester.widget<Text>(label).style!.color,
+        isNot(tester.widget<Text>(value).style?.color ?? AppColors.textPrimary),
+      );
+      expect(find.byType(InfoChip), findsNothing);
     });
   });
 

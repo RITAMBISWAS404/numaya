@@ -1546,6 +1546,43 @@ const List<LabGroup> kLabGroups = [
   // UI-094 (2026-11-15): the status template's surface. The reviewer asked to explore a white
   // card as the shared surface; O keeps the existing EmptyState card, A puts the same centred
   // group straight on the page. The production choice is pending review.
+  // V10 pilot (2026-11-16): two materially different directions for the person profile body
+  // (Discover first, then own Profile and Chat). O is the current build. Not selected yet.
+  LabGroup(
+    id: 'v10-direction',
+    title: 'V10 direction',
+    kind: LabKind.screen,
+    question:
+        'Which composition makes a person easiest to understand and answer?',
+    usages: [
+      'Discover profile body',
+      'Own profile',
+      'Chat and received Compliment',
+    ],
+    // V10 (2026-11-16): the owner's V10 brief delegates the choice where evidence is clear; A won
+    // two blind critique rounds (docs/v10/DECISIONS.md D3, D5). O stays selectable for comparison.
+    proposed: 'A',
+    variants: [
+      LabVariant(
+        _o,
+        'Current',
+        'baseline',
+        'Identical white cards; emoji fact pills.',
+      ),
+      LabVariant(
+        'A',
+        'People first',
+        'recommended',
+        'One calm sheet for bio, labelled facts and shared interests; unboxed prompts; labelled Compliment.',
+      ),
+      LabVariant(
+        'C',
+        'Editorial',
+        'alternative',
+        'First prompt as a pull quote; facts on one line; alternating photo and prompt rhythm.',
+      ),
+    ],
+  ),
   LabGroup(
     id: 'ui094-status-surface',
     title: 'Status and empty screens',

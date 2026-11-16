@@ -2561,6 +2561,8 @@
     }
   },
   "v8ComplimentTag": "Compliment",
+  "v10ComplimentAboutPhoto": "about your photo",
+  "v10ComplimentAboutPrompt": "about your prompt",
   "v8ComplimentFrom": "{name} sent you a Compliment",
   "@v8ComplimentFrom": {"placeholders": {"name": {"type": "String"}}},
   "v8ComplimentYouSent": "You sent {name} a Compliment",

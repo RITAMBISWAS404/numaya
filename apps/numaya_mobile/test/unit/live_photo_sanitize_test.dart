@@ -10,7 +10,11 @@ void main() {
     source.exif.imageIfd['Make'] = 'TestCam';
     source.exif.gpsIfd['GPSLatitudeRef'] = 'N';
     final withExif = img.encodeJpg(source);
-    expect(img.decodeJpgExif(withExif)?.isEmpty, isFalse, reason: 'fixture has EXIF');
+    expect(
+      img.decodeJpgExif(withExif)?.isEmpty,
+      isFalse,
+      reason: 'fixture has EXIF',
+    );
 
     final clean = sanitizePhoto(withExif)!;
     final exif = img.decodeJpgExif(clean);
@@ -21,6 +25,9 @@ void main() {
   });
 
   test('refuses bytes that are not an image', () {
-    expect(sanitizePhoto(img.Image(width: 1, height: 1).toUint8List().sublist(0, 2)), isNull);
+    expect(
+      sanitizePhoto(img.Image(width: 1, height: 1).toUint8List().sublist(0, 2)),
+      isNull,
+    );
   });
 }

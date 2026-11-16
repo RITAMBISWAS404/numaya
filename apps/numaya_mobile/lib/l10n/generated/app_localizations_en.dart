@@ -5022,6 +5022,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get v8ComplimentTag => 'Compliment';
 
   @override
+  String get v10ComplimentAboutPhoto => 'about your photo';
+
+  @override
+  String get v10ComplimentAboutPrompt => 'about your prompt';
+
+  @override
   String v8ComplimentFrom(String name) {
     return '$name sent you a Compliment';
   }

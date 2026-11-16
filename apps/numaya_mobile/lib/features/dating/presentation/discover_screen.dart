@@ -24,6 +24,7 @@ import '../application/dating_controller.dart';
 import '../domain/sample_people.dart';
 import 'person_profile.dart';
 import 'safety_sheets.dart';
+import 'v10_person_sections.dart';
 
 /// Home (B-30 / B-32): one sample profile at a time as a scroll (photo card, prompt, about me,
 /// shared interests, photos, location). Decisions are swipes only (UI-016): swipe the photo right
@@ -448,6 +449,8 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
     final v7 = ref.watch(labVariantProvider('v7-discover'));
     // Fable lab `fx-discover`: A essentials first, B photo-led (lib/features/fable_lab).
     final fx = ref.watch(labVariantProvider('fx-discover'));
+    // V10 pilot direction (O current, A people first, C editorial).
+    final v10 = ref.watch(labVariantProvider('v10-direction'));
     final page = TabPage(
       header: header,
       scrollController: _scroll,
@@ -508,7 +511,17 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
                   ),
                   // A: the photo stays clean (the labelled action follows it). B: a labelled
                   // bar on the photo's foot, with distance and intention above it.
-                  complimentAction: fx == 'O'
+                  // V10: the labelled pill replaces the squircle; the fx sheet/bar variants
+                  // keep their own action.
+                  complimentAction: v10 != 'O' && fx == 'O'
+                      ? V10ComplimentButton(
+                          key: const ValueKey('compliment-photo-0'),
+                          name: person.name,
+                          onPhoto: true,
+                          onPressed: () =>
+                              compliment(const ComplimentTarget.photo(0)),
+                        )
+                      : fx == 'O'
                       ? ComplimentAnchor(
                           key: const ValueKey('compliment-photo-0'),
                           name: person.name,
@@ -538,7 +551,15 @@ class _DiscoverScreenState extends ConsumerState<DiscoverScreen>
             ),
             // UI-016: no decision buttons; the photo is swiped.
             const SizedBox(height: AppLayout.itemGap),
-            if (fx == 'O')
+            if (v10 != 'O')
+              ...v10PersonSections(
+                context,
+                person,
+                direction: v10,
+                onPhoto: openPhotos,
+                onCompliment: compliment,
+              )
+            else if (fx == 'O')
               ...personSections(
                 context,
                 person,

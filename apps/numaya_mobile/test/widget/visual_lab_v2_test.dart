@@ -50,7 +50,8 @@ void main() {
             // V8 review groups: the selected baseline plus the requested directions.
             !g.id.startsWith('v8-') &&
             // UI-087..102 phase: only the requested exploration (no padding options).
-            !g.id.startsWith('ui0')) {
+            !g.id.startsWith('ui0') &&
+            !g.id.startsWith('v10-')) {
           expect(g.ids, ['O', 'A', 'B', 'C'], reason: g.id);
         }
         // Dependencies name real groups and variants.
@@ -252,7 +253,8 @@ void main() {
       await tester.pump(const Duration(milliseconds: 400));
       await tapOn(tester, find.bySemanticsLabel('Conversation options'));
       await tester.pump(const Duration(milliseconds: 400));
-      await tapOn(tester, find.text('Dismiss'));
+      // The menu's item (V10 A also shows a Dismiss link under the reply field).
+      await tapOn(tester, find.text('Dismiss').last);
       await tester.pump(const Duration(milliseconds: 600));
       await tapOn(tester, find.byKey(const ValueKey('dismiss-confirm')));
       await tester.pump(const Duration(milliseconds: 600));
@@ -272,7 +274,9 @@ void main() {
       'the Compliment action sits bottom-right on the photo, clear of the name',
       (tester) async {
         await usePhoneSize(tester);
-        await quickStartApp(tester);
+        final c = await quickStartApp(tester);
+        c.read(labChoicesProvider.notifier).choose('v10-direction', 'O');
+        await tester.pump();
         final action = tester.getRect(
           find.byKey(const ValueKey('compliment-photo-0')),
         );
@@ -281,6 +285,26 @@ void main() {
         expect(action.left, greaterThan(name.right - 1));
         // Same 48pt target as the overflow control.
         expect(action.width, 48);
+        await settle(tester);
+      },
+    );
+
+    testWidgets(
+      'V10 A: the labelled Compliment pill sits bottom-right on the photo, clear of the name',
+      (tester) async {
+        await usePhoneSize(tester);
+        await quickStartApp(tester);
+        final key = find.byKey(const ValueKey('compliment-photo-0'));
+        final action = tester.getRect(key);
+        final name = tester.getRect(find.text('Maya, 29').first);
+        expect(action.overlaps(name), isFalse);
+        expect(action.left, greaterThan(name.right - 1));
+        expect(action.height, greaterThanOrEqualTo(48));
+        // What it does is written, not only drawn.
+        expect(
+          find.descendant(of: key, matching: find.text('Compliment')),
+          findsOneWidget,
+        );
         await settle(tester);
       },
     );
@@ -329,7 +353,8 @@ void main() {
       await tester.pump(const Duration(milliseconds: 400));
       await tapOn(tester, find.bySemanticsLabel('Conversation options'));
       await tester.pump(const Duration(milliseconds: 400));
-      await tapOn(tester, find.text('Dismiss'));
+      // The menu's item (V10 A also shows a Dismiss link under the reply field).
+      await tapOn(tester, find.text('Dismiss').last);
       await tester.pump(const Duration(milliseconds: 600));
       final close = find.byKey(const ValueKey('sheet-close'));
       expect(close, findsOneWidget);

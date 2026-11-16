@@ -15,7 +15,8 @@ void main() {
   TextStyle resolved(WidgetTester tester, Finder f) {
     final text = tester.widget<Text>(f);
     final ambient = DefaultTextStyle.of(tester.element(f)).style;
-    return ambient.merge(text.style);
+    // Balanced text renders as Text.rich: its style lives on the span.
+    return ambient.merge(text.style ?? text.textSpan?.style);
   }
 
   void expectBody(TextStyle s, String what) {

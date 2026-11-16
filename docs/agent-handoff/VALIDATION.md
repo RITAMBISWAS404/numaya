@@ -1,5 +1,27 @@
 # Validation
 
+> **2026-11-16, V10 design-led (V2 brief). Read this first.**
+> - **Folder:** `C:\Users\biswa\Projects\Numaya-fable-lab`. **Branch:** `experiment/numaya-v10-design-led-20261116-1847`, from `6129fa2` (tag `checkpoint/pre-v10-20261116-1847`).
+> - **What it is:** direction A ("People first") is now the default for Discover, the shared person body, own Profile and received Compliments.
+>   - It won two blind critique rounds; the result is recorded in DECISIONS D7.
+>   - O (the baseline) and C (Editorial) stay in the Design Lab, `v10-direction`.
+> - **Records:** [docs/v10](../v10/STATE.md):
+>   - STATE
+>   - DECISIONS
+>   - DESIGN_CONTRACT
+>   - ISSUE_TRACKER.csv
+>   - EVIDENCE_INDEX
+>   - RELEASE_REPORT
+> - **Review folder:** `C:\Users\biswa\OneDrive\Desktop\Numaya V10 Review\2026-11-16`. It holds the demo debug APK `41f8504b…b37f`, 25 screenshots and the gallery.
+> - **Blocked:**
+>   - Signed release: no upload key.
+>   - Live service: no backend.
+>   - PR-005: no physical phone.
+>   - UI-099 and UI-100.
+> - **Other checkouts:** `Numaya` and `Numaya-backend` are untouched.
+
+
+
 > **2026-11-15, device checks (owner authorised the emulator).** emulator-5554 (iPhone_16_Custom): review APK installed and launched; Dev Mode relaunch and Reset all, slider drag, mic permission, voice record/play, photo pick and reply, keyboard open/close all pass; onboarding integration test passes (test body repaired); profile-mode frame timings recorded (build thread fine; raster is software-rendered, not representative). See docs/quality-refinement/DEVICE_CHECKS.md. Not run: TalkBack, physical phone, iOS.
 
 

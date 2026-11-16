@@ -1,0 +1,36 @@
+id,source,title,status,implemented,verified_by,evidence
+V10-PILOT,V10 brief §1,Discover/Profile/Chat pilot with A and one alternative (C),done,v10_person_sections.dart; lab group v10-direction,two blind critique rounds,docs/v10/DECISIONS.md D2-D5
+V10-CONTRACT,V10 brief §2,DESIGN_CONTRACT from winning renders,done,docs/v10/DESIGN_CONTRACT.md,rows C-1..C-8 each name a test,docs/v10/DESIGN_CONTRACT.md
+V10-DEFAULT,V10 brief §2,A is what launches render; O and C stay in Design Lab,done,lab_registry.dart proposed A,v10_direction_test 'V10 A is what ordinary launches render',DECISIONS D5
+DEF-V10-01,critic r2,Received Compliment reply field invisible (page-on-page),fixed,compliment_thread.dart white tray,v10_direction_test C-6; device 14-15,screenshots 14 15
+DEF-V10-02,critic r2,No visible decline on a received Compliment,fixed,compliment_thread.dart Dismiss link (asks first),v10_direction_test C-6; device 20-21,screenshots 20 21
+DEF-V10-03,device pass,Own prompt card read twice by TalkBack,fixed,V10PromptCard excludeChildSemantics,v10_direction_test C-5 (fails without fix),uiautomator dump before/after
+DEF-V10-04,stress render,Hero name broke inside words at 320pt/200% (pill squeezed it),fixed,person_profile.dart stacks name above pill when pill > 40% of photo,stress render 22,screenshots 22
+DEF-V10-05,default switch,A facts dropped gender and pronouns,fixed,_facts leads with identity,onboarding_flow_test review,test log
+DEF-V10-06,default switch,A bio used answer role instead of card-primary (UI-020),fixed,cardPrimary,type_roles_test TR-01,test log
+DEF-V10-07,default switch,Labelled pill duplicated fx sheet/bar actions,fixed,pill only with default fx,creative_lab_v7_test,test log
+DEF-V10-08,critic r2,Profile prompt text link broke chevron pattern,fixed,profile_screen.dart chevron card,v10_direction_test C-5; device 17-18,screenshots 17 18
+DEF-V10-09,critic r2,12pt grey labels too small,fixed,labels 14/20 medium,render review,screenshots 02
+DEF-V10-11,final critic,Premium moved to an orphaned headerless card (round-2 change),reverted to a Your profile row,profile_screen.dart,v10_direction_test C-5; device 17,DECISIONS D7
+DEF-V10-12,final critic,Received Compliment clipped under the reply tray at 200% text,fixed,sender photo dropped at >=130% text,v10_direction_test C-6 at 200%,screenshots 25
+DEF-V10-13,PR-004 test,Shared-interest pills 12pt measured 1.95:1 with real fonts,fixed,pills 14/20,v10_direction_test PR-004,test log
+DEF-V10-14,final critic,Hero name block covers the face at 320pt/200% (both versions),open (recorded),-,-,DECISIONS D7
+DEF-V10-15,final critic,Chat bubble last-line orphan; duplicate Not verified; repetitive credits subline (both versions),open (recorded),-,-,DECISIONS D7
+DEF-V10-16,final critic,Capture harness rendered A into the O folder after the default switch,fixed,v10_capture_test always chooses,critic re-review,DECISIONS D7
+DEF-V10-10,gallery test,Gallery import wiped notes missing from the file,fixed,tool/v10_gallery.py merges,browser test (export/import/reload),EVIDENCE_INDEX
+UI-014..020,V8 register,Discover hero/About/facts (spec superseded visually by A; O kept),changed by V10,O-pinned tests kept + A counterparts,discover_match_review_test; core_journey_test,DECISIONS D5
+UI-059,V8 register,One content order for every profile,kept,v10PersonSections uses the same order,visual_lab_v2_test,renders 03
+UI-099,UI-087-102,Discovery ranking,blocked,no PRD or ranking rules,-,owner action
+UI-100,UI-087-102,(blocked with UI-099),blocked,no PRD,-,owner action
+QR-004,quality refinement,Scoped theme,open (debt),-,-,docs/quality-refinement/QA_REPORT.md
+QR-010,quality refinement,Style-candidate override sweep,open,-,-,docs/quality-refinement/QA_REPORT.md
+DEF-QR-02,quality refinement,Large titles break inside words at 320pt/200%,partly fixed (PR-008 tab titles; V10 hero),-,large_text_regression_test,stress renders
+PR-001,production readiness,Release builds require the upload key,done (re-verified 2026-11-16),key.properties gate,flutter build apk --release fails with the gate message,RELEASE_REPORT
+PR-002,production readiness,Keyboard-visible reply covered,done,-,production_readiness_test; device 11 15,screenshots 11 15
+PR-003,production readiness,Auth entry/exit coverage without counting redirects,open,-,-,owner/next batch
+PR-004,production readiness,Discover contrast not verified,partial: Discover at the About sheet passes SDK textContrastGuideline with real fonts (hero photo text not covered),-,v10_direction_test PR-004,test log
+PR-005,production readiness,Performance on a named physical device,blocked (no physical device),-,-,owner action
+PR-006,production readiness,Backend merged,done,70efc37,-,git
+PR-007,production readiness,Live Compliment target resolution,done,e402b25,unit tests,git
+PR-008,production readiness,Titles never break inside a word,partial (tab titles; V10 hero); NumayaTopBar/LargeTitlePage open,-,large_text_regression_test,stress renders
+U1-U6,production readiness,Live-only states (photo review; restricted; rate limit; backend badge; processing; review hold),open: need a live backend,-,-,owner action

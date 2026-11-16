@@ -133,6 +133,8 @@ class _ComplimentThreadState extends ConsumerState<ComplimentThread> {
     final fx = received
         ? ref.watch(labVariantProvider('fx-compliment-thread'))
         : 'O';
+    // V10 A: who sent it and what it is about, said once, above the conversation.
+    final v10 = ref.watch(labVariantProvider('v10-direction'));
     // The quoted thing: your photo or prompt when it was sent to you, theirs when you sent it.
     final owner = received ? ref.watch(ownProfilePersonProvider) : person;
     final onPhoto = c.target.kind == ComplimentTargetKind.photo;
@@ -167,11 +169,48 @@ class _ComplimentThreadState extends ConsumerState<ComplimentThread> {
         AppSpacing.s4,
       ),
       children: [
-        ChatSystemLine(
-          received
-              ? l10n.v8ComplimentFrom(person.name)
-              : l10n.v8ComplimentYouSent(person.name),
-        ),
+        if (v10 != 'O' && received) ...[
+          const SizedBox(height: AppSpacing.s2),
+          // At large text the header already shows the sender's photo; a second, 72pt one
+          // would push the Compliment itself under the reply tray (final critic, D7).
+          if (MediaQuery.textScalerOf(context).scale(1) <= 1.3) ...[
+            Center(
+              child: InitialsAvatar(
+                key: const ValueKey('v10-sender-avatar'),
+                initial: person.initial,
+                size: 72,
+                image: personAvatarImage(person),
+                imageAlignment: personAvatarFocus(person),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.s3),
+          ],
+          Semantics(
+            header: true,
+            child: Text(
+              l10n.v8ComplimentFrom(person.name),
+              textAlign: TextAlign.center,
+              style: AppTypography.weight(
+                AppTypography.body,
+                AppTypography.semibold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            onPhoto
+                ? l10n.v10ComplimentAboutPhoto
+                : l10n.v10ComplimentAboutPrompt,
+            textAlign: TextAlign.center,
+            style: AppTypography.helper,
+          ),
+          const SizedBox(height: AppSpacing.s3),
+        ] else
+          ChatSystemLine(
+            received
+                ? l10n.v8ComplimentFrom(person.name)
+                : l10n.v8ComplimentYouSent(person.name),
+          ),
         ChatSystemLine(dayLine(l10n, c.sentAt, now)),
         if (fx == 'A')
           // Selected A with the owner's note: the Compliment is an ordinary incoming message from
@@ -297,57 +336,73 @@ class _ComplimentThreadState extends ConsumerState<ComplimentThread> {
               ),
             ),
             Expanded(child: thread),
+            // DEF-V10-01: the reply composer sits on a white tray, as in Chat. On the grey page
+            // the page-coloured field (UI-073) was invisible.
             if (received)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppLayout.screenGutter,
-                  AppSpacing.s2,
-                  AppLayout.screenGutter,
-                  AppSpacing.s3,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (fx == 'B' && !_replying)
-                      // Lab B: decide first. Reply reveals the composer with the keyboard.
-                      NumayaButtonGroup(
-                        children: [
-                          NumayaButton(
-                            key: const ValueKey('compliment-dismiss'),
+              ColoredBox(
+                key: const ValueKey('compliment-reply-tray'),
+                color: AppColors.surface,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppLayout.screenGutter,
+                    AppSpacing.s2,
+                    AppLayout.screenGutter,
+                    AppSpacing.s3,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      if (fx == 'B' && !_replying)
+                        // Lab B: decide first. Reply reveals the composer with the keyboard.
+                        NumayaButtonGroup(
+                          children: [
+                            NumayaButton(
+                              key: const ValueKey('compliment-dismiss'),
+                              label: l10n.requestDismiss,
+                              variant: NumayaButtonVariant.secondary,
+                              onPressed: _dismiss,
+                            ),
+                            NumayaButton(
+                              key: const ValueKey('compliment-reply'),
+                              label: l10n.fxReply,
+                              icon: NumayaIcons.message,
+                              onPressed: () {
+                                setState(() => _replying = true);
+                                WidgetsBinding.instance.addPostFrameCallback(
+                                  (_) => _replyFocus.requestFocus(),
+                                );
+                              },
+                            ),
+                          ],
+                        )
+                      else
+                        Composer(
+                          key: const ValueKey('compliment-reply-composer'),
+                          controller: _reply,
+                          focusNode: _replyFocus,
+                          placeholder: l10n.v8ReplyPrivately,
+                          sendLabel: l10n.chatSend,
+                          onSend: (_) => _send(),
+                        ),
+                      const SizedBox(height: AppSpacing.s2),
+                      Text(
+                        l10n.requestReplyHint,
+                        textAlign: TextAlign.center,
+                        style: AppTypography.micro,
+                      ),
+                      // V10 A: declining is visible, not only in the menu (same confirm flow).
+                      if (v10 != 'O' && fx != 'B')
+                        Center(
+                          child: TextLink(
+                            key: const ValueKey('compliment-dismiss-link'),
                             label: l10n.requestDismiss,
-                            variant: NumayaButtonVariant.secondary,
+                            muted: true,
                             onPressed: _dismiss,
                           ),
-                          NumayaButton(
-                            key: const ValueKey('compliment-reply'),
-                            label: l10n.fxReply,
-                            icon: NumayaIcons.message,
-                            onPressed: () {
-                              setState(() => _replying = true);
-                              WidgetsBinding.instance.addPostFrameCallback(
-                                (_) => _replyFocus.requestFocus(),
-                              );
-                            },
-                          ),
-                        ],
-                      )
-                    else
-                      Composer(
-                        key: const ValueKey('compliment-reply-composer'),
-                        controller: _reply,
-                        focusNode: _replyFocus,
-                        placeholder: l10n.v8ReplyPrivately,
-                        sendLabel: l10n.chatSend,
-                        onSend: (_) => _send(),
-                      ),
-                    const SizedBox(height: AppSpacing.s2),
-                    Text(
-                      l10n.requestReplyHint,
-                      textAlign: TextAlign.center,
-                      style: AppTypography.micro,
-                    ),
-                  ],
+                        ),
+                    ],
+                  ),
                 ),
               ),
           ],

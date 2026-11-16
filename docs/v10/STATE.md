@@ -1,10 +1,21 @@
 # V10 state
 
 - **Worktree:** C:\Users\biswa\Projects\Numaya-fable-lab
-- **Branch:** experiment/numaya-v10-design-led-20261116-1847, from 6129fa2 (= owner-approved 42b8dba + three official Flutter skills from the V10 preparation workspace).
+- **Branch:** experiment/numaya-v10-design-led-20261116-1847, from 6129fa2. That commit is the owner-approved 42b8dba plus three official Flutter skills from the V10 preparation workspace.
 - **Checkpoint tag:** checkpoint/pre-v10-20261116-1847
-- **Left untouched:** C:\Users\biswa\OneDrive\Documents\ChatGPT\Numaya dating app\NUMAYA_V10_WORKSPACE (branch version-10/final-product-refinement, 6129fa2, unpushed), Numaya, Numaya-backend.
-- **Carried local changes:** two generated l10n files differ only in line endings (not committed); docs/production-readiness/ baseline logs from the previous session.
-- **Mode:** demo (no live backend configured). Device: none attached at start.
-- **Active batch:** 1 pilot (Discover baseline capture, candidates A and C).
-- **Next action:** capture baseline Discover/Profile/Chat, inspect references, build candidates.
+- **Left untouched:**
+  - C:\Users\biswa\OneDrive\Documents\ChatGPT\Numaya dating app\NUMAYA_V10_WORKSPACE (branch version-10/final-product-refinement, 6129fa2, unpushed).
+  - The Numaya and Numaya-backend checkouts.
+- **Carried local changes:** two generated l10n files whose only difference is line endings. They are committed with the V10 strings.
+- **Mode:** demo; no live backend is configured. Device: emulator-5554 (AVD iPhone_16_Custom, which is Android), started for the V10 interaction checks.
+- **Done:**
+  - The pilot, with two blind rounds.
+  - A set as the default.
+  - The design contract.
+  - The device trace.
+  - QA.
+  - The delivery.
+  - The final-candidate critic round, recorded in DECISIONS D7.
+- **Next action:** the owner actions in RELEASE_REPORT.md: signing key, staging backend, approve A, D6, UI-099/100, physical phone.
+- **Records:** DECISIONS.md, DESIGN_CONTRACT.md, ISSUE_TRACKER.csv, EVIDENCE_INDEX.md, RELEASE_REPORT.md.
+- **Review folder (local, private):** C:\Users\biswa\OneDrive\Desktop\Numaya V10 Review\2026-11-16. It holds the APK `41f8504b…b37f`, 25 screenshots and the gallery.

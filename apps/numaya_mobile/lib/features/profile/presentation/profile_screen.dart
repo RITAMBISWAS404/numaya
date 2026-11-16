@@ -11,6 +11,7 @@ import '../../../core/time/ist.dart';
 import '../../../l10n/l10n.dart';
 import '../../commerce/application/economy_controller.dart';
 import '../../commerce/presentation/wallet_screen.dart';
+import '../../dating/presentation/v10_person_sections.dart' show V10PromptCard;
 import '../../fable_lab/fx_profile.dart';
 import '../../health/application/health_providers.dart';
 import '../../home/presentation/large_title_page.dart';
@@ -18,6 +19,7 @@ import '../../lab/activity_cards.dart';
 import '../../lab/lab_registry.dart';
 import '../../lab/stat_templates.dart';
 import '../../onboarding/application/onboarding_controller.dart';
+import '../../onboarding/domain/profile_draft.dart' show PromptAnswer;
 import '../../premium/application/premium_controller.dart';
 import '../../verification/application/verification_controller.dart';
 import '../application/profile_details_controller.dart';
@@ -140,6 +142,15 @@ class ProfileScreen extends ConsumerWidget {
     };
     final headerHasActivity = headerV == 'C';
 
+    // V10: round 2 moved Premium into its own group; the final critic found that card orphaned
+    // (no header, extra gap, a one-row identity group), so it stays here (D7).
+    final v10 = ref.watch(labVariantProvider('v10-direction'));
+    final premiumRow = ListRow(
+      leading: NumayaIcons.premium,
+      label: l10n.premiumName,
+      detail: premium.active ? l10n.premiumActive : l10n.premiumExplore,
+      onTap: () => context.push(Routes.premium),
+    );
     final profileGroup = ListGroup(
       title: l10n.profileYourProfile,
       children: [
@@ -161,12 +172,7 @@ class ProfileScreen extends ConsumerWidget {
           },
           onTap: () => context.push(Routes.verifyPhoto),
         ),
-        ListRow(
-          leading: NumayaIcons.premium,
-          label: l10n.premiumName,
-          detail: premium.active ? l10n.premiumActive : l10n.premiumExplore,
-          onTap: () => context.push(Routes.premium),
-        ),
+        premiumRow,
       ],
     );
     final activityGroup = ListGroup(
@@ -188,7 +194,7 @@ class ProfileScreen extends ConsumerWidget {
         ),
       ],
     );
-    final supportGroup = ListGroup(
+    final safetyGroup = ListGroup(
       title: l10n.profileSafetySupport,
       children: [
         ListRow(
@@ -208,21 +214,31 @@ class ProfileScreen extends ConsumerWidget {
         ),
       ],
     );
+    final supportGroup = safetyGroup;
     const gap = SizedBox(height: AppLayout.sectionGap);
     const small = SizedBox(height: AppSpacing.s3);
     final setup = ProfileSetupCard(health: health, variant: setupV);
     // Fable lab `fx-profile`: A compact hub, B credit hero (lib/features/fable_lab).
     final fx = ref.watch(labVariantProvider('fx-profile'));
+    // V10 A: the own prompt uses the same card as on Discover (whole card opens the editor).
+    Widget promptCard(PromptAnswer p) => v10 == 'O'
+        ? PromptCard(
+            question: p.question,
+            answer: p.answer,
+            editLabel: l10n.promptEditLabel,
+            onTap: () => context.push(Routes.editPrompt),
+          )
+        : V10PromptCard(
+            question: p.question,
+            answer: p.answer,
+            onTap: () => context.push(Routes.editPrompt),
+            trailingChevron: true,
+          );
     final promptSection = draft.prompt == null
         ? null
         : NumayaSection(
             title: l10n.profilePromptTitle,
-            child: PromptCard(
-              question: draft.prompt!.question,
-              answer: draft.prompt!.answer,
-              editLabel: l10n.promptEditLabel,
-              onTap: () => context.push(Routes.editPrompt),
-            ),
+            child: promptCard(draft.prompt!),
           );
     final premiumCard = premium.active
         ? _PremiumCard(
@@ -384,12 +400,7 @@ class ProfileScreen extends ConsumerWidget {
           if (draft.prompt != null) ...[
             NumayaSection(
               title: l10n.profilePromptTitle,
-              child: PromptCard(
-                question: draft.prompt!.question,
-                answer: draft.prompt!.answer,
-                editLabel: l10n.promptEditLabel,
-                onTap: () => context.push(Routes.editPrompt),
-              ),
+              child: promptCard(draft.prompt!),
             ),
             gap,
           ],
