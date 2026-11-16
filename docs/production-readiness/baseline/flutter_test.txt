@@ -1,0 +1,914 @@
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.2.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  cupertino_ui 1.1.4 (1.1.6 available)
+  flutter_riverpod 3.4.3 (3.5.0 available)
+  flutter_svg 2.3.0 (2.4.0 available)
+  go_router 18.1.1 (18.1.4 available)
+  hooks 2.0.2 (2.2.0 available)
+  image_picker_ios 0.8.13+13 (0.8.13+15 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.8.0 (1.11.0 available)
+  meta 1.18.3 (1.19.0 available)
+  objective_c 9.5.0 (9.6.4 available)
+  petitparser 7.0.2 (7.1.0 available)
+  record 7.1.2 (7.2.0 available)
+  record_android 2.2.0 (2.3.0 available)
+  record_linux 2.1.3 (2.2.0 available)
+  record_platform_interface 2.1.0 (2.2.0 available)
+  record_use 0.6.0 (1.1.1 available)
+  record_web 2.1.3 (2.2.0 available)
+  record_windows 2.3.0 (2.4.0 available)
+  riverpod 3.4.3 (3.5.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_graphics 1.2.4 (1.3.1 available)
+  vector_graphics_codec 1.1.13 (1.2.0 available)
+  vector_graphics_compiler 1.3.3 (1.3.6 available)
+  vector_math 2.4.0 (2.4.4 available)
+  xml 7.0.1 (7.1.0 available)
+Got dependencies!
+27 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_complete_product_test.dart
+00:00 +0: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_complete_product_test.dart: (suite)
+  Skip: Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens
+00:00 +0 ~1: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_discovery_test.dart: (suite)
+  Skip: Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens
+00:00 +0 ~2: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_events_test.dart: (suite)
+  Skip: Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens
+00:00 +0 ~3: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_frosted_navigation_test.dart: (suite)
+  Skip: Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens
+00:00 +0 ~4: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_full_app_test.dart: (suite)
+  Skip: Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens
+00:00 +0 ~5: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_monochrome_test.dart: (suite)
+  Skip: Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens
+00:00 +0 ~6: loading C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_onboarding_test.dart
+00:00 +0 ~6: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_onboarding_test.dart: (suite)
+  Skip: Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens
+00:00 +0 ~7: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_ov2_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~8: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_overnight_polish_test.dart: (suite)
+  Skip: Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens
+00:00 +0 ~9: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_overnight_test.dart: (suite)
+  Skip: Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens
+00:00 +0 ~10: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_refinement_qa_test.dart: (suite)
+  Skip: Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens
+00:00 +0 ~11: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_review3_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~12: loading C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_screens_test.dart
+00:00 +0 ~12: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_screens_test.dart: (suite)
+  Skip: Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens
+00:00 +0 ~13: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_v3_components_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~14: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_v3_experiments_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~15: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_v3_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~16: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_v4_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~17: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_visibility_test.dart: (suite)
+  Skip: Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens
+00:00 +0 ~18: loading C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_worst_case_test.dart
+00:00 +0 ~18: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/capture_worst_case_test.dart: (suite)
+  Skip: Screenshot capture. Run with: flutter test --tags screenshots --run-skipped --update-goldens
+00:00 +0 ~19: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/compare_navigation_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~20: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/compare_type_scale_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~21: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/design_review_capture_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~22: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/fx_lab_capture_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~23: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/qr_capture_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~24: loading C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/qr_routes_capture_test.dart
+00:00 +0 ~24: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/qr_routes_capture_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~25: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/ui087_capture_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~26: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/ui087_devmode_capture_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:00 +0 ~27: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/screenshots/v8_review_capture_test.dart: (suite)
+  Skip: Variant comparison. Run with: flutter test --tags comparison --run-skipped --update-goldens
+00:20 +0 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/country_test.dart: Country counts digits in the pattern
+00:20 +1 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/country_test.dart: Country placeholder uses 5 for the first three digits and 0 after
+00:20 +2 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/country_test.dart: Country formats partial input without a dangling separator
+00:20 +3 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/country_test.dart: Country search matches name, ISO code and dial code
+00:20 +4 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/country_test.dart: Country every country has a unique ISO code
+00:20 +5 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/country_test.dart: PhoneNumber keeps digits only and caps them at the country length
+00:20 +6 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/country_test.dart: PhoneNumber changing country trims the digits to the new length
+00:20 +7 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/country_test.dart: PhoneNumber display and E.164 forms
+00:20 +8 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/country_test.dart: PhoneNumber toString never contains the number
+00:20 +9 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: (setUpAll)
+00:21 +9 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/dating_controller_test.dart: Discover starts with no matches and the people who fit the default filters
+00:21 +10 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/dating_controller_test.dart: Discover starts with no matches and the people who fit the default filters
+00:21 +11 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/dating_controller_test.dart: Discover starts with no matches and the people who fit the default filters
+00:21 +12 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: type roles no screen restyles a weight without its wght axis
+00:21 +13 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: type roles no screen restyles a weight without its wght axis
+00:21 +14 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: type roles no screen restyles a weight without its wght axis
+00:21 +15 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/dating_controller_test.dart: Discover a like clears undo
+00:21 +16 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +17 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +18 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +19 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +20 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +21 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +22 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +23 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +24 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +25 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +26 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +27 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +28 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +29 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +30 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +31 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +32 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +33 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:21 +34 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:22 +35 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: bundled fonts render distinct weights Figtree: regular < medium < semibold < bold
+00:22 +36 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/dating_controller_test.dart: Messages with simulated errors a send fails; retry and delete work
+00:22 +37 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/dating_controller_test.dart: Messages with simulated errors a send fails; retry and delete work
+00:22 +38 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/dating_controller_test.dart: Messages with simulated errors a send fails; retry and delete work
+00:22 +39 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/dating_controller_test.dart: Messages with simulated errors a send fails; retry and delete work
+00:22 +40 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/dating_controller_test.dart: Messages with simulated errors a send fails; retry and delete work
+00:22 +41 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/dating_controller_test.dart: Messages with simulated errors a send fails; retry and delete work
+00:22 +42 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/dating_controller_test.dart: Messages with simulated errors a send fails; retry and delete work
+00:22 +43 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/dating_controller_test.dart: Messages with simulated errors a send fails; retry and delete work
+00:22 +44 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:22 +45 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:22 +46 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +47 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +48 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +49 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +50 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +51 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +52 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +53 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +54 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +55 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +56 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +57 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +58 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +59 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +60 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +61 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +62 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +63 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +64 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +65 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +66 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +67 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +68 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +69 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +70 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +71 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +72 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +73 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +74 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:23 +75 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:24 +76 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:24 +77 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:24 +78 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:24 +79 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:24 +80 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:24 +81 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:24 +82 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:24 +83 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:24 +84 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:24 +85 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:24 +86 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:24 +87 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:25 +88 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:25 +89 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:25 +90 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:25 +91 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:25 +92 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:25 +93 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:25 +94 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:25 +95 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:25 +96 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:25 +97 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:25 +98 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:25 +99 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:25 +100 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:27 +101 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:27 +102 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:27 +103 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:27 +104 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:27 +105 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:27 +106 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:27 +107 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:27 +108 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:27 +109 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:29 +110 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:29 +111 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:29 +112 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +113 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +114 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +115 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +116 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +117 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +118 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +119 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +120 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +121 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +122 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +123 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +124 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +125 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-04: a long top-bar title wraps instead of truncating
+00:30 +126 ~28: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +126 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +127 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +128 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +129 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +130 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +131 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +132 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +133 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +134 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +135 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +136 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +137 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +138 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +139 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +140 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +141 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +142 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +143 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +144 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +145 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +146 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +147 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +148 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +149 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +150 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +151 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +152 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +153 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:30 +154 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/full_app_test.dart: Photo verification (simulated) approves by default; a declined attempt counts towards support
+00:31 +155 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) an archived chat can send; blocked cannot be revived (R01)
+00:31 +156 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) an archived chat can send; blocked cannot be revived (R01)
+00:31 +157 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) an archived chat can send; blocked cannot be revived (R01)
+00:31 +158 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) an archived chat can send; blocked cannot be revived (R01)
+00:31 +159 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) an archived chat can send; blocked cannot be revived (R01)
+00:31 +160 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/typography/typography_copy_test.dart: large-text placement (320pt, 200%) TC-06: Day, Month and Year sit under the Birthday label
+00:31 +161 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) ten unanswered messages, then wait for a reply
+00:32 +162 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) ten unanswered messages, then wait for a reply
+00:32 +163 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) ten unanswered messages, then wait for a reply
+00:32 +164 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) ten unanswered messages, then wait for a reply
+00:32 +165 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) ten unanswered messages, then wait for a reply
+00:32 +166 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) ten unanswered messages, then wait for a reply
+00:32 +167 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) ten unanswered messages, then wait for a reply
+00:32 +168 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) ten unanswered messages, then wait for a reply
+00:32 +169 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/mvp_controllers_test.dart: Chats lifecycle (S22-S25) ten unanswered messages, then wait for a reply
+00:34 +170 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/profile_rules_test.dart: Date of birth (OD-1, OD-2) needs all three fields, with a four-digit year
+00:34 +171 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/profile_rules_test.dart: Date of birth (OD-1, OD-2) refuses dates that do not exist
+00:34 +172 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/profile_rules_test.dart: Date of birth (OD-1, OD-2) 18 on the birthday itself, 17 the day before
+00:34 +173 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/profile_rules_test.dart: Date of birth (OD-1, OD-2) future dates and ages over 100 are refused
+00:34 +174 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/profile_rules_test.dart: First name trimmed, not empty, letters in any script
+00:34 +175 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/profile_rules_test.dart: First name digits, emoji and leading punctuation are refused
+00:34 +176 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/profile_rules_test.dart: What is missing before the profile can be created nothing when every required answer is there
+00:34 +177 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/profile_rules_test.dart: What is missing before the profile can be created each required item is named, in flow order
+00:34 +178 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/profile_rules_test.dart: What is missing before the profile can be created interests need 3 to 5; a whitespace answer is no answer
+00:34 +179 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/profile_rules_test.dart: What is missing before the profile can be created photos need at least two
+00:34 +180 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/profile_rules_test.dart: What is missing before the profile can be created toString leaves out personal data
+00:35 +181 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Visibility status (METRICS §1) ready profile, no notices: visible
+00:35 +182 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Visibility status (METRICS §1) paused says paused, and Resume is the first suggestion
+00:35 +183 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Visibility status (METRICS §1) a restriction from the notice source wins over everything
+00:35 +184 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Visibility status (METRICS §1) missing Discover requirements are named
+00:35 +185 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Visibility status (METRICS §1) an unanswered notice source is "can’t check", never an all-clear
+00:35 +186 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Visibility status (METRICS §1) Incognito is limited
+00:35 +187 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Visibility status (METRICS §1) a notice that doesn’t hide the profile keeps it visible
+00:35 +188 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Activity never decides status (METRICS §7) zero activity: still visible, and shown as "not enough data"
+00:35 +189 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Activity never decides status (METRICS §7) unavailable insights hide the numbers instead of inventing them
+00:35 +190 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Activity never decides status (METRICS §7) stale insights keep the numbers with the state
+00:35 +191 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Completeness and suggestions (METRICS §3, §8) completeness is the shared ProfileCompletion value
+00:35 +192 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Completeness and suggestions (METRICS §3, §8) suggestions are capped at five and say nothing about activity
+00:35 +193 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Completeness and suggestions (METRICS §3, §8) filters are only flagged when nobody fits
+00:35 +194 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: Completeness and suggestions (METRICS §3, §8) verification is suggested only when not started or retryable
+00:35 +195 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/unit/visibility_report_test.dart: no copy claims a shadowban, a penalty or a ranking
+00:37 +196 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/a11y_tools_audit_test.dart: (setUpAll)
+00:37 +196 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/a11y_tools_audit_test.dart: accessibility_tools reports no issues on the core journey
+00:41 +197 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/a11y_tools_audit_test.dart: the checkers do flag an unlabelled, undersized tap target
+00:41 +198 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/a11y_tools_audit_test.dart: (tearDownAll)
+00:41 +198 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/accessibility_test.dart: (setUpAll)
+00:41 +198 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/accessibility_test.dart: onboarding screens meet tap-target and label guidelines
+00:47 +199 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/accessibility_test.dart: onboarding lays out on a 375 × 667 phone at 130% text
+00:49 +200 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/accessibility_test.dart: dating screens meet tap-target and label guidelines
+00:52 +201 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/break_ui_test.dart: worst-case profile lays out at 320 pt and 100% text
+00:54 +202 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/accessibility_test.dart: dating screens lay out on a 375 × 667 phone at 130% text
+00:54 +203 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/break_ui_test.dart: worst-case profile lays out at 375 pt and 130% text
+00:55 +204 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/accessibility_test.dart: full-app screens meet tap-target and label guidelines
+00:56 +205 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/accessibility_test.dart: full-app screens meet tap-target and label guidelines
+00:56 +206 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/accessibility_test.dart: full-app screens lay out on a 375 × 667 phone at 130% text
+00:57 +207 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/bumble_meetup_test.dart: BM-01 Verified is a tick beside the name, not a photo badge
+00:58 +208 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/bumble_meetup_test.dart: UI-023 list groups on a sheet keep their white cards row labels sit inside their cards, as on a page (UI-044: one 16pt inset)
+01:00 +209 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/bumble_meetup_test.dart: UI-023 list groups on a sheet keep their white cards off a sheet, the group keeps its card inset
+01:00 +210 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/bumble_meetup_test.dart: (tearDownAll)
+01:01 +210 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_media_test.dart: (setUpAll)
+01:01 +210 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_media_test.dart: photo: preview, remove, caption, send; it shows in the chat and the inbox, and opens full screen
+01:04 +211 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_media_test.dart: photo: preview, remove, caption, send; it shows in the chat and the inbox, and opens full screen
+01:05 +212 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_media_test.dart: photo: preview, remove, caption, send; it shows in the chat and the inbox, and opens full screen
+01:05 +213 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_media_test.dart: photo: preview, remove, caption, send; it shows in the chat and the inbox, and opens full screen
+01:05 +214 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_review3_test.dart: UI-036 swipe to reply a right swipe replies to exactly that message
+01:05 +215 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_review3_test.dart: UI-036 swipe to reply a right swipe replies to exactly that message
+01:06 +216 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_media_test.dart: picker cancelled or refused: nothing is attached and the reason is shown
+01:06 +217 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_review3_test.dart: UI-036 swipe to reply a short or vertical drag does not start a reply
+01:06 +218 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_media_test.dart: offline: an attachment waits with its caption and sends on reconnect
+01:06 +219 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_review3_test.dart: UI-036 swipe to reply cancel clears the reply; the next message is ordinary
+01:07 +220 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_media_test.dart: (tearDownAll)
+01:07 +220 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_review3_test.dart: UI-036 swipe to reply changing the target replaces it; double Send sends once
+01:07 +221 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_review3_test.dart: UI-036 swipe to reply screen readers get Reply as an action
+01:07 +222 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_review3_test.dart: UI-038/039/040/041: one white bar, up-arrow Send, white incoming bubbles, no demo footer
+01:07 +223 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_review3_test.dart: UI-037: the idle composer field has no stroke; focus adds the purple edge
+01:07 +224 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_review3_test.dart: (tearDownAll)
+01:09 +224 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_v6_contract_test.dart: (setUpAll)
+01:09 +224 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_v6_contract_test.dart: Composer the microphone gives way to Send in the same place
+01:10 +225 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_v6_contract_test.dart: Composer the microphone gives way to Send in the same place
+01:10 +226 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: Sending the credit is spent only after the send is accepted, once
+01:11 +227 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: Sending the credit is spent only after the send is accepted, once
+01:11 +228 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: Sending the credit is spent only after the send is accepted, once
+01:11 +229 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: Sending the credit is spent only after the send is accepted, once
+01:12 +230 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: Sending the credit is spent only after the send is accepted, once
+01:12 +231 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: Sending the credit is spent only after the send is accepted, once
+01:12 +232 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: Sending the credit is spent only after the send is accepted, once
+01:12 +233 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/chat_v6_contract_test.dart: Country picker high contrast adds a tick as a non-colour cue
+01:12 +234 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: Sending a failure keeps the words, spends nothing, and can retry
+01:13 +235 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: Sending a second send to the same person is refused, not charged
+01:13 +236 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: Sending no credits leads to the pack, with no debit
+01:13 +237 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: Sending closing with words asks first; keeping them changes nothing
+
+Warning: A call to tap() with finder "Found 1 widget with text "Keep writing": [
+  Text("Keep writing", inherit: true, color: Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB), family: Figtree, size: 15.0, weight: 600, letterSpacing: 0.0, height: 1.2x, leadingDistribution: even, textAlign: center, overflow: ellipsis, maxLines: 2, dependencies: [DefaultSelectionStyle, DefaultTextStyle, MediaQuery]),
+]" derived an Offset (Offset(196.5, 1018.0)) that would not hit test on the specified widget.
+Maybe the widget is actually off-screen, or another widget is obscuring it, or the widget cannot receive pointer events.
+Indeed, Offset(196.5, 1018.0) is outside the bounds of the root of the render tree, Size(393.0, 852.0).
+The finder corresponds to this RenderBox: RenderParagraph#bd9ff relayoutBoundary=up25
+The hit test result at that offset is: HitTestResult(HitTestEntry<HitTestTarget>#abd0b(_ReusableRenderView#7a735), HitTestEntry<HitTestTarget>#c0d3f(<AutomatedTestWidgetsFlutterBinding>))
+#0      WidgetController._getElementPoint (package:flutter_test/src/controller.dart:2165:25)
+#1      WidgetController.getCenter (package:flutter_test/src/controller.dart:1947:12)
+#2      WidgetController.tap (package:flutter_test/src/controller.dart:1080:7)
+#3      main.<anonymous closure>.<anonymous closure> (file:///C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart:167:20)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+To silence this warning, pass "warnIfMissed: false" to "tap()".
+To make this warning fatal, set WidgetController.hitTestWarningShouldBeFatal to true.
+
+01:13 +238 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: Receiving a reply opens one chat; repeating cannot duplicate it
+01:14 +239 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: Receiving a dismissed or blocked request is gone from Compliments
+01:14 +240 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/compliment_contract_test.dart: (tearDownAll)
+01:15 +240 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/component_cleanup_test.dart: (setUpAll)
+01:15 +240 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/component_cleanup_test.dart: CL-01 switch states on: purple track, white thumb, no outline
+01:16 +241 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/component_cleanup_test.dart: CL-01 switch states off: solid #D6D6D6 track, no border, plain white thumb (SW-01)
+01:16 +242 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/component_cleanup_test.dart: CL-01 switch states disabled: same shape, dimmed
+01:16 +243 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/component_cleanup_test.dart: CL-01 switch states a switch row keeps toggled semantics and a full-row target
+01:16 +244 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/component_cleanup_test.dart: OV-01/UI-060 InfoCard and StatusBanner share the white card with the status in the icon
+01:16 +245 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/component_cleanup_test.dart: CL-04 metadata separator a vertical bar, excluded from semantics, parts read in order
+01:16 +246 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/component_cleanup_test.dart: CL-04 metadata separator the bar takes a separator colour on coloured surfaces
+01:16 +247 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/component_cleanup_test.dart: CL-04 metadata separator user text keeps its own punctuation
+01:16 +248 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/component_cleanup_test.dart: CL-06/07, UI-038/041 chat: one composer bar, no demo notice
+01:17 +249 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/conversation_contract_test.dart: Heart has no Compliments part; the old link opens Messages
+01:19 +250 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/core_journey_test.dart: UI-015: shared interests are a section below the photo, once
+01:20 +251 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/core_journey_test.dart: UI-015: shared interests are a section below the photo, once
+01:20 +252 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/core_journey_test.dart: UI-015: shared interests are a section below the photo, once
+01:21 +253 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/core_journey_test.dart: UI-015: shared interests are a section below the photo, once
+01:21 +254 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/conversation_contract_test.dart: blocking removes the row, and the link no longer opens it
+01:21 +255 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/conversation_contract_test.dart: blocking removes the row, and the link no longer opens it
+01:21 +256 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/core_journey_test.dart: UI-031: Messages shows no Opening Moves suggestion
+01:21 +257 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/core_journey_test.dart: (tearDownAll)
+01:23 +257 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/creative_lab_v7_test.dart: v7-nav O renders on its route
+01:26 +258 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:26 +259 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:27 +260 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:27 +261 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:27 +262 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:28 +263 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:28 +264 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:28 +265 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:28 +266 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:28 +267 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:28 +268 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:28 +269 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:28 +270 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:28 +271 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:28 +272 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:28 +273 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:29 +274 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:29 +275 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:29 +276 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:30 +277 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:30 +278 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:30 +279 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:30 +280 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:30 +281 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:31 +282 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:31 +283 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:31 +284 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:31 +285 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:32 +286 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:33 +287 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:33 +288 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:33 +289 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:33 +290 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:33 +291 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:34 +292 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:34 +293 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:34 +294 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:34 +295 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:35 +296 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:35 +297 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:35 +298 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:35 +299 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:36 +300 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:37 +301 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:37 +302 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:37 +303 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:37 +304 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:38 +305 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:38 +306 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:38 +307 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:39 +308 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:39 +309 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:39 +310 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:39 +311 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:39 +312 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:39 +313 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:40 +314 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:40 +314 ~29: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/events_test.dart: (suite)
+  Skip: Superseded: the old Events module was replaced by the Events MVP (lib/features/events_mvp, H-13); covered by events_mvp tests
+01:40 +314 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Discover: sample profile, pass, undo, like without a match
+01:40 +315 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: Navigation (V8: UI-026 compact bar, UI-050 corners) UI-026 new build: capsule shell, 8pt from shell to every tile, 4pt between 44 x 60 tiles, four destinations
+01:41 +316 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: photos: the card opens the viewer; next / previous / back; a section photo opens at itself
+01:41 +317 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: photos: the card opens the viewer; next / previous / back; a section photo opens at itself
+01:42 +318 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: photos: the card opens the viewer; next / previous / back; a section photo opens at itself
+01:42 +319 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: photos: the card opens the viewer; next / previous / back; a section photo opens at itself
+01:42 +320 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: photos: the card opens the viewer; next / previous / back; a section photo opens at itself
+01:44 +321 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: photos: the card opens the viewer; next / previous / back; a section photo opens at itself
+01:44 +322 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: photos: the card opens the viewer; next / previous / back; a section photo opens at itself
+01:45 +323 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:45 +324 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:45 +325 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:45 +326 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:46 +327 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:46 +328 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:46 +329 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:46 +330 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:46 +331 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:46 +332 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:46 +333 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:46 +334 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:46 +335 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:46 +336 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:46 +337 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discover_match_review_test.dart: UI-028 to UI-031: New Match Open chat opens their ordinary conversation; Close keeps browsing
+01:46 +338 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: mutual like → match → message stays on device → conversation listed
+01:47 +339 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:47 +340 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:47 +341 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:47 +342 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:47 +343 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:47 +344 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:47 +345 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:47 +346 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:47 +347 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:47 +348 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:48 +349 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:48 +350 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:48 +351 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:48 +352 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: reading a profile: no decision buttons; back returns to the photo, then Home stays
+01:49 +353 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: keep browsing after a match: the match waits in Messages with openers
+01:50 +354 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: keep browsing after a match: the match waits in Messages with openers
+01:50 +355 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: keep browsing after a match: the match waits in Messages with openers
+01:50 +356 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: keep browsing after a match: the match waits in Messages with openers
+01:50 +357 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: keep browsing after a match: the match waits in Messages with openers
+01:50 +358 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ente_v4_test.dart: V4 alternatives and the pilot every V4 alternative lays out at 320dp and 200% text
+01:52 +359 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ente_v4_test.dart: V4 alternatives and the pilot every V4 alternative lays out at 320dp and 200% text
+01:52 +360 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ente_v4_test.dart: V4 alternatives and the pilot every V4 alternative lays out at 320dp and 200% text
+01:52 +361 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ente_v4_test.dart: V4 alternatives and the pilot every V4 alternative lays out at 320dp and 200% text
+01:52 +362 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ente_v4_test.dart: V4 alternatives and the pilot every V4 alternative lays out at 320dp and 200% text
+01:53 +363 ~30: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ente_v4_test.dart: V4 alternatives and the pilot every V4 alternative lays out at 320dp and 200% text
+01:53 +363 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ente_v4_test.dart: V4 alternatives and the pilot every V4 alternative lays out at 320dp and 200% text
+01:53 +364 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ente_v4_test.dart: V4 alternatives and the pilot every V4 alternative lays out at 320dp and 200% text
+01:53 +365 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: filters: no one fits → widen; seen everyone → show again
+01:53 +366 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: filters: no one fits → widen; seen everyone → show again
+01:54 +367 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: filters: no one fits → widen; seen everyone → show again
+01:54 +368 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: filters: no one fits → widen; seen everyone → show again
+01:54 +369 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: report and block from the end of a profile
+01:55 +370 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: report and block from the end of a profile
+01:55 +371 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: report and block from the end of a profile
+01:55 +372 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/discovery_test.dart: report and block from the end of a profile
+01:56 +373 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes dragging right shows Like on the photo and likes on release
+01:56 +374 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes dragging right shows Like on the photo and likes on release
+01:56 +375 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes dragging right shows Like on the photo and likes on release
+01:57 +376 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes dragging right shows Like on the photo and likes on release
+01:57 +377 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes dragging right shows Like on the photo and likes on release
+01:58 +378 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes dragging right shows Like on the photo and likes on release
+02:00 +379 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes dragging right shows Like on the photo and likes on release
+02:01 +380 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes dragging right shows Like on the photo and likes on release
+02:02 +381 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: report from chat blocks, is saved on device only, and can be unblocked
+02:03 +382 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: report from chat blocks, is saved on device only, and can be unblocked
+02:03 +383 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: report from chat blocks, is saved on device only, and can be unblocked
+02:04 +384 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes dragging left shows Pass and passes; undo brings them back
+02:04 +385 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes dragging left shows Pass and passes; undo brings them back
+02:04 +386 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes dragging left shows Pass and passes; undo brings them back
+02:05 +387 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes dragging left shows Pass and passes; undo brings them back
+02:05 +388 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes dragging left shows Pass and passes; undo brings them back
+02:05 +389 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: block from the profile options removes the person from Home
+02:05 +390 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: block from the profile options removes the person from Home
+02:06 +391 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: block from the profile options removes the person from Home
+02:06 +392 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: block from the profile options removes the person from Home
+02:06 +393 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes an interrupted swipe springs back: dragged back before release
+02:06 +394 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes an interrupted swipe springs back: dragged back before release
+02:08 +395 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: simulated connection problems: Home error and a failed send with retry
+02:09 +396 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: Demo Hub: quick start from Welcome, reset and switch world
+02:11 +397 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: Demo Hub: quick start from Welcome, reset and switch world
+02:13 +398 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: Demo Hub: quick start from Welcome, reset and switch world
+02:13 +399 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: Demo Hub: quick start from Welcome, reset and switch world
+02:13 +400 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: Demo Hub: quick start from Welcome, reset and switch world
+02:13 +401 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: Demo Hub: quick start from Welcome, reset and switch world
+02:13 +402 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: Demo Hub: quick start from Welcome, reset and switch world
+02:14 +403 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/fx_lab_test.dart: fx-messages A: one row per person, and a Compliment row opens its thread
+02:14 +404 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes a pointer cancel mid-drag decides nothing
+02:15 +405 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes a pointer cancel mid-drag decides nothing
+02:15 +406 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes a pointer cancel mid-drag decides nothing
+02:15 +407 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes a pointer cancel mid-drag decides nothing
+02:16 +408 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/motion_test.dart: Haptics selection controls tick once, and the Vibration switch silences them
+02:16 +409 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/motion_test.dart: Haptics selection controls tick once, and the Vibration switch silences them
+02:17 +410 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Messages search finds names and message text
+02:17 +411 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Messages search finds names and message text
+02:17 +412 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/dating_test.dart: Messages search finds names and message text
+02:17 +413 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_scope_test.dart: the bar has four destinations, each selecting correctly
+02:18 +414 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_scope_test.dart: the bar has four destinations, each selecting correctly
+02:18 +415 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_scope_test.dart: the bar has four destinations, each selecting correctly
+02:19 +416 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_scope_test.dart: the bar has four destinations, each selecting correctly
+02:19 +417 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_scope_test.dart: the bar has four destinations, each selecting correctly
+02:19 +418 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_scope_test.dart: the bar has four destinations, each selecting correctly
+02:19 +419 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes one decision per person: a double Pass passes only once
+02:20 +420 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes one decision per person: a double Pass passes only once
+02:20 +421 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes one decision per person: a double Pass passes only once
+02:20 +422 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes one decision per person: a double Pass passes only once
+02:20 +423 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Discover swipes one decision per person: a double Pass passes only once
+02:20 +424 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:21 +425 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:22 +426 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:22 +427 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:22 +428 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:23 +429 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:23 +430 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:23 +431 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:23 +432 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:25 +433 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:25 +434 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:25 +435 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:26 +436 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:26 +437 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:26 +438 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:27 +439 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/mvp_screens_test.dart: MVP routes lay out at 320dp, 100% text
+02:27 +440 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_complete_test.dart: every step opens from the Demo Hub and from the hub resume
+02:27 +441 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_complete_test.dart: every step opens from the Demo Hub and from the hub resume
+02:28 +442 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_complete_test.dart: every step opens from the Demo Hub and from the hub resume
+02:29 +443 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_complete_test.dart: every step opens from the Demo Hub and from the hub resume
+02:29 +444 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_complete_test.dart: every step opens from the Demo Hub and from the hub resume
+02:30 +445 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_complete_test.dart: every step opens from the Demo Hub and from the hub resume
+02:30 +446 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_complete_test.dart: every step opens from the Demo Hub and from the hub resume
+02:30 +447 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_complete_test.dart: every step opens from the Demo Hub and from the hub resume
+02:30 +448 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: invalid, future and over-100 dates and digit names are refused
+02:32 +449 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: invalid, future and over-100 dates and digit names are refused
+02:33 +450 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: invalid, future and over-100 dates and digit names are refused
+02:33 +451 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: invalid, future and over-100 dates and digit names are refused
+02:34 +452 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: invalid, future and over-100 dates and digit names are refused
+02:34 +453 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: a deleted account can be restored by signing in again
+02:35 +454 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: a deleted account can be restored by signing in again
+02:35 +455 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: a deleted account can be restored by signing in again
+02:35 +456 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: a deleted account can be restored by signing in again
+02:35 +457 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: a deleted account can be restored by signing in again
+02:35 +458 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: a deleted account can be restored by signing in again
+02:35 +459 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: a deleted account can be restored by signing in again
+02:36 +460 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: a deleted account can be restored by signing in again
+02:37 +461 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: a deleted account can be restored by signing in again
+02:37 +462 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: a deleted account can be restored by signing in again
+02:37 +463 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: a deleted account can be restored by signing in again
+02:37 +464 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: a deleted account can be restored by signing in again
+02:38 +465 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/full_app_journeys_test.dart: a deleted account can be restored by signing in again
+02:38 +466 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Match a match from Discover names the right person
+02:38 +467 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Match a match from Discover names the right person
+02:39 +468 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Match a match from Discover names the right person
+02:39 +469 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Match a match from Discover names the right person
+02:39 +470 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/final_polish_test.dart: Match a match from Discover names the right person
+02:40 +471 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:40 +472 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:40 +473 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:40 +474 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:40 +475 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:40 +476 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:40 +477 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:40 +478 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:40 +479 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:40 +480 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:41 +481 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:41 +482 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:42 +483 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:43 +484 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:43 +485 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: back from Interests to the first step keeps every answer, forward keeps picks
+02:43 +486 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_flow_test.dart: full sign-up: phone, wrong code, right code, every setup step, review, Home
+02:43 +487 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_flow_test.dart: full sign-up: phone, wrong code, right code, every setup step, review, Home
+02:44 +488 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_flow_test.dart: full sign-up: phone, wrong code, right code, every setup step, review, Home
+02:44 +489 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_flow_test.dart: full sign-up: phone, wrong code, right code, every setup step, review, Home
+02:44 +490 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_flow_test.dart: full sign-up: phone, wrong code, right code, every setup step, review, Home
+02:44 +491 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_flow_test.dart: full sign-up: phone, wrong code, right code, every setup step, review, Home
+02:45 +492 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_flow_test.dart: full sign-up: phone, wrong code, right code, every setup step, review, Home
+02:46 +493 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_flow_test.dart: full sign-up: phone, wrong code, right code, every setup step, review, Home
+02:46 +494 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_flow_test.dart: full sign-up: phone, wrong code, right code, every setup step, review, Home
+02:46 +495 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_flow_test.dart: full sign-up: phone, wrong code, right code, every setup step, review, Home
+02:47 +496 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: Android back pops a step, then a chat back to Messages
+02:47 +497 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: Android back pops a step, then a chat back to Messages
+02:47 +498 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: Android back pops a step, then a chat back to Messages
+02:48 +499 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: Android back pops a step, then a chat back to Messages
+02:49 +500 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: tapping outside a field dismisses the keyboard
+02:49 +501 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/onboarding_edge_cases_test.dart: (tearDownAll)
+02:59 +501 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/overnight_polish_test.dart: (setUpAll)
+03:00 +501 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/overnight_polish_test.dart: OP-01 to OP-03: type roles the semantic body is 15/20 (X15); rows and typing match it
+03:00 +502 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/overnight_polish_test.dart: OP-01 to OP-03: type roles option rows use the row role, not the reading body
+03:01 +503 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/overnight_polish_test.dart: OP-04: large text on a 320pt phone R12: the large title is not truncated at 200% text
+03:02 +504 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/overnight_polish_test.dart: OP-04: large text on a 320pt phone the Profile hero puts the avatar above the name
+03:02 +505 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/overnight_polish_test.dart: OP-04: large text on a 320pt phone at 100% text the photo is centred above the name (UI-042)
+03:03 +506 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/overnight_polish_test.dart: OP-05: glass highlight the frosted bar draws one top highlight
+03:03 +507 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/overnight_polish_test.dart: OP-05: glass highlight High Contrast drops the glass and its highlight
+03:03 +508 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/overnight_polish_test.dart: OP-06: a like that moved on shows the mascot
+03:04 +509 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/overnight_polish_test.dart: route gaps: routes no other test opened lay out at 320pt with 200% text
+03:12 +510 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ov2_components_test.dart: OV-03 action sheet: one sheet attached to the bottom, red destructive rows, a working Cancel
+03:12 +511 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ov2_components_test.dart: OV-03 action sheet: one sheet attached to the bottom, red destructive rows, a working Cancel
+03:12 +512 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ov2_components_test.dart: OV-03 action sheet: one sheet attached to the bottom, red destructive rows, a working Cancel
+03:13 +513 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ov2_components_test.dart: OV-03 action sheet: one sheet attached to the bottom, red destructive rows, a working Cancel
+03:14 +514 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ov2_components_test.dart: OV-03 action sheet: one sheet attached to the bottom, red destructive rows, a working Cancel
+03:14 +515 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ov2_components_test.dart: OV-03 action sheet: one sheet attached to the bottom, red destructive rows, a working Cancel
+03:23 +516 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/overnight_stress_test.dart: chat: pending photo, long caption, keyboard up, 2x text
+03:23 +517 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/overnight_stress_test.dart: chat: pending photo, long caption, keyboard up, 2x text
+03:38 +518 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/photo_options_test.dart: photos step: make main, remove, cancel
+03:39 +519 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/photo_options_test.dart: photos step: make main, remove, cancel
+03:40 +520 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/photo_options_test.dart: photos step: make main, remove, cancel
+03:40 +521 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/photo_options_test.dart: photos step: make main, remove, cancel
+03:41 +522 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/photo_options_test.dart: edit profile keeps at least 2 photos
+03:49 +523 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/photo_options_test.dart: (tearDownAll)
+03:57 +523 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/recovery_email_test.dart: (setUpAll)
+03:57 +523 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/recovery_email_test.dart: email check: plausible addresses only
+03:57 +524 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/recovery_email_test.dart: removing the email turns email notifications off
+03:57 +525 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/recovery_email_test.dart: Settings: add a recovery email, fix a typo, then remove it
+03:59 +526 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/recovery_email_test.dart: (tearDownAll)
+04:04 +526 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/profile_photos_test.dart: (setUpAll)
+04:04 +526 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/profile_photos_test.dart: Edit profile: a photo from the phone shows in the grid, on Profile and in Preview; cancel and refusal add nothing; replace keeps the place
+04:06 +527 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/profile_photos_test.dart: Edit profile: a photo from the phone shows in the grid, on Profile and in Preview; cancel and refusal add nothing; replace keeps the place
+04:13 +528 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/profile_photos_test.dart: Edit profile: a photo from the phone shows in the grid, on Profile and in Preview; cancel and refusal add nothing; replace keeps the place
+04:13 +529 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/profile_review3_test.dart: UI-033/034 New matches no Likes tile (owner selection); UI-033: each match is a circular photo at the conversation avatar size in a progress ring with no countdown or name below
+04:13 +530 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/profile_review3_test.dart: UI-033/034 New matches no Likes tile (owner selection); UI-033: each match is a circular photo at the conversation avatar size in a progress ring with no countdown or name below
+04:14 +531 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/profile_review3_test.dart: UI-033/034 New matches no Likes tile (owner selection); UI-033: each match is a circular photo at the conversation avatar size in a progress ring with no countdown or name below
+04:15 +532 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/profile_review3_test.dart: UI-033/034 New matches no Likes tile (owner selection); UI-033: each match is a circular photo at the conversation avatar size in a progress ring with no countdown or name below
+04:17 +533 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/profile_review3_test.dart: UI-033/034 New matches no Likes tile (owner selection); UI-033: each match is a circular photo at the conversation avatar size in a progress ring with no countdown or name below
+04:17 +534 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/profile_review3_test.dart: UI-033/034 New matches no Likes tile (owner selection); UI-033: each match is a circular photo at the conversation avatar size in a progress ring with no countdown or name below
+04:17 +535 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/profile_review3_test.dart: UI-033/034 New matches no Likes tile (owner selection); UI-033: each match is a circular photo at the conversation avatar size in a progress ring with no countdown or name below
+04:18 +536 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/profile_review3_test.dart: UI-033/034 New matches no Likes tile (owner selection); UI-033: each match is a circular photo at the conversation avatar size in a progress ring with no countdown or name below
+04:18 +537 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:18 +538 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:18 +539 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:18 +540 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:18 +541 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:18 +542 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:19 +543 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:22 +544 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:22 +545 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:22 +546 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:23 +547 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:23 +548 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:23 +549 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:23 +550 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:23 +551 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:24 +552 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:24 +553 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:24 +554 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:25 +555 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:25 +556 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:25 +557 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:25 +558 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:25 +559 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:25 +560 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:26 +561 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:26 +562 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:26 +563 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:26 +564 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:26 +565 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: every route lays out on a 320 × 568 phone at 150% text
+04:26 +566 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls the flag is off without a build define
+04:26 +567 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls the flag is off without a build define
+04:27 +568 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls the flag is off without a build define
+04:28 +569 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls the flag is off without a build define
+04:28 +570 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls the flag is off without a build define
+04:29 +571 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls the flag is off without a build define
+04:29 +572 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls the flag is off without a build define
+04:29 +573 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls the flag is off without a build define
+04:29 +574 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls the flag is off without a build define
+04:29 +575 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls the flag is off without a build define
+04:38 +576 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls the flag is off without a build define
+04:38 +577 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/route_sweep_test.dart: sign-up, every step, lays out on 393 × 852 at 200% text
+04:38 +578 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/quality_refinement_test.dart: QR-003 finite corners are at most 20 (circles and capsules excepted) /store/outcome?kind=premiumMonthly&result=failed
+04:38 +579 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:38 +580 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:38 +581 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:39 +582 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:40 +583 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:42 +584 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:43 +585 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:43 +586 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:43 +587 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:43 +588 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:43 +589 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:43 +590 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:44 +591 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:44 +592 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selected_candidate_test.dart: the normal app has no development controls Settings has no prototype section and labs redirect
+04:45 +593 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selections_test.dart: without development tools the selected screens are the defaults
+04:45 +594 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selections_test.dart: without development tools the selected screens are the defaults
+04:46 +595 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selections_test.dart: a received Compliment is an incoming message quoting your photo; replying once is free
+04:46 +596 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selections_test.dart: Welcome has a labelled demo entry; sign-out returns to Welcome
+04:48 +597 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selections_test.dart: the credits number agrees on Profile and the credits screen
+04:48 +598 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/selections_test.dart: (tearDownAll)
+04:49 +598 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/size_matrix_test.dart: (setUpAll)
+04:50 +598 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/size_matrix_test.dart: full-app routes lay out at 320pt with 100% text
+05:03 +599 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/size_matrix_test.dart: full-app routes lay out at 320pt with 100% text
+05:05 +600 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/size_matrix_test.dart: full-app routes lay out at 320pt with 100% text
+05:06 +601 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/size_matrix_test.dart: full-app routes lay out at 320pt with 100% text
+05:06 +602 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/size_matrix_test.dart: full-app routes lay out at 320pt with 100% text
+05:08 +603 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/system_states_test.dart: offline: a banner on every screen, messages wait and send on reconnect, reservations fail safely
+05:09 +604 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/system_states_test.dart: offline: a banner on every screen, messages wait and send on reconnect, reservations fail safely
+05:11 +605 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/system_states_test.dart: offline: a banner on every screen, messages wait and send on reconnect, reservations fail safely
+05:13 +606 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/system_states_test.dart: offline: a banner on every screen, messages wait and send on reconnect, reservations fail safely
+05:14 +607 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/system_states_test.dart: offline: a banner on every screen, messages wait and send on reconnect, reservations fail safely
+05:16 +608 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/system_states_test.dart: offline: a banner on every screen, messages wait and send on reconnect, reservations fail safely
+05:17 +609 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/system_states_test.dart: offline: a banner on every screen, messages wait and send on reconnect, reservations fail safely
+05:18 +610 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/system_states_test.dart: offline: a banner on every screen, messages wait and send on reconnect, reservations fail safely
+05:18 +611 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Tabler icons icons draw bundled Tabler SVGs tinted with srcIn
+05:19 +612 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Tabler icons icons draw bundled Tabler SVGs tinted with srcIn
+05:19 +613 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Tabler icons icons draw bundled Tabler SVGs tinted with srcIn
+05:19 +614 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Tabler icons icons draw bundled Tabler SVGs tinted with srcIn
+05:20 +615 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Tabler icons icons draw bundled Tabler SVGs tinted with srcIn
+05:21 +616 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Tabler icons icons draw bundled Tabler SVGs tinted with srcIn
+05:22 +617 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Tabler icons icons draw bundled Tabler SVGs tinted with srcIn
+05:28 +618 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:33 +619 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:34 +620 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:34 +621 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:34 +622 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:34 +623 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:34 +624 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:34 +625 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:34 +626 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:34 +627 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:34 +628 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:34 +629 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:34 +630 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:35 +631 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Navigation four destinations (MVP Focus V5); selected is filled near-black on a light tile, announced as selected
+05:38 +632 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/type_roles_test.dart: TR-01: body copy is 15/20 (X15) a Discover bio is the card-primary role (UI-020)
+05:38 +633 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/type_roles_test.dart: TR-01: body copy is 15/20 (X15) a Discover bio is the card-primary role (UI-020)
+05:39 +634 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/type_roles_test.dart: TR-01: body copy is 15/20 (X15) a Discover bio is the card-primary role (UI-020)
+05:40 +635 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/type_roles_test.dart: TR-01: body copy is 15/20 (X15) a Discover bio is the card-primary role (UI-020)
+05:41 +636 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/type_roles_test.dart: TR-01: body copy is 15/20 (X15) a Discover bio is the card-primary role (UI-020)
+05:41 +637 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/type_roles_test.dart: TR-01: body copy is 15/20 (X15) a Discover bio is the card-primary role (UI-020)
+05:43 +638 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/type_roles_test.dart: TR-01: body copy is 15/20 (X15) a Discover bio is the card-primary role (UI-020)
+05:44 +639 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:46 +640 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:46 +641 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:46 +642 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:46 +643 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +644 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +645 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +646 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +647 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +648 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +648 ~31: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Events is unavailable in the MVP direct route /events lands on Discover
+  Skip: Superseded: Events MVP replaces Health/Insights (H-13); old event routes redirect to /events
+05:47 +648 ~32: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +648 ~32: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Events is unavailable in the MVP direct route /events?view=mine lands on Discover
+  Skip: Superseded: Events MVP replaces Health/Insights (H-13); old event routes redirect to /events
+05:47 +648 ~33: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +648 ~33: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Events is unavailable in the MVP direct route /event/new lands on Discover
+  Skip: Superseded: Events MVP replaces Health/Insights (H-13); old event routes redirect to /events
+05:47 +648 ~34: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +648 ~34: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Events is unavailable in the MVP direct route /event/e-jazz lands on Discover
+  Skip: Superseded: Events MVP replaces Health/Insights (H-13); old event routes redirect to /events
+05:47 +648 ~35: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +648 ~35: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Events is unavailable in the MVP direct route /event/e-jazz/people lands on Discover
+  Skip: Superseded: Events MVP replaces Health/Insights (H-13); old event routes redirect to /events
+05:47 +648 ~36: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +648 ~36: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Events is unavailable in the MVP direct route /event/e-jazz/edit lands on Discover
+  Skip: Superseded: Events MVP replaces Health/Insights (H-13); old event routes redirect to /events
+05:47 +648 ~37: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +648 ~37: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Events is unavailable in the MVP a pushed event link resolves to Discover without a loop
+  Skip: Superseded: Events MVP replaces Health/Insights (H-13); old event routes redirect to /events
+05:47 +648 ~38: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +648 ~38: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Events is unavailable in the MVP no Events shortcuts in the Demo Hub
+  Skip: Superseded: Events MVP replaces Health/Insights (H-13); old event routes redirect to /events
+05:47 +648 ~39: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:47 +648 ~39: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/tabler_mvp_test.dart: Events is unavailable in the MVP with Events available, the tab comes back second
+  Skip: Superseded: Events MVP replaces Health/Insights (H-13); old event routes redirect to /events
+05:47 +648 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:48 +649 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/ui_consistency_test.dart: UC-02 header actions Discover and Profile show the same 8pt between their two actions
+05:49 +650 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:49 +651 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:49 +652 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:49 +653 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:49 +654 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:49 +655 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:50 +656 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:50 +657 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:50 +658 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:51 +659 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:51 +660 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:51 +661 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:51 +662 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:52 +663 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:52 +664 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:52 +665 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:52 +666 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:52 +667 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:53 +668 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:54 +669 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:54 +670 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:54 +671 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:54 +672 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:54 +673 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:54 +674 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:54 +675 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:54 +675 ~40: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visibility_test.dart: (suite)
+  Skip: Superseded: Visibility/Health screens removed by the Events PRD (H-13); old links land on Profile (visual_lab_v2 fallback test)
+05:55 +675 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: interests: the sixth pick is unavailable at 5/5
+05:55 +676 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: prompt editor: Save stays disabled until there is an answer
+05:57 +677 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: Likes empty state (every like answered) sends people to Home
+06:02 +678 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: delete account: the sheet can be cancelled, then confirmed
+06:04 +679 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v16_screens_test.dart: (tearDownAll)
+06:12 +679 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: (setUpAll)
+06:14 +679 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: release builds always render the refined candidate
+06:14 +680 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: choices are independent and summarised for a reply
+06:16 +681 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: the lab switches a variant with its chips
+06:16 +682 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-001 match moment Current: open chat, view profile, close
+06:18 +683 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-001 match moment A: open chat, view profile, close
+06:20 +684 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-001 match moment B: open chat, view profile, close
+06:20 +685 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-001 match moment C: open chat, view profile, close
+06:21 +686 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-002 own-profile header Current: edit and verify
+06:21 +687 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-002 own-profile header A: edit and verify
+06:23 +688 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-002 own-profile header B: edit and verify
+06:24 +689 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-002 own-profile header C: edit and verify
+06:24 +690 ~41: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-002 own-profile header C: Preview is one tap from the tab
+06:24 +690 ~42: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-004 completion card Current: same percentage, reaches the hub
+06:24 +690 ~43: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-004 completion card A: same percentage, reaches the hub
+06:24 +690 ~44: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-004 completion card B: same percentage, reaches the hub
+06:24 +690 ~45: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-004 completion card C: same percentage, reaches the hub
+06:24 +690 ~46: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-004 completion card B: Continue opens the next unfinished part (photos)
+06:24 +690 ~47: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-003 empty conversations Current: Find your people opens Discover
+06:25 +691 ~47: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-003 empty conversations A: Find your people opens Discover
+06:25 +692 ~47: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-003 empty conversations B: Find your people opens Discover
+06:26 +693 ~47: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_experiments_test.dart: EXP-003 empty conversations C: Find your people opens Discover
+06:26 +694 ~47: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_fidelity_test.dart: V3-D01: the Unmatch sheet fits 320pt at 200% text, action pinned
+06:26 +694 ~48: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_fidelity_test.dart: V3-D01: the Unmatch sheet fits 320pt at 200% text, action pinned
+06:26 +694 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_fidelity_test.dart: V3-D01: the Unmatch sheet fits 320pt at 200% text, action pinned
+06:27 +695 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_fidelity_test.dart: V3-D01: the Unmatch sheet fits 320pt at 200% text, action pinned
+06:28 +696 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_fidelity_test.dart: V3-D01: the Unmatch sheet fits 320pt at 200% text, action pinned
+06:30 +697 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_fidelity_test.dart: V3-D01: the Unmatch sheet fits 320pt at 200% text, action pinned
+06:30 +698 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v3_fidelity_test.dart: V3-D01: the Unmatch sheet fits 320pt at 200% text, action pinned
+06:33 +699 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v4_polish_test.dart: V4-01: a missing main photo shows the initial (header Current)
+06:33 +700 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v4_polish_test.dart: V4-01: a missing main photo shows the initial (header Current)
+06:34 +701 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v8_review_test.dart: Typography review controls (UI-085, 14/15 body) 14pt changes the body tier at once; Reset restores 15
+06:35 +702 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v8_review_test.dart: Typography review controls (UI-085, 14/15 body) 14pt changes the body tier at once; Reset restores 15
+06:36 +703 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/v8_review_test.dart: Typography review controls (UI-085, 14/15 body) 14pt changes the body tier at once; Reset restores 15
+06:37 +704 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:38 +705 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:39 +706 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:39 +707 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:40 +708 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:40 +709 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:41 +710 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:42 +711 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:42 +712 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:43 +713 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:43 +714 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:44 +715 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:46 +716 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:46 +717 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:46 +718 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component preview renders every variant at 320dp and 200% text
+06:48 +719 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every component variant works in its real screen at 320dp and 200% text
+07:40 +720 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Registry every screen direction lays out at 320dp and 200% text
+07:41 +721 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: R01 / R02 Chats Chats lists Archive, no Requests; new matches are ringed circles
+07:43 +722 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: R01 / R02 Chats inside a new match: a countdown-only banner (UI-086)
+07:43 +723 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: V8 Heart tab and Compliment conversations Likes only; a Compliment opens from Messages and replies once
+07:45 +724 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: V8 Heart tab and Compliment conversations Dismiss asks first and leaves no duplicate
+07:47 +725 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: R05 / R06 / R08 controls the Compliment action sits bottom-right on the photo, clear of the name
+07:47 +726 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: R05 / R06 / R08 controls a prompt reserves a footer: the action is below the answer
+07:48 +727 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: R05 / R06 / R08 controls chat header: verified mark after the name, not on the avatar
+07:49 +728 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: R05 / R06 / R08 controls sheet close is the white squircle with a dark glyph
+07:50 +729 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Health/Insights removed (Events PRD) old Health, Insights and visibility links land on Profile, with no note
+07:50 +730 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: R12 large title collapses into the bar on scroll and back
+07:51 +731 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: Motion presets M0 is reduced everywhere; M2 is quicker than M1
+07:51 +732 ~49: C:/Users/biswa/Projects/Numaya-baseline-pr/apps/numaya_mobile/test/widget/visual_lab_v2_test.dart: (tearDownAll)
+07:52 +732 ~49: All tests passed!
